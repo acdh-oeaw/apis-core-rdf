@@ -3,7 +3,7 @@ from django.views.generic.detail import DetailView
 from django_tables2 import RequestConfig
 
 from apis_core.apis_entities.views import GenericListViewNew
-from apis_core.apis_relations.models import AbstractRelation
+# from apis_core.apis_relations.models import AbstractRelation
 from .rel_filters import get_generic_relation_filter
 from .tables import get_generic_relation_listview_table
 
@@ -21,7 +21,8 @@ class GenericRelationView(GenericListViewNew):
 
     def get_queryset(self, **kwargs):
         self.entity = self.kwargs.get('entity')
-        qs = AbstractRelation.get_relation_class_of_name(self.entity).objects.all()
+        # qs = AbstractRelation.get_relation_class_of_name(self.entity).objects.all()
+        qs = None
         self.filter = get_generic_relation_filter(
             self.entity.title())(self.request.GET, queryset=qs)
         self.filter.form.helper = self.formhelper_class()
@@ -51,7 +52,8 @@ class GenericRelationDetailView(DetailView):
     def get_object(self):
         entity = self.kwargs['entity'].lower()
         instance = self.kwargs['pk'].lower()
-        entity_model = AbstractRelation.get_relation_class_of_name(entity)
+        # entity_model = AbstractRelation.get_relation_class_of_name(entity)
+        entity_model = None
         instance = entity_model.objects.get(pk=instance)
         return instance
 

@@ -9,11 +9,12 @@ from django_tables2 import RequestConfig
 
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
-from apis_core.apis_relations.models import AbstractRelation
-from apis_core.apis_relations.tables import get_generic_relations_table, LabelTableBase  # , EntityDetailViewLabelTable
+# from apis_core.apis_relations.models import AbstractRelation
+from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, LabelTableBase  # , EntityDetailViewLabelTable
 from apis_core.helper_functions.utils import access_for_all
 from .models import AbstractEntity
 from .views import get_highlighted_texts
+from apis_core.apis_relations.models import Triple, TempTriple
 
 
 class GenericEntitiesDetailView(UserPassesTestMixin, View):
@@ -30,40 +31,64 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         pk = kwargs['pk']
         entity_model = AbstractEntity.get_entity_class_of_name(entity)
         instance = get_object_or_404(entity_model, pk=pk)
-        relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
+        # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
         side_bar = []
-        for rel in relations:
-            match = [
-                rel.get_related_entity_classA().__name__.lower(),
-                rel.get_related_entity_classB().__name__.lower()
-            ]
-            prefix = "{}{}-".format(match[0].title()[:2], match[1].title()[:2])
-            table = get_generic_relations_table(relation_class=rel, entity_instance=instance, detail=True)
-            if match[0] == match[1]:
-                title_card = entity.title()
-                dict_1 = {'related_' + entity.lower() + 'A': instance}
-                dict_2 = {'related_' + entity.lower() + 'B': instance}
-                if 'apis_highlighter' in settings.INSTALLED_APPS:
-                    objects = rel.objects.filter_ann_proj(request=request).filter_for_user().filter(
-                        Q(**dict_1) | Q(**dict_2))
-                else:
-                    objects = rel.objects.filter(
-                        Q(**dict_1) | Q(**dict_2))
-                    if callable(getattr(objects, 'filter_for_user', None)):
-                        objects = objects.filter_for_user()
-            else:
-                if match[0].lower() == entity.lower():
-                    title_card = match[1].title()
-                else:
-                    title_card = match[0].title()
-                dict_1 = {'related_' + entity.lower(): instance}
-                if 'apis_highlighter' in settings.INSTALLED_APPS:
-                    objects = rel.objects.filter_ann_proj(request=request).filter_for_user().filter(**dict_1)
-                else:
-                    objects = rel.objects.filter(**dict_1)
-                    if callable(getattr(objects, 'filter_for_user', None)):
-                        objects = objects.filter_for_user()
-            tb_object = table(data=objects, prefix=prefix)
+
+        triples_related_all = Triple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
+
+        for entity_class in AbstractEntity.get_all_entity_classes():
+
+            other_entity_class_name = entity_class.__name__.lower()
+
+            # TODO __sresch__ : Check if this filter call results in additional db hits
+            triples_related_by_entity = triples_related_all.filter(
+                (
+                    Q(**{f"subj__{other_entity_class_name}__isnull": False}) & Q(**{f"obj__pk": pk})
+                )
+                | (
+                    Q(**{f"obj__{other_entity_class_name}__isnull": False}) & Q(**{f"subj__pk": pk})
+                )
+            )
+
+            table = get_generic_triple_table(other_entity_class_name=other_entity_class_name, this_entity_pk=pk, detail=True)
+
+        # for rel in relations:
+        #     match = [
+        #         rel.get_related_entity_classA().__name__.lower(),
+        #         rel.get_related_entity_classB().__name__.lower()
+        #     ]
+        #     prefix = "{}{}-".format(match[0].title()[:2], match[1].title()[:2])
+        #     table = get_generic_relations_table(relation_class=rel, entity_instance=instance, detail=True)
+        #     if match[0] == match[1]:
+        #         title_card = entity.title()
+        #         dict_1 = {'related_' + entity.lower() + 'A': instance}
+        #         dict_2 = {'related_' + entity.lower() + 'B': instance}
+        #         if 'apis_highlighter' in settings.INSTALLED_APPS:
+        #             objects = rel.objects.filter_ann_proj(request=request).filter_for_user().filter(
+        #                 Q(**dict_1) | Q(**dict_2))
+        #         else:
+        #             objects = rel.objects.filter(
+        #                 Q(**dict_1) | Q(**dict_2))
+        #             if callable(getattr(objects, 'filter_for_user', None)):
+        #                 objects = objects.filter_for_user()
+        #     else:
+        #         if match[0].lower() == entity.lower():
+        #             title_card = match[1].title()
+        #         else:
+        #             title_card = match[0].title()
+        #         dict_1 = {'related_' + entity.lower(): instance}
+        #         if 'apis_highlighter' in settings.INSTALLED_APPS:
+        #             objects = rel.objects.filter_ann_proj(request=request).filter_for_user().filter(**dict_1)
+        #         else:
+        #             objects = rel.objects.filter(**dict_1)
+        #             if callable(getattr(objects, 'filter_for_user', None)):
+        #                 objects = objects.filter_for_user()
+
+
+            prefix = f"other {other_entity_class_name}"
+            title_card = prefix
+            match = [prefix]
+            tb_object = table(data=triples_related_by_entity, prefix=prefix)
             tb_object_open = request.GET.get(prefix + 'page', None)
             RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
             side_bar.append(

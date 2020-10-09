@@ -4,9 +4,9 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from rest_framework import serializers
 
-from .models import Institution, Person, Place, Event, Work
-from ..apis_relations.models import PersonInstitution, InstitutionPlace, PersonPlace
-from ..apis_vocabularies.models import RelationBaseClass, InstitutionPlaceRelation
+# from .models import Institution, Person, Place, Event, Work
+# from ..apis_relations.models import PersonInstitution, InstitutionPlace, PersonPlace
+# from ..apis_vocabularies.models import RelationBaseClass, InstitutionPlaceRelation
 
 
 class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
@@ -30,100 +30,100 @@ class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
     )
 
 
-class InstitutionSerializer(BaseEntitySerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:institution-detail",
-        lookup_field="pk"
-    )
-
-    kind = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:institutiontype-detail",
-        read_only=True
-    )
-
-    class Meta:
-        model = Institution
-        fields = ('url', 'id', 'name', 'uri_set', 'kind', 'collection', 'text')
-
-
-class PersonSerializer(BaseEntitySerializer):
-
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:person-detail",
-        lookup_field="pk"
-    )
-    profession = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:professiontype-detail",
-        lookup_field="pk",
-        many=True,
-        read_only=True
-    )
-
-    class Meta:
-        model = Person
-        fields = (
-            'url', 'id', 'name', 'first_name', 'uri_set', 'profession', 'collection', 'text'
-        )
-
-
-class PlaceSerializer(BaseEntitySerializer):
-
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:place-detail",
-        lookup_field="pk"
-    )
-
-    kind = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:placetype-detail",
-        lookup_field="pk",
-        read_only=True
-    )
-
-    class Meta:
-        model = Place
-        fields = (
-            'url', 'id', 'name', 'uri_set', 'collection', 'text', 'kind', 'lng', 'lat'
-        )
-
-
-class EventSerializer(BaseEntitySerializer):
-
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:event-detail",
-        lookup_field="pk"
-    )
-
-    kind = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:eventtype-detail",
-        lookup_field="pk",
-        read_only=True
-    )
-
-    class Meta:
-        model = Event
-        fields = (
-            'url', 'id', 'name', 'uri_set', 'collection', 'text', 'kind'
-        )
-
-
-class WorkSerializer(BaseEntitySerializer):
-
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:work-detail",
-        lookup_field="pk"
-    )
-
-    kind = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:worktype-detail",
-        lookup_field="pk",
-        read_only=True
-    )
-
-    class Meta:
-        model = Work
-        fields = (
-            'url', 'id', 'name', 'uri_set', 'collection', 'text', 'kind'
-        )
+# class InstitutionSerializer(BaseEntitySerializer):
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:institution-detail",
+#         lookup_field="pk"
+#     )
+#
+#     kind = serializers.HyperlinkedRelatedField(
+#         view_name="apis:apis_api:institutiontype-detail",
+#         read_only=True
+#     )
+#
+#     class Meta:
+#         model = Institution
+#         fields = ('url', 'id', 'name', 'uri_set', 'kind', 'collection', 'text')
+#
+#
+# class PersonSerializer(BaseEntitySerializer):
+#
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:person-detail",
+#         lookup_field="pk"
+#     )
+#     profession = serializers.HyperlinkedRelatedField(
+#         view_name="apis:apis_api:professiontype-detail",
+#         lookup_field="pk",
+#         many=True,
+#         read_only=True
+#     )
+#
+#     class Meta:
+#         model = Person
+#         fields = (
+#             'url', 'id', 'name', 'first_name', 'uri_set', 'profession', 'collection', 'text'
+#         )
+#
+#
+# class PlaceSerializer(BaseEntitySerializer):
+#
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:place-detail",
+#         lookup_field="pk"
+#     )
+#
+#     kind = serializers.HyperlinkedRelatedField(
+#         view_name="apis:apis_api:placetype-detail",
+#         lookup_field="pk",
+#         read_only=True
+#     )
+#
+#     class Meta:
+#         model = Place
+#         fields = (
+#             'url', 'id', 'name', 'uri_set', 'collection', 'text', 'kind', 'lng', 'lat'
+#         )
+#
+#
+# class EventSerializer(BaseEntitySerializer):
+#
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:event-detail",
+#         lookup_field="pk"
+#     )
+#
+#     kind = serializers.HyperlinkedRelatedField(
+#         view_name="apis:apis_api:eventtype-detail",
+#         lookup_field="pk",
+#         read_only=True
+#     )
+#
+#     class Meta:
+#         model = Event
+#         fields = (
+#             'url', 'id', 'name', 'uri_set', 'collection', 'text', 'kind'
+#         )
+#
+#
+# class WorkSerializer(BaseEntitySerializer):
+#
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:work-detail",
+#         lookup_field="pk"
+#     )
+#
+#     kind = serializers.HyperlinkedRelatedField(
+#         view_name="apis:apis_api:worktype-detail",
+#         lookup_field="pk",
+#         read_only=True
+#     )
+#
+#     class Meta:
+#         model = Work
+#         fields = (
+#             'url', 'id', 'name', 'uri_set', 'collection', 'text', 'kind'
+#         )
 
 
 class GeoJsonSerializer(serializers.BaseSerializer):
@@ -291,58 +291,58 @@ class NetJsonNodeSerializer(serializers.BaseSerializer):
                 r['data']['gender'] = obj.gender
         return r
 
-class LifePathPlaceSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField()
-    name = serializers.CharField()
-    lat = serializers.FloatField()
-    long = serializers.FloatField(source='lng')
-
-    class Meta:
-        fields = ['id', 'name', 'lat', 'long']
-        model = Place
-
-
-class LifePathSerializer(serializers.BaseSerializer):
-    place = serializers.SerializerMethodField(method_name='get_place')
-    year = serializers.SerializerMethodField(method_name='get_year')
-    relation_type = serializers.CharField(source='relation_type__name')
-
-    def get_place(self, obj):
-        if isinstance(obj, PersonInstitution):
-            inst = obj.related_institution
-            rel_type = getattr(settings, 'APIS_LOCATED_IN_ATTR', ['situated in',])
-            ipl_rel = InstitutionPlaceRelation.objects.filter(name__in=rel_type).values_list('pk', flat=True)
-            plc = InstitutionPlace.objects.filter(relation_type_id__in=ipl_rel, related_institution=inst)
-            if plc.count() == 1:
-                plc = plc.first().related_place
-                if plc.lng and plc.lat:
-                    return LifePathPlaceSerializer(plc).data
-        elif isinstance(obj, PersonPlace):
-            plc = obj.related_place
-            if plc.lat and plc.lng:
-                return LifePathPlaceSerializer(plc).data
-
-    def get_year(self, obj):
-        if not obj.start_date and not obj.end_date:
-            return None
-        if obj.start_date and obj.end_date:
-            start = int(obj.start_date.strftime("%Y"))
-            end = int(obj.end_date.strftime("%Y"))
-            return int((start + end) / 2)
-        elif obj.start_date:
-            return int(obj.start_date.strftime("%Y"))
-        elif obj.end_date:
-            return int(obj.end_date.strftime("%Y"))
-
-    def to_representation(self, instance):
-        p = self.get_place(instance)
-        if p is None:
-            return None
-        res = {
-            'id': instance.pk,
-            'coords': [p['lat'], p['long']],
-            'name': p['name'],
-            'year': self.get_year(instance),
-            'relation_type': str(instance.relation_type)
-        }
-        return res
+# class LifePathPlaceSerializer(serializers.ModelSerializer):
+#     id = serializers.ReadOnlyField()
+#     name = serializers.CharField()
+#     lat = serializers.FloatField()
+#     long = serializers.FloatField(source='lng')
+#
+#     class Meta:
+#         fields = ['id', 'name', 'lat', 'long']
+#         model = Place
+#
+#
+# class LifePathSerializer(serializers.BaseSerializer):
+#     place = serializers.SerializerMethodField(method_name='get_place')
+#     year = serializers.SerializerMethodField(method_name='get_year')
+#     relation_type = serializers.CharField(source='relation_type__name')
+#
+#     def get_place(self, obj):
+#         if isinstance(obj, PersonInstitution):
+#             inst = obj.related_institution
+#             rel_type = getattr(settings, 'APIS_LOCATED_IN_ATTR', ['situated in',])
+#             ipl_rel = InstitutionPlaceRelation.objects.filter(name__in=rel_type).values_list('pk', flat=True)
+#             plc = InstitutionPlace.objects.filter(relation_type_id__in=ipl_rel, related_institution=inst)
+#             if plc.count() == 1:
+#                 plc = plc.first().related_place
+#                 if plc.lng and plc.lat:
+#                     return LifePathPlaceSerializer(plc).data
+#         elif isinstance(obj, PersonPlace):
+#             plc = obj.related_place
+#             if plc.lat and plc.lng:
+#                 return LifePathPlaceSerializer(plc).data
+#
+#     def get_year(self, obj):
+#         if not obj.start_date and not obj.end_date:
+#             return None
+#         if obj.start_date and obj.end_date:
+#             start = int(obj.start_date.strftime("%Y"))
+#             end = int(obj.end_date.strftime("%Y"))
+#             return int((start + end) / 2)
+#         elif obj.start_date:
+#             return int(obj.start_date.strftime("%Y"))
+#         elif obj.end_date:
+#             return int(obj.end_date.strftime("%Y"))
+#
+#     def to_representation(self, instance):
+#         p = self.get_place(instance)
+#         if p is None:
+#             return None
+#         res = {
+#             'id': instance.pk,
+#             'coords': [p['lat'], p['long']],
+#             'name': p['name'],
+#             'year': self.get_year(instance),
+#             'relation_type': str(instance.relation_type)
+#         }
+#         return res

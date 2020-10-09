@@ -17,7 +17,7 @@ from django_tables2.export.views import ExportMixin
 from reversion_compare.views import HistoryCompareDetailView
 
 from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
-from apis_core.apis_relations.models import AbstractRelation
+# from apis_core.apis_relations.models import AbstractRelation
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.helper_functions.stanbolQueries import retrieve_obj
 from apis_core.helper_functions.utils import (
@@ -29,7 +29,7 @@ from .forms import (
     NetworkVizFilterForm, PersonResolveUriForm,
     GenericEntitiesStanbolForm
 )
-from .models import Place
+# from .models import Place
 from .tables import get_entities_table
 
 if 'apis_highlighter' in settings.INSTALLED_APPS:
@@ -354,98 +354,98 @@ def getGeoJsonList(request):
 
 
 @user_passes_test(access_for_all_function)
-def getNetJsonList(request):
-    '''Used to retrieve a Json to draw a network'''
-    relation = AbstractRelation.get_relation_class_of_name('PersonPlace')
-    objects = relation.objects.filter(
-            related_place__status='distinct')
-    nodes = dict()
-    edges = []
-
-    for x in objects:
-        if x.related_place.pk not in nodes.keys():
-            place_url = reverse_lazy('apis_entities:place_edit', kwargs={'pk': str(x.related_place.pk)})
-            tt = "<div class='arrow'></div>\
-            <div class='sigma-tooltip-header'>%s</div>\
-            <div class='sigma-tooltip-body'>\
-            <table>\
-                <tr><th>Type</th> <td>%s</td></tr>\
-                <tr><th>Entity</th> <td><a href='%s'>Link</a></td></tr>\
-            </table>\
-            </div>"% (x.related_place.name, 'place', place_url)
-            nodes[x.related_place.pk] = {'type': 'place', 'label': x.related_place.name, 'id': str(x.related_place.pk), 'tooltip': tt}
-        if x.related_person.pk not in nodes.keys():
-            pers_url = reverse_lazy('apis_entities:person_edit', kwargs={'pk': str(x.related_person.pk)})
-            tt = "<div class='arrow'></div>\
-            <div class='sigma-tooltip-header'>%s</div>\
-            <div class='sigma-tooltip-body'>\
-            <table>\
-                <tr><th>Type</th> <td>%s</td></tr>\
-                <tr><th>Entity</th> <td><a href='%s'>Link</a></td></tr>\
-            </table>\
-            </div>"% (str(x.related_person), 'person', pers_url)
-            nodes[x.related_person.pk] = {'type': 'person', 'label': str(x.related_person), 'id': str(x.related_person.pk), 'tooltip': tt}
-        edges.append({'source': x.related_person.pk, 'target': x.related_place.pk, 'kind': x.relation_type.name, 'id': str(x.pk)})
-    lst_json = {'edges': edges, 'nodes': [nodes[x] for x in nodes.keys()]}
-
-    return HttpResponse(json.dumps(lst_json), content_type='application/json')
-
-
-@user_passes_test(access_for_all_function)
-def getNetJsonListInstitution(request):
-    '''Used to retrieve a Json to draw a network'''
-    relation = AbstractRelation.get_relation_class_of_name('PersonInstitution')
-    objects = relation.objects.all()
-    nodes = dict()
-    edges = []
-
-    for x in objects:
-        if x.related_institution.pk not in nodes.keys():
-            inst_url = reverse_lazy('apis_entities:institution_edit', kwargs={'pk': str(x.related_institution.pk)})
-            tt = "<div class='arrow'></div>\
-            <div class='sigma-tooltip-header'>%s</div>\
-            <div class='sigma-tooltip-body'>\
-            <table>\
-                <tr><th>Type</th> <td>%s</td></tr>\
-                <tr><th>Entity</th> <td><a href='%s'>Link</a></td></tr>\
-            </table>\
-            </div>"% (x.related_institution.name, 'institution', inst_url)
-            nodes[x.related_institution.pk] = {'type': 'institution', 'label': x.related_institution.name, 'id': str(x.related_institution.pk), 'tooltip': tt}
-        if x.related_person.pk not in nodes.keys():
-            pers_url = reverse_lazy('apis_entities:person_edit', kwargs={'pk': str(x.related_person.pk)})
-            tt = "<div class='arrow'></div>\
-            <div class='sigma-tooltip-header'>%s</div>\
-            <div class='sigma-tooltip-body'>\
-            <table>\
-                <tr><th>Type</th> <td>%s</td></tr>\
-                <tr><th>Entity</th> <td><a href='%s'>Link</a></td></tr>\
-            </table>\
-            </div>"% (str(x.related_person), 'person', pers_url)
-            nodes[x.related_person.pk] = {'type': 'person', 'label': str(x.related_person), 'id': str(x.related_person.pk), 'tooltip': tt}
-        edges.append({'source': x.related_person.pk, 'target': x.related_institution.pk, 'kind': x.relation_type.name, 'id': str(x.pk)})
-    lst_json = {'edges': edges, 'nodes': [nodes[x] for x in nodes.keys()]}
-
-    return HttpResponse(json.dumps(lst_json), content_type='application/json')
-
-
-@login_required
-def resolve_ambigue_place(request, pk, uri):
-    '''Only used to resolve place names.'''
-    with reversion.create_revision():
-        uri = 'http://'+uri
-        entity = Place.objects.get(pk=pk)
-        pl_n = RDFParser(uri, kind='Place')
-        pl_n.create_objct()
-        pl_n_1 = pl_n.save()
-        pl_n_1 = pl_n.merge(entity)
-        url = pl_n_1.get_absolute_url()
-        if pl_n.created:
-            pl_n_1.status = 'distinct (manually resolved)'
-            pl_n_1.save()
-        UriCandidate.objects.filter(entity=entity).delete()
-        reversion.set_user(request.user)
-
-    return HttpResponseRedirect(url)
+# def getNetJsonList(request):
+#     '''Used to retrieve a Json to draw a network'''
+#     relation = AbstractRelation.get_relation_class_of_name('PersonPlace')
+#     objects = relation.objects.filter(
+#             related_place__status='distinct')
+#     nodes = dict()
+#     edges = []
+#
+#     for x in objects:
+#         if x.related_place.pk not in nodes.keys():
+#             place_url = reverse_lazy('apis_entities:place_edit', kwargs={'pk': str(x.related_place.pk)})
+#             tt = "<div class='arrow'></div>\
+#             <div class='sigma-tooltip-header'>%s</div>\
+#             <div class='sigma-tooltip-body'>\
+#             <table>\
+#                 <tr><th>Type</th> <td>%s</td></tr>\
+#                 <tr><th>Entity</th> <td><a href='%s'>Link</a></td></tr>\
+#             </table>\
+#             </div>"% (x.related_place.name, 'place', place_url)
+#             nodes[x.related_place.pk] = {'type': 'place', 'label': x.related_place.name, 'id': str(x.related_place.pk), 'tooltip': tt}
+#         if x.related_person.pk not in nodes.keys():
+#             pers_url = reverse_lazy('apis_entities:person_edit', kwargs={'pk': str(x.related_person.pk)})
+#             tt = "<div class='arrow'></div>\
+#             <div class='sigma-tooltip-header'>%s</div>\
+#             <div class='sigma-tooltip-body'>\
+#             <table>\
+#                 <tr><th>Type</th> <td>%s</td></tr>\
+#                 <tr><th>Entity</th> <td><a href='%s'>Link</a></td></tr>\
+#             </table>\
+#             </div>"% (str(x.related_person), 'person', pers_url)
+#             nodes[x.related_person.pk] = {'type': 'person', 'label': str(x.related_person), 'id': str(x.related_person.pk), 'tooltip': tt}
+#         edges.append({'source': x.related_person.pk, 'target': x.related_place.pk, 'kind': x.relation_type.name, 'id': str(x.pk)})
+#     lst_json = {'edges': edges, 'nodes': [nodes[x] for x in nodes.keys()]}
+#
+#     return HttpResponse(json.dumps(lst_json), content_type='application/json')
+#
+#
+# @user_passes_test(access_for_all_function)
+# def getNetJsonListInstitution(request):
+#     '''Used to retrieve a Json to draw a network'''
+#     relation = AbstractRelation.get_relation_class_of_name('PersonInstitution')
+#     objects = relation.objects.all()
+#     nodes = dict()
+#     edges = []
+#
+#     for x in objects:
+#         if x.related_institution.pk not in nodes.keys():
+#             inst_url = reverse_lazy('apis_entities:institution_edit', kwargs={'pk': str(x.related_institution.pk)})
+#             tt = "<div class='arrow'></div>\
+#             <div class='sigma-tooltip-header'>%s</div>\
+#             <div class='sigma-tooltip-body'>\
+#             <table>\
+#                 <tr><th>Type</th> <td>%s</td></tr>\
+#                 <tr><th>Entity</th> <td><a href='%s'>Link</a></td></tr>\
+#             </table>\
+#             </div>"% (x.related_institution.name, 'institution', inst_url)
+#             nodes[x.related_institution.pk] = {'type': 'institution', 'label': x.related_institution.name, 'id': str(x.related_institution.pk), 'tooltip': tt}
+#         if x.related_person.pk not in nodes.keys():
+#             pers_url = reverse_lazy('apis_entities:person_edit', kwargs={'pk': str(x.related_person.pk)})
+#             tt = "<div class='arrow'></div>\
+#             <div class='sigma-tooltip-header'>%s</div>\
+#             <div class='sigma-tooltip-body'>\
+#             <table>\
+#                 <tr><th>Type</th> <td>%s</td></tr>\
+#                 <tr><th>Entity</th> <td><a href='%s'>Link</a></td></tr>\
+#             </table>\
+#             </div>"% (str(x.related_person), 'person', pers_url)
+#             nodes[x.related_person.pk] = {'type': 'person', 'label': str(x.related_person), 'id': str(x.related_person.pk), 'tooltip': tt}
+#         edges.append({'source': x.related_person.pk, 'target': x.related_institution.pk, 'kind': x.relation_type.name, 'id': str(x.pk)})
+#     lst_json = {'edges': edges, 'nodes': [nodes[x] for x in nodes.keys()]}
+#
+#     return HttpResponse(json.dumps(lst_json), content_type='application/json')
+#
+#
+# @login_required
+# def resolve_ambigue_place(request, pk, uri):
+#     '''Only used to resolve place names.'''
+#     with reversion.create_revision():
+#         uri = 'http://'+uri
+#         entity = Place.objects.get(pk=pk)
+#         pl_n = RDFParser(uri, kind='Place')
+#         pl_n.create_objct()
+#         pl_n_1 = pl_n.save()
+#         pl_n_1 = pl_n.merge(entity)
+#         url = pl_n_1.get_absolute_url()
+#         if pl_n.created:
+#             pl_n_1.status = 'distinct (manually resolved)'
+#             pl_n_1.save()
+#         UriCandidate.objects.filter(entity=entity).delete()
+#         reversion.set_user(request.user)
+#
+#     return HttpResponseRedirect(url)
 
 
 @login_required

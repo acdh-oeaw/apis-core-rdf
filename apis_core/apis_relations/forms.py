@@ -4,7 +4,7 @@
 from crispy_forms.helper import FormHelper
 from django import forms
 
-from apis_core.apis_entities.models import Place
+# from apis_core.apis_entities.models import Place
 from apis_core.apis_labels.models import Label
 from apis_core.helper_functions import DateParser
 from apis_core.helper_functions.RDFParser import RDFParser
@@ -107,13 +107,13 @@ class EventLabelForm(EntityLabelForm):
 #############################################
 
 
-class PlaceEntityForm(forms.Form):
-    # place = forms.CharField(label='Place', widget=al.TextWidget('OrtAutocomplete'))
-    place_uri = forms.CharField(required=False, widget=forms.HiddenInput())
-
-    def save(self, *args, **kwargs):
-        cd = self.cleaned_data
-        pl = Place.get_or_create_uri(cd['place_uri'])
-        if not pl:
-            pl = RDFParser(cd['place_uri'], 'Place').get_or_create()
-        return pl
+# class PlaceEntityForm(forms.Form):
+#     # place = forms.CharField(label='Place', widget=al.TextWidget('OrtAutocomplete'))
+#     place_uri = forms.CharField(required=False, widget=forms.HiddenInput())
+#
+#     def save(self, *args, **kwargs):
+#         cd = self.cleaned_data
+#         pl = Place.get_or_create_uri(cd['place_uri'])
+#         if not pl:
+#             pl = RDFParser(cd['place_uri'], 'Place').get_or_create()
+#         return pl

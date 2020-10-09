@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.urls import reverse
 
-from .models import AbstractRelation
+# from .models import AbstractRelation
 
 
 # TODO __sresch__ : Change this whole module according to the same logic as in apis_core/apis_entities/filters.py
@@ -131,7 +131,8 @@ def get_generic_relation_filter(entity):
             return queryset.filter(**{f: value})
 
         class Meta:
-            model = AbstractRelation.get_relation_class_of_name(entity)
+            # model = AbstractRelation.get_relation_class_of_name(entity)
+            model = None
             fields = get_filters(
                 model,
                 exclude=get_excluded_fields(model),

@@ -56,8 +56,8 @@ def get_entities_form(entity):
                 'source',
                 'published'
             ]
-            exclude.extend(model.get_related_entity_field_names())
-            exclude.extend(model.get_related_relationtype_field_names())
+            # exclude.extend(model.get_related_entity_field_names())
+            # exclude.extend(model.get_related_relationtype_field_names())
 
 
         def __init__(self, *args, **kwargs):
@@ -141,70 +141,71 @@ def get_entities_form(entity):
                     The sorted list if entity-specific ordering was defined, the same unordered list if not.
                 """
 
-                fields_sort_preferences_per_entity = {
-                    'Person': [
-                        'name',
-                        'first_name',
-                        'gender',
-                        'title',
-                        'start_date_written',
-                        'end_date_written',
-                        'status',
-                        'collection',
-                    ],
-                    'Event': [
-                        'name',
-                        'name_english',
-                    ],
-                    'Institution': [
-                        'name',
-                        'name_english',
-                        'start_date_written',
-                        'end_date_written',
-                    ],
-                    'Place': [
-                        'name',
-                        'name_english'
-                    ],
-                    'Work': [
-                        'name',
-                        'name_english'
-                    ]
-                }
-                sett_entities = getattr(settings, 'APIS_ENTITIES', None)
-                if sett_entities is not None:
-                    for ent in sett_entities.keys():
-                        fields_sort_preferences_per_entity[ent] = sett_entities[ent].get('form_order', fields_sort_preferences_per_entity[ent])
-                if entity_label in fields_sort_preferences_per_entity:
-                    # for this entity an ordering was defined, go trough it
-
-                    sort_preferences = fields_sort_preferences_per_entity[entity_label]
-
-                    # list of tuples to be sorted later
-                    field_rank_pair_list = []
-
-                    for field in list_unsorted:
-                        try:
-                            # if this succeeds, then the field has been given a priorites ordering above
-                            field_rank_pair = (field, sort_preferences.index(field))
-
-                        except Exception as e:
-                            # if no ordering for the field was found, then give it 'Inf'
-                            # so that it will be attached at the end.
-                            field_rank_pair = (field, float('Inf'))
-
-                        field_rank_pair_list.append(field_rank_pair)
-
-                    # sort the list according to the second element in each tuple
-                    # and then take the first elements from it and return as list
-                    return [ t[0] for t in sorted(field_rank_pair_list, key=lambda x: x[1]) ]
-
-                else:
-                    # for this entity no ordering was defined, return unsorted list
-                    return list_unsorted
+                # fields_sort_preferences_per_entity = {
+                #     'Person': [
+                #         'name',
+                #         'first_name',
+                #         'gender',
+                #         'title',
+                #         'start_date_written',
+                #         'end_date_written',
+                #         'status',
+                #         'collection',
+                #     ],
+                #     'Event': [
+                #         'name',
+                #         'name_english',
+                #     ],
+                #     'Institution': [
+                #         'name',
+                #         'name_english',
+                #         'start_date_written',
+                #         'end_date_written',
+                #     ],
+                #     'Place': [
+                #         'name',
+                #         'name_english'
+                #     ],
+                #     'Work': [
+                #         'name',
+                #         'name_english'
+                #     ]
+                # }
+                # sett_entities = getattr(settings, 'APIS_ENTITIES', None)
+                # if sett_entities is not None:
+                #     for ent in sett_entities.keys():
+                #         fields_sort_preferences_per_entity[ent] = sett_entities[ent].get('form_order', fields_sort_preferences_per_entity[ent])
+                # if entity_label in fields_sort_preferences_per_entity:
+                #     # for this entity an ordering was defined, go trough it
+                #
+                #     sort_preferences = fields_sort_preferences_per_entity[entity_label]
+                #
+                #     # list of tuples to be sorted later
+                #     field_rank_pair_list = []
+                #
+                #     for field in list_unsorted:
+                #         try:
+                #             # if this succeeds, then the field has been given a priorites ordering above
+                #             field_rank_pair = (field, sort_preferences.index(field))
+                #
+                #         except Exception as e:
+                #             # if no ordering for the field was found, then give it 'Inf'
+                #             # so that it will be attached at the end.
+                #             field_rank_pair = (field, float('Inf'))
+                #
+                #         field_rank_pair_list.append(field_rank_pair)
+                #
+                #     # sort the list according to the second element in each tuple
+                #     # and then take the first elements from it and return as list
+                #     return [ t[0] for t in sorted(field_rank_pair_list, key=lambda x: x[1]) ]
+                #
+                # else:
+                #     # for this entity no ordering was defined, return unsorted list
+                #     return list_unsorted
 
             # sort field list, iterate over it and append each element to the accordion group
-            for f in sort_fields_list(fields_list_unsorted, entity):
+            # for f in sort_fields_list(fields_list_unsorted, entity):
+            for f in fields_list_unsorted:
                 acc_grp1.append(f)
 
 

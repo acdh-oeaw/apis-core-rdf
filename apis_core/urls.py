@@ -15,13 +15,13 @@ from rest_framework.schemas import get_schema_view
 from rest_framework_swagger.renderers import OpenAPIRenderer, SwaggerUIRenderer
 
 from apis_core.api_routers import views
-from apis_core.apis_entities.api_views import (
-    NetJsonViewSet,
-    PlaceGeoJsonViewSet,
-)
-from apis_core.apis_vocabularies.api_views import (
-    UserViewSet,
-)
+# from apis_core.apis_entities.api_views import (
+#     NetJsonViewSet,
+#     PlaceGeoJsonViewSet,
+# )
+# from apis_core.apis_vocabularies.api_views import (
+#     UserViewSet,
+# )
 
 app_name = "apis_core"
 
@@ -58,9 +58,9 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
     router.register(r"HLVocabularyAPI", HighlighterVocabularyAPIViewSet)
     router.register(r"HLAnnotation", HighlighterAnnotationViewSet)
 
-router.register(r"users", UserViewSet)
-router.register(r"GeoJsonPlace", PlaceGeoJsonViewSet, "PlaceGeoJson")
-router.register(r"NetJson", NetJsonViewSet, "NetJson")
+# router.register(r"users", UserViewSet)
+# router.register(r"GeoJsonPlace", PlaceGeoJsonViewSet, "PlaceGeoJson")
+# router.register(r"NetJson", NetJsonViewSet, "NetJson")
 
 
 @api_view()

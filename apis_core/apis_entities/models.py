@@ -29,7 +29,7 @@ BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
 
 
 
-
+# TODO : Make TempEntityClass as subclass of AbstractEntity
 class AbstractEntity(TempEntityClass):
     """
     Abstract super class which encapsulates common logic between the different entity kinds and provides various methods
@@ -55,23 +55,23 @@ class AbstractEntity(TempEntityClass):
 
     def __str__(self):
 
-        if self.__class__ == Person:
+        # if self.__class__ == Person:
+        #
+        #     if self.first_name != "" and self.name != "":
+        #         return "{}, {}".format(self.name, self.first_name)
+        #     elif self.first_name != "" and self.name == "":
+        #         return "{}, {}".format("no surename provided", self.first_name)
+        #     elif self.first_name == "" and self.name != "":
+        #         return self.name
+        #     elif self.first_name == "" and self.name == "":
+        #         return "no name provided"
+        #
+        # else:
 
-            if self.first_name != "" and self.name != "":
-                return "{}, {}".format(self.name, self.first_name)
-            elif self.first_name != "" and self.name == "":
-                return "{}, {}".format("no surename provided", self.first_name)
-            elif self.first_name == "" and self.name != "":
-                return self.name
-            elif self.first_name == "" and self.name == "":
-                return "no name provided"
-
+        if self.name != "":
+            return self.name
         else:
-
-            if self.name != "":
-                return self.name
-            else:
-                return "no name provided"
+            return "no name provided"
 
 
     @classmethod
@@ -499,149 +499,215 @@ class AbstractEntity(TempEntityClass):
 
 
 
+# @reversion.register(follow=["tempentityclass_ptr"])
+# class Person(AbstractEntity):
+#
+#     GENDER_CHOICES = (("female", "female"), ("male", "male"), ("third gender", "third gender"))
+#     first_name = models.CharField(
+#         max_length=255,
+#         help_text="The persons´s forename. In case of more then one name...",
+#         blank=True,
+#         null=True,
+#     )
+#     profession = models.ManyToManyField(ProfessionType, blank=True)
+#     title = models.ManyToManyField(Title, blank=True)
+#     gender = models.CharField(max_length=15, choices=GENDER_CHOICES, blank=True, null=True)
+#
+#     def save(self, *args, **kwargs):
+#         if self.first_name:
+#             # secure correct unicode encoding
+#             if self.first_name != unicodedata.normalize("NFC", self.first_name):
+#                 self.first_name = unicodedata.normalize("NFC", self.first_name)
+#         super(Person, self).save(*args, **kwargs)
+#         return self
+#
+#
+# @reversion.register(follow=["tempentityclass_ptr"])
+# class Place(AbstractEntity):
+#
+#     kind = models.ForeignKey(
+#         PlaceType, blank=True, null=True, on_delete=models.SET_NULL
+#     )
+#     lat = models.FloatField(blank=True, null=True, verbose_name="latitude")
+#     lng = models.FloatField(blank=True, null=True, verbose_name="longitude")
+#
+#     def save(self, *args, **kwargs):
+#         if isinstance(self.lat, float) and isinstance(self.lng, float):
+#             self.status = 'distinct'
+#         super(Place, self).save(*args, **kwargs)
+#         return self
+#
+#
+# @reversion.register(follow=["tempentityclass_ptr"])
+# class Institution(AbstractEntity):
+#
+#     kind = models.ForeignKey(
+#         InstitutionType, blank=True, null=True, on_delete=models.SET_NULL
+#     )
+#
+#
+# @reversion.register(follow=["tempentityclass_ptr"])
+# class Event(AbstractEntity):
+#
+#     kind = models.ForeignKey(
+#         EventType, blank=True, null=True, on_delete=models.SET_NULL
+#     )
+#
+#
+# @reversion.register(follow=["tempentityclass_ptr"])
+# class Work(AbstractEntity):
+#
+#     kind = models.ForeignKey(
+#         WorkType, blank=True, null=True, on_delete=models.SET_NULL
+#     )
+
+
 @reversion.register(follow=["tempentityclass_ptr"])
-class Person(AbstractEntity):
+class F1_Work(AbstractEntity):
 
-    GENDER_CHOICES = (("female", "female"), ("male", "male"), ("third gender", "third gender"))
-    first_name = models.CharField(
-        max_length=255,
-        help_text="The persons´s forename. In case of more then one name...",
-        blank=True,
-        null=True,
-    )
-    profession = models.ManyToManyField(ProfessionType, blank=True)
-    title = models.ManyToManyField(Title, blank=True)
-    gender = models.CharField(max_length=15, choices=GENDER_CHOICES, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        if self.first_name:
-            # secure correct unicode encoding
-            if self.first_name != unicodedata.normalize("NFC", self.first_name):
-                self.first_name = unicodedata.normalize("NFC", self.first_name)
-        super(Person, self).save(*args, **kwargs)
-        return self
+    pass
 
 
 @reversion.register(follow=["tempentityclass_ptr"])
-class Place(AbstractEntity):
+class F2_Expression(AbstractEntity):
 
-    kind = models.ForeignKey(
-        PlaceType, blank=True, null=True, on_delete=models.SET_NULL
-    )
-    lat = models.FloatField(blank=True, null=True, verbose_name="latitude")
-    lng = models.FloatField(blank=True, null=True, verbose_name="longitude")
-
-    def save(self, *args, **kwargs):
-        if isinstance(self.lat, float) and isinstance(self.lng, float):
-            self.status = 'distinct'
-        super(Place, self).save(*args, **kwargs)
-        return self
+    pass
 
 
 @reversion.register(follow=["tempentityclass_ptr"])
-class Institution(AbstractEntity):
+class F3_Manifestation_Product_Type(AbstractEntity):
 
-    kind = models.ForeignKey(
-        InstitutionType, blank=True, null=True, on_delete=models.SET_NULL
-    )
+    pass
 
 
 @reversion.register(follow=["tempentityclass_ptr"])
-class Event(AbstractEntity):
+class F4_Manifestation_Singleton(AbstractEntity):
 
-    kind = models.ForeignKey(
-        EventType, blank=True, null=True, on_delete=models.SET_NULL
-    )
+    pass
 
 
 @reversion.register(follow=["tempentityclass_ptr"])
-class Work(AbstractEntity):
+class F5_Item(AbstractEntity):
 
-    kind = models.ForeignKey(
-        WorkType, blank=True, null=True, on_delete=models.SET_NULL
-    )
+    pass
 
 
-@receiver(post_save, sender=Event, dispatch_uid="create_default_uri")
-@receiver(post_save, sender=Work, dispatch_uid="create_default_uri")
-@receiver(post_save, sender=Institution, dispatch_uid="create_default_uri")
-@receiver(post_save, sender=Person, dispatch_uid="create_default_uri")
-@receiver(post_save, sender=Place, dispatch_uid="create_default_uri")
-def create_default_uri(sender, instance, **kwargs):
-    if kwargs['created']:
-        if BASE_URI.endswith('/'):
-            base1 = BASE_URI[:-1]
-        else:
-            base1 = BASE_URI
-        uri_c = "{}{}".format(
-            base1,
-            reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
-        )
-        uri2 = Uri(uri=uri_c, domain="apis default", entity=instance)
-        uri2.save()
+@reversion.register(follow=["tempentityclass_ptr"])
+class F6_Concept(AbstractEntity):
+
+    pass
 
 
-@receiver(
-    m2m_changed,
-    sender=Event.collection.through,
-    dispatch_uid="create_object_permissions",
-)
-@receiver(
-    m2m_changed,
-    sender=Work.collection.through,
-    dispatch_uid="create_object_permissions",
-)
-@receiver(
-    m2m_changed,
-    sender=Institution.collection.through,
-    dispatch_uid="create_object_permissions",
-)
-@receiver(
-    m2m_changed,
-    sender=Person.collection.through,
-    dispatch_uid="create_object_permissions",
-)
-@receiver(
-    m2m_changed,
-    sender=Place.collection.through,
-    dispatch_uid="create_object_permissions",
-)
-def create_object_permissions(sender, instance, **kwargs):
-    if kwargs["action"] == "pre_add":
-        perms = []
-        for j in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
-            perms.extend(j.groups_allowed.all())
-        for x in perms:
-            assign_perm("change_" + instance.__class__.__name__.lower(), x, instance)
-            assign_perm("delete_" + instance.__class__.__name__.lower(), x, instance)
-    elif kwargs["action"] == "post_remove":
-        perms = []
-        perms_keep = []
-        for j in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
-            perms.extend(j.groups_allowed.all())
-        for u in instance.collection.all():
-            perms_keep.extend(u.groups_allowed.all())
-        rm_perms = set(perms) - set(perms_keep)
-        for x in rm_perms:
-            remove_perm("change_" + instance.__class__.__name__.lower(), x, instance)
-            remove_perm("delete_" + instance.__class__.__name__.lower(), x, instance)
+@reversion.register(follow=["tempentityclass_ptr"])
+class F7_Object(AbstractEntity):
+
+    pass
 
 
-@receiver(
-    m2m_changed,
-    sender=Collection.groups_allowed.through,
-    dispatch_uid="add_usergroup_collection",
-)
-def add_usergroup_collection(sender, instance, **kwargs):
-    if kwargs["action"] == "pre_add":
-        for x in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
-            for z in ["change", "delete"]:
-                for y in [Person, Institution, Place, Event, Work]:
-                    assign_perm(
-                        z + "_" + y.__name__.lower(),
-                        x,
-                        y.objects.filter(collection=instance),
-                    )
+@reversion.register(follow=["tempentityclass_ptr"])
+class F8_Event(AbstractEntity):
+
+    pass
+
+
+@reversion.register(follow=["tempentityclass_ptr"])
+class F9_Place(AbstractEntity):
+
+    pass
+
+
+@reversion.register(follow=["tempentityclass_ptr"])
+class F10_Person(AbstractEntity):
+
+    pass
+
+
+@reversion.register(follow=["tempentityclass_ptr"])
+class F11_Corporate_Body(AbstractEntity):
+
+    pass
+
+
+# @receiver(post_save, sender=Event, dispatch_uid="create_default_uri")
+# @receiver(post_save, sender=Work, dispatch_uid="create_default_uri")
+# @receiver(post_save, sender=Institution, dispatch_uid="create_default_uri")
+# @receiver(post_save, sender=Person, dispatch_uid="create_default_uri")
+# @receiver(post_save, sender=Place, dispatch_uid="create_default_uri")
+# def create_default_uri(sender, instance, **kwargs):
+#     if kwargs['created']:
+#         if BASE_URI.endswith('/'):
+#             base1 = BASE_URI[:-1]
+#         else:
+#             base1 = BASE_URI
+#         uri_c = "{}{}".format(
+#             base1,
+#             reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
+#         )
+#         uri2 = Uri(uri=uri_c, domain="apis default", entity=instance)
+#         uri2.save()
+#
+#
+# @receiver(
+#     m2m_changed,
+#     sender=Event.collection.through,
+#     dispatch_uid="create_object_permissions",
+# )
+# @receiver(
+#     m2m_changed,
+#     sender=Work.collection.through,
+#     dispatch_uid="create_object_permissions",
+# )
+# @receiver(
+#     m2m_changed,
+#     sender=Institution.collection.through,
+#     dispatch_uid="create_object_permissions",
+# )
+# @receiver(
+#     m2m_changed,
+#     sender=Person.collection.through,
+#     dispatch_uid="create_object_permissions",
+# )
+# @receiver(
+#     m2m_changed,
+#     sender=Place.collection.through,
+#     dispatch_uid="create_object_permissions",
+# )
+# def create_object_permissions(sender, instance, **kwargs):
+#     if kwargs["action"] == "pre_add":
+#         perms = []
+#         for j in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
+#             perms.extend(j.groups_allowed.all())
+#         for x in perms:
+#             assign_perm("change_" + instance.__class__.__name__.lower(), x, instance)
+#             assign_perm("delete_" + instance.__class__.__name__.lower(), x, instance)
+#     elif kwargs["action"] == "post_remove":
+#         perms = []
+#         perms_keep = []
+#         for j in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
+#             perms.extend(j.groups_allowed.all())
+#         for u in instance.collection.all():
+#             perms_keep.extend(u.groups_allowed.all())
+#         rm_perms = set(perms) - set(perms_keep)
+#         for x in rm_perms:
+#             remove_perm("change_" + instance.__class__.__name__.lower(), x, instance)
+#             remove_perm("delete_" + instance.__class__.__name__.lower(), x, instance)
+#
+#
+# @receiver(
+#     m2m_changed,
+#     sender=Collection.groups_allowed.through,
+#     dispatch_uid="add_usergroup_collection",
+# )
+# def add_usergroup_collection(sender, instance, **kwargs):
+#     if kwargs["action"] == "pre_add":
+#         for x in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
+#             for z in ["change", "delete"]:
+#                 for y in [Person, Institution, Place, Event, Work]:
+#                     assign_perm(
+#                         z + "_" + y.__name__.lower(),
+#                         x,
+#                         y.objects.filter(collection=instance),
+#                     )
 
 
 if "registration" in getattr(settings, "INSTALLED_APPS", []):
@@ -662,4 +728,4 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
 
 
 # Call the field generation function here, after all relevant entity classes have been defined above
-EntityRelationFieldGenerator.generate_all_fields()
+# EntityRelationFieldGenerator.generate_all_fields()

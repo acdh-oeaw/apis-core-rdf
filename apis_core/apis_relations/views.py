@@ -9,15 +9,16 @@ from django.http import HttpResponse, Http404
 from django.template.loader import render_to_string
 from apis_core.apis_relations import forms as relation_form_module
 
-from apis_core.apis_entities.models import Person, Institution, Place, Event, Work, AbstractEntity
+# from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
+from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from .forms2 import GenericRelationForm
-from .models import (
-    PersonPlace, PersonPerson, PersonInstitution, InstitutionPlace,
-    InstitutionInstitution, PlacePlace, PersonEvent, InstitutionEvent, PlaceEvent, PersonWork,
-    InstitutionWork, PlaceWork, EventWork, WorkWork
-)
+# from .models import (
+#     PersonPlace, PersonPerson, PersonInstitution, InstitutionPlace,
+#     InstitutionInstitution, PlacePlace, PersonEvent, InstitutionEvent, PlaceEvent, PersonWork,
+#     InstitutionWork, PlaceWork, EventWork, WorkWork
+# )
 #from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
 from .tables import LabelTableEdit
 
@@ -60,39 +61,39 @@ form_class_dict = turn_form_modules_into_dict(form_module_list)
 
 
 # Model-classes must be registered together with their ModelForm-classes
-registered_forms = {'WorkWorkForm': [WorkWork, Work, Work],
-                    'PersonPlaceForm': [PersonPlace, Person, Place],
-                    'PersonPlaceHighlighterForm': [PersonPlace, Person, Place],
-                    'PersonPersonForm': [PersonPerson, Person, Person],
-                    'PersonPersonHighlighterForm': [PersonPerson, Person, Person],
-                    'PersonInstitutionForm': [PersonInstitution, Person, Institution],
-                    'PersonEventForm': [PersonEvent, Person, Event],
-                    'PersonWorkForm': [PersonWork, Person, Work],
-                    'PersonInstitutionHighlighterForm': [PersonInstitution, Person, Institution],
-                    'PersonWorkHighlighterForm': [PersonWork, Person, Work],
-                    'PlaceWorkHighlighterForm': [PlaceWork, Place, Work],
-                    'InstitutionWorkHighlighterForm': [InstitutionWork, Institution, Work],
-                    'InstitutionPlaceForm': [InstitutionPlace, Institution, Place],
-                    'InstitutionInstitutionForm': [
-                        InstitutionInstitution,
-                        Institution,
-                        Institution],
-                    'InstitutionPersonForm': [PersonInstitution, Institution, Person],
-                    'InstitutionEventForm': [InstitutionEvent, Institution, Event],
-                    'InstitutionWorkForm': [InstitutionWork, Institution, Work],
-                    'PlaceEventForm': [PlaceEvent, Place, Event],
-                    'PlaceWorkForm': [PlaceWork, Place, Work],
-                    'PlacePlaceForm': [PlacePlace, Place, Place],
-                    'EventWorkForm': [EventWork, Event, Work],
-                    'InstitutionLabelForm': [Label, Institution, Label],
-                    'PersonLabelForm': [Label, Person, Label],
-                    'EventLabelForm': [Label, Event, Label],
-                    'PersonResolveUriForm': [Uri, Person, Uri],
-                    'SundayHighlighterForm': [ ],
-                    'AddRelationHighlighterPersonForm': [],
-                    #'PlaceHighlighterForm': [Annotation, ],
-                    #'PersonHighlighterForm': [Annotation, ]
-                    }
+# registered_forms = {'WorkWorkForm': [WorkWork, Work, Work],
+#                     'PersonPlaceForm': [PersonPlace, Person, Place],
+#                     'PersonPlaceHighlighterForm': [PersonPlace, Person, Place],
+#                     'PersonPersonForm': [PersonPerson, Person, Person],
+#                     'PersonPersonHighlighterForm': [PersonPerson, Person, Person],
+#                     'PersonInstitutionForm': [PersonInstitution, Person, Institution],
+#                     'PersonEventForm': [PersonEvent, Person, Event],
+#                     'PersonWorkForm': [PersonWork, Person, Work],
+#                     'PersonInstitutionHighlighterForm': [PersonInstitution, Person, Institution],
+#                     'PersonWorkHighlighterForm': [PersonWork, Person, Work],
+#                     'PlaceWorkHighlighterForm': [PlaceWork, Place, Work],
+#                     'InstitutionWorkHighlighterForm': [InstitutionWork, Institution, Work],
+#                     'InstitutionPlaceForm': [InstitutionPlace, Institution, Place],
+#                     'InstitutionInstitutionForm': [
+#                         InstitutionInstitution,
+#                         Institution,
+#                         Institution],
+#                     'InstitutionPersonForm': [PersonInstitution, Institution, Person],
+#                     'InstitutionEventForm': [InstitutionEvent, Institution, Event],
+#                     'InstitutionWorkForm': [InstitutionWork, Institution, Work],
+#                     'PlaceEventForm': [PlaceEvent, Place, Event],
+#                     'PlaceWorkForm': [PlaceWork, Place, Work],
+#                     'PlacePlaceForm': [PlacePlace, Place, Place],
+#                     'EventWorkForm': [EventWork, Event, Work],
+#                     'InstitutionLabelForm': [Label, Institution, Label],
+#                     'PersonLabelForm': [Label, Person, Label],
+#                     'EventLabelForm': [Label, Event, Label],
+#                     'PersonResolveUriForm': [Uri, Person, Uri],
+#                     'SundayHighlighterForm': [ ],
+#                     'AddRelationHighlighterPersonForm': [],
+#                     #'PlaceHighlighterForm': [Annotation, ],
+#                     #'PersonHighlighterForm': [Annotation, ]
+#                     }
 
 
 @login_required
@@ -106,42 +107,52 @@ def get_form_ajax(request):
     entity_type_str = request.POST.get('entity_type')
     form_match = re.match(r'([A-Z][a-z]+)([A-Z][a-z]+)(Highlighter)?Form', FormName)
     form_match2 = re.match(r'([A-Z][a-z]+)(Highlighter)?Form', FormName)
-    if FormName and form_match:
-        entity_type_v1 = ContentType.objects.filter(
-            model='{}{}'.format(form_match.group(1).lower(), form_match.group(2)).lower(),
-            app_label='apis_relations')
-        entity_type_v2 = ContentType.objects.none()
-    elif FormName and form_match2:
-        entity_type_v2 = ContentType.objects.filter(
-            model='{}'.format(
-                form_match.group(1).lower(),
-                app_label='apis_entities'))
-        entity_type_v1 = ContentType.objects.none()
+
+
+    if FormName == "TripleForm":
+
+        from apis_core.apis_relations.forms2 import TripleForm
+        form = TripleForm()
+
     else:
-        entity_type_v1 = ContentType.objects.none()
-        entity_type_v2 = ContentType.objects.none()
-    if ObjectID == 'false' or ObjectID is None or ObjectID == 'None':
-        ObjectID = False
-        form_dict = {'entity_type': entity_type_str}
-    elif entity_type_v1.count() > 0:
-        d = entity_type_v1[0].model_class().objects.get(pk=ObjectID)
-        form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
-    elif entity_type_v2.count() > 0:
-        d = entity_type_v2[0].model_class().objects.get(pk=ObjectID)
-        form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
-    else:
-        if FormName not in registered_forms.keys():
-            raise Http404
-        d = registered_forms[FormName][0].objects.get(pk=ObjectID)
-        form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
-    if entity_type_v1.count() > 0:
-        form_dict['relation_form'] = '{}{}'.format(form_match.group(1), form_match.group(2))
-        if form_match.group(3) == 'Highlighter':
-            form_dict['highlighter'] = True
-        form = GenericRelationForm(**form_dict)
-    else:
-        form_class = form_class_dict[FormName]
-        form = form_class(**form_dict)
+
+        if FormName and form_match:
+            entity_type_v1 = ContentType.objects.filter(
+                model='{}{}'.format(form_match.group(1).lower(), form_match.group(2)).lower(),
+                app_label='apis_relations')
+            entity_type_v2 = ContentType.objects.none()
+        elif FormName and form_match2:
+            entity_type_v2 = ContentType.objects.filter(
+                model='{}'.format(
+                    form_match.group(1).lower(),
+                    app_label='apis_entities'))
+            entity_type_v1 = ContentType.objects.none()
+        else:
+            entity_type_v1 = ContentType.objects.none()
+            entity_type_v2 = ContentType.objects.none()
+        if ObjectID == 'false' or ObjectID is None or ObjectID == 'None':
+            ObjectID = False
+            form_dict = {'entity_type': entity_type_str}
+        elif entity_type_v1.count() > 0:
+            d = entity_type_v1[0].model_class().objects.get(pk=ObjectID)
+            form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
+        elif entity_type_v2.count() > 0:
+            d = entity_type_v2[0].model_class().objects.get(pk=ObjectID)
+            form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
+        else:
+            if FormName not in registered_forms.keys():
+                raise Http404
+            d = registered_forms[FormName][0].objects.get(pk=ObjectID)
+            form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
+        if entity_type_v1.count() > 0:
+            form_dict['relation_form'] = '{}{}'.format(form_match.group(1), form_match.group(2))
+            if form_match.group(3) == 'Highlighter':
+                form_dict['highlighter'] = True
+            form = GenericRelationForm(**form_dict)
+        else:
+            form_class = form_class_dict[FormName]
+            form = form_class(**form_dict)
+
     tab = FormName[:-4]
     data = {'tab': tab, 'form': render_to_string("apis_relations/_ajax_form.html", {
                 "entity_type": entity_type_str,
