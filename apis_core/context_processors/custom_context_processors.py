@@ -9,7 +9,8 @@ def add_entities(request):
     for name, obj in inspect.getmembers(
         sys.modules['apis_core.apis_entities.models'], inspect.isclass
     ):
-        if obj.__module__ == 'apis_core.apis_entities.models' and name != "AbstractEntity":
+        # if obj.__module__ == 'apis_core.apis_entities.models' and name != "AbstractEntity":
+        if obj.__module__ == 'apis_ontology.models' and name != "AbstractEntity":
             ent_list.append(str(name).lower())
     res = {
         'entities_list': ent_list,

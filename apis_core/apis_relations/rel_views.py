@@ -4,8 +4,8 @@ from django_tables2 import RequestConfig
 
 from apis_core.apis_entities.views import GenericListViewNew
 # from apis_core.apis_relations.models import AbstractRelation
-from .rel_filters import get_generic_relation_filter
-from .tables import get_generic_relation_listview_table
+from .rel_filters import get_generic_relation_filter, TripleFilter
+from .tables import get_generic_relation_listview_table, TripleTable
 
 
 class GenericRelationView(GenericListViewNew):
@@ -23,8 +23,9 @@ class GenericRelationView(GenericListViewNew):
         self.entity = self.kwargs.get('entity')
         # qs = AbstractRelation.get_relation_class_of_name(self.entity).objects.all()
         qs = None
-        self.filter = get_generic_relation_filter(
-            self.entity.title())(self.request.GET, queryset=qs)
+        # self.filter = get_generic_relation_filter(
+        #     self.entity.title())(self.request.GET, queryset=qs)
+        self.filter = TripleFilter(self.request.GET, queryset=qs)
         self.filter.form.helper = self.formhelper_class()
         if callable(getattr(self.filter.qs, 'filter_for_user', None)):
             return self.filter.qs.filter_for_user().distinct()
@@ -34,7 +35,8 @@ class GenericRelationView(GenericListViewNew):
 
     def get_table(self, **kwargs):
         relation_name = self.kwargs['entity'].lower()
-        self.table_class = get_generic_relation_listview_table(relation_name=relation_name)
+        # self.table_class = get_generic_relation_listview_table(relation_name=relation_name)
+        self.table_class = TripleTable
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(self.request, paginate={
             'page': 1, 'per_page': self.paginate_by}).configure(table)

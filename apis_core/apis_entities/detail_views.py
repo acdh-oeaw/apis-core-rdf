@@ -12,7 +12,7 @@ from apis_core.apis_metainfo.models import Uri
 # from apis_core.apis_relations.models import AbstractRelation
 from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, LabelTableBase  # , EntityDetailViewLabelTable
 from apis_core.helper_functions.utils import access_for_all
-from .models import AbstractEntity
+from apis_core.apis_entities.models import AbstractEntity
 from .views import get_highlighted_texts
 from apis_core.apis_relations.models import Triple, TempTriple
 
@@ -34,6 +34,10 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
         side_bar = []
 
+
+
+
+
         triples_related_all = Triple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
 
         for entity_class in AbstractEntity.get_all_entity_classes():
@@ -50,7 +54,11 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
                 )
             )
 
-            table = get_generic_triple_table(other_entity_class_name=other_entity_class_name, this_entity_pk=pk, detail=True)
+            table = get_generic_triple_table(
+                other_entity_class_name=other_entity_class_name,
+                this_entity_pk=pk,
+                detail=True
+            )
 
         # for rel in relations:
         #     match = [
@@ -85,7 +93,10 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         #                 objects = objects.filter_for_user()
 
 
-            prefix = f"other {other_entity_class_name}"
+
+
+
+            prefix = f"{other_entity_class_name}"
             title_card = prefix
             match = [prefix]
             tb_object = table(data=triples_related_by_entity, prefix=prefix)

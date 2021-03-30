@@ -3,7 +3,7 @@ import re
 import sys
 import unicodedata
 
-# from reversion import revisions as reversion
+from reversion import revisions as reversion
 import reversion
 from django.conf import settings
 from django.contrib.auth.models import Group
@@ -23,7 +23,6 @@ from apis_core.apis_vocabularies.models import (
     Title,
     WorkType,
 )
-from apis_core.helper_functions import EntityRelationFieldGenerator
 
 BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
 
@@ -41,38 +40,22 @@ class AbstractEntity(TempEntityClass):
 
     class Meta:
         abstract = True
+        app_label = "apis_entities"
 
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
         self.__class__.create_relation_methods_from_manytomany_fields()
 
-
-
     # Methods dealing with individual data retrievals of instances
     ####################################################################################################################
 
-
     def __str__(self):
-
-        # if self.__class__ == Person:
-        #
-        #     if self.first_name != "" and self.name != "":
-        #         return "{}, {}".format(self.name, self.first_name)
-        #     elif self.first_name != "" and self.name == "":
-        #         return "{}, {}".format("no surename provided", self.first_name)
-        #     elif self.first_name == "" and self.name != "":
-        #         return self.name
-        #     elif self.first_name == "" and self.name == "":
-        #         return "no name provided"
-        #
-        # else:
 
         if self.name != "":
             return self.name
         else:
             return "no name provided"
-
 
     @classmethod
     def get_or_create_uri(cls, uri):
@@ -91,7 +74,6 @@ class AbstractEntity(TempEntityClass):
 
     # Various Methods enabling convenient shortcuts between entities, relations, fields, etc
     ####################################################################################################################
-
 
     @classmethod
     def create_relation_methods_from_manytomany_fields(cls):
@@ -119,7 +101,9 @@ class AbstractEntity(TempEntityClass):
         :return: None
         """
 
-        def create_function_from_manytomany_field_to_other_entity(entity_manytomany_field):
+        def create_function_from_manytomany_field_to_other_entity(
+            entity_manytomany_field,
+        ):
             """
             creates the individual method from a ManyToMany field by calling the manager's objects.all()
 
@@ -135,7 +119,9 @@ class AbstractEntity(TempEntityClass):
             """
             return lambda self: getattr(self, entity_manytomany_field).all().distinct()
 
-        def create_function_from_manytomany_field_to_self_entity(entityA_manytomany_field, entityB_manytomany_field):
+        def create_function_from_manytomany_field_to_self_entity(
+            entityA_manytomany_field, entityB_manytomany_field
+        ):
             """
             Same method as above, but with two managers instead of one for the case of self-relations.
 
@@ -146,12 +132,11 @@ class AbstractEntity(TempEntityClass):
             :param entityB_manytomany_field: ManyToManyManager to entity A in a self-relation
             :return: method to call both and return the distinct union of them
             """
-            return lambda self: \
-                (
-                    getattr(self, entityA_manytomany_field).all().union(
-                        getattr(self, entityB_manytomany_field).all())
-                ).distinct()
-
+            return lambda self: (
+                getattr(self, entityA_manytomany_field)
+                .all()
+                .union(getattr(self, entityB_manytomany_field).all())
+            ).distinct()
 
         for entity_name in cls.get_all_entity_names():
             # Iterate over each entity defined within this models' module
@@ -164,28 +149,37 @@ class AbstractEntity(TempEntityClass):
                     # If the related entity is the same as this current one, then set the names of the related functions
                     # to A and B and also combine them into one function where both A and B are returned.
 
-                    related_entityA_function_name = "get_related_" + entity_name + "A_instances"
-                    related_entityB_function_name = "get_related_" + entity_name + "B_instances"
+                    related_entityA_function_name = (
+                        "get_related_" + entity_name + "A_instances"
+                    )
+                    related_entityB_function_name = (
+                        "get_related_" + entity_name + "B_instances"
+                    )
                     entityA_manytomany_field = entity_name + "A_set"
                     entityB_manytomany_field = entity_name + "B_set"
 
                     setattr(
                         cls,
                         related_entityA_function_name,
-                        create_function_from_manytomany_field_to_other_entity(entityA_manytomany_field)
+                        create_function_from_manytomany_field_to_other_entity(
+                            entityA_manytomany_field
+                        ),
                     )
 
                     setattr(
                         cls,
                         related_entityB_function_name,
-                        create_function_from_manytomany_field_to_other_entity(entityB_manytomany_field)
+                        create_function_from_manytomany_field_to_other_entity(
+                            entityB_manytomany_field
+                        ),
                     )
 
                     setattr(
                         cls,
                         related_entity_function_name,
-                        create_function_from_manytomany_field_to_self_entity(entityA_manytomany_field,
-                                                                             entityB_manytomany_field)
+                        create_function_from_manytomany_field_to_self_entity(
+                            entityA_manytomany_field, entityB_manytomany_field
+                        ),
                     )
 
                 else:
@@ -196,18 +190,16 @@ class AbstractEntity(TempEntityClass):
                     setattr(
                         cls,
                         related_entity_function_name,
-                        create_function_from_manytomany_field_to_other_entity(entity_manytomany_field)
+                        create_function_from_manytomany_field_to_other_entity(
+                            entity_manytomany_field
+                        ),
                     )
-
-
 
     # Methods dealing with all entities
     ####################################################################################################################
 
-
     _all_entity_classes = None
     _all_entity_names = None
-
 
     @classmethod
     def get_all_entity_classes(cls):
@@ -220,20 +212,24 @@ class AbstractEntity(TempEntityClass):
             entity_classes = []
             entity_names = []
 
-            for entity_name, entity_class in inspect.getmembers(sys.modules[__name__], inspect.isclass):
+            for entity_name, entity_class in inspect.getmembers(
+                sys.modules[__name__], inspect.isclass
+            ):
 
-                if entity_class.__module__ == "apis_core.apis_entities.models" and \
-                        entity_name != "AbstractEntity":
+                if (
+                    # entity_class.__module__ == "apis_core.apis_entities.models"
+                    entity_class.__module__ == "apis_ontology.models"
+                    and entity_name != "ent_class"
+                    and entity_name != "AbstractEntity"
+                ):
 
                     entity_classes.append(entity_class)
                     entity_names.append(entity_name.lower())
-
 
             cls._all_entity_classes = entity_classes
             cls._all_entity_names = entity_names
 
         return cls._all_entity_classes
-
 
     @classmethod
     def get_entity_class_of_name(cls, entity_name):
@@ -248,7 +244,6 @@ class AbstractEntity(TempEntityClass):
 
         raise Exception("Could not find entity class of name:", entity_name)
 
-
     @classmethod
     def get_all_entity_names(cls):
         """
@@ -261,14 +256,10 @@ class AbstractEntity(TempEntityClass):
 
         return cls._all_entity_names
 
-
-
     # Methods dealing with related entities
     ####################################################################################################################
 
-
     _related_entity_field_names = None
-
 
     @classmethod
     def get_related_entity_field_names(cls):
@@ -278,8 +269,8 @@ class AbstractEntity(TempEntityClass):
         E.g. for Person.get_related_entity_field_names() or person_instance.get_related_entity_field_names() ->
         ['event_set', 'institution_set', 'personB_set', 'personA_set', 'place_set', 'work_set']
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
+        which wires the ManyToMany Fields into the entities and respective relationtypes.
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -288,15 +279,14 @@ class AbstractEntity(TempEntityClass):
         else:
             return cls._related_entity_field_names
 
-
     @classmethod
     def add_related_entity_field_name(cls, entity_field_name):
         """
         :param entity_field_name: the name of one of several ManyToMany fields created automatically
         :return: None
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
+        which wires the ManyToMany Fields into the entities and respective relationtypes.
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -304,7 +294,6 @@ class AbstractEntity(TempEntityClass):
             cls._related_entity_field_names = []
 
         cls._related_entity_field_names.append(entity_field_name)
-
 
     def get_related_entity_instances(self):
         """
@@ -321,11 +310,8 @@ class AbstractEntity(TempEntityClass):
 
         return queryset_list
 
-
-
     # Methods dealing with related relations
     ####################################################################################################################
-
 
     @classmethod
     def get_related_relation_classes(cls):
@@ -339,8 +325,7 @@ class AbstractEntity(TempEntityClass):
         # TODO __sresch__ : check for best practice on local imports vs circularity problems.
         from apis_core.apis_relations.models import AbstractRelation
 
-        return AbstractRelation.get_relation_classes_of_entity_class( cls )
-
+        return AbstractRelation.get_relation_classes_of_entity_class(cls)
 
     @classmethod
     def get_related_relation_field_names(cls):
@@ -354,7 +339,6 @@ class AbstractEntity(TempEntityClass):
         from apis_core.apis_relations.models import AbstractRelation
 
         return AbstractRelation.get_relation_field_names_of_entity_class(cls)
-
 
     def get_related_relation_instances(self):
         """
@@ -373,20 +357,17 @@ class AbstractEntity(TempEntityClass):
             if relation_class.get_related_entity_classB() == self.__class__:
                 q_args |= Q(**{relation_class.get_related_entity_field_nameB(): self})
 
-            queryset = relation_class.objects.filter( q_args )
-            queryset_list.append( queryset )
+            queryset = relation_class.objects.filter(q_args)
+            queryset_list.extend(list(queryset))
 
         return queryset_list
-
 
     # Methods dealing with related relationtypes
     ####################################################################################################################
 
-
     _related_relationtype_classes = None
     _related_relationtype_field_names = None
     _related_relationtype_names = None
-
 
     @classmethod
     def get_related_relationtype_classes(cls):
@@ -419,7 +400,6 @@ class AbstractEntity(TempEntityClass):
 
         return cls._related_relationtype_classes
 
-
     @classmethod
     def get_related_relationtype_names(cls):
         """
@@ -435,7 +415,6 @@ class AbstractEntity(TempEntityClass):
 
         return cls._related_relationtype_names
 
-
     @classmethod
     def get_related_relationtype_field_names(cls):
         """
@@ -444,16 +423,17 @@ class AbstractEntity(TempEntityClass):
         E.g. for PersonPerson.get_related_relationtype_field_names() or person_instance.get_related_relationtype_field_names() ->
         ['event_relationtype_set', 'institution_relationtype_set', 'personB_relationtype_set', 'personA_relationtype_set', 'place_relationtype_set', 'work_relationtype_set']
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
+        which wires the ManyToMany Fields into the entities and respective relationtypes.
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
         if cls._related_relationtype_field_names == None:
-            raise Exception("_related_relationtype_field_names was not initialized yet.")
+            raise Exception(
+                "_related_relationtype_field_names was not initialized yet."
+            )
         else:
             return cls._related_relationtype_field_names
-
 
     @classmethod
     def add_related_relationtype_field_name(cls, relationtype_field_name):
@@ -461,8 +441,8 @@ class AbstractEntity(TempEntityClass):
         :param entity_field_name: the name of one of several ManyToMany fields created automatically
         :return: None
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
+        which wires the ManyToMany Fields into the entities and respective relationtypes.
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -470,7 +450,6 @@ class AbstractEntity(TempEntityClass):
             cls._related_relationtype_field_names = []
 
         cls._related_relationtype_field_names.append(relationtype_field_name)
-
 
     def get_related_relationtype_instances(self):
         """
@@ -484,230 +463,24 @@ class AbstractEntity(TempEntityClass):
 
             if entity_name != self.__class__.__name__.lower():
 
-                queryset = getattr(self, entity_name + "_relationtype_set").all().distinct()
+                queryset = (
+                    getattr(self, entity_name + "_relationtype_set").all().distinct()
+                )
 
             else:
 
-                querysetA = getattr(self, entity_name + "A_relationtype_set").all().distinct()
-                querysetB = getattr(self, entity_name + "B_relationtype_set").all().distinct()
+                querysetA = (
+                    getattr(self, entity_name + "A_relationtype_set").all().distinct()
+                )
+                querysetB = (
+                    getattr(self, entity_name + "B_relationtype_set").all().distinct()
+                )
                 queryset = querysetA.union(querysetB)
 
             if queryset and len(queryset) > 0:
                 queryset_list.append(queryset)
 
         return queryset_list
-
-
-
-# @reversion.register(follow=["tempentityclass_ptr"])
-# class Person(AbstractEntity):
-#
-#     GENDER_CHOICES = (("female", "female"), ("male", "male"), ("third gender", "third gender"))
-#     first_name = models.CharField(
-#         max_length=255,
-#         help_text="The persons´s forename. In case of more then one name...",
-#         blank=True,
-#         null=True,
-#     )
-#     profession = models.ManyToManyField(ProfessionType, blank=True)
-#     title = models.ManyToManyField(Title, blank=True)
-#     gender = models.CharField(max_length=15, choices=GENDER_CHOICES, blank=True, null=True)
-#
-#     def save(self, *args, **kwargs):
-#         if self.first_name:
-#             # secure correct unicode encoding
-#             if self.first_name != unicodedata.normalize("NFC", self.first_name):
-#                 self.first_name = unicodedata.normalize("NFC", self.first_name)
-#         super(Person, self).save(*args, **kwargs)
-#         return self
-#
-#
-# @reversion.register(follow=["tempentityclass_ptr"])
-# class Place(AbstractEntity):
-#
-#     kind = models.ForeignKey(
-#         PlaceType, blank=True, null=True, on_delete=models.SET_NULL
-#     )
-#     lat = models.FloatField(blank=True, null=True, verbose_name="latitude")
-#     lng = models.FloatField(blank=True, null=True, verbose_name="longitude")
-#
-#     def save(self, *args, **kwargs):
-#         if isinstance(self.lat, float) and isinstance(self.lng, float):
-#             self.status = 'distinct'
-#         super(Place, self).save(*args, **kwargs)
-#         return self
-#
-#
-# @reversion.register(follow=["tempentityclass_ptr"])
-# class Institution(AbstractEntity):
-#
-#     kind = models.ForeignKey(
-#         InstitutionType, blank=True, null=True, on_delete=models.SET_NULL
-#     )
-#
-#
-# @reversion.register(follow=["tempentityclass_ptr"])
-# class Event(AbstractEntity):
-#
-#     kind = models.ForeignKey(
-#         EventType, blank=True, null=True, on_delete=models.SET_NULL
-#     )
-#
-#
-# @reversion.register(follow=["tempentityclass_ptr"])
-# class Work(AbstractEntity):
-#
-#     kind = models.ForeignKey(
-#         WorkType, blank=True, null=True, on_delete=models.SET_NULL
-#     )
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F1_Work(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F2_Expression(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F3_Manifestation_Product_Type(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F4_Manifestation_Singleton(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F5_Item(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F6_Concept(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F7_Object(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F8_Event(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F9_Place(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F10_Person(AbstractEntity):
-
-    pass
-
-
-@reversion.register(follow=["tempentityclass_ptr"])
-class F11_Corporate_Body(AbstractEntity):
-
-    pass
-
-
-# @receiver(post_save, sender=Event, dispatch_uid="create_default_uri")
-# @receiver(post_save, sender=Work, dispatch_uid="create_default_uri")
-# @receiver(post_save, sender=Institution, dispatch_uid="create_default_uri")
-# @receiver(post_save, sender=Person, dispatch_uid="create_default_uri")
-# @receiver(post_save, sender=Place, dispatch_uid="create_default_uri")
-# def create_default_uri(sender, instance, **kwargs):
-#     if kwargs['created']:
-#         if BASE_URI.endswith('/'):
-#             base1 = BASE_URI[:-1]
-#         else:
-#             base1 = BASE_URI
-#         uri_c = "{}{}".format(
-#             base1,
-#             reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
-#         )
-#         uri2 = Uri(uri=uri_c, domain="apis default", entity=instance)
-#         uri2.save()
-#
-#
-# @receiver(
-#     m2m_changed,
-#     sender=Event.collection.through,
-#     dispatch_uid="create_object_permissions",
-# )
-# @receiver(
-#     m2m_changed,
-#     sender=Work.collection.through,
-#     dispatch_uid="create_object_permissions",
-# )
-# @receiver(
-#     m2m_changed,
-#     sender=Institution.collection.through,
-#     dispatch_uid="create_object_permissions",
-# )
-# @receiver(
-#     m2m_changed,
-#     sender=Person.collection.through,
-#     dispatch_uid="create_object_permissions",
-# )
-# @receiver(
-#     m2m_changed,
-#     sender=Place.collection.through,
-#     dispatch_uid="create_object_permissions",
-# )
-# def create_object_permissions(sender, instance, **kwargs):
-#     if kwargs["action"] == "pre_add":
-#         perms = []
-#         for j in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
-#             perms.extend(j.groups_allowed.all())
-#         for x in perms:
-#             assign_perm("change_" + instance.__class__.__name__.lower(), x, instance)
-#             assign_perm("delete_" + instance.__class__.__name__.lower(), x, instance)
-#     elif kwargs["action"] == "post_remove":
-#         perms = []
-#         perms_keep = []
-#         for j in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
-#             perms.extend(j.groups_allowed.all())
-#         for u in instance.collection.all():
-#             perms_keep.extend(u.groups_allowed.all())
-#         rm_perms = set(perms) - set(perms_keep)
-#         for x in rm_perms:
-#             remove_perm("change_" + instance.__class__.__name__.lower(), x, instance)
-#             remove_perm("delete_" + instance.__class__.__name__.lower(), x, instance)
-#
-#
-# @receiver(
-#     m2m_changed,
-#     sender=Collection.groups_allowed.through,
-#     dispatch_uid="add_usergroup_collection",
-# )
-# def add_usergroup_collection(sender, instance, **kwargs):
-#     if kwargs["action"] == "pre_add":
-#         for x in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
-#             for z in ["change", "delete"]:
-#                 for y in [Person, Institution, Place, Event, Work]:
-#                     assign_perm(
-#                         z + "_" + y.__name__.lower(),
-#                         x,
-#                         y.objects.filter(collection=instance),
-#                     )
 
 
 if "registration" in getattr(settings, "INSTALLED_APPS", []):
@@ -726,6 +499,4 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
 
 
 
-
-# Call the field generation function here, after all relevant entity classes have been defined above
-# EntityRelationFieldGenerator.generate_all_fields()
+from apis_ontology.models import *

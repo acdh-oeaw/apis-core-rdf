@@ -435,7 +435,17 @@ def get_list_filter_of_entity(entity):
     :return: Entity specific FilterClass
     """
 
-    return GenericListFilter
+    entity_class = AbstractEntity.get_entity_class_of_name(entity)
+
+    class GenericEntityListFilter(GenericListFilter):
+
+        class Meta(GenericListFilter.Meta):
+
+            model = entity_class
+
+
+
+    return GenericEntityListFilter
 
     # el = entity.lower()
     #

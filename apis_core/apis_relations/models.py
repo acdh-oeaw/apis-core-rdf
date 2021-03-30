@@ -116,7 +116,13 @@ class Triple(models.Model):
 
     def __repr__(self):
 
-        return f"<Triple: subj: {self.subj}, prop: {self.prop}, obj: {self.obj}>"
+        if self.subj is not None or self.obj is not None or self.prop is not None:
+
+            return f"<Triple: subj: {self.subj}, prop: {self.prop}, obj: {self.obj}>"
+
+        else:
+
+            return f"<Triple: None>"
 
 
     def __str__(self):

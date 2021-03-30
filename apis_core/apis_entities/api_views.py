@@ -32,7 +32,7 @@ from apis_core.helper_functions.stanbolQueries import find_loc
 from .api_renderers import EntityToTEI, EntityToCIDOCXML, EntityToProsopogrAPhI, EntityToCIDOCN3, EntityToCIDOCNQUADS, \
     EntityToCIDOCTURTLE
 # from .models import Event, Institution, Person, Place, Work,
-from .models import AbstractEntity
+from apis_core.apis_entities.models import AbstractEntity
 # from .serializers import (
 #     EventSerializer,
 #     GeoJsonSerializer,

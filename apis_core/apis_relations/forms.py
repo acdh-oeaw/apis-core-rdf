@@ -73,33 +73,33 @@ class EntityLabelForm(forms.ModelForm):
 ##############################################
 
 
-class PersonLabelForm(EntityLabelForm):
-    pass
-
-##############################################
-# Institutions
-##############################################
-
-
-class InstitutionLabelForm(EntityLabelForm):
-    pass
-
-
-##############################################
-# Places
-##############################################
-
-class PlaceLabelForm(EntityLabelForm):
-    pass
-
-
-##############################################
-# Events
-##############################################
-
-
-class EventLabelForm(EntityLabelForm):
-    pass
+# class PersonLabelForm(EntityLabelForm):
+#     pass
+#
+# ##############################################
+# # Institutions
+# ##############################################
+#
+#
+# class InstitutionLabelForm(EntityLabelForm):
+#     pass
+#
+#
+# ##############################################
+# # Places
+# ##############################################
+#
+# class PlaceLabelForm(EntityLabelForm):
+#     pass
+#
+#
+# ##############################################
+# # Events
+# ##############################################
+#
+#
+# class EventLabelForm(EntityLabelForm):
+#     pass
 
 
 ##############################################

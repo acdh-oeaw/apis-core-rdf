@@ -17,7 +17,7 @@ from django.db.models import Q
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.default_settings.NER_settings import autocomp_settings as ac_settings
-from .models import AbstractEntity
+from apis_core.apis_entities.models import AbstractEntity
 
 
 class CustomEntityAutocompletes(object):

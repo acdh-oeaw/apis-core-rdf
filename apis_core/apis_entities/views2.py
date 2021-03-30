@@ -61,14 +61,14 @@ class GenericEntitiesEditView(View):
 
             table = get_generic_triple_table(other_entity_class_name=other_entity_class_name, this_entity_pk=pk, detail=False)
 
-            prefix = f"other {other_entity_class_name}"
+            prefix = f"{other_entity_class_name}"
             title_card = prefix
-            match = [prefix]
             tb_object = table(data=triples_related_by_entity, prefix=prefix)
             tb_object_open = request.GET.get(prefix + 'page', None)
             RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
             side_bar.append(
-                (title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open)
+                # (title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open)
+                (title_card, tb_object, f"triple_from_{entity}_to_{other_entity_class_name}", tb_object_open)
             )
 
 
@@ -132,7 +132,7 @@ class GenericEntitiesEditView(View):
         object_labels = Label.objects.filter(temp_entity=instance)
         tb_label = LabelTableEdit(data=object_labels, prefix=entity.title()[:2] + 'L-')
         tb_label_open = request.GET.get('PL-page', None)
-        side_bar.append(('Label', tb_label, 'PersonLabel', tb_label_open))
+        # side_bar.append(('Label', tb_label, 'PersonLabel', tb_label_open))
         RequestConfig(request, paginate={"per_page": 10}).configure(tb_label)
         perm = ObjectPermissionChecker(request.user)
         permissions = {'change': perm.has_perm('change_{}'.format(entity), instance),

@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from apis_core.apis_relations import forms as relation_form_module
 
 # from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
+# from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
@@ -96,81 +97,106 @@ form_class_dict = turn_form_modules_into_dict(form_module_list)
 #                     }
 
 
+
+
 @login_required
 def get_form_ajax(request):
     '''Returns forms rendered in html'''
+
+
+    print("apis_core/apis_relations/views.py")
+    print(f"FormName: {request.POST.get('FormName')}")
 
     FormName = request.POST.get('FormName')
     SiteID = request.POST.get('SiteID')
     ButtonText = request.POST.get('ButtonText')
     ObjectID = request.POST.get('ObjectID')
     entity_type_str = request.POST.get('entity_type')
-    form_match = re.match(r'([A-Z][a-z]+)([A-Z][a-z]+)(Highlighter)?Form', FormName)
-    form_match2 = re.match(r'([A-Z][a-z]+)(Highlighter)?Form', FormName)
+    # form_match = re.match(r'([A-Z][a-z]+)([A-Z][a-z]+)(Highlighter)?Form', FormName)
+    # form_match2 = re.match(r'([A-Z][a-z]+)(Highlighter)?Form', FormName)
+    # if FormName and form_match:
+    #     entity_type_v1 = ContentType.objects.filter(
+    #         model='{}{}'.format(form_match.group(1).lower(), form_match.group(2)).lower(),
+    #         app_label='apis_relations')
+    #     entity_type_v2 = ContentType.objects.none()
+    # elif FormName and form_match2:
+    #     entity_type_v2 = ContentType.objects.filter(
+    #         model='{}'.format(
+    #             form_match.group(1).lower(),
+    #             app_label='apis_entities'))
+    #     entity_type_v1 = ContentType.objects.none()
+    # else:
+    #     entity_type_v1 = ContentType.objects.none()
+    #     entity_type_v2 = ContentType.objects.none()
+    # if ObjectID == 'false' or ObjectID is None or ObjectID == 'None':
+    #     ObjectID = False
+    #     form_dict = {'entity_type': entity_type_str}
+    # elif entity_type_v1.count() > 0:
+    #     d = entity_type_v1[0].model_class().objects.get(pk=ObjectID)
+    #     form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
+    # elif entity_type_v2.count() > 0:
+    #     d = entity_type_v2[0].model_class().objects.get(pk=ObjectID)
+    #     form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
+    # else:
+    #     if FormName not in registered_forms.keys():
+    #         raise Http404
+    #     d = registered_forms[FormName][0].objects.get(pk=ObjectID)
+    #     form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
+    # if entity_type_v1.count() > 0:
+    #     form_dict['relation_form'] = '{}{}'.format(form_match.group(1), form_match.group(2))
+    #     if form_match.group(3) == 'Highlighter':
+    #         form_dict['highlighter'] = True
+    #     form = GenericRelationForm(**form_dict)
+    # else:
+    #     form_class = form_class_dict[FormName]
+    #     form = form_class(**form_dict)
 
 
-    if FormName == "TripleForm":
+    if FormName.startswith("triple_from_") and FormName.endswith("_form"):
 
         from apis_core.apis_relations.forms2 import TripleForm
-        form = TripleForm()
 
-    else:
-
-        if FormName and form_match:
-            entity_type_v1 = ContentType.objects.filter(
-                model='{}{}'.format(form_match.group(1).lower(), form_match.group(2)).lower(),
-                app_label='apis_relations')
-            entity_type_v2 = ContentType.objects.none()
-        elif FormName and form_match2:
-            entity_type_v2 = ContentType.objects.filter(
-                model='{}'.format(
-                    form_match.group(1).lower(),
-                    app_label='apis_entities'))
-            entity_type_v1 = ContentType.objects.none()
-        else:
-            entity_type_v1 = ContentType.objects.none()
-            entity_type_v2 = ContentType.objects.none()
         if ObjectID == 'false' or ObjectID is None or ObjectID == 'None':
-            ObjectID = False
-            form_dict = {'entity_type': entity_type_str}
-        elif entity_type_v1.count() > 0:
-            d = entity_type_v1[0].model_class().objects.get(pk=ObjectID)
-            form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
-        elif entity_type_v2.count() > 0:
-            d = entity_type_v2[0].model_class().objects.get(pk=ObjectID)
-            form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
-        else:
-            if FormName not in registered_forms.keys():
-                raise Http404
-            d = registered_forms[FormName][0].objects.get(pk=ObjectID)
-            form_dict = {'instance': d, 'siteID': SiteID, 'entity_type': entity_type_str}
-        if entity_type_v1.count() > 0:
-            form_dict['relation_form'] = '{}{}'.format(form_match.group(1), form_match.group(2))
-            if form_match.group(3) == 'Highlighter':
-                form_dict['highlighter'] = True
-            form = GenericRelationForm(**form_dict)
-        else:
-            form_class = form_class_dict[FormName]
-            form = form_class(**form_dict)
+            form_dict = {'siteID': SiteID, 'entity_type': entity_type_str}
+            form = TripleForm(**form_dict)
+            print()
+
+    param_dict = {
+        "entity_type": entity_type_str,
+        # "form": form,
+        # 'type1': FormName + "__type1",
+        # 'url2': 'save_ajax_'+FormName,
+        # 'url2': 'save_ajax_XXX',
+        'button_text': ButtonText,
+        # 'ObjectID': ObjectID,
+        'ObjectID': False,
+        'SiteID': SiteID
+    }
+
+    print("param_dict")
+    print(param_dict)
 
     tab = FormName[:-4]
-    data = {'tab': tab, 'form': render_to_string("apis_relations/_ajax_form.html", {
-                "entity_type": entity_type_str,
-                "form": form,
-                'type1': FormName,
-                'url2': 'save_ajax_'+FormName,
-                'button_text': ButtonText,
-                'ObjectID': ObjectID,
-                'SiteID': SiteID})}
+    data = {
+        'tab': tab,
+        # 'form': render_to_string(
+        #     "apis_relations/_ajax_form.html",
+        #     param_dict
+        # )
+    }
 
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 
 @login_required
 def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
+
+    # raise Exception()
+
+
     '''Tests validity and saves AjaxForms, returns them when validity test fails'''
-    if kind_form not in registered_forms.keys():
-        raise Http404
+    # if kind_form not in registered_forms.keys():
+    #     raise Http404
 
     button_text = "create/modify"
 

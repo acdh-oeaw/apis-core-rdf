@@ -135,7 +135,7 @@ def get_generic_relation_filter(entity):
             model = None
             fields = get_filters(
                 model,
-                exclude=get_excluded_fields(model),
+                exclude=[],
                 include_parents=True
             )
 
@@ -189,3 +189,19 @@ def get_generic_relation_filter(entity):
                         )
                     )
     return GenericListFilter
+
+
+
+from apis_core.apis_relations.models import Triple
+
+
+class TripleFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = Triple
+        exclude = []
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
