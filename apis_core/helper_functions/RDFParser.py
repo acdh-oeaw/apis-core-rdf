@@ -325,7 +325,7 @@ class RDFParser(object):
                 for rel_exst in rel2.objects.filter(**rel_q):
                     setattr(rel_exst, 'related_'+self.kind.lower()+'B_id', self.objct.pk)
                     rel_exst.save()
-        for z in genUri.objects.filter(entity=m_obj):
+        for z in genUri.objects.filter(root_object=m_obj):
             z.entity_id = self.objct.pk
             z.save()
         for z in Label.objects.filter(temp_entity=m_obj):

@@ -1,5 +1,6 @@
 import inspect
 import sys
+import unicodedata
 
 # from reversion import revisions as reversion
 import reversion
@@ -9,18 +10,17 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Q
 from model_utils.managers import InheritanceManager
-
+from django.utils.functional import cached_property
 # from apis_core.apis_entities.models import Person
-from apis_core.apis_metainfo.models import TempEntityClass
-
-
+from apis_core.apis_entities.models import TempEntityClass, RootObject
 
 #######################################################################
 #
 # Custom Managers
 #
 #######################################################################
-from apis_core.apis_vocabularies.models import RelationBaseClass
+# from apis_core.apis_vocabularies.models import Property
+from apis_core.helper_functions import DateParser
 
 
 def find_if_user_accepted():
@@ -34,6 +34,48 @@ def find_if_user_accepted():
             return {'published': True}
     else:
         return {}
+
+
+# TODO RDF : Implement filtering for implicit superclasses
+# Currently if a Property.objects.filter() is used with param subj_class or obj_class, then it searches only for the
+# passed class, but not for implicit superclasses. For this to be possible, the object manager must be overriden
+@reversion.register(follow=['vocabsbaseclass_ptr'])
+class Property(RootObject):
+    """ An abstract base class for other classes which contain so called
+    'controlled vocabulary' to describe the relations between main temporalized
+    entities ('db_')"""
+
+    name_reverse = models.CharField(
+        max_length=255,
+        verbose_name='Name reverse',
+        help_text='Inverse relation like: "is sub-class of" vs. "is super-class of".',
+        blank=True)
+
+    subj_class = models.ManyToManyField(
+        ContentType,
+        related_name="property_subj",
+        limit_choices_to=Q(app_label="apis_entities"), # TODO RDF : Add vocab
+    )
+
+    obj_class = models.ManyToManyField(
+        ContentType,
+        related_name="property_obj",
+        limit_choices_to=Q(app_label="apis_entities"),
+    )
+
+    def __str__(self):
+        return self.name
+
+
+    def save(self, *args, **kwargs):
+        if self.name_reverse != unicodedata.normalize('NFC', self.name_reverse):
+            self.name_reverse = unicodedata.normalize('NFC', self.name_reverse)
+
+        if self.name_reverse == "" or self.name_reverse == None:
+            self.name_reverse = self.name + " [REVERSE]"
+
+        super(Property, self).save(*args, **kwargs)
+        return self
 
 
 class RelationPublishedQueryset(models.QuerySet):
@@ -86,121 +128,15 @@ class BaseRelationManager(models.Manager):
             return self.get_queryset()
 
 
-
-
-
-
-
-from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
-
-class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):
-    def get_queryset(self, **hints):
-        return self.field.remote_field.model.objects_inheritance.db_manager(hints=hints).select_subclasses()
-
-
-class InheritanceForeignKey(models.ForeignKey):
-    forward_related_accessor_class = InheritanceForwardManyToOneDescriptor
-
-
-
-class Triple(models.Model):
-
-    # TODO __sresch__ : add ent filter shortcut so that e.g. this can be shortened: Triple.objects.filter(Q(subj__pk=113) | Q(obj__pk=113))
-
-    subj = InheritanceForeignKey(TempEntityClass, on_delete=models.CASCADE, related_name="triple_subj")
-    obj = InheritanceForeignKey(TempEntityClass, on_delete=models.CASCADE, related_name="triple_obj")
-    prop = models.ForeignKey(RelationBaseClass, on_delete=models.CASCADE, related_name="triple_prop")
-
-    objects = models.Manager()
-    objects_inheritance = InheritanceManager()
-
-    def __repr__(self):
-
-        if self.subj is not None or self.obj is not None or self.prop is not None:
-
-            return f"<Triple: subj: {self.subj}, prop: {self.prop}, obj: {self.obj}>"
-
-        else:
-
-            return f"<Triple: None>"
-
-
-    def __str__(self):
-
-        return self.__repr__()
-
-
-    def save(self, *args, **kwargs):
-
-        # TODO __sresch__ : Integrate proper check if subj and obj instances are of valid class as defined in prop.subj_class and prop.obj_class
-
-        allowed_contenttypes = self.prop.subj_class.all()
-        ct_subj = ContentType.objects.get(model=self.subj.__class__.__name__)
-        if ct_subj not in allowed_contenttypes:
-            raise Exception()
-
-        allowed_contenttypes = self.prop.obj_class.all()
-        ct_obj = ContentType.objects.get(model=self.obj.__class__.__name__)
-        if ct_obj not in allowed_contenttypes:
-            raise Exception()
-
-        super().save(*args, **kwargs)
-
-
-class TempTriple(Triple):
-
-
-    review = models.BooleanField(
-        default=False,
-        help_text="Should be set to True, if the data record holds up quality standards.",
-    )
-    start_date = models.DateField(blank=True, null=True)
-    start_start_date = models.DateField(blank=True, null=True)
-    start_end_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-    end_start_date = models.DateField(blank=True, null=True)
-    end_end_date = models.DateField(blank=True, null=True)
-    start_date_written = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name="Start",
-    )
-    end_date_written = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name="End",
-    )
-    # text = models.ManyToManyField("Text", blank=True)
-    # collection = models.ManyToManyField("Collection")
-    status = models.CharField(max_length=100)
-    # source = models.ForeignKey(
-    #     "Source", blank=True, null=True, on_delete=models.SET_NULL
-    # )
-    references = models.TextField(blank=True, null=True)
-    notes = models.TextField(blank=True, null=True)
-
-
-class SubTriple(Triple):
-
-    comment = models.CharField(max_length=100)
-
-
-
-
-
-
-
-
-
-#######################################################################
+# __before_triple_refactoring__
 #
-# AbstractRelation
+# #######################################################################
+# #
+# # AbstractRelation
+# #
+# #######################################################################
 #
-#######################################################################
-
-
+#
 # class AbstractRelation(TempEntityClass):
 #     """
 #     Abstract super class which encapsulates common logic between the different relations and provides various methods
@@ -319,7 +255,8 @@ class SubTriple(Triple):
 #                         relation_class.__name__ != "AnnotationRelationLinkManager" and \
 #                         relation_class.__name__ != "BaseRelationManager" and \
 #                         relation_class.__name__ != "RelationPublishedQueryset" and \
-#                         relation_class.__name__ != "AbstractRelation":
+#                         relation_class.__name__ != "AbstractRelation" and \
+#                         relation_name != "ent_class":
 #
 #                     relation_classes.append(relation_class)
 #                     relation_names.append(relation_name.lower())
@@ -442,7 +379,8 @@ class SubTriple(Triple):
 #         # get the list of the class dictionary, create if not yet exists.
 #         relation_names_list = cls._relation_field_names_of_entity_class.get(entity_class, [])
 #         # append the current relation field name to the list.
-#         relation_names_list.append(relation_name)
+#         if relation_name not in relation_names_list:
+#             relation_names_list.append(relation_name) #TODO: this is a workaround, find out why it is called several times
 #         # save into the dictionary, which uses the entity class as key and the extended list above as value.
 #         cls._relation_field_names_of_entity_class[entity_class] = relation_names_list
 #
@@ -513,9 +451,210 @@ class SubTriple(Triple):
 #         E.g. PersonWork -> "related_work"
 #         """
 #         return None
+
+
+# TODO __sresch__ : Move this somewhere else so that it can be imported at several places
+from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
+
+class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):
+    def get_queryset(self, **hints):
+        return self.field.remote_field.model.objects_inheritance.db_manager(hints=hints).select_subclasses()
+
+
+class InheritanceForeignKey(models.ForeignKey):
+    forward_related_accessor_class = InheritanceForwardManyToOneDescriptor
+
+
+# class SubjClass(RootObject):
 #
-#
-#
+#     subj_name = models.CharField(max_length=255, verbose_name='Name')
+
+
+class Triple(models.Model):
+    # TODO RDF : (maybe) implement a convenient way of fetching related triples of a given root object
+
+    # TODO RDF : add ent filter shortcut so that e.g. this can be shortened: Triple.objects.filter(Q(subj__pk=113) | Q(obj__pk=113))
+    subj = InheritanceForeignKey(RootObject, on_delete=models.CASCADE, related_name="triple_set_from_subj")
+    obj = InheritanceForeignKey(RootObject, on_delete=models.CASCADE, related_name="triple_set_from_obj")
+    prop = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="triple_set_from_prop")
+
+    objects = models.Manager()
+    objects_inheritance = InheritanceManager()
+
+    def __repr__(self):
+
+        if self.subj is not None or self.obj is not None or self.prop is not None:
+
+            return f"<{self.__class__.__name__}: subj: {self.subj}, prop: {self.prop}, obj: {self.obj}>"
+
+        else:
+
+            return f"<{self.__class__.__name__}: None>"
+
+
+    def __str__(self):
+
+        return self.__repr__()
+
+
+    def get_web_object(self):
+
+        # __before_triple_refactoring__
+        #
+        # nameA = self.get_related_entity_instanceA().name
+        # nameB = self.get_related_entity_instanceB().name
+        #
+        # if self.get_related_entity_classA() == Person:
+        #     nameA += ", "
+        #     if self.get_related_entity_instanceA().first_name is None:
+        #         nameA += "-"
+        #     else:
+        #         nameA += self.get_related_entity_instanceA().first_name
+        #
+        # if self.get_related_entity_classB() == Person:
+        #     nameB += ", "
+        #     if self.get_related_entity_instanceB().first_name is None:
+        #         nameB += "-"
+        #     else:
+        #         nameB += self.get_related_entity_instanceB().first_name
+        #
+        # result = {
+        #     'relation_pk': self.pk,
+        #     'relation_type': self.relation_type.name,
+        #     self.get_related_entity_field_nameA(): nameA,
+        #     self.get_related_entity_field_nameB(): nameB,
+        #     'start_date': self.start_date_written,
+        #     'end_date': self.end_date_written}
+        # return result
+        #
+        # __after_triple_refactoring__
+
+        return {
+            "relation_pk": self.pk,
+            "subj": self.subj.name,
+            "obj": self.obj.name,
+            "prop": self.prop.name,
+        }
+
+
+
+    def save(self, *args, **kwargs):
+
+        # TODO RDF : Integrate proper check if subj and obj instances are of valid class as defined in prop.subj_class and prop.obj_class
+
+        # def get_all_parents(cls_current):
+        #     parent_list = []
+        #     for p in cls_current.__bases__:
+        #         parent_list.append(p)
+        #         parent_list.extend(get_all_parents(p))
+        #     return parent_list
+
+        def get_all_childs(cls_current):
+            child_list = []
+            for p in cls_current.__subclasses__():
+                child_list.append(p)
+                child_list.extend(get_all_childs(p))
+            return child_list
+
+
+        # TODO RDF : transfer this property inheritance logic to Property.save()
+        allowed_contenttypes_subj = list(self.prop.subj_class.all())
+        ct_subj = ContentType.objects.get(model=self.subj.__class__.__name__)
+        allowed_contenttypes_subj_tmp = []
+        for ct_allowed in allowed_contenttypes_subj:
+            for child_cls in get_all_childs(ct_allowed.model_class()):
+                allowed_contenttypes_subj_tmp += ContentType.objects.filter(model=child_cls.__name__)
+        allowed_contenttypes_subj += allowed_contenttypes_subj_tmp
+        if ct_subj not in allowed_contenttypes_subj:
+            raise Exception()
+
+        allowed_contenttypes_obj = list(self.prop.obj_class.all())
+        ct_obj = ContentType.objects.get(model=self.obj.__class__.__name__)
+        allowed_contenttypes_obj_tmp = []
+        for ct_allowed in allowed_contenttypes_obj:
+            for child_cls in get_all_childs(ct_allowed.model_class()):
+                allowed_contenttypes_obj_tmp += ContentType.objects.filter(model=child_cls.__name__)
+        allowed_contenttypes_obj += allowed_contenttypes_obj_tmp
+        if ct_obj not in allowed_contenttypes_obj:
+            raise Exception()
+
+        super().save(*args, **kwargs)
+
+
+class TempTriple(Triple):
+
+    review = models.BooleanField(
+        default=False,
+        help_text="Should be set to True, if the data record holds up quality standards.",
+    )
+    start_date = models.DateField(blank=True, null=True)
+    start_start_date = models.DateField(blank=True, null=True)
+    start_end_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    end_start_date = models.DateField(blank=True, null=True)
+    end_end_date = models.DateField(blank=True, null=True)
+    start_date_written = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="Start",
+    )
+    end_date_written = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="End",
+    )
+    # text = models.ManyToManyField("Text", blank=True)
+    # collection = models.ManyToManyField("Collection")
+    status = models.CharField(max_length=100)
+    # source = models.ForeignKey(
+    #     "Source", blank=True, null=True, on_delete=models.SET_NULL
+    # )
+    references = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+
+
+    def save(self, parse_dates=True, *args, **kwargs):
+        """Adaption of the save() method of the class to automatically parse string-dates into date objects"""
+
+        if parse_dates:
+
+            # overwrite every field with None as default
+            start_date = None
+            start_start_date = None
+            start_end_date = None
+            end_date = None
+            end_start_date = None
+            end_end_date = None
+
+            if self.start_date_written:
+                # If some textual user input of a start date is there, then parse it
+
+                start_date, start_start_date, start_end_date = DateParser.parse_date(
+                    self.start_date_written
+                )
+
+            if self.end_date_written:
+                # If some textual user input of an end date is there, then parse it
+
+                end_date, end_start_date, end_end_date = DateParser.parse_date(
+                    self.end_date_written
+                )
+
+            self.start_date = start_date
+            self.start_start_date = start_start_date
+            self.start_end_date = start_end_date
+            self.end_date = end_date
+            self.end_start_date = end_start_date
+            self.end_end_date = end_end_date
+
+        super().save(*args, **kwargs)
+
+        return self
+
+
+# __before_triple_refactoring__
 #
 # #######################################################################
 # #
@@ -640,4 +779,30 @@ class SubTriple(Triple):
 # class WorkWork(AbstractRelation):
 #
 #     pass
-
+#
+#
+# a_ents = getattr(settings, 'APIS_ADDITIONAL_ENTITIES', False)
+#
+#
+# if a_ents:
+#     with open(a_ents, 'r') as ents_file:
+#         ents = yaml.load(ents_file, Loader=yaml.CLoader)
+#         print(ents)
+#         for ent in ents['entities']:
+#             rels = ent.get("relations", [])
+#             base_ents = ['Person', 'Institution', 'Place', 'Work', 'Event']
+#             if isinstance(rels, str):
+#                 if rels == 'all':
+#                     rels = base_ents + [x['name'].title() for x in ents['entities']]
+#             else:
+#                 rels = base_ents + rels
+#             for r2 in rels:
+#                 attributes = {"__module__":__name__}
+#                 if r2 in base_ents:
+#                     rel_class_name = f"{r2.title()}{ent['name'].title()}"
+#                 else:
+#                     rel_class_name = f"{ent['name'].title()}{r2.title()}"
+#                 if rel_class_name not in globals().keys():
+#                     print(rel_class_name)
+#                     ent_class = type(rel_class_name, (AbstractRelation,), attributes)
+#                     globals()[rel_class_name] = ent_class

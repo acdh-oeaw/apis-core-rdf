@@ -15,6 +15,9 @@ from rest_framework.schemas import get_schema_view
 from rest_framework_swagger.renderers import OpenAPIRenderer, SwaggerUIRenderer
 
 from apis_core.api_routers import views
+
+# __before_triple_refactoring__
+#
 # from apis_core.apis_entities.api_views import (
 #     NetJsonViewSet,
 #     PlaceGeoJsonViewSet,

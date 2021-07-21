@@ -132,7 +132,7 @@ class PersonPlaceForm(forms.ModelForm):
             self.fields['relation_type'].choices = choices
             if instance and instance.id:
                 self.fields['person'].initial = instance.related_person
-                self.fields['person_uri'].initial = Uri.objects.filter(entity=instance.related_person)[0]
+                self.fields['person_uri'].initial = Uri.objects.filter(root_object=instance.related_person)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCPersonPlaceReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -146,7 +146,7 @@ class PersonPlaceForm(forms.ModelForm):
             self.fields.pop('person_uri')
             if instance and instance.id:
                 self.fields['place'].initial = instance.related_place.name
-                self.fields['place_uri'].initial = Uri.objects.filter(entity=instance.related_place)[0]
+                self.fields['place_uri'].initial = Uri.objects.filter(root_object=instance.related_place)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCPersonPlaceReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -217,7 +217,7 @@ class PersonPersonForm(forms.ModelForm):
                 else:
                     rel_pers = instance.related_personB
             self.fields['person'].initial = rel_pers
-            self.fields['person_uri'].initial = Uri.objects.filter(entity=rel_pers)[0]
+            self.fields['person_uri'].initial = Uri.objects.filter(root_object=rel_pers)[0]
         self.fields['relation_type'].required = True
         self.helper = FormHelper()
         self.helper.form_class = 'PersonPersonForm'
@@ -293,7 +293,7 @@ class PersonInstitutionForm(forms.ModelForm):
         instance = getattr(self, 'instance', None)
         if instance and instance.id:
             self.fields['institution'].initial = instance.related_institution.name
-            self.fields['institution_uri'].initial = Uri.objects.filter(entity=instance.related_institution)[0]
+            self.fields['institution_uri'].initial = Uri.objects.filter(root_object=instance.related_institution)[0]
         self.fields['relation_type'].required = True
         self.helper = FormHelper()
         self.helper.form_class = 'PersonInstitutionForm'
@@ -318,7 +318,7 @@ class PersonInstitutionForm(forms.ModelForm):
             self.fields.pop('institution_uri')
             if instance and instance.id:
                 self.fields['person'].initial = instance.related_person
-                self.fields['person_uri'].initial = Uri.objects.filter(entity=instance.related_person)[0]
+                self.fields['person_uri'].initial = Uri.objects.filter(root_object=instance.related_person)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget('VCPersonInstitutionReverseAutocomplete',
                                                                       extra_context={
                                                                           'values': [instance.relation_type.pk],
@@ -334,7 +334,7 @@ class PersonInstitutionForm(forms.ModelForm):
             self.fields.pop('person_uri')
             if instance and instance.id:
                 self.fields['institution'].initial = instance.related_institution.name
-                self.fields['institution_uri'].initial = Uri.objects.filter(entity=instance.related_institution)[0]
+                self.fields['institution_uri'].initial = Uri.objects.filter(root_object=instance.related_institution)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget('VCPersonInstitutionReverseAutocomplete',
                                                                       extra_context={
                                                                           'values': [instance.relation_type.pk],
@@ -401,7 +401,7 @@ class PersonEventForm(forms.ModelForm):
         instance = getattr(self, 'instance', None)
         if instance and instance.id:
             self.fields['event'].initial = instance.related_event.name
-            self.fields['event_uri'].initial = Uri.objects.filter(entity=instance.related_event)[0]
+            self.fields['event_uri'].initial = Uri.objects.filter(root_object=instance.related_event)[0]
         self.fields['relation_type'].required = True
         self.helper = FormHelper()
         self.helper.form_class = 'PersonEventForm'
@@ -426,7 +426,7 @@ class PersonEventForm(forms.ModelForm):
             self.fields.pop('event_uri')
             if instance and instance.id:
                 self.fields['person'].initial = instance.related_person
-                self.fields['person_uri'].initial = Uri.objects.filter(entity=instance.related_person)[0]
+                self.fields['person_uri'].initial = Uri.objects.filter(root_object=instance.related_person)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCPersonEventReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -440,7 +440,7 @@ class PersonEventForm(forms.ModelForm):
             self.fields.pop('person_uri')
             if instance and instance.id:
                 self.fields['event'].initial = instance.related_event.name
-                self.fields['event_uri'].initial = Uri.objects.filter(entity=instance.related_event)[0]
+                self.fields['event_uri'].initial = Uri.objects.filter(root_object=instance.related_event)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCPersonEventReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -505,7 +505,7 @@ class PersonWorkForm(forms.ModelForm):
         instance = getattr(self, 'instance', None)
         if instance and instance.id:
             self.fields['work'].initial = instance.related_work.name
-            self.fields['work_uri'].initial = Uri.objects.filter(entity=instance.related_work)[0]
+            self.fields['work_uri'].initial = Uri.objects.filter(root_object=instance.related_work)[0]
         self.fields['relation_type'].required = True
         self.helper = FormHelper()
         self.helper.form_class = 'PersonWorkForm'
@@ -526,7 +526,7 @@ class PersonWorkForm(forms.ModelForm):
             self.fields.pop('work_uri')
             if instance and instance.id:
                 self.fields['person'].initial = instance.related_person
-                self.fields['person_uri'].initial = Uri.objects.filter(entity=instance.related_person)[0]
+                self.fields['person_uri'].initial = Uri.objects.filter(root_object=instance.related_person)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget('VCPersonWorkReverseAutocomplete',
                                                                       extra_context={
                                                                           'values': [instance.relation_type.pk],
@@ -542,7 +542,7 @@ class PersonWorkForm(forms.ModelForm):
             self.fields.pop('person_uri')
             if instance and instance.id:
                 self.fields['work'].initial = instance.related_work.name
-                self.fields['work_uri'].initial = Uri.objects.filter(entity=instance.related_work)[0]
+                self.fields['work_uri'].initial = Uri.objects.filter(root_object=instance.related_work)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget('VCPersonWorkReverseAutocomplete',
                                                                       extra_context={
                                                                           'values': [instance.relation_type.pk],
@@ -614,7 +614,7 @@ class InstitutionPlaceForm(forms.ModelForm):
             self.fields.pop('place_uri')
             if instance and instance.id:
                 self.fields['institution'].initial = instance.related_institution.name
-                self.fields['institution_uri'].initial = Uri.objects.filter(entity=instance.related_institution)[0]
+                self.fields['institution_uri'].initial = Uri.objects.filter(root_object=instance.related_institution)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCInstitutionPlaceReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -639,7 +639,7 @@ class InstitutionPlaceForm(forms.ModelForm):
             self.fields.pop('institution_uri')
             if instance and instance.id:
                 self.fields['place'].initial = instance.related_place.name
-                self.fields['place_uri'].initial = Uri.objects.filter(entity=instance.related_place)[0]
+                self.fields['place_uri'].initial = Uri.objects.filter(root_object=instance.related_place)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCInstitutionPlaceReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -721,7 +721,7 @@ class InstitutionEventForm(forms.ModelForm):
             self.fields['relation_type'].choices = choices
             if instance and instance.id:
                 self.fields['institution'].initial = instance.related_institution.name
-                self.fields['institution_uri'].initial = Uri.objects.filter(entity=instance.related_institution)[0]
+                self.fields['institution_uri'].initial = Uri.objects.filter(root_object=instance.related_institution)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCInstitutionEventReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -746,7 +746,7 @@ class InstitutionEventForm(forms.ModelForm):
             self.fields.pop('institution_uri')
             if instance and instance.id:
                 self.fields['event'].initial = instance.related_event.name
-                self.fields['event_uri'].initial = Uri.objects.filter(entity=instance.related_event)[0]
+                self.fields['event_uri'].initial = Uri.objects.filter(root_object=instance.related_event)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCInstitutionEventReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -825,7 +825,7 @@ class InstitutionWorkForm(forms.ModelForm):
             self.fields.pop('work_uri')
             if instance and instance.id:
                 self.fields['institution'].initial = instance.related_institution.name
-                self.fields['institution_uri'].initial = Uri.objects.filter(entity=instance.related_institution)[0]
+                self.fields['institution_uri'].initial = Uri.objects.filter(root_object=instance.related_institution)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCInstitutionWorkReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -850,7 +850,7 @@ class InstitutionWorkForm(forms.ModelForm):
             self.fields.pop('institution_uri')
             if instance and instance.id:
                 self.fields['work'].initial = instance.related_work.name
-                self.fields['work_uri'].initial = Uri.objects.filter(entity=instance.related_work)[0]
+                self.fields['work_uri'].initial = Uri.objects.filter(root_object=instance.related_work)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCInstitutionWorkReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -997,7 +997,7 @@ class InstitutionPersonForm(forms.ModelForm):
         instance = getattr(self, 'instance', None)
         if instance and instance.id:
             self.fields['person'].initial = instance.related_person.name+", "+instance.related_person.first_name
-            self.fields['person_uri'].initial = Uri.objects.filter(entity=instance.related_person)[0]
+            self.fields['person_uri'].initial = Uri.objects.filter(root_object=instance.related_person)[0]
         self.fields['relation_type'].required = True
         self.helper = FormHelper()
         self.helper.form_class = 'InstitutionPersonForm'
@@ -1072,7 +1072,7 @@ class PlaceEventForm(forms.ModelForm):
 
             if instance and instance.id:
                 self.fields['place'].initial = instance.related_place.name
-                self.fields['place_uri'].initial = Uri.objects.filter(entity=instance.related_place)[0]
+                self.fields['place_uri'].initial = Uri.objects.filter(root_object=instance.related_place)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCPlaceEventReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -1097,7 +1097,7 @@ class PlaceEventForm(forms.ModelForm):
             self.fields.pop('place_uri')
             if instance and instance.id:
                 self.fields['event'].initial = instance.related_event.name
-                self.fields['event_uri'].initial = Uri.objects.filter(entity=instance.related_event)[0]
+                self.fields['event_uri'].initial = Uri.objects.filter(root_object=instance.related_event)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCPlaceEventReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -1176,7 +1176,7 @@ class PlaceWorkForm(forms.ModelForm):
 
             if instance and instance.id:
                 self.fields['place'].initial = instance.related_place.name
-                self.fields['place_uri'].initial = Uri.objects.filter(entity=instance.related_place)[0]
+                self.fields['place_uri'].initial = Uri.objects.filter(root_object=instance.related_place)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCPlaceWorkReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -1201,7 +1201,7 @@ class PlaceWorkForm(forms.ModelForm):
             self.fields.pop('place_uri')
             if instance and instance.id:
                 self.fields['work'].initial = instance.related_work.name
-                self.fields['work_uri'].initial = Uri.objects.filter(entity=instance.related_work)[0]
+                self.fields['work_uri'].initial = Uri.objects.filter(root_object=instance.related_work)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCPlaceWorkReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -1279,7 +1279,7 @@ class PlacePlaceForm(forms.ModelForm):
                 else:
                     rel_place = instance.related_placeB
             self.fields['place'].initial = rel_place
-            self.fields['place_uri'].initial = Uri.objects.filter(entity=rel_place)[0]
+            self.fields['place_uri'].initial = Uri.objects.filter(root_object=rel_place)[0]
         self.fields['relation_type'].required = True
         self.helper = FormHelper()
         self.helper.form_class = 'PlacePlaceForm'
@@ -1363,7 +1363,7 @@ class EventWorkForm(forms.ModelForm):
 
             if instance and instance.id:
                 self.fields['event'].initial = instance.related_event.name
-                self.fields['event_uri'].initial = Uri.objects.filter(entity=instance.related_event)[0]
+                self.fields['event_uri'].initial = Uri.objects.filter(root_object=instance.related_event)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCEventWorkReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],
@@ -1388,7 +1388,7 @@ class EventWorkForm(forms.ModelForm):
             self.fields.pop('event_uri')
             if instance and instance.id:
                 self.fields['work'].initial = instance.related_work.name
-                self.fields['work_uri'].initial = Uri.objects.filter(entity=instance.related_work)[0]
+                self.fields['work_uri'].initial = Uri.objects.filter(root_object=instance.related_work)[0]
                 self.fields['relation_type'].widget = al.ChoiceWidget(
                     'VCEventWorkReverseAutocomplete',
                     extra_context={'values': [instance.relation_type.pk],

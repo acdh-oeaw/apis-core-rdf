@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -14,7 +15,7 @@ from apis_core.apis_relations.tables import get_generic_relations_table, get_gen
 from apis_core.helper_functions.utils import access_for_all
 from apis_core.apis_entities.models import AbstractEntity
 from .views import get_highlighted_texts
-from apis_core.apis_relations.models import Triple, TempTriple
+from apis_core.apis_relations.models import TempTriple
 
 
 class GenericEntitiesDetailView(UserPassesTestMixin, View):
@@ -31,35 +32,11 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         pk = kwargs['pk']
         entity_model = AbstractEntity.get_entity_class_of_name(entity)
         instance = get_object_or_404(entity_model, pk=pk)
-        # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
         side_bar = []
 
-
-
-
-
-        triples_related_all = Triple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
-
-        for entity_class in AbstractEntity.get_all_entity_classes():
-
-            other_entity_class_name = entity_class.__name__.lower()
-
-            # TODO __sresch__ : Check if this filter call results in additional db hits
-            triples_related_by_entity = triples_related_all.filter(
-                (
-                    Q(**{f"subj__{other_entity_class_name}__isnull": False}) & Q(**{f"obj__pk": pk})
-                )
-                | (
-                    Q(**{f"obj__{other_entity_class_name}__isnull": False}) & Q(**{f"subj__pk": pk})
-                )
-            )
-
-            table = get_generic_triple_table(
-                other_entity_class_name=other_entity_class_name,
-                this_entity_pk=pk,
-                detail=True
-            )
-
+        # __before_triple_refactoring__
+        #
+        # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
         # for rel in relations:
         #     match = [
         #         rel.get_related_entity_classA().__name__.lower(),
@@ -91,10 +68,36 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         #             objects = rel.objects.filter(**dict_1)
         #             if callable(getattr(objects, 'filter_for_user', None)):
         #                 objects = objects.filter_for_user()
+        #
+        # __after_triple_refactoring__
 
+        triples_related_all = TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
 
+        for entity_class in AbstractEntity.get_all_entity_classes():
 
+            # TODO __sresch__ : change this db fetch with the cached one from master
+            entity_content_type = ContentType.objects.get_for_model(entity_class)
 
+            other_entity_class_name = entity_class.__name__.lower()
+
+            # TODO __sresch__ : Check if this filter call results in additional db hits
+            triples_related_by_entity = triples_related_all.filter(
+                (
+                    # TODO RDF is filtering for pk necessary if it's already done above?
+                    Q(subj__self_content_type=entity_content_type)
+                    & Q(obj__pk=pk)
+                )
+                | (
+                    Q(obj__self_content_type=entity_content_type)
+                    & Q(subj__pk=pk)
+                )
+            )
+
+            table = get_generic_triple_table(
+                other_entity_class_name=other_entity_class_name,
+                entity_pk_self=pk,
+                detail=True
+            )
 
             prefix = f"{other_entity_class_name}"
             title_card = prefix
@@ -105,7 +108,11 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             side_bar.append(
                 (title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open)
             )
-        object_lod = Uri.objects.filter(entity=instance)
+
+
+        # TODO RDF : Check / Adapt the following code to rdf architecture
+
+        object_lod = Uri.objects.filter(root_object=instance)
         object_texts, ann_proj_form = get_highlighted_texts(request, instance)
         object_labels = Label.objects.filter(temp_entity=instance)
         tb_label = LabelTableBase(data=object_labels, prefix=entity.title()[:2]+'L-')
@@ -162,13 +169,3 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
                 'iiif_server': iiif_server,
                 }
             ))
-
-
-# TODO __sresch__ : This seems unused. Remove it once sure
-# class WorkDetailView(DetailView):
-#     model = Work
-#     template_name = 'apis_entities/detail_views/work_detail.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(WorkDetailView, self).get_context_data(**kwargs)
-#         return context

@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 # from .models import Institution, Person, Place, Event, Work
 # from ..apis_relations.models import PersonInstitution, InstitutionPlace, PersonPlace
-# from ..apis_vocabularies.models import RelationBaseClass, InstitutionPlaceRelation
+# from ..apis_vocabularies.models import Property, InstitutionPlaceRelation
 
 
 class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
@@ -30,6 +30,8 @@ class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
     )
 
 
+# __before_triple_refactoring__
+#
 # class InstitutionSerializer(BaseEntitySerializer):
 #     url = serializers.HyperlinkedIdentityField(
 #         view_name="apis:apis_api:institution-detail",
@@ -291,6 +293,8 @@ class NetJsonNodeSerializer(serializers.BaseSerializer):
                 r['data']['gender'] = obj.gender
         return r
 
+# __before_triple_refactoring__
+#
 # class LifePathPlaceSerializer(serializers.ModelSerializer):
 #     id = serializers.ReadOnlyField()
 #     name = serializers.CharField()

@@ -201,13 +201,16 @@ class LabelTypeSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
         model = LabelType
 
-#####################################################################
-#
-# Relations
-#
-####################################################################
 
-
+# __before_triple_refactoring__
+#
+# #####################################################################
+# #
+# # Relations
+# #
+# ####################################################################
+#
+#
 # class InstitutionInstitutionRelationSerializer(VocabsBaseSerializer):
 #
 #     class Meta:

@@ -1,3 +1,5 @@
+# __before_triple_refactoring__
+#
 # from django.contrib.auth.models import User
 # from rest_framework import viewsets
 #
@@ -163,6 +165,4 @@
 # class WorkWorkRelationViewSet(viewsets.ModelViewSet):
 #     queryset = WorkWorkRelation.objects.all()
 #     serializer_class = WorkWorkRelationSerializer
-#
-#
 #

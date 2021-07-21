@@ -162,10 +162,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
             for r in res[offset:offset+page_size]:
                 f = dict()
                 dataclass = ""
-                try:
-                    f['id'] = Uri.objects.filter(entity=r)[0].uri
-                except:
-                    continue
+                f['id'] = Uri.objects.filter(root_object=r)[0].uri
                 if hasattr(r, 'lng'):
                     if r.lng and r.lat:
                         dataclass = 'data-vis-tooltip="{}" data-lat="{}" \
@@ -322,6 +319,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         }), content_type='application/json')
 
 
+# TODO RDF : Adapt this Autocomplete class to triple architecture
 class GenericVocabulariesAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         page_size = 20
@@ -333,13 +331,26 @@ class GenericVocabulariesAutocomplete(autocomplete.Select2ListView):
         vocab_model = ContentType.objects.get(app_label='apis_vocabularies', model=vocab).model_class()
         if direct == 'normal':
             if vocab_model.__bases__[0] == VocabsBaseClass:
-                choices = [{'id': x.pk, 'text': x.label} for x in vocab_model.objects.filter(name__icontains=q).order_by('parent_class__name', 'name')[offset:offset+page_size]]
+                choices = [
+                    {'id': x.pk, 'text': x.label}
+                    for x in vocab_model.objects.filter(
+                        name__icontains=q
+                    ).order_by('parent_class__name', 'name')[offset:offset+page_size]
+                ]
             else:
-                choices = [{'id': x.pk, 'text': x.label} for x in vocab_model.objects.filter(
-                    Q(name__icontains=q) | Q(name_reverse__icontains=q)).order_by('parent_class__name', 'name')[offset:offset+page_size]]
+                choices = [
+                    {'id': x.pk, 'text': x.label}
+                    for x in vocab_model.objects.filter(
+                        Q(name__icontains=q) | Q(name_reverse__icontains=q)
+                    ).order_by('parent_class__name', 'name')[offset:offset+page_size]
+                ]
         elif direct == 'reverse':
-            choices = [{'id': x.pk, 'text': x.label_reverse} for x in vocab_model.objects.filter(
-                Q(name__icontains=q) | Q(name_reverse__icontains=q)).order_by('parent_class__name', 'name')[offset:offset+page_size]]
+            choices = [
+                {'id': x.pk, 'text': x.label_reverse}
+                for x in vocab_model.objects.filter(
+                    Q(name__icontains=q) | Q(name_reverse__icontains=q)
+                ).order_by('parent_class__name', 'name')[offset:offset+page_size]
+            ]
         if len(choices) == page_size:
             more = True
         return http.HttpResponse(json.dumps({
@@ -402,3 +413,66 @@ class GenericNetworkEntitiesAutocomplete(autocomplete.Select2ListView):
         return http.HttpResponse(json.dumps({
             'results': results
         }), content_type='application/json')
+
+
+# __after_triple_refactoring__
+class PropertyAutocomplete(autocomplete.Select2ListView):
+
+    SELF_SUBJ_OTHER_OBJ_STR = "self_subj_other_obj"
+    SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
+
+    def get(self, request, *args, **kwargs):
+        # TODO RDF : pagination
+
+        search_name_str = self.q
+
+        more = False
+
+        entity_self_str = kwargs["entity_self"]
+        entity_other_str = kwargs["entity_other"]
+
+        # TODO __sresch__ : Replace the db contenttype query with cached helper functions from GetContentTypes once this has been merged
+        entity_self_contenttype = ContentType.objects.get(model=entity_self_str)
+        entity_other_contenttype = ContentType.objects.get(model=entity_other_str)
+
+        from apis_core.apis_relations.models import Property
+
+        rbc_self_subj_other_obj = Property.objects.filter(
+            subj_class=entity_self_contenttype,
+            obj_class=entity_other_contenttype,
+            name__icontains=search_name_str
+        )
+        rbc_self_obj_other_subj = Property.objects.filter(
+            subj_class=entity_other_contenttype,
+            obj_class=entity_self_contenttype,
+            name_reverse__icontains=search_name_str
+        )
+
+        choices = []
+
+        for rbc in rbc_self_subj_other_obj:
+            choices.append(
+                {
+                    'id': f"id:{rbc.pk}__direction:{self.SELF_SUBJ_OTHER_OBJ_STR}",
+                    'text': rbc.name
+                }
+            )
+
+        for rbc in rbc_self_obj_other_subj:
+            choices.append(
+                {
+                    'id': f"id:{rbc.pk}__direction:{self.SELF_OBJ_OTHER_SUBJ_STR}",
+                    'text': rbc.name_reverse
+                }
+            )
+
+        return http.HttpResponse(
+            json.dumps(
+                {
+                    'results': choices,
+                    'pagination': {'more': more},
+                    "abcde": "0"
+                }
+            ),
+            content_type='application/json'
+        )

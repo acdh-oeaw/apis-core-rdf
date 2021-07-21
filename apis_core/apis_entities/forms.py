@@ -40,7 +40,6 @@ class SearchForm(forms.Form):
 
 def get_entities_form(entity):
 
-    # TODO __sresch__ : consider moving this class outside of the function call to avoid redundant class definitions
     class GenericEntitiesForm(forms.ModelForm):
         class Meta:
             model = AbstractEntity.get_entity_class_of_name(entity)
@@ -56,7 +55,8 @@ def get_entities_form(entity):
                 'end_date_is_exact',
                 'text',
                 'source',
-                'published'
+                'published',
+                'self_content_type'
             ]
             # exclude.extend(model.get_related_entity_field_names())
             # exclude.extend(model.get_related_relationtype_field_names())
@@ -88,13 +88,40 @@ def get_entities_form(entity):
                         widget1 = Select2Multiple
                     else:
                         widget1 = ListSelect2
-                    if ContentType.objects.get(app_label__in=[
-                        'apis_entities',
-                        'apis_metainfo',
-                        'apis_relations',
-                        'apis_vocabularies',
-                        'apis_labels'
-                    ], model=v_name_p.lower()).app_label.lower() == 'apis_vocabularies':
+
+
+                    # __before_triple_refactoring__
+                    #
+                    # if (
+                    #     ContentType.objects.get(
+                    #         app_label__in=[
+                    #             "apis_entities",
+                    #             "apis_metainfo",
+                    #             "apis_relations",
+                    #             "apis_vocabularies",
+                    #             "apis_labels",
+                    #         ],
+                    #         model=v_name_p.lower(),
+                    #     ).app_label.lower()
+                    #     == "apis_vocabularies"
+                    # ):
+                    #
+                    # __after_triple_refactoring__
+
+                    matching_content_type = ContentType.objects.filter(
+                        app_label__in=[
+                            'apis_entities',
+                            'apis_metainfo',
+                            'apis_relations',
+                            'apis_vocabularies',
+                            'apis_labels'
+                        ],
+                        model=v_name_p.lower()
+                    )
+                    if (
+                        len(matching_content_type) == 1
+                        and matching_content_type[0].app_label.lower() == 'apis_vocabularies'
+                    ):
                         self.fields[f].widget = widget1(
                             url=reverse(
                                 'apis:apis_vocabularies:generic_vocabularies_autocomplete',
@@ -143,6 +170,9 @@ def get_entities_form(entity):
                     The sorted list if entity-specific ordering was defined, the same unordered list if not.
                 """
 
+                # __before_triple_refactoring__
+                # TODO RDF : Re-implement this for rdf architecture
+                #
                 # fields_sort_preferences_per_entity = {
                 #     'Person': [
                 #         'name',

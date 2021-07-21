@@ -18,7 +18,7 @@ from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 # from apis_core.apis_relations.models import AbstractRelation
-from apis_core.apis_relations.models import Triple
+from apis_core.apis_relations.models import Triple, TempTriple
 from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, LabelTableEdit
 from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm
 from .views import get_highlighted_texts
@@ -39,40 +39,41 @@ class GenericEntitiesEditView(View):
         instance = get_object_or_404(entity_model, pk=pk)
         request = set_session_variables(request)
 
-
-
         side_bar = []
 
-        triples_related_all = Triple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
+        triples_related_all = TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
 
         for entity_class in AbstractEntity.get_all_entity_classes():
+
+            # TODO __sresch__ : change this db fetch with the cached one from master
+            entity_content_type = ContentType.objects.get_for_model(entity_class)
 
             other_entity_class_name = entity_class.__name__.lower()
 
             # TODO __sresch__ : Check if this filter call results in additional db hits
             triples_related_by_entity = triples_related_all.filter(
                 (
-                    Q(**{f"subj__{other_entity_class_name}__isnull": False}) & Q(**{f"obj__pk": pk})
+                    Q(**{f"subj__self_content_type": entity_content_type}) & Q(**{f"obj__pk": pk})
                 )
                 | (
-                    Q(**{f"obj__{other_entity_class_name}__isnull": False}) & Q(**{f"subj__pk": pk})
+                    Q(**{f"obj__self_content_type": entity_content_type}) & Q(**{f"subj__pk": pk})
                 )
             )
 
-            table = get_generic_triple_table(other_entity_class_name=other_entity_class_name, this_entity_pk=pk, detail=False)
+            table_class = get_generic_triple_table(other_entity_class_name=other_entity_class_name, entity_pk_self=pk, detail=False)
 
             prefix = f"{other_entity_class_name}"
             title_card = prefix
-            tb_object = table(data=triples_related_by_entity, prefix=prefix)
+            tb_object = table_class(data=triples_related_by_entity, prefix=prefix)
             tb_object_open = request.GET.get(prefix + 'page', None)
             RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
             side_bar.append(
                 # (title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open)
-                (title_card, tb_object, f"triple_from_{entity}_to_{other_entity_class_name}", tb_object_open)
+                (title_card, tb_object, f"triple_form_{entity}_to_{other_entity_class_name}", tb_object_open)
             )
 
-
-
+        # __before_triple_refactoring__
+        #
         # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
         # side_bar = []
         # for rel in relations:
@@ -127,7 +128,7 @@ class GenericEntitiesEditView(View):
         else:
             apis_bibsonomy = False
         object_revisions = Version.objects.get_for_object(instance)
-        object_lod = Uri.objects.filter(entity=instance)
+        object_lod = Uri.objects.filter(root_object=instance)
         object_texts, ann_proj_form = get_highlighted_texts(request, instance)
         object_labels = Label.objects.filter(temp_entity=instance)
         tb_label = LabelTableEdit(data=object_labels, prefix=entity.title()[:2] + 'L-')
@@ -258,7 +259,7 @@ class GenericEntitiesCreateStanbolView(View):
 @method_decorator(login_required, name='dispatch')
 class GenericEntitiesDeleteView(DeleteView):
     model = ContentType.objects.get(
-        app_label='apis_metainfo', model='tempentityclass').model_class()
+        app_label='apis_entities', model='tempentityclass').model_class()
     template_name = getattr(
         settings, 'APIS_DELETE_VIEW_TEMPLATE', 'apis_entities/confirm_delete.html'
     )

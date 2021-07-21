@@ -17,8 +17,8 @@ class UriListFilter(django_filters.FilterSet):
         )
     entity__name = django_filters.CharFilter(
         lookup_expr='icontains',
-        help_text=Uri._meta.get_field('entity').help_text,
-        label=Uri._meta.get_field('entity').verbose_name
+        help_text=Uri._meta.get_field('root_object').help_text,
+        label=Uri._meta.get_field('root_object').verbose_name
         )
 
     class Meta:

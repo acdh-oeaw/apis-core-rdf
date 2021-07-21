@@ -68,11 +68,14 @@ class EntityLabelForm(forms.ModelForm):
             else:
                 self.fields['end_date_written'].help_text = DateParser.get_date_help_text_default()
 
-##############################################
-# Person
-##############################################
 
-
+# __before_triple_refactoring__
+#
+# ##############################################
+# # Person
+# ##############################################
+#
+#
 # class PersonLabelForm(EntityLabelForm):
 #     pass
 #
@@ -100,13 +103,13 @@ class EntityLabelForm(forms.ModelForm):
 #
 # class EventLabelForm(EntityLabelForm):
 #     pass
-
-
-##############################################
-# Entities Base Forms
-#############################################
-
-
+#
+#
+# ##############################################
+# # Entities Base Forms
+# #############################################
+#
+#
 # class PlaceEntityForm(forms.Form):
 #     # place = forms.CharField(label='Place', widget=al.TextWidget('OrtAutocomplete'))
 #     place_uri = forms.CharField(required=False, widget=forms.HiddenInput())

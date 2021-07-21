@@ -126,7 +126,8 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         qs = ContentType.objects.get(
             app_label__startswith='apis_', model=self.entity.lower()
         ).model_class().objects.all()
-        self.filter = get_list_filter_of_entity(self.entity.title())(self.request.GET, queryset=qs)
+        filter_class = get_list_filter_of_entity(self.entity.title())
+        self.filter = filter_class(self.request.GET, queryset=qs)
         self.filter.form.helper = self.formhelper_class()
         return self.filter.qs
 
@@ -271,7 +272,7 @@ def getGeoJson(request):
     # if request.is_ajax():
     pk_obj = request.GET.get("object_id")
     instance = get_object_or_404(Place, pk=pk_obj)
-    uria = Uri.objects.filter(entity=instance)
+    uria = Uri.objects.filter(root_object=instance)
     urib = UriCandidate.objects.filter(entity=instance)
     if urib.count() > 0:
         uric = urib
@@ -353,7 +354,9 @@ def getGeoJsonList(request):
     return HttpResponse(json.dumps(lst_json), content_type='application/json')
 
 
-@user_passes_test(access_for_all_function)
+# __before_triple_refactoring__
+#
+# @user_passes_test(access_for_all_function)
 # def getNetJsonList(request):
 #     '''Used to retrieve a Json to draw a network'''
 #     relation = AbstractRelation.get_relation_class_of_name('PersonPlace')

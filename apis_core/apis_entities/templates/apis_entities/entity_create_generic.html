@@ -199,49 +199,58 @@
             // update our tooltip content with our returned data and cache it
             $('#tab_'+data.tab).find('div:eq(1)').remove();
             $('#tab_'+data.tab).append(data.form);
-	    $('#form_PersonInstitutionForm div:first div:first select').focus();
+	        $('#form_PersonInstitutionForm div:first div:first select').focus();
             //$(".form.ajax_form").unbind()
         };
         if (!$.ApisForms) {
-                        $.ApisForms = {}
-                      };
-        if (ObjectID === undefined) {
-        ObjectID = false;
-        if ($.ApisForms[FormName+'_'+'{{entity_type}}']) {
-          var new_data = $.ApisForms[FormName+'_'+'{{entity_type}}']
-          new_data.form = new_data.form
-              .replace('##ENT_PK##', {{instance.pk}});
-          add_form(new_data);
-          return;
+            $.ApisForms = {}
         };
+        if (ObjectID === undefined) {
+            if ($.ApisForms[FormName+'_'+'{{entity_type}}']) {
+                var new_data = $.ApisForms[FormName+'_'+'{{entity_type}}']
+                new_data.form = new_data.form.replace('##ENT_PK##', {{instance.pk}});
+                add_form(new_data);
+                return;
+            };
         };
         if (ButtonText === undefined) {
-        ButtonText = 'create/modify';
+            ButtonText = 'create/modify';
         };
-        return $.ajax({
+        return $.ajax(
+            {
                 type: 'POST',
                 url: '{% url 'apis:apis_relations:get_form_ajax' %}',
-            beforeSend: function(request) {
-              var csrftoken = getCookie('csrftoken');
-    request.setRequestHeader("X-CSRFToken", csrftoken);
-  },
-            data: {'FormName':FormName,'SiteID':{{instance.pk}},'ObjectID':ObjectID,'ButtonText':ButtonText, 'entity_type': '{{entity_type}}'},
+                beforeSend: function(request) {
+                    var csrftoken = getCookie('csrftoken');
+                    request.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                data: {
+                    'FormName':FormName,
+                    'SiteID':{{instance.pk}},
+                    'ObjectID':ObjectID,
+                    'ButtonText':ButtonText,
+                    'entity_type': '{{entity_type}}',
+                },
                 success: function(data) {
                     add_form(data);
                     if (!ObjectID) {
-                      $.ApisForms[FormName+'_'+'{{entity_type}}'] = data;
+                        $.ApisForms[FormName+'_'+'{{entity_type}}'] = data;
                         $.ApisForms[FormName+'_'+'{{entity_type}}'].form = $.ApisForms[FormName+'_'+'{{entity_type}}'].form
-                            .replace('/{{instance.pk}}/', '/##ENT_PK##/');
+                        .replace('/{{instance.pk}}/', '/##ENT_PK##/');
                     };
                 },
                 error: function(error) {
                     console.log(error)
                 }
-            });
+            }
+        );
     }
 </script>
 <script type="text/javascript">
     function EntityRelationForm_response(response){
+
+        console.log("apis_core/apis_entities/templates/apis_entities/entity_create_generic.html:EntityRelationForm_response")
+
         if (response.test == false) {
             $('#'+response.DivID).replaceWith(response.form);
             //$(".form.ajax_form").unbind();
@@ -258,8 +267,8 @@
              if (check_perms_relation()){
              if (response.right_card) {
                  console.log('fetching form');
-                 console.log(response.tab+'Form');
-             GetFormAjax(response.tab+'Form');};
+                 console.log(response.tab);
+             GetFormAjax(response.tab);};
              if ($.ApisHigh){
              if ($.ApisHigh.tt_instance_detail["__state"] == 'stable') {
                 $.ApisHigh.tt_instance_detail.close()
@@ -350,7 +359,7 @@
 <script type="text/javascript">
  function activate_editing(){
         {% for obj in right_card %}
-        GetFormAjax("{{obj.2|add:'Form'}}");
+        GetFormAjax("{{obj.2}}");
         //unbind_ajax_forms();
         {% endfor %}
 {% if highlighter_active %}

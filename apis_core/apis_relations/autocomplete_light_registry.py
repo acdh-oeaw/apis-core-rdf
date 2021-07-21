@@ -74,7 +74,7 @@ class StanbolAutocompleteBase(al.AutocompleteListTemplate):
                 f['name'] = r
                 f['score'] = None
                 try:
-                    f['uri'] = Uri.objects.filter(entity=r)[0].uri
+                    f['uri'] = Uri.objects.filter(root_object=r)[0].uri
                 except:
                     continue
                 f['source'] = 'db'

@@ -23,7 +23,8 @@ from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
 from apis_core.apis_metainfo.api_renderers import PaginatedCSVRenderer
-from apis_core.apis_metainfo.models import TempEntityClass, Uri
+from apis_core.apis_entities.models import TempEntityClass
+from apis_core.apis_metainfo.models import Uri
 # from apis_core.apis_relations.models import PersonPlace, InstitutionPlace, AbstractRelation, PersonInstitution
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.default_settings.NER_settings import autocomp_settings, stb_base
@@ -33,6 +34,8 @@ from .api_renderers import EntityToTEI, EntityToCIDOCXML, EntityToProsopogrAPhI,
     EntityToCIDOCTURTLE
 # from .models import Event, Institution, Person, Place, Work,
 from apis_core.apis_entities.models import AbstractEntity
+
+# __before_triple_refactoring__
 # from .serializers import (
 #     EventSerializer,
 #     GeoJsonSerializer,
@@ -100,7 +103,9 @@ def uri_resolver(request):
             ) + '?format={}'.format(f)
         return redirect(url)
 
-
+# __before_triple_refactoring__
+# TODO RDF : Check if this is still necessary and needed to be adapted
+#
 # class InstitutionViewSet(viewsets.ModelViewSet):
 #     """Serialization of the institution class.
 #     In addition to the institution this view includes related texts and \
@@ -359,6 +364,8 @@ def uri_resolver(request):
 #         sr1_2 = NetJsonNodeSerializer(lst_nodes, many=True)
 #         res = {"nodes": sr1_2.data, "edges": sr1_1.data}
 #         return Response(res)
+#
+# __after_triple_refactoring__
 
 
 class SaveNetworkFiles(APIView):
@@ -425,7 +432,9 @@ class GetOrCreateEntity(APIView):
         }
         return Response(res)
 
-
+# __before_triple_refactoring__
+# TODO RDF : Check if this is still necessary and needed to be adapted
+#
 # class GetRelatedPlaces(APIView):
 #     #map_qs = {
 #      #   'institution': Prefetch('personinstitution_set__related_institution__institutionplace_set', queryset=InstitutionPlace.objects.select_related('related_place'))
@@ -490,3 +499,5 @@ class GetOrCreateEntity(APIView):
 #         data = sorted(data, key = lambda i: i['year'])
 #
 #         return Response(data)
+#
+# __after_triple_refactoring__

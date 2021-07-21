@@ -174,6 +174,11 @@ def generic_serializer_creation_factory():
             exclude_lst = deep_get(
                 test_search, "{}.api_exclude".format(entity_str), []
             )
+
+            # TODO: Remove this hardwired exclude item, in favor of fetching it from settings like code above
+            # Though I could not figure out how that above works correctly. Hence this hard-coded part here - sresch
+            exclude_lst.append("self_content_type")
+
         else:
             set_prem = getattr(settings, f"{cont.app_label.upper()}", {})
             exclude_lst = deep_get(set_prem, "exclude", [])
@@ -181,20 +186,16 @@ def generic_serializer_creation_factory():
                 deep_get(set_prem, "{}.exclude".format(entity_str), [])
             )
         exclude_lst_fin = [x for x in exclude_lst if x in [x.name for x in entity._meta.get_fields()]]
+
         if entity_str.lower() == "text":
             exclude_lst_fin.extend(['kind', 'source'])
-
-        # print(entity_str, exclude_lst_fin)
-
         if cont.model == "triple":
             # exclude_lst_fin = [x.name for x in entity._meta.get_fields()]
 
             class Meta:
                 model = entity
                 fields = ["id", "url", "subj", "prop", "obj"]
-
         else:
-
             class Meta:
                 model = entity
                 exclude = exclude_lst_fin
@@ -261,6 +262,7 @@ def generic_serializer_creation_factory():
             if entity_str == 'Triple':
                 self.fields["subj"].view_name = 'apis:apis_api:' + self.fields["subj"].view_name
                 self.fields["obj"].view_name = 'apis:apis_api:' + self.fields["obj"].view_name
+
 
         s_dict = {
             "id": serializers.ReadOnlyField(),

@@ -42,6 +42,7 @@ urlpatterns = [
     #     detail_views.WorkDetailView.as_view(), name='work_detail'),
 
     url(r'^place/geojson/$', views.getGeoJson, name='getGeoJson'),
+    # __before_triple_refactoring__
     # url(r'^place/geojson/list/$', views.getGeoJsonList, name='getGeoJsonList'),
     # url(r'^place/network/list/$', views.getNetJsonList, name='getNetJsonList'),
     # url(r'^resolve/place/(?P<pk>[0-9]+)/(?P<uri>.+)$',
