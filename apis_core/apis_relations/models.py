@@ -13,6 +13,7 @@ from model_utils.managers import InheritanceManager
 from django.utils.functional import cached_property
 # from apis_core.apis_entities.models import Person
 from apis_core.apis_entities.models import TempEntityClass, RootObject
+from django.db.models.signals import m2m_changed
 
 #######################################################################
 #
@@ -36,14 +37,13 @@ def find_if_user_accepted():
         return {}
 
 
+
+
 # TODO RDF : Implement filtering for implicit superclasses
 # Currently if a Property.objects.filter() is used with param subj_class or obj_class, then it searches only for the
 # passed class, but not for implicit superclasses. For this to be possible, the object manager must be overriden
 @reversion.register(follow=['vocabsbaseclass_ptr'])
 class Property(RootObject):
-    """ An abstract base class for other classes which contain so called
-    'controlled vocabulary' to describe the relations between main temporalized
-    entities ('db_')"""
 
     name_reverse = models.CharField(
         max_length=255,
@@ -53,13 +53,13 @@ class Property(RootObject):
 
     subj_class = models.ManyToManyField(
         ContentType,
-        related_name="property_subj",
+        related_name="property_set_subj",
         limit_choices_to=Q(app_label="apis_entities"), # TODO RDF : Add vocab
     )
 
     obj_class = models.ManyToManyField(
         ContentType,
-        related_name="property_obj",
+        related_name="property_set_obj",
         limit_choices_to=Q(app_label="apis_entities"),
     )
 
@@ -76,6 +76,113 @@ class Property(RootObject):
 
         super(Property, self).save(*args, **kwargs)
         return self
+
+
+# TODO __sresch__ : comment and explain
+def subj_or_obj_class_changed(sender, is_subj, **kwargs):
+
+    def cascade_subj_obj_class_to_children(
+        contenttype_to_add_or_remove,
+        contenttype_already_saved_list,
+        subj_or_obj_field_function
+    ):
+
+        def get_all_parents(contenttype_current):
+
+            parent_list = []
+            class_current = contenttype_current.model_class()
+
+            for class_parent in class_current.__bases__:
+
+                # TODO __sresch__ : Avoid ContentType DB fetch
+                contenttype_parent = ContentType.objects.filter(model=class_parent.__name__)
+
+                if len(contenttype_parent) == 1:
+
+                    contenttype_parent = contenttype_parent[0]
+                    parent_list.append(contenttype_parent)
+                    parent_list.extend(get_all_parents(contenttype_parent))
+
+            return parent_list
+
+        def get_all_children(contenttype_current):
+
+            child_list = []
+            class_current = contenttype_current.model_class()
+
+            for class_child in class_current.__subclasses__():
+
+                # TODO __sresch__ : Avoid ContentType DB fetch
+                contenttype_child = ContentType.objects.get(model=class_child.__name__)
+                child_list.append(contenttype_child)
+                child_list.extend(get_all_children(contenttype_child))
+
+            return child_list
+
+        parent_contenttype_list = get_all_parents(contenttype_to_add_or_remove)
+
+        for parent_contenttype in parent_contenttype_list:
+
+            if parent_contenttype in contenttype_already_saved_list:
+
+                raise Exception(
+                    f"Pre-existing parent class found when trying to save or remove a property subject or object class."
+                    f" The current class to be saved is '{contenttype_to_add_or_remove.model_class().__name__}',"
+                    f" but already saved is '{parent_contenttype.model_class().__name__}'."
+                    f" Such a save could potentially be in conflict with an ontology."
+                    f" Better save or remove the respective top parent subject or object class from this property."
+                )
+
+        children_contenttype_list = get_all_children(contenttype_to_add_or_remove)
+
+        for child_contenttype in children_contenttype_list:
+
+            subj_or_obj_field_function(child_contenttype)
+
+    if kwargs["pk_set"] is not None and len(kwargs["pk_set"]) == 1:
+
+        sending_property = kwargs["instance"]
+
+        if sender == Property.subj_class.through:
+
+            subj_or_obj_field = sending_property.subj_class
+
+        elif sender == Property.obj_class.through:
+
+            subj_or_obj_field = sending_property.obj_class
+
+        else:
+
+            raise Exception
+
+        subj_or_obj_field_function = None
+
+        if kwargs["action"] == "pre_add":
+
+            subj_or_obj_field_function = subj_or_obj_field.add
+
+        elif kwargs["action"] == "post_remove":
+
+            subj_or_obj_field_function = subj_or_obj_field.remove
+
+        if subj_or_obj_field_function is not None:
+
+            cascade_subj_obj_class_to_children(
+                contenttype_to_add_or_remove=ContentType.objects.get(pk=min(kwargs["pk_set"])),
+                contenttype_already_saved_list=subj_or_obj_field.all(),
+                subj_or_obj_field_function=subj_or_obj_field_function
+            )
+
+def subj_class_changed(sender, **kwargs):
+
+    subj_or_obj_class_changed(sender, is_subj=True, **kwargs)
+
+def obj_class_changed(sender, **kwargs):
+
+    subj_or_obj_class_changed(sender, is_subj=False, **kwargs)
+
+m2m_changed.connect(subj_class_changed, sender=Property.subj_class.through)
+m2m_changed.connect(obj_class_changed, sender=Property.obj_class.through)
 
 
 class RelationPublishedQueryset(models.QuerySet):
@@ -500,6 +607,7 @@ class Triple(models.Model):
     def get_web_object(self):
 
         # __before_triple_refactoring__
+        # Method from RelationBaseClass
         #
         # nameA = self.get_related_entity_instanceA().name
         # nameB = self.get_related_entity_instanceB().name
@@ -556,26 +664,13 @@ class Triple(models.Model):
             return child_list
 
 
-        # TODO RDF : transfer this property inheritance logic to Property.save()
-        allowed_contenttypes_subj = list(self.prop.subj_class.all())
-        ct_subj = ContentType.objects.get(model=self.subj.__class__.__name__)
-        allowed_contenttypes_subj_tmp = []
-        for ct_allowed in allowed_contenttypes_subj:
-            for child_cls in get_all_childs(ct_allowed.model_class()):
-                allowed_contenttypes_subj_tmp += ContentType.objects.filter(model=child_cls.__name__)
-        allowed_contenttypes_subj += allowed_contenttypes_subj_tmp
-        if ct_subj not in allowed_contenttypes_subj:
-            raise Exception()
+        subj_class_name = self.subj.__class__.__name__
+        if ContentType.objects.get(model=subj_class_name) not in self.prop.subj_class.all():
+            raise Exception(f"Subject class '{subj_class_name}' is not in valid subject class list of property '{self.prop}'")
 
-        allowed_contenttypes_obj = list(self.prop.obj_class.all())
-        ct_obj = ContentType.objects.get(model=self.obj.__class__.__name__)
-        allowed_contenttypes_obj_tmp = []
-        for ct_allowed in allowed_contenttypes_obj:
-            for child_cls in get_all_childs(ct_allowed.model_class()):
-                allowed_contenttypes_obj_tmp += ContentType.objects.filter(model=child_cls.__name__)
-        allowed_contenttypes_obj += allowed_contenttypes_obj_tmp
-        if ct_obj not in allowed_contenttypes_obj:
-            raise Exception()
+        obj_class_name = self.obj.__class__.__name__
+        if ContentType.objects.get(model=obj_class_name) not in self.prop.obj_class.all():
+            raise Exception(f"Object class '{obj_class_name}' is not in valid object class list of property '{self.prop}'")
 
         super().save(*args, **kwargs)
 
