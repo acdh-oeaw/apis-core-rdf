@@ -528,7 +528,6 @@ class Triple(models.Model):
         # return result
         #
         # __after_triple_refactoring__
-
         return {
             "relation_pk": self.pk,
             "subj": self.subj.name,

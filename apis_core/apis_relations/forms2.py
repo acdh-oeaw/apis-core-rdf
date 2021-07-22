@@ -363,7 +363,6 @@ class GenericTripleForm(forms.ModelForm):
         # lst_src_target = re.findall('[A-Z][^A-Z]*', self.relation_form.__name__)
         #
         # __after_triple_refactoring__
-
         super().__init__()
 
         self.helper = FormHelper()
@@ -575,7 +574,6 @@ class GenericTripleForm(forms.ModelForm):
         # return x
         #
         # __after_triple_refactoring__
-
         #TODO RDF: make programmatic way to fetch fields and insert them as kwargs to existing or new triple
 
         if self.instance is not None:
@@ -637,7 +635,6 @@ class GenericTripleForm(forms.ModelForm):
         # return table_html
         #
         # __after_triple_refactoring__
-
         table_class = get_generic_triple_table(
             other_entity_class_name=entity_instance_other.__class__.__name__.lower(),
             entity_pk_self=entity_instance_self.pk,

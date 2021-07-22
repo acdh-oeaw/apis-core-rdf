@@ -253,7 +253,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
         # return result
         #
         # __after_triple_refactoring__
-
         lookup, value = self.construct_lookup(value)
 
         queryset = queryset.filter(
@@ -327,7 +326,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
         # return result
         #
         # __after_triple_refactoring__
-
         lookup, value = self.construct_lookup(value)
 
         queryset = queryset.filter(
@@ -448,8 +446,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
 #         exclude = GenericListFilter.fields_to_exclude
 #
 # __after_triple_refactoring__
-
-
 def get_list_filter_of_entity(entity):
     """
     Main method to be called somewhere else in the codebase in order to get the FilterClass respective to the entity string input

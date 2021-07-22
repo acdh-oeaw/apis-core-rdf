@@ -107,7 +107,6 @@ def get_entities_form(entity):
                     # ):
                     #
                     # __after_triple_refactoring__
-
                     matching_content_type = ContentType.objects.filter(
                         app_label__in=[
                             'apis_entities',

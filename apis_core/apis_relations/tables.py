@@ -574,8 +574,6 @@ def get_generic_relations_table(relation_class, entity_instance, detail=None):
 #         return RelationTableEdit
 #
 # __after_triple_refactoring__
-
-
 def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
     # TODO RDF : add code from before refactoring and comment it out
@@ -689,7 +687,6 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
             # super().__init__(data, *args, **kwargs)
             #
             # __after_triple_refactoring__
-
             data = data.annotate(
                 other_entity=Case(
                     # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
@@ -745,7 +742,6 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                 # super().__init__(data=data, *args, **kwargs)
                 #
                 # __after_triple_refactoring__
-
                 self.base_columns["other_entity"] = tables.LinkColumn(
                     'apis:apis_entities:generic_entities_detail_view',
                     args=[
@@ -814,8 +810,6 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                 # super().__init__(*args, **kwargs)
                 #
                 # __after_triple_refactoring__
-
-
                 # linking entity
                 self.base_columns["other_entity"] = tables.LinkColumn(
                     'apis:apis_entities:generic_entities_edit_view',

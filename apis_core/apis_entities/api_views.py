@@ -366,8 +366,6 @@ def uri_resolver(request):
 #         return Response(res)
 #
 # __after_triple_refactoring__
-
-
 class SaveNetworkFiles(APIView):
     def post(self, request, format=None):
         file_name = request.data["file_name"]
@@ -500,4 +498,3 @@ class GetOrCreateEntity(APIView):
 #
 #         return Response(data)
 #
-# __after_triple_refactoring__

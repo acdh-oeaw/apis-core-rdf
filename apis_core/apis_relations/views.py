@@ -154,7 +154,6 @@ def get_form_ajax(request):
     #     form = form_class(**form_dict)
     #
     # __after_triple_refactoring__
-
     form_name = request.POST.get('FormName')
     SiteID = int(request.POST.get('SiteID'))
     ButtonText = request.POST.get('ButtonText')
@@ -222,7 +221,6 @@ def get_form_ajax(request):
     # return HttpResponse(json.dumps(data), content_type='application/json')
     #
     # __after_triple_refactoring__
-
     param_dict = {
         "entity_type": entity_type_self_str,
         "form": form,
@@ -290,7 +288,6 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
     #     form = form_class(**form_dict)
     #
     # __after_triple_refactoring__
-
     self_other = kind_form.split("triple_form_")[1].split("_to_")
     entity_type_self_str = self_other[0]
     entity_type_other_str = self_other[1]
@@ -347,32 +344,6 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
     # }
     #
     # __after_triple_refactoring__
-
-
-
-
-    #     data = {'test': True, 'tab': tab, 'call_function': call_function,
-    #             'instance': instance2,
-    #             'table_html': table_html2,
-    #             'text': hl_text,
-    #             'right_card': right_card}
-    # else:
-    #     if 'Highlighter' in tab:
-    #         call_function = 'HighlForm_response'
-    #     data = {'test': False, 'call_function': call_function,
-    #             'DivID': 'div_'+kind_form+instance_id,
-    #             'form': render_to_string("apis_relations/_ajax_form.html", context={
-    #                 "entity_type": entity_type_str,
-    #                 "form": form, 'type1': kind_form, 'url2': 'save_ajax_'+kind_form,
-    #                 'button_text': button_text, 'ObjectID': ObjectID, 'SiteID': SiteID},
-    #                 request=request)}
-    #
-    # # except Exception as e:
-    # #     print('Error in save method')
-    # #     print(e)
-    # #     data = {'test': False, 'error': json.dumps(str(e))}
-    # return HttpResponse(json.dumps(data), content_type='application/json')
-
     data = {
         'test': True,
         'tab': kind_form,
@@ -451,5 +422,3 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
     #                 'button_text': button_text, 'ObjectID': ObjectID, 'SiteID': SiteID},
     #                 request=request)}
     #
-    # __after_triple_refactoring__
-

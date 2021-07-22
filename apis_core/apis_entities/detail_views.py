@@ -70,7 +70,6 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         #                 objects = objects.filter_for_user()
         #
         # __after_triple_refactoring__
-
         triples_related_all = TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
 
         for entity_class in AbstractEntity.get_all_entity_classes():
