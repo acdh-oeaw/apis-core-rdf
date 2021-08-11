@@ -307,6 +307,10 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
 
 
 class RootObject(models.Model):
+    """
+    In order to make the Triple architecture as versatile as possible, I defined a new super class 'RootObject'.
+    This class is being used as superclass for entities, vocabularies, and properties
+    """
 
     name = models.CharField(max_length=255, verbose_name='Name')
     self_content_type = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
@@ -316,7 +320,7 @@ class RootObject(models.Model):
 
     def save(self, *args, **kwargs):
 
-        # TODO RDF : adapt this
+        # TODO RDF : optimize this with caching
         self.self_content_type = ContentType.objects.get_for_model(self)
 
         super().save(*args, **kwargs)

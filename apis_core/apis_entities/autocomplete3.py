@@ -418,6 +418,7 @@ class GenericNetworkEntitiesAutocomplete(autocomplete.Select2ListView):
 # __after_triple_refactoring__
 class PropertyAutocomplete(autocomplete.Select2ListView):
 
+    # These constants are set so that they are defined in one place only and reused by fetching them elsewhere.
     SELF_SUBJ_OTHER_OBJ_STR = "self_subj_other_obj"
     SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
 
@@ -450,10 +451,21 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
 
         choices = []
 
+        # The Select2ListView class when finding results for some user input, returns these results in this 'choices' list.
+        # This is a list of dictionaries, where each dictionary has an id and a text.
+        # In our case however the results can come from two different sets:
+        # the one where result hits match on the forward name of a property and the other set where the result hits
+        # match on the reverse name. These hits need to re-used later, but additionally the direction of the property
+        # is also needed later to persist it correctly (e.g. when creating a triple between two persons, where one is
+        # the mother and the other is the daugther, then the property direction is needed).
+        # I could not find a way to return in this function a choices list with dictionaries or something else, that
+        # would pass additional data. So I am misusing the 'id' item in the dictionary by encoding the id and the direction
+        # into a string which will be parsed and split later on.
+
         for rbc in rbc_self_subj_other_obj:
             choices.append(
                 {
-                    'id': f"id:{rbc.pk}__direction:{self.SELF_SUBJ_OTHER_OBJ_STR}",
+                    'id': f"id:{rbc.pk}__direction:{self.SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
                     'text': rbc.name
                 }
             )
@@ -461,7 +473,7 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
         for rbc in rbc_self_obj_other_subj:
             choices.append(
                 {
-                    'id': f"id:{rbc.pk}__direction:{self.SELF_OBJ_OTHER_SUBJ_STR}",
+                    'id': f"id:{rbc.pk}__direction:{self.SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
                     'text': rbc.name_reverse
                 }
             )

@@ -6,12 +6,14 @@ from .models import (
     TextType,
     CollectionType,
     VocabsBaseClass,
-    InstitutionType,
-    ProfessionType,
-    PlaceType,
+    # __before_triple_refactoring__
+    # InstitutionType,
+    # ProfessionType,
+    # PlaceType,
     VocabNames,
-    EventType,
-    WorkType,
+    # __before_triple_refactoring__
+    # EventType,
+    # WorkType,
     LabelType
 )
 
@@ -140,69 +142,70 @@ class TextTypeSerializer(VocabsBaseSerializer):
         model = TextType
 
 
-class InstitutionTypeSerializer(VocabsBaseSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:institutiontype-detail",
-        lookup_field="pk"
-    )
-
-    class Meta:
-        fields = '__all__'
-        model = InstitutionType
-
-
-class ProfessionTypeSerializer(VocabsBaseSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:profession-detail",
-        lookup_field="pk"
-    )
-
-    class Meta:
-        fields = '__all__'
-        model = ProfessionType
-
-
-class PlaceTypeSerializer(VocabsBaseSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:placetype-detail",
-        lookup_field="pk"
-    )
-
-    class Meta:
-        fields = '__all__'
-        model = PlaceType
-
-
-class EventTypeSerializer(VocabsBaseSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:eventtype-detail",
-        lookup_field="pk"
-    )
-
-    class Meta:
-        fields = '__all__'
-        model = EventType
-
-
-class WorkTypeSerializer(VocabsBaseSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:worktype-detail",
-        lookup_field="pk"
-    )
-
-    class Meta:
-        fields = '__all__'
-        model = WorkType
-
-
+# __before_triple_refactoring__
+#
+# class InstitutionTypeSerializer(VocabsBaseSerializer):
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:institutiontype-detail",
+#         lookup_field="pk"
+#     )
+#
+#     class Meta:
+#         fields = '__all__'
+#         model = InstitutionType
+#
+#
+# class ProfessionTypeSerializer(VocabsBaseSerializer):
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:profession-detail",
+#         lookup_field="pk"
+#     )
+#
+#     class Meta:
+#         fields = '__all__'
+#         model = ProfessionType
+#
+#
+# class PlaceTypeSerializer(VocabsBaseSerializer):
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:placetype-detail",
+#         lookup_field="pk"
+#     )
+#
+#     class Meta:
+#         fields = '__all__'
+#         model = PlaceType
+#
+#
+# class EventTypeSerializer(VocabsBaseSerializer):
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:eventtype-detail",
+#         lookup_field="pk"
+#     )
+#
+#     class Meta:
+#         fields = '__all__'
+#         model = EventType
+#
+#
+# class WorkTypeSerializer(VocabsBaseSerializer):
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="apis:apis_api:worktype-detail",
+#         lookup_field="pk"
+#     )
+#
+#     class Meta:
+#         fields = '__all__'
+#         model = WorkType
+#
+#
 class LabelTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ('id', 'name')
         model = LabelType
 
-
-# __before_triple_refactoring__
+#
 #
 # #####################################################################
 # #

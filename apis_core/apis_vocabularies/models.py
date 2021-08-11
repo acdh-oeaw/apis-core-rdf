@@ -140,40 +140,42 @@ class VocabsUri(models.Model):
 
 
 
-@reversion.register(follow=['vocabsbaseclass_ptr'])
-class WorkType(VocabsBaseClass):
-    """Holds controlled vocabularies about work-types"""
-    pass
-
-
-@reversion.register(follow=['vocabsbaseclass_ptr'])
-class Title(VocabsBaseClass):
-    """A person´s (academic) title"""
-    abbreviation = models.CharField(max_length=10, blank=True)
-
-
-@reversion.register(follow=['vocabsbaseclass_ptr'])
-class ProfessionType(VocabsBaseClass):
-    """Holds controlled vocabularies about profession-types"""
-    pass
-
-
-@reversion.register(follow=['vocabsbaseclass_ptr'])
-class PlaceType(VocabsBaseClass):
-    """Holds controlled vocabularies about place-types"""
-    pass
-
-
-@reversion.register(follow=['vocabsbaseclass_ptr'])
-class InstitutionType(VocabsBaseClass):
-    """Holds controlled vocabularies about institution-types"""
-    pass
-
-
-@reversion.register(follow=['vocabsbaseclass_ptr'])
-class EventType(VocabsBaseClass):
-    """Holds controlled vocabularies about event-types"""
-    pass
+# __before_triple_refactoring__
+#
+# @reversion.register(follow=['vocabsbaseclass_ptr'])
+# class WorkType(VocabsBaseClass):
+#     """Holds controlled vocabularies about work-types"""
+#     pass
+#
+#
+# @reversion.register(follow=['vocabsbaseclass_ptr'])
+# class Title(VocabsBaseClass):
+#     """A person´s (academic) title"""
+#     abbreviation = models.CharField(max_length=10, blank=True)
+#
+#
+# @reversion.register(follow=['vocabsbaseclass_ptr'])
+# class ProfessionType(VocabsBaseClass):
+#     """Holds controlled vocabularies about profession-types"""
+#     pass
+#
+#
+# @reversion.register(follow=['vocabsbaseclass_ptr'])
+# class PlaceType(VocabsBaseClass):
+#     """Holds controlled vocabularies about place-types"""
+#     pass
+#
+#
+# @reversion.register(follow=['vocabsbaseclass_ptr'])
+# class InstitutionType(VocabsBaseClass):
+#     """Holds controlled vocabularies about institution-types"""
+#     pass
+#
+#
+# @reversion.register(follow=['vocabsbaseclass_ptr'])
+# class EventType(VocabsBaseClass):
+#     """Holds controlled vocabularies about event-types"""
+#     pass
 
 
 @reversion.register(follow=['vocabsbaseclass_ptr'])
@@ -186,6 +188,7 @@ class LabelType(VocabsBaseClass):
 class CollectionType(VocabsBaseClass):
     """e.g. reseachCollection, importCollection """
     pass
+
 
 @reversion.register(follow=['vocabsbaseclass_ptr'])
 class TextType(VocabsBaseClass):

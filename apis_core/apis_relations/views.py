@@ -162,6 +162,7 @@ def get_form_ajax(request):
 
 
     if ObjectID is None and form_name.startswith("triple_form_"):
+        # If this is the case, then instantiate an empty form
 
         entity_type_other_str = form_name.split("_to_")[1]
 
@@ -171,6 +172,7 @@ def get_form_ajax(request):
         )
 
     elif ObjectID is not None and SiteID is not None:
+        # If this is the case, then instantiate a form and pre-load with existing data
 
         triple = TempTriple.objects.get(pk=ObjectID)
         property_instance = triple.prop
