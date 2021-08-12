@@ -581,9 +581,9 @@ class Triple(models.Model):
     # TODO RDF : (maybe) implement a convenient way of fetching related triples of a given root object
 
     # TODO RDF : add ent filter shortcut so that e.g. this can be shortened: Triple.objects.filter(Q(subj__pk=113) | Q(obj__pk=113))
-    subj = InheritanceForeignKey(RootObject, on_delete=models.CASCADE, related_name="triple_set_from_subj")
-    obj = InheritanceForeignKey(RootObject, on_delete=models.CASCADE, related_name="triple_set_from_obj")
-    prop = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="triple_set_from_prop")
+    subj = InheritanceForeignKey(RootObject, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_subj")
+    obj = InheritanceForeignKey(RootObject, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_obj")
+    prop = models.ForeignKey(Property, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_prop")
 
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
@@ -663,14 +663,15 @@ class Triple(models.Model):
                 child_list.extend(get_all_childs(p))
             return child_list
 
+        if self.subj is not None:
+            subj_class_name = self.subj.__class__.__name__
+            if ContentType.objects.get(model=subj_class_name) not in self.prop.subj_class.all():
+                raise Exception(f"Subject class '{subj_class_name}' is not in valid subject class list of property '{self.prop}'")
 
-        subj_class_name = self.subj.__class__.__name__
-        if ContentType.objects.get(model=subj_class_name) not in self.prop.subj_class.all():
-            raise Exception(f"Subject class '{subj_class_name}' is not in valid subject class list of property '{self.prop}'")
-
-        obj_class_name = self.obj.__class__.__name__
-        if ContentType.objects.get(model=obj_class_name) not in self.prop.obj_class.all():
-            raise Exception(f"Object class '{obj_class_name}' is not in valid object class list of property '{self.prop}'")
+        if self.obj is not None:
+            obj_class_name = self.obj.__class__.__name__
+            if ContentType.objects.get(model=obj_class_name) not in self.prop.obj_class.all():
+                raise Exception(f"Object class '{obj_class_name}' is not in valid object class list of property '{self.prop}'")
 
         super().save(*args, **kwargs)
 

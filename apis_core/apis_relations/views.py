@@ -196,7 +196,7 @@ def get_form_ajax(request):
             entity_type_self_str=entity_type_self_str,
             entity_type_other_str=entity_type_other_str,
         )
-        form.set_subj_obj(
+        form.load_subj_obj_prop(
             entity_instance_self,
             entity_instance_other,
             property_instance,
@@ -307,7 +307,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
     property_direction = property_param_dict["direction"]
 
     form = GenericTripleForm(entity_type_self_str, entity_type_other_str)
-    form.set_subj_obj(
+    form.load_subj_obj_prop(
         entity_instance_self,
         entity_instance_other,
         property_instance,
