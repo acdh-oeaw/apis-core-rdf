@@ -24,7 +24,7 @@ from apis_core.apis_metainfo.models import Text, Uri
 from apis_core.helper_functions import DateParser
 from apis_core.helper_functions.RDFParser import RDFParser, APIS_RDF_URI_SETTINGS
 from .tables import get_generic_relations_table, get_generic_triple_table
-from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
+from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete
 
 # from dal.autocomplete import ListSelect2
 
@@ -378,6 +378,10 @@ class GenericTripleForm(forms.ModelForm):
         attrs_target = copy.deepcopy(attrs)
         attrs_target['data-tags'] = '1'
 
+        # This assert only serves as a linking for us devs, to make explicit what internal object the class
+        # Select2ListCreateChoiceField object afterwards uses.
+        assert GenericEntitiesAutocomplete
+
         self.fields['other_entity'] = autocomplete.Select2ListCreateChoiceField(
             label='entity',
             widget=ListSelect2(
@@ -389,6 +393,10 @@ class GenericTripleForm(forms.ModelForm):
             ),
             help_text=help_text_other_entity
         )
+
+        # This assert only serves as a linking for us devs, to make explicit what internal object the class
+        # Select2ListCreateChoiceField object afterwards uses.
+        assert PropertyAutocomplete
 
         self.fields['property'] = autocomplete.Select2ListCreateChoiceField(
             label='property',
@@ -467,7 +475,10 @@ class GenericTripleForm(forms.ModelForm):
         #         self.fields['end_date_written'].help_text = DateParser.get_date_help_text_default()
 
 
-    def set_subj_obj(self, entity_instance_self, entity_instance_other, property_instance, property_direction):
+    def load_subj_obj_prop(self, entity_instance_self, entity_instance_other, property_instance, property_direction):
+        # the more important function here when writing data from an user input via an ajax call into this form.
+        # Because here the direction of the property is respected. Hence the subject and object position of the
+        # triple and the property name or name_reverse are loaded correctly here.
 
         if property_direction == PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR:
 
@@ -506,6 +517,12 @@ class GenericTripleForm(forms.ModelForm):
 
 
     def load_remaining_data_from_triple(self, triple):
+        # Most data is loaded via the set_subj_obj function.
+        # Here, load the rest from a pre-existing triple.
+        #
+        # This function is both used in get_form_ajax and save_form_ajax,
+        # hence it's not feasible to assume existing user input as done
+        # in 'load_remaining_data_from_input'
 
         self.fields["start_date_written"].initial = triple.start_date_written
         self.fields["end_date_written"].initial = triple.end_date_written
@@ -517,6 +534,8 @@ class GenericTripleForm(forms.ModelForm):
         start_date_written,
         end_date_written,
     ):
+        # Most data is loaded via the set_subj_obj function.
+        # Here, load the rest from the user input via the ajax post
 
         self.fields["start_date_written"].initial = start_date_written
         self.fields["end_date_written"].initial = end_date_written
@@ -574,26 +593,24 @@ class GenericTripleForm(forms.ModelForm):
         # return x
         #
         # __after_triple_refactoring__
-        #TODO RDF: make programmatic way to fetch fields and insert them as kwargs to existing or new triple
+        # TODO RDF: make programmatic way to fetch fields and insert them as kwargs to existing or new triple
+        # Ideally, the form would be linked to an instance and the form fields are correctly set so that they correspond
+        # to the fields of the model defined in the Meta subclass of the form class. Then a save call on this form
+        # should actually save the model automatically. However I couldn't get this to work for whatever reason.
+        # Hence this save function where the model instance is saved manually.
 
-        if self.instance is not None:
+        if self.instance.pk is None:
 
-            triple = self.instance
+            self.instance = TempTriple.objects.create()
 
-        else:
+        self.instance.subj = self.fields["subj"].initial
+        self.instance.obj = self.fields["obj"].initial
+        self.instance.prop = self.fields["prop"].initial
+        self.instance.start_date_written = self.fields["start_date_written"].initial
+        self.instance.end_date_written = self.fields["end_date_written"].initial
+        self.instance.save()
 
-            triple = TempTriple.objects.create()
-            self.instance = triple
-
-        triple = self.instance
-        triple.subj = self.fields["subj"].initial
-        triple.obj = self.fields["obj"].initial
-        triple.prop = self.fields["prop"].initial
-        triple.start_date_written = self.fields["start_date_written"].initial
-        triple.end_date_written = self.fields["end_date_written"].initial
-        triple.save()
-
-        return triple
+        return self.instance
 
 
     def get_text_id(self):

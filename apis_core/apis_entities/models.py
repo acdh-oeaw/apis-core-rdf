@@ -19,14 +19,18 @@ from model_utils.managers import InheritanceManager
 from django.db.models.query import QuerySet
 from apis_core.helper_functions import DateParser
 from apis_core.apis_metainfo.models import RootObject, Collection
-from apis_core.apis_vocabularies.models import (
-    EventType,
-    InstitutionType,
-    PlaceType,
-    ProfessionType,
-    Title,
-    WorkType,
-)
+
+
+# __before_triple_refactoring__
+# from apis_core.apis_vocabularies.models import (
+#     EventType,
+#     InstitutionType,
+#     PlaceType,
+#     ProfessionType,
+#     Title,
+#     WorkType,
+# )
+
 
 BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
