@@ -76,43 +76,76 @@ class GenericEntityListFilter(django_filters.FilterSet):
                 are referenced in the settings file (and if there were methods or labels also referenced, using them)
             """
 
-            enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__]["list_filters"]
+            # TODO __sresch__ : This is a temporary hack just so that showcasing works with everything enabled
+            # temporary hack replacement new
 
             filter_dict_tmp = {}
 
-            for enabled_filter in enabled_filters:
+            for filter_key, filter_object in default_filter_dict.items():
 
-                if type(enabled_filter) == str and enabled_filter in default_filter_dict:
-                    # If string then just use it, if a filter with such a name is already defined
+                if filter_key not in [
+                    "self_content_type",
+                    "review",
+                    "start_date",
+                    "start_start_date",
+                    "start_end_date",
+                    "end_date",
+                    "end_start_date",
+                    "end_end_date",
+                    "notes",
+                    "text",
+                    "collection",
+                    "published",
+                    "status",
+                    "references",
+                ]:
 
-                    filter_dict_tmp[enabled_filter] = default_filter_dict[enabled_filter]
-
-
-                elif type(enabled_filter) == dict:
-                    # if a dictionary, then look further into if there is a method or label which overrides the defaults
-
-                    enabled_filter_key = list(enabled_filter.keys())[0]
-
-                    if enabled_filter_key in default_filter_dict:
-
-                        # get the dictionary which contains potential method or label overrides
-                        enabled_filter_settings_dict = enabled_filter[enabled_filter_key]
-
-                        if "method" in enabled_filter_settings_dict:
-                            default_filter_dict[enabled_filter_key].method = enabled_filter_settings_dict["method"]
-
-                        if "label" in enabled_filter_settings_dict:
-                            default_filter_dict[enabled_filter_key].label = enabled_filter_settings_dict["label"]
-
-                        filter_dict_tmp[enabled_filter_key] = default_filter_dict[enabled_filter_key]
-
-                else:
-                    raise ValueError(
-                        "Expected either str or dict as type for an individual filter in the settings file."
-                        f"\nGot instead: {type(enabled_filter)}"
-                     )
+                    filter_dict_tmp[filter_key] = filter_object
 
             return filter_dict_tmp
+
+
+            # temporary hack replacement old
+            #
+            # enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__]["list_filters"]
+            #
+            # filter_dict_tmp = {}
+            #
+            # for enabled_filter in enabled_filters:
+            #
+            #     if type(enabled_filter) == str and enabled_filter in default_filter_dict:
+            #         # If string then just use it, if a filter with such a name is already defined
+            #
+            #         filter_dict_tmp[enabled_filter] = default_filter_dict[enabled_filter]
+            #
+            #
+            #     elif type(enabled_filter) == dict:
+            #         # if a dictionary, then look further into if there is a method or label which overrides the defaults
+            #
+            #         enabled_filter_key = list(enabled_filter.keys())[0]
+            #
+            #         if enabled_filter_key in default_filter_dict:
+            #
+            #             # get the dictionary which contains potential method or label overrides
+            #             enabled_filter_settings_dict = enabled_filter[enabled_filter_key]
+            #
+            #             if "method" in enabled_filter_settings_dict:
+            #                 default_filter_dict[enabled_filter_key].method = enabled_filter_settings_dict["method"]
+            #
+            #             if "label" in enabled_filter_settings_dict:
+            #                 default_filter_dict[enabled_filter_key].label = enabled_filter_settings_dict["label"]
+            #
+            #             filter_dict_tmp[enabled_filter_key] = default_filter_dict[enabled_filter_key]
+            #
+            #     else:
+            #         raise ValueError(
+            #             "Expected either str or dict as type for an individual filter in the settings file."
+            #             f"\nGot instead: {type(enabled_filter)}"
+            #          )
+            #
+            # return filter_dict_tmp
+
+            # temporary hack replacement end
 
         self.filters = eliminate_unused_filters(self.filters)
 
