@@ -2,6 +2,7 @@ import inspect
 import re
 import sys
 import unicodedata
+import yaml
 from django.contrib.contenttypes.models import ContentType
 
 from reversion import revisions as reversion
@@ -289,8 +290,8 @@ class AbstractEntity(RootObject):
         E.g. for Person.get_related_entity_field_names() or person_instance.get_related_entity_field_names() ->
         ['event_set', 'institution_set', 'personB_set', 'personA_set', 'place_set', 'work_set']
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
-        which wires the ManyToMany Fields into the entities and respective relationtypes.
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
+        which wires the ManyToMany Fields into the entities and respective relationtypes. 
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -305,8 +306,8 @@ class AbstractEntity(RootObject):
         :param entity_field_name: the name of one of several ManyToMany fields created automatically
         :return: None
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
-        which wires the ManyToMany Fields into the entities and respective relationtypes.
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
+        which wires the ManyToMany Fields into the entities and respective relationtypes. 
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -406,7 +407,9 @@ class AbstractEntity(RootObject):
             # TODO __sresch__ : check for best practice on local imports vs circularity problems.
             from apis_core.apis_vocabularies.models import AbstractRelationType
 
-            for relationtype_class in AbstractRelationType.get_all_relationtype_classes():
+            for (
+                relationtype_class
+            ) in AbstractRelationType.get_all_relationtype_classes():
 
                 relationtype_name = relationtype_class.__name__.lower()
 
@@ -443,8 +446,8 @@ class AbstractEntity(RootObject):
         E.g. for PersonPerson.get_related_relationtype_field_names() or person_instance.get_related_relationtype_field_names() ->
         ['event_relationtype_set', 'institution_relationtype_set', 'personB_relationtype_set', 'personA_relationtype_set', 'place_relationtype_set', 'work_relationtype_set']
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
-        which wires the ManyToMany Fields into the entities and respective relationtypes.
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
+        which wires the ManyToMany Fields into the entities and respective relationtypes. 
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -461,8 +464,8 @@ class AbstractEntity(RootObject):
         :param entity_field_name: the name of one of several ManyToMany fields created automatically
         :return: None
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
-        which wires the ManyToMany Fields into the entities and respective relationtypes.
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
+        which wires the ManyToMany Fields into the entities and respective relationtypes. 
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -553,7 +556,7 @@ class TempEntityClass(AbstractEntity):
 
     def __str__(self):
         if self.name != "" and hasattr(
-            self, "first_name"
+            self, "first_name" # TODO RDF: remove first_name here
         ):  # relation usually don´t have names
             return "{}, {} (ID: {})".format(self.name, self.first_name, self.id)
         elif self.name != "":
@@ -601,6 +604,7 @@ class TempEntityClass(AbstractEntity):
 
         return self
 
+    # TODO RDF: I don't remember what this function was used for. Investiage or delete it 
     def get_child_entity(self):
         for x in [x for x in apps.all_models['apis_entities'].values()]:
             if x.__name__ in list(settings.APIS_ENTITIES.keys()):

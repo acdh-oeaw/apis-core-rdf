@@ -1,4 +1,5 @@
 from functools import reduce
+import importlib
 
 import django_filters
 from django.conf import settings
@@ -387,8 +388,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
         # name variable is the name of the filter and needs the corresponding field within the model
         return queryset.filter( **{ name + "__name" + lookup : value } )
-
-
 
 
 

@@ -28,7 +28,7 @@ from .tables import LabelTableEdit
 form_module_list = [relation_form_module]
 
 if 'apis_highlighter' in settings.INSTALLED_APPS:
-    from apis_core.helper_functions.highlighter import highlight_text
+    from apis_highlighter.highlighter import highlight_text_new
     from apis_highlighter import forms as highlighter_form_module
     form_module_list.append(highlighter_form_module)
 

@@ -1,11 +1,14 @@
 from rest_framework import serializers
 
-from apis_core.apis_vocabularies.serializers import LabelTypeSerializer
+# __before_triple_refactoring__
+# from apis_core.apis_vocabularies.serializers import LabelTypeMinimalSerializer
 from .models import Label
 
 
 class LabelSerializerLegacy(serializers.ModelSerializer):
-    label_type = LabelTypeSerializer()
+
+    # __before_triple_refactoring__
+    # label_type = LabelTypeMinimalSerializer()
 
     class Meta:
         model = Label

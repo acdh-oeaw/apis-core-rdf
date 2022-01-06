@@ -30,8 +30,14 @@ from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.default_settings.NER_settings import autocomp_settings, stb_base
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.helper_functions.stanbolQueries import find_loc
-from .api_renderers import EntityToTEI, EntityToCIDOCXML, EntityToProsopogrAPhI, EntityToCIDOCN3, EntityToCIDOCNQUADS, \
-    EntityToCIDOCTURTLE
+from .api_renderers import (
+    EntityToTEI,
+    EntityToCIDOCXML,
+    EntityToProsopogrAPhI,
+    EntityToCIDOCN3,
+    EntityToCIDOCNQUADS,
+    EntityToCIDOCTURTLE,
+)
 # from .models import Event, Institution, Person, Place, Work,
 from apis_core.apis_entities.models import AbstractEntity
 
@@ -52,6 +58,7 @@ from .serializers_generic import EntitySerializer
 
 # from metainfo.models import TempEntityClass
 
+
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 25
     page_size_query_param = "page_size"
@@ -61,9 +68,15 @@ class StandardResultsSetPagination(PageNumberPagination):
 class GetEntityGeneric(GenericAPIView):
     serializer_class = EntitySerializer
     queryset = TempEntityClass.objects.all()
-    renderer_classes = tuple(
-        api_settings.DEFAULT_RENDERER_CLASSES) + (EntityToTEI, EntityToCIDOCXML, EntityToProsopogrAPhI, EntityToCIDOCN3, EntityToCIDOCNQUADS, EntityToCIDOCTURTLE)
-    if getattr(settings, 'APIS_RENDERERS', None) is not None:
+    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (
+        EntityToTEI,
+        EntityToCIDOCXML,
+        EntityToProsopogrAPhI,
+        EntityToCIDOCN3,
+        EntityToCIDOCNQUADS,
+        EntityToCIDOCTURTLE,
+    )
+    if getattr(settings, "APIS_RENDERERS", None) is not None:
         rend_add = tuple()
         for rd in settings.APIS_RENDERERS:
             rend_mod = __import__(rd)
@@ -71,16 +84,23 @@ class GetEntityGeneric(GenericAPIView):
                 rend_add + (cls,)
         renderer_classes += rend_add
 
-    def get_object(self, pk):
+    def get_object(self, pk, request):
         try:
             return TempEntityClass.objects_inheritance.get_subclass(pk=pk)
         except TempEntityClass.DoesNotExist:
-            raise Http404
+            uri2 = Uri.objects.filter(uri=request.build_absolute_uri())
+            if uri2.count() == 1:
+                return TempEntityClass.objects_inheritance.get_subclass(
+                    pk=uri2[0].entity_id
+                )
+            else:
+                raise Http404
 
     def get(self, request, pk):
-        ent = self.get_object(pk)
+        ent = self.get_object(pk, request)
         res = EntitySerializer(ent, context={"request": request})
         return Response(res.data)
+
 
 @api_view(["GET"])
 def uri_resolver(request):
@@ -100,7 +120,7 @@ def uri_resolver(request):
         else:
             url = reverse(
                 "apis_core:apis_api2:GetEntityGeneric", kwargs={"pk": uri.entity_id}
-            ) + '?format={}'.format(f)
+            ) + "?format={}".format(f)
         return redirect(url)
 
 # __before_triple_refactoring__
@@ -403,22 +423,22 @@ class GetOrCreateEntity(APIView):
     def get(self, request):
         entity = request.query_params.get("entity2", None)
         uri = request.query_params.get("uri", None)
-        if uri.startswith('http:'):
+        if uri.startswith("http:"):
             ent = RDFParser(uri, entity.title()).get_or_create()
         else:
             r1 = re.search(r"^[^<]+", uri)
             r2 = re.search(r"<([^>]+)>", uri)
             q_d = dict()
-            q_d['name'] = r1
+            q_d["name"] = r1
             if r2:
-                for x in r2.group(1).split(';'):
-                    x2 = x.split('=')
+                for x in r2.group(1).split(";"):
+                    x2 = x.split("=")
                     q_d[x2[0].strip()] = x2[1].strip()
-            if entity == 'person':
-                r1_2 = r1.group(0).split(',')
+            if entity == "person":
+                r1_2 = r1.group(0).split(",")
                 if len(r1_2) == 2:
-                    q_d['first_name'] = r1_2[1].strip()
-                    q_d['name'] = r1_2[0].strip()
+                    q_d["first_name"] = r1_2[1].strip()
+                    q_d["name"] = r1_2[0].strip()
             ent = AbstractEntity.get_entity_class_of_name(entity).objects.create(**q_d)
         res = {
             "id": ent.pk,

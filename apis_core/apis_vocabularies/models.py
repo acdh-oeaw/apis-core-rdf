@@ -9,6 +9,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.functional import cached_property
 from reversion import revisions as reversion
+from django.conf import settings
 from apis_core.apis_metainfo.models import RootObject
 
 
@@ -20,7 +21,6 @@ class VocabNames(models.Model):
 
     def get_vocab_label(self):
         return re.sub(r"([A-Z])", r" \1", self.name).strip()
-
 
 
 @reversion.register()
@@ -50,6 +50,9 @@ class VocabsBaseClass(RootObject):
         VocabNames, blank=True, null=True,
         on_delete=models.SET_NULL
     )
+    if 'apis_highlighter' in settings.INSTALLED_APPS:
+        from apis_highlighter.models import Annotation
+        annotation_set = GenericRelation(Annotation)
 
     def __str__(self):
         return self.label
@@ -188,7 +191,6 @@ class LabelType(VocabsBaseClass):
 class CollectionType(VocabsBaseClass):
     """e.g. reseachCollection, importCollection """
     pass
-
 
 @reversion.register(follow=['vocabsbaseclass_ptr'])
 class TextType(VocabsBaseClass):

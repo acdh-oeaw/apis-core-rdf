@@ -37,6 +37,19 @@ def find_if_user_accepted():
         return {}
 
 
+class BaseRelationManager(models.Manager):
+    def get_queryset(self):
+        return RelationPublishedQueryset(self.model, using=self._db)
+
+    def filter_ann_proj(self, request=None, ann_proj=1, include_all=True):
+        return self.get_queryset().filter_ann_proj(request=request, ann_proj=ann_proj, include_all=include_all)
+
+    def filter_for_user(self):
+        if hasattr(settings, "APIS_SHOW_ONLY_PUBLISHED") or "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
+            return self.get_queryset().filter_for_user()
+        else:
+            return self.get_queryset()
+
 
 
 # TODO RDF : Implement filtering for implicit superclasses
@@ -44,6 +57,8 @@ def find_if_user_accepted():
 # passed class, but not for implicit superclasses. For this to be possible, the object manager must be overriden
 @reversion.register(follow=['vocabsbaseclass_ptr'])
 class Property(RootObject):
+
+    objects = BaseRelationManager()
 
     name_reverse = models.CharField(
         max_length=255,
@@ -220,19 +235,6 @@ class RelationPublishedQueryset(models.QuerySet):
             query.add(Q(annotation__annotation_project__isnull=True), Q.OR)
         return qs.filter(query)
 
-
-class BaseRelationManager(models.Manager):
-    def get_queryset(self):
-        return RelationPublishedQueryset(self.model, using=self._db)
-
-    def filter_ann_proj(self, request=None, ann_proj=1, include_all=True):
-        return self.get_queryset().filter_ann_proj(request=request, ann_proj=ann_proj, include_all=include_all)
-
-    def filter_for_user(self):
-        if hasattr(settings, "APIS_SHOW_ONLY_PUBLISHED") or "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
-            return self.get_queryset().filter_for_user()
-        else:
-            return self.get_queryset()
 
 
 # __before_triple_refactoring__
@@ -560,7 +562,7 @@ class BaseRelationManager(models.Manager):
 #         return None
 
 
-# TODO __sresch__ : Move this somewhere else so that it can be imported at several places
+# TODO __sresch__ : Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
 class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):
