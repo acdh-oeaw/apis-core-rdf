@@ -193,6 +193,7 @@ def generic_serializer_creation_factory():
         "vocab",
         "entity",
         "autofield",
+        "contenttype",
     ]
     for cont in lst_cont:
         prefetch_rel = []
@@ -217,6 +218,15 @@ def generic_serializer_creation_factory():
                 exclude_lst_fin.append(x)
         if entity_str.lower() == "text":
             exclude_lst_fin.extend(["kind", "source"])
+
+
+        # TODO serializer refactoring: Remove this. It's a dirty work-around to get apis_rdf at least halfway running.
+        dirty_work_around_list = ["rootobject", "self_content_type"]
+        for dwa in dirty_work_around_list:
+            if dwa in entity_field_name_list:
+                exclude_lst_fin.append(dwa)
+
+
         # __before_triple_refactoring__
         # if app_label == "apis_relations":
         #     exclude_lst_fin.extend(["text", "collection"])

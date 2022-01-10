@@ -587,7 +587,7 @@ class Triple(models.Model):
     obj = InheritanceForeignKey(RootObject, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_obj")
     prop = models.ForeignKey(Property, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_prop")
 
-    objects = models.Manager()
+    objects = BaseRelationManager()
     objects_inheritance = InheritanceManager()
 
     def __repr__(self):
