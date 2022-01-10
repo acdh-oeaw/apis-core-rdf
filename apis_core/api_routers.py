@@ -22,9 +22,8 @@ from drf_spectacular.utils import (
 from drf_spectacular.types import OpenApiTypes
 from django import forms
 from django_filters import rest_framework as filters
-from .apis_metainfo.models import TempEntityClass
+from apis_core.apis_entities.models import TempEntityClass
 from .api_renderers import NetJsonRenderer
-from .apis_relations.models import AbstractRelation
 from apis_core.helper_functions.ContentType import GetContentTypes
 
 
