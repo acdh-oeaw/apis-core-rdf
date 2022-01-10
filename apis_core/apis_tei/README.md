@@ -2,9 +2,7 @@
 
 ## endpoints
 
-* `/apis/tei/person/{id}`
-* `/apis/tei/place/{id}`
-* `/apis/tei/ort|institution/{id}`
+* `/apis/tei/ort|institution|work|person/{id}`
 
 ## needed settings
 
@@ -29,6 +27,8 @@ ORG_LOCATED_IN = [1141, 970, 1160]
 `python manage.py persons_to_tei --collection=5  --settings=apis.settings.local_pmb`
 `python manage.py places_to_tei --collection=5  --settings=apis.settings.local_pmb`
 `python manage.py orgs_to_tei --collection=5  --settings=apis.settings.local_pmb`
+`python manage.py works_to_tei --collection=5  --settings=apis.settings.local_pmb`
+
 
 ## serialize all persons/places full
 

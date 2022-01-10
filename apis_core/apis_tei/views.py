@@ -22,6 +22,15 @@ from django.shortcuts import get_object_or_404
 #     doc = get_node_from_template('apis_tei/place.xml', res, full=full)
 #     tei = ET.tostring(doc, pretty_print=True, encoding='UTF-8')
 #     return HttpResponse(tei, content_type="application/xml")
+# 
+# 
+# def work_as_tei(request, pk):
+#     full = request.GET.get('full')
+#     res = get_object_or_404(Work, pk=pk)
+#     doc = get_node_from_template('apis_tei/work.xml', res, full=full)
+#     tei = ET.tostring(doc, pretty_print=True, encoding='UTF-8')
+#     return HttpResponse(tei, content_type="application/xml")
+# 
 #
 #
 # def org_as_tei(request, pk):
