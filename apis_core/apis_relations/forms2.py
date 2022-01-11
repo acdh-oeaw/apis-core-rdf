@@ -60,7 +60,7 @@ def validate_target_autocomplete(value):
                 params={'value': value},
             )
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # class GenericRelationForm(forms.ModelForm):
 #
@@ -321,7 +321,7 @@ def validate_target_autocomplete(value):
 #             else:
 #                 self.fields['end_date_written'].help_text = DateParser.get_date_help_text_default()
 #
-# __after_triple_refactoring__
+# __after_rdf_refactoring__
 class GenericTripleForm(forms.ModelForm):
 
     # TODO RDF : Add Notes and references
@@ -343,7 +343,7 @@ class GenericTripleForm(forms.ModelForm):
 
     def __init__(self, entity_type_self_str, entity_type_other_str):
 
-        # __before_triple_refactoring__
+        # __before_rdf_refactoring__
         #
         # css_notes = 'LS'
         # self.highlighter = highlighter
@@ -362,7 +362,7 @@ class GenericTripleForm(forms.ModelForm):
         # self.helper.form_tag = False
         # lst_src_target = re.findall('[A-Z][^A-Z]*', self.relation_form.__name__)
         #
-        # __after_triple_refactoring__
+        # __after_rdf_refactoring__
         super().__init__()
 
         self.helper = FormHelper()
@@ -417,7 +417,7 @@ class GenericTripleForm(forms.ModelForm):
 
         self.helper.include_media = False
 
-        # __before_triple_refactoring__ # TODO RDF
+        # __before_rdf_refactoring__ # TODO RDF
         #
         # self.helper.layout = Layout(
         #     'relation_type',
@@ -435,7 +435,7 @@ class GenericTripleForm(forms.ModelForm):
         #     )
         # )
 
-        # __before_triple_refactoring__ # TODO RDF
+        # __before_rdf_refactoring__ # TODO RDF
         #
         # self.
         # if self.highlighter:
@@ -450,7 +450,7 @@ class GenericTripleForm(forms.ModelForm):
         #         ]
         #     )
 
-        # __before_triple_refactoring__ # TODO RDF :
+        # __before_rdf_refactoring__ # TODO RDF :
         #
         # if instance != None:
         #
@@ -543,7 +543,7 @@ class GenericTripleForm(forms.ModelForm):
 
     def save(self):
 
-        # __before_triple_refactoring__
+        # __before_rdf_refactoring__
         #
         # """
         # Save function of the GenericRelationForm.
@@ -592,7 +592,7 @@ class GenericTripleForm(forms.ModelForm):
         # print('saved: {}'.format(x))
         # return x
         #
-        # __after_triple_refactoring__
+        # __after_rdf_refactoring__
         # TODO RDF: make programmatic way to fetch fields and insert them as kwargs to existing or new triple
         # Ideally, the form would be linked to an instance and the form fields are correctly set so that they correspond
         # to the fields of the model defined in the Meta subclass of the form class. Then a save call on this form
@@ -622,7 +622,7 @@ class GenericTripleForm(forms.ModelForm):
 
     def get_html_table(self, entity_instance_self, entity_instance_other):
 
-        # __before_triple_refactoring__ # TODO RDF :
+        # __before_rdf_refactoring__ # TODO RDF :
         #
         # table = get_generic_relations_table(relation_class=self.relation_form, entity_instance=site_instance,
         #                                     detail=False)
@@ -651,7 +651,7 @@ class GenericTripleForm(forms.ModelForm):
         #     table_html = table(data=ttab, prefix=prefix)
         # return table_html
         #
-        # __after_triple_refactoring__
+        # __after_rdf_refactoring__
         table_class = get_generic_triple_table(
             other_entity_class_name=entity_instance_other.__class__.__name__.lower(),
             entity_pk_self=entity_instance_self.pk,

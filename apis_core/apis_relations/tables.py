@@ -341,7 +341,7 @@ def get_generic_relations_table(relation_class, entity_instance, detail=None):
         return RelationTableEdit
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # def get_generic_relations_table(relation_class, entity_instance, detail=None):
 #     """
@@ -573,7 +573,7 @@ def get_generic_relations_table(relation_class, entity_instance, detail=None):
 #
 #         return RelationTableEdit
 #
-# __after_triple_refactoring__
+# __after_rdf_refactoring__
 def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
     # TODO RDF : add code from before refactoring and comment it out
@@ -633,7 +633,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
         def __init__(self, data, *args, **kwargs):
 
-            # __before_triple_refactoring__
+            # __before_rdf_refactoring__
             #
             # # annotations for displaying data about the 'other side' of the relation.
             # # Both of them ('other_related_entity' and 'other_relation_type') are necessary for displaying relations
@@ -686,7 +686,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
             #
             # super().__init__(data, *args, **kwargs)
             #
-            # __after_triple_refactoring__
+            # __after_rdf_refactoring__
             data = data.annotate(
                 other_entity=Case(
                     # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
@@ -726,7 +726,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
             def __init__(self, data, *args, **kwargs):
 
-                # __before_triple_refactoring__
+                # __before_rdf_refactoring__
                 #
                 # # Only addition with respect to parent class is which main url is to be used when clicking on a
                 # # related entity column.
@@ -741,7 +741,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                 #
                 # super().__init__(data=data, *args, **kwargs)
                 #
-                # __after_triple_refactoring__
+                # __after_rdf_refactoring__
                 self.base_columns["other_entity"] = tables.LinkColumn(
                     'apis:apis_entities:generic_entities_detail_view',
                     args=[
@@ -780,7 +780,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
             def __init__(self, *args, **kwargs):
 
-                # __before_triple_refactoring__ TODO RDF:
+                # __before_rdf_refactoring__ TODO RDF:
                 #
                 # # Clicking on a related entity will lead also the edit view of the related entity instance
                 # self.base_columns["other_related_entity"] = tables.LinkColumn(
@@ -809,7 +809,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                 #
                 # super().__init__(*args, **kwargs)
                 #
-                # __after_triple_refactoring__
+                # __after_rdf_refactoring__
                 # linking entity
                 self.base_columns["other_entity"] = tables.LinkColumn(
                     'apis:apis_entities:generic_entities_edit_view',

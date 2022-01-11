@@ -6,12 +6,12 @@ from .models import (
     TextType,
     CollectionType,
     VocabsBaseClass,
-    # __before_triple_refactoring__
+    # __before_rdf_refactoring__
     # InstitutionType,
     # ProfessionType,
     # PlaceType,
     VocabNames,
-    # __before_triple_refactoring__
+    # __before_rdf_refactoring__
     # EventType,
     # WorkType,
     LabelType
@@ -142,7 +142,7 @@ class TextTypeSerializer(VocabsBaseSerializer):
         model = TextType
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # class InstitutionTypeSerializer(VocabsBaseSerializer):
 #     url = serializers.HyperlinkedIdentityField(

@@ -226,7 +226,7 @@ def generic_serializer_creation_factory():
                 exclude_lst_fin.append(dwa)
 
 
-        # __before_triple_refactoring__
+        # __before_rdf_refactoring__
         # if app_label == "apis_relations":
         #     exclude_lst_fin.extend(["text", "collection"])
         for f in entity._meta.get_fields():

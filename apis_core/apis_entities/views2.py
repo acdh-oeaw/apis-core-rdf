@@ -72,7 +72,7 @@ class GenericEntitiesEditView(View):
                 (title_card, tb_object, f"triple_form_{entity}_to_{other_entity_class_name}", tb_object_open)
             )
 
-        # __before_triple_refactoring__
+        # __before_rdf_refactoring__
         #
         # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
         # side_bar = []

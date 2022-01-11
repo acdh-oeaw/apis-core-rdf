@@ -63,7 +63,7 @@ form_class_dict = turn_form_modules_into_dict(form_module_list)
 ######################################################
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # Model-classes must be registered together with their ModelForm-classes
 # registered_forms = {'WorkWorkForm': [WorkWork, Work, Work],
@@ -107,7 +107,7 @@ form_class_dict = turn_form_modules_into_dict(form_module_list)
 def get_form_ajax(request):
     '''Returns forms rendered in html'''
 
-    # __before_triple_refactoring__
+    # __before_rdf_refactoring__
     #
     # FormName = request.POST.get('FormName')
     # SiteID = request.POST.get('SiteID')
@@ -153,7 +153,7 @@ def get_form_ajax(request):
     #     form_class = form_class_dict[FormName]
     #     form = form_class(**form_dict)
     #
-    # __after_triple_refactoring__
+    # __after_rdf_refactoring__
     form_name = request.POST.get('FormName')
     SiteID = int(request.POST.get('SiteID'))
     ButtonText = request.POST.get('ButtonText')
@@ -208,7 +208,7 @@ def get_form_ajax(request):
 
         raise Exception("Missing necessary form data")
 
-    # __before_triple_refactoring__
+    # __before_rdf_refactoring__
     #
     # tab = FormName[:-4]
     # data = {'tab': tab, 'form': render_to_string("apis_relations/_ajax_form.html", {
@@ -222,7 +222,7 @@ def get_form_ajax(request):
     #
     # return HttpResponse(json.dumps(data), content_type='application/json')
     #
-    # __after_triple_refactoring__
+    # __after_rdf_refactoring__
     param_dict = {
         "entity_type": entity_type_self_str,
         "form": form,
@@ -252,7 +252,7 @@ def get_form_ajax(request):
 def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
     '''Tests validity and saves AjaxForms, returns them when validity test fails'''
 
-    # __before_triple_refactoring__
+    # __before_rdf_refactoring__
     #
     # if kind_form not in registered_forms.keys():
     #     raise Http404
@@ -289,7 +289,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
     #     form_class = form_class_dict[kind_form]
     #     form = form_class(**form_dict)
     #
-    # __after_triple_refactoring__
+    # __after_rdf_refactoring__
     self_other = kind_form.split("triple_form_")[1].split("_to_")
     entity_type_self_str = self_other[0]
     entity_type_other_str = self_other[1]
@@ -325,7 +325,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
     )
     form.save()
 
-    # __before_triple_refactoring__
+    # __before_rdf_refactoring__
     #
     # data = {
     #     'test': False,
@@ -345,7 +345,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
     #         )
     # }
     #
-    # __after_triple_refactoring__
+    # __after_rdf_refactoring__
     data = {
         'test': True,
         'tab': kind_form,
@@ -357,7 +357,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
     }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
-    # __before_triple_refactoring__
+    # __before_rdf_refactoring__
     #
     # if form.is_valid():
     #     site_instance = entity_type.objects.get(pk=SiteID)

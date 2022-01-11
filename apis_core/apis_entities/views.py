@@ -18,7 +18,7 @@ from django_tables2.export.views import ExportMixin
 # from reversion_compare.views import HistoryCompareDetailView
 
 from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 # from apis_core.apis_relations.models import AbstractRelation
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.helper_functions.stanbolQueries import retrieve_obj
@@ -406,7 +406,7 @@ def getGeoJsonList(request):
     return HttpResponse(json.dumps(lst_json), content_type="application/json")
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # @user_passes_test(access_for_all_function)
 # def getNetJsonList(request):

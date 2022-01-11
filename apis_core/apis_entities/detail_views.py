@@ -34,7 +34,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         instance = get_object_or_404(entity_model, pk=pk)
         side_bar = []
 
-        # __before_triple_refactoring__
+        # __before_rdf_refactoring__
         #
         # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
         # for rel in relations:
@@ -69,7 +69,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         #             if callable(getattr(objects, 'filter_for_user', None)):
         #                 objects = objects.filter_for_user()
         #
-        # __after_triple_refactoring__
+        # __after_rdf_refactoring__
         triples_related_all = TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
 
         for entity_class in AbstractEntity.get_all_entity_classes():

@@ -237,7 +237,7 @@ class RelationPublishedQueryset(models.QuerySet):
 
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # #######################################################################
 # #
@@ -608,7 +608,7 @@ class Triple(models.Model):
 
     def get_web_object(self):
 
-        # __before_triple_refactoring__
+        # __before_rdf_refactoring__
         # Method from RelationBaseClass
         #
         # nameA = self.get_related_entity_instanceA().name
@@ -637,7 +637,7 @@ class Triple(models.Model):
         #     'end_date': self.end_date_written}
         # return result
         #
-        # __after_triple_refactoring__
+        # __after_rdf_refactoring__
         return {
             "relation_pk": self.pk,
             "subj": self.subj.name,
@@ -751,7 +751,7 @@ class TempTriple(Triple):
         return self
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # #######################################################################
 # #

@@ -88,7 +88,7 @@ def get_entities_form(entity):
                         widget1 = ListSelect2
 
 
-                    # __before_triple_refactoring__
+                    # __before_rdf_refactoring__
                     #
                     # if (
                     #     ContentType.objects.get(
@@ -104,7 +104,7 @@ def get_entities_form(entity):
                     #     == "apis_vocabularies"
                     # ):
                     #
-                    # __after_triple_refactoring__
+                    # __after_rdf_refactoring__
                     matching_content_type = ContentType.objects.filter(
                         app_label__in=[
                             'apis_entities',
@@ -166,7 +166,7 @@ def get_entities_form(entity):
                     The sorted list if entity-specific ordering was defined, the same unordered list if not.
                 """
 
-                # __before_triple_refactoring__
+                # __before_rdf_refactoring__
                 # TODO RDF : Re-implement this for rdf architecture
                 #
                 # fields_sort_preferences_per_entity = {

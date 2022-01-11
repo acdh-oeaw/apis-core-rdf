@@ -8,7 +8,7 @@ from django.utils.text import slugify
 from .partials import TEI_NSMAP, tei_gen_header
 
 from apis_core.apis_metainfo.models import Text
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 # from apis_core.apis_entities.models import Person, Place, Event, Work, Institution
 
 
@@ -24,7 +24,7 @@ def custom_escape(somestring):
     return escape(un_escaped)
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 # When serializing texts, we need to be able to look up
 # the entity in DB to check we have all the texts (not just the
 # annotated ones) — so need to map string values to classes.

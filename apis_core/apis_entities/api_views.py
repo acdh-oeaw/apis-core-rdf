@@ -41,7 +41,7 @@ from .api_renderers import (
 # from .models import Event, Institution, Person, Place, Work,
 from apis_core.apis_entities.models import AbstractEntity
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 # from .serializers import (
 #     EventSerializer,
 #     GeoJsonSerializer,
@@ -123,7 +123,7 @@ def uri_resolver(request):
             ) + "?format={}".format(f)
         return redirect(url)
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 # TODO RDF : Check if this is still necessary and needed to be adapted
 #
 # class InstitutionViewSet(viewsets.ModelViewSet):
@@ -385,7 +385,7 @@ def uri_resolver(request):
 #         res = {"nodes": sr1_2.data, "edges": sr1_1.data}
 #         return Response(res)
 #
-# __after_triple_refactoring__
+# __after_rdf_refactoring__
 class SaveNetworkFiles(APIView):
     def post(self, request, format=None):
         file_name = request.data["file_name"]
@@ -450,7 +450,7 @@ class GetOrCreateEntity(APIView):
         }
         return Response(res)
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 # TODO RDF : Check if this is still necessary and needed to be adapted
 #
 # class GetRelatedPlaces(APIView):

@@ -36,9 +36,9 @@ from apis_core.apis_entities.models import *
 # TODO __sresch__ : Do this better
 fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 # class GenericListFilter(django_filters.FilterSet):
-# __after_triple_refactoring__
+# __after_rdf_refactoring__
 class GenericEntityListFilter(django_filters.FilterSet):
 
     fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
@@ -201,7 +201,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
 
     def related_entity_name_method(self, queryset, name, value):
-        # __before_triple_refactoring__
+        # __before_rdf_refactoring__
         #
         # """
         # Searches through the all name fields of all related entities of a given queryset
@@ -286,7 +286,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
         #
         # return result
         #
-        # __after_triple_refactoring__
+        # __after_rdf_refactoring__
         lookup, value = self.construct_lookup(value)
 
         queryset = queryset.filter(
@@ -298,7 +298,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
 
     def related_property_name_method(self, queryset, name, value):
-        # __before_triple_refactoring__
+        # __before_rdf_refactoring__
         #
         # """
         # Searches through the all name fields of all related relationtypes of a given queryset
@@ -359,7 +359,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
         #
         # return result
         #
-        # __after_triple_refactoring__
+        # __after_rdf_refactoring__
         lookup, value = self.construct_lookup(value)
 
         queryset = queryset.filter(
@@ -397,7 +397,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 #
 #######################################################################
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # class PersonListFilter(GenericListFilter):
 #
@@ -477,7 +477,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 #         # Later those which are not referenced in the settings file will be removed again
 #         exclude = GenericListFilter.fields_to_exclude
 #
-# __after_triple_refactoring__
+# __after_rdf_refactoring__
 def get_list_filter_of_entity(entity):
     """
     Main method to be called somewhere else in the codebase in order to get the FilterClass respective to the entity string input

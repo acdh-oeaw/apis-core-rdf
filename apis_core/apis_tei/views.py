@@ -3,7 +3,7 @@ import lxml.etree as ET
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 # from apis_core.apis_entities.models import Person, Place, Institution
 # from .tei_utils import get_node_from_template
 #

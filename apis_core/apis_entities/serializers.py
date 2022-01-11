@@ -30,7 +30,7 @@ class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
     )
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # class InstitutionSerializer(BaseEntitySerializer):
 #     url = serializers.HyperlinkedIdentityField(
@@ -290,7 +290,7 @@ class NetJsonNodeSerializer(serializers.BaseSerializer):
                 r["data"]["gender"] = obj.gender
         return r
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # class LifePathPlaceSerializer(serializers.ModelSerializer):
 #     id = serializers.ReadOnlyField()

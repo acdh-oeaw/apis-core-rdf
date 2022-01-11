@@ -421,7 +421,7 @@ class GenericNetworkEntitiesAutocomplete(autocomplete.Select2ListView):
         }), content_type='application/json')
 
 
-# __after_triple_refactoring__
+# __after_rdf_refactoring__
 class PropertyAutocomplete(autocomplete.Select2ListView):
 
     # These constants are set so that they are defined in one place only and reused by fetching them elsewhere.

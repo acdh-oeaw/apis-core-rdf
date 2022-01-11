@@ -69,7 +69,7 @@ class EntityLabelForm(forms.ModelForm):
                 self.fields['end_date_written'].help_text = DateParser.get_date_help_text_default()
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # ##############################################
 # # Person

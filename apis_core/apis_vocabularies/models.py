@@ -74,7 +74,7 @@ class VocabsBaseClass(RootObject):
             d = d.parent_class
         return res
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # @reversion.register(follow=['vocabsbaseclass_ptr'])
 # class RelationBaseClass(VocabsBaseClass):
@@ -119,7 +119,7 @@ class VocabsBaseClass(RootObject):
 #         super(RelationBaseClass, self).save(*args, **kwargs)
 #         return self
 #
-# __after_triple_refactoring__
+# __after_rdf_refactoring__
 # refactored to property and moved to apis_relations.models
 
 
@@ -143,7 +143,7 @@ class VocabsUri(models.Model):
 
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # @reversion.register(follow=['vocabsbaseclass_ptr'])
 # class WorkType(VocabsBaseClass):
@@ -203,7 +203,7 @@ class TextType(VocabsBaseClass):
         verbose_name='ISO Code', default='deu')
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # #######################################################################
 # #

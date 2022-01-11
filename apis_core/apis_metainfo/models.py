@@ -33,7 +33,7 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import Annotation
 
 
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # @reversion.register()
 # class TempEntityClass(models.Model):
@@ -312,7 +312,7 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
 #     def get_serialization(self):
 #         return EntitySerializer(self).data
 #
-# __after_triple_refactoring__
+# __after_rdf_refactoring__
 # moved TempEntityClass to apis_entities.models
 
 

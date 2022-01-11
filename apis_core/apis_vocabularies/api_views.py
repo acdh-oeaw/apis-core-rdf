@@ -1,4 +1,4 @@
-# __before_triple_refactoring__
+# __before_rdf_refactoring__
 #
 # from django.contrib.auth.models import User
 # from rest_framework import viewsets
