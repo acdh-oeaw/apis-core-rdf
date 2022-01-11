@@ -507,6 +507,7 @@ class AbstractEntity(RootObject):
 
 
 # __after_rdf_refactoring__
+# TODO RDF: Consider moving TempEntityClass also into ontologies
 @reversion.register()
 class TempEntityClass(AbstractEntity):
     """ Base class to bind common attributes to many classes.
