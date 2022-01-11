@@ -87,4 +87,5 @@ class GetContentTypes:
                         and inspect.isclass(getattr(m, cls_n))
                     ):
                         lst_cont.append(getattr(m, cls_n))
+        lst_cont.append(ContentType)
         self._lst_cont = lst_cont
