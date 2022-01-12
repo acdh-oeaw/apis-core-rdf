@@ -275,6 +275,7 @@ def generic_serializer_creation_factory():
                             in [
                                 "ManyToManyField",
                                 "ForeignKey",
+                                "InheritanceForeignKey"
                             ]
                             and "apis_vocabularies" not in str(f.related_model)
                         ):
