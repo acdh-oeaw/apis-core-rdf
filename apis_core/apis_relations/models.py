@@ -60,6 +60,13 @@ class Property(RootObject):
 
     objects = BaseRelationManager()
 
+    # TODO RDF : Redundancy between name_forward and name, solve this.
+    name_forward = models.CharField(
+        max_length=255,
+        verbose_name='Name reverse',
+        help_text='Inverse relation like: "is sub-class of" vs. "is super-class of".',
+        blank=True)
+
     # TODO RDF : Maybe rename name to name_subj_to_obj and name_reverse to name_obj_to_subj
     name_reverse = models.CharField(
         max_length=255,
