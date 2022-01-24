@@ -98,6 +98,9 @@ class Property(RootObject):
         if self.name_reverse == "" or self.name_reverse == None:
             self.name_reverse = self.name + " [REVERSE]"
 
+        # TODO RDF : Temporary hack, remove this once better solution is found
+        self.name_forward = self.name
+
         super(Property, self).save(*args, **kwargs)
         return self
 
