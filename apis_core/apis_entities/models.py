@@ -57,7 +57,6 @@ class AbstractEntity(RootObject):
 
     class Meta:
         abstract = True
-        # app_label = "apis_entities"
 
     def __init__(self, *args, **kwargs):
 
@@ -961,9 +960,6 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
         user_group = getattr(settings, "APIS_AUTO_USERGROUP", None)
         if user_group is not None:
             user.groups.add(Group.objects.get(name=user_group))
-
-# # __after_rdf_refactoring__
-# from apis_ontology.models import *
 
 # __after_rdf_refactoring__
 # TODO RDF : This function is an ad hoc work around. It would be better done if entity settings would be fully moved into the entities themselves
