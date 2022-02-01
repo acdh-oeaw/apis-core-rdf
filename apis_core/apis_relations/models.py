@@ -60,6 +60,12 @@ class Property(RootObject):
 
     objects = BaseRelationManager()
 
+    property_class_uri = models.CharField(
+        max_length=255,
+        verbose_name='Property Class URI',
+        blank=True
+    )
+
     # TODO RDF : Redundancy between name_forward and name, solve this.
     name_forward = models.CharField(
         max_length=255,
