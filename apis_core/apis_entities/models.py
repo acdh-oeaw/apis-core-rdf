@@ -57,7 +57,7 @@ class AbstractEntity(RootObject):
 
     class Meta:
         abstract = True
-        app_label = "apis_entities"
+        # app_label = "apis_entities"
 
     def __init__(self, *args, **kwargs):
 
@@ -233,9 +233,13 @@ class AbstractEntity(RootObject):
             entity_classes = []
             entity_names = []
 
+            from apis_ontology import models as ontology_models
+
             for entity_name, entity_class in inspect.getmembers(
-                sys.modules[__name__], inspect.isclass
+                ontology_models, inspect.isclass
             ):
+
+                # print(entity_name, entity_class)
 
                 if (
                     # entity_class.__module__ == "apis_core.apis_entities.models"
@@ -958,8 +962,8 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
         if user_group is not None:
             user.groups.add(Group.objects.get(name=user_group))
 
-# __after_rdf_refactoring__
-from apis_ontology.models import *
+# # __after_rdf_refactoring__
+# from apis_ontology.models import *
 
 # __after_rdf_refactoring__
 # TODO RDF : This function is an ad hoc work around. It would be better done if entity settings would be fully moved into the entities themselves
