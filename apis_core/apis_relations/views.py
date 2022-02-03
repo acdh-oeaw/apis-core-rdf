@@ -234,7 +234,7 @@ def get_form_ajax(request):
     }
 
     rendered_form_str = render_to_string(
-        "apis_relations/_ajax_form.html",
+        "apis_relations/_ajax_form.html", # rel_form_logic_breadcrumb (for refinding the implicit connections)
         context=param_dict
     )
 
@@ -249,7 +249,7 @@ def get_form_ajax(request):
 # TODO RDF : Implement highlighter and label form
 # TODO RDF : Check if rdf refactoring covers all use cases
 @login_required
-def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
+def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # rel_form_logic_breadcrumb (for refinding the implicit connections)
     '''Tests validity and saves AjaxForms, returns them when validity test fails'''
 
     # __before_rdf_refactoring__
@@ -314,7 +314,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False):
         property_direction,
     )
 
-    if ObjectID is not None:
+    if ObjectID is not False:
 
         triple = TempTriple.objects.get(pk=ObjectID)
         form.load_remaining_data_from_triple(triple)
