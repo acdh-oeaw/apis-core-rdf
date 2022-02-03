@@ -200,7 +200,28 @@
             $('#tab_'+data.tab).find('div:eq(1)').remove();
             $('#tab_'+data.tab).append(data.form);
 	        $('#form_PersonInstitutionForm div:first div:first select').focus();
-            //$(".form.ajax_form").unbind()
+            $('#tab_'+data.tab+" select.listselect2").each(function( index, element ){
+                console.log($(this).data("autocompleteLightUrl"))
+            $(this).select2({
+                escapeMarkup: function(markup) {
+                return markup;
+            },
+            templateResult: function(data) {
+                return data.text;
+            },
+            templateSelection: function(data) {
+                return data.text;
+            },
+                ajax: {
+                url: $(this).data("autocompleteLightUrl"),
+                dataType: 'json'
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+                },
+            })
+
+
+            })            //$(".form.ajax_form").unbind()
+            console.log($('#tab_'+data.tab+" select.listselect2"))
         };
         if (!$.ApisForms) {
             $.ApisForms = {}
