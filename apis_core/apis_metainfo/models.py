@@ -17,6 +17,7 @@ from django.utils.functional import cached_property
 from math import inf
 from model_utils.managers import InheritanceManager
 import copy
+import importlib
 
 # from apis_core.apis_entities.serializers_generic import EntitySerializer
 # from apis_core.apis_labels.models import Label
@@ -24,7 +25,13 @@ import copy
 
 # from django.contrib.contenttypes.fields import GenericRelation
 # from helper_functions.highlighter import highlight_text
-from apis_core.default_settings.NER_settings import autocomp_settings
+
+path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
+if path_ac_settings:
+    ac_settings = importlib.import_module(path_ac_settings)
+    autocomp_settings = getattr(ac_settings, "autocomp_settings")
+else:
+    from apis_core.default_settings.NER_settings import autocomp_settings
 # from apis_core.helper_functions import DateParser
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)

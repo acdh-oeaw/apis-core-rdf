@@ -3,16 +3,23 @@
 import operator
 import re
 from functools import reduce
+import importlib
 
 import autocomplete_light.shortcuts as al
 import dateutil.parser
 import requests
 from django.db.models import Q
+from django.conf import settings
 
 from apis_core.apis_entities.models import Place, Person, Institution, Event, Work
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import PersonPerson, PersonPlace, PersonInstitution
-from apis_core.default_settings.NER_settings import autocomp_settings as ac_settings
+path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
+if path_ac_settings:
+    ac_settings = importlib.import_module(path_ac_settings)
+    ac_settings = getattr(ac_settings, "autocomp_settings")
+else:
+    from apis_core.default_settings.NER_settings import autocomp_settings as ac_settings
 
 
 class StanbolAutocompleteBase(al.AutocompleteListTemplate):

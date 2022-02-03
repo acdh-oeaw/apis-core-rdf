@@ -27,7 +27,6 @@ from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_metainfo.models import Uri
 # from apis_core.apis_relations.models import PersonPlace, InstitutionPlace, AbstractRelation, PersonInstitution
 from apis_core.apis_vocabularies.models import VocabsBaseClass
-from apis_core.default_settings.NER_settings import autocomp_settings, stb_base
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.helper_functions.stanbolQueries import find_loc
 from .api_renderers import (

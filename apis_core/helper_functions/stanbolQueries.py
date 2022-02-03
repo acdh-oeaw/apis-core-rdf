@@ -1,8 +1,17 @@
 import json
+import importlib
+from django.conf import settings
 
 import requests
 
-from apis_core.default_settings.NER_settings import StbGeoQuerySettings, autocomp_settings
+
+path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
+if path_ac_settings:
+    ac_settings = importlib.import_module(path_ac_settings)
+    autocomp_settings = getattr(ac_settings, "autocomp_settings")
+    StbGeoQuerySettings = getattr(ac_settings, "StbGeoQuerySettings")
+else:
+    from apis_core.default_settings.NER_settings import StbGeoQuerySettings, autocomp_settings
 
 
 def decide_score_stanbol(results, dec_diff):
