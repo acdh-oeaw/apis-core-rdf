@@ -101,6 +101,16 @@
                                         {{ object.name }}
                                     </td>
                                 </tr>
+                                {% for x in relvant_fields %}
+                                    <tr>
+                                        <th>
+                                            {{x.0}}
+                                        </th>
+                                        <td>
+                                            <small>{{x.1}}</small>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
                                 <tr>
                                     <th>
                                         Labels
