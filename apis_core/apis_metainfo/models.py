@@ -412,6 +412,7 @@ class Collection(models.Model):
 
 # TODO RDF : Make Text also a Subclass of RootObject
 # TODO RDF : Maybe move text away from apis_metainfo?
+# TODO RDF : Maybe even remove text entirely?
 @reversion.register()
 class Text(models.Model):
     """ Holds unstructured text associeted with
