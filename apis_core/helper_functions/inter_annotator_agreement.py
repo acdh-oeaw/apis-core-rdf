@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
 
-from apis_core.apis_metainfo.models import Text, TempEntityClass
+from apis_core.apis_metainfo.models import Text
+from apis_core.apis_entities.models import TempEntityClass
 from apis_highlighter.models import Annotation
 
 if 'annotator agreement' in getattr(settings, "APIS_COMPONENTS", []):

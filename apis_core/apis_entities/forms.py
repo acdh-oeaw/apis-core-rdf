@@ -367,6 +367,10 @@ class FullTextForm(forms.Form):
                 collections.append(i)
         try:
             if len(collections) > 0:
+                # TODO : make this filter call respect entity class hierarchy
+                # Here texttypes are searched for a given entity. But since this is an exact search
+                # for the entity, it does not regard any subclasses of the class to which a texttype
+                # was assigned
                 q = TextType.objects.filter(
                     entity__iexact=entity, collections__in=collections
                 )

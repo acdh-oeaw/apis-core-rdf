@@ -420,7 +420,7 @@ class Text(models.Model):
     from apis_core.apis_vocabularies.models import TextType
 
     kind = models.ForeignKey(TextType, blank=True, null=True, on_delete=models.SET_NULL)
-    text = models.TextField(blank=True, null=True)
+    text = models.TextField(blank=True)
     source = models.ForeignKey(Source, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
