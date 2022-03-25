@@ -11,6 +11,7 @@ from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -347,8 +348,9 @@ class RootObject(models.Model):
     def get_content_type(cls):
         return ContentType.objects.get_for_model(cls) # TODO RDF : otimize this
 
-
-
+    def get_triples(self):
+        from apis_core.apis_relations.models import Triple
+        return Triple.objects.filter(Q(subj=self) | Q(obj=self))
 
     def __str__(self):
 

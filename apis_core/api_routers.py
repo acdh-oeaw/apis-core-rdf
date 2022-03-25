@@ -25,7 +25,7 @@ from django_filters import rest_framework as filters
 from apis_core.apis_entities.models import TempEntityClass
 from .api_renderers import NetJsonRenderer
 from apis_core.helper_functions.ContentType import GetContentTypes
-
+from .apis_relations.models import Triple, Property
 
 if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
     from apis_highlighter.highlighter import highlight_text_new
@@ -149,29 +149,44 @@ class VocabsBaseSerializer(LabelSerializer, EntitySerializer):
     pass
 
 
-class RelationObjectSerializer2(ApisBaseSerializer):
-    relation_type = VocabsBaseSerializer(read_only=True)
+class RelatedTripleSerializer(ApisBaseSerializer):
+    relation_type =  serializers.SerializerMethodField(method_name="add_related_property")
     related_entity = serializers.SerializerMethodField(method_name="add_related_entity")
 
-    @extend_schema_field(EntitySerializer)
-    def add_related_entity(self, instance):
-        for at in dir(instance):
-            if (
-                at.startswith("related_")
-                and at.endswith("_id")
-                and getattr(instance, at) != self._pk_instance
-            ):
-                return EntitySerializer(
-                    getattr(instance, at[:-3]), context=self.context
-                ).data
-
-    class Meta(ApisBaseSerializer.Meta):
-        fields = ApisBaseSerializer.Meta.fields + ["relation_type", "related_entity"]
+    class Meta:
+        model = Triple
+        fields = ["id", "url", "relation_type", "related_entity"]
 
     def __init__(self, *args, **kwargs):
         self._pk_instance = kwargs.pop("pk_instance")
-        super(RelationObjectSerializer2, self).__init__(*args, **kwargs)
+        super(RelatedTripleSerializer, self).__init__(*args, **kwargs)
 
+    def add_related_property(self, triple):
+        if triple.subj.pk == self._pk_instance:
+
+            class RelatedPropertySerializer(ApisBaseSerializer):
+                label = serializers.CharField(source="name_forward")
+                class Meta:
+                    model = Property
+                    fields = ["id", "label", "url"]
+        elif triple.obj.pk == self._pk_instance:
+
+            class RelatedPropertySerializer(ApisBaseSerializer):
+                label = serializers.CharField(source="name_reverse")
+                class Meta:
+                    model = Property
+                    fields = ["id", "label", "url"]
+        else:
+            raise Exception("Did not find entity in triple where it is supposed to be. Something must be wrong with the code.")
+        return RelatedPropertySerializer(triple.prop, context=self.context).data
+
+    def add_related_entity(self, triple):
+        if triple.subj.pk == self._pk_instance:
+            return EntitySerializer(triple.obj, context=self.context).data
+        elif triple.obj.pk == self._pk_instance:
+            return EntitySerializer(triple.subj, context=self.context).data
+        else:
+            raise Exception("Did not find entity in triple where it is supposed to be. Something must be wrong with the code.")
 
 if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
 
@@ -388,21 +403,34 @@ def generic_serializer_creation_factory():
                             )
                         elif f.__class__.__name__ in ["ManyToManyField", "ForeignKey"]:
                             self.fields[f.name] = LabelSerializer(many=ck_many, read_only=True)
-                    # include = list(ContentType.objects.filter(app_label="apis_relations", model__icontains=entity_str).values_list('model', flat=True))
-                    include = [
-                        x
-                        for x in lst_cont
-                        if x.__module__ == "apis_core.apis_relations.models"
-                        and entity_str.lower() in x.__name__.lower()
-                    ]
-                    if len(include) > 0 and len(args) > 0:
-                        inst_pk2 = args[0].pk
-                        self.fields["relations"] = RelationObjectSerializer2(
-                            read_only=True,
-                            source="get_related_relation_instances",
-                            many=True,
-                            pk_instance=inst_pk2,
-                        )
+                    # __before_rdf_refactoring__
+                    #
+                    # # include = list(ContentType.objects.filter(app_label="apis_relations", model__icontains=entity_str).values_list('model', flat=True))
+                    # include = [
+                    #     x
+                    #     for x in lst_cont
+                    #     if x.__module__ == "apis_core.apis_relations.models"
+                    #        and entity_str.lower() in x.__name__.lower()
+                    # ]
+                    # if len(include) > 0 and len(args) > 0:
+                    #     inst_pk2 = args[0].pk
+                    #     self.fields["relations"] = RelationObjectSerializer2(
+                    #         read_only=True,
+                    #         source="get_related_relation_instances",
+                    #         many=True,
+                    #         pk_instance=inst_pk2,
+                    #     )
+                    #
+                    # __after_rdf_refactoring__
+                    if len(args) > 0:
+                        entity = args[0]
+                        if hasattr(entity, "triple_set_from_subj") or hasattr(entity, "triple_set_from_obj"):
+                            self.fields["relations"] = RelatedTripleSerializer(
+                                read_only=True,
+                                source="get_triples",
+                                many=True,
+                                pk_instance=entity.pk,
+                            )
 
         TemplateSerializerRetrieve.__name__ = TemplateSerializerRetrieve.__qualname__ = f"{entity_str.title().replace(' ', '')}DetailSerializer"
 
