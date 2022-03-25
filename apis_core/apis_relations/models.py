@@ -683,6 +683,9 @@ class Triple(models.Model):
                 child_list.extend(get_all_childs(p))
             return child_list
 
+        if self.subj is None or self.obj is None or self.prop is None:
+            raise Exception("subj, obj, or prop is None")
+
         if self.subj is not None:
             subj_class_name = self.subj.__class__.__name__
             if ContentType.objects.get(model=subj_class_name) not in self.prop.subj_class.all():
