@@ -601,11 +601,18 @@ class GenericTripleForm(forms.ModelForm):
 
         if self.instance.pk is None:
 
-            self.instance = TempTriple.objects.create()
+            self.instance = TempTriple.objects.create(
+                subj=self.fields["subj"].initial,
+                obj=self.fields["obj"].initial,
+                prop=self.fields["prop"].initial
+            )
 
-        self.instance.subj = self.fields["subj"].initial
-        self.instance.obj = self.fields["obj"].initial
-        self.instance.prop = self.fields["prop"].initial
+        else:
+
+            self.instance.subj = self.fields["subj"].initial
+            self.instance.obj = self.fields["obj"].initial
+            self.instance.prop = self.fields["prop"].initial
+
         self.instance.start_date_written = self.fields["start_date_written"].initial
         self.instance.end_date_written = self.fields["end_date_written"].initial
         self.instance.save()
