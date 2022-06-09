@@ -157,10 +157,12 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
             edit_v = self.request.session.get("edit_views", False)
         else:
             edit_v = False
-        if "table_fields" in settings.APIS_ENTITIES[entity.title()]:
+
+        # check APIS_ENTITIES var in Settings for key used for table columns
+        try:
             default_cols = settings.APIS_ENTITIES[entity.title()]["table_fields"]
-        else:
-            default_cols = ["name"]
+        except KeyError as e:
+            default_cols = []  # gets set to "name" in get_entities_table when empty
         default_cols = default_cols + selected_cols
         self.table_class = get_entities_table(
             self.entity.title(), edit_v, default_cols=default_cols
@@ -189,7 +191,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
             )
         context["docstring"] = "{}".format(model.__doc__)
         if model._meta.verbose_name_plural:
-            context["class_name"] = "{}".format(model._meta.verbose_name.title())
+            context["class_name"] = "{}".format(model._meta.verbose_name_plural.title())
         else:
             if model.__name__.endswith("s"):
                 context["class_name"] = "{}".format(model.__name__)
