@@ -150,9 +150,17 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         return self.filter.qs
 
     def get_table(self, **kwargs):
+        """
+        Create entity-specific table object for use on the frontend.
+
+        Holds information on e.g. which fields to use for table columns.
+        Incorporates variables provided in Models, Settings where available.
+
+        :return: a dictionary
+        """
         session = getattr(self.request, "session", False)
         entity = self.kwargs.get("entity")
-        selected_cols = self.request.GET.getlist("columns")
+        selected_cols = self.request.GET.getlist("columns")  # populates "Select additional columns" dropdown
         if session:
             edit_v = self.request.session.get("edit_views", False)
         else:
@@ -164,6 +172,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         except KeyError as e:
             default_cols = []  # gets set to "name" in get_entities_table when empty
         default_cols = default_cols + selected_cols
+
         self.table_class = get_entities_table(
             self.entity.title(), edit_v, default_cols=default_cols
         )
@@ -174,6 +183,14 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         return table
 
     def get_context_data(self, **kwargs):
+        """
+        Create entity-specific context object for use on the frontend.
+
+        Holds display values and information on functionality based on
+        model data as well as variables provided in Settings (where available).
+
+        :return: a dictionary
+        """
         model = self.get_model()
         context = super(GenericListViewNew, self).get_context_data()
         context[self.context_filter_name] = self.filter
