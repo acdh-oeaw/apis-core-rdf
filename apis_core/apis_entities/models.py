@@ -224,7 +224,15 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_all_entity_classes(cls):
         """
-        :return: list of all python classes of the entities defined within this models' module
+        Retrieve all entity classes included in an APIS Ontologies app's
+        model.py file – except classes named "ent_class".
+
+        Attempts to set protected variables
+        - _all_entity_classes to list of classes
+        - _all_entity_names to list of strings
+        if they do not exist yet and returns _all_entity_classes.
+
+        :return: a list of classes, or None
         """
 
         if cls._all_entity_classes is None:
@@ -257,10 +265,13 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_entity_class_of_name(cls, entity_name):
         """
-        :param entity_name: str : The name of an entity
-        :return: The model class of the entity respective to the given name
-        """
+        Look up an entity class based on a given name.
 
+        :param entity_name: a string to compare against classes' __name__
+                            values; need not be formatted (letter case does
+                            not matter)
+        :return: an entity class – or raise exception
+        """
         for entity_class in cls.get_all_entity_classes():
             if entity_class.__name__.lower() == entity_name.lower():
                 return entity_class
@@ -270,7 +281,10 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_all_entity_names(cls):
         """
-        :return: list of all class names in lower case of the entities defined within this models' module
+        Retrieve lower-cased names of all entity classes in an
+        APIS Ontologies app's model.py file.
+
+        :return: a list of strings, or None
         """
         if cls._all_entity_names is None:
             cls.get_all_entity_classes()
