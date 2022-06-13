@@ -5,7 +5,12 @@ from django.conf import settings
 
 
 def add_entities(request):
+    """
+    Retrieve all models which inherit from AbstractEntity class
+    and make information about them available on the frontend.
 
+    :return a dictionary of context items
+    """
     from apis_core.apis_entities.models import AbstractEntity
 
     entities_classes = AbstractEntity.get_all_entity_classes() or []
