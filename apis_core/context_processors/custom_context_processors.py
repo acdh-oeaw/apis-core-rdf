@@ -3,22 +3,16 @@ import sys
 
 from django.conf import settings
 
+
 def add_entities(request):
-    ent_list = []
 
-    # TODO : This probably can be optimized, by fetching the existing entity classes from AbstractEntity
-    from apis_core.apis_entities import models as core_models
-    from apis_ontology import models as ontology_models
-    ontology_classes = inspect.getmembers(ontology_models, inspect.isclass)
-    core_classes = inspect.getmembers(core_models, inspect.isclass)
+    from apis_core.apis_entities.models import AbstractEntity
 
-    for name, obj in ontology_classes + core_classes:
+    entities_classes = AbstractEntity.get_all_entity_classes() or []
+    entities_uris = [e.__name__.lower() for e in entities_classes]
 
-        # if obj.__module__ == 'apis_core.apis_entities.models' and name != "AbstractEntity" and name != "ent_class":
-        if obj.__module__ == 'apis_ontology.models' and name != "AbstractEntity":
-            ent_list.append(str(name).lower())
     res = {
-        'entities_list': ent_list,
+        'entities_list': entities_uris,
         'request': request
     }
     return res
