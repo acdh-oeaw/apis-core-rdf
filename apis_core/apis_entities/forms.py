@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from crispy_forms.bootstrap import Accordion, AccordionGroup
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset
+from crispy_forms.layout import Layout, Fieldset, Field
 from crispy_forms.layout import Submit
 from dal import autocomplete
 from django import forms
@@ -37,6 +37,12 @@ class SearchForm(forms.Form):
 
 
 def get_entities_form(entity):
+    """
+    Form for edit view for an entity object.
+
+    :param entity: entity name as String
+    :return: GenericEntitiesForm class
+    """
 
     class GenericEntitiesForm(forms.ModelForm):
         class Meta:
@@ -59,34 +65,35 @@ def get_entities_form(entity):
             # exclude.extend(model.get_related_entity_field_names())
             # exclude.extend(model.get_related_relationtype_field_names())
 
-
         def __init__(self, *args, **kwargs):
             super(GenericEntitiesForm, self).__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.form_class = entity.title() + "Form"
             self.helper.form_tag = False
             self.helper.help_text_inline = True
-            acc_grp1 = Fieldset("Metadata {}".format(entity.title()))
-            acc_grp2 = AccordionGroup("MetaInfo", "references", "notes", "review")
+            main_fields = []  # fields to display for entity
+            meta_fields = ["references", "notes", "review"]  # fields for separate meta info section
+            crispy_main_fields = Fieldset(f"Entity type: {entity.title()}")  # crispy forms field collection for entity fields
+            crispy_meta_fields = AccordionGroup(  # crispy forms Accordion Group needs be expanded manually
+                "MetaInfo",
+                *meta_fields
+            )
             attrs = {
                 "data-placeholder": "Type to get suggestions",
                 "data-minimum-input-length": getattr(settings, "APIS_MIN_CHAR", 3),
                 "data-html": True,
             }
 
-            # list to catch all fields that will not be inserted into accordion group acc_grp2
-            fields_list_unsorted = []
-
             for f in self.fields.keys():
                 if isinstance(
                     self.fields[f], (ModelMultipleChoiceField, ModelChoiceField)
                 ):
-                    v_name_p = str(self.fields[f].queryset.model.__name__)
+                    model_uri = self.fields[f].queryset.model.__name__.lower()
+
                     if isinstance(self.fields[f], ModelMultipleChoiceField):
                         widget1 = Select2Multiple
                     else:
                         widget1 = ListSelect2
-
 
                     # __before_rdf_refactoring__
                     #
@@ -113,7 +120,7 @@ def get_entities_form(entity):
                             'apis_vocabularies',
                             'apis_labels'
                         ],
-                        model=v_name_p.lower()
+                        model=model_uri
                     )
                     if (
                         len(matching_content_type) == 1
@@ -122,7 +129,7 @@ def get_entities_form(entity):
                         self.fields[f].widget = widget1(
                             url=reverse(
                                 "apis:apis_vocabularies:generic_vocabularies_autocomplete",
-                                kwargs={"vocab": v_name_p.lower(), "direct": "normal"},
+                                kwargs={"vocab": model_uri, "direct": "normal"},
                             ),
                             attrs=attrs,
                         )
@@ -146,9 +153,10 @@ def get_entities_form(entity):
                                         ]
                                 except ValueError:
                                     res = ""
-                if f not in acc_grp2:
+
+                if f not in meta_fields:
                     # append to unsorted list, so that it can be sorted and afterwards attached to accordion group acc_grp1
-                    fields_list_unsorted.append(f)
+                    main_fields.append(f)
 
             def sort_fields_list(elem_unordered_list, entity_label):
                 """
@@ -177,11 +185,13 @@ def get_entities_form(entity):
                 else:
                     return elem_unordered_list
 
-            # sort field list, iterate over it and append each element to the accordion group
-            for f in sort_fields_list(fields_list_unsorted, entity):
-                acc_grp1.append(f)
+            for field in sort_fields_list(main_fields, entity):
+                crispy_main_fields.append(Field(field))
 
-            self.helper.layout = Layout(Accordion(acc_grp1, acc_grp2))
+            self.helper.layout = Layout(Accordion(  # creates two blocks for fields
+                crispy_main_fields,
+                crispy_meta_fields
+            ))
             self.fields["status"].required = False
             self.fields["collection"].required = False
             self.fields["start_date_written"].required = False
