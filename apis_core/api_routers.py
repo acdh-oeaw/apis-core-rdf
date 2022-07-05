@@ -625,7 +625,7 @@ def load_additional_serializers():
             elif type(target) is ReverseManyToOneDescriptor:
                 model_class = target.field.model
             else:
-                raise Exception("Unhandled case. Report to Stefan")
+                raise Exception(f"Unhandled case. Report to Stefan. type of field is: {type(target)}")
 
             meta_fields = []
             sub_serializers = {}
@@ -637,8 +637,12 @@ def load_additional_serializers():
                     or type(field) is InheritanceForwardManyToOneDescriptor
                 ):
                     meta_fields.append(field.field.name)
+                    # In case the referenced model class by the foreign key is parent class
+                    # of designated target class, use the target class:
                     if field.field.model is not model_class and issubclass(field.field.model, model_class):
                         model_class = field.field.model
+                elif type(field) is ReverseManyToOneDescriptor:
+                    meta_fields.append(field.rel.related_name)
                 elif type(field) is dict:
                     target = list(field.keys())[0]
                     if type(target) is ManyToManyDescriptor:
@@ -654,12 +658,13 @@ def load_additional_serializers():
                         target_name = target.rel.name
                         is_many = True
                     else:
-                        raise Exception("Unhandled case. Report to Stefan")
+                        raise Exception(f"Unhandled case. Report to Stefan. type of field is: {type(field)}")
 
                     sub_serializers[target_name] = create_additional_serializer(field)(read_only=True, many=is_many)
+                    field["path_self"] = target_name
                     meta_fields.append(target_name)
                 else:
-                    raise Exception("Unhandled case. Report to Stefan")
+                    raise Exception(f"Unhandled case. Report to Stefan. type of field is: {type(field)}")
 
             class AdditionalSerializer(serializers.ModelSerializer):
 
@@ -672,9 +677,28 @@ def load_additional_serializers():
                     model = model_class
                     fields = meta_fields
 
-            AdditionalSerializer.__name__ = AdditionalSerializer.__qualname__ = f"{model_class.__name__.title().replace(' ', '')}Serializer"
+            AdditionalSerializer.__name__ = AdditionalSerializer.__qualname__ = f"Additional{model_class.__name__.title().replace(' ', '')}Serializer"
 
             return AdditionalSerializer
+
+        def construct_prefetch_path_set(path_structure):
+
+            path_set = set()
+            if type(path_structure) is dict:
+                path_current = path_structure.get("path_self")
+                for path_structure_sub in list(path_structure.values())[0]:
+                    for path_sub in construct_prefetch_path_set(path_structure_sub):
+                        if path_current is not None:
+                            path_set.add(path_current + "__" + path_sub)
+                        else:
+                            path_set.add(path_sub)
+                if len(path_set) == 0:
+                    if path_current is not None:
+                        path_set.add(path_current)
+                    else:
+                        return None
+
+            return path_set
 
         def main():
 
@@ -683,11 +707,13 @@ def load_additional_serializers():
             class AdditionalViewSet(viewsets.ModelViewSet):
 
                 queryset = additional_serializer_class.Meta.model.objects.all()
+                for prefetch_path in construct_prefetch_path_set(path_structure):
+                    queryset = queryset.prefetch_related(prefetch_path)
                 serializer_class = additional_serializer_class
 
                 def get_queryset(self):
 
-                    # TODO: Improve this
+                    # TODO: Improve this param handling by extending it or reusing the original input
                     # The original 'self.request.query_params' could not be forwarded directly to django's ORM filter
                     # So as a work-around a dictionary is created and its values are casted. Some cases such as lists
                     # are not handled at the moment
@@ -704,7 +730,7 @@ def load_additional_serializers():
 
                     return self.queryset.filter(**params)
 
-            AdditionalViewSet.__name__ = AdditionalViewSet.__qualname__ = f"Generic{additional_serializer_class.Meta.model.__name__.title().replace(' ', '')}ViewSet"
+            AdditionalViewSet.__name__ = AdditionalViewSet.__qualname__ = f"Additional{additional_serializer_class.Meta.model.__name__.title().replace(' ', '')}ViewSet"
 
             return AdditionalViewSet
 
