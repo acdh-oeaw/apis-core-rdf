@@ -10,7 +10,7 @@ from rest_framework import response, schemas
 from rest_framework import routers
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.schemas import get_schema_view
-
+from apis_core.api_routers import load_additional_serializers
 from apis_core.api_routers import views
 # from apis_core.apis_entities.api_views import (
 #     NetJsonViewSet,
@@ -36,6 +36,12 @@ for app_label, model_str in GetContentTypes().get_names():
     except Exception as e:
         print("{} not found, skipping".format(model_str.lower()))
 
+for additional_serializer in load_additional_serializers():
+    router.register(
+        additional_serializer.url,
+        additional_serializer.viewset,
+        additional_serializer.name
+    )
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.api_views import (

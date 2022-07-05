@@ -2,9 +2,10 @@ from functools import reduce
 import copy
 import importlib
 import inspect
-
 from django.conf import settings
-
+from apis_ontology.models import *
+from apis_core.apis_metainfo.models import *
+from apis_ontology.additional_serializers import additional_serializers_list
 # from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from rest_framework import pagination, serializers, viewsets
@@ -586,8 +587,130 @@ def generic_serializer_creation_factory():
         serializers_dict[TemplateSerializer] = TemplateSerializer
         views[f"{entity_str.lower().replace(' ', '')}"] = TemplateViewSet
 
+# TODO: What is this dict 'serializers_dict' used for?
+# I don't find any usage anywhere else and above it gets filled with classes where they are key and value at the same time,
+# which doesn't make sense
 serializers_dict = dict()
 views = dict()
 # filter_classes = dict()
 # lst_filter_classes_check = []
 generic_serializer_creation_factory()
+
+def load_additional_serializers():
+
+    # imports had to be done here, because if imported at top, python would mistake class 'InheritanceForwardManyToOneDescriptor'
+    # from different module apis_metainfo. No idea how this is even possible or could be properly fixed.
+    from django.db.models.query_utils import DeferredAttribute
+    from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor, ReverseManyToOneDescriptor, ManyToManyDescriptor
+    from django.db.models.base import ModelBase
+    from apis_core.apis_relations.models import InheritanceForwardManyToOneDescriptor
+
+    def create_additional_viewset(path_structure):
+
+        def create_additional_serializer(path_structure):
+
+            if len(path_structure.keys()) != 1 or len(path_structure.values()) == 0:
+                raise Exception()
+            target = list(path_structure.keys())[0]
+            model_fields = list(path_structure.values())[0]
+
+            if type(target) is ModelBase:
+                model_class = target
+            elif (
+                type(target) is ForwardManyToOneDescriptor
+                or type(target) is InheritanceForwardManyToOneDescriptor
+                or type(target) is ManyToManyDescriptor
+            ):
+                model_class = target.field.related_model
+            elif type(target) is ReverseManyToOneDescriptor:
+                model_class = target.field.model
+            else:
+                raise Exception("Unhandled case. Report to Stefan")
+
+            meta_fields = []
+            sub_serializers = {}
+
+            for field in model_fields:
+                if (
+                    type(field) is DeferredAttribute
+                    or type(field) is ForwardManyToOneDescriptor
+                    or type(field) is InheritanceForwardManyToOneDescriptor
+                ):
+                    meta_fields.append(field.field.name)
+                    if field.field.model is not model_class and issubclass(field.field.model, model_class):
+                        model_class = field.field.model
+                elif type(field) is dict:
+                    target = list(field.keys())[0]
+                    if type(target) is ManyToManyDescriptor:
+                        target_name = target.field.name
+                        is_many = True
+                    elif (
+                        type(target) is ForwardManyToOneDescriptor
+                        or type(target) is InheritanceForwardManyToOneDescriptor
+                    ):
+                        target_name = target.field.name
+                        is_many = False
+                    elif type(target) is ReverseManyToOneDescriptor:
+                        target_name = target.rel.name
+                        is_many = True
+                    else:
+                        raise Exception("Unhandled case. Report to Stefan")
+
+                    sub_serializers[target_name] = create_additional_serializer(field)(read_only=True, many=is_many)
+                    meta_fields.append(target_name)
+                else:
+                    raise Exception("Unhandled case. Report to Stefan")
+
+            class AdditionalSerializer(serializers.ModelSerializer):
+
+                for item in sub_serializers.items():
+                    # Don't use temporary veriables here for the sub-serializer. Otherwise django would mistake
+                    # the temporary variable as belonging to the parent serializer. Hence 'item[1]'
+                    vars()[item[0]] = item[1]
+
+                class Meta:
+                    model = model_class
+                    fields = meta_fields
+
+            AdditionalSerializer.__name__ = AdditionalSerializer.__qualname__ = f"{model_class.__name__.title().replace(' ', '')}Serializer"
+
+            return AdditionalSerializer
+
+        def main():
+
+            additional_serializer_class = create_additional_serializer(path_structure)
+
+            class AdditionalViewSet(viewsets.ModelViewSet):
+
+                queryset = additional_serializer_class.Meta.model.objects.all()
+                serializer_class = additional_serializer_class
+
+                def get_queryset(self):
+
+                    # TODO: Improve this
+                    # The original 'self.request.query_params' could not be forwarded directly to django's ORM filter
+                    # So as a work-around a dictionary is created and its values are casted. Some cases such as lists
+                    # are not handled at the moment
+                    params = {}
+                    for k, v in self.request.query_params.items():
+                        try:
+                            v = int(v)
+                        except:
+                            if v.lower() == "true":
+                                v = True
+                            elif v.lower() == "false":
+                                v = False
+                        params[k] = v
+
+                    return self.queryset.filter(**params)
+
+            AdditionalViewSet.__name__ = AdditionalViewSet.__qualname__ = f"Generic{additional_serializer_class.Meta.model.__name__.title().replace(' ', '')}ViewSet"
+
+            return AdditionalViewSet
+
+        return main()
+
+    for additional_serializer in additional_serializers_list:
+        additional_serializer.viewset = create_additional_viewset(additional_serializer.path_structure)
+
+    return additional_serializers_list
