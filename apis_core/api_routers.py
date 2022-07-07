@@ -5,7 +5,6 @@ import inspect
 from django.conf import settings
 from apis_ontology.models import *
 from apis_core.apis_metainfo.models import *
-from apis_ontology.additional_serializers import additional_serializers_list
 # from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from rest_framework import pagination, serializers, viewsets
@@ -597,6 +596,11 @@ views = dict()
 generic_serializer_creation_factory()
 
 def load_additional_serializers():
+
+    try:
+        additional_serializers_list= getattr(importlib.import_module("apis_ontology.additional_serializers"), "additional_serializers_list")
+    except:
+        return []
 
     # imports had to be done here, because if imported at top, python would mistake class 'InheritanceForwardManyToOneDescriptor'
     # from different module apis_metainfo. No idea how this is even possible or could be properly fixed.
