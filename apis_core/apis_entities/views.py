@@ -142,7 +142,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
             )
             .model_class()
             .objects.all()
-        )
+        ).order_by("name")
         self.filter = get_list_filter_of_entity(self.entity.title())(
             self.request.GET, queryset=qs
         )
