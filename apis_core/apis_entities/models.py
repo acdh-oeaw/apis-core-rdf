@@ -224,11 +224,18 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_all_entity_classes(cls):
         """
-        :return: list of all python classes of the entities defined within this models' module
+        Retrieve all entity classes included in an APIS Ontologies app's
+        model.py file – except classes named "ent_class".
+
+        Attempts to set protected variables
+        - _all_entity_classes to list of classes
+        - _all_entity_names to list of strings
+        if they do not exist yet and returns _all_entity_classes.
+
+        :return: a list of classes, or None
         """
 
-        if cls._all_entity_classes == None:
-
+        if cls._all_entity_classes is None:
             entity_classes = []
             entity_names = []
 
@@ -258,10 +265,13 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_entity_class_of_name(cls, entity_name):
         """
-        :param entity_name: str : The name of an entity
-        :return: The model class of the entity respective to the given name
-        """
+        Look up an entity class based on a given name.
 
+        :param entity_name: a string to compare against classes' __name__
+                            values; need not be formatted (letter case does
+                            not matter)
+        :return: an entity class – or raise exception
+        """
         for entity_class in cls.get_all_entity_classes():
             if entity_class.__name__.lower() == entity_name.lower():
                 return entity_class
@@ -271,11 +281,12 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_all_entity_names(cls):
         """
-        :return: list of all class names in lower case of the entities defined within this models' module
+        Retrieve lower-cased names of all entity classes in an
+        APIS Ontologies app's model.py file.
+
+        :return: a list of strings, or None
         """
-
-        if cls._all_entity_names == None:
-
+        if cls._all_entity_names is None:
             cls.get_all_entity_classes()
 
         return cls._all_entity_names
@@ -298,7 +309,7 @@ class AbstractEntity(RootObject):
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
-        if cls._related_entity_field_names == None:
+        if cls._related_entity_field_names is None:
             raise Exception("_related_entity_field_names was not initialized yet.")
         else:
             return cls._related_entity_field_names
@@ -314,7 +325,7 @@ class AbstractEntity(RootObject):
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
-        if cls._related_entity_field_names == None:
+        if cls._related_entity_field_names is None:
             cls._related_entity_field_names = []
 
         cls._related_entity_field_names.append(entity_field_name)
@@ -402,7 +413,7 @@ class AbstractEntity(RootObject):
         [ InstitutionPlaceRelation, PersonPlaceRelation, PlaceEventRelation, PlacePlaceRelation, PlaceWorkRelation ]
         """
 
-        if cls._related_relationtype_classes == None:
+        if cls._related_relationtype_classes is None:
 
             relationtype_classes = []
             relationtype_names = []
@@ -435,7 +446,7 @@ class AbstractEntity(RootObject):
         [ 'institutionplacerelation', 'personplacerelation', 'placeeventrelation', 'placeplacerelation', 'placeworkrelation' ]
         """
 
-        if cls._related_relationtype_names == None:
+        if cls._related_relationtype_names is None:
 
             cls.get_related_relationtype_classes()
 
@@ -454,7 +465,7 @@ class AbstractEntity(RootObject):
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
-        if cls._related_relationtype_field_names == None:
+        if cls._related_relationtype_field_names is None:
             raise Exception(
                 "_related_relationtype_field_names was not initialized yet."
             )
@@ -472,7 +483,7 @@ class AbstractEntity(RootObject):
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
-        if cls._related_relationtype_field_names == None:
+        if cls._related_relationtype_field_names is None:
             cls._related_relationtype_field_names = []
 
         cls._related_relationtype_field_names.append(relationtype_field_name)
