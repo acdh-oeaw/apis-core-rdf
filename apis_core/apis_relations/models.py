@@ -599,7 +599,7 @@ class InheritanceForeignKey(models.ForeignKey):
 
 class Triple(models.Model):
     # TODO RDF : (maybe) implement a convenient way of fetching related triples of a given root object
-
+    # TODO RDF : Make it so that triples are unique given their subj, obj, prop (With an aggregated primary key maybe?)
     # TODO RDF : add ent filter shortcut so that e.g. this can be shortened: Triple.objects.filter(Q(subj__pk=113) | Q(obj__pk=113))
     subj = InheritanceForeignKey(RootObject, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_subj")
     obj = InheritanceForeignKey(RootObject, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_obj")
