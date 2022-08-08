@@ -1,5 +1,6 @@
 import inspect
 import sys
+from operator import itemgetter
 
 from django.conf import settings
 
@@ -16,6 +17,7 @@ def add_entities(request):
     entities_classes = AbstractEntity.get_all_entity_classes() or []
     # create (uri, label) tuples for entities for use in templates
     entities_links = [(e.__name__.lower(), e._meta.verbose_name_plural.title()) for e in entities_classes]
+    entities_links.sort(key=itemgetter(1))
     entities_uris = [u[0] for u in entities_links]  # TODO kk for compatibility, see below
 
     res = {
