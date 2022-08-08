@@ -2,6 +2,7 @@ from functools import reduce
 import copy
 import importlib
 import inspect
+from ast import literal_eval
 from django.conf import settings
 from apis_ontology.models import *
 from apis_core.apis_metainfo.models import *
@@ -717,19 +718,41 @@ def load_additional_serializers():
 
                 def get_queryset(self):
 
-                    # TODO: Improve this param handling by extending it or reusing the original input
+                    # TODO: Improve this param handling by extending the parsing logic or by forwarding the params untouched
                     # The original 'self.request.query_params' could not be forwarded directly to django's ORM filter
-                    # So as a work-around a dictionary is created and its values are casted. Some cases such as lists
-                    # are not handled at the moment
+                    # So as a work-around, a dictionary is created and its values are casted. M
+                    # Maybe there a possibility can be found to forward the params directly?
                     params = {}
+                    was_parsed = False
                     for k, v in self.request.query_params.items():
+
+                        # check for int
                         try:
                             v = int(v)
                         except:
+                            pass
+                        else:
+                            was_parsed = True
+
+                        # check for boolean
+                        if not was_parsed:
                             if v.lower() == "true":
                                 v = True
+                                was_parsed = True
                             elif v.lower() == "false":
                                 v = False
+                                was_parsed = True
+
+                        # check for list
+                        if not was_parsed:
+                            if k.endswith("__in"):
+                                try:
+                                    v = literal_eval(v)
+                                except:
+                                    pass
+                                else:
+                                    was_parsed = True
+
                         params[k] = v
 
                     return self.queryset.filter(**params)
