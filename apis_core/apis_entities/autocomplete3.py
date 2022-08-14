@@ -114,6 +114,9 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
 
 
     def get(self, request, *args, **kwargs):
+        """
+        Look up entity objects from which to create relationships.
+        """
         page_size = 20
         offset = (int(self.request.GET.get('page', 1))-1)*page_size
         ac_type = self.kwargs['entity']
@@ -124,11 +127,13 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         ent_model = AbstractEntity.get_entity_class_of_name(ac_type)
         ent_model_name = ent_model.__name__
 
+        # inspect user search query
         q3 = None
         if self.q.startswith('http'):
             res = ent_model.objects.filter(uri__uri=self.q.strip())
         elif len(self.q) > 0:
-            q1 = re.match('^([^\[]+)\[([^\]]+)\]$', self.q)
+            # looks for pattern matching "hello [world]" or "hello [world=1 universe=2]"
+            q1 = re.match('([^\[]+)\[([^\]]+)\]$', self.q)
             if q1:
                 q = q1.group(1).strip()
                 q3 = q1.group(2).split(',')
@@ -156,6 +161,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                 f_dict2 = {}
                 for fd in q3:
                     try:
+                        # try to split query along equal signs
                         f_dict2[fd.split('=')[0].strip()] = fd.split('=')[1].strip()
                     except IndexError as e:
                         print(e)
@@ -219,7 +225,6 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                     else:
                         continue
                 else:
-
                     data = {
                         'limit': page_size,
                         'ldpath': ldpath,
