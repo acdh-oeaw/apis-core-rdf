@@ -136,7 +136,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
             q1 = re.match('([^\[]+)\[([^\]]+)\]$', self.q)
             if q1:
                 q = q1.group(1).strip()
-                q3 = q1.group(2).split(',')
+                q3 = q1.group(2).split(';')
                 q3 = [e.strip() for e in q3]
             else:
                 q = re.match('^[^\[]+', self.q).group(0)
