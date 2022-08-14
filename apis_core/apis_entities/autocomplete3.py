@@ -194,7 +194,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                     q = False
                     match_url_geo = re.search(r'geonames[^0-9]+([0-9]+)', self.q.strip())
                     if match_url_geo:
-                        url = 'http://sws.geonames.org/{}/'.format(match_url_geo.group(1))
+                        url = 'https://sws.geonames.org/{}/'.format(match_url_geo.group(1))
                     else:
                         url = self.q.strip()
                     params = {'id': url, 'ldpath': ldpath}
@@ -223,7 +223,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                         'constraints': [{
                             "type": "text",
                             "patternType": "wildcard",
-                            "field": "http://www.w3.org/2000/01/rdf-schema#label",
+                            "field": "https://www.w3.org/2000/01/rdf-schema#label",
                             "text": q.split()
                         }]
                     }
