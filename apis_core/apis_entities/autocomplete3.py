@@ -122,6 +122,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         choices = []
         headers = {'Content-Type': 'application/json'}
         ent_model = AbstractEntity.get_entity_class_of_name(ac_type)
+        ent_model_name = ent_model.__name__
         if self.q.startswith('http'):
             res = ent_model.objects.filter(uri__uri=self.q.strip())
         elif len(self.q) > 0:
@@ -148,7 +149,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
             else:
                 search_type = '__icontains'
                 q = q.strip()
-            arg_list = [Q(**{x+search_type: q}) for x in settings.APIS_ENTITIES[ac_type.title()]['search']]
+            arg_list = [Q(**{x+search_type: q}) for x in settings.APIS_ENTITIES[ent_model_name]['search']]
             res = ent_model.objects.filter(reduce(operator.or_, arg_list)).distinct()
             if q3:
                 f_dict2 = {}
@@ -183,8 +184,9 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                 test_db = False
         else:
             test_db = False
-        if ac_type.title() in ac_settings.keys():
-            for y in ac_settings[ac_type.title()]:
+
+        if ent_model_name in ac_settings.keys():
+            for y in ac_settings[ent_model_name]:
                 ldpath = ""
                 for d in y['fields'].keys():
                     ldpath += "{} = <{}>;\n".format(d, y['fields'][d][0])
