@@ -123,6 +123,8 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         headers = {'Content-Type': 'application/json'}
         ent_model = AbstractEntity.get_entity_class_of_name(ac_type)
         ent_model_name = ent_model.__name__
+
+        q3 = None
         if self.q.startswith('http'):
             res = ent_model.objects.filter(uri__uri=self.q.strip())
         elif len(self.q) > 0:
@@ -133,7 +135,6 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                 q3 = [e.strip() for e in q3]
             else:
                 q = re.match('^[^\[]+', self.q).group(0)
-                q3 = False
             if re.match('^[^*]+\*$', q.strip()):
                 search_type = '__istartswith'
                 q = re.match('^([^*]+)\*$', q.strip()).group(1)
@@ -154,7 +155,10 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
             if q3:
                 f_dict2 = {}
                 for fd in q3:
-                    f_dict2[fd.split('=')[0].strip()] = fd.split('=')[1].strip()
+                    try:
+                        f_dict2[fd.split('=')[0].strip()] = fd.split('=')[1].strip()
+                    except IndexError as e:
+                        print(e)
                 try:
                     res = res.filter(**f_dict2)
                 except Exception as e:
@@ -314,8 +318,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
             for k in test_stanbol_list.keys():
                 if test_stanbol_list[k]:
                     test_stanbol = True
-        else:
-            test_stanbol = False
+
         cust_auto_more = False
         if q:
             cust_auto = CustomEntityAutocompletes(ac_type, q, page_size=page_size, offset=offset)
