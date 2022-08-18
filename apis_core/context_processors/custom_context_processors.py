@@ -1,35 +1,29 @@
 import inspect
 import sys
 from operator import itemgetter
-
+from apis_core.apis_entities.models import AbstractEntity
 from django.conf import settings
 
 
-def add_entities(request):
+def list_entities(request):
     """
     Retrieve all models which inherit from AbstractEntity class
     and make information about them available on the frontend.
 
     :return a dictionary of context items
     """
-    from apis_core.apis_entities.models import AbstractEntity
-
     entities_classes = AbstractEntity.get_all_entity_classes() or []
     # create (uri, label) tuples for entities for use in templates
-    entities_links = [(e.__name__.lower(), e._meta.verbose_name_plural.title()) for e in entities_classes]
+    entities_links = [(e.__name__.lower(), e._meta.verbose_name.title()) for e in entities_classes]
     entities_links.sort(key=itemgetter(1))
-    entities_uris = [u[0] for u in entities_links]  # TODO kk for compatibility, see below
 
-    res = {
-        'entities_list': entities_uris,  # TODO kk keep for compatibility; remove when not used in templates anymore
-        'entities_classes': entities_classes,
+    return {
         'entities_links': entities_links,
         'request': request
     }
-    return res
 
 
-def add_relations(request):
+def list_relations(request):
     relations_list = []
     for name, obj in inspect.getmembers(
         sys.modules['apis_core.apis_relations.models'], inspect.isclass
@@ -43,7 +37,7 @@ def add_relations(request):
     return res
 
 
-def add_apis_settings(request):
+def list_apis_settings(request):
     """adds the custom settings to the templates"""
     res = {
         'additional_functions': getattr(settings, "APIS_COMPONENTS", []),
