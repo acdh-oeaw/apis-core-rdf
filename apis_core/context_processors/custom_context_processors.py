@@ -1,30 +1,29 @@
 import inspect
 import sys
-
+from operator import itemgetter
+from apis_core.apis_entities.models import AbstractEntity
 from django.conf import settings
 
-def add_entities(request):
-    ent_list = []
 
-    # TODO : This probably can be optimized, by fetching the existing entity classes from AbstractEntity
-    from apis_core.apis_entities import models as core_models
-    from apis_ontology import models as ontology_models
-    ontology_classes = inspect.getmembers(ontology_models, inspect.isclass)
-    core_classes = inspect.getmembers(core_models, inspect.isclass)
+def list_entities(request):
+    """
+    Retrieve all models which inherit from AbstractEntity class
+    and make information about them available on the frontend.
 
-    for name, obj in ontology_classes + core_classes:
+    :return a dictionary of context items
+    """
+    entities_classes = AbstractEntity.get_all_entity_classes() or []
+    # create (uri, label) tuples for entities for use in templates
+    entities_links = [(e.__name__.lower(), e._meta.verbose_name.title()) for e in entities_classes]
+    entities_links.sort(key=itemgetter(1))
 
-        # if obj.__module__ == 'apis_core.apis_entities.models' and name != "AbstractEntity" and name != "ent_class":
-        if obj.__module__ == 'apis_ontology.models' and name != "AbstractEntity":
-            ent_list.append(str(name).lower())
-    res = {
-        'entities_list': ent_list,
+    return {
+        'entities_links': entities_links,
         'request': request
     }
-    return res
 
 
-def add_relations(request):
+def list_relations(request):
     relations_list = []
     for name, obj in inspect.getmembers(
         sys.modules['apis_core.apis_relations.models'], inspect.isclass
@@ -38,7 +37,7 @@ def add_relations(request):
     return res
 
 
-def add_apis_settings(request):
+def list_apis_settings(request):
     """adds the custom settings to the templates"""
     res = {
         'additional_functions': getattr(settings, "APIS_COMPONENTS", []),
