@@ -76,7 +76,7 @@ def get_entities_form(entity):
             crispy_main_fields = Fieldset(f"Entity type: {entity.title()}")  # crispy forms field collection for entity fields
             crispy_meta_fields = AccordionGroup(  # crispy forms Accordion Group needs be expanded manually
                 "MetaInfo",
-                *meta_fields
+                *[Field(f) for f in meta_fields]
             )
             attrs = {
                 "data-placeholder": "Type to get suggestions",
@@ -154,8 +154,8 @@ def get_entities_form(entity):
                                 except ValueError:
                                     res = ""
 
+                # add fields not meant for meta section to main fields list
                 if f not in meta_fields:
-                    # append to unsorted list, so that it can be sorted and afterwards attached to accordion group acc_grp1
                     main_fields.append(f)
 
             def sort_fields_list(elem_unordered_list, entity_label):
