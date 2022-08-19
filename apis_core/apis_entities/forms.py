@@ -158,32 +158,30 @@ def get_entities_form(entity):
                 if f not in meta_fields:
                     main_fields.append(f)
 
-            def sort_fields_list(elem_unordered_list, entity_label):
+            def sort_fields_list(field_names, entity_name):
                 """
-                Sorts a list of model fields according to defined order in entity settings.
-                If no settings exists, the unordered list is returned.
+                Sorts an entity's field names based on the form_order setting
+                defined in the entity's class (if available).
+                Field names included in form_order are listed first, followed
+                by the remaining field names.
+
+                :param field_names: a list of strings
+                :param entity_name: string representation of an entity name
+                :return: a list of strings
                 """
+                entity_settings = getattr(settings, 'APIS_ENTITIES', None)
 
-                elem_ordered_list = settings.APIS_ENTITIES[entity_label].get("form_order")
-                if elem_ordered_list is not None:
-                    elem_final_list = []
+                if entity_settings is not None:
+                    try:
+                        form_order = entity_settings[entity_name].get('form_order', [])
+                    except KeyError as e:
+                        form_order = []
 
-                    # quick check if settings correlate with model
-                    for elem_ordered in elem_ordered_list:
-                        if elem_ordered not in elem_unordered_list:
-                            raise Exception(f"Found field {elem_ordered} in form_order setting that does not exist on the model")
+                    if len(form_order) > 0:
+                        remaining = set(field_names) - set(form_order)
+                        field_names = form_order + list(remaining)
 
-                    # use the defined order list
-                    elem_final_list.extend(elem_ordered_list)
-
-                    # append the unordered list to the final list (and check if an element hasn't already been added)
-                    for elem_unordered in elem_unordered_list:
-                        if elem_unordered not in elem_ordered_list:
-                            elem_final_list.append(elem_unordered)
-
-                    return elem_final_list
-                else:
-                    return elem_unordered_list
+                return field_names
 
             for field in sort_fields_list(main_fields, entity):
                 crispy_main_fields.append(Field(field))
