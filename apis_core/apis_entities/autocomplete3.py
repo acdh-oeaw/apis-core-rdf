@@ -114,6 +114,9 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
 
 
     def get(self, request, *args, **kwargs):
+        """
+        Look up entity objects from which to create relationships.
+        """
         page_size = 20
         offset = (int(self.request.GET.get('page', 1))-1)*page_size
         ac_type = self.kwargs['entity']
@@ -122,17 +125,21 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         choices = []
         headers = {'Content-Type': 'application/json'}
         ent_model = AbstractEntity.get_entity_class_of_name(ac_type)
+        ent_model_name = ent_model.__name__
+
+        # inspect user search query
+        q3 = None
         if self.q.startswith('http'):
             res = ent_model.objects.filter(uri__uri=self.q.strip())
         elif len(self.q) > 0:
-            q1 = re.match('^([^\[]+)\[([^\]]+)\]$', self.q)
+            # looks for pattern matching "hello [world]" or "hello [world=1 universe=2]"
+            q1 = re.match('([^\[]+)\[([^\]]+)\]$', self.q)
             if q1:
                 q = q1.group(1).strip()
-                q3 = q1.group(2).split(',')
+                q3 = q1.group(2).split(';')
                 q3 = [e.strip() for e in q3]
             else:
                 q = re.match('^[^\[]+', self.q).group(0)
-                q3 = False
             if re.match('^[^*]+\*$', q.strip()):
                 search_type = '__istartswith'
                 q = re.match('^([^*]+)\*$', q.strip()).group(1)
@@ -148,12 +155,16 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
             else:
                 search_type = '__icontains'
                 q = q.strip()
-            arg_list = [Q(**{x+search_type: q}) for x in settings.APIS_ENTITIES[ac_type.title()]['search']]
+            arg_list = [Q(**{x+search_type: q}) for x in settings.APIS_ENTITIES[ent_model_name]['search']]
             res = ent_model.objects.filter(reduce(operator.or_, arg_list)).distinct()
             if q3:
                 f_dict2 = {}
                 for fd in q3:
-                    f_dict2[fd.split('=')[0].strip()] = fd.split('=')[1].strip()
+                    try:
+                        # try to split query along equal signs
+                        f_dict2[fd.split('=')[0].strip()] = fd.split('=')[1].strip()
+                    except IndexError as e:
+                        print(e)
                 try:
                     res = res.filter(**f_dict2)
                 except Exception as e:
@@ -183,8 +194,9 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                 test_db = False
         else:
             test_db = False
-        if ac_type.title() in ac_settings.keys():
-            for y in ac_settings[ac_type.title()]:
+
+        if ent_model_name in ac_settings.keys():
+            for y in ac_settings[ent_model_name]:
                 ldpath = ""
                 for d in y['fields'].keys():
                     ldpath += "{} = <{}>;\n".format(d, y['fields'][d][0])
@@ -192,7 +204,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                     q = False
                     match_url_geo = re.search(r'geonames[^0-9]+([0-9]+)', self.q.strip())
                     if match_url_geo:
-                        url = 'http://sws.geonames.org/{}/'.format(match_url_geo.group(1))
+                        url = 'https://sws.geonames.org/{}/'.format(match_url_geo.group(1))
                     else:
                         url = self.q.strip()
                     params = {'id': url, 'ldpath': ldpath}
@@ -213,7 +225,6 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                     else:
                         continue
                 else:
-
                     data = {
                         'limit': page_size,
                         'ldpath': ldpath,
@@ -221,7 +232,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                         'constraints': [{
                             "type": "text",
                             "patternType": "wildcard",
-                            "field": "http://www.w3.org/2000/01/rdf-schema#label",
+                            "field": "https://www.w3.org/2000/01/rdf-schema#label",
                             "text": q.split()
                         }]
                     }
@@ -312,8 +323,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
             for k in test_stanbol_list.keys():
                 if test_stanbol_list[k]:
                     test_stanbol = True
-        else:
-            test_stanbol = False
+
         cust_auto_more = False
         if q:
             cust_auto = CustomEntityAutocompletes(ac_type, q, page_size=page_size, offset=offset)
