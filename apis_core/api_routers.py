@@ -725,6 +725,9 @@ def load_additional_serializers():
                     params = {}
                     was_parsed = False
                     for k, v in self.request.query_params.items():
+                        # check for pagination params:
+                        if k == "limit" or k == "offset":
+                            continue
 
                         # check for int
                         try:
