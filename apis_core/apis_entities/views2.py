@@ -119,7 +119,7 @@ class GenericEntitiesEditView(View):
         else:
             form_ann_agreement = False
         if 'apis_bibsonomy' in settings.INSTALLED_APPS:
-            apis_bibsonomy = getattr(settings, 'APIS_BIBSONOMY_FIELDS', ['self'])
+            apis_bibsonomy = getattr(instance, 'APIS_BIBSONOMY_FIELDS', [])
             apis_bibsonomy_texts = getattr(settings, "APIS_BIBSONOMY_TEXTS", False)
             if apis_bibsonomy_texts:
                 apis_bibsonomy.extend([f"text_{pk}" for pk in TextType.objects.filter(name__in=apis_bibsonomy_texts).values_list('pk', flat=True) if f"text_{pk}" not in apis_bibsonomy])
