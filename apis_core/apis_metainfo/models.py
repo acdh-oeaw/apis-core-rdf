@@ -471,11 +471,11 @@ class Text(models.Model):
                     """
                     This function computes the positions for pre-existing annotations when a text is
                     changed. Since we only received the old and the new text we don't have any
-                    information on the sum of changes happened to the text. And since we don't have
-                    that information we can not know for sure where a pre-existing annotation has
-                    moved to given its relative position in a text (because the annotated
-                    sub-text alone is not enough to give this information because there can exist
-                    multiple of the same sub-text).
+                    information on the individual steps of changes happened to the text. And
+                    since we don't have that information we can not know for sure where a
+                    pre-existing annotation has moved to given its relative position in a text (
+                    because the annotated sub-text alone is not enough to give this information
+                    because there can exist multiple of the same sub-text).
                     
                     So we use a heuristic here where for each annotation embedded in an old text
                     we compute its textual neighbourhood and give each word a weight where the
