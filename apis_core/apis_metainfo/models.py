@@ -466,49 +466,68 @@ class Text(models.Model):
             orig = Text.objects.get(pk=self.pk)
             if orig.text != self.text and "apis_highlighter" in settings.INSTALLED_APPS:
                 from apis_highlighter.models import Annotation
-                def calculate_context_weights(text, i_start, i_end):
-
-                    def calculate_word_dict(text, direction):
-
-                        word_list = re.split(" |\\n", text)
-                        word_list = [w for w in word_list if w != ""]
-
-                        word_dict = {}
-
-                        if word_list != []:
-
-                            value_step = 1 / len(word_list)
-                            value_current = 1
-                            for word in word_list[::direction]:
-                                word_value = word_dict.get(word, 0)
-                                word_dict[word] = word_value + value_current
-                                value_current -= value_step
-
-                        return word_dict
-
-                    text_left = text[:i_start]
-                    text_right = text[i_end:]
-                    word_dict_left = calculate_word_dict(text=text_left, direction=-1)
-                    word_dict_right = calculate_word_dict(text=text_right, direction=1)
-
-                    return {
-                        "word_dict_left": word_dict_left,
-                        "word_dict_right": word_dict_right,
-                    }
-
-                def make_diff(word_dict_a, word_dict_b):
-
-                    words_all = set(word_dict_a.keys()).union(set(word_dict_b.keys()))
-                    diff_all = 0
-                    for word in words_all:
-                        word_value_a = word_dict_a.get(word, 0)
-                        word_value_b = word_dict_b.get(word, 0)
-                        diff_all += abs(word_value_a - word_value_b)
-
-                    return diff_all
 
                 def correlate_annotations(text_old, text_new, annotations_old):
+                    """
+                    This function computes the positions for pre-existing annotations when a text is
+                    changed. Since we only received the old and the new text we don't have any
+                    information on the sum of changes happened to the text. And since we don't have
+                    that information we can not know for sure where a pre-existing annotation has
+                    moved to given its relative position in a text (because the annotated
+                    sub-text alone is not enough to give this information because there can exist
+                    multiple of the same sub-text).
+                    
+                    So we use a heuristic here where for each annotation embedded in an old text
+                    we compute its textual neighbourhood and give each word a weight where the
+                    weight depends on proximity to the annotation. For example the word to the
+                    left of an annotation and the word to the right of an annotation both have a
+                    high score while the outermost ones at the beginning and the end of the text
+                    have the lowest score. Now when we receive a new text we do the same
+                    computation again and then correspond the annotations with each other that
+                    have the closes score (i.e. the most similar textual context).
+                    
+                    :param text_old: the old text coming from the db
+                    :param text_new: the new text coming from the user
+                    :param annotations_old: the list of pre-existing annotations in the old text
+                    :return: None - the computed changes are persisted in the annotations
+                    """
+                    
+                    def calculate_context_weights(text, i_start, i_end):
+        
+                        def calculate_word_dict(text, direction):
+                            word_list = re.split(" |\\n", text)
+                            word_list = [w for w in word_list if w != ""]
+                            word_dict = {}
+                            if word_list != []:
+                                value_step = 1 / len(word_list)
+                                value_current = 1
+                                for word in word_list[::direction]:
+                                    word_value = word_dict.get(word, 0)
+                                    word_dict[word] = word_value + value_current
+                                    value_current -= value_step
+            
+                            return word_dict
+        
+                        text_left = text[:i_start]
+                        text_right = text[i_end:]
+                        word_dict_left = calculate_word_dict(text=text_left, direction=-1)
+                        word_dict_right = calculate_word_dict(text=text_right, direction=1)
+                        
+                        return {
+                            "word_dict_left": word_dict_left,
+                            "word_dict_right": word_dict_right,
+                        }
 
+                    def make_diff(word_dict_a, word_dict_b):
+                        words_all = set(word_dict_a.keys()).union(set(word_dict_b.keys()))
+                        diff_all = 0
+                        for word in words_all:
+                            word_value_a = word_dict_a.get(word, 0)
+                            word_value_b = word_dict_b.get(word, 0)
+                            diff_all += abs(word_value_a - word_value_b)
+        
+                        return diff_all
+        
                     for ann in annotations_old:
                         i_old_start = ann.start
                         i_old_end = ann.end
