@@ -25,4 +25,4 @@ Supersedes PR:
 - [ ] My changes follow the project's code formatting rules and style guidelines
 - [ ] I have commented my code with Docstrings and code comments, particularly complex, unusual or hard-to-read code
 - [ ] I have updated the project documentation to reflect the changes I introduce
-- [ ] I haved added new unit tests or updated existing ones to demonstrate my changes works
+- [ ] I have added new unit tests or updated existing ones to demonstrate my changes works
