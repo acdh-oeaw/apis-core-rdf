@@ -40,9 +40,16 @@ fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
 
 class GenericEntityListFilter(django_filters.FilterSet):
+    """
+    Entity fields by which a given entity's list view can be
+    filtered on the frontend.
 
+    Combines config options in an app's settings file with entity-specific
+    settings defined in models.
+    """
     fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
+    # add default labels to form fields on frontend
     name = django_filters.CharFilter(method="name_label_filter", label="Name or label")
     related_entity_name = django_filters.CharFilter(method="related_entity_name_method", label="Related entity")
     related_property_name = django_filters.CharFilter(method="related_property_name_method", label="Related property")
