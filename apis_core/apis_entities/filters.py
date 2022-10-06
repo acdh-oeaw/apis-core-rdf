@@ -72,126 +72,126 @@ class GenericEntityListFilter(django_filters.FilterSet):
         # call super init foremost to create dictionary of filters which will be processed further below
         super().__init__(*args, **kwargs)
         self.entity_class = self.Meta.model
+        self.filters = self.set_sort_filters(self.filters)
 
-        def set_sort_filters(default_filters):
-            """
-            Check for existence of "list_filters" setting for an entity class
-            and return an ordered dictionary containing filters for
-            applicable fields plus pre-set filters defined for all entities
-            (in GenericEntityListFilter's Meta class).
+    def set_sort_filters(self, default_filters):
+        """
+        Check for existence of "list_filters" setting for an entity class
+        and return an ordered dictionary containing filters for
+        applicable fields plus pre-set filters defined for all entities
+        (in GenericEntityListFilter's Meta class).
 
-            :param default_filters: dictionary of filters created
-                                    on filter class instantiation;
-                                    includes: GenericListFilter, specific
-                                    model ListFilter and their defaults
+        :param default_filters: dictionary of filters created
+                                on filter class instantiation;
+                                includes: GenericListFilter, specific
+                                model ListFilter and their defaults
 
-            :return: ordered dictionary with tuples of field names
-                     and filters defined for them
-            """
-            field_filters = OrderedDict()
+        :return: ordered dictionary with tuples of field names
+                 and filters defined for them
+        """
+        field_filters = OrderedDict()
 
-            try:
-                fields = self.entity_class.entity_settings['list_filter']
-                if fields == ['name', 'related_entity_name', 'related_property_name']:
-                    # for AbstractEntity, certain fields are defined to be filterable by default;
-                    # ignore these for the purpose of sorting field names for filtering
-                    fields = []
-            except KeyError as e:
+        try:
+            fields = self.entity_class.entity_settings['list_filters']
+            if fields == ['name', 'related_entity_name', 'related_property_name']:
+                # for AbstractEntity, certain fields are defined to be filterable by default;
+                # ignore these for the purpose of sorting field names for filtering
                 fields = []
-            except Exception as e:
-                raise e
+        except KeyError as e:
+            fields = []
+        except Exception as e:
+            raise e
 
-            # fields by which entity lists should not be filterable
-            ignore_fields = [
-                "self_content_type",
-                "review",
-                "start_date",
-                "start_start_date",
-                "start_end_date",
-                "end_date",
-                "end_start_date",
-                "end_end_date",
-                "notes",
-                "text",
-                "published",
-                "status",
-                "references",
-            ]
+        # fields by which entity lists should not be filterable
+        ignore_fields = [
+            "self_content_type",
+            "review",
+            "start_date",
+            "start_start_date",
+            "start_end_date",
+            "end_date",
+            "end_start_date",
+            "end_end_date",
+            "notes",
+            "text",
+            "published",
+            "status",
+            "references",
+        ]
 
-            for f in fields:
-                if type(f) == str and f in default_filters:
-                    field_filters[f] = default_filters[f]
-                elif type(f) == dict:
-                    field_name = list(f)[0]
+        for f in fields:
+            if type(f) == str and f in default_filters:
+                field_filters[f] = default_filters[f]
+            elif type(f) == dict:
+                field_name = list(f)[0]
 
-                    if field_name in default_filters:
-                        filter_settings = f[field_name]
+                if field_name in default_filters:
+                    filter_settings = f[field_name]
 
-                        if "method" in filter_settings:
-                            default_filters[field_name].method = filter_settings["method"]
+                    if "method" in filter_settings:
+                        default_filters[field_name].method = filter_settings["method"]
 
-                        if "label" in filter_settings:
-                            default_filters[field_name].label = filter_settings["label"]
+                    if "label" in filter_settings:
+                        default_filters[field_name].label = filter_settings["label"]
 
-                        field_filters[field_name] = default_filters[field_name]
+                    field_filters[field_name] = default_filters[field_name]
 
-                else:
-                    raise ValueError(
-                        f"Filters for individual entities need to be of type "
-                        f"string or dictionary.\n"
-                        f"Got instead: {type(f)}"
-                     )
+            else:
+                raise ValueError(
+                    f"Filters for individual entities need to be of type "
+                    f"string or dictionary.\n"
+                    f"Got instead: {type(f)}"
+                 )
 
-            for f_name, f_filter in default_filters.items():
-                if f_name not in ignore_fields and f_name not in field_filters:
-                    field_filters[f_name] = f_filter
+        for f_name, f_filter in default_filters.items():
+            if f_name not in ignore_fields and f_name not in field_filters:
+                field_filters[f_name] = f_filter
 
-            return field_filters
+        return field_filters
 
-            # __before_rdf_refactoring__
-            # temporary hack replacement old
-            #
-            # enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__]["list_filters"]
-            #
-            # filter_dict_tmp = {}
-            #
-            # for enabled_filter in enabled_filters:
-            #
-            #     if type(enabled_filter) == str and enabled_filter in default_filter_dict:
-            #         # If string then just use it, if a filter with such a name is already defined
-            #
-            #         filter_dict_tmp[enabled_filter] = default_filter_dict[enabled_filter]
-            #
-            #
-            #     elif type(enabled_filter) == dict:
-            #         # if a dictionary, then look further into if there is a method or label which overrides the defaults
-            #
-            #         enabled_filter_key = list(enabled_filter.keys())[0]
-            #
-            #         if enabled_filter_key in default_filter_dict:
-            #
-            #             # get the dictionary which contains potential method or label overrides
-            #             enabled_filter_settings_dict = enabled_filter[enabled_filter_key]
-            #
-            #             if "method" in enabled_filter_settings_dict:
-            #                 default_filter_dict[enabled_filter_key].method = enabled_filter_settings_dict["method"]
-            #
-            #             if "label" in enabled_filter_settings_dict:
-            #                 default_filter_dict[enabled_filter_key].label = enabled_filter_settings_dict["label"]
-            #
-            #             filter_dict_tmp[enabled_filter_key] = default_filter_dict[enabled_filter_key]
-            #
-            #     else:
-            #         raise ValueError(
-            #             "Expected either str or dict as type for an individual filter in the settings file."
-            #             f"\nGot instead: {type(enabled_filter)}"
-            #          )
-            #
-            # return filter_dict_tmp
+        # __before_rdf_refactoring__
+        # temporary hack replacement old
+        #
+        # enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__]["list_filters"]
+        #
+        # filter_dict_tmp = {}
+        #
+        # for enabled_filter in enabled_filters:
+        #
+        #     if type(enabled_filter) == str and enabled_filter in default_filter_dict:
+        #         # If string then just use it, if a filter with such a name is already defined
+        #
+        #         filter_dict_tmp[enabled_filter] = default_filter_dict[enabled_filter]
+        #
+        #
+        #     elif type(enabled_filter) == dict:
+        #         # if a dictionary, then look further into if there is a method or label which overrides the defaults
+        #
+        #         enabled_filter_key = list(enabled_filter.keys())[0]
+        #
+        #         if enabled_filter_key in default_filter_dict:
+        #
+        #             # get the dictionary which contains potential method or label overrides
+        #             enabled_filter_settings_dict = enabled_filter[enabled_filter_key]
+        #
+        #             if "method" in enabled_filter_settings_dict:
+        #                 default_filter_dict[enabled_filter_key].method = enabled_filter_settings_dict["method"]
+        #
+        #             if "label" in enabled_filter_settings_dict:
+        #                 default_filter_dict[enabled_filter_key].label = enabled_filter_settings_dict["label"]
+        #
+        #             filter_dict_tmp[enabled_filter_key] = default_filter_dict[enabled_filter_key]
+        #
+        #     else:
+        #         raise ValueError(
+        #             "Expected either str or dict as type for an individual filter in the settings file."
+        #             f"\nGot instead: {type(enabled_filter)}"
+        #          )
+        #
+        # return filter_dict_tmp
 
-            # temporary hack replacement end
+        # temporary hack replacement end
 
-        self.filters = set_sort_filters(self.filters)
 
     def construct_lookup(self, value):
         """
