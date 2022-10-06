@@ -38,22 +38,20 @@ from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
 # TODO __sresch__ : Do this better
 fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
-# __before_rdf_refactoring__
-# class GenericListFilter(django_filters.FilterSet):
-# __after_rdf_refactoring__
+
 class GenericEntityListFilter(django_filters.FilterSet):
 
     fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
-    name = django_filters.CharFilter(method="name_label_filter", label="Name or Label")
+    name = django_filters.CharFilter(method="name_label_filter", label="Name or label")
+    related_entity_name = django_filters.CharFilter(method="related_entity_name_method", label="Related entity")
+    related_property_name = django_filters.CharFilter(method="related_property_name_method", label="Related property")
+
     collection = django_filters.ModelMultipleChoiceFilter(queryset=Collection.objects.all())
 
     # TODO __sresch__ : look into how the date values can be intercepted so that they can be parsed with the same logic as in edit forms
     start_date = django_filters.DateFromToRangeFilter()
     end_date = django_filters.DateFromToRangeFilter()
-
-    related_entity_name = django_filters.CharFilter(method="related_entity_name_method", label="related entity")
-    related_property_name = django_filters.CharFilter(method="related_property_name_method", label="related property")
 
     class Meta:
         model = TempEntityClass
@@ -168,39 +166,30 @@ class GenericEntityListFilter(django_filters.FilterSet):
         """
 
         if value.startswith("*") and not value.endswith("*"):
-
             value = value[1:]
             return "__iendswith", value
 
         elif not value.startswith("*") and value.endswith("*"):
-
             value = value[:-1]
             return "__istartswith", value
 
         elif value.startswith('"') and value.endswith('"'):
-
             value = value[1:-1]
             return "__iexact", value
 
         else:
-
             if value.startswith("*") and value.endswith("*"):
-
                 value = value[1:-1]
-
             return "__icontains", value
-
 
     def name_label_filter(self, queryset, name, value):
         # TODO __sresch__ : include alternative names queries
-
         lookup, value = self.construct_lookup(value)
 
-        queryset_related_label=queryset.filter(**{"label__label"+lookup : value})
-        queryset_self_name=queryset.filter(**{name+lookup : value})
+        queryset_related_label = queryset.filter(**{"label__label"+lookup : value})
+        queryset_self_name = queryset.filter(**{name+lookup : value})
 
-        return ( queryset_related_label | queryset_self_name ).distinct().all()
-
+        return (queryset_related_label|queryset_self_name).distinct().all()
 
     def related_entity_name_method(self, queryset, name, value):
         # __before_rdf_refactoring__
@@ -298,7 +287,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
         return queryset
 
-
     def related_property_name_method(self, queryset, name, value):
         # __before_rdf_refactoring__
         #
@@ -372,7 +360,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
         ).distinct()
 
         return queryset
-
 
     def related_arbitrary_model_name(self, queryset, name, value):
         """
@@ -493,11 +480,8 @@ def get_list_filter_of_entity(entity):
     entity_list_filter_class = entity_class.get_entity_list_filter()
 
     if entity_list_filter_class is None:
-
         class AdHocEntityListFilter(GenericEntityListFilter):
-
             class Meta(GenericEntityListFilter.Meta):
-
                 model = entity_class
 
         entity_list_filter_class = AdHocEntityListFilter
