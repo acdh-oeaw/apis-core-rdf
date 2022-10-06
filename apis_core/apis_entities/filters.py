@@ -8,6 +8,7 @@ from django.db.models import Q
 from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
 
+from collections import OrderedDict
 
 # The following classes define the filter sets respective to their models.
 # Also by what was enabled in the global settings file (or disabled by not explicitley enabling it).
@@ -71,8 +72,9 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
         # call super init foremost to create dictionary of filters which will be processed further below
         super().__init__(*args, **kwargs)
+        self.entity_class = self.Meta.model
 
-        def eliminate_unused_filters(default_filter_dict):
+        def set_sort_filters(default_filters):
             """
             Method to read in from the settings file which filters should be enabled / disabled and if there are
             methods or labels to override the default ones.
@@ -83,36 +85,67 @@ class GenericEntityListFilter(django_filters.FilterSet):
             :return: a new dictionary which is a subset of the input dictionary and only contains the filters which
                 are referenced in the settings file (and if there were methods or labels also referenced, using them)
             """
+            field_filters = OrderedDict()
 
-            # TODO __sresch__ : This is a temporary hack just so that showcasing works with everything enabled
-            # temporary hack replacement new
+            try:
+                fields = self.entity_class.entity_settings['list_filter']
+                if fields == ['name', 'related_entity_name', 'related_property_name']:
+                    # for AbstractEntity, certain fields are defined to be filterable by default;
+                    # ignore these for the purpose of sorting field names for filtering
+                    fields = []
+            except KeyError as e:
+                fields = []
+            except Exception as e:
+                raise e
 
-            filter_dict_tmp = {}
+            # fields by which entity lists should not be filterable
+            ignore_fields = [
+                "self_content_type",
+                "review",
+                "start_date",
+                "start_start_date",
+                "start_end_date",
+                "end_date",
+                "end_start_date",
+                "end_end_date",
+                "notes",
+                "text",
+                "published",
+                "status",
+                "references",
+            ]
 
-            for filter_key, filter_object in default_filter_dict.items():
+            for f in fields:
+                if type(f) == str and f in default_filters:
+                    field_filters[f] = default_filters[f]
+                elif type(f) == dict:
+                    field_name = list(f)[0]
 
-                if filter_key not in [
-                    "self_content_type",
-                    "review",
-                    "start_date",
-                    "start_start_date",
-                    "start_end_date",
-                    "end_date",
-                    "end_start_date",
-                    "end_end_date",
-                    "notes",
-                    "text",
-                    "collection",
-                    "published",
-                    "status",
-                    "references",
-                ]:
+                    if field_name in default_filters:
+                        filter_settings = f[field_name]
 
-                    filter_dict_tmp[filter_key] = filter_object
+                        if "method" in filter_settings:
+                            default_filters[field_name].method = filter_settings["method"]
 
-            return filter_dict_tmp
+                        if "label" in filter_settings:
+                            default_filters[field_name].label = filter_settings["label"]
 
+                        field_filters[field_name] = default_filters[field_name]
 
+                else:
+                    raise ValueError(
+                        f"Filters for individual entities need to be of type "
+                        f"string or dictionary.\n"
+                        f"Got instead: {type(f)}"
+                     )
+
+            for f_name, f_filter in default_filters.items():
+                if f_name not in ignore_fields and f_name not in field_filters:
+                    field_filters[f_name] = f_filter
+
+            return field_filters
+
+            # __before_rdf_refactoring__
             # temporary hack replacement old
             #
             # enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__]["list_filters"]
@@ -155,9 +188,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
             # temporary hack replacement end
 
-        self.filters = eliminate_unused_filters(self.filters)
-
-
+        self.filters = set_sort_filters(self.filters)
 
     def construct_lookup(self, value):
         """
