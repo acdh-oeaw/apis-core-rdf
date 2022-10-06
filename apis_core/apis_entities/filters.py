@@ -69,21 +69,24 @@ class GenericEntityListFilter(django_filters.FilterSet):
         exclude = fields_to_exclude
 
     def __init__(self, *args, **kwargs):
-
         # call super init foremost to create dictionary of filters which will be processed further below
         super().__init__(*args, **kwargs)
         self.entity_class = self.Meta.model
 
         def set_sort_filters(default_filters):
             """
-            Method to read in from the settings file which filters should be enabled / disabled and if there are
-            methods or labels to override the default ones.
+            Check for existence of "list_filters" setting for an entity class
+            and return an ordered dictionary containing filters for
+            applicable fields plus pre-set filters defined for all entities
+            (in GenericEntityListFilter's Meta class).
 
-            :param default_filter_dict: the default filter dictionary created on filter class instantiation
-                (which comprises filters defined: in GenericListFilter, in specific model ListFilter and their defaults)
+            :param default_filters: dictionary of filters created
+                                    on filter class instantiation;
+                                    includes: GenericListFilter, specific
+                                    model ListFilter and their defaults
 
-            :return: a new dictionary which is a subset of the input dictionary and only contains the filters which
-                are referenced in the settings file (and if there were methods or labels also referenced, using them)
+            :return: ordered dictionary with tuples of field names
+                     and filters defined for them
             """
             field_filters = OrderedDict()
 
