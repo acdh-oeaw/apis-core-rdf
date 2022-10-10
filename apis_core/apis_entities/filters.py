@@ -8,6 +8,7 @@ from django.db.models import Q
 from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
 
+from collections import OrderedDict
 
 # The following classes define the filter sets respective to their models.
 # Also by what was enabled in the global settings file (or disabled by not explicitley enabling it).
@@ -38,22 +39,27 @@ from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
 # TODO __sresch__ : Do this better
 fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
-# __before_rdf_refactoring__
-# class GenericListFilter(django_filters.FilterSet):
-# __after_rdf_refactoring__
-class GenericEntityListFilter(django_filters.FilterSet):
 
+class GenericEntityListFilter(django_filters.FilterSet):
+    """
+    Entity fields by which a given entity's list view can be
+    filtered on the frontend.
+
+    Combines config options in an app's settings file with entity-specific
+    settings defined in models.
+    """
     fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
-    name = django_filters.CharFilter(method="name_label_filter", label="Name or Label")
+    # add default labels to form fields on frontend
+    name = django_filters.CharFilter(method="name_label_filter", label="Name or label")
+    related_entity_name = django_filters.CharFilter(method="related_entity_name_method", label="Related entity")
+    related_property_name = django_filters.CharFilter(method="related_property_name_method", label="Related property")
+
     collection = django_filters.ModelMultipleChoiceFilter(queryset=Collection.objects.all())
 
     # TODO __sresch__ : look into how the date values can be intercepted so that they can be parsed with the same logic as in edit forms
     start_date = django_filters.DateFromToRangeFilter()
     end_date = django_filters.DateFromToRangeFilter()
-
-    related_entity_name = django_filters.CharFilter(method="related_entity_name_method", label="related entity")
-    related_property_name = django_filters.CharFilter(method="related_property_name_method", label="related property")
 
     class Meta:
         model = TempEntityClass
@@ -63,95 +69,128 @@ class GenericEntityListFilter(django_filters.FilterSet):
         exclude = fields_to_exclude
 
     def __init__(self, *args, **kwargs):
-
         # call super init foremost to create dictionary of filters which will be processed further below
         super().__init__(*args, **kwargs)
+        self.entity_class = self.Meta.model
+        self.filters = self.set_sort_filters(self.filters)
 
-        def eliminate_unused_filters(default_filter_dict):
-            """
-            Method to read in from the settings file which filters should be enabled / disabled and if there are
-            methods or labels to override the default ones.
+    def set_sort_filters(self, default_filters):
+        """
+        Check for existence of "list_filters" setting for an entity class
+        and return an ordered dictionary containing filters for
+        applicable fields plus pre-set filters defined for all entities
+        (in GenericEntityListFilter's Meta class).
 
-            :param default_filter_dict: the default filter dictionary created on filter class instantiation
-                (which comprises filters defined: in GenericListFilter, in specific model ListFilter and their defaults)
+        :param default_filters: dictionary of filters created
+                                on filter class instantiation;
+                                includes: GenericListFilter, specific
+                                model ListFilter and their defaults
 
-            :return: a new dictionary which is a subset of the input dictionary and only contains the filters which
-                are referenced in the settings file (and if there were methods or labels also referenced, using them)
-            """
+        :return: ordered dictionary with tuples of field names
+                 and filters defined for them
+        """
+        field_filters = OrderedDict()
 
-            # TODO __sresch__ : This is a temporary hack just so that showcasing works with everything enabled
-            # temporary hack replacement new
+        try:
+            fields = self.entity_class.entity_settings['list_filters']
+            if fields == ['name', 'related_entity_name', 'related_property_name']:
+                # for AbstractEntity, certain fields are defined to be filterable by default;
+                # ignore these for the purpose of sorting field names for filtering
+                fields = []
+        except KeyError as e:
+            fields = []
+        except Exception as e:
+            raise e
 
-            filter_dict_tmp = {}
+        # fields by which entity lists should not be filterable
+        ignore_fields = [
+            "self_content_type",
+            "review",
+            "start_date",
+            "start_start_date",
+            "start_end_date",
+            "end_date",
+            "end_start_date",
+            "end_end_date",
+            "notes",
+            "text",
+            "published",
+            "status",
+            "references",
+        ]
 
-            for filter_key, filter_object in default_filter_dict.items():
+        for f in fields:
+            if type(f) == str and f in default_filters:
+                field_filters[f] = default_filters[f]
+            elif type(f) == dict:
+                field_name = list(f)[0]
 
-                if filter_key not in [
-                    "self_content_type",
-                    "review",
-                    "start_date",
-                    "start_start_date",
-                    "start_end_date",
-                    "end_date",
-                    "end_start_date",
-                    "end_end_date",
-                    "notes",
-                    "text",
-                    "collection",
-                    "published",
-                    "status",
-                    "references",
-                ]:
+                if field_name in default_filters:
+                    filter_settings = f[field_name]
 
-                    filter_dict_tmp[filter_key] = filter_object
+                    if "method" in filter_settings:
+                        default_filters[field_name].method = filter_settings["method"]
 
-            return filter_dict_tmp
+                    if "label" in filter_settings:
+                        default_filters[field_name].label = filter_settings["label"]
 
+                    field_filters[field_name] = default_filters[field_name]
 
-            # temporary hack replacement old
-            #
-            # enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__]["list_filters"]
-            #
-            # filter_dict_tmp = {}
-            #
-            # for enabled_filter in enabled_filters:
-            #
-            #     if type(enabled_filter) == str and enabled_filter in default_filter_dict:
-            #         # If string then just use it, if a filter with such a name is already defined
-            #
-            #         filter_dict_tmp[enabled_filter] = default_filter_dict[enabled_filter]
-            #
-            #
-            #     elif type(enabled_filter) == dict:
-            #         # if a dictionary, then look further into if there is a method or label which overrides the defaults
-            #
-            #         enabled_filter_key = list(enabled_filter.keys())[0]
-            #
-            #         if enabled_filter_key in default_filter_dict:
-            #
-            #             # get the dictionary which contains potential method or label overrides
-            #             enabled_filter_settings_dict = enabled_filter[enabled_filter_key]
-            #
-            #             if "method" in enabled_filter_settings_dict:
-            #                 default_filter_dict[enabled_filter_key].method = enabled_filter_settings_dict["method"]
-            #
-            #             if "label" in enabled_filter_settings_dict:
-            #                 default_filter_dict[enabled_filter_key].label = enabled_filter_settings_dict["label"]
-            #
-            #             filter_dict_tmp[enabled_filter_key] = default_filter_dict[enabled_filter_key]
-            #
-            #     else:
-            #         raise ValueError(
-            #             "Expected either str or dict as type for an individual filter in the settings file."
-            #             f"\nGot instead: {type(enabled_filter)}"
-            #          )
-            #
-            # return filter_dict_tmp
+            else:
+                raise ValueError(
+                    f"Filters for individual entities need to be of type "
+                    f"string or dictionary.\n"
+                    f"Got instead: {type(f)}"
+                 )
 
-            # temporary hack replacement end
+        for f_name, f_filter in default_filters.items():
+            if f_name not in ignore_fields and f_name not in field_filters:
+                field_filters[f_name] = f_filter
 
-        self.filters = eliminate_unused_filters(self.filters)
+        return field_filters
 
+        # __before_rdf_refactoring__
+        # temporary hack replacement old
+        #
+        # enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__]["list_filters"]
+        #
+        # filter_dict_tmp = {}
+        #
+        # for enabled_filter in enabled_filters:
+        #
+        #     if type(enabled_filter) == str and enabled_filter in default_filter_dict:
+        #         # If string then just use it, if a filter with such a name is already defined
+        #
+        #         filter_dict_tmp[enabled_filter] = default_filter_dict[enabled_filter]
+        #
+        #
+        #     elif type(enabled_filter) == dict:
+        #         # if a dictionary, then look further into if there is a method or label which overrides the defaults
+        #
+        #         enabled_filter_key = list(enabled_filter.keys())[0]
+        #
+        #         if enabled_filter_key in default_filter_dict:
+        #
+        #             # get the dictionary which contains potential method or label overrides
+        #             enabled_filter_settings_dict = enabled_filter[enabled_filter_key]
+        #
+        #             if "method" in enabled_filter_settings_dict:
+        #                 default_filter_dict[enabled_filter_key].method = enabled_filter_settings_dict["method"]
+        #
+        #             if "label" in enabled_filter_settings_dict:
+        #                 default_filter_dict[enabled_filter_key].label = enabled_filter_settings_dict["label"]
+        #
+        #             filter_dict_tmp[enabled_filter_key] = default_filter_dict[enabled_filter_key]
+        #
+        #     else:
+        #         raise ValueError(
+        #             "Expected either str or dict as type for an individual filter in the settings file."
+        #             f"\nGot instead: {type(enabled_filter)}"
+        #          )
+        #
+        # return filter_dict_tmp
+
+        # temporary hack replacement end
 
 
     def construct_lookup(self, value):
@@ -168,39 +207,30 @@ class GenericEntityListFilter(django_filters.FilterSet):
         """
 
         if value.startswith("*") and not value.endswith("*"):
-
             value = value[1:]
             return "__iendswith", value
 
         elif not value.startswith("*") and value.endswith("*"):
-
             value = value[:-1]
             return "__istartswith", value
 
         elif value.startswith('"') and value.endswith('"'):
-
             value = value[1:-1]
             return "__iexact", value
 
         else:
-
             if value.startswith("*") and value.endswith("*"):
-
                 value = value[1:-1]
-
             return "__icontains", value
-
 
     def name_label_filter(self, queryset, name, value):
         # TODO __sresch__ : include alternative names queries
-
         lookup, value = self.construct_lookup(value)
 
-        queryset_related_label=queryset.filter(**{"label__label"+lookup : value})
-        queryset_self_name=queryset.filter(**{name+lookup : value})
+        queryset_related_label = queryset.filter(**{"label__label"+lookup : value})
+        queryset_self_name = queryset.filter(**{name+lookup : value})
 
-        return ( queryset_related_label | queryset_self_name ).distinct().all()
-
+        return (queryset_related_label|queryset_self_name).distinct().all()
 
     def related_entity_name_method(self, queryset, name, value):
         # __before_rdf_refactoring__
@@ -298,7 +328,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
         return queryset
 
-
     def related_property_name_method(self, queryset, name, value):
         # __before_rdf_refactoring__
         #
@@ -372,7 +401,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
         ).distinct()
 
         return queryset
-
 
     def related_arbitrary_model_name(self, queryset, name, value):
         """
@@ -493,11 +521,8 @@ def get_list_filter_of_entity(entity):
     entity_list_filter_class = entity_class.get_entity_list_filter()
 
     if entity_list_filter_class is None:
-
         class AdHocEntityListFilter(GenericEntityListFilter):
-
             class Meta(GenericEntityListFilter.Meta):
-
                 model = entity_class
 
         entity_list_filter_class = AdHocEntityListFilter
