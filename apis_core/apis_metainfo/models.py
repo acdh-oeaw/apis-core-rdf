@@ -333,20 +333,23 @@ class RootObject(models.Model):
 
     name = models.CharField(max_length=255, verbose_name='Name')
     self_content_type = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
+    self_content_type_cached = None
 
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
 
     def save(self, *args, **kwargs):
-
-        # TODO RDF : optimize this with caching
-        self.self_content_type = ContentType.objects.get_for_model(self)
+        if self.self_content_type is None:
+            self.self_content_type = self.get_content_type()
 
         super().save(*args, **kwargs)
 
     @classmethod
     def get_content_type(cls):
-        return ContentType.objects.get_for_model(cls) # TODO RDF : otimize this
+        if cls.self_content_type_cached is None:
+            cls.self_content_type_cached = ContentType.objects.get_for_model(cls)
+        
+        return cls.self_content_type_cached
 
     def get_triples(self):
         from apis_core.apis_relations.models import Triple
