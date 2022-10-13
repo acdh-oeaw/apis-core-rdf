@@ -351,10 +351,6 @@ class RootObject(models.Model):
         
         return cls.self_content_type_cached
 
-    def get_triples(self):
-        from apis_core.apis_relations.models import Triple
-        return Triple.objects.filter(Q(subj=self) | Q(obj=self))
-
     def __str__(self):
 
         if self.name != "":
