@@ -132,7 +132,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         Look up the model class for the given entity
         """
         model = ContentType.objects.get(
-            app_label__startswith="apis_", model=self.entity
+            app_label__startswith='apis_', model=self.entity
         ).model_class()
         return model
 
@@ -165,26 +165,31 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         model = self.get_model()
         class_name = model.__name__
 
-        session = getattr(self.request, "session", False)
-        selected_cols = self.request.GET.getlist("columns")  # populates "Select additional columns" dropdown
+        session = getattr(self.request, 'session', False)
+        selected_cols = self.request.GET.getlist('columns')  # populates "Select additional columns" dropdown
+
         if session:
-            edit_v = self.request.session.get("edit_views", False)
+            edit_v = self.request.session.get('edit_views', False)
         else:
             edit_v = False
 
         try:
             default_cols = model.entity_settings['table_fields']
         except KeyError as e:
-            default_cols = []  # gets set to "name" in get_entities_table when empty
+            default_cols = []  # gets set to 'name' in get_entities_table when empty
         default_cols = default_cols + selected_cols
 
-        self.table_class = get_entities_table(
-            class_name, edit_v, default_cols=default_cols
-        )
+        self.table_class = get_entities_table(class_name,
+                                              edit_v,
+                                              default_cols=default_cols)
+
         table = super(GenericListViewNew, self).get_table()
-        RequestConfig(
-            self.request, paginate={"page": 1, "per_page": self.paginate_by}
-        ).configure(table)
+        RequestConfig(self.request,
+                      paginate={"page": 1,
+                                "per_page": self.paginate_by
+                                }
+                      ).configure(table)
+
         return table
 
     def get_context_data(self, **kwargs):
@@ -201,18 +206,19 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         context = super(GenericListViewNew, self).get_context_data()
 
         context[self.context_filter_name] = self.filter
-        context["entity"] = self.entity  # model slug
-        context["app_name"] = "apis_entities"
-        context["entity_create_stanbol"] = GenericEntitiesStanbolForm(self.entity)
+        context['entity'] = self.entity  # model slug
+        context['app_name'] = 'apis_entities'
 
-        if "browsing" in settings.INSTALLED_APPS:
+        context['entity_create_stanbol'] = GenericEntitiesStanbolForm(self.entity)
+
+        if 'browsing' in settings.INSTALLED_APPS:
             from browsing.models import BrowsConf
-            context["conf_items"] = list(
+            context['conf_items'] = list(
                 BrowsConf.objects.filter(model_name=class_name).values_list(
-                    "field_path", "label"
+                    'field_path', 'label'
                 )
             )
-        context["docstring"] = "{}".format(model.__doc__)
+        context['docstring'] = f"{model.__doc__}"
 
         # TODO kk
         #  suggestion: rename context['class_name'] to context['entity_name']
@@ -231,13 +237,14 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
                 context['class_name_plural'] = f"{class_name}s"
 
         try:
-            context["get_arche_dump"] = model.get_arche_dump()
+            context['get_arche_dump'] = model.get_arche_dump()
         except AttributeError:
-            context["get_arche_dump"] = None
+            context['get_arche_dump'] = None
         try:
-            context["create_view_link"] = model.get_createview_url()
+            context['create_view_link'] = model.get_createview_url()
         except AttributeError:
-            context["create_view_link"] = None
+            context['create_view_link'] = None
+
         if "charts" in settings.INSTALLED_APPS:
             app_label = model._meta.app_label
             filtered_objs = ChartConfig.objects.filter(
@@ -259,14 +266,15 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         try:
             context['enable_merge'] = model.entity_settings[class_name]['merge']
         except KeyError:
-            context["enable_merge"] = False
+            context['enable_merge'] = False
+
         try:
-            togg_cols = model.entity_settings['additional_cols']
+            toggleable_cols = model.entity_settings['additional_cols']
         except KeyError:
-            togg_cols = []
-        if context["enable_merge"] and self.request.user.is_authenticated:
-            togg_cols = togg_cols + ["merge"]
-        context["togglable_colums"] = togg_cols + ENTITIES_DEFAULT_COLS
+            toggleable_cols = []
+        if context['enable_merge'] and self.request.user.is_authenticated:
+            toggleable_cols = toggleable_cols + ['merge']
+        context['togglable_colums'] = toggleable_cols + ENTITIES_DEFAULT_COLS
 
         return context
 
