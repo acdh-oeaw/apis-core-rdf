@@ -130,7 +130,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
 
     def get_model(self):
         model = ContentType.objects.get(
-            app_label__startswith="apis_", model=self.entity.lower()
+            app_label__startswith="apis_", model=self.entity
         ).model_class()
         return model
 
@@ -143,16 +143,15 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
     def get_queryset(self, **kwargs):
         self.entity = self.kwargs.get("entity")
         qs = (
-            ContentType.objects.get(
-                app_label__startswith="apis_", model=self.entity.lower()
-            )
+            ContentType.objects.get(app_label__startswith="apis_", model=self.entity)
             .model_class()
             .objects.all()
         ).order_by("name")
-        self.filter = get_list_filter_of_entity(self.entity.title())(
+        self.filter = get_list_filter_of_entity(self.entity)(
             self.request.GET, queryset=qs
         )
         self.filter.form.helper = self.formhelper_class()
+
         return self.filter.qs
 
     def get_table(self, **kwargs):
@@ -164,8 +163,10 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
 
         :return: a dictionary
         """
+        model = self.get_model()
+        class_name = model.__name__
+
         session = getattr(self.request, "session", False)
-        entity = self.kwargs.get("entity")
         selected_cols = self.request.GET.getlist(
             "columns"
         )  # populates "Select additional columns" dropdown
@@ -176,13 +177,13 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
 
         # check APIS_ENTITIES var in Settings for key used for table columns
         try:
-            default_cols = settings.APIS_ENTITIES[entity.title()]["table_fields"]
+            default_cols = model.entity_settings["table_fields"]
         except KeyError as e:
             default_cols = []  # gets set to "name" in get_entities_table when empty
         default_cols = default_cols + selected_cols
 
         self.table_class = get_entities_table(
-            self.entity.title(), edit_v, default_cols=default_cols
+            class_name, edit_v, default_cols=default_cols
         )
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(
@@ -200,28 +201,40 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         :return: a dictionary
         """
         model = self.get_model()
+        class_name = model.__name__
         context = super(GenericListViewNew, self).get_context_data()
+
         context[self.context_filter_name] = self.filter
-        context["entity"] = self.entity
+        context["entity"] = self.entity  # model slug
         context["app_name"] = "apis_entities"
-        entity = self.entity.title()
         context["entity_create_stanbol"] = GenericEntitiesStanbolForm(self.entity)
+
         if "browsing" in settings.INSTALLED_APPS:
             from browsing.models import BrowsConf
 
             context["conf_items"] = list(
-                BrowsConf.objects.filter(model_name=self.entity).values_list(
+                BrowsConf.objects.filter(model_name=class_name).values_list(
                     "field_path", "label"
                 )
             )
         context["docstring"] = "{}".format(model.__doc__)
-        if model._meta.verbose_name_plural:
-            context["class_name"] = "{}".format(model._meta.verbose_name_plural.title())
+
+        # TODO kk
+        #  suggestion: rename context['class_name'] to context['entity_name']
+        #  throughout (+ same for plural versions) to avoid confusion with
+        #  actual model class name
+        if model._meta.verbose_name:
+            context["class_name"] = f"{model._meta.verbose_name.title()}"
         else:
-            if model.__name__.endswith("s"):
-                context["class_name"] = "{}".format(model.__name__)
+            context["class_name"] = f"{class_name}"
+        if model._meta.verbose_name_plural:
+            context["class_name_plural"] = f"{model._meta.verbose_name_plural.title()}"
+        else:
+            if class_name.endswith("s"):
+                context["class_name_plural"] = f"{class_name}"
             else:
-                context["class_name"] = "{}s".format(model.__name__)
+                context["class_name_plural"] = f"{class_name}s"
+
         try:
             context["get_arche_dump"] = model.get_arche_dump()
         except AttributeError:
@@ -249,11 +262,11 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
                 )
                 context = dict(context, **chartdata)
         try:
-            context["enable_merge"] = settings.APIS_ENTITIES[entity.title()]["merge"]
+            context["enable_merge"] = model.entity_settings[class_name]["merge"]
         except KeyError:
             context["enable_merge"] = False
         try:
-            togg_cols = settings.APIS_ENTITIES[entity.title()]["additional_cols"]
+            togg_cols = model.entity_settings["additional_cols"]
         except KeyError:
             togg_cols = []
         if context["enable_merge"] and self.request.user.is_authenticated:
