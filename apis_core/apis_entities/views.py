@@ -142,11 +142,8 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
 
     def get_queryset(self, **kwargs):
         self.entity = self.kwargs.get("entity")
-        qs = (
-            ContentType.objects.get(app_label__startswith="apis_", model=self.entity)
-            .model_class()
-            .objects.all()
-        ).order_by("name")
+
+        qs = (self.get_model().objects.all()).order_by("name")
         self.filter = get_list_filter_of_entity(self.entity)(
             self.request.GET, queryset=qs
         )
