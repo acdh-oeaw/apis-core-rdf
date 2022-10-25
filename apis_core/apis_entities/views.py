@@ -134,6 +134,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         model = ContentType.objects.get(
             app_label__startswith='apis_', model=self.entity
         ).model_class()
+
         return model
 
     def test_func(self):
@@ -166,13 +167,12 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         class_name = model.__name__
 
         session = getattr(self.request, 'session', False)
-        selected_cols = self.request.GET.getlist('columns')  # populates "Select additional columns" dropdown
-
         if session:
             edit_v = self.request.session.get('edit_views', False)
         else:
             edit_v = False
 
+        selected_cols = self.request.GET.getlist('columns')  # populates "Select additional columns" dropdown
         try:
             default_cols = model.entity_settings['table_fields']
         except KeyError as e:
@@ -182,7 +182,6 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         self.table_class = get_entities_table(class_name,
                                               edit_v,
                                               default_cols=default_cols)
-
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(self.request,
                       paginate={"page": 1,
@@ -201,13 +200,14 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
 
         :return: a dictionary
         """
+        context = super(GenericListViewNew, self).get_context_data()
         model = self.get_model()
         class_name = model.__name__
-        context = super(GenericListViewNew, self).get_context_data()
 
         context[self.context_filter_name] = self.filter
         context['entity'] = self.entity  # model slug
         context['app_name'] = 'apis_entities'
+        context['docstring'] = f"{model.__doc__}"
 
         context['entity_create_stanbol'] = GenericEntitiesStanbolForm(self.entity)
 
@@ -218,7 +218,6 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
                     'field_path', 'label'
                 )
             )
-        context['docstring'] = f"{model.__doc__}"
 
         # TODO kk
         #  suggestion: rename context['class_name'] to context['entity_name']
@@ -240,6 +239,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
             context['get_arche_dump'] = model.get_arche_dump()
         except AttributeError:
             context['get_arche_dump'] = None
+
         try:
             context['create_view_link'] = model.get_createview_url()
         except AttributeError:
@@ -263,6 +263,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
                     app_label=app_label,
                 )
                 context = dict(context, **chartdata)
+
         try:
             context['enable_merge'] = model.entity_settings[class_name]['merge']
         except KeyError:
