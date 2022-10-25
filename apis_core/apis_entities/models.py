@@ -9,6 +9,8 @@ from reversion import revisions as reversion
 from django.apps import apps
 import reversion
 from django.conf import settings
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models import Q
@@ -32,8 +34,15 @@ from apis_core.apis_metainfo.models import RootObject, Collection
 #     WorkType,
 # )
 
+web_address = getattr(settings, "APIS_BASE_URI", "https://apis.info")
+validator = URLValidator()
+try:
+    validator(web_address)
+    BASE_URI = web_address
+except ValidationError as e:
+    print("APIS_BASE_URI needs to be set in settings")
+    BASE_URI = ""
 
-BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
 

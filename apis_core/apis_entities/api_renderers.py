@@ -5,6 +5,8 @@ from datetime import date
 
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from rdflib import XSD, Graph, Literal, Namespace, URIRef, ConjunctiveGraph, OWL
 from rdflib.namespace import DCTERMS, VOID
@@ -23,10 +25,18 @@ except ImportError:
     except ImportError:
         PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD")
 
+web_address = getattr(settings, "APIS_BASE_URI", "http://apis.info")
+validator = URLValidator()
+try:
+    validator(web_address)
+    base_uri = web_address
+except ValidationError as e:
+    print("APIS_BASE_URI needs to be set in settings")
+    base_uri = ""
 
-base_uri = getattr(settings, "APIS_BASE_URI", "http://apis.info")
 if base_uri.endswith("/"):
     base_uri = base_uri[:-1]
+
 lang = getattr(settings, "LANGUAGE_CODE", "de")
 
 

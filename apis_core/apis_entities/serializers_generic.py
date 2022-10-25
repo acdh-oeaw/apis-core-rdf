@@ -2,6 +2,8 @@ import re
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
 from django.urls import reverse
 from rest_framework import serializers
@@ -9,7 +11,16 @@ from reversion.models import Version
 
 from apis_core.apis_labels.serializers import LabelSerializerLegacy as LabelSerializer
 
-base_uri = getattr(settings, "APIS_BASE_URI", "http://apis.info")
+
+web_address = getattr(settings, "APIS_BASE_URI", "https://apis.info")
+validator = URLValidator()
+try:
+    validator(web_address)
+    base_uri = web_address
+except ValidationError as e:
+    print("APIS_BASE_URI needs to be set in settings")
+    base_uri = ""
+
 if base_uri.endswith("/"):
     base_uri = base_uri[:-1]
 

@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from rdflib import Graph, URIRef, Literal
 from rdflib.namespace import SKOS, RDF, DC, RDFS
 from rest_framework import renderers
@@ -10,7 +12,15 @@ except ImportError:
     from webpage.utils import PROJECT_METADATA
 
 
-base_uri_web = getattr(settings, 'APIS_BASE_URI', 'http://apis.info')
+web_address = getattr(settings, "APIS_BASE_URI", "http://apis.info")
+validator = URLValidator()
+try:
+    validator(web_address)
+    base_uri_web = web_address
+except ValidationError as e:
+    print("APIS_BASE_URI needs to be set in settings")
+    base_uri_web = ""
+
 if base_uri_web.endswith('/'):
     base_uri_web = base_uri_web[:-1]
 lang = getattr(settings, 'LANGUAGE_CODE', 'de')
