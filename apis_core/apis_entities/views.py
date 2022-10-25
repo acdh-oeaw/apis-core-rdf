@@ -129,6 +129,9 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         self.filter = None
 
     def get_model(self):
+        """
+        Look up the model class for the given entity
+        """
         model = ContentType.objects.get(
             app_label__startswith="apis_", model=self.entity
         ).model_class()
@@ -172,7 +175,6 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         else:
             edit_v = False
 
-        # check APIS_ENTITIES var in Settings for key used for table columns
         try:
             default_cols = model.entity_settings["table_fields"]
         except KeyError as e:
