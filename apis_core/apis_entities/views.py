@@ -237,9 +237,12 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
             context["class_name"] = f"{class_name}"
         if model._meta.verbose_name_plural:
             context["class_name_plural"] = f"{model._meta.verbose_name_plural.title()}"
+        # rudimentary way of pluralising the name of a model class
         else:
             if class_name.endswith("s"):
-                context["class_name_plural"] = f"{class_name}"
+                context["class_name_plural"] = f"{class_name}es"
+            elif class_name.endswith("y"):
+                context["class_name_plural"] = f"{class_name[:-1]}ies"
             else:
                 context["class_name_plural"] = f"{class_name}s"
 
