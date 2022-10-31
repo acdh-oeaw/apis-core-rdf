@@ -286,6 +286,8 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
             toggleable_cols = []
         if context["enable_merge"] and self.request.user.is_authenticated:
             toggleable_cols = toggleable_cols + ["merge"]
+        # TODO kk spelling of this dict key should get fixed throughout
+        #  (togglable_colums -> toggleable_columns)
         context["togglable_colums"] = toggleable_cols + ENTITIES_DEFAULT_COLS
 
         return context
