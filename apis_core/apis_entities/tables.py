@@ -82,8 +82,8 @@ def get_entities_table(entity, edit_v, default_cols):
             for col in default_cols:
                 if not hasattr(model, col):
                     raise Exception(
-                        f"Model for \"{entity}\" entity has no field \"{col}\"."
-                        f"Check values in \"table_fields\" list in \"entity_settings\""
+                        f"Model for \"{entity}\" entity has no field \"{col}\".\n"
+                        f"Check values in \"table_fields\" list in \"entity_settings\" "
                         f"(models.py or Settings file)."
                     )
 
