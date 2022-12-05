@@ -59,6 +59,8 @@ class BaseRelationManager(models.Manager):
 # passed class, but not for implicit superclasses. For this to be possible, the object manager must be overriden
 @reversion.register(follow=["vocabsbaseclass_ptr"])
 class Property(RootObject):
+    class Meta:
+        verbose_name_plural = "Properties"
 
     objects = BaseRelationManager()
 
