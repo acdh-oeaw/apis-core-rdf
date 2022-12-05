@@ -4,17 +4,8 @@ import unicodedata
 
 # from reversion import revisions as reversion
 import reversion
-from crum import get_current_request
-from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-from django.db import models
-from django.db.models import Q
-from model_utils.managers import InheritanceManager
-from django.utils.functional import cached_property
 # from apis_core.apis_entities.models import Person
-from apis_core.apis_entities.models import TempEntityClass, RootObject
-from django.db.models.signals import m2m_changed
-
+from apis_core.apis_entities.models import RootObject, TempEntityClass
 #######################################################################
 #
 # Custom Managers
@@ -22,17 +13,25 @@ from django.db.models.signals import m2m_changed
 #######################################################################
 # from apis_core.apis_vocabularies.models import Property
 from apis_core.helper_functions import DateParser
+from crum import get_current_request
+from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from django.db.models import Q
+from django.db.models.signals import m2m_changed
+from django.utils.functional import cached_property
+from model_utils.managers import InheritanceManager
 
 
 def find_if_user_accepted():
     request = get_current_request()
     if request is not None:
-        print('running through request')
+        print("running through request")
         if request.user.is_authenticated:
-            print('authenticated')
+            print("authenticated")
             return {}
         else:
-            return {'published': True}
+            return {"published": True}
     else:
         return {}
 
@@ -42,49 +41,52 @@ class BaseRelationManager(models.Manager):
         return RelationPublishedQueryset(self.model, using=self._db)
 
     def filter_ann_proj(self, request=None, ann_proj=1, include_all=True):
-        return self.get_queryset().filter_ann_proj(request=request, ann_proj=ann_proj, include_all=include_all)
+        return self.get_queryset().filter_ann_proj(
+            request=request, ann_proj=ann_proj, include_all=include_all
+        )
 
     def filter_for_user(self):
-        if hasattr(settings, "APIS_SHOW_ONLY_PUBLISHED") or "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
+        if hasattr(
+            settings, "APIS_SHOW_ONLY_PUBLISHED"
+        ) or "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
             return self.get_queryset().filter_for_user()
         else:
             return self.get_queryset()
 
 
-
 # TODO RDF : Implement filtering for implicit superclasses
 # Currently if a Property.objects.filter() is used with param subj_class or obj_class, then it searches only for the
 # passed class, but not for implicit superclasses. For this to be possible, the object manager must be overriden
-@reversion.register(follow=['vocabsbaseclass_ptr'])
+@reversion.register(follow=["vocabsbaseclass_ptr"])
 class Property(RootObject):
 
     objects = BaseRelationManager()
 
     property_class_uri = models.CharField(
-        max_length=255,
-        verbose_name='Property Class URI',
-        blank=True
+        max_length=255, verbose_name="Property Class URI", blank=True
     )
 
     # TODO RDF : Redundancy between name_forward and name, solve this.
     name_forward = models.CharField(
         max_length=255,
-        verbose_name='Name reverse',
+        verbose_name="Name reverse",
         help_text='Inverse relation like: "is sub-class of" vs. "is super-class of".',
-        blank=True)
+        blank=True,
+    )
 
     # TODO RDF : Maybe rename name to name_subj_to_obj and name_reverse to name_obj_to_subj
     name_reverse = models.CharField(
         max_length=255,
-        verbose_name='Name reverse',
+        verbose_name="Name reverse",
         help_text='Inverse relation like: "is sub-class of" vs. "is super-class of".',
-        blank=True)
+        blank=True,
+    )
 
     # TODO RDF : Rename subj_class to subj_classes
     subj_class = models.ManyToManyField(
         ContentType,
         related_name="property_set_subj",
-        limit_choices_to=Q(app_label="apis_entities"), # TODO RDF : Add vocab
+        limit_choices_to=Q(app_label="apis_entities"),  # TODO RDF : Add vocab
     )
 
     obj_class = models.ManyToManyField(
@@ -96,10 +98,9 @@ class Property(RootObject):
     def __str__(self):
         return self.name
 
-
     def save(self, *args, **kwargs):
-        if self.name_reverse != unicodedata.normalize('NFC', self.name_reverse):
-            self.name_reverse = unicodedata.normalize('NFC', self.name_reverse)
+        if self.name_reverse != unicodedata.normalize("NFC", self.name_reverse):
+            self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
 
         if self.name_reverse == "" or self.name_reverse == None:
             self.name_reverse = self.name + " [REVERSE]"
@@ -113,13 +114,11 @@ class Property(RootObject):
 
 # TODO __sresch__ : comment and explain
 def subj_or_obj_class_changed(sender, is_subj, **kwargs):
-
     def cascade_subj_obj_class_to_children(
         contenttype_to_add_or_remove,
         contenttype_already_saved_list,
-        subj_or_obj_field_function
+        subj_or_obj_field_function,
     ):
-
         def get_all_parents(contenttype_current):
 
             parent_list = []
@@ -128,7 +127,9 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
             for class_parent in class_current.__bases__:
 
                 # TODO __sresch__ : Avoid ContentType DB fetch
-                contenttype_parent = ContentType.objects.filter(model=class_parent.__name__)
+                contenttype_parent = ContentType.objects.filter(
+                    model=class_parent.__name__
+                )
 
                 if len(contenttype_parent) == 1:
 
@@ -201,18 +202,23 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
         if subj_or_obj_field_function is not None:
 
             cascade_subj_obj_class_to_children(
-                contenttype_to_add_or_remove=ContentType.objects.get(pk=min(kwargs["pk_set"])),
+                contenttype_to_add_or_remove=ContentType.objects.get(
+                    pk=min(kwargs["pk_set"])
+                ),
                 contenttype_already_saved_list=subj_or_obj_field.all(),
-                subj_or_obj_field_function=subj_or_obj_field_function
+                subj_or_obj_field_function=subj_or_obj_field_function,
             )
+
 
 def subj_class_changed(sender, **kwargs):
 
     subj_or_obj_class_changed(sender, is_subj=True, **kwargs)
 
+
 def obj_class_changed(sender, **kwargs):
 
     subj_or_obj_class_changed(sender, is_subj=False, **kwargs)
+
 
 m2m_changed.connect(subj_class_changed, sender=Property.subj_class.through)
 m2m_changed.connect(obj_class_changed, sender=Property.obj_class.through)
@@ -242,17 +248,16 @@ class RelationPublishedQueryset(models.QuerySet):
         qs = self
         users_show = None
         if request:
-            ann_proj = request.session.get('annotation_project', False)
+            ann_proj = request.session.get("annotation_project", False)
             if not ann_proj:
                 return qs
-            users_show = request.session.get('users_show_highlighter', None)
+            users_show = request.session.get("users_show_highlighter", None)
         query = Q(annotation__annotation_project_id=ann_proj)
         if users_show is not None:
             query.add(Q(annotation__user_added_id__in=users_show), Q.AND)
         if include_all:
             query.add(Q(annotation__annotation_project__isnull=True), Q.OR)
         return qs.filter(query)
-
 
 
 # __before_rdf_refactoring__
@@ -581,11 +586,15 @@ class RelationPublishedQueryset(models.QuerySet):
 
 
 # TODO __sresch__ : Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
-from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
+from django.db.models.fields.related_descriptors import \
+    ForwardManyToOneDescriptor
+
 
 class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):
     def get_queryset(self, **hints):
-        return self.field.remote_field.model.objects_inheritance.db_manager(hints=hints).select_subclasses()
+        return self.field.remote_field.model.objects_inheritance.db_manager(
+            hints=hints
+        ).select_subclasses()
 
 
 class InheritanceForeignKey(models.ForeignKey):
@@ -601,9 +610,27 @@ class Triple(models.Model):
     # TODO RDF : (maybe) implement a convenient way of fetching related triples of a given root object
     # TODO RDF : Make it so that triples are unique given their subj, obj, prop (With an aggregated primary key maybe?)
     # TODO RDF : add ent filter shortcut so that e.g. this can be shortened: Triple.objects.filter(Q(subj__pk=113) | Q(obj__pk=113))
-    subj = InheritanceForeignKey(RootObject, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_subj")
-    obj = InheritanceForeignKey(RootObject, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_obj")
-    prop = models.ForeignKey(Property, blank=True, null=True, on_delete=models.CASCADE, related_name="triple_set_from_prop")
+    subj = InheritanceForeignKey(
+        RootObject,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="triple_set_from_subj",
+    )
+    obj = InheritanceForeignKey(
+        RootObject,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="triple_set_from_obj",
+    )
+    prop = models.ForeignKey(
+        Property,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="triple_set_from_prop",
+    )
 
     objects = BaseRelationManager()
     objects_inheritance = InheritanceManager()
@@ -618,11 +645,9 @@ class Triple(models.Model):
 
             return f"<{self.__class__.__name__}: None>"
 
-
     def __str__(self):
 
         return self.__repr__()
-
 
     def get_web_object(self):
 
@@ -663,8 +688,6 @@ class Triple(models.Model):
             "prop": self.prop.name,
         }
 
-
-
     def save(self, *args, **kwargs):
 
         # TODO RDF : Integrate proper check if subj and obj instances are of valid class as defined in prop.subj_class and prop.obj_class
@@ -688,13 +711,23 @@ class Triple(models.Model):
 
         if self.subj is not None:
             subj_class_name = self.subj.__class__.__name__
-            if ContentType.objects.get(model=subj_class_name) not in self.prop.subj_class.all():
-                raise Exception(f"Subject class '{subj_class_name}' is not in valid subject class list of property '{self.prop}'")
+            if (
+                ContentType.objects.get(model=subj_class_name)
+                not in self.prop.subj_class.all()
+            ):
+                raise Exception(
+                    f"Subject class '{subj_class_name}' is not in valid subject class list of property '{self.prop}'"
+                )
 
         if self.obj is not None:
             obj_class_name = self.obj.__class__.__name__
-            if ContentType.objects.get(model=obj_class_name) not in self.prop.obj_class.all():
-                raise Exception(f"Object class '{obj_class_name}' is not in valid object class list of property '{self.prop}'")
+            if (
+                ContentType.objects.get(model=obj_class_name)
+                not in self.prop.obj_class.all()
+            ):
+                raise Exception(
+                    f"Object class '{obj_class_name}' is not in valid object class list of property '{self.prop}'"
+                )
 
         super().save(*args, **kwargs)
 
@@ -731,7 +764,6 @@ class TempTriple(Triple):
     # )
     references = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
-
 
     def save(self, parse_dates=True, *args, **kwargs):
         """Adaption of the save() method of the class to automatically parse string-dates into date objects"""
