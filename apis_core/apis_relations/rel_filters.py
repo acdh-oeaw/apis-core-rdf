@@ -244,7 +244,7 @@ def get_generic_relation_filter(entity):
     return GenericListFilter
 
 
-from apis_core.apis_relations.models import Triple
+from apis_core.apis_relations.models import Triple, Property
 
 
 class TripleFilter(django_filters.FilterSet):
@@ -253,4 +253,13 @@ class TripleFilter(django_filters.FilterSet):
 
     class Meta:
         model = Triple
+        exclude = []
+
+
+class PropertyFilter(django_filters.FilterSet):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Property
         exclude = []
