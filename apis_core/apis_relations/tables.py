@@ -19,9 +19,13 @@ empty_text_default = "There are currently no relations"
 
 from apis_core.apis_relations.models import Triple
 
+
 # TODO RDF : combine this or re-use this class here in get_generic_triple_table
 # TODO RDF : Also consider implementing proper form search fields for this (instead of default drop-downs)
 class TripleTable(tables.Table):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     class Meta:
         model = Triple
         fields = [
@@ -30,9 +34,6 @@ class TripleTable(tables.Table):
             "obj",
         ]
         sequence = tuple(fields)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 def get_generic_relation_listview_table(relation_name):

@@ -248,10 +248,9 @@ from apis_core.apis_relations.models import Triple
 
 
 class TripleFilter(django_filters.FilterSet):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     class Meta:
         model = Triple
         exclude = []
-
-    def __init__(self, *args, **kwargs):
-
-        super().__init__(*args, **kwargs)
