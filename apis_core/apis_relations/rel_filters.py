@@ -9,8 +9,8 @@ from functools import reduce
 
 # from .models import AbstractRelation
 
-
 # TODO __sresch__ : Change this whole module according to the same logic as in apis_core/apis_entities/filters.py
+
 
 def get_excluded_fields(model):
     modelname = model.__name__
@@ -35,14 +35,13 @@ def get_included_fields(model):
         return False
 
 
-
 FIELD_TO_FILTER = {
     "ForeignKey": "MultipleChoiceFilter",
     "ManyToManyField": "MultipleChoiceFilter",
     "TextField": "CharFilter",
     "CharField": "CharFilter",
     "DateField": "DateFromToRangeFilter",
-    "BooleanField": "BooleanFilter"
+    "BooleanField": "BooleanFilter",
 }
 
 
@@ -50,11 +49,12 @@ def get_field_dicts(model, include_parents=False):
     fields = [
         {
             "f_name": x.name,
-            "f_v_name": getattr(x, 'verbose_name', None),
-            "f_help_text": getattr(x, 'helptext', None),
+            "f_v_name": getattr(x, "verbose_name", None),
+            "f_help_text": getattr(x, "helptext", None),
             "f_class_name": "{}".format(x.__class__.__name__),
-            "f_model": getattr(x, 'related_model', None)
-        } for x in model._meta.get_fields(include_parents=include_parents)
+            "f_model": getattr(x, "related_model", None),
+        }
+        for x in model._meta.get_fields(include_parents=include_parents)
     ]
     return fields
 
@@ -63,14 +63,14 @@ def get_filters(model, exclude=False, include=False, include_parents=False):
     filters = []
     field_dicts = get_field_dicts(model, include_parents=include_parents)
     for x in field_dicts:
-        filters.append(x['f_name'])
-        if x['f_model']:
-            rel_fields = get_field_dicts(x['f_model'], include_parents)
+        filters.append(x["f_name"])
+        if x["f_model"]:
+            rel_fields = get_field_dicts(x["f_model"], include_parents)
             for y in rel_fields:
-                if 'apis_relations' in "{}".format(y['f_model']):
+                if "apis_relations" in "{}".format(y["f_model"]):
                     pass
                 else:
-                    rel_field_name = "{}__{}".format(x['f_name'], y['f_name'])
+                    rel_field_name = "{}__{}".format(x["f_name"], y["f_name"])
                     filters.append(rel_field_name)
     if include:
         filters = [x for x in filters if x in include]
@@ -81,7 +81,9 @@ def get_filters(model, exclude=False, include=False, include_parents=False):
             elif x.startswith("*") and x.endswith("*"):
                 filters = [f for f in filters if not x[1:-1].lower() in f]
             elif not x.startswith("*") and x.endswith("*"):
-                filters = [f for f in filters if not f.lower().startswith(x[:-1].lower())]
+                filters = [
+                    f for f in filters if not f.lower().startswith(x[:-1].lower())
+                ]
             else:
                 filters = [f for f in filters if not x.lower() == f.lower()]
     return filters
@@ -89,7 +91,7 @@ def get_filters(model, exclude=False, include=False, include_parents=False):
 
 def get_generic_relation_filter(entity):
     class GenericListFilter(django_filters.FilterSet):
-        #search = django_filters.CharFilter(method='search_filter_method')
+        # search = django_filters.CharFilter(method='search_filter_method')
 
         def name_label_filter(self, queryset, name, value):
             """
@@ -102,50 +104,54 @@ def get_generic_relation_filter(entity):
             :param value: value for the filter
             :return: filtered queryset
             """
-            alternate_names = getattr(settings, "APIS_ALTERNATE_NAMES", ['alternative name'])
+            alternate_names = getattr(
+                settings, "APIS_ALTERNATE_NAMES", ["alternative name"]
+            )
             res = []
             orig_value = value
-            for n in ['name', 'label__label']:
+            for n in ["name", "label__label"]:
                 value = orig_value
-                f = '{}__'.format(n)
+                f = "{}__".format(n)
                 if value.startswith('"') and value.endswith('"'):
                     value = value[1:-1]
                 else:
-                    f += 'i'
-                if value.startswith('*') and value.endswith('*'):
-                    f += 'contains'
+                    f += "i"
+                if value.startswith("*") and value.endswith("*"):
+                    f += "contains"
                     value = value[1:-1]
-                elif value.startswith('*'):
-                    f += 'endswith'
+                elif value.startswith("*"):
+                    f += "endswith"
                     value = value[1:]
-                elif value.endswith('*'):
-                    f += 'startswith'
+                elif value.endswith("*"):
+                    f += "startswith"
                     value = value[:-1]
                 else:
-                    f += 'exact'
-                if n == 'label__label':
-                    res.append(Q(**{f: value, 'label__label_type__name__in': alternate_names}))
+                    f += "exact"
+                if n == "label__label":
+                    res.append(
+                        Q(**{f: value, "label__label_type__name__in": alternate_names})
+                    )
                 else:
                     res.append(Q(**{f: value}))
             return queryset.filter(res[0] | res[1]).distinct()
 
         def wildcard_filter(self, queryset, name, value):
-            f = '{}__'.format(name)
+            f = "{}__".format(name)
             if value.startswith('"') and value.endswith('"'):
                 value = value[1:-1]
             else:
-                f += 'i'
-            if value.startswith('*') and value.endswith('*'):
-                f += 'contains'
+                f += "i"
+            if value.startswith("*") and value.endswith("*"):
+                f += "contains"
                 value = value[1:-1]
-            elif value.startswith('*'):
-                f += 'endswith'
+            elif value.startswith("*"):
+                f += "endswith"
                 value = value[1:]
-            elif value.endswith('*'):
-                f += 'startswith'
+            elif value.endswith("*"):
+                f += "startswith"
                 value = value[:-1]
             else:
-                f += 'exact'
+                f += "exact"
             return queryset.filter(**{f: value})
 
         def search_filter_method(self, queryset, name, value):
@@ -153,53 +159,62 @@ def get_generic_relation_filter(entity):
             sett_filters = getattr(settings, "APIS_RELATIONS", {})
             if cls.lower() in sett_filters.keys():
                 filter_attr = sett_filters[cls.lower()].get("search", ["name"])
-                query = reduce(operator.or_, [ Q(**{attr: value}) for attr in filter_attr ] )
-
+                query = reduce(
+                    operator.or_, [Q(**{attr: value}) for attr in filter_attr]
+                )
 
         class Meta:
             # model = AbstractRelation.get_relation_class_of_name(entity)
             model = None
-            fields = get_filters(
-                model,
-                exclude=[],
-                include_parents=True
-            )
+            fields = get_filters(model, exclude=[], include_parents=True)
 
         def __init__(self, *args, **kwargs):
-            attrs = {'data-placeholder': 'Type to get suggestions',
-                     'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-                     'data-html': True}
+            attrs = {
+                "data-placeholder": "Type to get suggestions",
+                "data-minimum-input-length": getattr(settings, "APIS_MIN_CHAR", 3),
+                "data-html": True,
+            }
             super(GenericListFilter, self).__init__(*args, **kwargs)
             for x in self.filters.keys():
                 if type(self.filters[x].field).__name__ == "ModelChoiceField":
-                    current_model_name = str(self.filters[x].queryset.model.__name__).lower()
+                    current_model_name = str(
+                        self.filters[x].queryset.model.__name__
+                    ).lower()
                     current_qs = self.filters[x].queryset
-                    if ContentType.objects.filter(app_label='apis_entities', model=current_model_name).count() > 0:
+                    if (
+                        ContentType.objects.filter(
+                            app_label="apis_entities", model=current_model_name
+                        ).count()
+                        > 0
+                    ):
                         self.filters[x] = django_filters.ModelMultipleChoiceFilter(
                             field_name=x,
                             queryset=current_qs,
                             widget=autocomplete.ModelSelect2Multiple(
                                 url=reverse(
-                                    'apis:apis_entities:generic_network_entities_autocomplete',
-                                    kwargs={
-                                        'entity': current_model_name
-                                    }
+                                    "apis:apis_entities:generic_network_entities_autocomplete",
+                                    kwargs={"entity": current_model_name},
                                 ),
-                            )
+                            ),
                         )
-                    elif ContentType.objects.filter(app_label='apis_vocabularies', model=current_model_name).count() > 0:
+                    elif (
+                        ContentType.objects.filter(
+                            app_label="apis_vocabularies", model=current_model_name
+                        ).count()
+                        > 0
+                    ):
                         self.filters[x] = django_filters.ModelMultipleChoiceFilter(
                             field_name=x,
                             queryset=current_qs,
                             widget=autocomplete.ModelSelect2Multiple(
                                 url=reverse(
-                                    'apis:apis_vocabularies:generic_vocabularies_autocomplete',
+                                    "apis:apis_vocabularies:generic_vocabularies_autocomplete",
                                     kwargs={
-                                        'vocab': current_model_name,
-                                        'direct': 'normal'
-                                    }
+                                        "vocab": current_model_name,
+                                        "direct": "normal",
+                                    },
                                 ),
-                            )
+                            ),
                         )
                 if type(self.filters[x].field).__name__ == "DateField":
                     self.filters[x] = django_filters.DateFromToRangeFilter(
@@ -207,33 +222,32 @@ def get_generic_relation_filter(entity):
                     )
                 if type(self.filters[x].field).__name__ == "CharField":
                     self.filters[x] = django_filters.CharFilter(
-                        lookup_expr='icontains',
+                        lookup_expr="icontains",
                         field_name=x,
                     )
                 if type(self.filters[x].field).__name__ == "ModelMultipleChoiceField":
-                    current_model_name = str(self.filters[x].queryset.model.__name__).lower()
+                    current_model_name = str(
+                        self.filters[x].queryset.model.__name__
+                    ).lower()
                     current_qs = self.filters[x].queryset
                     self.filters[x] = django_filters.ModelMultipleChoiceFilter(
                         field_name=x,
                         queryset=current_qs,
                         widget=autocomplete.ModelSelect2Multiple(
                             url=reverse(
-                                'apis:apis_entities:generic_network_entities_autocomplete',
-                                kwargs={
-                                    'entity': current_model_name
-                                }
+                                "apis:apis_entities:generic_network_entities_autocomplete",
+                                kwargs={"entity": current_model_name},
                             ),
-                        )
+                        ),
                     )
-    return GenericListFilter
 
+    return GenericListFilter
 
 
 from apis_core.apis_relations.models import Triple
 
 
 class TripleFilter(django_filters.FilterSet):
-
     class Meta:
         model = Triple
         exclude = []
@@ -241,4 +255,3 @@ class TripleFilter(django_filters.FilterSet):
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-
