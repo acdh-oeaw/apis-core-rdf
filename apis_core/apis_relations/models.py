@@ -612,6 +612,7 @@ class Triple(models.Model):
         null=True,
         on_delete=models.CASCADE,
         related_name="triple_set_from_subj",
+        verbose_name="Subject",
     )
     obj = InheritanceForeignKey(
         RootObject,
@@ -619,6 +620,7 @@ class Triple(models.Model):
         null=True,
         on_delete=models.CASCADE,
         related_name="triple_set_from_obj",
+        verbose_name="Object",
     )
     prop = models.ForeignKey(
         Property,
@@ -626,6 +628,7 @@ class Triple(models.Model):
         null=True,
         on_delete=models.CASCADE,
         related_name="triple_set_from_prop",
+        verbose_name="Property",
     )
 
     objects = BaseRelationManager()
