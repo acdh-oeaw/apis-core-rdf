@@ -29,11 +29,13 @@ class TripleTable(tables.Table):
     class Meta:
         model = Triple
         fields = [
+            "id",
             "subj",
             "prop",
             "obj",
         ]
         sequence = tuple(fields)
+        attrs = {"class": "table table-hover table-striped table-condensed"}
 
 
 class PropertyTable(tables.Table):
