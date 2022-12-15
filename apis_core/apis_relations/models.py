@@ -645,9 +645,8 @@ class Triple(models.Model):
 
         return self.__repr__()
 
-    def get_web_object(self):
-
         # __before_rdf_refactoring__
+        # def get_web_object(self):
         # Method from RelationBaseClass
         #
         # nameA = self.get_related_entity_instanceA().name
@@ -677,6 +676,8 @@ class Triple(models.Model):
         # return result
         #
         # __after_rdf_refactoring__
+
+    def get_web_object(self):
         return {
             "relation_pk": self.pk,
             "subj": self.subj.name,
