@@ -21,7 +21,6 @@ from django.db.models.query import QuerySet
 from apis_core.helper_functions import DateParser
 from apis_core.apis_metainfo.models import RootObject, Collection
 
-
 # __before_rdf_refactoring__
 # from apis_core.apis_vocabularies.models import (
 #     EventType,
@@ -41,7 +40,6 @@ NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 # class AbstractEntity(TempEntityClass):
 # __after_rdf_refactoring__
 class AbstractEntity(RootObject):
-
     """
     Abstract super class which encapsulates common logic between the different entity kinds and provides various methods
     relating to either all or a specific entity kind.
@@ -90,7 +88,6 @@ class AbstractEntity(RootObject):
     def get_entity_list_filter(cls):
 
         return None
-
 
     # Various Methods enabling convenient shortcuts between entities, relations, fields, etc
     ####################################################################################################################
@@ -253,7 +250,6 @@ class AbstractEntity(RootObject):
                     and entity_name != "ent_class"
                     and entity_name != "AbstractEntity"
                 ):
-
                     entity_classes.append(entity_class)
                     entity_names.append(entity_name.lower())
 
@@ -304,8 +300,8 @@ class AbstractEntity(RootObject):
         E.g. for Person.get_related_entity_field_names() or person_instance.get_related_entity_field_names() ->
         ['event_set', 'institution_set', 'personB_set', 'personA_set', 'place_set', 'work_set']
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
+        which wires the ManyToMany Fields into the entities and respective relationtypes.
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -320,8 +316,8 @@ class AbstractEntity(RootObject):
         :param entity_field_name: the name of one of several ManyToMany fields created automatically
         :return: None
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
+        which wires the ManyToMany Fields into the entities and respective relationtypes.
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -428,7 +424,6 @@ class AbstractEntity(RootObject):
                 relationtype_name = relationtype_class.__name__.lower()
 
                 if cls.__name__.lower() in relationtype_name:
-
                     relationtype_classes.append(relationtype_class)
                     relationtype_names.append(relationtype_name)
 
@@ -447,7 +442,6 @@ class AbstractEntity(RootObject):
         """
 
         if cls._related_relationtype_names is None:
-
             cls.get_related_relationtype_classes()
 
         return cls._related_relationtype_names
@@ -460,8 +454,8 @@ class AbstractEntity(RootObject):
         E.g. for PersonPerson.get_related_relationtype_field_names() or person_instance.get_related_relationtype_field_names() ->
         ['event_relationtype_set', 'institution_relationtype_set', 'personB_relationtype_set', 'personA_relationtype_set', 'place_relationtype_set', 'work_relationtype_set']
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
+        which wires the ManyToMany Fields into the entities and respective relationtypes.
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -478,8 +472,8 @@ class AbstractEntity(RootObject):
         :param entity_field_name: the name of one of several ManyToMany fields created automatically
         :return: None
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
+        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class
+        which wires the ManyToMany Fields into the entities and respective relationtypes.
         This method is nevertheless defined here within AbstractEntity for documentational purpose.
         """
 
@@ -524,7 +518,7 @@ class AbstractEntity(RootObject):
 # TODO RDF: Consider moving TempEntityClass also into ontologies
 @reversion.register()
 class TempEntityClass(AbstractEntity):
-    """ Base class to bind common attributes to many classes.
+    """Base class to bind common attributes to many classes.
 
     The common attributes are:
     written start and enddates
@@ -568,10 +562,9 @@ class TempEntityClass(AbstractEntity):
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
 
-
     def __str__(self):
         if self.name != "" and hasattr(
-            self, "first_name" # TODO RDF: remove first_name here
+            self, "first_name"  # TODO RDF: remove first_name here
         ):  # relation usually don´t have names
             return "{}, {} (ID: {})".format(self.name, self.first_name, self.id)
         elif self.name != "":
@@ -580,8 +573,7 @@ class TempEntityClass(AbstractEntity):
             return "(ID: {})".format(self.id)
 
     def save(self, parse_dates=True, *args, **kwargs):
-        """Adaption of the save() method of the class to automatically parse string-dates into date objects
-        """
+        """Adaption of the save() method of the class to automatically parse string-dates into date objects"""
 
         if parse_dates:
 
@@ -596,14 +588,16 @@ class TempEntityClass(AbstractEntity):
             if self.start_date_written:
                 # If some textual user input of a start date is there, then parse it
 
-                start_date, start_start_date, start_end_date = \
-                    DateParser.parse_date(self.start_date_written)
+                start_date, start_start_date, start_end_date = DateParser.parse_date(
+                    self.start_date_written
+                )
 
             if self.end_date_written:
                 # If some textual user input of an end date is there, then parse it
 
-                end_date, end_start_date, end_end_date = \
-                    DateParser.parse_date(self.end_date_written)
+                end_date, end_start_date, end_end_date = DateParser.parse_date(
+                    self.end_date_written
+                )
 
             self.start_date = start_date
             self.start_start_date = start_start_date
@@ -619,9 +613,9 @@ class TempEntityClass(AbstractEntity):
 
         return self
 
-    # TODO RDF: I don't remember what this function was used for. Investiage or delete it 
+    # TODO RDF: I don't remember what this function was used for. Investiage or delete it
     def get_child_entity(self):
-        for x in [x for x in apps.all_models['apis_entities'].values()]:
+        for x in [x for x in apps.all_models["apis_entities"].values()]:
             if x.__name__ in list(settings.APIS_ENTITIES.keys()):
                 try:
                     my_ent = x.objects.get(id=self.id)
@@ -819,7 +813,7 @@ class TempEntityClass(AbstractEntity):
                 if col2 not in col_list:
                     self.collection.add(col2)
             for f in ent._meta.local_many_to_many:
-                if not f.name.endswith('_set'):
+                if not f.name.endswith("_set"):
                     sl = list(getattr(self, f.name).all())
                     for s in getattr(ent, f.name).all():
                         if s not in sl:
@@ -854,6 +848,7 @@ class TempEntityClass(AbstractEntity):
 
     def get_serialization(self):
         from apis_core.apis_entities.serializers_generic import EntitySerializer
+
         return EntitySerializer(self).data
 
 
@@ -888,7 +883,6 @@ def prepare_fields_dict(fields_list, vocabs, vocabs_m2m):
 
 @receiver(post_save, dispatch_uid="create_default_uri")
 def create_default_uri(sender, instance, **kwargs):
-
     from apis_core.apis_metainfo.models import Uri
 
     if kwargs["created"] and sender in AbstractEntity.get_all_entity_classes():
@@ -897,7 +891,8 @@ def create_default_uri(sender, instance, **kwargs):
         else:
             base1 = BASE_URI
         uri_c = "{}{}".format(
-            base1, reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
+            base1,
+            reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
         )
         uri2 = Uri(uri=uri_c, domain="apis default", root_object=instance)
         uri2.save()
@@ -914,11 +909,12 @@ lst_entities_complete = [
 lst_entities_complete = list(dict.fromkeys(lst_entities_complete))
 perm_change_senders = [
     getattr(getattr(x, "collection"), "through") for x in lst_entities_complete
-] # TODO: Inspect. This list here will contain only duplicates if `lst_entities_complete` contains all entities
+]  # TODO: Inspect. This list here will contain only duplicates if `lst_entities_complete` contains all entities
 
 
 @receiver(
-    m2m_changed, dispatch_uid="create_object_permissions",
+    m2m_changed,
+    dispatch_uid="create_object_permissions",
 )
 def create_object_permissions(sender, instance, **kwargs):
     if kwargs["action"] == "pre_add" and sender in perm_change_senders:
@@ -972,14 +968,14 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
         if user_group is not None:
             user.groups.add(Group.objects.get(name=user_group))
 
+
 # __after_rdf_refactoring__
 # TODO RDF : This function is an ad hoc work around. It would be better done if entity settings would be fully moved into the entities themselves
 def fill_settings_with_entity_attributes():
-
     for entity_class in AbstractEntity.get_all_entity_classes():
-
         entity_settings = entity_class.entity_settings
 
         settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
+
 
 fill_settings_with_entity_attributes()
