@@ -1,11 +1,13 @@
+import operator
+from functools import reduce
+
 import django_filters
 from dal import autocomplete
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.urls import reverse
-import operator
-from functools import reduce
+
 
 # from .models import AbstractRelation
 

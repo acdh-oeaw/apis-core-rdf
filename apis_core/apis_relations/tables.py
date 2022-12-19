@@ -1,8 +1,8 @@
 import django_tables2 as tables
 from django.conf import settings
 from django.db.models import Case, When, F
-from django_tables2.utils import A
 from django.utils.html import format_html
+from django_tables2.utils import A
 
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
