@@ -96,8 +96,8 @@ class GetContentTypes:
                         getattr(m, cls_n).__module__ in apis_modules
                         and getattr(m, cls_n) not in lst_cont
                         and cls_n.lower() not in models_exclude
-                        and not "abstract" in cls_n.lower()
                         and inspect.isclass(getattr(m, cls_n))
+                        and getattr(m, cls_n)._meta.abstract is False
                     ):
                         lst_cont.append(getattr(m, cls_n))
         lst_cont.append(ContentType)
