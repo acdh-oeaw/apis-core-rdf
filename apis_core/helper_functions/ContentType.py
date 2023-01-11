@@ -6,14 +6,16 @@ from django.db.models.base import ModelBase
 
 class GetContentTypes:
 
-    # class memeber dictionary, used for caching ContentType objects in method get_content_type_of_class_or_instance
+    # class member dict for caching ContentType objects in
+    # get_content_type_of_class_or_instance method
     class_content_type_dict = {}
 
     def get_names(self):
-        """Function to create Module/Class name tuples
+        """
+        Create tuples from a list of model classes to store their module names
+        and class names (as strings).
 
-        Returns:
-            [list]: [list of Modile/Class tuples]
+        :return: a list of tuples
         """
         res = []
         for cls in self._lst_cont:
@@ -21,22 +23,20 @@ class GetContentTypes:
         return res
 
     def get_model_classes(self):
-        """Returns list of django model classes
-
-        Returns:
-            [list]: [django model classes]
+        """
+        Return a list of Django model classes.
         """
         return self._lst_cont
 
     @classmethod
     def get_content_type_of_class_or_instance(cls, model_class_or_instance):
         """
-        Helper method which caches ContentType of a given model class or instance. When first called on a model
-        it fetches its respective ContentType from DB and caches it in a class dictionary. Later this dictionary is
-        called
+        Helper method which caches ContentType of a given model class or instance.
+        When first called on a model, it fetches its respective ContentType from the DB
+        and caches it in a class dictionary. Later, this dictionary is called.
 
-        :param model_class_or_instance: can be either a model class or an instance of a model class
-        :return: The django ContentType object for the given parameter
+        :param model_class_or_instance: model class or instance of a model class
+        :return: dictionary holding Django ContentType object
         """
 
         model_class = None
@@ -59,9 +59,14 @@ class GetContentTypes:
 
     def __init__(self, lst_conts=None):
         """
+        Iterate through a list of modules and filter for
+        - classes
+        - which are not abstract
+        - except for those explicitly ignored (via models_exclude list).
 
-        Args:
-            lst_conts ([list], optional): [list of entity names]. Defaults to list of apis_core entities.
+        :param lst_conts: (optional) list of paths to app models, in form of strings,
+                          e.g. "apis_core.apis_entities.models".
+                          By default, apis_core models are iterated over.
         """
         models_exclude = [
             "texttype_collections",
