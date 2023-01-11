@@ -6,20 +6,18 @@ from django.db.models.base import ModelBase
 
 class GetContentTypes:
 
-
     # class memeber dictionary, used for caching ContentType objects in method get_content_type_of_class_or_instance
     class_content_type_dict = {}
-
 
     def get_names(self):
         """Function to create Module/Class name tuples
 
         Returns:
             [list]: [list of Modile/Class tuples]
-        """            
+        """
         res = []
         for cls in self._lst_cont:
-            res.append((cls.__module__.split('.')[-2], cls.__name__))
+            res.append((cls.__module__.split(".")[-2], cls.__name__))
         return res
 
     def get_model_classes(self):
@@ -27,9 +25,8 @@ class GetContentTypes:
 
         Returns:
             [list]: [django model classes]
-        """            
+        """
         return self._lst_cont
-
 
     @classmethod
     def get_content_type_of_class_or_instance(cls, model_class_or_instance):
@@ -55,18 +52,32 @@ class GetContentTypes:
             )
 
         if model_class not in cls.class_content_type_dict:
-            cls.class_content_type_dict[model_class] = ContentType.objects.get(model=model_class.__name__)
+            cls.class_content_type_dict[model_class] = ContentType.objects.get(
+                model=model_class.__name__
+            )
         return cls.class_content_type_dict[model_class]
-
 
     def __init__(self, lst_conts=None):
         """
 
         Args:
             lst_conts ([list], optional): [list of entity names]. Defaults to list of apis_core entities.
-        """        
-        models_exclude = ["texttype_collections", "relationbaseclass", "baserelationmanager", "relationpublishedqueryset", "inheritanceforwardmanytoonedescriptor", "inheritanceforeignkey"]
-        apis_modules = ['apis_core.apis_metainfo.models', 'apis_core.apis_vocabularies.models', 'apis_core.apis_entities.models', 'apis_core.apis_relations.models', "apis_ontology.models"]
+        """
+        models_exclude = [
+            "texttype_collections",
+            "relationbaseclass",
+            "baserelationmanager",
+            "relationpublishedqueryset",
+            "inheritanceforwardmanytoonedescriptor",
+            "inheritanceforeignkey",
+        ]
+        apis_modules = [
+            "apis_core.apis_metainfo.models",
+            "apis_core.apis_vocabularies.models",
+            "apis_core.apis_entities.models",
+            "apis_core.apis_relations.models",
+            "apis_ontology.models",
+        ]
         if lst_conts is not None:
             r2 = []
             for c in lst_conts:
@@ -78,7 +89,9 @@ class GetContentTypes:
         lst_cont = []
         for m in lst_cont_pre:
             for cls_n in dir(m):
-                if not cls_n.startswith('__') and "__module__" in list(dir(getattr(m, cls_n))):
+                if not cls_n.startswith("__") and "__module__" in list(
+                    dir(getattr(m, cls_n))
+                ):
                     if (
                         getattr(m, cls_n).__module__ in apis_modules
                         and getattr(m, cls_n) not in lst_cont
