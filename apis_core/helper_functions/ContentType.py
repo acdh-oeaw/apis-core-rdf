@@ -39,7 +39,6 @@ class GetContentTypes:
         :return: dictionary holding Django ContentType object
         """
 
-        model_class = None
         if type(model_class_or_instance) is ModelBase:
             # true if model_class_or_instance is model class
             model_class = model_class_or_instance
@@ -57,7 +56,7 @@ class GetContentTypes:
             )
         return cls.class_content_type_dict[model_class]
 
-    def __init__(self, lst_conts=None):
+    def __init__(self, lst_conts: list = None):
         """
         Iterate through a list of modules and filter for
         - classes
