@@ -73,7 +73,7 @@ class Property(RootObject):
     # TODO RDF : Redundancy between name_forward and name, solve this.
     name_forward = models.CharField(
         max_length=255,
-        verbose_name="Name reverse",
+        verbose_name="Name forward",
         help_text='Inverse relation like: "is sub-class of" vs. "is super-class of".',
         blank=True,
     )
