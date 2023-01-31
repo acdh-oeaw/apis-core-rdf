@@ -21,7 +21,6 @@ from django.db.models.query import QuerySet
 from apis_core.helper_functions import DateParser
 from apis_core.apis_metainfo.models import RootObject, Collection
 
-
 # __before_rdf_refactoring__
 # from apis_core.apis_vocabularies.models import (
 #     EventType,
@@ -32,22 +31,21 @@ from apis_core.apis_metainfo.models import RootObject, Collection
 #     WorkType,
 # )
 
-
 BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
-
 
 # __before_rdf_refactoring__
 # class AbstractEntity(TempEntityClass):
 # __after_rdf_refactoring__
 class AbstractEntity(RootObject):
-
     """
-    Abstract super class which encapsulates common logic between the different entity kinds and provides various methods
-    relating to either all or a specific entity kind.
+    Abstract super class which encapsulates common logic between the
+    different entity kinds and provides various methods relating to either
+    all or one specific entity kind.
 
-    Most of the class methods are designed to be used in the sublcass as they are considering contexts which depend on
-    the subclass entity type. So they are to be understood in that dynamic context.
+    Most of the class methods are designed to be used in the subclass as they
+    are considering contexts which depend on the subclass entity type.
+    So they are to be understood in that dynamic context.
     """
 
     entity_settings = {
@@ -64,7 +62,7 @@ class AbstractEntity(RootObject):
         self.__class__.create_relation_methods_from_manytomany_fields()
 
     # Methods dealing with individual data retrievals of instances
-    ####################################################################################################################
+    ###########################################################################
 
     def __str__(self):
 
@@ -91,15 +89,16 @@ class AbstractEntity(RootObject):
 
         return None
 
-
-    # Various Methods enabling convenient shortcuts between entities, relations, fields, etc
-    ####################################################################################################################
+    # Various Methods enabling convenient shortcuts between entities,
+    # relations, fields, etc
+    # ########################################################################
 
     @classmethod
     def create_relation_methods_from_manytomany_fields(cls):
         """
-        Creates methods on an entity class with which other related entities can be called without the need to consider
-        potential self-references (the A and B sides therein).
+        Creates methods on an entity class with which other related entities
+        can be called without the need to consider potential self-references
+        (the A and B sides therein).
 
         The resulting methods follow the syntax:
         <entity>.get_related_<entity>_instances()
@@ -109,14 +108,18 @@ class AbstractEntity(RootObject):
         or
         person.get_related_person_instances()
 
-        Note that with these methods it is not necessary to differentiate between A and B entities when self-relations exist.
+        Note that with these methods it is not necessary to differentiate
+        between A and B entities when self-relations exist.
 
-        The result of any such method call is the queryset of the related entities.
-        (And not a ManyToManyManager as is the case when calling <entity>.<entity>_set where in the case of self-relation
-        it must be differentiated between A and B entities, e.g. person.personA_set )
+        The result of any such method call is the queryset of the related
+        entities. (And not a ManyToManyManager as is the case when calling
+        <entity>.<entity>_set where in the case of self-relation
+        it must be differentiated between A and B entities,
+        e.g. person.personA_set.)
 
-        It was not possible to my understanding to change managers in such a way that two (the A and the B) could be combined
-        into one manager. Hence these additional shortcut methods.
+        It was not possible to my understanding to change managers in such a
+        way that two (A and the B) could be combined into one manager.
+        Hence, these additional shortcut methods.
 
         :return: None
         """
@@ -125,17 +128,24 @@ class AbstractEntity(RootObject):
             entity_manytomany_field,
         ):
             """
-            creates the individual method from a ManyToMany field by calling the manager's objects.all()
+            Creates the individual method from a ManyToMany field by calling
+            the manager's objects.all().
 
-            This method creation has to be done here in a separate method, so that it can be called once before assignment
-            as otherwise the variable 'entity_name' in the loop below changes with each iteration and with that also the
-            method references (due to python's "late binding").
-            A method call in between thus forces the content of 'entity_name' to be assigned for good to the
-            respective class ( = forced early binding).
-            For more details on this: https://stackoverflow.com/questions/3431676/creating-functions-in-a-loop
+            This method creation has to be done here in a separate method,
+            so that it can be called once before assignment, as otherwise,
+            the variable "entity_name" in the loop below changes with each
+            iteration and with that also the method references (due to
+            Python's "late binding").
+
+            A method call in-between thus forces the content of "entity_name"
+            to be assigned for good to the respective class (= forced early
+            binding).
+
+            For more details on this, see:
+            https://stackoverflow.com/questions/3431676/creating-functions-in-a-loop
 
             :param entity_manytomany_field: the ManyToManyManager to another model
-            :return: method which will call the managers's objects.all() method
+            :return: method which will call the manager's objects.all() method
             """
             return lambda self: getattr(self, entity_manytomany_field).all().distinct()
 
@@ -143,13 +153,17 @@ class AbstractEntity(RootObject):
             entityA_manytomany_field, entityB_manytomany_field
         ):
             """
-            Same method as above, but with two managers instead of one for the case of self-relations.
+            Same method as above, but with two managers instead of one for
+            the case of self-relations.
 
-            Both managers' objects.all() methods are called and their queryset results are unionised for the
-            shortcut method of an entity to its own related entities.
+            Both managers' objects.all() methods are called and their
+            queryset results are unionised for the shortcut method of an
+            entity to its own related entities.
 
-            :param entityA_manytomany_field: ManyToManyManager to entity A in a self-relation
-            :param entityB_manytomany_field: ManyToManyManager to entity A in a self-relation
+            :param entityA_manytomany_field: ManyToManyManager to entity A
+                                             in a self-relation
+            :param entityB_manytomany_field: ManyToManyManager to entity A
+                                             in a self-relation
             :return: method to call both and return the distinct union of them
             """
             return lambda self: (
@@ -166,8 +180,10 @@ class AbstractEntity(RootObject):
             if not hasattr(cls, related_entity_function_name):
 
                 if cls.__name__.lower() == entity_name:
-                    # If the related entity is the same as this current one, then set the names of the related functions
-                    # to A and B and also combine them into one function where both A and B are returned.
+                    # If the related entity is the same as this current one,
+                    # set the names of the related functions to A and B
+                    # and also combine them into one function where
+                    # both A and B are returned.
 
                     related_entityA_function_name = (
                         "get_related_" + entity_name + "A_instances"
@@ -202,9 +218,8 @@ class AbstractEntity(RootObject):
                         ),
                     )
 
+                # if the related entity is a different one, build on the usual names
                 else:
-                    # If the related entity is a different one, then just build on the usual names
-
                     entity_manytomany_field = entity_name + "_set"
 
                     setattr(
@@ -216,7 +231,7 @@ class AbstractEntity(RootObject):
                     )
 
     # Methods dealing with all entities
-    ####################################################################################################################
+    ###########################################################################
 
     _all_entity_classes = None
     _all_entity_names = None
@@ -224,8 +239,8 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_all_entity_classes(cls):
         """
-        Retrieve all entity classes included in an APIS Ontologies app's
-        model.py file – except classes named "ent_class".
+        Retrieve all entity classes from an APIS Ontologies app's model.py
+        file – except for abstract classes or classes named "ent_class".
 
         Attempts to set protected variables
         - _all_entity_classes to list of classes
@@ -251,9 +266,8 @@ class AbstractEntity(RootObject):
                     # entity_class.__module__ == "apis_core.apis_entities.models"
                     entity_class.__module__ == "apis_ontology.models"
                     and entity_name != "ent_class"
-                    and entity_name != "AbstractEntity"
+                    and entity_class._meta.abstract is False
                 ):
-
                     entity_classes.append(entity_class)
                     entity_names.append(entity_name.lower())
 
@@ -292,21 +306,29 @@ class AbstractEntity(RootObject):
         return cls._all_entity_names
 
     # Methods dealing with related entities
-    ####################################################################################################################
+    ###########################################################################
 
     _related_entity_field_names = None
 
     @classmethod
     def get_related_entity_field_names(cls):
         """
-        :return: a list of names of all ManyToMany field names relating to entities from the respective entity class
+        :return: a list of names of all ManyToMany field names relating to
+        entities from the respective entity class.
 
-        E.g. for Person.get_related_entity_field_names() or person_instance.get_related_entity_field_names() ->
-        ['event_set', 'institution_set', 'personB_set', 'personA_set', 'place_set', 'work_set']
+        E.g. for
+        Person.get_related_entity_field_names()
+        or
+        person_instance.get_related_entity_field_names()
+        -> ["event_set", "institution_set", "personB_set", "personA_set",
+        "place_set", "work_set"]
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
-        This method is nevertheless defined here within AbstractEntity for documentational purpose.
+        Note: this method depends on the "generate_all_fields" function of
+        the EntityRelationFieldGenerator class which wires the ManyToMany
+        Fields into the entities and respective relation types.
+
+        This method is nevertheless defined here within AbstractEntity for
+        documentation purposes.
         """
 
         if cls._related_entity_field_names is None:
@@ -317,12 +339,16 @@ class AbstractEntity(RootObject):
     @classmethod
     def add_related_entity_field_name(cls, entity_field_name):
         """
-        :param entity_field_name: the name of one of several ManyToMany fields created automatically
+        :param entity_field_name: the name of one of several ManyToMany fields
+                                  created automatically
         :return: None
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
-        This method is nevertheless defined here within AbstractEntity for documentational purpose.
+        Note: this method depends on the "generate_all_fields" function of
+        the EntityRelationFieldGenerator class which wires the ManyToMany
+        Fields into the entities and respective relation types.
+
+        This method is nevertheless defined here within AbstractEntity for
+        documentation purposes.
         """
 
         if cls._related_entity_field_names is None:
@@ -332,7 +358,8 @@ class AbstractEntity(RootObject):
 
     def get_related_entity_instances(self):
         """
-        :return: list of queryset of all entity instances which are somehow related to the calling entity instance
+        :return: list of queryset of all entity instances which are somehow
+        related to the calling entity instance
         """
 
         queryset_list = []
@@ -346,18 +373,23 @@ class AbstractEntity(RootObject):
         return queryset_list
 
     # Methods dealing with related relations
-    ####################################################################################################################
+    ###########################################################################
 
     @classmethod
     def get_related_relation_classes(cls):
         """
-        :return: list of python classes of the relations which are related to the respective entity class
+        :return: list of python classes of the relations which are related to
+        the respective entity class
 
-        E.g. for Place.get_related_relation_classes() or place_instance.get_related_relation_classes() ->
-        [ InstitutionPlace, PersonPlace, PlaceEvent, PlacePlace, PlaceWork ]
+        E.g. for
+        Place.get_related_relation_classes()
+        or
+        place_instance.get_related_relation_classes()
+        -> [ InstitutionPlace, PersonPlace, PlaceEvent, PlacePlace, PlaceWork ]
         """
 
-        # TODO __sresch__ : check for best practice on local imports vs circularity problems.
+        # TODO __sresch__ : check for best practice on local imports vs
+        #  circularity problems.
         from apis_core.apis_relations.models import AbstractRelation
 
         return AbstractRelation.get_relation_classes_of_entity_class(cls)
@@ -365,19 +397,26 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_related_relation_field_names(cls):
         """
-        :return: list of class names in lower case of the relations which are related to the respective entity class
+        :return: list of class names in lower case of the relations which are
+        related to the respective entity class
 
-        E.g. for Place.get_related_relation_names() or place_instance.get_related_relation_names() ->
-        ['institutionplace_set', 'personplace_set', 'placeevent_set', 'placeplace_set', 'placework_set']
+        E.g. for
+        Place.get_related_relation_names()
+        or
+        place_instance.get_related_relation_names()
+        -> ["institutionplace_set", "personplace_set", "placeevent_set",
+        "placeplace_set", "placework_set"]
         """
-        # TODO __sresch__ : check for best practice on local imports vs circularity problems.
+        # TODO __sresch__ : check for best practice on local imports vs
+        #  circularity problems.
         from apis_core.apis_relations.models import AbstractRelation
 
         return AbstractRelation.get_relation_field_names_of_entity_class(cls)
 
     def get_related_relation_instances(self):
         """
-        :return: list of queryset of all relation instances which are somehow related to the calling entity instance
+        :return: list of queryset of all relation instances which are somehow
+        related to the calling entity instance
         """
 
         queryset_list = []
@@ -397,8 +436,8 @@ class AbstractEntity(RootObject):
 
         return queryset_list
 
-    # Methods dealing with related relationtypes
-    ####################################################################################################################
+    # Methods dealing with related relation types
+    ###########################################################################
 
     _related_relationtype_classes = None
     _related_relationtype_field_names = None
@@ -407,10 +446,15 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_related_relationtype_classes(cls):
         """
-        :return: list of python classes of the relation types which are related to the respective entity class
+        :return: list of python classes of the relation types which are
+        related to the respective entity class
 
-        E.g. for Place.get_related_relation_classes() or place_instance.get_related_relation_classes() ->
-        [ InstitutionPlaceRelation, PersonPlaceRelation, PlaceEventRelation, PlacePlaceRelation, PlaceWorkRelation ]
+        E.g. for
+        Place.get_related_relation_classes()
+        or
+        place_instance.get_related_relation_classes()
+        -> [ InstitutionPlaceRelation, PersonPlaceRelation, PlaceEventRelation,
+        PlacePlaceRelation, PlaceWorkRelation ]
         """
 
         if cls._related_relationtype_classes is None:
@@ -418,7 +462,8 @@ class AbstractEntity(RootObject):
             relationtype_classes = []
             relationtype_names = []
 
-            # TODO __sresch__ : check for best practice on local imports vs circularity problems.
+            # TODO __sresch__: check for best practice on local imports vs.
+            #  circularity problems.
             from apis_core.apis_vocabularies.models import AbstractRelationType
 
             for (
@@ -428,7 +473,6 @@ class AbstractEntity(RootObject):
                 relationtype_name = relationtype_class.__name__.lower()
 
                 if cls.__name__.lower() in relationtype_name:
-
                     relationtype_classes.append(relationtype_class)
                     relationtype_names.append(relationtype_name)
 
@@ -440,14 +484,18 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_related_relationtype_names(cls):
         """
-        :return: list of class names in lower case of the relation types which are related to the respective entity class
+        :return: list of class names in lower case of the relation types
+        which are related to the respective entity class
 
-        E.g. for Place.get_related_relation_classes() or place_instance.get_related_relation_classes() ->
-        [ 'institutionplacerelation', 'personplacerelation', 'placeeventrelation', 'placeplacerelation', 'placeworkrelation' ]
+        E.g. for
+        Place.get_related_relation_classes()
+        or
+        place_instance.get_related_relation_classes()
+        -> [ "institutionplacerelation", "personplacerelation",
+        "placeeventrelation", "placeplacerelation", "placeworkrelation" ]
         """
 
         if cls._related_relationtype_names is None:
-
             cls.get_related_relationtype_classes()
 
         return cls._related_relationtype_names
@@ -455,14 +503,23 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_related_relationtype_field_names(cls):
         """
-        :return: a list of names of all ManyToMany field names relating to relationtypes from the respective entity class
+        :return: a list of names of all ManyToMany field names relating to
+        relation types from the respective entity class
 
-        E.g. for PersonPerson.get_related_relationtype_field_names() or person_instance.get_related_relationtype_field_names() ->
-        ['event_relationtype_set', 'institution_relationtype_set', 'personB_relationtype_set', 'personA_relationtype_set', 'place_relationtype_set', 'work_relationtype_set']
+        E.g. for
+        PersonPerson.get_related_relationtype_field_names()
+        or
+        person_instance.get_related_relationtype_field_names()
+        -> ["event_relationtype_set", "institution_relationtype_set",
+        "personB_relationtype_set", "personA_relationtype_set",
+        "place_relationtype_set", "work_relationtype_set"]
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
-        This method is nevertheless defined here within AbstractEntity for documentational purpose.
+        Note: this method depends on the "generate_all_fields" function of
+        the EntityRelationFieldGenerator class which wires the ManyToMany
+        Fields into the entities and respective relation types.
+
+        This method is nevertheless defined here within AbstractEntity for
+        documentation purposes.
         """
 
         if cls._related_relationtype_field_names is None:
@@ -475,12 +532,16 @@ class AbstractEntity(RootObject):
     @classmethod
     def add_related_relationtype_field_name(cls, relationtype_field_name):
         """
-        :param entity_field_name: the name of one of several ManyToMany fields created automatically
+        :param entity_field_name: the name of one of several ManyToMany
+                                  fields created automatically
         :return: None
 
-        Note: this method depends on the 'generate_all_fields' function of the EntityRelationFieldGenerator class 
-        which wires the ManyToMany Fields into the entities and respective relationtypes. 
-        This method is nevertheless defined here within AbstractEntity for documentational purpose.
+        Note: this method depends on the "generate_all_fields" function of
+        the EntityRelationFieldGenerator class which wires the ManyToMany
+        Fields into the entities and respective relation types.
+
+        This method is nevertheless defined here within AbstractEntity for
+        documentation purposes.
         """
 
         if cls._related_relationtype_field_names is None:
@@ -490,7 +551,8 @@ class AbstractEntity(RootObject):
 
     def get_related_relationtype_instances(self):
         """
-        :return: list of queryset of all relationtype instances which are somehow related to the calling entity instance
+        :return: list of queryset of all relation type instances which are
+        somehow related to the calling entity instance
         """
 
         queryset_list = []
@@ -524,18 +586,21 @@ class AbstractEntity(RootObject):
 # TODO RDF: Consider moving TempEntityClass also into ontologies
 @reversion.register()
 class TempEntityClass(AbstractEntity):
-    """ Base class to bind common attributes to many classes.
+    """
+    Base class to bind common attributes to many classes.
 
     The common attributes are:
-    written start and enddates
-    recognized start and enddates which are derived by RegEx
-    from the written dates.
-    A review boolean field to mark an object as reviewed
+    - written start and enddates,
+    - recognized start and enddates which are derived from the written dates
+    using RegEx,
+    - a review boolean field to mark an object as reviewed.
     """
 
     review = models.BooleanField(
         default=False,
-        help_text="Should be set to True, if the data record holds up quality standards.",
+        help_text="Should be set to True, if the "
+        "data record holds up quality "
+        "standards.",
     )
     start_date = models.DateField(blank=True, null=True)
     start_start_date = models.DateField(blank=True, null=True)
@@ -568,10 +633,9 @@ class TempEntityClass(AbstractEntity):
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
 
-
     def __str__(self):
         if self.name != "" and hasattr(
-            self, "first_name" # TODO RDF: remove first_name here
+            self, "first_name"  # TODO RDF: remove first_name here
         ):  # relation usually don´t have names
             return "{}, {} (ID: {})".format(self.name, self.first_name, self.id)
         elif self.name != "":
@@ -580,7 +644,9 @@ class TempEntityClass(AbstractEntity):
             return "(ID: {})".format(self.id)
 
     def save(self, parse_dates=True, *args, **kwargs):
-        """Adaption of the save() method of the class to automatically parse string-dates into date objects
+        """
+        Adaption of the save() method of the class to automatically parse
+        string-dates into date objects.
         """
 
         if parse_dates:
@@ -593,17 +659,17 @@ class TempEntityClass(AbstractEntity):
             end_start_date = None
             end_end_date = None
 
+            # if some textual user input of a start date is there, parse it
             if self.start_date_written:
-                # If some textual user input of a start date is there, then parse it
+                start_date, start_start_date, start_end_date = DateParser.parse_date(
+                    self.start_date_written
+                )
 
-                start_date, start_start_date, start_end_date = \
-                    DateParser.parse_date(self.start_date_written)
-
+            # if some textual user input of an end date is there, parse it
             if self.end_date_written:
-                # If some textual user input of an end date is there, then parse it
-
-                end_date, end_start_date, end_end_date = \
-                    DateParser.parse_date(self.end_date_written)
+                end_date, end_start_date, end_end_date = DateParser.parse_date(
+                    self.end_date_written
+                )
 
             self.start_date = start_date
             self.start_start_date = start_start_date
@@ -619,9 +685,10 @@ class TempEntityClass(AbstractEntity):
 
         return self
 
-    # TODO RDF: I don't remember what this function was used for. Investiage or delete it 
+    # TODO RDF: I don't remember what this function was used for.
+    #  Investigate or delete it.
     def get_child_entity(self):
-        for x in [x for x in apps.all_models['apis_entities'].values()]:
+        for x in [x for x in apps.all_models["apis_entities"].values()]:
             if x.__name__ in list(settings.APIS_ENTITIES.keys()):
                 try:
                     my_ent = x.objects.get(id=self.id)
@@ -789,7 +856,8 @@ class TempEntityClass(AbstractEntity):
 
     def merge_with(self, entities):
 
-        # TODO: Check if these imports can be put to top of module while not having a circual import issue
+        # TODO: check if these imports can be put to top of module without
+        #  causing circular import issues.
         from apis_core.apis_labels.models import Label
         from apis_core.apis_vocabularies.models import LabelType
         from apis_core.apis_metainfo.models import Uri
@@ -819,7 +887,7 @@ class TempEntityClass(AbstractEntity):
                 if col2 not in col_list:
                     self.collection.add(col2)
             for f in ent._meta.local_many_to_many:
-                if not f.name.endswith('_set'):
+                if not f.name.endswith("_set"):
                     sl = list(getattr(self, f.name).all())
                     for s in getattr(ent, f.name).all():
                         if s not in sl:
@@ -854,6 +922,7 @@ class TempEntityClass(AbstractEntity):
 
     def get_serialization(self):
         from apis_core.apis_entities.serializers_generic import EntitySerializer
+
         return EntitySerializer(self).data
 
 
@@ -888,7 +957,6 @@ def prepare_fields_dict(fields_list, vocabs, vocabs_m2m):
 
 @receiver(post_save, dispatch_uid="create_default_uri")
 def create_default_uri(sender, instance, **kwargs):
-
     from apis_core.apis_metainfo.models import Uri
 
     if kwargs["created"] and sender in AbstractEntity.get_all_entity_classes():
@@ -897,7 +965,8 @@ def create_default_uri(sender, instance, **kwargs):
         else:
             base1 = BASE_URI
         uri_c = "{}{}".format(
-            base1, reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
+            base1,
+            reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
         )
         uri2 = Uri(uri=uri_c, domain="apis default", root_object=instance)
         uri2.save()
@@ -912,13 +981,18 @@ lst_entities_complete = [
     and globals()[x]
 ]
 lst_entities_complete = list(dict.fromkeys(lst_entities_complete))
+
+# TODO: inspect.
+#  This list here will contain only duplicates if
+#  `lst_entities_complete` contains all entities
 perm_change_senders = [
     getattr(getattr(x, "collection"), "through") for x in lst_entities_complete
-] # TODO: Inspect. This list here will contain only duplicates if `lst_entities_complete` contains all entities
+]
 
 
 @receiver(
-    m2m_changed, dispatch_uid="create_object_permissions",
+    m2m_changed,
+    dispatch_uid="create_object_permissions",
 )
 def create_object_permissions(sender, instance, **kwargs):
     if kwargs["action"] == "pre_add" and sender in perm_change_senders:
@@ -972,14 +1046,16 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
         if user_group is not None:
             user.groups.add(Group.objects.get(name=user_group))
 
+
 # __after_rdf_refactoring__
-# TODO RDF : This function is an ad hoc work around. It would be better done if entity settings would be fully moved into the entities themselves
+# TODO RDF : This function is an ad hoc work around.
+#  It would be better done if entity settings would be fully moved
+#  into the entities themselves.
 def fill_settings_with_entity_attributes():
-
     for entity_class in AbstractEntity.get_all_entity_classes():
-
         entity_settings = entity_class.entity_settings
 
         settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
+
 
 fill_settings_with_entity_attributes()
