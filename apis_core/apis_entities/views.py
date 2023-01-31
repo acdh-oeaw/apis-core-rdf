@@ -18,6 +18,7 @@ from django_tables2.export.views import ExportMixin
 # from reversion_compare.views import HistoryCompareDetailView
 
 from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
+
 # __before_rdf_refactoring__
 # from apis_core.apis_relations.models import AbstractRelation
 from apis_core.helper_functions.RDFParser import RDFParser
@@ -165,7 +166,9 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         """
         session = getattr(self.request, "session", False)
         entity = self.kwargs.get("entity")
-        selected_cols = self.request.GET.getlist("columns")  # populates "Select additional columns" dropdown
+        selected_cols = self.request.GET.getlist(
+            "columns"
+        )  # populates "Select additional columns" dropdown
         if session:
             edit_v = self.request.session.get("edit_views", False)
         else:
@@ -439,7 +442,7 @@ def getGeoJsonList(request):
 #     objects = relation.objects.filter(related_place__status="distinct")
 #     nodes = dict()
 #     edges = []
-# 
+#
 #     for x in objects:
 #         if x.related_place.pk not in nodes.keys():
 #             place_url = reverse_lazy(
@@ -493,10 +496,10 @@ def getGeoJsonList(request):
 #             }
 #         )
 #     lst_json = {"edges": edges, "nodes": [nodes[x] for x in nodes.keys()]}
-# 
+#
 #     return HttpResponse(json.dumps(lst_json), content_type="application/json")
-# 
-# 
+#
+#
 # @user_passes_test(access_for_all_function)
 # def getNetJsonListInstitution(request):
 #     """Used to retrieve a Json to draw a network"""
@@ -504,7 +507,7 @@ def getGeoJsonList(request):
 #     objects = relation.objects.all()
 #     nodes = dict()
 #     edges = []
-# 
+#
 #     for x in objects:
 #         if x.related_institution.pk not in nodes.keys():
 #             inst_url = reverse_lazy(
@@ -559,10 +562,10 @@ def getGeoJsonList(request):
 #             }
 #         )
 #     lst_json = {"edges": edges, "nodes": [nodes[x] for x in nodes.keys()]}
-# 
+#
 #     return HttpResponse(json.dumps(lst_json), content_type="application/json")
-# 
-# 
+#
+#
 # @login_required
 # def resolve_ambigue_place(request, pk, uri):
 #     """Only used to resolve place names."""
@@ -579,7 +582,7 @@ def getGeoJsonList(request):
 #             pl_n_1.save()
 #         UriCandidate.objects.filter(entity=entity).delete()
 #         reversion.set_user(request.user)
-# 
+#
 #     return HttpResponseRedirect(url)
 
 
