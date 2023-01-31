@@ -18,6 +18,7 @@ from django_tables2.export.views import ExportMixin
 # from reversion_compare.views import HistoryCompareDetailView
 
 from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
+
 # __before_rdf_refactoring__
 # from apis_core.apis_relations.models import AbstractRelation
 from apis_core.helper_functions.RDFParser import RDFParser
@@ -126,11 +127,21 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         super(GenericListViewNew, self).__init__(*args, **kwargs)
         self.entity = None
         self.filter = None
+        self.entity_settings = None
 
     def get_model(self):
+        """
+        Look up the model class for the given entity
+        """
         model = ContentType.objects.get(
-            app_label__startswith="apis_", model=self.entity.lower()
+            app_label__startswith="apis_", model=self.entity
         ).model_class()
+
+        try:
+            self.entity_settings = model.entity_settings
+        except AttributeError as e:
+            self.entity_settings = {}
+
         return model
 
     def test_func(self):
@@ -141,17 +152,13 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
 
     def get_queryset(self, **kwargs):
         self.entity = self.kwargs.get("entity")
-        qs = (
-            ContentType.objects.get(
-                app_label__startswith="apis_", model=self.entity.lower()
-            )
-            .model_class()
-            .objects.all()
-        ).order_by("name")
-        self.filter = get_list_filter_of_entity(self.entity.title())(
+
+        qs = (self.get_model().objects.all()).order_by("name")
+        self.filter = get_list_filter_of_entity(self.entity)(
             self.request.GET, queryset=qs
         )
         self.filter.form.helper = self.formhelper_class()
+
         return self.filter.qs
 
     def get_table(self, **kwargs):
@@ -163,28 +170,32 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
 
         :return: a dictionary
         """
+        model = self.get_model()
+        class_name = model.__name__
+
         session = getattr(self.request, "session", False)
-        entity = self.kwargs.get("entity")
-        selected_cols = self.request.GET.getlist("columns")  # populates "Select additional columns" dropdown
         if session:
             edit_v = self.request.session.get("edit_views", False)
         else:
             edit_v = False
 
-        # check APIS_ENTITIES var in Settings for key used for table columns
+        selected_cols = self.request.GET.getlist(
+            "columns"
+        )  # populates "Select additional columns" dropdown
         try:
-            default_cols = settings.APIS_ENTITIES[entity.title()]["table_fields"]
+            default_cols = self.entity_settings["table_fields"]
         except KeyError as e:
             default_cols = []  # gets set to "name" in get_entities_table when empty
         default_cols = default_cols + selected_cols
 
         self.table_class = get_entities_table(
-            self.entity.title(), edit_v, default_cols=default_cols
+            class_name, edit_v, default_cols=default_cols
         )
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(
             self.request, paginate={"page": 1, "per_page": self.paginate_by}
         ).configure(table)
+
         return table
 
     def get_context_data(self, **kwargs):
@@ -196,37 +207,55 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
 
         :return: a dictionary
         """
-        model = self.get_model()
         context = super(GenericListViewNew, self).get_context_data()
+        model = self.get_model()
+        class_name = model.__name__
+
         context[self.context_filter_name] = self.filter
-        context["entity"] = self.entity
+        context["entity"] = self.entity  # model slug
         context["app_name"] = "apis_entities"
-        entity = self.entity.title()
+        context["docstring"] = f"{model.__doc__}"
+
         context["entity_create_stanbol"] = GenericEntitiesStanbolForm(self.entity)
+
         if "browsing" in settings.INSTALLED_APPS:
             from browsing.models import BrowsConf
 
             context["conf_items"] = list(
-                BrowsConf.objects.filter(model_name=self.entity).values_list(
+                BrowsConf.objects.filter(model_name=class_name).values_list(
                     "field_path", "label"
                 )
             )
-        context["docstring"] = "{}".format(model.__doc__)
-        if model._meta.verbose_name_plural:
-            context["class_name"] = "{}".format(model._meta.verbose_name_plural.title())
+
+        # TODO kk
+        #  suggestion: rename context['class_name'] to context['entity_name']
+        #  throughout (+ same for plural versions) to avoid confusion with
+        #  actual model class name
+        if model._meta.verbose_name:
+            context["class_name"] = f"{model._meta.verbose_name.title()}"
         else:
-            if model.__name__.endswith("s"):
-                context["class_name"] = "{}".format(model.__name__)
+            context["class_name"] = f"{class_name}"
+        if model._meta.verbose_name_plural:
+            context["class_name_plural"] = f"{model._meta.verbose_name_plural.title()}"
+        # rudimentary way of pluralising the name of a model class
+        else:
+            if class_name.endswith("s"):
+                context["class_name_plural"] = f"{class_name}es"
+            elif class_name.endswith("y"):
+                context["class_name_plural"] = f"{class_name[:-1]}ies"
             else:
-                context["class_name"] = "{}s".format(model.__name__)
+                context["class_name_plural"] = f"{class_name}s"
+
         try:
             context["get_arche_dump"] = model.get_arche_dump()
         except AttributeError:
             context["get_arche_dump"] = None
+
         try:
             context["create_view_link"] = model.get_createview_url()
         except AttributeError:
             context["create_view_link"] = None
+
         if "charts" in settings.INSTALLED_APPS:
             app_label = model._meta.app_label
             filtered_objs = ChartConfig.objects.filter(
@@ -245,17 +274,21 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
                     app_label=app_label,
                 )
                 context = dict(context, **chartdata)
+
         try:
-            context["enable_merge"] = settings.APIS_ENTITIES[entity.title()]["merge"]
+            context["enable_merge"] = self.entity_settings["merge"]
         except KeyError:
             context["enable_merge"] = False
+
         try:
-            togg_cols = settings.APIS_ENTITIES[entity.title()]["additional_cols"]
+            toggleable_cols = self.entity_settings["additional_cols"]
         except KeyError:
-            togg_cols = []
+            toggleable_cols = []
         if context["enable_merge"] and self.request.user.is_authenticated:
-            togg_cols = togg_cols + ["merge"]
-        context["togglable_colums"] = togg_cols + ENTITIES_DEFAULT_COLS
+            toggleable_cols = toggleable_cols + ["merge"]
+        # TODO kk spelling of this dict key should get fixed throughout
+        #  (togglable_colums -> toggleable_columns)
+        context["togglable_colums"] = toggleable_cols + ENTITIES_DEFAULT_COLS
 
         return context
 
@@ -439,7 +472,7 @@ def getGeoJsonList(request):
 #     objects = relation.objects.filter(related_place__status="distinct")
 #     nodes = dict()
 #     edges = []
-# 
+#
 #     for x in objects:
 #         if x.related_place.pk not in nodes.keys():
 #             place_url = reverse_lazy(
@@ -493,10 +526,10 @@ def getGeoJsonList(request):
 #             }
 #         )
 #     lst_json = {"edges": edges, "nodes": [nodes[x] for x in nodes.keys()]}
-# 
+#
 #     return HttpResponse(json.dumps(lst_json), content_type="application/json")
-# 
-# 
+#
+#
 # @user_passes_test(access_for_all_function)
 # def getNetJsonListInstitution(request):
 #     """Used to retrieve a Json to draw a network"""
@@ -504,7 +537,7 @@ def getGeoJsonList(request):
 #     objects = relation.objects.all()
 #     nodes = dict()
 #     edges = []
-# 
+#
 #     for x in objects:
 #         if x.related_institution.pk not in nodes.keys():
 #             inst_url = reverse_lazy(
@@ -559,10 +592,10 @@ def getGeoJsonList(request):
 #             }
 #         )
 #     lst_json = {"edges": edges, "nodes": [nodes[x] for x in nodes.keys()]}
-# 
+#
 #     return HttpResponse(json.dumps(lst_json), content_type="application/json")
-# 
-# 
+#
+#
 # @login_required
 # def resolve_ambigue_place(request, pk, uri):
 #     """Only used to resolve place names."""
@@ -579,7 +612,7 @@ def getGeoJsonList(request):
 #             pl_n_1.save()
 #         UriCandidate.objects.filter(entity=entity).delete()
 #         reversion.set_user(request.user)
-# 
+#
 #     return HttpResponseRedirect(url)
 
 
