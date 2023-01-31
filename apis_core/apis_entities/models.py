@@ -239,8 +239,8 @@ class AbstractEntity(RootObject):
     @classmethod
     def get_all_entity_classes(cls):
         """
-        Retrieve all entity classes included in an APIS Ontologies app's
-        model.py file – except classes named "ent_class".
+        Retrieve all entity classes from an APIS Ontologies app's model.py
+        file – except for abstract classes or classes named "ent_class".
 
         Attempts to set protected variables
         - _all_entity_classes to list of classes
@@ -266,7 +266,7 @@ class AbstractEntity(RootObject):
                     # entity_class.__module__ == "apis_core.apis_entities.models"
                     entity_class.__module__ == "apis_ontology.models"
                     and entity_name != "ent_class"
-                    and entity_name != "AbstractEntity"
+                    and entity_class._meta.abstract is False
                 ):
                     entity_classes.append(entity_class)
                     entity_names.append(entity_name.lower())
