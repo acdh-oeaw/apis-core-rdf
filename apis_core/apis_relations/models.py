@@ -4,8 +4,10 @@ import unicodedata
 
 # from reversion import revisions as reversion
 import reversion
+
 # from apis_core.apis_entities.models import Person
 from apis_core.apis_entities.models import RootObject, TempEntityClass
+
 #######################################################################
 #
 # Custom Managers
@@ -71,7 +73,7 @@ class Property(RootObject):
     # TODO RDF : Redundancy between name_forward and name, solve this.
     name_forward = models.CharField(
         max_length=255,
-        verbose_name="Name reverse",
+        verbose_name="Name forward",
         help_text='Inverse relation like: "is sub-class of" vs. "is super-class of".',
         blank=True,
     )
@@ -134,7 +136,6 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
                 )
 
                 if len(contenttype_parent) == 1:
-
                     contenttype_parent = contenttype_parent[0]
                     parent_list.append(contenttype_parent)
                     parent_list.extend(get_all_parents(contenttype_parent))
@@ -147,7 +148,6 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
             class_current = contenttype_current.model_class()
 
             for class_child in class_current.__subclasses__():
-
                 # TODO __sresch__ : Avoid ContentType DB fetch
                 contenttype_child = ContentType.objects.get(model=class_child.__name__)
                 child_list.append(contenttype_child)
@@ -160,7 +160,6 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
         for parent_contenttype in parent_contenttype_list:
 
             if parent_contenttype in contenttype_already_saved_list:
-
                 raise Exception(
                     f"Pre-existing parent class found when trying to save or remove a property subject or object class."
                     f" The current class to be saved is '{contenttype_to_add_or_remove.model_class().__name__}',"
@@ -172,7 +171,6 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
         children_contenttype_list = get_all_children(contenttype_to_add_or_remove)
 
         for child_contenttype in children_contenttype_list:
-
             subj_or_obj_field_function(child_contenttype)
 
     if kwargs["pk_set"] is not None and len(kwargs["pk_set"]) == 1:
@@ -202,7 +200,6 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
             subj_or_obj_field_function = subj_or_obj_field.remove
 
         if subj_or_obj_field_function is not None:
-
             cascade_subj_obj_class_to_children(
                 contenttype_to_add_or_remove=ContentType.objects.get(
                     pk=min(kwargs["pk_set"])
@@ -213,12 +210,10 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
 
 
 def subj_class_changed(sender, **kwargs):
-
     subj_or_obj_class_changed(sender, is_subj=True, **kwargs)
 
 
 def obj_class_changed(sender, **kwargs):
-
     subj_or_obj_class_changed(sender, is_subj=False, **kwargs)
 
 
@@ -588,8 +583,7 @@ class RelationPublishedQueryset(models.QuerySet):
 
 
 # TODO __sresch__ : Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
-from django.db.models.fields.related_descriptors import \
-    ForwardManyToOneDescriptor
+from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
 
 class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):
@@ -618,6 +612,7 @@ class Triple(models.Model):
         null=True,
         on_delete=models.CASCADE,
         related_name="triple_set_from_subj",
+        verbose_name="Subject",
     )
     obj = InheritanceForeignKey(
         RootObject,
@@ -625,6 +620,7 @@ class Triple(models.Model):
         null=True,
         on_delete=models.CASCADE,
         related_name="triple_set_from_obj",
+        verbose_name="Object",
     )
     prop = models.ForeignKey(
         Property,
@@ -632,6 +628,7 @@ class Triple(models.Model):
         null=True,
         on_delete=models.CASCADE,
         related_name="triple_set_from_prop",
+        verbose_name="Property",
     )
 
     objects = BaseRelationManager()
@@ -651,9 +648,8 @@ class Triple(models.Model):
 
         return self.__repr__()
 
-    def get_web_object(self):
-
         # __before_rdf_refactoring__
+        # def get_web_object(self):
         # Method from RelationBaseClass
         #
         # nameA = self.get_related_entity_instanceA().name
@@ -683,6 +679,8 @@ class Triple(models.Model):
         # return result
         #
         # __after_rdf_refactoring__
+
+    def get_web_object(self):
         return {
             "relation_pk": self.pk,
             "subj": self.subj.name,
@@ -735,7 +733,6 @@ class Triple(models.Model):
 
 
 class TempTriple(Triple):
-
     review = models.BooleanField(
         default=False,
         help_text="Should be set to True, if the data record holds up quality standards.",
