@@ -183,7 +183,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
             "columns"
         )  # populates "Select additional columns" dropdown
         try:
-            default_cols = self.entity_settings["table_fields"]
+            default_cols = settings.APIS_ENTITIES.get(class_name)["table_fields"]
         except KeyError as e:
             default_cols = []  # gets set to "name" in get_entities_table when empty
         default_cols = default_cols + selected_cols
