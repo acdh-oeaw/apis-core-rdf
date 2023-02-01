@@ -147,7 +147,6 @@ class GenericEntitiesEditView(View):
         context = {
             'entity_type': entity,
             'form': form,
-            "table_xyz": VocabTable(E55_Type.objects.all()),
             "form_xyz": VocabForm(),
             'form_text': form_text,
             'instance': instance,
