@@ -1052,10 +1052,13 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
 #  It would be better done if entity settings would be fully moved
 #  into the entities themselves.
 def fill_settings_with_entity_attributes():
-    for entity_class in AbstractEntity.get_all_entity_classes():
-        entity_settings = entity_class.entity_settings
+    # if APIS_ENTITIES are not defined in the settings, we take the
+    # ones that are defined in the entity classes
+    if not settings.APIS_ENTITIES:
+        for entity_class in AbstractEntity.get_all_entity_classes():
+            entity_settings = entity_class.entity_settings
 
-        settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
+            settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
 
 
 fill_settings_with_entity_attributes()
