@@ -13,7 +13,7 @@
 {% block Titel %}Create a {{entity_type|title}}{% endblock %}
 {% load guardian_tags %}
 {% load static %}
-
+{% load render_table from django_tables2 %}
 {% block content %}
 {% load django_tables2 %}
 {% if instance %}
@@ -54,7 +54,22 @@
                                 <button hidden=True class="bibsonomy-anker-hidden" data-bibs-contenttype={{ entity_type }} data-bibs-object_pk={{instance.pk}} data-bibs-form-elements="{{ apis_bibsonomy }}">Ref</button>
                             {% endif %}
                                 <div class="card card-default">
-
+                                    <div id="vocab_triple_form_id_div">
+                                        <form id="vocab_triple_form_id_form">
+                                            <h1>bla</h1>
+                                            {% for field in form_xyz %}
+                                                <div class="fieldWrapper">
+                                                    {{ field.errors }}
+                                                    {% if not field.field.widget.is_hidden %}
+                                                        {{ field.label_tag }}
+                                                    {% endif %}
+                                                    {{ field }}
+                                                </div>
+                                            {% endfor %}
+                                            <input type="submit" class="btn btn-primary" value="Create User" />
+                                        </form>
+                                    </div>
+                                {% render_table table_xyz %}
                             	{% crispy form %}
 
                                     <div class="card-header" role="tab" id="headingFour">
@@ -193,6 +208,17 @@
 {% block scripts %}
 {{block.super}}
 {% if instance %}
+<script type="text/javascript">
+window.onload = function() {
+  $("#id_other_entity").select2({
+        ajax: {
+            url: '/apis/entities/autocomplete/e55_type/',
+            dataType: 'json'
+            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+        }
+    })
+};
+</script>
 <script type="text/javascript">
     function GetFormAjax(FormName , ObjectID , ButtonText) {
         function add_form(data) {

@@ -181,7 +181,7 @@ class VocabsUri(models.Model):
 #     """Holds controlled vocabularies about event-types"""
 #     pass
 
-
+# TODO RDF: Remove all these types
 @reversion.register(follow=['vocabsbaseclass_ptr'])
 class LabelType(VocabsBaseClass):
     """Holds controlled vocabularies about label-types"""
@@ -458,3 +458,9 @@ class TextType(VocabsBaseClass):
 #                     ent_class = type(f"{rel_class_name}Relation", (AbstractRelationType,), attributes)
 #                     globals()[f"{rel_class_name}Relation"] = ent_class
 #
+
+class AbstractVocabulary(RootObject):
+    is_vocabulary = True
+    
+    class Meta:
+        abstract = True

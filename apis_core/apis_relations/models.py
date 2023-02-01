@@ -56,6 +56,13 @@ class BaseRelationManager(models.Manager):
             return self.get_queryset()
 
 
+class AbstractProperty(RootObject):
+    is_property = True
+    
+    class Meta:
+        abstract = True
+
+
 # TODO RDF : Implement filtering for implicit superclasses
 # Currently if a Property.objects.filter() is used with param subj_class or obj_class, then it searches only for the
 # passed class, but not for implicit superclasses. For this to be possible, the object manager must be overriden
@@ -622,6 +629,7 @@ class Triple(models.Model):
         related_name="triple_set_from_obj",
         verbose_name="Object",
     )
+    # TODO RDF: consider changing this foreign key to RootObject for higher versatility
     prop = models.ForeignKey(
         Property,
         blank=True,

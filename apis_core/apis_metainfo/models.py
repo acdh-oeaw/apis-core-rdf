@@ -330,7 +330,12 @@ class RootObject(models.Model):
     In order to make the Triple architecture as versatile as possible, I defined a new super class 'RootObject'.
     This class is being used as superclass for entities, vocabularies, and properties
     """
+    is_entity = False
+    is_property = False
+    is_vocabulary = False
+    class_uri = None
 
+    # TODO RDF: consider renaming attribute 'name' to 'value'
     name = models.CharField(max_length=255, verbose_name='Name')
     self_content_type = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
     self_content_type_cached = None

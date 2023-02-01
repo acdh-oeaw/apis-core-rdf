@@ -141,9 +141,14 @@ class GenericEntitiesEditView(View):
                        'create': request.user.has_perm('entities.add_{}'.format(entity))}
         template = select_template(['apis_entities/{}_create_generic.html'.format(entity),
                                     'apis_entities/entity_create_generic.html'])
+        
+        from apis_core.apis_entities.forms import VocabTable, VocabForm
+        from apis_ontology.models import E55_Type
         context = {
             'entity_type': entity,
             'form': form,
+            "table_xyz": VocabTable(E55_Type.objects.all()),
+            "form_xyz": VocabForm(),
             'form_text': form_text,
             'instance': instance,
             'right_card': side_bar,
@@ -190,6 +195,7 @@ class GenericEntitiesEditView(View):
                 context['form_merge_with'] = form_merge_with
                 return TemplateResponse(request, template, context=context)
             return HttpResponse(template.render(request=request, context=context))
+
 
 
 @method_decorator(login_required, name='dispatch')

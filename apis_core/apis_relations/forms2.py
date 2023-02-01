@@ -1,6 +1,5 @@
 import copy
 import re
-
 import yaml
 from crispy_forms.bootstrap import Accordion, AccordionGroup
 from crispy_forms.helper import FormHelper
@@ -342,7 +341,6 @@ class GenericTripleForm(forms.ModelForm):
         }
 
     def __init__(self, entity_type_self_str, entity_type_other_str):
-
         # __before_rdf_refactoring__
         #
         # css_notes = 'LS'
@@ -364,10 +362,8 @@ class GenericTripleForm(forms.ModelForm):
         #
         # __after_rdf_refactoring__
         super().__init__()
-
         self.helper = FormHelper()
         self.helper.form_tag = False
-
         attrs = {
             'data-placeholder': 'Type to get suggestions',
              'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
@@ -377,11 +373,9 @@ class GenericTripleForm(forms.ModelForm):
         help_text_other_entity = "Search and select or use an URL from a reference resource"
         attrs_target = copy.deepcopy(attrs)
         attrs_target['data-tags'] = '1'
-
         # This assert only serves as a linking for us devs, to make explicit what internal object the class
         # Select2ListCreateChoiceField object afterwards uses.
         assert GenericEntitiesAutocomplete
-
         self.fields['other_entity'] = autocomplete.Select2ListCreateChoiceField(
             label='entity',
             widget=ListSelect2(
@@ -393,11 +387,9 @@ class GenericTripleForm(forms.ModelForm):
             ),
             help_text=help_text_other_entity
         )
-
         # This assert only serves as a linking for us devs, to make explicit what internal object the class
         # Select2ListCreateChoiceField object afterwards uses.
         assert PropertyAutocomplete
-
         self.fields['property'] = autocomplete.Select2ListCreateChoiceField(
             label='property',
             widget=ListSelect2(
@@ -408,15 +400,11 @@ class GenericTripleForm(forms.ModelForm):
                 attrs=attrs_target
             ),
         )
-
-
         # if self.highlighter: # TODO RDF
         #     css_notes = 'HL'
         # else:
         #     css_notes = 'LS'
-
         self.helper.include_media = False
-
         # __before_rdf_refactoring__ # TODO RDF
         #
         # self.helper.layout = Layout(
@@ -473,7 +461,6 @@ class GenericTripleForm(forms.ModelForm):
         #         )
         #     else:
         #         self.fields['end_date_written'].help_text = DateParser.get_date_help_text_default()
-
 
     def load_subj_obj_prop(self, entity_instance_self, entity_instance_other, property_instance, property_direction):
         # the more important function here when writing data from an user input via an ajax call into this form.

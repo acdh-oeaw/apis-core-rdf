@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import copy
 from crispy_forms.bootstrap import Accordion, AccordionGroup
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Field
@@ -11,13 +12,14 @@ from django.core.validators import URLValidator
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import ModelMultipleChoiceField, ModelChoiceField
 from django.urls import reverse
-
 from apis_core.apis_metainfo.models import Text, Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
 from apis_core.helper_functions import DateParser
 from apis_core.helper_functions.RDFParser import RDFParser
 from .fields import ListSelect2, Select2Multiple
 from apis_core.apis_entities.models import AbstractEntity
+from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete
+import django_tables2 as tables
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import AnnotationProject
@@ -35,6 +37,55 @@ class SearchForm(forms.Form):
         helper.form_method = "GET"
         return helper
 
+class VocabForm(forms.ModelForm):
+    pk = forms.CharField(widget=forms.HiddenInput(), required = False)
+    
+    def __init__(self, *args, **kwargs):
+        super(VocabForm, self).__init__(*args, **kwargs)
+        # for name in self.fields.keys():
+        #     self.fields[name].widget.attrs.update({
+        #         # add a "form-control" class to each form input for enabling bootstrap
+        #         'class': 'form-control',
+        #     })
+
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        attrs_target = {
+            'data-placeholder': 'Type to get suggestions',
+            'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+            'data-html': True,
+            'style': 'width: 100%',
+            'data-tags' : '1',
+        }.copy()
+        self.fields['other_entity'] = autocomplete.Select2ListCreateChoiceField(
+            label='entity',
+            widget=ListSelect2(
+                url=reverse(
+                    'apis:apis_entities:generic_entities_autocomplete',
+                    kwargs={"entity": "e55_type"}
+                ),
+                attrs=attrs_target,
+            ),
+            help_text="bla ble blo"
+        )
+        self.helper.include_media = False
+    
+    class Meta:
+        from apis_core.apis_relations.models import Triple
+        model = Triple
+        # fields = ["pk", "nick_name", "first_name"]
+        exclude = []
+        # widgets = {
+        #     "nick_name": autocomplete.ModelSelect2(url="autocomplete/")
+        # }
+
+class VocabTable(tables.Table):
+    
+    class Meta:
+        from apis_ontology.models import E55_Type
+        model = E55_Type
+        # exclude = []
+        fields = ["name"]
 
 def get_entities_form(entity):
     """
@@ -48,6 +99,8 @@ def get_entities_form(entity):
         class Meta:
             model = AbstractEntity.get_entity_class_of_name(entity)
 
+            # TODO RDF: Remove these hard-coded ontology specific fields, and delegate them to
+            #  apis-ontologies
             exclude = [
                 "start_date",
                 "start_start_date",
@@ -185,10 +238,48 @@ def get_entities_form(entity):
 
             for field in sort_fields_list(main_fields, entity):
                 crispy_main_fields.append(Field(field))
+                
+            # crispy_main_fields.append
 
-            self.helper.layout = Layout(Accordion(  # creates two blocks for fields
+            # crispy_vocabulary_fields = AccordionGroup(
+            #     "Vocabularies",
+            #     *[Field(f) for f in meta_fields]
+            # )
+            
+            
+            # attrs = {
+            #     'data-placeholder': 'Type to get suggestions',
+            #     'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+            #     'data-html': True,
+            #     'style': 'width: 100%'
+            # }
+            # help_text_other_entity = "Search and select or use an URL from a reference resource"
+            # attrs_target = copy.deepcopy(attrs)
+            # attrs_target['data-tags'] = '1'
+            #
+            # # This assert only serves as a linking for us devs, to make explicit what internal object the class
+            # # Select2ListCreateChoiceField object afterwards uses.
+            # assert GenericEntitiesAutocomplete
+            # crispy_main_fields.append(Field("XXX"))
+            # self.fields['XXX'] = autocomplete.Select2ListCreateChoiceField(
+            #         label='entity',
+            #         widget=ListSelect2(
+            #             url=reverse(
+            #                 'apis:apis_entities:generic_entities_autocomplete',
+            #                 kwargs={"entity": "F10_Person"}
+            #             ),
+            #             attrs=attrs_target,
+            #         ),
+            #         help_text=help_text_other_entity
+            #     )
+
+            from apis_ontology.models import E55_Type
+
+            self.helper.layout = Layout(Accordion(  # creates blocks for fields
+                # VocabTable(E55_Type.objects.all()),
                 crispy_main_fields,
-                crispy_meta_fields
+                # crispy_vocabulary_fields,
+                crispy_meta_fields,
             ))
             self.fields["status"].required = False
             self.fields["collection"].required = False
@@ -480,4 +571,3 @@ class GenericFilterFormHelper(FormHelper):
         self.form_class = "genericFilterForm"
         self.form_method = "GET"
         self.add_input(Submit("Filter", "Filter"))
-
