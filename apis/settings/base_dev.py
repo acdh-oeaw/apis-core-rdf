@@ -1,7 +1,7 @@
 from .base import *
 
 NOTEBOOK_ARGUMENTS = [
-    '--notebook-dir', 'notebooks',
+    '--notebook-dir', 'apis-notebooks-v2',
 ]
 
 INSTALLED_APPS += ['django_extensions']

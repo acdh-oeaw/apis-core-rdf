@@ -11,7 +11,33 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-from typing import Dict, Any
+from typing import Any, Dict
+
+if os.environ.get('SENTRY_DSN'):
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=os.environ.get('SENTRY_DSN'),
+        integrations=[
+            DjangoIntegration(),
+        ],
+        environment="production",
+
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=1.0,
+
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True
+    )
+
+# We fall back to a DEFAULT_SECRET_KEY, but you should
+# override this using an environment variable!
+DEFAULT_SECRET_KEY = "a+nkut46lzzg_=ul)zrs29$u_6^*)2by2mjmwn)tqlgw)_at&l"
+SECRET_KEY = os.environ.get('SECRET_KEY', DEFAULT_SECRET_KEY)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(
@@ -20,33 +46,38 @@ BASE_DIR = os.path.dirname(
 
 SHARED_URL = "https://shared.acdh.oeaw.ac.at/"
 
-ACDH_IMPRINT_URL = "https://shared.acdh.oeaw.ac.at/acdh-common-assets/api/imprint.php?serviceID="
+ACDH_IMPRINT_URL = (
+    "https://shared.acdh.oeaw.ac.at/acdh-common-assets/api/imprint.php?serviceID="
+)
 
 PROJECT_NAME = "apis"
 PROJECT_SHARED = "https://shared.acdh.oeaw.ac.at/apis/"
 PROJECT_DEFAULT_MD = {
-    'title': 'TITLE',
-    'author': 'Matthias Schlögl, Peter Andorfer',
-    'subtitle': 'SUBTITLE',
-    'description': """This is a default metadata file. To change this, provide\
+    "title": "TITLE",
+    "author": "Matthias Schlögl, Peter Andorfer",
+    "subtitle": "SUBTITLE",
+    "description": """This is a default metadata file. To change this, provide\
     provide a following file {PROJECT_SHARED}/{PROJECT_NAME}/metadata.json""",
-    'github': 'https://github.com/acdh-oeaw/apis-webpage-base',
-    'production instance': None,
-    'purpose_de': '',
-    'purpose_en': """""",
-    'version': ['apis_core', 'charts', 'django'],
-    'matomo_id': '',
-    'matomo_url': '',
-    'imprint': '/imprint',
-    'social_media': [
-        ('fab fa-twitter', 'https://twitter.com/ACDH_OeAW'),
-        ('fab fa-youtube', 'https://www.youtube.com/channel/UCgaEMaMbPkULYRI5u6gvG-w'),
+    "github": "https://github.com/acdh-oeaw/apis-webpage-base",
+    "production instance": None,
+    "purpose_de": "",
+    "purpose_en": """""",
+    "version": ["apis_core", "charts", "django"],
+    "matomo_id": "",
+    "matomo_url": "",
+    "imprint": "/imprint",
+    "social_media": [
+        ("fab fa-twitter", "https://twitter.com/ACDH_OeAW"),
+        ("fab fa-youtube", "https://www.youtube.com/channel/UCgaEMaMbPkULYRI5u6gvG-w"),
     ],
-    'social_media': [
-        ('fab fa-twitter fa-2x', 'https://twitter.com/ACDH_OeAW'),
-        ('fab fa-youtube fa-2x', 'https://www.youtube.com/channel/UCgaEMaMbPkULYRI5u6gvG-w'),
+    "social_media": [
+        ("fab fa-twitter fa-2x", "https://twitter.com/ACDH_OeAW"),
+        (
+            "fab fa-youtube fa-2x",
+            "https://www.youtube.com/channel/UCgaEMaMbPkULYRI5u6gvG-w",
+        ),
     ],
-    'app_type': 'database',
+    "app_type": "database",
 }
 
 # Application definition
@@ -62,7 +93,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "reversion",
-    #"reversion_compare",
     "crispy_forms",
     "django_filters",
     "django_tables2",
@@ -74,14 +104,16 @@ INSTALLED_APPS = [
     "apis_core.apis_relations",
     "apis_core.apis_vocabularies",
     "apis_core.apis_labels",
+    "apis_core.apis_tei",
     # 'apis_core.apis_vis',
     "rest_framework.authtoken",
-    #"drf_yasg",
+    # "drf_yasg",
     "drf_spectacular",
     "guardian",
     "charts",
     "infos",
-    "pycsvexport",
+    "csvexport",
+    "apis_ontology",
 ]
 
 USE_X_FORWARDED_HOST = True
@@ -91,12 +123,32 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ("GET", "OPTIONS")
 
 SPECTACULAR_SETTINGS: Dict[str, Any] = {
-'TITLE': 'APIS generic API',
-'DESCRIPTIOPN': 'Provides access to the main APIS data-model endpoints.',
-'LICENSE': {'name': 'MIT License', 'url': 'https://www.mit.edu/~amini/LICENSE.md'},
-'VERSION': '0.13'
+    "TITLE": "APIS generic API",
+    "DESCRIPTIOPN": "Provides access to the main APIS data-model endpoints.",
+    "LICENSE": {"name": "MIT License", "url": "https://www.mit.edu/~amini/LICENSE.md"},
+    "VERSION": "0.13",
 }
 
+
+CSP_DEFAULT_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "cdnjs.cloudflare.com",
+    "cdn.jsdelivr.net",
+    "fonts.googleapis.com",
+    "ajax.googleapis.com",
+    "cdn.rawgit.com",
+    "*.acdh.oeaw.ac.at",
+    "unpkg.com",
+    "fonts.gstatic.com",
+    "cdn.datatables.net",
+    "code.highcharts.com",
+    "*.acdh-dev.oeaw.ac.at",
+    "*.acdh.oeaw.ac.at",
+    "openstreetmap.org",
+    "*.openstreetmap.org",
+)
+CSP_FRAME_SRC = ("sennierer.github.io",)
 
 CRISPY_TEMPLATE_PACK = "bootstrap3"
 
@@ -104,8 +156,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 50,
     "DEFAULT_PERMISSION_CLASSES": (
-        #"rest_framework.permissions.DjangoModelPermissions",
-        #"rest_framework.permissions.IsAuthenticated",
+        # "rest_framework.permissions.DjangoModelPermissions",
+        # "rest_framework.permissions.IsAuthenticated",
         "rest_framework.permissions.DjangoObjectPermissions",
         # use IsAuthenticated for every logged in user to have global edit rights
     ),
@@ -114,11 +166,11 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ),
-    'DEFAULT_FILTER_BACKENDS': (
-    'django_filters.rest_framework.DjangoFilterBackend',
-    'drf_spectacular.contrib.django_filters.DjangoFilterBackend'
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
+        # "drf_spectacular.contrib.django_filters.DjangoFilterBackend",
     ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -127,14 +179,16 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE = [
+    "allow_cidr.middleware.AllowCIDRMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "csp.middleware.CSPMiddleware",
     "reversion.middleware.RevisionMiddleware",
     "crum.CurrentRequestUserMiddleware",
 ]
@@ -144,7 +198,7 @@ ROOT_URLCONF = "apis.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "apis_ontology", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -160,9 +214,9 @@ TEMPLATES = [
                 "webpage.webpage_content_processors.custom_css",
                 "webpage.webpage_content_processors.shared_url",
                 "webpage.webpage_content_processors.apis_app_name",
-                "apis_core.context_processors.custom_context_processors.add_entities",
-                "apis_core.context_processors.custom_context_processors.add_relations",
-                "apis_core.context_processors.custom_context_processors.add_apis_settings",
+                "apis_core.context_processors.custom_context_processors.list_entities",
+                "apis_core.context_processors.custom_context_processors.list_relations",
+                "apis_core.context_processors.custom_context_processors.list_apis_settings",
             ]
         },
     }
@@ -232,26 +286,37 @@ APIS_ALTERNATE_NAMES = [
 ]
 
 APIS_RELATIONS_FILTER_EXCLUDE = [
-    "uri",
-    "tempentityclass",
+    "*uri*",
+    "*tempentityclass*",
     "user",
-    "__id",
-    "source",
+    "*__id",
+    "*source*",
     "label",
-    "temp_entity",
-    "collection__",
+    "*temp_entity*",
+    "*collection*",
+    "*published*",
+    "*_set",
+    "*_set__*",
     "_ptr",
     "baseclass",
-    "id",
-    "written",
-    "relation_type__description",
-    "relation_type__parent_class",
-    "relation_type__status",
-    "relation_type__vocab_name",
-    "relation_type__name_reverse",
-    "__text",
-    'annotation_set_relation',
+    "*id",
+    "*written*",
+    "relation_type__*",
+    "*__text*",
+    "text*",
+    "*annotation_set_relation*",
+    "*start_start_date*",
+    "*end_end_date*",
+    "*start_end_date*",
+    "*end_start_date*",
+    "*label*",
+    "*review*",
+    "*__name",
+    "*__status",
+    "*__references",
+    "*__notes",
 ]
+
 
 APIS_RELATIONS = {
     "list_filters": [("relation_type",)],
@@ -265,7 +330,13 @@ APIS_RELATIONS = {
             "related_person__first_name",
             "related_place__name",
         ],
+        # "include": ["related_place"], use include statement to set a list of filters
         "list_filters": [("relation_type",), ("related_person",), ("related_place",)],
+        "exclude": [
+            "related_person__first_name",
+            "related_place__lng",
+            "related_place__lat",
+        ],
     },
     "PersonInstitution": {
         "labels": ["related_person", "related_institution", "relation_type"],
@@ -280,6 +351,7 @@ APIS_RELATIONS = {
             ("related_person",),
             ("related_institution",),
         ],
+        "exclude": ["related_person__first_name"],
     },
     "PersonEvent": {
         "labels": ["related_person", "related_event", "relation_type"],
@@ -290,6 +362,7 @@ APIS_RELATIONS = {
             "related_event__name",
         ],
         "list_filters": [("relation_type",), ("related_person",), ("related_event",)],
+        "exclude": ["related_person__first_name"],
     },
     "PersonWork": {
         "labels": ["related_person", "related_work", "relation_type"],
@@ -300,6 +373,7 @@ APIS_RELATIONS = {
             "related_work__name",
         ],
         "list_filters": [("relation_type",), ("related_person",), ("related_work",)],
+        "exclude": ["related_person__first_name"],
     },
     "PersonPerson": {
         "labels": ["related_personA", "related_personB", "relation_type"],
@@ -315,6 +389,7 @@ APIS_RELATIONS = {
             ("related_personA",),
             ("related_personB",),
         ],
+        "exclude": ["related_person__first_name"],
     },
     "InstitutionPlace": {
         "labels": ["related_institution", "related_place", "relation_type"],
@@ -328,6 +403,7 @@ APIS_RELATIONS = {
             ("related_institution",),
             ("related_place",),
         ],
+        "exclude": ["related_place__lat", "related_place__lng"],
     },
     "InstitutionWork": {
         "labels": ["related_institution", "related_work", "relation_type"],
@@ -372,11 +448,13 @@ APIS_RELATIONS = {
         "labels": ["related_work", "related_place", "relation_type"],
         "search": ["relation_type__name", "related_place__name", "related_work__name"],
         "list_filters": [("relation_type",), ("related_place",), ("related_work",)],
+        "exclude": ["related_place__lat", "related_place__lng"],
     },
     "PlaceEvent": {
         "labels": ["related_event", "related_place", "relation_type"],
         "search": ["relation_type__name", "related_place__name", "related_event__name"],
         "list_filters": [("relation_type",), ("related_place",), ("related_event",)],
+        "exclude": ["related_place__lat", "related_place__lng"],
     },
     "PlacePlace": {
         "labels": ["related_placeA", "related_placeB", "relation_type"],
@@ -386,6 +464,7 @@ APIS_RELATIONS = {
             "related_placeB__name",
         ],
         "list_filters": [("relation_type",), ("related_placeA",), ("related_placeB",)],
+        "exclude": ["related_place__lat", "related_place__lng"],
     },
     "EventWork": {
         "labels": ["related_event", "related_work", "relation_type"],
@@ -412,90 +491,123 @@ APIS_VOCABULARIES = {"exclude": ["userAdded"]}
 
 APIS_METAINFO = {"exclude": ["groups_allowed"]}
 
-APIS_ENTITIES = {
-    "Place": {
-        "merge": True,
-        "search": ["name"],
-        "form_order": ["name", "kind", "lat", "lng", "status", "collection"],
-        "table_fields": ["name"],
-        "additional_cols": ["id", "lat", "lng", "part_of"],
-        "list_filters": [
-            {"name": {"method": "name_label_filter"}},
-            {"collection": {"label": "Collection"}},
-            {"kind": {"label": "Kind of Place"}},
-            "related_entity_name",
-            "related_relationtype_name",
-            "lat",
-            "lng",
-        ],
-    },
-    "Person": {
-        "merge": True,
-        "search": ["name", "first_name"],
-        "form_order": ["first_name", "name", "start_date_written", "end_date_written", "profession", "status", "collection"],
-        "table_fields": ["name", "first_name", "start_date_written", "end_date_written"],
-        "additional_cols": ["id", "profession", "gender"],
-        "list_filters": [
-            "name",
-            {"gender": {"label": "Gender"}},
-            {"start_date": {"label": "Date of Birth"}},
-            {"end_date": {"label": "Date of Death"}},
-            {"profession": {"label": "Profession"}},
-            {"title": {"label": "Title"}},
-            {"collection": {"label": "Collection"}},
-            "related_entity_name",
-            "related_relationtype_name",
-        ],
-    },
-    "Institution": {
-        "merge": True,
-        "search": ["name"],
-        "form_order": ["name", "start_date_written", "end_date_written", "kind", "status", "collection"],
-        "additional_cols": ["id", "kind", ],
-        "list_filters": [
-            {"name": {"label": "Name or label of institution"}},
-            {"kind": {"label": "Kind of Institution"}},
-            {"start_date": {"label": "Date of foundation"}},
-            {"end_date": {"label": "Date of termination"}},
-            {"collection": {"label": "Collection"}},
-            "related_entity_name",
-            "related_relationtype_name",
-        ],
-    },
-    "Work": {
-        "merge": True,
-        "search": ["name"],
-        "additional_cols": ["id", "kind", ],
-        "list_filters": [
-            {"name": {"label": "Name of work"}},
-            {"kind": {"label": "Kind of Work"}},
-            {"start_date": {"label": "Date of creation"}},
-            {"collection": {"label": "Collection"}},
-            "related_entity_name",
-            "related_relationtype_name",
-        ],
-    },
-    "Event": {
-        "merge": True,
-        "search": ["name"],
-        "additional_cols": ["id", ],
-        "list_filters": [
-            {"name": {"label": "Name of event"}},
-            {"kind": {"label": "Kind of Event"}},
-            {"start_date": {"label": "Date of beginning"}},
-            {"end_date": {"label": "Date of end"}},
-            {"collection": {"label": "Collection"}},
-            "related_entity_name",
-            "related_relationtype_name",
-        ],
-    },
-}
+# __before_rdf_refactoring__
+# APIS_ENTITIES = {
+#     "Place": {
+#         "merge": True,
+#         "search": ["name"],
+#         "form_order": ["name", "kind", "lat", "lng", "status", "collection"],
+#         "table_fields": ["name"],
+#         "additional_cols": ["id", "lat", "lng", "part_of"],
+#         "list_filters": [
+#             {"name": {"method": "name_label_filter"}},
+#             {"collection": {"label": "Collection"}},
+#             {"kind": {"label": "Kind of Place"}},
+#             "related_entity_name",
+#             "related_relationtype_name",
+#             "lat",
+#             "lng",
+#         ],
+#     },
+#     "Person": {
+#         "merge": True,
+#         "search": ["name", "first_name"],
+#         "form_order": [
+#             "first_name",
+#             "name",
+#             "start_date_written",
+#             "end_date_written",
+#             "profession",
+#             "status",
+#             "collection",
+#         ],
+#         "table_fields": [
+#             "name",
+#             "first_name",
+#             "start_date_written",
+#             "end_date_written",
+#         ],
+#         "additional_cols": ["id", "profession", "gender"],
+#         "list_filters": [
+#             "name",
+#             {"gender": {"label": "Gender"}},
+#             {"start_date": {"label": "Date of Birth"}},
+#             {"end_date": {"label": "Date of Death"}},
+#             {"profession": {"label": "Profession"}},
+#             {"title": {"label": "Title"}},
+#             {"collection": {"label": "Collection"}},
+#             "related_entity_name",
+#             "related_relationtype_name",
+#         ],
+#     },
+#     "Institution": {
+#         "merge": True,
+#         "search": ["name"],
+#         "form_order": [
+#             "name",
+#             "start_date_written",
+#             "end_date_written",
+#             "kind",
+#             "status",
+#             "collection",
+#         ],
+#         "additional_cols": [
+#             "id",
+#             "kind",
+#         ],
+#         "list_filters": [
+#             {"name": {"label": "Name or label of institution"}},
+#             {"kind": {"label": "Kind of Institution"}},
+#             {"start_date": {"label": "Date of foundation"}},
+#             {"end_date": {"label": "Date of termination"}},
+#             {"collection": {"label": "Collection"}},
+#             "related_entity_name",
+#             "related_relationtype_name",
+#         ],
+#     },
+#     "Work": {
+#         "merge": True,
+#         "search": ["name"],
+#         "additional_cols": [
+#             "id",
+#             "kind",
+#         ],
+#         "list_filters": [
+#             {"name": {"label": "Name of work"}},
+#             {"kind": {"label": "Kind of Work"}},
+#             {"start_date": {"label": "Date of creation"}},
+#             {"collection": {"label": "Collection"}},
+#             "related_entity_name",
+#             "related_relationtype_name",
+#         ],
+#     },
+#     "Event": {
+#         "merge": True,
+#         "search": ["name"],
+#         "additional_cols": [
+#             "id",
+#         ],
+#         "list_filters": [
+#             {"name": {"label": "Name of event"}},
+#             {"kind": {"label": "Kind of Event"}},
+#             {"start_date": {"label": "Date of beginning"}},
+#             {"end_date": {"label": "Date of end"}},
+#             {"collection": {"label": "Collection"}},
+#             "related_entity_name",
+#             "related_relationtype_name",
+#         ],
+#     },
+# }
+#
+# __after_rdf_refactoring__
+# TODO RDF: Remove this dictionary from settings entirely and attach it only to entity models
+APIS_ENTITIES = {}
 
 APIS_API_EXCLUDE_SETS = True  # exclude reverse links to entities
 
 APIS_LIST_VIEWS_ALLOWED = False
 APIS_DETAIL_VIEWS_ALLOWED = False
-MAX_AGE = 60*60
+MAX_AGE = 60 * 60
 
 APIS_LIST_VIEW_TEMPLATE = "browsing/generic_list.html"
 APIS_DELETE_VIEW_TEMPLATE = "webpage/confirm_delete.html"
