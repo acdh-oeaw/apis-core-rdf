@@ -1,0 +1,14 @@
+<div id="ajax_form_id">
+    <form id="generic_triple_form_id_form" onsubmit="return false;">
+        {% for field in form_xyz %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                {% if not field.field.widget.is_hidden %}
+                    {{ field.label_tag }}
+                {% endif %}
+                {{ field }}
+            </div>
+        {% endfor %}
+        <input type="submit" class="btn btn-primary" value="Create User" />
+    </form>
+</div>

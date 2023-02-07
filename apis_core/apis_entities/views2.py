@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, get_object_or_404
-from django.template.loader import select_template
+from django.shortcuts import redirect, get_object_or_404, render
+from django.template.loader import get_template
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -13,6 +13,7 @@ from django.views.generic import DeleteView
 from django_tables2 import RequestConfig
 from guardian.core import ObjectPermissionChecker
 from reversion.models import Version
+from django.template.loader import render_to_string
 import importlib
 
 from apis_core.apis_entities.models import AbstractEntity
@@ -139,15 +140,14 @@ class GenericEntitiesEditView(View):
         permissions = {'change': perm.has_perm('change_{}'.format(entity), instance),
                        'delete': perm.has_perm('delete_{}'.format(entity), instance),
                        'create': request.user.has_perm('entities.add_{}'.format(entity))}
-        template = select_template(['apis_entities/{}_create_generic.html'.format(entity),
-                                    'apis_entities/entity_create_generic.html'])
         
-        from apis_core.apis_entities.forms import VocabTable, VocabForm
+        from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2
+        from apis_core.apis_relations.tables import GenericTripleTable
         from apis_ontology.models import E55_Type
         context = {
             'entity_type': entity,
             'form': form,
-            "form_xyz": VocabForm(),
+            "table_xyz": GenericTripleTable(Triple.objects.all()),
             'form_text': form_text,
             'instance': instance,
             'right_card': side_bar,
@@ -160,7 +160,11 @@ class GenericEntitiesEditView(View):
             'permissions': permissions}
         form_merge_with = GenericEntitiesStanbolForm(entity, ent_merge_pk=pk)
         context['form_merge_with'] = form_merge_with
-        return HttpResponse(template.render(request=request, context=context))
+        # template = get_template('apis_entities/entity_create_generic.html')
+        # return HttpResponse(get_template("apis_entities/entity_create_generic.html").render(request=request, context=context))
+        form_xyz = GenericTripleForm2()
+        context["form_xyz"] = render_to_string(form_xyz.template_name, context={"form_xyz": form_xyz})
+        return render(request, "apis_entities/entity_create_generic.html", context)
 
     def post(self, request, *args, **kwargs):
         entity = kwargs['entity']

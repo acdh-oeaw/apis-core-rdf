@@ -20,6 +20,28 @@ empty_text_default = "There are currently no relations"
 from apis_core.apis_relations.models import Triple, Property
 
 
+class GenericTripleTable(tables.Table):
+    
+    class Meta:
+        model = Triple
+        fields = ["subj", "prop", "obj", "edit"]
+        attrs = {"id": "generic_triple_table_id_table"}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.base_columns["edit"] = tables.Column(empty_values=())
+
+    def render_edit(self, record):
+        return format_html(f"""
+            <a class='reledit' onclick="ajax_2_load_into_form('{record.id}')")>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
+                    <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
+                </svg>
+            </a>
+        """)
+
+
+
 # TODO RDF : combine this or re-use this class here in get_generic_triple_table
 # TODO RDF : Also consider implementing proper form search fields for this (instead of default drop-downs)
 class TripleTable(tables.Table):

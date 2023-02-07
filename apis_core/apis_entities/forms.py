@@ -37,6 +37,34 @@ class SearchForm(forms.Form):
         helper.form_method = "GET"
         return helper
 
+class GenericTripleForm2(forms.ModelForm):
+    template_name = "apis_entities/ajax_triple_form.html"
+    
+    class Meta:
+        from apis_core.apis_relations.models import Triple
+        model = Triple
+        exclude = []
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['other_entity'] = autocomplete.Select2ListCreateChoiceField(
+    #         label='entity',
+    #         widget=ListSelect2(
+    #             url=reverse(
+    #                 'apis:apis_entities:generic_entities_autocomplete',
+    #                 kwargs={"entity": "e55_type"}
+    #             ),
+    #             attrs={
+    #                 'data-placeholder': 'Type to get suggestions',
+    #                 'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+    #                 'data-html': True,
+    #                 'style': 'width: 100%',
+    #                 'data-tags' : '1',
+    #             },
+    #         ),
+    #         help_text="bla ble blo"
+    #     )
+
 class VocabForm(forms.ModelForm):
     pk = forms.CharField(widget=forms.HiddenInput(), required = False)
     

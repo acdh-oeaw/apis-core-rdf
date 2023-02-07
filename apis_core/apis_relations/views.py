@@ -5,8 +5,9 @@ import inspect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponse, Http404
+from django.http import JsonResponse, HttpResponse, Http404
 from django.template.loader import render_to_string
+from apis_ontology.models import *
 
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
@@ -16,7 +17,7 @@ from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 # from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
-from apis_core.apis_relations.models import Property, TempTriple
+from apis_core.apis_relations.models import Property, TempTriple, Triple
 # from .models import (
 #     PersonPlace, PersonPerson, PersonInstitution, InstitutionPlace,
 #     InstitutionInstitution, PlacePlace, PersonEvent, InstitutionEvent, PlaceEvent, PersonWork,
@@ -424,3 +425,21 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #                 'button_text': button_text, 'ObjectID': ObjectID, 'SiteID': SiteID},
     #                 request=request)}
     #
+
+def ajax_2_post(request):
+    t = Triple.objects.create(
+        subj=F10_Person.objects.get(pk=request.POST["subj"]),
+        obj=E55_Type.objects.get(pk=request.POST["obj"]),
+        prop=Property.objects.get(pk=request.POST["prop"])
+    )
+    from apis_core.apis_relations.tables import GenericTripleTable
+    table = GenericTripleTable(Triple.objects.all())
+    return JsonResponse(table.as_html(request), status=200, safe=False)
+
+def ajax_2_get(request):
+    from ..apis_entities.forms import GenericTripleForm2
+    t = Triple.objects.get(pk=request.GET["pk"])
+    # maybe this works with UserForm(instance=instance) ?
+    form = GenericTripleForm2(initial={"pk": t.pk, "subj": t.subj, "prop": t.prop, "obj": t.obj})
+    rendered_form_str = render_to_string(form.template_name, context={"form_xyz": form})
+    return JsonResponse(rendered_form_str, status=200, safe=False)

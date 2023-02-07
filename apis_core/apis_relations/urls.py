@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^autocomplete/(?P<entity_self>[a-zA-Z0-9-_]+)/(?P<entity_other>[a-zA-Z0-9-_]+)/$',
         PropertyAutocomplete.as_view(),
         name='generic_property_autocomplete'),
+    url(r"^ajax_2_post/$", views.ajax_2_post, name="ajax_2_post"),
+    url(r"^ajax_2_get/$", views.ajax_2_get, name="ajax_2_get"),
 ]

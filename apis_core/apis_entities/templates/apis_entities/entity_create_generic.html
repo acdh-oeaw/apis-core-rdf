@@ -17,6 +17,8 @@
 {% block content %}
 {% load django_tables2 %}
 {% if instance %}
+{{ form_xyz }}
+{% render_table table_xyz %}
 <div class="container-fluid">
     <div class="card">
         <div class="card-header" style="text-align: center;">
@@ -54,21 +56,6 @@
                                 <button hidden=True class="bibsonomy-anker-hidden" data-bibs-contenttype={{ entity_type }} data-bibs-object_pk={{instance.pk}} data-bibs-form-elements="{{ apis_bibsonomy }}">Ref</button>
                             {% endif %}
                                 <div class="card card-default">
-                                    <div id="vocab_triple_form_id_div">
-                                        <form id="vocab_triple_form_id_form">
-                                            <h1>bla</h1>
-                                            {% for field in form_xyz %}
-                                                <div class="fieldWrapper">
-                                                    {{ field.errors }}
-                                                    {% if not field.field.widget.is_hidden %}
-                                                        {{ field.label_tag }}
-                                                    {% endif %}
-                                                    {{ field }}
-                                                </div>
-                                            {% endfor %}
-                                            <input type="submit" class="btn btn-primary" value="Create User" />
-                                        </form>
-                                    </div>
                             	{% crispy form %}
 
                                     <div class="card-header" role="tab" id="headingFour">
@@ -208,19 +195,59 @@
 {{block.super}}
 {% if instance %}
 <script type="text/javascript">
-window.onload = function() {
-  $("#id_other_entity").select2({
-        ajax: {
-            url: '/apis/entities/autocomplete/e55_type/',
-            dataType: 'json'
-            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-        }
+    window.onload = function() {
+      $("#id_other_entity").select2({
+            ajax: {
+                url: '/apis/entities/autocomplete/e55_type/',
+                dataType: 'json'
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+        })
+    };
+
+    function ajax_2_load_into_form(pk) {
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'apis:apis_relations:ajax_2_get' %}",
+            data: {pk: pk},
+            success: function (response) {
+                $("#generic_triple_form_id_form").html(response)
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+    }
+
+    $(document).on('submit', '#generic_triple_form_id_form', function() {
+        let csrftoken = '{{ csrf_token }}'
+        var serializedData = $(this).serialize();
+        $.ajax({
+            type: 'POST',
+            headers: {'X-CSRFToken':csrftoken},
+            url: "{% url 'apis:apis_relations:ajax_2_post' %}",
+            data: serializedData,
+            success: function (response) {
+                console.log(response)
+                $("#generic_triple_form_id_form").trigger('reset');
+                $("#generic_triple_table_id_table").html(response)
+            },
+            error: function (response) {
+                alert(response["responseJSON"]["error"]);
+            }
+        })
     })
-};
 </script>
 <script type="text/javascript">
     function GetFormAjax(FormName , ObjectID , ButtonText) {
+        console.log("calling GetFormAjax");
+        console.log("FormName: ", FormName);
+        console.log("ObjectID: ", ObjectID);
+        console.log("ButtonText: ", ButtonText);
+
         function add_form(data) {
+            console.log("calling add_form");
+            console.log("autocompleteLightUrl:", $(this).data("autocompleteLightUrl"));
             // update our tooltip content with our returned data and cache it
             $('#tab_'+data.tab).find('div:eq(1)').remove();
             $('#tab_'+data.tab).append(data.form);
@@ -262,6 +289,7 @@ window.onload = function() {
         if (ButtonText === undefined) {
             ButtonText = 'create/modify';
         };
+        console.log("apis:apis_relations:get_form_ajax", "{% url 'apis:apis_relations:get_form_ajax' %}");
         return $.ajax(
             {
                 type: 'POST',
@@ -405,6 +433,11 @@ window.onload = function() {
 <script type="text/javascript">
  function activate_editing(){
         {% for obj in right_card %}
+        console.log("activate_editing");
+        console.log("obj.0: {{obj.0}}");
+        console.log("obj.1: {{obj.1}}");
+        console.log("obj.2: {{obj.2}}");
+        console.log("obj.3: {{obj.3}}");
         GetFormAjax("{{obj.2}}");
         //unbind_ajax_forms();
         {% endfor %}
