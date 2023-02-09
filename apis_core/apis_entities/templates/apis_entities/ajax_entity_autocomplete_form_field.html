@@ -1,0 +1,18 @@
+{% for field in entity_autocomplete_field %}
+<div class="fieldWrapper">
+    {{ field.errors }}
+    {% if not field.field.widget.is_hidden %}
+    {{ field.label_tag }}
+    {% endif %}
+    {{ field }}
+</div>
+{% endfor %}
+
+<script>
+    $("#{{ id_form_field }}").select2({
+        ajax: {
+            url: '{{ autocomplete_url }}',
+            dataType: 'json'
+        }
+    })
+</script>

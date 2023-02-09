@@ -81,7 +81,7 @@ class ReificationForm(forms.ModelForm):
     
 
 class PropertyAutocompleteFormField(forms.Form):
-    template_name = "apis_entities/ajax_property_autocmplete_form_field.html"
+    template_name = "apis_entities/ajax_property_autocomplete_form_field.html"
     
     def __init__(self, entity_type_self_str, entity_type_other_str, field_id, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -99,6 +99,28 @@ class PropertyAutocompleteFormField(forms.Form):
                     'style': 'width: 100%'
                 }
             ),
+        )
+
+class EntityAutocompleteFormField(forms.Form):
+    template_name = "apis_entities/ajax_entity_autocomplete_form_field.html"
+    
+    def __init__(self, entity_type_other_str, field_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
+            label='entity',
+            widget=ListSelect2(
+                url=reverse(
+                    'apis:apis_entities:generic_entities_autocomplete',
+                    kwargs={"entity": entity_type_other_str}
+                ),
+                attrs={
+                    'data-placeholder': 'Type to get suggestions',
+                    'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+                    'data-html': True,
+                    'style': 'width: 100%'
+                },
+            ),
+            help_text="bla"
         )
 
 

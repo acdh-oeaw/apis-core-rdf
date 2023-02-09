@@ -141,7 +141,8 @@ class GenericEntitiesEditView(View):
                        'delete': perm.has_perm('delete_{}'.format(entity), instance),
                        'create': request.user.has_perm('entities.add_{}'.format(entity))}
         
-        from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2, ReificationForm, PropertyAutocompleteFormField
+        from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2, ReificationForm, PropertyAutocompleteFormField, EntityAutocompleteFormField
+        from apis_core.apis_entities.autocomplete3 import GenericEntitiesAutocomplete
         from apis_core.apis_relations.tables import GenericTripleTable, ReificationTable
         from apis_ontology.models import E55_Type, BookPublicationRelationship
         context = {
@@ -179,10 +180,10 @@ class GenericEntitiesEditView(View):
                 "autocomplete_url": "/apis/relations/autocomplete/f10_person/bookpublicationrelationship/",
             }
         )
-
+        
         property_autocomplete_field_from_reif = PropertyAutocompleteFormField(
             entity_type_self_str="bookpublicationrelationship",
-            entity_type_other_str="f10_person",
+            entity_type_other_str="e40_legal_body",
             field_id="custom_property_from_reif",
         )
         property_autocomplete_field_from_reif_rendered = render_to_string(
@@ -190,7 +191,20 @@ class GenericEntitiesEditView(View):
             context={
                 "property_autocomplete_field": property_autocomplete_field_from_reif,
                 "id_form_field": "id_custom_property_from_reif",
-                "autocomplete_url": "/apis/relations/autocomplete/bookpublicationrelationship/f10_person/",
+                "autocomplete_url": "/apis/relations/autocomplete/bookpublicationrelationship/e40_legal_body/",
+            }
+        )
+        
+        entity_autocomplete_field_from_reif = EntityAutocompleteFormField(
+            entity_type_other_str="e40_legal_body",
+            field_id="custom_entity_from_reif",
+        )
+        entity_autocomplete_field_from_reif_rendered = render_to_string(
+            entity_autocomplete_field_from_reif.template_name,
+            context={
+                "entity_autocomplete_field": entity_autocomplete_field_from_reif,
+                "id_form_field": "id_custom_entity_from_reif",
+                "autocomplete_url": "/apis/entities/autocomplete/e40_legal_body/",
             }
         )
         
@@ -199,8 +213,9 @@ class GenericEntitiesEditView(View):
             reification_form.template_name,
             context={
                 "reification_form": reification_form,
-                "property_autocomplete_field_to_reif": property_autocomplete_field_to_reif_rendered,
-                "property_autocomplete_field_from_reif": property_autocomplete_field_from_reif_rendered,
+                "property_autocomplete_field_to_reif_rendered": property_autocomplete_field_to_reif_rendered,
+                "property_autocomplete_field_from_reif_rendered": property_autocomplete_field_from_reif_rendered,
+                "entity_autocomplete_field_from_reif_rendered": entity_autocomplete_field_from_reif_rendered,
             }
         )
         return render(request, "apis_entities/entity_create_generic.html", context)
