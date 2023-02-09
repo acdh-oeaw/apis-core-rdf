@@ -1,6 +1,7 @@
 <div id="ajax_form_id">
     <h3>ajax_reification_form</h3>
     <form id="generic_reification_form_id_form" onsubmit="return false;">
+        {{ form_property_autocomplete_field }}
         {% for field in form_zyx %}
         <div class="fieldWrapper">
             {{ field.errors }}
@@ -10,9 +11,14 @@
             {{ field }}
         </div>
         {% endfor %}
-        <input type="submit" class="btn btn-primary" value="reification" />
+        <input onclick="read_form_data(this.parentElement)" type="submit" class="btn btn-primary" value="reification" />
     </form>
 </div>
 
 <script>
+    function read_form_data(form_elem) {
+        var serializedData = $(form_elem).serialize();
+        console.log(serializedData);
+        let csrftoken = '{{ csrf_token }}'
+    }
 </script>

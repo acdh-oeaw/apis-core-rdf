@@ -165,11 +165,12 @@ class GenericEntitiesEditView(View):
         # return HttpResponse(get_template("apis_entities/entity_create_generic.html").render(request=request, context=context))
         form_xyz = GenericTripleForm2()
         context["form_xyz"] = render_to_string(form_xyz.template_name, context={"form_xyz": form_xyz})
+        
         form_property_autocomplete_field = PropertyAutocompleteFormField(
             entity_type_self_str="f10_person",
             entity_type_other_str="bookpublicationrelationship"
         )
-        context["form_property_autocomplete_field"] = render_to_string(
+        form_property_autocomplete_field_rendered = render_to_string(
             form_property_autocomplete_field.template_name,
             context={
                 "form_property_autocomplete_field": form_property_autocomplete_field,
@@ -178,7 +179,13 @@ class GenericEntitiesEditView(View):
             }
         )
         form_zyx = ReificationForm()
-        context["form_zyx"] = render_to_string(form_zyx.template_name, context={"form_zyx": form_zyx})
+        context["form_zyx"] = render_to_string(
+            form_zyx.template_name,
+            context={
+                "form_zyx": form_zyx,
+                "form_property_autocomplete_field": form_property_autocomplete_field_rendered,
+            }
+        )
         return render(request, "apis_entities/entity_create_generic.html", context)
 
     def post(self, request, *args, **kwargs):
