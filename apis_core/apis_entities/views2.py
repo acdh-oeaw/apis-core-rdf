@@ -141,13 +141,14 @@ class GenericEntitiesEditView(View):
                        'delete': perm.has_perm('delete_{}'.format(entity), instance),
                        'create': request.user.has_perm('entities.add_{}'.format(entity))}
         
-        from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2
-        from apis_core.apis_relations.tables import GenericTripleTable
-        from apis_ontology.models import E55_Type
+        from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2, ReificationForm, PropertyAutocompleteFormField
+        from apis_core.apis_relations.tables import GenericTripleTable, ReificationTable
+        from apis_ontology.models import E55_Type, BookPublicationRelationship
         context = {
             'entity_type': entity,
             'form': form,
             "table_xyz": GenericTripleTable(Triple.objects.all()),
+            "table_zyx": ReificationTable(BookPublicationRelationship.objects.all()),
             'form_text': form_text,
             'instance': instance,
             'right_card': side_bar,
@@ -164,6 +165,20 @@ class GenericEntitiesEditView(View):
         # return HttpResponse(get_template("apis_entities/entity_create_generic.html").render(request=request, context=context))
         form_xyz = GenericTripleForm2()
         context["form_xyz"] = render_to_string(form_xyz.template_name, context={"form_xyz": form_xyz})
+        form_property_autocomplete_field = PropertyAutocompleteFormField(
+            entity_type_self_str="f10_person",
+            entity_type_other_str="bookpublicationrelationship"
+        )
+        context["form_property_autocomplete_field"] = render_to_string(
+            form_property_autocomplete_field.template_name,
+            context={
+                "form_property_autocomplete_field": form_property_autocomplete_field,
+                "id_form_field": "id_custom_property",
+                "autocomplete_url": "/apis/relations/autocomplete/f10_person/bookpublicationrelationship/",
+            }
+        )
+        form_zyx = ReificationForm()
+        context["form_zyx"] = render_to_string(form_zyx.template_name, context={"form_zyx": form_zyx})
         return render(request, "apis_entities/entity_create_generic.html", context)
 
     def post(self, request, *args, **kwargs):

@@ -18,7 +18,7 @@ from apis_core.apis_metainfo.tables import (
 empty_text_default = "There are currently no relations"
 
 from apis_core.apis_relations.models import Triple, Property
-
+from apis_ontology.models import BookPublicationRelationship
 
 class GenericTripleTable(tables.Table):
     
@@ -39,6 +39,12 @@ class GenericTripleTable(tables.Table):
                 </svg>
             </a>
         """)
+
+class ReificationTable(tables.Table):
+    
+    class Meta:
+        model = BookPublicationRelationship
+        fields = ["name"]
 
 
 

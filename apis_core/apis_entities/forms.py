@@ -37,6 +37,7 @@ class SearchForm(forms.Form):
         helper.form_method = "GET"
         return helper
 
+# class GenericTripleForm2(forms.Form):
 class GenericTripleForm2(forms.ModelForm):
     template_name = "apis_entities/ajax_triple_form.html"
     
@@ -64,6 +65,42 @@ class GenericTripleForm2(forms.ModelForm):
     #         ),
     #         help_text="bla ble blo"
     #     )
+
+class ReificationForm(forms.ModelForm):
+    template_name = "apis_entities/ajax_reification_form.html"
+
+    class Meta:
+        from apis_ontology.models import BookPublicationRelationship
+        model = BookPublicationRelationship
+        fields = ["name", "start_date"]
+
+    def __init__(self, *args, **kwargs):
+        from apis_core.apis_relations.models import Property
+        super().__init__(*args, **kwargs)
+        self.fields["property_to_reification"] = forms.ModelChoiceField(queryset=Property.objects.filter(name__icontains="is author of"))
+    
+
+class PropertyAutocompleteFormField(forms.Form):
+    template_name = "apis_entities/ajax_property_autocmplete_form_field.html"
+    
+    def __init__(self, entity_type_self_str, entity_type_other_str, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["custom_property"] = autocomplete.Select2ListCreateChoiceField(
+            label='property',
+            widget=ListSelect2(
+                url=reverse(
+                    'apis:apis_relations:generic_property_autocomplete',
+                    kwargs={"entity_self": entity_type_self_str, "entity_other": entity_type_other_str}
+                ),
+                attrs={
+                    'data-placeholder': 'Type to get suggestions',
+                    'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+                    'data-html': True,
+                    'style': 'width: 100%'
+                }
+            ),
+        )
+
 
 class VocabForm(forms.ModelForm):
     pk = forms.CharField(widget=forms.HiddenInput(), required = False)

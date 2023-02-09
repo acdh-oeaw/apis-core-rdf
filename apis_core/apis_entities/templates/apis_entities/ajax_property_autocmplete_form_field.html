@@ -1,0 +1,22 @@
+<div id="ajax_property_autocmplete_form_field_id">
+    <h3>ajax_property_autocmplete_form_field</h3>
+        {% for field in form_property_autocomplete_field %}
+        <div class="fieldWrapper">
+            {{ field.errors }}
+            {% if not field.field.widget.is_hidden %}
+            {{ field.label_tag }}
+            {% endif %}
+            {{ field }}
+        </div>
+        {% endfor %}
+</div>
+
+<script>
+    $("#{{ id_form_field }}").select2({
+        ajax: {
+            url: '{{ autocomplete_url }}',
+            dataType: 'json'
+            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+        }
+    })
+</script>

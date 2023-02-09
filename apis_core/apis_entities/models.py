@@ -48,6 +48,7 @@ class AbstractEntity(RootObject):
     So they are to be understood in that dynamic context.
     """
     is_entity = True
+    is_reification = False
 
     entity_settings = {
         "list_filters": ["name", "related_entity_name", "related_property_name"],

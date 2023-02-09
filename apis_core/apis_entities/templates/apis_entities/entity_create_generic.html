@@ -17,8 +17,10 @@
 {% block content %}
 {% load django_tables2 %}
 {% if instance %}
+{{ form_property_autocomplete_field }}
+{{ form_zyx }}
 {{ form_xyz }}
-{% render_table table_xyz %}
+{% render_table table_zyx %}
 <div class="container-fluid">
     <div class="card">
         <div class="card-header" style="text-align: center;">
@@ -219,9 +221,10 @@
         })
     }
 
-    $(document).on('submit', '#generic_triple_form_id_form', function() {
+    //$(document).on('submit', '#generic_triple_form_id_form', function() {
+    function ajax_2_post(form_elem) {
         let csrftoken = '{{ csrf_token }}'
-        var serializedData = $(this).serialize();
+        var serializedData = $(form_elem).serialize();
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
@@ -236,7 +239,7 @@
                 alert(response["responseJSON"]["error"]);
             }
         })
-    })
+    };
 </script>
 <script type="text/javascript">
     function GetFormAjax(FormName , ObjectID , ButtonText) {
