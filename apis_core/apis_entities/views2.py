@@ -165,25 +165,42 @@ class GenericEntitiesEditView(View):
         # return HttpResponse(get_template("apis_entities/entity_create_generic.html").render(request=request, context=context))
         form_xyz = GenericTripleForm2()
         context["form_xyz"] = render_to_string(form_xyz.template_name, context={"form_xyz": form_xyz})
-        
-        form_property_autocomplete_field = PropertyAutocompleteFormField(
+
+        property_autocomplete_field_to_reif = PropertyAutocompleteFormField(
             entity_type_self_str="f10_person",
-            entity_type_other_str="bookpublicationrelationship"
+            entity_type_other_str="bookpublicationrelationship",
+            field_id="custom_property_to_reif",
         )
-        form_property_autocomplete_field_rendered = render_to_string(
-            form_property_autocomplete_field.template_name,
+        property_autocomplete_field_to_reif_rendered = render_to_string(
+            property_autocomplete_field_to_reif.template_name,
             context={
-                "form_property_autocomplete_field": form_property_autocomplete_field,
-                "id_form_field": "id_custom_property",
+                "property_autocomplete_field": property_autocomplete_field_to_reif,
+                "id_form_field": "id_custom_property_to_reif",
                 "autocomplete_url": "/apis/relations/autocomplete/f10_person/bookpublicationrelationship/",
             }
         )
-        form_zyx = ReificationForm()
-        context["form_zyx"] = render_to_string(
-            form_zyx.template_name,
+
+        property_autocomplete_field_from_reif = PropertyAutocompleteFormField(
+            entity_type_self_str="bookpublicationrelationship",
+            entity_type_other_str="f10_person",
+            field_id="custom_property_from_reif",
+        )
+        property_autocomplete_field_from_reif_rendered = render_to_string(
+            property_autocomplete_field_from_reif.template_name,
             context={
-                "form_zyx": form_zyx,
-                "form_property_autocomplete_field": form_property_autocomplete_field_rendered,
+                "property_autocomplete_field": property_autocomplete_field_from_reif,
+                "id_form_field": "id_custom_property_from_reif",
+                "autocomplete_url": "/apis/relations/autocomplete/bookpublicationrelationship/f10_person/",
+            }
+        )
+        
+        reification_form = ReificationForm()
+        context["form_zyx"] = render_to_string(
+            reification_form.template_name,
+            context={
+                "reification_form": reification_form,
+                "property_autocomplete_field_to_reif": property_autocomplete_field_to_reif_rendered,
+                "property_autocomplete_field_from_reif": property_autocomplete_field_from_reif_rendered,
             }
         )
         return render(request, "apis_entities/entity_create_generic.html", context)

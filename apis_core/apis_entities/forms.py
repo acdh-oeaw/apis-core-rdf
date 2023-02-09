@@ -83,9 +83,9 @@ class ReificationForm(forms.ModelForm):
 class PropertyAutocompleteFormField(forms.Form):
     template_name = "apis_entities/ajax_property_autocmplete_form_field.html"
     
-    def __init__(self, entity_type_self_str, entity_type_other_str, *args, **kwargs):
+    def __init__(self, entity_type_self_str, entity_type_other_str, field_id, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["custom_property"] = autocomplete.Select2ListCreateChoiceField(
+        self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
             label='property',
             widget=ListSelect2(
                 url=reverse(
