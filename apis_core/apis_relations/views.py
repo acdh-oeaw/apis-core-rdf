@@ -427,14 +427,15 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #
 
 def ajax_2_post(request):
-    t = Triple.objects.create(
-        subj=F10_Person.objects.get(pk=request.POST["subj"]),
-        obj=E55_Type.objects.get(pk=request.POST["obj"]),
-        prop=Property.objects.get(pk=request.POST["prop"])
-    )
-    from apis_core.apis_relations.tables import GenericTripleTable
-    table = GenericTripleTable(Triple.objects.all())
-    return JsonResponse(table.as_html(request), status=200, safe=False)
+    return JsonResponse(None, status=200, safe=False)
+    # t = Triple.objects.create(
+    #     subj=F10_Person.objects.get(pk=request.POST["subj"]),
+    #     obj=E55_Type.objects.get(pk=request.POST["obj"]),
+    #     prop=Property.objects.get(pk=request.POST["prop"])
+    # )
+    # from apis_core.apis_relations.tables import GenericTripleTable
+    # table = GenericTripleTable(Triple.objects.all())
+    # return JsonResponse(table.as_html(request), status=200, safe=False)
 
 def ajax_2_get(request):
     from ..apis_entities.forms import GenericTripleForm2

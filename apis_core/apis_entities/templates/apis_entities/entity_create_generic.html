@@ -17,8 +17,9 @@
 {% block content %}
 {% load django_tables2 %}
 {% if instance %}
+
 {{ form_property_autocomplete_field }}
-{{ form_zyx }}
+{{ reification_form }}
 {{ form_xyz }}
 {% render_table table_zyx %}
 <div class="container-fluid">
@@ -197,16 +198,6 @@
 {{block.super}}
 {% if instance %}
 <script type="text/javascript">
-    window.onload = function() {
-      $("#id_other_entity").select2({
-            ajax: {
-                url: '/apis/entities/autocomplete/e55_type/',
-                dataType: 'json'
-                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-            }
-        })
-    };
-
     function ajax_2_load_into_form(pk) {
         $.ajax({
             type: 'GET',
@@ -232,8 +223,8 @@
             data: serializedData,
             success: function (response) {
                 console.log(response)
-                $("#generic_triple_form_id_form").trigger('reset');
-                $("#generic_triple_table_id_table").html(response)
+                //$("#generic_triple_form_id_form").trigger('reset');
+                //$("#generic_triple_table_id_table").html(response)
             },
             error: function (response) {
                 alert(response["responseJSON"]["error"]);

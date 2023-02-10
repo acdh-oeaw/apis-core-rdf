@@ -21,7 +21,8 @@ from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Triple, TempTriple
 from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, LabelTableEdit
-from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm
+from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm, \
+    render_single_autocomplete_property_form, render_single_autocomplete_entity_form, render_contextual_triple_form
 from .views import get_highlighted_texts
 from .views import set_session_variables
 from ..apis_vocabularies.models import TextType
@@ -167,55 +168,63 @@ class GenericEntitiesEditView(View):
         form_xyz = GenericTripleForm2()
         context["form_xyz"] = render_to_string(form_xyz.template_name, context={"form_xyz": form_xyz})
 
-        property_autocomplete_field_to_reif = PropertyAutocompleteFormField(
+        # property_autocomplete_field_to_reif = PropertyAutocompleteFormField(
+        #     entity_type_self_str="f10_person",
+        #     entity_type_other_str="bookpublicationrelationship",
+        #     field_id="custom_property_to_reif",
+        # )
+        # property_autocomplete_field_to_reif_rendered = render_to_string(
+        #     property_autocomplete_field_to_reif.template_name,
+        #     context={
+        #         "property_autocomplete_field": property_autocomplete_field_to_reif,
+        #         "id_form_field": "id_custom_property_to_reif",
+        #         "autocomplete_url": "/apis/relations/autocomplete/f10_person/bookpublicationrelationship/",
+        #     }
+        # )
+        # property_autocomplete_field_from_reif = PropertyAutocompleteFormField(
+        #     entity_type_self_str="bookpublicationrelationship",
+        #     entity_type_other_str="e40_legal_body",
+        #     field_id="custom_property_from_reif",
+        # )
+        # property_autocomplete_field_from_reif_rendered = render_to_string(
+        #     property_autocomplete_field_from_reif.template_name,
+        #     context={
+        #         "property_autocomplete_field": property_autocomplete_field_from_reif,
+        #         "id_form_field": "id_custom_property_from_reif",
+        #         "autocomplete_url": "/apis/relations/autocomplete/bookpublicationrelationship/e40_legal_body/",
+        #     }
+        # )
+        # entity_autocomplete_field_from_reif = EntityAutocompleteFormField(
+        #     entity_type_other_str="e40_legal_body",
+        #     field_id="custom_entity_from_reif",
+        # )
+        # entity_autocomplete_field_from_reif_rendered = render_to_string(
+        #     entity_autocomplete_field_from_reif.template_name,
+        #     context={
+        #         "entity_autocomplete_field": entity_autocomplete_field_from_reif,
+        #         "id_form_field": "id_custom_entity_from_reif",
+        #         "autocomplete_url": "/apis/entities/autocomplete/e40_legal_body/",
+        #     }
+        # )
+
+        property_autocomplete_field_to_reif_rendered = render_single_autocomplete_property_form(
             entity_type_self_str="f10_person",
             entity_type_other_str="bookpublicationrelationship",
-            field_id="custom_property_to_reif",
+            single_field_id="custom_property_to_reif",
         )
-        property_autocomplete_field_to_reif_rendered = render_to_string(
-            property_autocomplete_field_to_reif.template_name,
-            context={
-                "property_autocomplete_field": property_autocomplete_field_to_reif,
-                "id_form_field": "id_custom_property_to_reif",
-                "autocomplete_url": "/apis/relations/autocomplete/f10_person/bookpublicationrelationship/",
-            }
-        )
-        
-        property_autocomplete_field_from_reif = PropertyAutocompleteFormField(
+        contextual_triple_form_rendered = render_contextual_triple_form(
             entity_type_self_str="bookpublicationrelationship",
             entity_type_other_str="e40_legal_body",
-            field_id="custom_property_from_reif",
-        )
-        property_autocomplete_field_from_reif_rendered = render_to_string(
-            property_autocomplete_field_from_reif.template_name,
-            context={
-                "property_autocomplete_field": property_autocomplete_field_from_reif,
-                "id_form_field": "id_custom_property_from_reif",
-                "autocomplete_url": "/apis/relations/autocomplete/bookpublicationrelationship/e40_legal_body/",
-            }
-        )
-        
-        entity_autocomplete_field_from_reif = EntityAutocompleteFormField(
-            entity_type_other_str="e40_legal_body",
-            field_id="custom_entity_from_reif",
-        )
-        entity_autocomplete_field_from_reif_rendered = render_to_string(
-            entity_autocomplete_field_from_reif.template_name,
-            context={
-                "entity_autocomplete_field": entity_autocomplete_field_from_reif,
-                "id_form_field": "id_custom_entity_from_reif",
-                "autocomplete_url": "/apis/entities/autocomplete/e40_legal_body/",
-            }
+            form_id="contextual_triple_form_1"
         )
         
         reification_form = ReificationForm()
-        context["form_zyx"] = render_to_string(
+        context["reification_form"] = render_to_string(
             reification_form.template_name,
             context={
                 "reification_form": reification_form,
                 "property_autocomplete_field_to_reif_rendered": property_autocomplete_field_to_reif_rendered,
-                "property_autocomplete_field_from_reif_rendered": property_autocomplete_field_from_reif_rendered,
-                "entity_autocomplete_field_from_reif_rendered": entity_autocomplete_field_from_reif_rendered,
+                "contextual_triple_form_rendered": contextual_triple_form_rendered,
             }
         )
         return render(request, "apis_entities/entity_create_generic.html", context)

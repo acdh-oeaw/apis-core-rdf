@@ -20,6 +20,7 @@ from .fields import ListSelect2, Select2Multiple
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete
 import django_tables2 as tables
+from django.template.loader import render_to_string
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import AnnotationProject
@@ -74,10 +75,10 @@ class ReificationForm(forms.ModelForm):
         model = BookPublicationRelationship
         fields = ["name", "start_date"]
 
-    def __init__(self, *args, **kwargs):
-        from apis_core.apis_relations.models import Property
-        super().__init__(*args, **kwargs)
-        self.fields["property_to_reification"] = forms.ModelChoiceField(queryset=Property.objects.filter(name__icontains="is author of"))
+    # def __init__(self, *args, **kwargs):
+    #     from apis_core.apis_relations.models import Property
+    #     super().__init__(*args, **kwargs)
+    #     self.fields["property_to_reification"] = forms.ModelChoiceField(queryset=Property.objects.filter(name__icontains="is author of"))
     
 
 class PropertyAutocompleteFormField(forms.Form):
@@ -165,6 +166,85 @@ class VocabForm(forms.ModelForm):
         # widgets = {
         #     "nick_name": autocomplete.ModelSelect2(url="autocomplete/")
         # }
+        
+def render_single_autocomplete_property_form(entity_type_self_str, entity_type_other_str, single_field_id):
+    # TODO __sresch__ : implement a check for if there is only one property between the entities.
+    # if so, pre-fill the form field.
+    # bonus-level: if there are 2-10 properties, make it a drop-down
+    class TemplateSingleAutocompletePropertyForm(forms.Form):
+        template_name = "apis_entities/single_autocomplete_property_form.html"
+        def __init__(self):
+            super().__init__()
+            self.fields[single_field_id] = autocomplete.Select2ListCreateChoiceField(
+                label='property',
+                widget=ListSelect2(
+                    url=reverse(
+                        'apis:apis_relations:generic_property_autocomplete',
+                        kwargs={"entity_self": entity_type_self_str, "entity_other": entity_type_other_str}
+                    ),
+                    attrs={
+                        'data-placeholder': 'Type to get suggestions',
+                        'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+                        'data-html': True,
+                        'style': 'width: 100%'
+                    }
+                ),
+            )
+    
+    return render_to_string(
+        TemplateSingleAutocompletePropertyForm.template_name,
+        context={
+            "autocomplete_property_form": TemplateSingleAutocompletePropertyForm(),
+            "id_single_field_id": f"id_{single_field_id}",
+            "autocomplete_url": f"/apis/relations/autocomplete/{entity_type_self_str}/{entity_type_other_str}/",
+        }
+    )
+
+def render_single_autocomplete_entity_form(entity_type_str, single_field_id):
+    class TemplateSingleAutocompleteEntityForm(forms.Form):
+        template_name = "apis_entities/single_autocomplete_entity_form.html"
+        def __init__(self):
+            super().__init__()
+            self.fields[single_field_id] = autocomplete.Select2ListCreateChoiceField(
+                label='entity',
+                widget=ListSelect2(
+                    url=reverse(
+                        'apis:apis_entities:generic_entities_autocomplete',
+                        kwargs={"entity": entity_type_str}
+                    ),
+                    attrs={
+                        'data-placeholder': 'Type to get suggestions',
+                        'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+                        'data-html': True,
+                        'style': 'width: 100%'
+                    },
+                ),
+            )
+
+    return render_to_string(
+        TemplateSingleAutocompleteEntityForm.template_name,
+        context={
+            "autocomplete_entity_form": TemplateSingleAutocompleteEntityForm(),
+            "id_single_field_id": f"id_{single_field_id}",
+            "autocomplete_url": f"/apis/entities/autocomplete/{entity_type_str}/",
+        }
+    )
+
+def render_contextual_triple_form(entity_type_self_str, entity_type_other_str, form_id):
+    return render_to_string(
+        "apis_entities/ajax_contextual_triple_form.html",
+        context={
+            "single_autocomplete_property_form": render_single_autocomplete_property_form(
+                entity_type_self_str=entity_type_self_str,
+                entity_type_other_str=entity_type_other_str,
+                single_field_id=f"{form_id}_property",
+            ),
+            "single_autocomplete_entity_form": render_single_autocomplete_entity_form(
+                entity_type_str=entity_type_other_str,
+                single_field_id=f"{form_id}_other_entity",
+            ),
+        }
+    )
 
 class VocabTable(tables.Table):
     
