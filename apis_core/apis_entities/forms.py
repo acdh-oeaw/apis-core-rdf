@@ -230,18 +230,18 @@ def render_single_autocomplete_entity_form(entity_type_str, single_field_id):
         }
     )
 
-def render_contextual_triple_form(entity_type_self_str, entity_type_other_str, form_id):
+def render_contextual_triple_form(entity_type_self_str, entity_type_other_str, id_number):
     return render_to_string(
         "apis_entities/ajax_contextual_triple_form.html",
         context={
             "single_autocomplete_property_form": render_single_autocomplete_property_form(
                 entity_type_self_str=entity_type_self_str,
                 entity_type_other_str=entity_type_other_str,
-                single_field_id=f"{form_id}_property",
+                single_field_id=f"contextual_triple_form_{id_number}_property",
             ),
             "single_autocomplete_entity_form": render_single_autocomplete_entity_form(
                 entity_type_str=entity_type_other_str,
-                single_field_id=f"{form_id}_other_entity",
+                single_field_id=f"contextual_triple_form_{id_number}_other_entity",
             ),
         }
     )

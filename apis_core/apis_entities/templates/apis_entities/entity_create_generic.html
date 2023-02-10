@@ -231,6 +231,25 @@
             }
         })
     };
+
+    //function ajax_2_create_contextual_triple_form(entity_type_self_str, entity_type_other_str, id_number) {
+    function ajax_2_create_contextual_triple_form(kwargs) {
+        let csrftoken = '{{ csrf_token }}'
+        console.log();
+        $.ajax({
+            type: 'POST',
+            headers: {'X-CSRFToken':csrftoken},
+            url: "{% url 'apis:apis_relations:ajax_2_create_contextual_triple_form' %}",
+            data: kwargs,
+            success: function (response) {
+                $("#"+kwargs['div_origin']).append(response);
+                //document.getElementById(kwargs['div_origin']).innerHTML += response
+            },
+            error: function (response) {
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    };
 </script>
 <script type="text/javascript">
     function GetFormAjax(FormName , ObjectID , ButtonText) {

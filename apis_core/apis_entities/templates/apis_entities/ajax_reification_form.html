@@ -14,7 +14,11 @@
         {% endfor %}
         {{ property_autocomplete_field_from_reif_rendered }}
         {{ entity_autocomplete_field_from_reif_rendered }}
-        {{ contextual_triple_form_rendered }}
+        <div id="contextual_triple_form_rendered_1">
+            {{ contextual_triple_form_rendered }}
+        </div>
+        <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'bookpublicationrelationship', 'entity_type_other_str':'e40_legal_body', 'id_number':2, 'div_origin':'contextual_triple_form_rendered_1'})" type="submit" class="btn btn-primary" value="ajax_2_create_contextual_triple_form" />
+        <br>
         <input onclick="ajax_2_post(this.parentElement)" type="submit" class="btn btn-primary" value="reification" />
     </form>
 </div>

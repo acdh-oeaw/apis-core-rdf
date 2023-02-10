@@ -215,7 +215,7 @@ class GenericEntitiesEditView(View):
         contextual_triple_form_rendered = render_contextual_triple_form(
             entity_type_self_str="bookpublicationrelationship",
             entity_type_other_str="e40_legal_body",
-            form_id="contextual_triple_form_1"
+            id_number="1"
         )
         
         reification_form = ReificationForm()

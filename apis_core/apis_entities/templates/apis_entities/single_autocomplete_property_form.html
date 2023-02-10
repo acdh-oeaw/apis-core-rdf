@@ -9,6 +9,8 @@
 {% endfor %}
 
 <script>
+    function foo() {console.log("id_single_field_id: {{ id_single_field_id }}");};
+    foo();
     $("#{{ id_single_field_id }}").select2({
         ajax: {
             url: '{{ autocomplete_url }}',
