@@ -89,7 +89,15 @@ class GetContentTypes:
                     if c in c2:
                         r2.append(c2)
             apis_modules = r2
-        lst_cont_pre = [importlib.import_module(x) for x in apis_modules]
+
+        # this is a hack, because the `apis_modules` are hardcoded, up there
+        # but there is no guarantee that all of them are available
+        lst_cont_pre = []
+        for module in apis_modules:
+            try:
+                lst_cont_pre.append(importlib.import_module(module))
+            except ImportError:
+                pass
         lst_cont = []
         for m in lst_cont_pre:
             for cls_n in dir(m):

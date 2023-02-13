@@ -254,22 +254,27 @@ class AbstractEntity(RootObject):
             entity_classes = []
             entity_names = []
 
-            from apis_ontology import models as ontology_models
+            # this try-expect is a workaround, because `apis_ontology` module
+            # might not be installed
+            try:
+                from apis_ontology import models as ontology_models
 
-            for entity_name, entity_class in inspect.getmembers(
-                ontology_models, inspect.isclass
-            ):
-
-                # print(entity_name, entity_class)
-
-                if (
-                    # entity_class.__module__ == "apis_core.apis_entities.models"
-                    entity_class.__module__ == "apis_ontology.models"
-                    and entity_name != "ent_class"
-                    and entity_class._meta.abstract is False
+                for entity_name, entity_class in inspect.getmembers(
+                    ontology_models, inspect.isclass
                 ):
-                    entity_classes.append(entity_class)
+
+                    # print(entity_name, entity_class)
+
+                    if (
+                        # entity_class.__module__ == "apis_core.apis_entities.models"
+                        entity_class.__module__ == "apis_ontology.models"
+                        and entity_name != "ent_class"
+                        and entity_class._meta.abstract is False
+                    ):
+                        entity_classes.append(entity_class)
                     entity_names.append(entity_name.lower())
+            except ImportError:
+                pass
 
             cls._all_entity_classes = entity_classes
             cls._all_entity_names = entity_names
