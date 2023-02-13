@@ -4,7 +4,10 @@ import importlib
 import inspect
 from ast import literal_eval
 from django.conf import settings
-from apis_ontology.models import *
+try:
+    from apis_ontology.models import *
+except ImportError:
+    pass
 from apis_core.apis_metainfo.models import *
 # from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
