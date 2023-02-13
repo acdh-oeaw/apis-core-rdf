@@ -9,6 +9,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import URLValidator
+from django.db.models import Q
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import ModelMultipleChoiceField, ModelChoiceField
 from django.urls import reverse
@@ -21,6 +22,8 @@ from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete
 import django_tables2 as tables
 from django.template.loader import render_to_string
+
+from ..apis_relations.models import Property
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import AnnotationProject
@@ -67,18 +70,18 @@ class GenericTripleForm2(forms.ModelForm):
     #         help_text="bla ble blo"
     #     )
 
-class ReificationForm(forms.ModelForm):
-    template_name = "apis_entities/ajax_reification_form.html"
-
-    class Meta:
-        from apis_ontology.models import BookPublicationRelationship
-        model = BookPublicationRelationship
-        fields = ["name", "start_date"]
-
-    # def __init__(self, *args, **kwargs):
-    #     from apis_core.apis_relations.models import Property
-    #     super().__init__(*args, **kwargs)
-    #     self.fields["property_to_reification"] = forms.ModelChoiceField(queryset=Property.objects.filter(name__icontains="is author of"))
+# class ReificationForm(forms.ModelForm):
+#     template_name = "apis_entities/reification_form.html"
+#
+#     class Meta:
+#         from apis_ontology.models import BookPublicationRelationship
+#         model = BookPublicationRelationship
+#         fields = ["name", "start_date"]
+#
+#     # def __init__(self, *args, **kwargs):
+#     #     from apis_core.apis_relations.models import Property
+#     #     super().__init__(*args, **kwargs)
+#     #     self.fields["property_to_reification"] = forms.ModelChoiceField(queryset=Property.objects.filter(name__icontains="is author of"))
     
 
 class PropertyAutocompleteFormField(forms.Form):
@@ -167,10 +170,11 @@ class VocabForm(forms.ModelForm):
         #     "nick_name": autocomplete.ModelSelect2(url="autocomplete/")
         # }
         
-def render_single_autocomplete_property_form(entity_type_self_str, entity_type_other_str, single_field_id):
+def render_single_autocomplete_form_property(entity_type_self_str, entity_type_other_str, single_field_id):
     # TODO __sresch__ : implement a check for if there is only one property between the entities.
     # if so, pre-fill the form field.
     # bonus-level: if there are 2-10 properties, make it a drop-down
+    
     class TemplateSingleAutocompletePropertyForm(forms.Form):
         template_name = "apis_entities/single_autocomplete_property_form.html"
         def __init__(self):
@@ -192,7 +196,7 @@ def render_single_autocomplete_property_form(entity_type_self_str, entity_type_o
             )
     
     return render_to_string(
-        TemplateSingleAutocompletePropertyForm.template_name,
+        template_name=TemplateSingleAutocompletePropertyForm.template_name,
         context={
             "autocomplete_property_form": TemplateSingleAutocompletePropertyForm(),
             "id_single_field_id": f"id_{single_field_id}",
@@ -200,7 +204,8 @@ def render_single_autocomplete_property_form(entity_type_self_str, entity_type_o
         }
     )
 
-def render_single_autocomplete_entity_form(entity_type_str, single_field_id):
+def render_single_autocomplete_form_entity(entity_type_str, single_field_id):
+    
     class TemplateSingleAutocompleteEntityForm(forms.Form):
         template_name = "apis_entities/single_autocomplete_entity_form.html"
         def __init__(self):
@@ -222,7 +227,7 @@ def render_single_autocomplete_entity_form(entity_type_str, single_field_id):
             )
 
     return render_to_string(
-        TemplateSingleAutocompleteEntityForm.template_name,
+        template_name=TemplateSingleAutocompleteEntityForm.template_name,
         context={
             "autocomplete_entity_form": TemplateSingleAutocompleteEntityForm(),
             "id_single_field_id": f"id_{single_field_id}",
@@ -232,17 +237,59 @@ def render_single_autocomplete_entity_form(entity_type_str, single_field_id):
 
 def render_contextual_triple_form(entity_type_self_str, entity_type_other_str, id_number):
     return render_to_string(
-        "apis_entities/ajax_contextual_triple_form.html",
+        template_name="apis_entities/contextual_triple_form_single.html",
         context={
-            "single_autocomplete_property_form": render_single_autocomplete_property_form(
+            "form_id": f"contextual_triple_form_single_{id_number}",
+            "single_autocomplete_property_form": render_single_autocomplete_form_property(
                 entity_type_self_str=entity_type_self_str,
                 entity_type_other_str=entity_type_other_str,
-                single_field_id=f"contextual_triple_form_{id_number}_property",
+                single_field_id=f"contextual_triple_form_single_{id_number}_property",
             ),
-            "single_autocomplete_entity_form": render_single_autocomplete_entity_form(
+            "single_autocomplete_entity_form": render_single_autocomplete_form_entity(
                 entity_type_str=entity_type_other_str,
-                single_field_id=f"contextual_triple_form_{id_number}_other_entity",
+                single_field_id=f"contextual_triple_form_single_{id_number}_other_entity",
             ),
+        }
+    )
+
+def render_reification_form(entity_type_self_str, entity_type_reification_str):
+    contextual_triple_form_count = 0
+    property_autocomplete_field_to_reif_rendered = render_single_autocomplete_form_property(
+        entity_type_self_str=entity_type_self_str,
+        entity_type_other_str=entity_type_reification_str,
+        single_field_id=f"contextual_triple_form_single_{contextual_triple_form_count}_property",
+    )
+    entity_type_reification_class = AbstractEntity.get_entity_class_of_name(entity_type_reification_str)
+    entity_type_reification_content_type = entity_type_reification_class.get_content_type()
+    related_ct_list = ContentType.objects.filter(
+        Q(property_set_obj__subj_class=entity_type_reification_content_type)
+        | Q(property_set_subj__obj_class=entity_type_reification_content_type)
+    ).distinct()
+    related_class_list = [ct.model_class() for ct in related_ct_list]
+    contextual_triple_form_list = []
+    for related_class in related_class_list:
+        contextual_triple_form_count += 1
+        contextual_triple_form_rendered = render_contextual_triple_form(
+            entity_type_self_str=entity_type_reification_str,
+            entity_type_other_str=related_class.__name__.lower(),
+            id_number=str(contextual_triple_form_count)
+        )
+        contextual_triple_form_list.append((related_class.__name__, contextual_triple_form_rendered))
+    
+    class ReificationForm(forms.ModelForm):
+        template_name = "apis_entities/reification_form.html"
+        class Meta:
+            model = entity_type_reification_class
+            fields = ["name", "start_date"]
+        
+    reification_form = ReificationForm()
+    return render_to_string(
+        template_name=reification_form.template_name,
+        context={
+            "reification_form": reification_form,
+            "contextual_triple_form_count": str(contextual_triple_form_count),
+            "property_autocomplete_field_to_reif_rendered": property_autocomplete_field_to_reif_rendered,
+            "contextual_triple_form_list": contextual_triple_form_list,
         }
     )
 

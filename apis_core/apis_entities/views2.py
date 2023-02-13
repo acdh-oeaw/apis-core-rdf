@@ -22,7 +22,7 @@ from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Triple, TempTriple
 from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, LabelTableEdit
 from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm, \
-    render_single_autocomplete_property_form, render_single_autocomplete_entity_form, render_contextual_triple_form
+    render_single_autocomplete_form_property, render_single_autocomplete_form_entity, render_contextual_triple_form, render_reification_form
 from .views import get_highlighted_texts
 from .views import set_session_variables
 from ..apis_vocabularies.models import TextType
@@ -142,7 +142,7 @@ class GenericEntitiesEditView(View):
                        'delete': perm.has_perm('delete_{}'.format(entity), instance),
                        'create': request.user.has_perm('entities.add_{}'.format(entity))}
         
-        from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2, ReificationForm, PropertyAutocompleteFormField, EntityAutocompleteFormField
+        from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2, PropertyAutocompleteFormField, EntityAutocompleteFormField
         from apis_core.apis_entities.autocomplete3 import GenericEntitiesAutocomplete
         from apis_core.apis_relations.tables import GenericTripleTable, ReificationTable
         from apis_ontology.models import E55_Type, BookPublicationRelationship
@@ -166,7 +166,7 @@ class GenericEntitiesEditView(View):
         # template = get_template('apis_entities/entity_create_generic.html')
         # return HttpResponse(get_template("apis_entities/entity_create_generic.html").render(request=request, context=context))
         form_xyz = GenericTripleForm2()
-        context["form_xyz"] = render_to_string(form_xyz.template_name, context={"form_xyz": form_xyz})
+        context["form_xyz"] = render_to_string(template_name=form_xyz.template_name, context={"form_xyz": form_xyz})
 
         # property_autocomplete_field_to_reif = PropertyAutocompleteFormField(
         #     entity_type_self_str="f10_person",
@@ -207,26 +207,32 @@ class GenericEntitiesEditView(View):
         #     }
         # )
 
-        property_autocomplete_field_to_reif_rendered = render_single_autocomplete_property_form(
+        # property_autocomplete_field_to_reif_rendered = render_single_autocompletex_form_property(
+        #     entity_type_self_str="f10_person",
+        #     entity_type_other_str="bookpublicationrelationship",
+        #     single_field_id="custom_property_to_reif",
+        # )
+        # contextual_triple_form_rendered = render_contextual_triple_form(
+        #     entity_type_self_str="bookpublicationrelationship",
+        #     entity_type_other_str="e40_legal_body",
+        #     id_number="0"
+        # )
+        #
+        # reification_form = ReificationForm()
+        # context["reification_form"] = render_to_string(
+        #     template_name=reification_form.template_name,
+        #     context={
+        #         "reification_form": reification_form,
+        #         "property_autocomplete_field_to_reif_rendered": property_autocomplete_field_to_reif_rendered,
+        #         "contextual_triple_form_rendered": contextual_triple_form_rendered,
+        #     }
+        # )
+
+        context["reification_form"] = render_reification_form(
             entity_type_self_str="f10_person",
-            entity_type_other_str="bookpublicationrelationship",
-            single_field_id="custom_property_to_reif",
-        )
-        contextual_triple_form_rendered = render_contextual_triple_form(
-            entity_type_self_str="bookpublicationrelationship",
-            entity_type_other_str="e40_legal_body",
-            id_number="1"
+            entity_type_reification_str="bookpublicationrelationship",
         )
         
-        reification_form = ReificationForm()
-        context["reification_form"] = render_to_string(
-            reification_form.template_name,
-            context={
-                "reification_form": reification_form,
-                "property_autocomplete_field_to_reif_rendered": property_autocomplete_field_to_reif_rendered,
-                "contextual_triple_form_rendered": contextual_triple_form_rendered,
-            }
-        )
         return render(request, "apis_entities/entity_create_generic.html", context)
 
     def post(self, request, *args, **kwargs):

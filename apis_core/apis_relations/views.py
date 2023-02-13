@@ -428,6 +428,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #
 
 def ajax_2_post(request):
+    print(list(request.POST.items()))
     return JsonResponse(None, status=200, safe=False)
     # t = Triple.objects.create(
     #     subj=F10_Person.objects.get(pk=request.POST["subj"]),
@@ -443,7 +444,7 @@ def ajax_2_get(request):
     t = Triple.objects.get(pk=request.GET["pk"])
     # maybe this works with UserForm(instance=instance) ?
     form = GenericTripleForm2(initial={"pk": t.pk, "subj": t.subj, "prop": t.prop, "obj": t.obj})
-    rendered_form_str = render_to_string(form.template_name, context={"form_xyz": form})
+    rendered_form_str = render_to_string(template_name=form.template_name, context={"form_xyz": form})
     return JsonResponse(rendered_form_str, status=200, safe=False)
 
 def ajax_2_create_contextual_triple_form(request):

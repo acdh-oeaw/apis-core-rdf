@@ -12,18 +12,21 @@
             {{ field }}
         </div>
         {% endfor %}
-        {{ property_autocomplete_field_from_reif_rendered }}
-        {{ entity_autocomplete_field_from_reif_rendered }}
-        <div id="contextual_triple_form_rendered_1">
-            {{ contextual_triple_form_rendered }}
-        </div>
-        <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'bookpublicationrelationship', 'entity_type_other_str':'e40_legal_body', 'id_number':2, 'div_origin':'contextual_triple_form_rendered_1'})" type="submit" class="btn btn-primary" value="ajax_2_create_contextual_triple_form" />
-        <br>
+        {% for ctf in contextual_triple_form_list %}
+            <h4>{{ ctf.0 }}</h4>
+            <div id="contextual_triple_form_container_{{ ctf.0 }}">
+                {{ ctf.1 }}
+            </div>
+            <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'bookpublicationrelationship', 'entity_type_other_str':'e40_legal_body', 'id_number':generated_form_counter, 'div_origin':'contextual_triple_form_container_{{ ctf.0 }}'})" type="submit" class="btn btn-primary" value="ajax_2_create_contextual_triple_form" />
+            <br>
+        {% endfor %}
         <input onclick="ajax_2_post(this.parentElement)" type="submit" class="btn btn-primary" value="reification" />
     </form>
 </div>
 
 <script>
+    //var generated_form_counter = document.querySelectorAll('[id ^= "contextual_triple_form_single"]').length;
+    var generated_form_counter = {{ contextual_triple_form_count }};
     function read_form_data(form_elem) {
         var serializedData = $(form_elem).serialize();
         console.log(serializedData);
