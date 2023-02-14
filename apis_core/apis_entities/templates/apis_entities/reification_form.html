@@ -3,6 +3,7 @@
         <div id="{{ contextual_triple_form_to_reif.0 }}">
             {{ contextual_triple_form_to_reif.1 }}
         </div>
+        <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'{{ contextual_triple_form_to_reif.2 }}', 'entity_type_other_str':'{{ contextual_triple_form_to_reif.3 }}', 'div_origin':'{{ contextual_triple_form_to_reif.0 }}'})" type="submit" class="btn btn-primary" value="+" />
         <h4>{{ entity_type_reification_str }}</h4>
         {% for field in reification_form %}
         <div class="fieldWrapper">
@@ -14,11 +15,11 @@
         </div>
         {% endfor %}
         {% for contextual_triple_form in contextual_triple_form_list %}
-            <h4>{{ contextual_triple_form.0 }}</h4>
-            <div id="{{ contextual_triple_form.1 }}">
-                {{ contextual_triple_form.2 }}
+            <h4>{{ contextual_triple_form.4 }}</h4>
+            <div id="{{ contextual_triple_form.0 }}">
+                {{ contextual_triple_form.1 }}
             </div>
-            <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'{{ contextual_triple_form.3 }}', 'entity_type_other_str':'{{ contextual_triple_form.4 }}', 'div_origin':'{{ contextual_triple_form.1 }}'})" type="submit" class="btn btn-primary" value="+" />
+            <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'{{ contextual_triple_form.2 }}', 'entity_type_other_str':'{{ contextual_triple_form.3 }}', 'div_origin':'{{ contextual_triple_form.0 }}'})" type="submit" class="btn btn-primary" value="+" />
             <br>
         {% endfor %}
         <input onclick="ajax_2_post(this.parentElement)" type="submit" class="btn btn-primary" value="reification" />

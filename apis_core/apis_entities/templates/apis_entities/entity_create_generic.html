@@ -257,8 +257,13 @@
             success: function (response) {
                 var form_container = document.getElementById(kwargs['div_origin'])
                 $(form_container).append(response);
-                var newest_form = form_container.childNodes[form_container.childNodes.length - 1];
-                search_and_activate_dal_s2(newest_form);
+                var form_list = form_container.childNodes;
+                for (var i = form_list.length - 1; i >= 0; i--) {
+                    if (form_list[i].tagName == "DIV") {
+                        search_and_activate_dal_s2(form_list[i]);
+                        break;
+                    };
+                };
             },
             error: function (response) {
                 alert(response["responseJSON"]["error"]);

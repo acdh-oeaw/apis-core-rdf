@@ -22,7 +22,7 @@ from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Triple, TempTriple
 from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, LabelTableEdit
 from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm, \
-    render_single_autocomplete_form_property, render_single_autocomplete_form_entity, render_contextual_triple_form, render_reification_form
+    render_single_autocomplete_form_property, render_single_autocomplete_form_entity_OLD, create_contextual_triple_form_class, render_reification_form
 from .views import get_highlighted_texts
 from .views import set_session_variables
 from ..apis_vocabularies.models import TextType

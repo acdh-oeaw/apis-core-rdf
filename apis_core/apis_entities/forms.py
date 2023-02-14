@@ -175,7 +175,7 @@ def render_single_autocomplete_form_property(entity_type_self_str, entity_type_o
     field_id = f"contextual_triple_form_property_{entity_type_self_str}_to_{entity_type_other_str}"
     
     class TemplateSingleAutocompletePropertyForm(forms.Form):
-        template_name = "apis_entities/single_autocomplete_property_form.html"
+        template_name = "apis_entities/single_autocomplete_property_form_OLD.html"
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
@@ -211,11 +211,11 @@ def render_single_autocomplete_form_property(entity_type_self_str, entity_type_o
         }
     )
 
-def render_single_autocomplete_form_entity(entity_type_self_str, entity_type_other_str):
+def render_single_autocomplete_form_entity_OLD(entity_type_self_str, entity_type_other_str):
     field_id = f"contextual_triple_form_entity_{entity_type_other_str}"
     
     class TemplateSingleAutocompleteEntityForm(forms.Form):
-        template_name = "apis_entities/single_autocomplete_entity_form.html"
+        template_name = "apis_entities/single_autocomplete_entity_form_OLD.html"
         def __init__(self):
             super().__init__()
             self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
@@ -243,33 +243,68 @@ def render_single_autocomplete_form_entity(entity_type_self_str, entity_type_oth
         }
     )
 
-def render_contextual_triple_form(
-    entity_type_self_str,
-    entity_type_other_str,
-    entity_id_self="",
-    entity_id_other="",
-    should_include_entity_other=True,
-    should_include_remove_button=True,
-):
-    context = {
-        "entity_type_self_str": entity_type_self_str,
-        "entity_type_other_str": entity_type_other_str,
-        "entity_id_self": entity_id_self,
-        "entity_id_other": entity_id_other,
-        "single_autocomplete_property_form": render_single_autocomplete_form_property(
-            entity_type_self_str=entity_type_self_str,
-            entity_type_other_str=entity_type_other_str,
-        ),
-        "should_include_remove_button": should_include_remove_button,
-    }
-    if should_include_entity_other:
-        context["single_autocomplete_entity_form"] = render_single_autocomplete_form_entity(
-            entity_type_self_str=entity_type_self_str,
-            entity_type_other_str=entity_type_other_str,
-        )
+def create_contextual_triple_form_class(entity_type_self_str, entity_type_other_str,):
+    
+    class GenericContextualTripleForm(forms.Form):
+        template_name = "apis_entities/contextual_triple_form_single.html"
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields["property"] = autocomplete.Select2ListCreateChoiceField(
+                label='property',
+                widget=ListSelect2(
+                    url=reverse(
+                        'apis:apis_relations:generic_property_autocomplete',
+                        kwargs={"entity_self": entity_type_self_str, "entity_other": entity_type_other_str}
+                    ),
+                    attrs={
+                        'data-placeholder': 'Type to get suggestions',
+                        'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+                        'data-html': True,
+                        'style': 'width: 100%'
+                    },
+                ),
+            )
+            self.fields["entity_other"] = autocomplete.Select2ListCreateChoiceField(
+                label='entity',
+                widget=ListSelect2(
+                    url=reverse(
+                        'apis:apis_entities:generic_entities_autocomplete',
+                        kwargs={"entity": entity_type_other_str}
+                    ),
+                    attrs={
+                        'data-placeholder': 'Type to get suggestions',
+                        'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+                        'data-html': True,
+                        'style': 'width: 100%'
+                    },
+                ),
+            )
+            choices = get_cached_property_choices(
+                entity_type_self_str=entity_type_self_str,
+                entity_type_other_str=entity_type_other_str,
+                search_name_str="",
+            )
+            if len(choices) == 1:
+                self.fields["property"].initial = choices[0]["id"]
+                self.fields["property"].choices = [(choices[0]["id"], choices[0]["text"])]
+        
+    return GenericContextualTripleForm
+    
+def render_contextual_triple_form(entity_type_self_str, entity_type_other_str, entity_id_self, entity_id_other):
+    form_class = create_contextual_triple_form_class(
+        entity_type_self_str=entity_type_self_str,
+        entity_type_other_str=entity_type_other_str
+    )
+    
     return render_to_string(
-        template_name="apis_entities/contextual_triple_form_single.html",
-        context=context,
+        template_name=form_class.template_name,
+        context={
+            "entity_type_self_str": entity_type_self_str,
+            "entity_type_other_str": entity_type_other_str,
+            "entity_id_self": entity_id_self,
+            "entity_id_other": entity_id_other,
+            "contextual_triple_form": form_class(),
+        }
     )
 
 def render_reification_form(entity_type_self_str, entity_type_reification_str, entity_id_self="", entity_id_other=""):
@@ -281,22 +316,31 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
             model = entity_type_reification_class
             fields = ["name", "start_date"]
     
-    def render_contextual_triple_form_to_reif(contextual_triple_form_count):
-        return (
-            (
-                f"contextual_triple_form_{entity_type_self_str}_to_{entity_type_reification_str.lower()}",
-                render_contextual_triple_form(
-                    entity_type_self_str=entity_type_self_str,
-                    entity_type_other_str=entity_type_reification_str,
-                    entity_id_self=entity_id_self,
-                    should_include_entity_other=False,
-                    should_include_remove_button=False,
-                )
-            ),
-            contextual_triple_form_count + 1,
+    def render_contextual_triple_form_to_reif():
+        form_class = create_contextual_triple_form_class(
+            entity_type_self_str=entity_type_self_str,
+            entity_type_other_str=entity_type_reification_str
         )
+        form = form_class()
+        del form.fields["entity_other"]
+        contextual_triple_form_rendered = render_to_string(
+            template_name=form_class.template_name,
+            context={
+                "entity_type_self_str": entity_type_self_str,
+                "entity_id_self": entity_id_self,
+                "entity_id_other": entity_id_other,
+                "contextual_triple_form": form,
+            }
+        )
+        return (
+            f"contextual_triple_form_{entity_type_self_str}_to_{entity_type_reification_str.lower()}",
+            contextual_triple_form_rendered,
+            entity_type_self_str,
+            entity_type_reification_str,
+        )
+        
 
-    def render_contextual_triple_form_list(entity_type_reification_class, contextual_triple_form_count):
+    def render_contextual_triple_form_list(entity_type_reification_class):
         entity_type_reification_content_type = entity_type_reification_class.get_content_type()
         related_ct_list = ContentType.objects.filter(
             Q(property_set_obj__subj_class=entity_type_reification_content_type)
@@ -305,34 +349,29 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
         related_class_list = [ct.model_class() for ct in related_ct_list]
         contextual_triple_form_list = []
         for related_class in related_class_list:
-            contextual_triple_form_rendered = render_contextual_triple_form(
+            contextual_triple_form_rendered = create_contextual_triple_form_class(
                 entity_type_self_str=entity_type_reification_str,
                 entity_type_other_str=related_class.__name__.lower(),
-                entity_id_self=entity_id_other,
             )
             contextual_triple_form_list.append((
-                related_class.__name__,
                 f"contextual_triple_form_container_{entity_type_reification_str}_to_{related_class.__name__.lower()}",
                 contextual_triple_form_rendered,
                 entity_type_reification_str,
                 related_class.__name__.lower(),
+                related_class.__name__,
             ))
-            contextual_triple_form_count += 1
         return contextual_triple_form_list
         
-    contextual_triple_form_to_reif, contextual_triple_form_count = \
-        render_contextual_triple_form_to_reif(0)
-    contextual_triple_form_list = \
-        render_contextual_triple_form_list(entity_type_reification_class, contextual_triple_form_count)
+    contextual_triple_form_to_reif = render_contextual_triple_form_to_reif()
+    # contextual_triple_form_list = render_contextual_triple_form_list(entity_type_reification_class)
     
     return render_to_string(
         template_name=ReificationForm.template_name,
         context={
             "entity_type_reification_str": entity_type_reification_str,
             "reification_form": ReificationForm(),
-            "contextual_triple_form_count": str(contextual_triple_form_count),
             "contextual_triple_form_to_reif": contextual_triple_form_to_reif,
-            "contextual_triple_form_list": contextual_triple_form_list,
+            # "contextual_triple_form_list": contextual_triple_form_list,
         }
     )
 
