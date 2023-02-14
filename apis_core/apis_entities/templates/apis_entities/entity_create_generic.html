@@ -242,7 +242,6 @@
             data: kwargs,
             success: function (response) {
                 $("#"+kwargs['div_origin']).append(response);
-                //document.getElementById(kwargs['div_origin']).innerHTML += response
             },
             error: function (response) {
                 alert(response["responseJSON"]["error"]);

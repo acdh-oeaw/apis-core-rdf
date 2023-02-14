@@ -19,7 +19,8 @@ from apis_core.helper_functions import DateParser
 from apis_core.helper_functions.RDFParser import RDFParser
 from .fields import ListSelect2, Select2Multiple
 from apis_core.apis_entities.models import AbstractEntity
-from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete
+from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete, \
+    get_cached_property_choices
 import django_tables2 as tables
 from django.template.loader import render_to_string
 
@@ -85,7 +86,7 @@ class GenericTripleForm2(forms.ModelForm):
     
 
 class PropertyAutocompleteFormField(forms.Form):
-    template_name = "apis_entities/ajax_property_autocomplete_form_field.html"
+    template_name = "apis_entities/property_autocomplete_form_field.html"
     
     def __init__(self, entity_type_self_str, entity_type_other_str, field_id, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -106,7 +107,7 @@ class PropertyAutocompleteFormField(forms.Form):
         )
 
 class EntityAutocompleteFormField(forms.Form):
-    template_name = "apis_entities/ajax_entity_autocomplete_form_field.html"
+    template_name = "apis_entities/entity_autocomplete_form_field.html"
     
     def __init__(self, entity_type_other_str, field_id, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -170,16 +171,14 @@ class VocabForm(forms.ModelForm):
         #     "nick_name": autocomplete.ModelSelect2(url="autocomplete/")
         # }
         
-def render_single_autocomplete_form_property(entity_type_self_str, entity_type_other_str, single_field_id):
-    # TODO __sresch__ : implement a check for if there is only one property between the entities.
-    # if so, pre-fill the form field.
-    # bonus-level: if there are 2-10 properties, make it a drop-down
+def render_single_autocomplete_form_property(entity_type_self_str, entity_type_other_str, id_number):
+    field_id = f"contextual_triple_form_{entity_type_self_str}_to_{entity_type_other_str}_{id_number}_property"
     
     class TemplateSingleAutocompletePropertyForm(forms.Form):
         template_name = "apis_entities/single_autocomplete_property_form.html"
-        def __init__(self):
-            super().__init__()
-            self.fields[single_field_id] = autocomplete.Select2ListCreateChoiceField(
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
                 label='property',
                 widget=ListSelect2(
                     url=reverse(
@@ -191,31 +190,40 @@ def render_single_autocomplete_form_property(entity_type_self_str, entity_type_o
                         'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
                         'data-html': True,
                         'style': 'width: 100%'
-                    }
+                    },
                 ),
             )
-    
+            choices = get_cached_property_choices(
+                entity_type_self_str=entity_type_self_str,
+                entity_type_other_str=entity_type_other_str,
+                search_name_str="",
+            )
+            if len(choices) == 1:
+                self.fields[field_id].initial = choices[0]["id"]
+                self.fields[field_id].choices = [(choices[0]["id"], choices[0]["text"])]
+
     return render_to_string(
         template_name=TemplateSingleAutocompletePropertyForm.template_name,
         context={
             "autocomplete_property_form": TemplateSingleAutocompletePropertyForm(),
-            "id_single_field_id": f"id_{single_field_id}",
+            "id_single_field_id": f"id_{field_id}",
             "autocomplete_url": f"/apis/relations/autocomplete/{entity_type_self_str}/{entity_type_other_str}/",
         }
     )
 
-def render_single_autocomplete_form_entity(entity_type_str, single_field_id):
+def render_single_autocomplete_form_entity(entity_type_self_str, entity_type_other_str, id_number):
+    field_id = f"contextual_triple_form_{entity_type_self_str}_to_{entity_type_other_str}_{id_number}_entity"
     
     class TemplateSingleAutocompleteEntityForm(forms.Form):
         template_name = "apis_entities/single_autocomplete_entity_form.html"
         def __init__(self):
             super().__init__()
-            self.fields[single_field_id] = autocomplete.Select2ListCreateChoiceField(
+            self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
                 label='entity',
                 widget=ListSelect2(
                     url=reverse(
                         'apis:apis_entities:generic_entities_autocomplete',
-                        kwargs={"entity": entity_type_str}
+                        kwargs={"entity": entity_type_other_str}
                     ),
                     attrs={
                         'data-placeholder': 'Type to get suggestions',
@@ -230,8 +238,8 @@ def render_single_autocomplete_form_entity(entity_type_str, single_field_id):
         template_name=TemplateSingleAutocompleteEntityForm.template_name,
         context={
             "autocomplete_entity_form": TemplateSingleAutocompleteEntityForm(),
-            "id_single_field_id": f"id_{single_field_id}",
-            "autocomplete_url": f"/apis/entities/autocomplete/{entity_type_str}/",
+            "id_single_field_id": f"id_{field_id}",
+            "autocomplete_url": f"/apis/entities/autocomplete/{entity_type_other_str}/",
         }
     )
 
@@ -239,15 +247,16 @@ def render_contextual_triple_form(entity_type_self_str, entity_type_other_str, i
     return render_to_string(
         template_name="apis_entities/contextual_triple_form_single.html",
         context={
-            "form_id": f"contextual_triple_form_single_{id_number}",
+            "form_id": f"contextual_triple_form_{entity_type_self_str}_to_{entity_type_other_str}_{id_number}",
             "single_autocomplete_property_form": render_single_autocomplete_form_property(
                 entity_type_self_str=entity_type_self_str,
                 entity_type_other_str=entity_type_other_str,
-                single_field_id=f"contextual_triple_form_single_{id_number}_property",
+                id_number=id_number,
             ),
             "single_autocomplete_entity_form": render_single_autocomplete_form_entity(
-                entity_type_str=entity_type_other_str,
-                single_field_id=f"contextual_triple_form_single_{id_number}_other_entity",
+                entity_type_self_str=entity_type_self_str,
+                entity_type_other_str=entity_type_other_str,
+                id_number=id_number,
             ),
         }
     )
@@ -257,8 +266,9 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str):
     property_autocomplete_field_to_reif_rendered = render_single_autocomplete_form_property(
         entity_type_self_str=entity_type_self_str,
         entity_type_other_str=entity_type_reification_str,
-        single_field_id=f"contextual_triple_form_single_{contextual_triple_form_count}_property",
+        id_number=contextual_triple_form_count,
     )
+    contextual_triple_form_count += 1
     entity_type_reification_class = AbstractEntity.get_entity_class_of_name(entity_type_reification_str)
     entity_type_reification_content_type = entity_type_reification_class.get_content_type()
     related_ct_list = ContentType.objects.filter(
@@ -268,13 +278,19 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str):
     related_class_list = [ct.model_class() for ct in related_ct_list]
     contextual_triple_form_list = []
     for related_class in related_class_list:
-        contextual_triple_form_count += 1
         contextual_triple_form_rendered = render_contextual_triple_form(
             entity_type_self_str=entity_type_reification_str,
             entity_type_other_str=related_class.__name__.lower(),
             id_number=str(contextual_triple_form_count)
         )
-        contextual_triple_form_list.append((related_class.__name__, contextual_triple_form_rendered))
+        contextual_triple_form_list.append((
+            related_class.__name__,
+            f"contextual_triple_form_{entity_type_reification_str}_to_{related_class.__name__.lower()}",
+            contextual_triple_form_rendered,
+            entity_type_reification_str,
+            related_class.__name__.lower(),
+        ))
+        contextual_triple_form_count += 1
     
     class ReificationForm(forms.ModelForm):
         template_name = "apis_entities/reification_form.html"
@@ -286,6 +302,7 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str):
     return render_to_string(
         template_name=reification_form.template_name,
         context={
+            "entity_type_reification_str": entity_type_reification_str,
             "reification_form": reification_form,
             "contextual_triple_form_count": str(contextual_triple_form_count),
             "property_autocomplete_field_to_reif_rendered": property_autocomplete_field_to_reif_rendered,

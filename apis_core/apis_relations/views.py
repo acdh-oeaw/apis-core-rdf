@@ -448,7 +448,7 @@ def ajax_2_get(request):
     return JsonResponse(rendered_form_str, status=200, safe=False)
 
 def ajax_2_create_contextual_triple_form(request):
-    return JsonResponse(
+    response = JsonResponse(
         data=render_contextual_triple_form(
             entity_type_self_str=request.POST["entity_type_self_str"],
             entity_type_other_str=request.POST["entity_type_other_str"],
@@ -457,3 +457,4 @@ def ajax_2_create_contextual_triple_form(request):
         status=200,
         safe=False
     )
+    return response

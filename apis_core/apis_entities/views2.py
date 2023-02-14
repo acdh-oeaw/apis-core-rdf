@@ -165,8 +165,8 @@ class GenericEntitiesEditView(View):
         context['form_merge_with'] = form_merge_with
         # template = get_template('apis_entities/entity_create_generic.html')
         # return HttpResponse(get_template("apis_entities/entity_create_generic.html").render(request=request, context=context))
-        form_xyz = GenericTripleForm2()
-        context["form_xyz"] = render_to_string(template_name=form_xyz.template_name, context={"form_xyz": form_xyz})
+        # form_xyz = GenericTripleForm2()
+        # context["form_xyz"] = render_to_string(template_name=form_xyz.template_name, context={"form_xyz": form_xyz})
 
         # property_autocomplete_field_to_reif = PropertyAutocompleteFormField(
         #     entity_type_self_str="f10_person",
@@ -206,7 +206,6 @@ class GenericEntitiesEditView(View):
         #         "autocomplete_url": "/apis/entities/autocomplete/e40_legal_body/",
         #     }
         # )
-
         # property_autocomplete_field_to_reif_rendered = render_single_autocompletex_form_property(
         #     entity_type_self_str="f10_person",
         #     entity_type_other_str="bookpublicationrelationship",

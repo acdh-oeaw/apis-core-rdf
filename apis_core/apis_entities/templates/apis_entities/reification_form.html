@@ -1,8 +1,7 @@
 <div id="ajax_form_id">
-    <h3>ajax_reification_form</h3>
     <form id="generic_reification_form_id_form" onsubmit="return false;">
         {{ property_autocomplete_field_to_reif_rendered }}
-        {{ property_autocomplete_field_to_reif_rendered2 }}
+        <h4>{{ entity_type_reification_str }}</h4>
         {% for field in reification_form %}
         <div class="fieldWrapper">
             {{ field.errors }}
@@ -12,12 +11,12 @@
             {{ field }}
         </div>
         {% endfor %}
-        {% for ctf in contextual_triple_form_list %}
-            <h4>{{ ctf.0 }}</h4>
-            <div id="contextual_triple_form_container_{{ ctf.0 }}">
-                {{ ctf.1 }}
+        {% for contextual_triple_form in contextual_triple_form_list %}
+            <h4>{{ contextual_triple_form.0 }}</h4>
+            <div id="{{ contextual_triple_form.1 }}">
+                {{ contextual_triple_form.2 }}
             </div>
-            <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'bookpublicationrelationship', 'entity_type_other_str':'e40_legal_body', 'id_number':generated_form_counter, 'div_origin':'contextual_triple_form_container_{{ ctf.0 }}'})" type="submit" class="btn btn-primary" value="ajax_2_create_contextual_triple_form" />
+            <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'{{ contextual_triple_form.3 }}', 'entity_type_other_str':'{{ contextual_triple_form.4 }}', 'id_number':generated_form_counter, 'div_origin':'{{ contextual_triple_form.1 }}'})" type="submit" class="btn btn-primary" value="+" />
             <br>
         {% endfor %}
         <input onclick="ajax_2_post(this.parentElement)" type="submit" class="btn btn-primary" value="reification" />
@@ -25,7 +24,6 @@
 </div>
 
 <script>
-    //var generated_form_counter = document.querySelectorAll('[id ^= "contextual_triple_form_single"]').length;
     var generated_form_counter = {{ contextual_triple_form_count }};
     function read_form_data(form_elem) {
         var serializedData = $(form_elem).serialize();
