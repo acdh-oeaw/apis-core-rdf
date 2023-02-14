@@ -1,11 +1,11 @@
 {% for field in property_autocomplete_field %}
-<div class="fieldWrapper">
-    {{ field.errors }}
-    {% if not field.field.widget.is_hidden %}
-        {{ field.label_tag }}
-    {% endif %}
-    {{ field }}
-</div>
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {% if not field.field.widget.is_hidden %}
+            {{ field.label_tag }}
+        {% endif %}
+        {{ field }}
+    </div>
 {% endfor %}
 
 <script>

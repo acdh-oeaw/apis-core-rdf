@@ -1,4 +1,4 @@
-<div id="{{ form_id }}">
+<div class="contextual_triple_form" data-entity_type_self="{{ entity_type_self_str }}" data-entity_type_other="{{ entity_type_other_str }}" data-entity_id_self="{{ entity_id_self }}" data-entity_id_other="{{ entity_id_other }}">
     <table>
         <tr>
             <td>
@@ -12,7 +12,9 @@
                 {{ single_autocomplete_entity_form }}
             </td>
             <td>
-                <input onclick="document.getElementById('{{ form_id }}').remove()" type="submit" class="btn btn-primary" value="-" />
+                {% if should_include_remove_button %}
+                    <input onclick="this.parentElement.parentElement.parentElement.parentElement.parentElement.remove()" type="submit" class="btn btn-primary" value="-" />
+                {% endif %}
             </td>
         </tr>
     </table>

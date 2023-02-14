@@ -111,8 +111,6 @@ class GenericEntitiesEditView(View):
         #     RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
         #     side_bar.append((title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open))
 
-
-
         form = get_entities_form(entity.title())
         form = form(instance=instance)
         form_text = FullTextForm(entity=entity.title(), instance=instance)
@@ -230,6 +228,7 @@ class GenericEntitiesEditView(View):
         context["reification_form"] = render_reification_form(
             entity_type_self_str="f10_person",
             entity_type_reification_str="bookpublicationrelationship",
+            entity_id_self=str(pk),
         )
         
         return render(request, "apis_entities/entity_create_generic.html", context)

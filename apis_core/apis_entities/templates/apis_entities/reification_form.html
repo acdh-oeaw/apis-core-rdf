@@ -1,6 +1,8 @@
 <div id="ajax_form_id">
     <form id="generic_reification_form_id_form" onsubmit="return false;">
-        {{ property_autocomplete_field_to_reif_rendered }}
+        <div id="{{ contextual_triple_form_to_reif.0 }}">
+            {{ contextual_triple_form_to_reif.1 }}
+        </div>
         <h4>{{ entity_type_reification_str }}</h4>
         {% for field in reification_form %}
         <div class="fieldWrapper">
