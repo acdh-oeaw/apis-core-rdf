@@ -18,18 +18,9 @@
             <div id="{{ contextual_triple_form.1 }}">
                 {{ contextual_triple_form.2 }}
             </div>
-            <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'{{ contextual_triple_form.3 }}', 'entity_type_other_str':'{{ contextual_triple_form.4 }}', 'id_number':generated_form_counter, 'div_origin':'{{ contextual_triple_form.1 }}'})" type="submit" class="btn btn-primary" value="+" />
+            <input onclick="ajax_2_create_contextual_triple_form({'entity_type_self_str':'{{ contextual_triple_form.3 }}', 'entity_type_other_str':'{{ contextual_triple_form.4 }}', 'div_origin':'{{ contextual_triple_form.1 }}'})" type="submit" class="btn btn-primary" value="+" />
             <br>
         {% endfor %}
         <input onclick="ajax_2_post(this.parentElement)" type="submit" class="btn btn-primary" value="reification" />
     </form>
 </div>
-
-<script>
-    var generated_form_counter = {{ contextual_triple_form_count }};
-    function read_form_data(form_elem) {
-        var serializedData = $(form_elem).serialize();
-        console.log(serializedData);
-        let csrftoken = '{{ csrf_token }}'
-    }
-</script>

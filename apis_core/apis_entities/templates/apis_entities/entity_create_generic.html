@@ -17,7 +17,22 @@
 {% block content %}
 {% load django_tables2 %}
 {% if instance %}
-
+<script>
+    function search_and_activate_dal_s2(elem) {
+        if (elem instanceof Element) {
+            if (elem.hasAttribute("data-autocomplete-light-url")) {
+                $(elem).select2({
+                    ajax: {
+                        url: elem.getAttribute("data-autocomplete-light-url"),
+                        dataType: 'json'
+                    }
+                });
+            } else {
+                elem.childNodes.forEach(e => search_and_activate_dal_s2(e));
+            }
+        }
+    };
+</script>
 {{ form_property_autocomplete_field }}
 {{ reification_form }}
 {{ form_xyz }}
@@ -240,7 +255,10 @@
             url: "{% url 'apis:apis_relations:ajax_2_create_contextual_triple_form' %}",
             data: kwargs,
             success: function (response) {
-                $("#"+kwargs['div_origin']).append(response);
+                var form_container = document.getElementById(kwargs['div_origin'])
+                $(form_container).append(response);
+                var newest_form = form_container.childNodes[form_container.childNodes.length - 1];
+                search_and_activate_dal_s2(newest_form);
             },
             error: function (response) {
                 alert(response["responseJSON"]["error"]);

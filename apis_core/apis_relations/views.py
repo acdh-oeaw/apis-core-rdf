@@ -452,7 +452,6 @@ def ajax_2_create_contextual_triple_form(request):
         data=render_contextual_triple_form(
             entity_type_self_str=request.POST["entity_type_self_str"],
             entity_type_other_str=request.POST["entity_type_other_str"],
-            id_number=request.POST["id_number"],
         ),
         status=200,
         safe=False
