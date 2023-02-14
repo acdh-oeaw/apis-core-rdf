@@ -103,14 +103,17 @@ class Property(RootObject):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.name_reverse != unicodedata.normalize("NFC", self.name_reverse):
-            self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
-
-        if self.name_reverse == "" or self.name_reverse == None:
-            self.name_reverse = self.name + " [REVERSE]"
-
         # TODO RDF : Temporary hack, remove this once better solution is found
         self.name_forward = self.name
+
+        if self.name_reverse is None or self.name_reverse == "":
+            self.name_reverse = self.name_forward + " [REVERSE]"
+
+        if unicodedata.is_normalized("NFC", self.name_forward) is False:
+            self.name_forward = unicodedata.normalize("NFC", self.name_forward)
+
+        if unicodedata.is_normalized("NFC", self.name_reverse) is False:
+            self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
 
         super(Property, self).save(*args, **kwargs)
         return self
