@@ -25,7 +25,7 @@ from apis_core.apis_relations.models import Property, TempTriple, Triple
 # )
 #from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
 from .tables import LabelTableEdit
-from ..apis_entities.forms import create_contextual_triple_form_class
+from ..apis_entities.forms import create_contextual_triple_form_class, render_contextual_triple_form
 
 form_module_list = [relation_form_module]
 
@@ -448,10 +448,16 @@ def ajax_2_get(request):
     return JsonResponse(rendered_form_str, status=200, safe=False)
 
 def ajax_2_create_contextual_triple_form(request):
+    should_include_other_entity = request.POST.get("should_include_other_entity")
+    if should_include_other_entity == "False":
+        should_include_other_entity = False
+    else:
+        should_include_other_entity = True
     response = JsonResponse(
-        data=create_contextual_triple_form_class(
+        data=render_contextual_triple_form(
             entity_type_self_str=request.POST["entity_type_self_str"],
             entity_type_other_str=request.POST["entity_type_other_str"],
+            should_include_other_entity=should_include_other_entity,
         ),
         status=200,
         safe=False

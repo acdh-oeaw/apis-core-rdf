@@ -464,7 +464,8 @@
     }
 </script>
 <script type="text/javascript">
- function activate_editing(){
+Array.from(document.getElementsByClassName("btn-triple-add")).forEach(e => {e.click();});
+function activate_editing(){
         {% for obj in right_card %}
         console.log("activate_editing");
         console.log("obj.0: {{obj.0}}");
