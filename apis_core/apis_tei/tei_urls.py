@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .tei_ac import TeiEntAc, TeiCompleterAc
 
 from apis_core.apis_tei import views
 
-app_name = 'apis_tei'
+app_name = "apis_tei"
 
 urlpatterns = [
     # __before_rdf_refactoring__
