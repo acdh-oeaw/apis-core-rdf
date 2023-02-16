@@ -44,7 +44,7 @@ class SearchForm(forms.Form):
 
 # class GenericTripleForm2(forms.Form):
 class GenericTripleForm2(forms.ModelForm):
-    template_name = "apis_entities/ajax_triple_form.html"
+    template_name = "apis_entities/ajax_triple_form_OLD.html"
     
     class Meta:
         from apis_core.apis_relations.models import Triple
@@ -266,6 +266,7 @@ def create_contextual_triple_form_class(
                         'style': 'width: 100%'
                     },
                 ),
+                
             )
             if should_include_other_entity:
                 self.fields["entity_other"] = autocomplete.Select2ListCreateChoiceField(
@@ -297,8 +298,7 @@ def create_contextual_triple_form_class(
 def render_contextual_triple_form(
     entity_type_self_str,
     entity_type_other_str,
-    entity_id_self="",
-    entity_id_other="",
+    entity_id_self,
     should_include_other_entity=True,
 ):
     form_class = create_contextual_triple_form_class(
@@ -313,12 +313,11 @@ def render_contextual_triple_form(
             "entity_type_self_str": entity_type_self_str,
             "entity_type_other_str": entity_type_other_str,
             "entity_id_self": entity_id_self,
-            "entity_id_other": entity_id_other,
             "contextual_triple_form": form_class(),
         }
     )
 
-def render_reification_form(entity_type_self_str, entity_type_reification_str, entity_id_self="", entity_id_other=""):
+def render_reification_form(entity_type_self_str, entity_type_reification_str, entity_id_self, entity_id_other=""):
     entity_type_reification_class = AbstractEntity.get_entity_class_of_name(entity_type_reification_str)
     
     class ReificationForm(forms.ModelForm):
@@ -327,47 +326,31 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
             model = entity_type_reification_class
             fields = ["name", "start_date"]
     
-    def render_contextual_triple_form_list(entity_type_reification_class):
+    def create_triple_form_data_from_reif_list(entity_type_reification_class):
         entity_type_reification_content_type = entity_type_reification_class.get_content_type()
         related_ct_list = ContentType.objects.filter(
             Q(property_set_obj__subj_class=entity_type_reification_content_type)
             | Q(property_set_subj__obj_class=entity_type_reification_content_type)
         ).distinct()
         related_class_list = [ct.model_class() for ct in related_ct_list]
-        contextual_triple_form_list = []
+        triple_form_data_from_reif_list = []
         for related_class in related_class_list:
-            contextual_triple_form_rendered = render_contextual_triple_form(
-                entity_type_self_str=entity_type_reification_str,
-                entity_type_other_str=related_class.__name__.lower(),
-            )
-            contextual_triple_form_list.append((
-                f"contextual_triple_form_container_{entity_type_reification_str}_to_{related_class.__name__.lower()}",
-                contextual_triple_form_rendered,
+            triple_form_data_from_reif_list.append((
+                related_class.__name__,
                 entity_type_reification_str,
                 related_class.__name__.lower(),
-                related_class.__name__,
             ))
-        return contextual_triple_form_list
+        return triple_form_data_from_reif_list
         
-    contextual_triple_form_to_reif = render_contextual_triple_form(
-        entity_type_self_str=entity_type_self_str,
-        entity_type_other_str=entity_type_reification_str,
-        should_include_other_entity=False,
-    )
-    contextual_triple_form_to_reif = (
-        f"contextual_triple_form_{entity_type_self_str}_to_{entity_type_reification_str.lower()}",
-        contextual_triple_form_to_reif,
-        entity_type_self_str,
-        entity_type_reification_str,
-    )
-    contextual_triple_form_list = render_contextual_triple_form_list(entity_type_reification_class)
+    triple_form_data_from_reif_list = create_triple_form_data_from_reif_list(entity_type_reification_class)
     return render_to_string(
         template_name=ReificationForm.template_name,
         context={
+            "entity_id_self": entity_id_self,
             "entity_type_reification_str": entity_type_reification_str,
             "reification_form": ReificationForm(),
-            "contextual_triple_form_to_reif": contextual_triple_form_to_reif,
-            "contextual_triple_form_list": contextual_triple_form_list,
+            "triple_form_data_to_reif": (entity_type_self_str, entity_type_reification_str),
+            "triple_form_data_from_reif_list": triple_form_data_from_reif_list,
         }
     )
 

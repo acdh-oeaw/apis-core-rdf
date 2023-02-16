@@ -428,7 +428,8 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #
 
 def ajax_2_post(request):
-    print(list(request.POST.items()))
+    post_data = json.loads(request.body)
+    print(post_data)
     return JsonResponse(None, status=200, safe=False)
     # t = Triple.objects.create(
     #     subj=F10_Person.objects.get(pk=request.POST["subj"]),
@@ -457,6 +458,7 @@ def ajax_2_create_contextual_triple_form(request):
         data=render_contextual_triple_form(
             entity_type_self_str=request.POST["entity_type_self_str"],
             entity_type_other_str=request.POST["entity_type_other_str"],
+            entity_id_self=request.POST["entity_id_self"],
             should_include_other_entity=should_include_other_entity,
         ),
         status=200,

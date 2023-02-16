@@ -32,6 +32,36 @@
             }
         }
     };
+
+    function parse_triple_form(triple_form) {
+        var entity_type_self = triple_form.getAttribute("data-entity_type_self");
+        var entity_type_other = triple_form.getAttribute("data-entity_type_other");
+        var entity_id_self = triple_form.getAttribute("data-entity_id_self");
+        var property_id = "";
+        var property_direction = "";
+        var entity_id_other = "";
+        var form_serialized = $(triple_form).serializeArray();
+        form_serialized.forEach(field_dict => {
+            if (field_dict["name"] == "property") {
+                property_value = field_dict["value"];
+                property_value = property_value.split("__");
+                property_id = property_value[0].split(":")[1];
+                property_direction = property_value[1].split(":")[1];
+            } else if (field_dict["name"] == "entity_other") {
+                entity_id_other = field_dict["value"];
+            } else {
+                throw new Error('Unexpected form field found.');
+            }
+        });
+        return {
+            "entity_type_self": entity_type_self,
+            "entity_type_other": entity_type_other,
+            "entity_id_self": entity_id_self,
+            "entity_id_other": entity_id_other,
+            "property_id": property_id,
+            "property_direction": property_direction,
+        };
+    }
 </script>
 {{ form_property_autocomplete_field }}
 {{ reification_form }}
@@ -227,15 +257,33 @@
         })
     }
 
-    //$(document).on('submit', '#generic_triple_form_id_form', function() {
     function ajax_2_post(form_elem) {
         let csrftoken = '{{ csrf_token }}'
-        var serializedData = $(form_elem).serialize();
+        var post_data = {
+            "generic_reification_attr_form": {},
+            "triple_data_to_reification_list": [],
+            "triple_data_from_reification_list": [],
+        };
+        $(form_elem.querySelector("#generic_reification_attr_form")).serializeArray().forEach(attr => {
+            post_data["generic_reification_attr_form"][attr["name"]] = attr["value"];
+        });
+        Array.from(form_elem.getElementsByClassName("contextual_triple_form_container")).forEach(triple_form_container => {
+            Array.from(triple_form_container.getElementsByClassName("contextual_triple_form")).forEach(triple_form => {
+                if (triple_form_container.getAttribute("data-direction") == "to_reification") {
+                    post_data["triple_data_to_reification_list"].push(parse_triple_form(triple_form));
+                } else if (triple_form_container.getAttribute("data-direction") == "from_reification") {
+                    post_data["triple_data_from_reification_list"].push(parse_triple_form(triple_form));
+                } else {
+                    throw new Error('No reification direction found.');
+                }
+            })
+        });
+        post_data = JSON.stringify(post_data)
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
             url: "{% url 'apis:apis_relations:ajax_2_post' %}",
-            data: serializedData,
+            data: post_data,
             success: function (response) {
                 console.log(response)
                 //$("#generic_triple_form_id_form").trigger('reset');
@@ -247,7 +295,7 @@
         })
     };
 
-    function ajax_2_create_contextual_triple_form(kwargs) {
+    function ajax_2_create_contextual_triple_form(kwargs, div_origin) {
         let csrftoken = '{{ csrf_token }}'
         $.ajax({
             type: 'POST',
@@ -255,15 +303,10 @@
             url: "{% url 'apis:apis_relations:ajax_2_create_contextual_triple_form' %}",
             data: kwargs,
             success: function (response) {
-                var form_container = document.getElementById(kwargs['div_origin'])
-                $(form_container).append(response);
-                var form_list = form_container.childNodes;
-                for (var i = form_list.length - 1; i >= 0; i--) {
-                    if (form_list[i].tagName == "DIV") {
-                        search_and_activate_dal_s2(form_list[i]);
-                        break;
-                    };
-                };
+                //var form_container = document.getElementById(kwargs['div_origin'])
+                $(div_origin).append(response);
+                var form_list = div_origin.getElementsByClassName("contextual_triple_form")
+                search_and_activate_dal_s2(form_list[form_list.length - 1]);
             },
             error: function (response) {
                 alert(response["responseJSON"]["error"]);

@@ -463,7 +463,7 @@ def get_cached_property_choices(entity_type_self_str, entity_type_other_str, sea
          # the one where result hits match on the forward name of a property and the other set where the result hits
          # match on the reverse name. These hits need to re-used later, but additionally the direction of the property
          # is also needed later to persist it correctly (e.g. when creating a triple between two persons, where one is
-         # the mother and the other is the daugther, then the property direction is needed).
+         # the mother and the other is the daughter, then the property direction is needed).
          # I could not find a way to return in this function a choices list with dictionaries or something else, that
          # would pass additional data. So I am misusing the 'id' item in the dictionary by encoding the id and the direction
          # into a string which will be parsed and split later on.
@@ -505,3 +505,4 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
             ),
             content_type='application/json'
         )
+    

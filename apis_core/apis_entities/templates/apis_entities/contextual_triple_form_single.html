@@ -1,4 +1,4 @@
-<div class="contextual_triple_form" data-entity_type_self="{{ entity_type_self_str }}" data-entity_type_other="{{ entity_type_other_str }}" data-entity_id_self="{{ entity_id_self }}" data-entity_id_other="{{ entity_id_other }}">
+<form class="contextual_triple_form" data-entity_type_self="{{ entity_type_self_str }}" data-entity_type_other="{{ entity_type_other_str }}" data-entity_id_self="{{ entity_id_self }}">
     {% for field in contextual_triple_form %}
         <div class="fieldWrapper">
             {{ field.errors }}
@@ -9,4 +9,4 @@
         </div>
     {% endfor %}
     <input onclick="this.parentElement.remove()" type="submit" class="btn btn-primary" value="-" />
-</div>
+</form>
