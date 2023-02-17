@@ -44,8 +44,26 @@ class ReificationTable(tables.Table):
     
     class Meta:
         model = BookPublicationRelationship
-        fields = ["name"]
+        fields = ["name", "edit", "delete"]
+        attrs = {"id": "reification_table_1"}
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.base_columns["edit"] = tables.Column(empty_values=())
+        self.base_columns["delete"] = tables.Column(empty_values=())
+    #
+    # def render_edit(self, record):
+    #     return format_html(f'<button type="button" onclick="alert({record.id})">E</button>')
+    #     return format_html(f"""
+    #         <a class='reledit' onclick="load_existing_user_form_ajax_js('{record.id}')")>
+    #             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
+    #                 <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
+    #             </svg>
+    #         </a>
+    #     """)
+    #
+    # def render_delete(self, record):
+    #     return format_html(f'<button type="button" onclick="ajax_2_delete_reification({record.id})">D</button>')
 
 
 # TODO RDF : combine this or re-use this class here in get_generic_triple_table

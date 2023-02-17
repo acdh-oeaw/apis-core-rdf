@@ -64,9 +64,10 @@
     }
 </script>
 {{ form_property_autocomplete_field }}
-{{ reification_form }}
-{{ form_xyz }}
-{% render_table table_zyx %}
+<div class="reification_form">
+    {{ reification_form }}
+</div>
+{% render_table reification_table %}
 <div class="container-fluid">
     <div class="card">
         <div class="card-header" style="text-align: center;">
@@ -257,6 +258,22 @@
         })
     }
 
+    function ajax_2_delete_reification(reification_id) {
+        let csrftoken = '{{ csrf_token }}'
+        $.ajax({
+            type: 'POST',
+            headers: {'X-CSRFToken':csrftoken},
+            url: "{% url 'apis:apis_relations:ajax_2_delete_reification' %}",
+            data: {"reification_id": reification_id},
+            success: function (response) {
+                $("#reification_table_1").html(response)
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+    }
+
     function ajax_2_post(form_elem) {
         let csrftoken = '{{ csrf_token }}'
         var post_data = {
@@ -303,7 +320,6 @@
             url: "{% url 'apis:apis_relations:ajax_2_create_contextual_triple_form' %}",
             data: kwargs,
             success: function (response) {
-                //var form_container = document.getElementById(kwargs['div_origin'])
                 $(div_origin).append(response);
                 var form_list = div_origin.getElementsByClassName("contextual_triple_form")
                 search_and_activate_dal_s2(form_list[form_list.length - 1]);

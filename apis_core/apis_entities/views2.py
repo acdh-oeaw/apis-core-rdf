@@ -148,7 +148,7 @@ class GenericEntitiesEditView(View):
             'entity_type': entity,
             'form': form,
             "table_xyz": GenericTripleTable(Triple.objects.all()),
-            "table_zyx": ReificationTable(BookPublicationRelationship.objects.all()),
+            "reification_table": ReificationTable(BookPublicationRelationship.objects.all()),
             'form_text': form_text,
             'instance': instance,
             'right_card': side_bar,

@@ -465,3 +465,11 @@ def ajax_2_create_contextual_triple_form(request):
         safe=False
     )
     return response
+
+def ajax_2_delete_reification(request):
+    response = JsonResponse(
+        data="<h1>XXX</h1>",
+        status=200,
+        safe=False
+    )
+    return response
