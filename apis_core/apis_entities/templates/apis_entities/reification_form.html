@@ -1,25 +1,23 @@
-<div id="ajax_form_id">
-    <div class="contextual_triple_form_container" data-direction="to_reification">
-    </div>
-    <input onclick="ajax_2_create_contextual_triple_form(kwargs={'entity_type_self_str':'{{ triple_form_data_to_reif.0 }}', 'entity_type_other_str':'{{ triple_form_data_to_reif.1 }}', 'entity_id_self':'{{ entity_id_self }}', 'should_include_other_entity': 'False'}, div_origin=this.previousElementSibling)" type="submit" class="btn btn-primary btn-triple-add" value="+" />
-    <h4>{{ entity_type_reification_str }}</h4>
-    <form id="generic_reification_attr_form" onsubmit="return false;">
-        {% for field in reification_form %}
-            <div class="fieldWrapper">
-                {{ field.errors }}
-                {% if not field.field.widget.is_hidden %}
-                    {{ field.label_tag }}
-                {% endif %}
-                {{ field }}
-            </div>
-        {% endfor %}
-    </form>
-    {% for triple_form_data_from_reif in triple_form_data_from_reif_list %}
-        <h4>{{ triple_form_data_from_reif.0 }}</h4>
-        <div class="contextual_triple_form_container" data-direction="from_reification">
-        </div>
-        <input onclick="ajax_2_create_contextual_triple_form(kwargs={'entity_type_self_str':'{{ triple_form_data_from_reif.1 }}', 'entity_type_other_str':'{{ triple_form_data_from_reif.2 }}', 'entity_id_self':''}, div_origin=this.previousElementSibling)" type="submit" class="btn btn-primary btn-triple-add" value="+" />
-        <br>
-    {% endfor %}
-    <input onclick="ajax_2_post(this.parentElement)" type="submit" class="btn btn-primary" value="create/modify" />
+<div class="contextual_triple_form_container" data-direction="to_reification">
 </div>
+<input onclick="ajax_2_load_contextual_triple_form(kwargs={'entity_type_self_str':'{{ triple_form_data_to_reif.0 }}', 'entity_type_other_str':'{{ triple_form_data_to_reif.1 }}', 'entity_id_self':'{{ entity_id_self }}', 'should_include_other_entity': 'False'}, div_origin=this.previousElementSibling)" type="submit" class="btn btn-primary btn-triple-add" value="+" />
+<h4>{{ entity_type_reification_str }}</h4>
+<form id="generic_reification_attr_form" onsubmit="return false;">
+    {% for field in reification_form %}
+        <div class="fieldWrapper">
+            {{ field.errors }}
+            {% if not field.field.widget.is_hidden %}
+                {{ field.label_tag }}
+            {% endif %}
+            {{ field }}
+        </div>
+    {% endfor %}
+</form>
+{% for triple_form_data_from_reif in triple_form_data_from_reif_list %}
+    <h4>{{ triple_form_data_from_reif.0 }}</h4>
+    <div class="contextual_triple_form_container" data-direction="from_reification">
+    </div>
+    <input onclick="ajax_2_load_contextual_triple_form(kwargs={'entity_type_self_str':'{{ triple_form_data_from_reif.1 }}', 'entity_type_other_str':'{{ triple_form_data_from_reif.2 }}', 'entity_id_self':''}, div_origin=this.previousElementSibling)" type="submit" class="btn btn-primary btn-triple-add" value="+" />
+    <br>
+{% endfor %}
+<input onclick="ajax_2_post_reification_form(this)" type="submit" class="btn btn-primary" value="create/modify" />

@@ -20,11 +20,13 @@ from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Triple, TempTriple
-from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, LabelTableEdit
+from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, \
+    LabelTableEdit, render_reification_table
 from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm, \
     render_single_autocomplete_form_property, render_single_autocomplete_form_entity_OLD, create_contextual_triple_form_class, render_reification_form
 from .views import get_highlighted_texts
 from .views import set_session_variables
+from ..apis_relations.views import ajax_2_load_contextual_triple_form, ajax_2_delete_reification
 from ..apis_vocabularies.models import TextType
 
 if 'apis_highlighter' in settings.INSTALLED_APPS:
@@ -148,7 +150,7 @@ class GenericEntitiesEditView(View):
             'entity_type': entity,
             'form': form,
             "table_xyz": GenericTripleTable(Triple.objects.all()),
-            "reification_table": ReificationTable(BookPublicationRelationship.objects.all()),
+            # "reification_table": ReificationTable(),
             'form_text': form_text,
             'instance': instance,
             'right_card': side_bar,
@@ -225,12 +227,24 @@ class GenericEntitiesEditView(View):
         #     }
         # )
 
-        context["reification_form"] = render_reification_form(
-            entity_type_self_str="f10_person",
-            entity_type_reification_str="bookpublicationrelationship",
-            entity_id_self=str(pk),
+        # context["reification_table"] = render_to_string(
+        #     ReificationTable.template_name_custom, context={"table": ReificationTable()}
+        # )
+        # context["reification_table_container"] = render_to_string("apis_entities/reification_table_container.html")
+        context["reification_form_and_table"] = render_to_string(
+            "apis_entities/reification_form_and_table.html",
+            context={
+                "reification_form": render_reification_form(
+                    entity_type_self_str="f10_person",
+                    entity_type_reification_str="bookpublicationrelationship",
+                    entity_id_self=str(pk),
+                ),
+                "entity_type_self": "f10_person",
+                "entity_type_reification": "bookpublicationrelationship",
+                "entity_id_self": str(pk),
+                "reification_table": render_reification_table(request),
+            },
         )
-        
         return render(request, "apis_entities/entity_create_generic.html", context)
 
     def post(self, request, *args, **kwargs):

@@ -1,6 +1,7 @@
 import django_tables2 as tables
 from django.conf import settings
 from django.db.models import Case, When, F
+from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django_tables2.utils import A
 
@@ -41,6 +42,10 @@ class GenericTripleTable(tables.Table):
         """)
 
 class ReificationTable(tables.Table):
+    # If I would use `template_name` here, django-tables crashes. Perhaps it only expects some
+    # of its own pre-integrated templates? But since I want to use a custom one and also attach it
+    # to this class I renamed it to `template_name_custom`. I did not find a better solution quickly.
+    template_name_custom = "apis_relations/reification_table_single.html"
     
     class Meta:
         model = BookPublicationRelationship
@@ -48,22 +53,29 @@ class ReificationTable(tables.Table):
         attrs = {"id": "reification_table_1"}
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs, data=BookPublicationRelationship.objects.all())
         self.base_columns["edit"] = tables.Column(empty_values=())
         self.base_columns["delete"] = tables.Column(empty_values=())
-    #
-    # def render_edit(self, record):
-    #     return format_html(f'<button type="button" onclick="alert({record.id})">E</button>')
-    #     return format_html(f"""
-    #         <a class='reledit' onclick="load_existing_user_form_ajax_js('{record.id}')")>
-    #             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
-    #                 <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
-    #             </svg>
-    #         </a>
-    #     """)
-    #
-    # def render_delete(self, record):
-    #     return format_html(f'<button type="button" onclick="ajax_2_delete_reification({record.id})">D</button>')
+
+    def render_edit(self, record):
+        return format_html(f'<button type="button" onclick="ajax_2_load_reification_form(record_id={record.id}, div_origin=this)">E</button>')
+        return format_html(f"""
+            <a class='reledit' onclick="load_existing_user_form_ajax_js('{record.id}')")>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
+                    <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
+                </svg>
+            </a>
+        """)
+
+    def render_delete(self, record):
+        return format_html(f'<button type="button" onclick="ajax_2_delete_reification({record.id})">D</button>')
+
+def render_reification_table(request):
+    return render_to_string(
+        request=request,
+        template_name=ReificationTable.template_name_custom,
+        context={"table": ReificationTable()},
+    )
 
 
 # TODO RDF : combine this or re-use this class here in get_generic_triple_table

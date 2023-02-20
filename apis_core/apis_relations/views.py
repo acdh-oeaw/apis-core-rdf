@@ -8,7 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse, HttpResponse, Http404
 from django.template.loader import render_to_string
 from apis_ontology.models import *
-
+from django.shortcuts import render
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
 from apis_core.apis_relations.forms2 import GenericTripleForm
@@ -24,8 +24,8 @@ from apis_core.apis_relations.models import Property, TempTriple, Triple
 #     InstitutionWork, PlaceWork, EventWork, WorkWork
 # )
 #from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
-from .tables import LabelTableEdit
-from ..apis_entities.forms import create_contextual_triple_form_class, render_contextual_triple_form
+from .tables import LabelTableEdit, ReificationTable, render_reification_table
+from ..apis_entities.forms import create_contextual_triple_form_class, render_reification_form
 
 form_module_list = [relation_form_module]
 
@@ -427,18 +427,23 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #                 request=request)}
     #
 
-def ajax_2_post(request):
+def ajax_2_post_reification_form(request):
     post_data = json.loads(request.body)
     print(post_data)
-    return JsonResponse(None, status=200, safe=False)
-    # t = Triple.objects.create(
-    #     subj=F10_Person.objects.get(pk=request.POST["subj"]),
-    #     obj=E55_Type.objects.get(pk=request.POST["obj"]),
-    #     prop=Property.objects.get(pk=request.POST["prop"])
-    # )
-    # from apis_core.apis_relations.tables import GenericTripleTable
-    # table = GenericTripleTable(Triple.objects.all())
-    # return JsonResponse(table.as_html(request), status=200, safe=False)
+    BookPublicationRelationship.objects.create(**post_data["generic_reification_attr_form"])
+    response = JsonResponse(
+        data={
+            "form": render_reification_form(
+                entity_type_self_str=post_data["entity_type_self"],
+                entity_type_reification_str=post_data["entity_type_reification"],
+                entity_id_self=post_data["entity_id_self"],
+            ),
+            "table": render_reification_table(request)
+        },
+        status=200,
+        safe=False
+    )
+    return response
 
 def ajax_2_get(request):
     from ..apis_entities.forms import GenericTripleForm2
@@ -448,27 +453,61 @@ def ajax_2_get(request):
     rendered_form_str = render_to_string(template_name=form.template_name, context={"form_xyz": form})
     return JsonResponse(rendered_form_str, status=200, safe=False)
 
-def ajax_2_create_contextual_triple_form(request):
+def ajax_2_load_contextual_triple_form(request):
     should_include_other_entity = request.POST.get("should_include_other_entity")
     if should_include_other_entity == "False":
         should_include_other_entity = False
     else:
         should_include_other_entity = True
+
+    form_class = create_contextual_triple_form_class(
+        entity_type_self_str=request.POST["entity_type_self_str"],
+        entity_type_other_str=request.POST["entity_type_other_str"],
+        should_include_other_entity=should_include_other_entity,
+    )
+
+    form_rendered = render_to_string(
+        template_name=form_class.template_name,
+        context={
+            "entity_type_self_str": request.POST["entity_type_self_str"],
+            "entity_type_other_str": request.POST["entity_type_other_str"],
+            "entity_id_self": request.POST["entity_id_self"],
+            "contextual_triple_form": form_class(),
+        }
+    )
     response = JsonResponse(
-        data=render_contextual_triple_form(
-            entity_type_self_str=request.POST["entity_type_self_str"],
-            entity_type_other_str=request.POST["entity_type_other_str"],
-            entity_id_self=request.POST["entity_id_self"],
-            should_include_other_entity=should_include_other_entity,
-        ),
+        data=form_rendered,
         status=200,
         safe=False
     )
     return response
 
-def ajax_2_delete_reification(request):
+def ajax_2_load_reification_form(request):
     response = JsonResponse(
-        data="<h1>XXX</h1>",
+        data="XXX",
+        status=200,
+        safe=False
+    )
+    return response
+
+
+def ajax_2_load_reification_table(request):
+    reification_table = ReificationTable()
+    response = JsonResponse(
+        data=reification_table.as_html(request),
+        status=200,
+        safe=False
+    )
+    return response
+    
+
+def ajax_2_delete_reification(request):
+    # form = UserForm()
+    # table = UserTable(User.objects.all().order_by(UserTable.Meta.fields[0]))
+    # return render(request, "user_table3.html", {"form": form, "table": table})
+    
+    response = JsonResponse(
+        data="<h1>XXXXXX</h1>",
         status=200,
         safe=False
     )

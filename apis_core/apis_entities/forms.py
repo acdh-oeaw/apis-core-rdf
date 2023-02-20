@@ -295,27 +295,27 @@ def create_contextual_triple_form_class(
         
     return GenericContextualTripleForm
     
-def render_contextual_triple_form(
-    entity_type_self_str,
-    entity_type_other_str,
-    entity_id_self,
-    should_include_other_entity=True,
-):
-    form_class = create_contextual_triple_form_class(
-        entity_type_self_str=entity_type_self_str,
-        entity_type_other_str=entity_type_other_str,
-        should_include_other_entity=should_include_other_entity
-    )
-    
-    return render_to_string(
-        template_name=form_class.template_name,
-        context={
-            "entity_type_self_str": entity_type_self_str,
-            "entity_type_other_str": entity_type_other_str,
-            "entity_id_self": entity_id_self,
-            "contextual_triple_form": form_class(),
-        }
-    )
+# def render_contextual_triple_form(
+#     entity_type_self_str,
+#     entity_type_other_str,
+#     entity_id_self,
+#     should_include_other_entity=True,
+# ):
+#     form_class = create_contextual_triple_form_class(
+#         entity_type_self_str=entity_type_self_str,
+#         entity_type_other_str=entity_type_other_str,
+#         should_include_other_entity=should_include_other_entity
+#     )
+#
+#     return render_to_string(
+#         template_name=form_class.template_name,
+#         context={
+#             "entity_type_self_str": entity_type_self_str,
+#             "entity_type_other_str": entity_type_other_str,
+#             "entity_id_self": entity_id_self,
+#             "contextual_triple_form": form_class(),
+#         }
+#     )
 
 def render_reification_form(entity_type_self_str, entity_type_reification_str, entity_id_self, entity_id_other=""):
     entity_type_reification_class = AbstractEntity.get_entity_class_of_name(entity_type_reification_str)
@@ -353,6 +353,10 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
             "triple_form_data_from_reif_list": triple_form_data_from_reif_list,
         }
     )
+
+def ajax_2_load_reification_form():
+    pass
+
 
 class VocabTable(tables.Table):
     

@@ -63,11 +63,13 @@
         };
     }
 </script>
-{{ form_property_autocomplete_field }}
+{{ form_property_autocomplete_field_DEACTIVATED }}
 <div class="reification_form">
-    {{ reification_form }}
+    {{ reification_form_DEACTIVATED }}
 </div>
-{% render_table reification_table %}
+{{ reification_table_container_DEACTIVATED }}
+
+{{ reification_form_and_table }}
 <div class="container-fluid">
     <div class="card">
         <div class="card-header" style="text-align: center;">
@@ -258,6 +260,39 @@
         })
     }
 
+    function ajax_2_load_reification_form(record_id, div_origin) {
+        let csrftoken = '{{ csrf_token }}'
+        $.ajax({
+            type: 'POST',
+            headers: {'X-CSRFToken':csrftoken},
+            url: "{% url 'apis:apis_relations:ajax_2_load_reification_form' %}",
+            data: {"record_id": record_id},
+            success: function (response) {
+                var div_form = div_origin.closest(".reification_form_and_table_anchor").querySelector(".reification_form_anchor");
+                div_form.innerHTML = response;
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    }
+
+    function ajax_2_load_reification_table(div_origin) {
+        let csrftoken = '{{ csrf_token }}'
+        $.ajax({
+            type: 'POST',
+            headers: {'X-CSRFToken':csrftoken},
+            url: "{% url 'apis:apis_relations:ajax_2_load_reification_table' %}",
+            data: {},
+            success: function (response) {
+                div_origin.innerHTML = response;
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    }
+
     function ajax_2_delete_reification(reification_id) {
         let csrftoken = '{{ csrf_token }}'
         $.ajax({
@@ -266,7 +301,7 @@
             url: "{% url 'apis:apis_relations:ajax_2_delete_reification' %}",
             data: {"reification_id": reification_id},
             success: function (response) {
-                $("#reification_table_1").html(response)
+                document.getElementById("reification_table_1").innerHTML=response
             },
             error: function (response) {
                 console.log(response)
@@ -274,17 +309,23 @@
         })
     }
 
-    function ajax_2_post(form_elem) {
-        let csrftoken = '{{ csrf_token }}'
+    function ajax_2_post_reification_form(div_origin) {
+        let csrftoken = '{{ csrf_token }}';
+        var div_form_and_table = div_origin.closest(".reification_form_and_table_anchor");
+        var div_form = div_form_and_table.querySelector(".reification_form_anchor");
+        var div_table = div_form_and_table.querySelector(".reification_table_anchor");
         var post_data = {
             "generic_reification_attr_form": {},
             "triple_data_to_reification_list": [],
             "triple_data_from_reification_list": [],
+            "entity_type_self": div_form_and_table.getAttribute("data-entity_type_self"),
+            "entity_type_reification": div_form_and_table.getAttribute("data-entity_type_reification"),
+            "entity_id_self": div_form_and_table.getAttribute("data-entity_id_self"),
         };
-        $(form_elem.querySelector("#generic_reification_attr_form")).serializeArray().forEach(attr => {
+        $(div_form.querySelector("#generic_reification_attr_form")).serializeArray().forEach(attr => {
             post_data["generic_reification_attr_form"][attr["name"]] = attr["value"];
         });
-        Array.from(form_elem.getElementsByClassName("contextual_triple_form_container")).forEach(triple_form_container => {
+        Array.from(div_form.getElementsByClassName("contextual_triple_form_container")).forEach(triple_form_container => {
             Array.from(triple_form_container.getElementsByClassName("contextual_triple_form")).forEach(triple_form => {
                 if (triple_form_container.getAttribute("data-direction") == "to_reification") {
                     post_data["triple_data_to_reification_list"].push(parse_triple_form(triple_form));
@@ -295,14 +336,15 @@
                 }
             })
         });
-        post_data = JSON.stringify(post_data)
+        post_data = JSON.stringify(post_data);
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
-            url: "{% url 'apis:apis_relations:ajax_2_post' %}",
+            url: "{% url 'apis:apis_relations:ajax_2_post_reification_form' %}",
             data: post_data,
             success: function (response) {
-                console.log(response)
+                div_table.innerHTML = response["table"];
+                div_form.innerHTML = response["form"];
                 //$("#generic_triple_form_id_form").trigger('reset');
                 //$("#generic_triple_table_id_table").html(response)
             },
@@ -312,12 +354,12 @@
         })
     };
 
-    function ajax_2_create_contextual_triple_form(kwargs, div_origin) {
+    function ajax_2_load_contextual_triple_form(kwargs, div_origin) {
         let csrftoken = '{{ csrf_token }}'
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
-            url: "{% url 'apis:apis_relations:ajax_2_create_contextual_triple_form' %}",
+            url: "{% url 'apis:apis_relations:ajax_2_load_contextual_triple_form' %}",
             data: kwargs,
             success: function (response) {
                 $(div_origin).append(response);
@@ -332,20 +374,13 @@
 </script>
 <script type="text/javascript">
     function GetFormAjax(FormName , ObjectID , ButtonText) {
-        console.log("calling GetFormAjax");
-        console.log("FormName: ", FormName);
-        console.log("ObjectID: ", ObjectID);
-        console.log("ButtonText: ", ButtonText);
-
         function add_form(data) {
-            console.log("calling add_form");
-            console.log("autocompleteLightUrl:", $(this).data("autocompleteLightUrl"));
             // update our tooltip content with our returned data and cache it
             $('#tab_'+data.tab).find('div:eq(1)').remove();
             $('#tab_'+data.tab).append(data.form);
 	        $('#form_PersonInstitutionForm div:first div:first select').focus();
             $('#tab_'+data.tab+" select.listselect2").each(function( index, element ){
-                console.log($(this).data("autocompleteLightUrl"))
+                //console.log($(this).data("autocompleteLightUrl"))
             $(this).select2({
                 escapeMarkup: function(markup) {
                 return markup;
@@ -365,7 +400,7 @@
 
 
             })            //$(".form.ajax_form").unbind()
-            console.log($('#tab_'+data.tab+" select.listselect2"))
+            //console.log($('#tab_'+data.tab+" select.listselect2"))
         };
         if (!$.ApisForms) {
             $.ApisForms = {}
@@ -381,7 +416,7 @@
         if (ButtonText === undefined) {
             ButtonText = 'create/modify';
         };
-        console.log("apis:apis_relations:get_form_ajax", "{% url 'apis:apis_relations:get_form_ajax' %}");
+        //console.log("apis:apis_relations:get_form_ajax", "{% url 'apis:apis_relations:get_form_ajax' %}");
         return $.ajax(
             {
                 type: 'POST',
@@ -415,7 +450,7 @@
 <script type="text/javascript">
     function EntityRelationForm_response(response){
 
-        console.log("apis_core/apis_entities/templates/apis_entities/entity_create_generic.html:EntityRelationForm_response")
+        //console.log("apis_core/apis_entities/templates/apis_entities/entity_create_generic.html:EntityRelationForm_response")
 
         if (response.test == false) {
             $('#'+response.DivID).replaceWith(response.form);
@@ -425,15 +460,15 @@
                 $.ApisHigh.tt_instance_detail.content(response.form);
             } }
         } else {
-            console.log('test did not fail');
+            //console.log('test did not fail');
              $('#tab_'+response.tab).find('div').remove();
              $('#tab_'+response.tab).append(response.table_html);
              initiate_compare_tooltip();
              {% if instance %}
              if (check_perms_relation()){
              if (response.right_card) {
-                 console.log('fetching form');
-                 console.log(response.tab);
+                 //console.log('fetching form');
+                 //console.log(response.tab);
              GetFormAjax(response.tab);};
              if ($.ApisHigh){
              if ($.ApisHigh.tt_instance_detail["__state"] == 'stable') {
@@ -523,14 +558,13 @@
     }
 </script>
 <script type="text/javascript">
-Array.from(document.getElementsByClassName("btn-triple-add")).forEach(e => {e.click();});
+//Array.from(document.getElementsByClassName("btn-triple-add")).forEach(e => {e.click();});
+function ajax_2_init_all() {
+    load_this_table();
+};
+ajax_2_init_all();
 function activate_editing(){
         {% for obj in right_card %}
-        console.log("activate_editing");
-        console.log("obj.0: {{obj.0}}");
-        console.log("obj.1: {{obj.1}}");
-        console.log("obj.2: {{obj.2}}");
-        console.log("obj.3: {{obj.3}}");
         GetFormAjax("{{obj.2}}");
         //unbind_ajax_forms();
         {% endfor %}

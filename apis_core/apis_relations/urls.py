@@ -24,8 +24,10 @@ urlpatterns = [
     url(r'^autocomplete/(?P<entity_self>[a-zA-Z0-9-_]+)/(?P<entity_other>[a-zA-Z0-9-_]+)/$',
         PropertyAutocomplete.as_view(),
         name='generic_property_autocomplete'),
-    url(r"^ajax_2_post/$", views.ajax_2_post, name="ajax_2_post"),
+    url(r"^ajax_2_post_reification_form/$", views.ajax_2_post_reification_form, name="ajax_2_post_reification_form"),
     url(r"^ajax_2_get/$", views.ajax_2_get, name="ajax_2_get"),
     url(r"^ajax_2_delete_reification/$", views.ajax_2_delete_reification, name="ajax_2_delete_reification"),
-    url(r"^ajax_2_create_contextual_triple_form/$", views.ajax_2_create_contextual_triple_form, name="ajax_2_create_contextual_triple_form"),
+    url(r"^ajax_2_load_reification_table/$", views.ajax_2_load_reification_table, name="ajax_2_load_reification_table"),
+    url(r"^ajax_2_load_reification_form/$", views.ajax_2_load_reification_form, name="ajax_2_load_reification_form"),
+    url(r"^ajax_2_load_contextual_triple_form/$", views.ajax_2_load_contextual_triple_form, name="ajax_2_load_contextual_triple_form"),
 ]
