@@ -18,6 +18,11 @@
 {% load django_tables2 %}
 {% if instance %}
 <script>
+
+    $(function(){
+        $('div[onload]').trigger('onload');
+    });
+
     function search_and_activate_dal_s2(elem) {
         if (elem instanceof Element) {
             if (elem.hasAttribute("data-autocomplete-light-url")) {
@@ -346,8 +351,6 @@
             success: function (response) {
                 div_table.innerHTML = response["table"];
                 div_form.innerHTML = response["form"];
-                //$("#generic_triple_form_id_form").trigger('reset');
-                //$("#generic_triple_table_id_table").html(response)
             },
             error: function (response) {
                 alert(response["responseJSON"]["error"]);
@@ -369,8 +372,6 @@
                 } else {
                     $(div_form_anchor).html(response);
                 }
-                var form_list = div_form_anchor.getElementsByClassName("contextual_triple_form")
-                search_and_activate_dal_s2(form_list[form_list.length - 1]);
             },
             error: function (response) {
                 alert(response["responseJSON"]["error"]);
@@ -565,6 +566,12 @@
 </script>
 <script type="text/javascript">
 //Array.from(document.getElementsByClassName("btn-triple-add")).forEach(e => {e.click();});
+
+
+$(function(){
+    $('div[onload]').trigger('onload');
+});
+
 function ajax_2_init_all() {
     load_this_table();
 };
