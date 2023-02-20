@@ -1,8 +1,15 @@
-<div class="contextual_triple_form_container" data-direction="to_reification">
+<!-- entity to reification -->
+<div>
+    <div class="contextual_triple_form_anchor" data-direction="to_reification">
+        {% for triple_form_to_reification in triple_form_container_to_reification.0 %}
+            {{ triple_form_to_reification }}
+        {% endfor %}
+    </div>
+    <input onclick="ajax_2_load_contextual_triple_form(div_form_anchor=this.parentElement.getElementsByClassName('contextual_triple_form_anchor')[0], should_append=true, kwargs={'entity_type_self_str':'{{ triple_form_container_to_reification.1 }}', 'entity_type_other_str':'{{ triple_form_container_to_reification.2 }}', 'entity_id_self':'{{ triple_form_container_to_reification.3 }}', 'should_include_other_entity': 'False'})" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
 </div>
-<input onclick="ajax_2_load_contextual_triple_form(kwargs={'entity_type_self_str':'{{ triple_form_data_to_reif.0 }}', 'entity_type_other_str':'{{ triple_form_data_to_reif.1 }}', 'entity_id_self':'{{ entity_id_self }}', 'should_include_other_entity': 'False'}, div_origin=this.previousElementSibling)" type="submit" class="btn btn-primary btn-triple-add" value="+" />
+<!-- reification attributes -->
 <h4>{{ entity_type_reification_str }}</h4>
-<form id="generic_reification_attr_form" onsubmit="return false;">
+<form class="generic_reification_attr_form" onsubmit="return false;" data-reification_id="{{ reification_id }}">
     {% for field in reification_form %}
         <div class="fieldWrapper">
             {{ field.errors }}
@@ -13,11 +20,17 @@
         </div>
     {% endfor %}
 </form>
-{% for triple_form_data_from_reif in triple_form_data_from_reif_list %}
-    <h4>{{ triple_form_data_from_reif.0 }}</h4>
-    <div class="contextual_triple_form_container" data-direction="from_reification">
+<!-- from reification to other entities -->
+{% for triple_form_container_from_reification in triple_form_container_list_from_reification %}
+    <div>
+        <h4>{{ triple_form_container_from_reification.2 }}</h4>
+        <div class="contextual_triple_form_anchor" data-direction="from_reification">
+            {% for triple_form_from_reification in triple_form_container_from_reification.0 %}
+                {{ triple_form_from_reification }}
+            {% endfor %}
+        </div>
+        <input onclick="ajax_2_load_contextual_triple_form(div_form_anchor=this.parentElement.getElementsByClassName('contextual_triple_form_anchor')[0], should_append=true, kwargs={'entity_type_self_str':'{{ triple_form_container_from_reification.1 }}', 'entity_type_other_str':'{{ triple_form_container_from_reification.2 }}', 'entity_id_self':'{{ triple_form_container_from_reification.3 }}', 'should_include_other_entity': 'True'})" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
+        <br>
     </div>
-    <input onclick="ajax_2_load_contextual_triple_form(kwargs={'entity_type_self_str':'{{ triple_form_data_from_reif.1 }}', 'entity_type_other_str':'{{ triple_form_data_from_reif.2 }}', 'entity_id_self':''}, div_origin=this.previousElementSibling)" type="submit" class="btn btn-primary btn-triple-add" value="+" />
-    <br>
 {% endfor %}
-<input onclick="ajax_2_post_reification_form(this)" type="submit" class="btn btn-primary" value="create/modify" />
+<input onclick="ajax_2_post_reification_form(div_form_and_table=this.closest('.reification_form_and_table_anchor'))" type="submit" class="btn btn-primary" value="create/modify" />

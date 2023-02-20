@@ -12,7 +12,7 @@ from django.shortcuts import render
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
 from apis_core.apis_relations.forms2 import GenericTripleForm
-from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
+from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR
 # from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
 # from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
@@ -25,7 +25,6 @@ from apis_core.apis_relations.models import Property, TempTriple, Triple
 # )
 #from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
 from .tables import LabelTableEdit, ReificationTable, render_reification_table
-from ..apis_entities.forms import create_contextual_triple_form_class, render_reification_form
 
 form_module_list = [relation_form_module]
 
@@ -182,11 +181,11 @@ def get_form_ajax(request):
         if triple.subj.pk == SiteID:
             entity_instance_self = triple.subj
             entity_instance_other = triple.obj
-            property_direction = PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR
+            property_direction = SELF_SUBJ_OTHER_OBJ_STR
         elif triple.obj.pk == SiteID:
             entity_instance_self = triple.obj
             entity_instance_other = triple.subj
-            property_direction = PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR
+            property_direction = SELF_OBJ_OTHER_SUBJ_STR
         else:
             raise Exception("SiteID was not found in triple")
 
@@ -427,10 +426,83 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #                 request=request)}
     #
 
+def render_contextual_triple_form(
+    entity_type_self_str,
+    entity_type_other_str,
+    entity_id_self="",
+    should_include_other_entity=True,
+):
+    from apis_core.apis_entities.forms import create_contextual_triple_form_class
+    
+    form_class = create_contextual_triple_form_class(
+        entity_type_self_str=entity_type_self_str,
+        entity_type_other_str=entity_type_other_str,
+        should_include_other_entity=should_include_other_entity,
+    )
+    
+    return render_to_string(
+        template_name=form_class.template_name,
+        context={
+            "entity_type_self_str": entity_type_self_str,
+            "entity_type_other_str": entity_type_other_str,
+            "entity_id_self": entity_id_self,
+            "contextual_triple_form": form_class(),
+        }
+    )
+
 def ajax_2_post_reification_form(request):
+    from apis_core.apis_entities.forms import render_reification_form
+    from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR
+    
     post_data = json.loads(request.body)
-    print(post_data)
-    BookPublicationRelationship.objects.create(**post_data["generic_reification_attr_form"])
+
+    entity_self_class = AbstractEntity.get_entity_class_of_name(post_data["entity_type_self"])
+    entity_self_instance = entity_self_class.objects.get(pk=post_data["entity_id_self"])
+
+    reification_class = AbstractEntity.get_entity_class_of_name(post_data["entity_type_reification"])
+    reification_instance_id = post_data["generic_reification_attr_form"].pop("reification_id")
+    if reification_instance_id != "":
+        reification_instance = reification_class.objects.get(pk=reification_instance_id)
+    else:
+        reification_instance = reification_class.objects.create()
+    for k, v in post_data["generic_reification_attr_form"].items():
+        setattr(reification_instance, k, v)
+    reification_instance.save()
+
+    for triple_form_data in post_data["triple_data_to_reification_list"]:
+        if triple_form_data["property_id"] != "":
+            property = Property.objects.get(pk=triple_form_data["property_id"])
+            if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
+                Triple.objects.get_or_create(
+                    subj=entity_self_instance,
+                    obj=reification_instance,
+                    prop=property
+                )
+            elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
+                Triple.objects.get_or_create(
+                    subj=reification_instance,
+                    obj=entity_self_instance,
+                    prop=property
+                )
+    
+    for triple_form_data in post_data["triple_data_from_reification_list"]:
+        if triple_form_data["property_id"] != "" and triple_form_data["entity_id_other"] != "":
+            property = Property.objects.get(pk=triple_form_data["property_id"])
+            entity_other_uri = Uri.objects.get(uri=triple_form_data["entity_id_other"])
+            entity_other_instance = entity_other_uri.root_object
+            if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
+                Triple.objects.get_or_create(
+                    subj=reification_instance,
+                    obj=entity_other_instance,
+                    prop=property
+                )
+            elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
+                Triple.objects.get_or_create(
+                    subj=entity_other_instance,
+                    obj=reification_instance,
+                    prop=property
+                )
+    
     response = JsonResponse(
         data={
             "form": render_reification_form(
@@ -460,23 +532,13 @@ def ajax_2_load_contextual_triple_form(request):
     else:
         should_include_other_entity = True
 
-    form_class = create_contextual_triple_form_class(
-        entity_type_self_str=request.POST["entity_type_self_str"],
-        entity_type_other_str=request.POST["entity_type_other_str"],
-        should_include_other_entity=should_include_other_entity,
-    )
-
-    form_rendered = render_to_string(
-        template_name=form_class.template_name,
-        context={
-            "entity_type_self_str": request.POST["entity_type_self_str"],
-            "entity_type_other_str": request.POST["entity_type_other_str"],
-            "entity_id_self": request.POST["entity_id_self"],
-            "contextual_triple_form": form_class(),
-        }
-    )
     response = JsonResponse(
-        data=form_rendered,
+        data=render_contextual_triple_form(
+            entity_type_self_str=request.POST["entity_type_self_str"],
+            entity_type_other_str=request.POST["entity_type_other_str"],
+            entity_id_self=request.POST.get("entity_id_self", ""),
+            should_include_other_entity=should_include_other_entity,
+        ),
         status=200,
         safe=False
     )

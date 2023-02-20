@@ -309,11 +309,11 @@
         })
     }
 
-    function ajax_2_post_reification_form(div_origin) {
+    function ajax_2_post_reification_form(div_form_and_table) {
         let csrftoken = '{{ csrf_token }}';
-        var div_form_and_table = div_origin.closest(".reification_form_and_table_anchor");
-        var div_form = div_form_and_table.querySelector(".reification_form_anchor");
-        var div_table = div_form_and_table.querySelector(".reification_table_anchor");
+        //var div_form_and_table = div_origin.closest(".reification_form_and_table_anchor");
+        var div_form =div_form_and_table.getElementsByClassName("reification_form_anchor")[0];
+        var div_table =div_form_and_table.getElementsByClassName("reification_table_anchor")[0];
         var post_data = {
             "generic_reification_attr_form": {},
             "triple_data_to_reification_list": [],
@@ -322,10 +322,11 @@
             "entity_type_reification": div_form_and_table.getAttribute("data-entity_type_reification"),
             "entity_id_self": div_form_and_table.getAttribute("data-entity_id_self"),
         };
-        $(div_form.querySelector("#generic_reification_attr_form")).serializeArray().forEach(attr => {
+        post_data["generic_reification_attr_form"]["reification_id"] = div_form.getElementsByClassName("generic_reification_attr_form")[0].getAttribute("data-reification_id");
+        $(div_form.getElementsByClassName("generic_reification_attr_form")).serializeArray().forEach(attr => {
             post_data["generic_reification_attr_form"][attr["name"]] = attr["value"];
         });
-        Array.from(div_form.getElementsByClassName("contextual_triple_form_container")).forEach(triple_form_container => {
+        Array.from(div_form.getElementsByClassName("contextual_triple_form_anchor")).forEach(triple_form_container => {
             Array.from(triple_form_container.getElementsByClassName("contextual_triple_form")).forEach(triple_form => {
                 if (triple_form_container.getAttribute("data-direction") == "to_reification") {
                     post_data["triple_data_to_reification_list"].push(parse_triple_form(triple_form));
@@ -354,7 +355,7 @@
         })
     };
 
-    function ajax_2_load_contextual_triple_form(kwargs, div_origin) {
+    function ajax_2_load_contextual_triple_form(div_form_anchor, should_append, kwargs) {
         let csrftoken = '{{ csrf_token }}'
         $.ajax({
             type: 'POST',
@@ -362,8 +363,13 @@
             url: "{% url 'apis:apis_relations:ajax_2_load_contextual_triple_form' %}",
             data: kwargs,
             success: function (response) {
-                $(div_origin).append(response);
-                var form_list = div_origin.getElementsByClassName("contextual_triple_form")
+                if (should_append) {
+                    // here, jquery should be used, because if innerHTML is used, the autocomplete of pre-existing forms is screwed up. No idea why.
+                    $(div_form_anchor).append(response);
+                } else {
+                    $(div_form_anchor).html(response);
+                }
+                var form_list = div_form_anchor.getElementsByClassName("contextual_triple_form")
                 search_and_activate_dal_s2(form_list[form_list.length - 1]);
             },
             error: function (response) {

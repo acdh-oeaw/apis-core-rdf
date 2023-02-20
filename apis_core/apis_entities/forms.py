@@ -25,6 +25,7 @@ import django_tables2 as tables
 from django.template.loader import render_to_string
 
 from ..apis_relations.models import Property
+from ..apis_relations.views import render_contextual_triple_form
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import AnnotationProject
@@ -317,7 +318,7 @@ def create_contextual_triple_form_class(
 #         }
 #     )
 
-def render_reification_form(entity_type_self_str, entity_type_reification_str, entity_id_self, entity_id_other=""):
+def render_reification_form(entity_type_self_str, entity_type_reification_str, entity_id_self, entity_id_other="", reification_id=""):
     entity_type_reification_class = AbstractEntity.get_entity_class_of_name(entity_type_reification_str)
     
     class ReificationForm(forms.ModelForm):
@@ -325,32 +326,53 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
         class Meta:
             model = entity_type_reification_class
             fields = ["name", "start_date"]
+            
+    def create_triple_form_container_to_reification(entity_type_self_str, entity_type_reification_str, entity_id_self):
+        return (
+            [
+                render_contextual_triple_form(
+                    entity_type_self_str=entity_type_self_str,
+                    entity_type_other_str=entity_type_reification_str,
+                    entity_id_self=entity_id_self,
+                    should_include_other_entity=False,
+                )
+            ],
+            entity_type_self_str,
+            entity_type_reification_str,
+            "",
+        )
     
-    def create_triple_form_data_from_reif_list(entity_type_reification_class):
+    def create_triple_form_container_list_from_reification(entity_type_reification_class):
         entity_type_reification_content_type = entity_type_reification_class.get_content_type()
         related_ct_list = ContentType.objects.filter(
             Q(property_set_obj__subj_class=entity_type_reification_content_type)
             | Q(property_set_subj__obj_class=entity_type_reification_content_type)
         ).distinct()
         related_class_list = [ct.model_class() for ct in related_ct_list]
-        triple_form_data_from_reif_list = []
+        triple_form_container_list_from_reification = []
         for related_class in related_class_list:
-            triple_form_data_from_reif_list.append((
-                related_class.__name__,
+            triple_form_container_list_from_reification.append((
+                [
+                    render_contextual_triple_form(
+                        entity_type_self_str=entity_type_reification_str,
+                        entity_type_other_str=related_class.__name__.lower(),
+                    )
+                ],
                 entity_type_reification_str,
                 related_class.__name__.lower(),
+                "",
             ))
-        return triple_form_data_from_reif_list
+        return triple_form_container_list_from_reification
         
-    triple_form_data_from_reif_list = create_triple_form_data_from_reif_list(entity_type_reification_class)
     return render_to_string(
         template_name=ReificationForm.template_name,
         context={
             "entity_id_self": entity_id_self,
             "entity_type_reification_str": entity_type_reification_str,
+            "reification_id": reification_id,
             "reification_form": ReificationForm(),
-            "triple_form_data_to_reif": (entity_type_self_str, entity_type_reification_str),
-            "triple_form_data_from_reif_list": triple_form_data_from_reif_list,
+            "triple_form_container_to_reification": create_triple_form_container_to_reification(entity_type_self_str, entity_type_reification_str, entity_id_self),
+            "triple_form_container_list_from_reification": create_triple_form_container_list_from_reification(entity_type_reification_class),
         }
     )
 

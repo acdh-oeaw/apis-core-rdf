@@ -438,6 +438,10 @@ class GenericNetworkEntitiesAutocomplete(autocomplete.Select2ListView):
 
 _cached_property_choices_dict = {}
 
+# These constants are set so that they are defined in one place only and reused by fetching them elsewhere.
+SELF_SUBJ_OTHER_OBJ_STR = "self_subj_other_obj"
+SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
+
 def get_cached_property_choices(entity_type_self_str, entity_type_other_str, search_name_str):
      res = _cached_property_choices_dict.get((entity_type_self_str, entity_type_other_str, search_name_str))
      if res is not None:
@@ -470,26 +474,22 @@ def get_cached_property_choices(entity_type_self_str, entity_type_other_str, sea
          for rbc in rbc_self_subj_other_obj:
              choices.append(
                  {
-                     'id': f"id:{rbc.pk}__direction:{PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
+                     'id': f"id:{rbc.pk}__direction:{SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
                      'text': rbc.name
                  }
              )
          for rbc in rbc_self_obj_other_subj:
              choices.append(
                  {
-                     'id': f"id:{rbc.pk}__direction:{PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
+                     'id': f"id:{rbc.pk}__direction:{SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
                      'text': rbc.name_reverse
                  }
              )
          _cached_property_choices_dict[(entity_type_self_str, entity_type_other_str, search_name_str)] = choices
          return choices
 
-
 # __after_rdf_refactoring__
 class PropertyAutocomplete(autocomplete.Select2ListView):
-    # These constants are set so that they are defined in one place only and reused by fetching them elsewhere.
-    SELF_SUBJ_OTHER_OBJ_STR = "self_subj_other_obj"
-    SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
 
     def get(self, request, *args, **kwargs):
         # TODO RDF : pagination
