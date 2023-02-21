@@ -40,7 +40,7 @@ class GenericTripleTable(tables.Table):
             </a>
         """)
 
-def render_reification_table(request, reification_type_str, entity_type_self_str, entity_id_self_str):
+def render_reification_table(request, reification_type_str):
     from apis_core.apis_entities.models import AbstractEntity
     reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
 
@@ -86,9 +86,6 @@ def render_reification_table(request, reification_type_str, entity_type_self_str
         template_name=ReificationTable.Meta.template_name_custom,
         context={
             "table": ReificationTable(),
-            "entity_type_self": entity_type_self_str,
-            "entity_id_self": entity_id_self_str,
-            "reification_type": reification_type_str,
         },
     )
 

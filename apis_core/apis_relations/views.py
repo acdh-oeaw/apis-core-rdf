@@ -429,7 +429,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
 def render_contextual_triple_form(
     entity_type_self_str,
     entity_type_other_str,
-    entity_id_self="",
+    entity_id_self_str="",
     should_include_other_entity=True,
 ):
     from apis_core.apis_entities.forms import create_contextual_triple_form_class
@@ -445,7 +445,7 @@ def render_contextual_triple_form(
         context={
             "entity_type_self_str": entity_type_self_str,
             "entity_type_other_str": entity_type_other_str,
-            "entity_id_self": entity_id_self,
+            "entity_id_self": entity_id_self_str,
             "contextual_triple_form": form_class(),
         }
     )
@@ -459,7 +459,7 @@ def ajax_2_post_reification_form(request):
     entity_self_class = AbstractEntity.get_entity_class_of_name(post_data["entity_type_self"])
     entity_self_instance = entity_self_class.objects.get(pk=post_data["entity_id_self"])
 
-    reification_class = AbstractEntity.get_entity_class_of_name(post_data["entity_type_reification"])
+    reification_class = AbstractEntity.get_entity_class_of_name(post_data["reification_type"])
     reification_instance_id = post_data["generic_reification_attr_form"].pop("reification_id")
     if reification_instance_id != "":
         reification_instance = reification_class.objects.get(pk=reification_instance_id)
@@ -507,14 +507,12 @@ def ajax_2_post_reification_form(request):
         data={
             "form": render_reification_form(
                 entity_type_self_str=post_data["entity_type_self"],
-                entity_type_reification_str=post_data["entity_type_reification"],
+                reification_type_str=post_data["reification_type"],
                 entity_id_self_str=post_data["entity_id_self"],
             ),
             "table": render_reification_table(
                 request=request,
-                reification_type_str=post_data["entity_type_reification"],
-                entity_type_self_str=post_data["entity_type_self"],
-                entity_id_self_str=post_data["entity_id_self"],
+                reification_type_str=post_data["reification_type"],
             )
         },
         status=200,
@@ -541,7 +539,7 @@ def ajax_2_load_contextual_triple_form(request):
         data=render_contextual_triple_form(
             entity_type_self_str=request.POST["entity_type_self_str"],
             entity_type_other_str=request.POST["entity_type_other_str"],
-            entity_id_self=request.POST.get("entity_id_self", ""),
+            entity_id_self_str=request.POST.get("entity_id_self", ""),
             should_include_other_entity=should_include_other_entity,
         ),
         status=200,
@@ -554,7 +552,7 @@ def ajax_2_load_reification_form(request):
     response = JsonResponse(
         data=render_reification_form(
             entity_type_self_str=request.POST["entity_type_self"],
-            entity_type_reification_str=request.POST["reification_type"],
+            reification_type_str=request.POST["reification_type"],
             entity_id_self_str=request.POST["entity_id_self"],
             reification_id_str=request.POST["reification_id"],
         ),
@@ -572,8 +570,6 @@ def ajax_2_delete_reification(request):
         data=render_reification_table(
             request=request,
             reification_type_str=request.POST["reification_type"],
-            entity_type_self_str=request.POST["entity_type_self"],
-            entity_id_self_str=request.POST["entity_id_self"],
         ),
         status=200,
         safe=False

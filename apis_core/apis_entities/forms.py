@@ -25,6 +25,7 @@ import django_tables2 as tables
 from django.template.loader import render_to_string
 
 from ..apis_relations.models import Property
+from ..apis_relations.tables import render_reification_table
 from ..apis_relations.views import render_contextual_triple_form
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
@@ -318,8 +319,32 @@ def create_contextual_triple_form_class(
 #         }
 #     )
 
-def render_reification_form(entity_type_self_str, entity_type_reification_str, entity_id_self_str, entity_id_other_str="", reification_id_str=""):
-    entity_type_reification_class = AbstractEntity.get_entity_class_of_name(entity_type_reification_str)
+def render_reification_form_and_table(
+    entity_type_self_str,
+    reification_type_str,
+    entity_id_self_str,
+    request,
+):
+    return render_to_string(
+        "apis_entities/reification_form_and_table.html",
+        context={
+            "reification_form": render_reification_form(
+                reification_type_str=reification_type_str,
+                entity_type_self_str=entity_type_self_str,
+                entity_id_self_str=entity_id_self_str,
+            ),
+            "entity_type_self": entity_type_self_str,
+            "reification_type": reification_type_str,
+            "entity_id_self": entity_id_self_str,
+            "reification_table": render_reification_table(
+                request=request,
+                reification_type_str=reification_type_str,
+            ),
+        },
+    )
+
+def render_reification_form(reification_type_str, entity_type_self_str, entity_id_self_str, reification_id_str=""):
+    entity_type_reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
     
     class ReificationForm(forms.ModelForm):
         template_name = "apis_entities/reification_form.html"
@@ -327,18 +352,18 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
             model = entity_type_reification_class
             fields = ["name", "start_date"]
             
-    def create_triple_form_container_to_reification(entity_type_self_str, entity_type_reification_str, entity_id_self):
+    def create_triple_form_container_to_reification(entity_type_self_str, reification_type_str, entity_id_self_str):
         return (
             [
                 render_contextual_triple_form(
                     entity_type_self_str=entity_type_self_str,
-                    entity_type_other_str=entity_type_reification_str,
-                    entity_id_self=entity_id_self,
+                    entity_type_other_str=reification_type_str,
+                    entity_id_self_str=entity_id_self_str,
                     should_include_other_entity=False,
                 )
             ],
             entity_type_self_str,
-            entity_type_reification_str,
+            reification_type_str,
             "",
         )
     
@@ -354,11 +379,11 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
             triple_form_container_list_from_reification.append((
                 [
                     render_contextual_triple_form(
-                        entity_type_self_str=entity_type_reification_str,
+                        entity_type_self_str=reification_type_str,
                         entity_type_other_str=related_class.__name__.lower(),
                     )
                 ],
-                entity_type_reification_str,
+                reification_type_str,
                 related_class.__name__.lower(),
                 "",
             ))
@@ -368,10 +393,10 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
         template_name=ReificationForm.template_name,
         context={
             "entity_id_self": entity_id_self_str,
-            "entity_type_reification_str": entity_type_reification_str,
+            "entity_type_reification_str": reification_type_str,
             "reification_id": reification_id_str,
             "reification_form": ReificationForm(),
-            "triple_form_container_to_reification": create_triple_form_container_to_reification(entity_type_self_str, entity_type_reification_str, entity_id_self_str),
+            "triple_form_container_to_reification": create_triple_form_container_to_reification(entity_type_self_str, reification_type_str, entity_id_self_str),
             "triple_form_container_list_from_reification": create_triple_form_container_list_from_reification(entity_type_reification_class),
         }
     )

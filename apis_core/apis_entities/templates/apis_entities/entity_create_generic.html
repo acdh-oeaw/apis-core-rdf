@@ -265,23 +265,26 @@
         })
     }
 
+    function load_reification_context_data(div_origin) {
+        var div_form_and_table_anchor = div_origin.closest(".reification_form_and_table_anchor");
+        return {
+            "reification_type": div_form_and_table_anchor.getAttribute("data-reification_type"),
+            "entity_type_self": div_form_and_table_anchor.getAttribute("data-entity_type_self"),
+            "entity_id_self": div_form_and_table_anchor.getAttribute("data-entity_id_self"),
+        };
+    }
+
     function ajax_2_load_reification_form(reification_id, div_origin) {
         let csrftoken = '{{ csrf_token }}'
-        var div_form_and_table_anchor = div_origin.closest(".reification_form_and_table_anchor");
-        var div_form_anchor = div_form_and_table_anchor.getElementsByClassName("reification_form_anchor")[0];
-        var div_table = div_form_and_table_anchor.getElementsByClassName("reification_table")[0];
-        var post_data = {
-            "reification_id": reification_id,
-            "reification_type": div_table.getAttribute("data-reification_type"),
-            "entity_type_self": div_table.getAttribute("data-entity_type_self"),
-            "entity_id_self": div_table.getAttribute("data-entity_id_self"),
-        };
+        var post_data = load_reification_context_data(div_origin);
+        post_data["reification_id"] = reification_id;
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
             url: "{% url 'apis:apis_relations:ajax_2_load_reification_form' %}",
             data: post_data,
             success: function (response) {
+                var div_form_anchor = div_origin.closest(".reification_form_and_table_anchor").getElementsByClassName("reification_form_anchor")[0];
                 div_form_anchor.innerHTML = response;
             },
             error: function (response) {
@@ -292,20 +295,15 @@
 
     function ajax_2_delete_reification(reification_id, div_origin) {
         let csrftoken = '{{ csrf_token }}'
-        var div_table_anchor = div_origin.closest(".reification_table_anchor");
-        var div_table = div_origin.closest(".reification_table");
-        var post_data = {
-            "reification_id": reification_id,
-            "reification_type": div_table.getAttribute("data-reification_type"),
-            "entity_type_self": div_table.getAttribute("data-entity_type_self"),
-            "entity_id_self": div_table.getAttribute("data-entity_id_self"),
-        };
+        var post_data = load_reification_context_data(div_origin);
+        post_data["reification_id"] = reification_id;
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
             url: "{% url 'apis:apis_relations:ajax_2_delete_reification' %}",
             data: post_data,
             success: function (response) {
+                var div_table_anchor = div_origin.closest(".reification_table_anchor");
                 div_table_anchor.innerHTML = response;
             },
             error: function (response) {
@@ -316,17 +314,12 @@
 
     function ajax_2_post_reification_form(div_origin) {
         let csrftoken = '{{ csrf_token }}';
+        var post_data = load_reification_context_data(div_origin);
+        post_data["generic_reification_attr_form"] = {};
+        post_data["triple_data_to_reification_list"] = [];
+        post_data["triple_data_from_reification_list"] = [];
         var div_form_and_table_anchor = div_origin.closest(".reification_form_and_table_anchor");
         var div_form_anchor = div_form_and_table_anchor.getElementsByClassName("reification_form_anchor")[0];
-        var div_table_anchor = div_form_and_table_anchor.getElementsByClassName("reification_table_anchor")[0];
-        var post_data = {
-            "generic_reification_attr_form": {},
-            "triple_data_to_reification_list": [],
-            "triple_data_from_reification_list": [],
-            "entity_type_self": div_form_and_table_anchor.getAttribute("data-entity_type_self"),
-            "entity_type_reification": div_form_and_table_anchor.getAttribute("data-entity_type_reification"),
-            "entity_id_self": div_form_and_table_anchor.getAttribute("data-entity_id_self"),
-        };
         post_data["generic_reification_attr_form"]["reification_id"] = div_form_anchor.getElementsByClassName("generic_reification_attr_form")[0].getAttribute("data-reification_id");
         $(div_form_anchor.getElementsByClassName("generic_reification_attr_form")).serializeArray().forEach(attr => {
             post_data["generic_reification_attr_form"][attr["name"]] = attr["value"];
@@ -349,6 +342,7 @@
             url: "{% url 'apis:apis_relations:ajax_2_post_reification_form' %}",
             data: post_data,
             success: function (response) {
+                var div_table_anchor = div_form_and_table_anchor.getElementsByClassName("reification_table_anchor")[0];
                 div_table_anchor.innerHTML = response["table"];
                 div_form_anchor.innerHTML = response["form"];
             },
