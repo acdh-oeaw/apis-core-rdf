@@ -12,6 +12,7 @@ from django.shortcuts import render
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
 from apis_core.apis_relations.forms2 import GenericTripleForm
+from apis_core.apis_relations.forms import render_reification_form, render_contextual_triple_form
 from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR, \
     get_cached_property_choices
 # from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
@@ -430,183 +431,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #                 request=request)}
     #
 
-def render_contextual_triple_form(
-    entity_type_self_str,
-    entity_type_other_str,
-    entity_self_instance=None,
-    entity_other_instance=None,
-    triple_instance=None,
-    entity_id_self_str="",
-    should_include_other_entity=True,
-):
-    
-    def instantiate_form():
-        
-        class GenericContextualTripleForm(forms.Form):
-            template_name = "apis_entities/contextual_triple_form_single.html"
-            def __init__(self, *args, **kwargs):
-                super().__init__(*args, **kwargs)
-                self.fields["property"] = autocomplete.Select2ListCreateChoiceField(
-                    label='property',
-                    widget=ListSelect2(
-                        url=reverse(
-                            'apis:apis_relations:generic_property_autocomplete',
-                            kwargs={"entity_self": entity_type_self_str, "entity_other": entity_type_other_str}
-                        ),
-                        attrs={
-                            'data-placeholder': 'Type to get suggestions',
-                            'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-                            'data-html': True,
-                            'style': 'width: 100%'
-                        },
-                    ),
-                
-                )
-                if should_include_other_entity:
-                    self.fields["entity_other"] = autocomplete.Select2ListCreateChoiceField(
-                        label='entity',
-                        widget=ListSelect2(
-                            url=reverse(
-                                'apis:apis_entities:generic_entities_autocomplete',
-                                kwargs={"entity": entity_type_other_str}
-                            ),
-                            attrs={
-                                'data-placeholder': 'Type to get suggestions',
-                                'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-                                'data-html': True,
-                                'style': 'width: 100%'
-                            },
-                        ),
-                    )
-                property_initial_choice = get_cached_property_choices(
-                    entity_type_self_str=entity_type_self_str,
-                    entity_type_other_str=entity_type_other_str,
-                    search_name_str="",
-                )
-                if len(property_initial_choice) == 1:
-                    property_initial_choice = property_initial_choice[0]
-                    self.fields["property"].initial = property_initial_choice["id"]
-                    self.fields["property"].choices = [(property_initial_choice["id"], property_initial_choice["text"])]
-                # TODO REIFICATION do caching for related entities too
-    
-        return GenericContextualTripleForm()
-    
-    def set_initial_values(triple_form):
-        
-        if triple_instance is not None:
-            property = triple_instance.prop
-            if entity_self_instance == triple_instance.subj:
-                property_initial_choice = {
-                    'id': f"id:{property.pk}__direction:{SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
-                    'text': property.name
-                }
-            elif entity_self_instance == triple_instance.obj:
-                property_initial_choice = {
-                    'id': f"id:{property.pk}__direction:{SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
-                    'text': property.name_reverse
-                }
-            else:
-                raise Exception("unhandled case.")
-            triple_form.fields["property"].initial = property_initial_choice["id"]
-            triple_form.fields["property"].choices = [(property_initial_choice["id"], property_initial_choice["text"])]
-    
-            if should_include_other_entity:
-                if entity_other_instance is None:
-                    raise Exception("entity_other_instance missing. Must be passed here for pre-loading triple form.")
-                triple_form.fields["entity_other"].initial = entity_other_instance.uri_set.all()[0]
-                triple_form.fields["entity_other"].choices = [(entity_other_instance.uri_set.all()[0], entity_other_instance.name)]
-                
-        return triple_form
-
-    triple_form = instantiate_form()
-    triple_form = set_initial_values(triple_form)
-    triple_id = ""
-    if triple_instance is not None:
-        triple_id = str(triple_instance.pk)
-
-    return render_to_string(
-        template_name=triple_form.template_name,
-        context={
-            "entity_type_self_str": entity_type_self_str,
-            "entity_type_other_str": entity_type_other_str,
-            "entity_id_self": entity_id_self_str,
-            "triple_id": triple_id,
-            "contextual_triple_form": triple_form,
-        }
-    )
-
-def ajax_2_post_reification_form(request):
-    from apis_core.apis_entities.forms import render_reification_form
-    from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR
-    
-    post_data = json.loads(request.body)
-
-    entity_self_class = AbstractEntity.get_entity_class_of_name(post_data["entity_type_self"])
-    entity_self_instance = entity_self_class.objects.get(pk=post_data["entity_id_self"])
-
-    reification_class = AbstractEntity.get_entity_class_of_name(post_data["reification_type"])
-    reification_instance_id = post_data["generic_reification_attr_form"].pop("reification_id")
-    if reification_instance_id != "":
-        reification_instance = reification_class.objects.get(pk=reification_instance_id)
-    else:
-        reification_instance = reification_class.objects.create()
-    for k, v in post_data["generic_reification_attr_form"].items():
-        setattr(reification_instance, k, v)
-    reification_instance.save()
-
-    for triple_form_data in post_data["triple_data_to_reification_list"]:
-        if triple_form_data["property_id"] != "":
-            property = Property.objects.get(pk=triple_form_data["property_id"])
-            if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
-                Triple.objects.get_or_create(
-                    subj=entity_self_instance,
-                    obj=reification_instance,
-                    prop=property
-                )
-            elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
-                Triple.objects.get_or_create(
-                    subj=reification_instance,
-                    obj=entity_self_instance,
-                    prop=property
-                )
-    
-    for triple_form_data in post_data["triple_data_from_reification_list"]:
-        if triple_form_data["property_id"] != "" and triple_form_data["entity_id_other"] != "":
-            property = Property.objects.get(pk=triple_form_data["property_id"])
-            entity_other_uri = Uri.objects.get(uri=triple_form_data["entity_id_other"])
-            entity_other_instance = entity_other_uri.root_object
-            if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
-                Triple.objects.get_or_create(
-                    subj=reification_instance,
-                    obj=entity_other_instance,
-                    prop=property
-                )
-            elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
-                Triple.objects.get_or_create(
-                    subj=entity_other_instance,
-                    obj=reification_instance,
-                    prop=property
-                )
-    
-    response = JsonResponse(
-        data={
-            "form": render_reification_form(
-                entity_type_self_str=post_data["entity_type_self"],
-                reification_type_str=post_data["reification_type"],
-                entity_id_self_str=post_data["entity_id_self"],
-            ),
-            "table": render_reification_table(
-                request=request,
-                reification_type_str=post_data["reification_type"],
-                entity_type_self_str=post_data["entity_type_self"],
-                entity_id_self_str=post_data["entity_id_self"],
-            )
-        },
-        status=200,
-        safe=False
-    )
-    return response
-
+#TODO REIFICATION probably to delete
 def ajax_2_get(request):
     from ..apis_entities.forms import GenericTripleForm2
     t = Triple.objects.get(pk=request.GET["pk"])
@@ -615,7 +440,8 @@ def ajax_2_get(request):
     rendered_form_str = render_to_string(template_name=form.template_name, context={"form_xyz": form})
     return JsonResponse(rendered_form_str, status=200, safe=False)
 
-def ajax_2_load_contextual_triple_form(request):
+
+def ajax_2_load_triple_form(request):
     should_include_other_entity = request.POST.get("should_include_other_entity")
     if should_include_other_entity == "False":
         should_include_other_entity = False
@@ -634,7 +460,10 @@ def ajax_2_load_contextual_triple_form(request):
     )
     return response
 
-def ajax_2_delete_contextual_triple(request):
+def ajax_2_post_triple_form(request):
+    pass
+
+def ajax_2_delete_triple(request):
     triple_id = request.POST["triple_id"]
     if triple_id != "":
         Triple.objects.get(pk=triple_id).delete()
@@ -646,7 +475,6 @@ def ajax_2_delete_contextual_triple(request):
     return response
 
 def ajax_2_load_reification_form(request):
-    from ..apis_entities.forms import render_reification_form
     response = JsonResponse(
         data=render_reification_form(
             entity_type_self_str=request.POST["entity_type_self"],
@@ -657,15 +485,79 @@ def ajax_2_load_reification_form(request):
         status=200,
         safe=False
     )
+
+    return response
+
+def ajax_2_post_reification_form(request):
+    from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR
+    post_data = json.loads(request.body)
+    entity_self_class = AbstractEntity.get_entity_class_of_name(post_data["entity_type_self"])
+    entity_self_instance = entity_self_class.objects.get(pk=post_data["entity_id_self"])
+    reification_class = AbstractEntity.get_entity_class_of_name(post_data["reification_type"])
+    reification_instance_id = post_data["generic_reification_attr_form"].pop("reification_id")
+    if reification_instance_id != "":
+        reification_instance = reification_class.objects.get(pk=reification_instance_id)
+    else:
+        reification_instance = reification_class.objects.create()
+    for k, v in post_data["generic_reification_attr_form"].items():
+        setattr(reification_instance, k, v)
+    reification_instance.save()
+    for triple_form_data in post_data["triple_data_to_reification_list"]:
+        if triple_form_data["property_id"] != "":
+            property = Property.objects.get(pk=triple_form_data["property_id"])
+            if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
+                Triple.objects.get_or_create(
+                    subj=entity_self_instance,
+                    obj=reification_instance,
+                    prop=property
+                )
+            elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
+                Triple.objects.get_or_create(
+                    subj=reification_instance,
+                    obj=entity_self_instance,
+                    prop=property
+                )
+    for triple_form_data in post_data["triple_data_from_reification_list"]:
+        if triple_form_data["property_id"] != "" and triple_form_data["entity_id_other"] != "":
+            property = Property.objects.get(pk=triple_form_data["property_id"])
+            entity_other_uri = Uri.objects.get(uri=triple_form_data["entity_id_other"])
+            entity_other_instance = entity_other_uri.root_object
+            if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
+                Triple.objects.get_or_create(
+                    subj=reification_instance,
+                    obj=entity_other_instance,
+                    prop=property
+                )
+            elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
+                Triple.objects.get_or_create(
+                    subj=entity_other_instance,
+                    obj=reification_instance,
+                    prop=property
+                )
+    response = JsonResponse(
+        data={
+            "form": render_reification_form(
+                entity_type_self_str=post_data["entity_type_self"],
+                reification_type_str=post_data["reification_type"],
+                entity_id_self_str=post_data["entity_id_self"],
+            ),
+            "table": render_reification_table(
+                request=request,
+                reification_type_str=post_data["reification_type"],
+                entity_type_self_str=post_data["entity_type_self"],
+                entity_id_self_str=post_data["entity_id_self"],
+            )
+        },
+        status=200,
+        safe=False
+    )
+    
     return response
 
 
 def ajax_2_delete_reification(request):
-    from apis_core.apis_entities.forms import render_reification_form
-    
     reification_class = AbstractEntity.get_entity_class_of_name(request.POST["reification_type"])
     reification_class.objects.get(pk=request.POST["reification_id"]).delete()
-    
     response = JsonResponse(
         data={
             "form": render_reification_form(
@@ -683,4 +575,5 @@ def ajax_2_delete_reification(request):
         status=200,
         safe=False
     )
+    
     return response

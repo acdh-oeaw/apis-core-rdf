@@ -32,6 +32,7 @@ if 'apis_highlighter' in settings.INSTALLED_APPS:
     from apis_highlighter.models import Annotation, AnnotationProject
 
 
+# TODO : can this be deleted?
 def validate_target_autocomplete(value):
     try:
         value = int(value)

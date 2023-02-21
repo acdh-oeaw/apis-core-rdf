@@ -17,16 +17,12 @@ from apis_core.apis_metainfo.models import Text, Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
 from apis_core.helper_functions import DateParser
 from apis_core.helper_functions.RDFParser import RDFParser
-from .fields import ListSelect2, Select2Multiple
+from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete, \
     get_cached_property_choices
 import django_tables2 as tables
 from django.template.loader import render_to_string
-
-from ..apis_relations.models import Property
-from ..apis_relations.tables import render_reification_table
-from ..apis_relations.views import render_contextual_triple_form
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import AnnotationProject
@@ -53,38 +49,6 @@ class GenericTripleForm2(forms.ModelForm):
         model = Triple
         exclude = []
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['other_entity'] = autocomplete.Select2ListCreateChoiceField(
-    #         label='entity',
-    #         widget=ListSelect2(
-    #             url=reverse(
-    #                 'apis:apis_entities:generic_entities_autocomplete',
-    #                 kwargs={"entity": "e55_type"}
-    #             ),
-    #             attrs={
-    #                 'data-placeholder': 'Type to get suggestions',
-    #                 'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-    #                 'data-html': True,
-    #                 'style': 'width: 100%',
-    #                 'data-tags' : '1',
-    #             },
-    #         ),
-    #         help_text="bla ble blo"
-    #     )
-
-# class ReificationForm(forms.ModelForm):
-#     template_name = "apis_entities/reification_form.html"
-#
-#     class Meta:
-#         from apis_ontology.models import BookPublicationRelationship
-#         model = BookPublicationRelationship
-#         fields = ["name", "start_date"]
-#
-#     # def __init__(self, *args, **kwargs):
-#     #     from apis_core.apis_relations.models import Property
-#     #     super().__init__(*args, **kwargs)
-#     #     self.fields["property_to_reification"] = forms.ModelChoiceField(queryset=Property.objects.filter(name__icontains="is author of"))
     
 
 class PropertyAutocompleteFormField(forms.Form):
@@ -245,188 +209,6 @@ def render_single_autocomplete_form_entity_OLD(entity_type_self_str, entity_type
         }
     )
     
-# def render_contextual_triple_form(
-#     entity_type_self_str,
-#     entity_type_other_str,
-#     entity_id_self,
-#     should_include_other_entity=True,
-# ):
-#     form_class = create_contextual_triple_form_class(
-#         entity_type_self_str=entity_type_self_str,
-#         entity_type_other_str=entity_type_other_str,
-#         should_include_other_entity=should_include_other_entity
-#     )
-#
-#     return render_to_string(
-#         template_name=form_class.template_name,
-#         context={
-#             "entity_type_self_str": entity_type_self_str,
-#             "entity_type_other_str": entity_type_other_str,
-#             "entity_id_self": entity_id_self,
-#             "contextual_triple_form": form_class(),
-#         }
-#     )
-
-def render_reification_form_and_table(
-    entity_type_self_str,
-    reification_type_str,
-    entity_id_self_str,
-    request,
-):
-    return render_to_string(
-        "apis_entities/reification_form_and_table.html",
-        context={
-            "reification_form": render_reification_form(
-                reification_type_str=reification_type_str,
-                entity_type_self_str=entity_type_self_str,
-                entity_id_self_str=entity_id_self_str,
-            ),
-            "entity_type_self": entity_type_self_str,
-            "reification_type": reification_type_str,
-            "entity_id_self": entity_id_self_str,
-            "reification_table": render_reification_table(
-                request=request,
-                reification_type_str=reification_type_str,
-                entity_type_self_str=entity_type_self_str,
-                entity_id_self_str=entity_id_self_str,
-            ),
-        },
-    )
-
-def render_reification_form(reification_type_str, entity_type_self_str, entity_id_self_str, reification_id_str=""):
-    from ..apis_relations.models import Triple
-    
-    reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
-    reification_instance = None
-    if reification_id_str != "":
-        reification_instance = reification_class.objects.get(pk=reification_id_str)
-
-    entity_self_class = AbstractEntity.get_entity_class_of_name(entity_type_self_str)
-    entity_self_instance = entity_self_class.objects.get(pk=entity_id_self_str)
-    
-    def instantiate_form():
-        
-        class ReificationForm(forms.ModelForm):
-            template_name = "apis_entities/reification_form.html"
-            class Meta:
-                model = reification_class
-                fields = ["name", "start_date"]
-
-        reification_form = ReificationForm()
-        if reification_instance is not None:
-            for k in reification_form.fields.keys():
-                reification_form.fields[k].initial = getattr(reification_instance, k)
-        return reification_form
-            
-    def create_triple_form_container_to_reification():
-        triple_form_to_reification_list = []
-        has_loaded_existing_triple = False
-        if reification_instance is not None:
-            triple_list = Triple.objects.filter(
-                Q(subj=entity_self_instance, obj=reification_instance)
-                | Q(subj=reification_instance, obj=entity_self_instance)
-            )
-            for triple in triple_list:
-                triple_form_to_reification_list.append(
-                    render_contextual_triple_form(
-                        entity_type_self_str=entity_type_self_str,
-                        entity_type_other_str=reification_type_str,
-                        entity_self_instance=entity_self_instance,
-                        entity_other_instance=reification_instance,
-                        triple_instance=triple,
-                        should_include_other_entity=False,
-                    )
-                )
-                has_loaded_existing_triple = True
-
-        if not has_loaded_existing_triple:
-            triple_form_to_reification_list.append(
-                render_contextual_triple_form(
-                    entity_type_self_str=entity_type_self_str,
-                    entity_type_other_str=reification_type_str,
-                    should_include_other_entity=False,
-                )
-            )
-        return {
-            "triple_form_to_reification": triple_form_to_reification_list,
-            "entity_type_self": entity_type_self_str,
-            "reification_type": reification_type_str,
-            "entity_id_self": "",
-        }
-    
-    def create_triple_form_container_from_reification_list():
-        entity_type_reification_content_type = reification_class.get_content_type()
-        related_ct_list = ContentType.objects.filter(
-            Q(property_set_obj__subj_class=entity_type_reification_content_type)
-            | Q(property_set_subj__obj_class=entity_type_reification_content_type)
-        ).distinct()
-        related_class_list = [ct.model_class() for ct in related_ct_list]
-        triple_form_container_from_reification_list = []
-
-        triple_list = None
-        if reification_instance is not None:
-            triple_list = Triple.objects.filter(
-                Q(subj=reification_instance)
-                | Q(obj=reification_instance)
-            )
-        for related_class in related_class_list:
-            has_loaded_existing_triple = False
-            triple_form_to_reification_list = []
-            if triple_list is not None and len(triple_list) > 0:
-                for triple in triple_list:
-                    if (
-                        triple.subj.__class__ is related_class
-                        or triple.obj.__class__ is related_class
-                    ):
-                        entity_other_instance = None
-                        if triple.subj == reification_instance:
-                            entity_other_instance = triple.obj
-                        elif triple.obj == reification_instance:
-                            entity_other_instance = triple.subj
-                        else:
-                            raise Exception("this should not happen. Check that the correct triples are filtered beforehand.")
-                        if str(entity_other_instance.pk) != entity_id_self_str:
-                            triple_form_to_reification_list.append(
-                                render_contextual_triple_form(
-                                    entity_type_self_str=reification_type_str,
-                                    entity_type_other_str=related_class.__name__.lower(),
-                                    entity_self_instance=reification_instance,
-                                    entity_other_instance=entity_other_instance,
-                                    triple_instance=triple,
-                                )
-                            )
-                            has_loaded_existing_triple = True
-                            
-            if not has_loaded_existing_triple:
-                triple_form_to_reification_list.append(
-                    render_contextual_triple_form(
-                        entity_type_self_str=reification_type_str,
-                        entity_type_other_str=related_class.__name__.lower(),
-                    )
-                )
-            triple_form_container_from_reification_list.append({
-                "triple_form_from_reification": triple_form_to_reification_list,
-                "reification_type": reification_type_str,
-                "entity_type_other": related_class.__name__.lower(),
-                "entity_id_self": "",
-            })
-        return triple_form_container_from_reification_list
-
-    reification_form = instantiate_form()
-    context = {
-        "entity_id_self": entity_id_self_str,
-        "entity_type_reification_str": reification_type_str,
-        "reification_id": reification_id_str,
-        "reification_form": reification_form,
-        "triple_form_container_to_reification": create_triple_form_container_to_reification(),
-        "triple_form_container_from_reification_list": create_triple_form_container_from_reification_list(),
-    }
-    result_rendered = render_to_string(
-        template_name=reification_form.template_name,
-        context=context,
-    )
-    return result_rendered
-
 class VocabTable(tables.Table):
     
     class Meta:

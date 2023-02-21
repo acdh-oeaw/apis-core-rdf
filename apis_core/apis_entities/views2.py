@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404, render
-from django.template.loader import get_template
+from django.template.loader import get_template, select_template
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -22,12 +22,12 @@ from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Triple, TempTriple
 from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, \
     LabelTableEdit, render_reification_table
+from apis_core.apis_relations.forms import render_reification_form_and_table
 from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm, \
-    render_single_autocomplete_form_property, render_single_autocomplete_form_entity_OLD, \
-    render_reification_form, render_reification_form_and_table
+    render_single_autocomplete_form_property, render_single_autocomplete_form_entity_OLD
 from .views import get_highlighted_texts
 from .views import set_session_variables
-from ..apis_relations.views import ajax_2_load_contextual_triple_form, ajax_2_delete_reification
+from ..apis_relations.views import ajax_2_load_triple_form, ajax_2_delete_reification
 from ..apis_vocabularies.models import TextType
 
 if 'apis_highlighter' in settings.INSTALLED_APPS:
@@ -164,74 +164,7 @@ class GenericEntitiesEditView(View):
             'permissions': permissions}
         form_merge_with = GenericEntitiesStanbolForm(entity, ent_merge_pk=pk)
         context['form_merge_with'] = form_merge_with
-        # template = get_template('apis_entities/entity_create_generic.html')
-        # return HttpResponse(get_template("apis_entities/entity_create_generic.html").render(request=request, context=context))
-        # form_xyz = GenericTripleForm2()
-        # context["form_xyz"] = render_to_string(template_name=form_xyz.template_name, context={"form_xyz": form_xyz})
-
-        # property_autocomplete_field_to_reif = PropertyAutocompleteFormField(
-        #     entity_type_self_str="f10_person",
-        #     entity_type_other_str="bookpublicationrelationship",
-        #     field_id="custom_property_to_reif",
-        # )
-        # property_autocomplete_field_to_reif_rendered = render_to_string(
-        #     property_autocomplete_field_to_reif.template_name,
-        #     context={
-        #         "property_autocomplete_field": property_autocomplete_field_to_reif,
-        #         "id_form_field": "id_custom_property_to_reif",
-        #         "autocomplete_url": "/apis/relations/autocomplete/f10_person/bookpublicationrelationship/",
-        #     }
-        # )
-        # property_autocomplete_field_from_reif = PropertyAutocompleteFormField(
-        #     entity_type_self_str="bookpublicationrelationship",
-        #     entity_type_other_str="e40_legal_body",
-        #     field_id="custom_property_from_reif",
-        # )
-        # property_autocomplete_field_from_reif_rendered = render_to_string(
-        #     property_autocomplete_field_from_reif.template_name,
-        #     context={
-        #         "property_autocomplete_field": property_autocomplete_field_from_reif,
-        #         "id_form_field": "id_custom_property_from_reif",
-        #         "autocomplete_url": "/apis/relations/autocomplete/bookpublicationrelationship/e40_legal_body/",
-        #     }
-        # )
-        # entity_autocomplete_field_from_reif = EntityAutocompleteFormField(
-        #     entity_type_other_str="e40_legal_body",
-        #     field_id="custom_entity_from_reif",
-        # )
-        # entity_autocomplete_field_from_reif_rendered = render_to_string(
-        #     entity_autocomplete_field_from_reif.template_name,
-        #     context={
-        #         "entity_autocomplete_field": entity_autocomplete_field_from_reif,
-        #         "id_form_field": "id_custom_entity_from_reif",
-        #         "autocomplete_url": "/apis/entities/autocomplete/e40_legal_body/",
-        #     }
-        # )
-        # property_autocomplete_field_to_reif_rendered = render_single_autocompletex_form_property(
-        #     entity_type_self_str="f10_person",
-        #     entity_type_other_str="bookpublicationrelationship",
-        #     single_field_id="custom_property_to_reif",
-        # )
-        # contextual_triple_form_rendered = render_contextual_triple_form(
-        #     entity_type_self_str="bookpublicationrelationship",
-        #     entity_type_other_str="e40_legal_body",
-        #     id_number="0"
-        # )
-        #
-        # reification_form = ReificationForm()
-        # context["reification_form"] = render_to_string(
-        #     template_name=reification_form.template_name,
-        #     context={
-        #         "reification_form": reification_form,
-        #         "property_autocomplete_field_to_reif_rendered": property_autocomplete_field_to_reif_rendered,
-        #         "contextual_triple_form_rendered": contextual_triple_form_rendered,
-        #     }
-        # )
-
-        # context["reification_table"] = render_to_string(
-        #     ReificationTable.template_name_custom, context={"table": ReificationTable()}
-        # )
-        # context["reification_table_container"] = render_to_string("apis_entities/reification_table_container.html")
+        
         context["reification_form_and_table"] = render_reification_form_and_table(
             entity_type_self_str="f10_person",
             reification_type_str="bookpublicationrelationship",

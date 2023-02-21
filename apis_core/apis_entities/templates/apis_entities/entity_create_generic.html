@@ -355,12 +355,12 @@
         })
     };
 
-    function ajax_2_load_contextual_triple_form(div_form_anchor, should_append, kwargs) {
+    function ajax_2_load_triple_form(div_form_anchor, should_append, kwargs) {
         let csrftoken = '{{ csrf_token }}'
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
-            url: "{% url 'apis:apis_relations:ajax_2_load_contextual_triple_form' %}",
+            url: "{% url 'apis:apis_relations:ajax_2_load_triple_form' %}",
             data: kwargs,
             success: function (response) {
                 if (should_append) {
@@ -376,13 +376,13 @@
         })
     };
 
-    function ajax_2_delete_contextual_triple(div_origin) {
+    function ajax_2_delete_triple(div_origin) {
         let csrftoken = '{{ csrf_token }}';
         var triple_id = div_origin.closest(".contextual_triple_form").getAttribute("data-triple_id")
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
-            url: "{% url 'apis:apis_relations:ajax_2_delete_contextual_triple' %}",
+            url: "{% url 'apis:apis_relations:ajax_2_delete_triple' %}",
             data: {"triple_id": triple_id},
             success: function (response) {
                 div_origin.parentElement.remove();

@@ -5,7 +5,7 @@
             {{ triple_form_to_reification }}
         {% endfor %}
     </div>
-    <input onclick="ajax_2_load_contextual_triple_form(div_form_anchor=this.parentElement.getElementsByClassName('contextual_triple_form_anchor')[0], should_append=true, kwargs={'entity_type_self_str':'{{ triple_form_container_to_reification.entity_type_self }}', 'entity_type_other_str':'{{ triple_form_container_to_reification.reification_type }}', 'entity_id_self':'{{ triple_form_container_to_reification.entity_id_self }}', 'should_include_other_entity': 'False'})" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
+    <input onclick="ajax_2_load_triple_form(div_form_anchor=this.parentElement.getElementsByClassName('contextual_triple_form_anchor')[0], should_append=true, kwargs={'entity_type_self_str':'{{ triple_form_container_to_reification.entity_type_self }}', 'entity_type_other_str':'{{ triple_form_container_to_reification.reification_type }}', 'entity_id_self':'{{ triple_form_container_to_reification.entity_id_self }}', 'should_include_other_entity': 'False'})" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
 </div>
 <!-- reification attributes -->
 <h4>{{ entity_type_reification_str }}</h4>
@@ -29,7 +29,7 @@
                 {{ triple_form_from_reification }}
             {% endfor %}
         </div>
-        <input onclick="ajax_2_load_contextual_triple_form(div_form_anchor=this.parentElement.getElementsByClassName('contextual_triple_form_anchor')[0], should_append=true, kwargs={'entity_type_self_str':'{{ triple_form_container_from_reification.reification_type }}', 'entity_type_other_str':'{{ triple_form_container_from_reification.entity_type_other }}', 'entity_id_self':'{{ triple_form_container_from_reification.entity_id_self }}', 'should_include_other_entity': 'True'})" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
+        <input onclick="ajax_2_load_triple_form(div_form_anchor=this.parentElement.getElementsByClassName('contextual_triple_form_anchor')[0], should_append=true, kwargs={'entity_type_self_str':'{{ triple_form_container_from_reification.reification_type }}', 'entity_type_other_str':'{{ triple_form_container_from_reification.entity_type_other }}', 'entity_id_self':'{{ triple_form_container_from_reification.entity_id_self }}', 'should_include_other_entity': 'True'})" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
         <br>
     </div>
 {% endfor %}
