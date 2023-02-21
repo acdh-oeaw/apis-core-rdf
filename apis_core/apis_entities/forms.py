@@ -318,6 +318,7 @@ def render_reification_form(reification_type_str, entity_type_self_str, entity_i
             
     def create_triple_form_container_to_reification():
         triple_form_to_reification_list = []
+        has_loaded_existing_triple = False
         if reification_instance is not None:
             triple_list = Triple.objects.filter(
                 Q(subj=entity_self_instance, obj=reification_instance)
@@ -334,7 +335,9 @@ def render_reification_form(reification_type_str, entity_type_self_str, entity_i
                         should_include_other_entity=False,
                     )
                 )
-        else:
+                has_loaded_existing_triple = True
+
+        if not has_loaded_existing_triple:
             triple_form_to_reification_list.append(
                 render_contextual_triple_form(
                     entity_type_self_str=entity_type_self_str,

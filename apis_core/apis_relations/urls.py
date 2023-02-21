@@ -29,4 +29,5 @@ urlpatterns = [
     url(r"^ajax_2_delete_reification/$", views.ajax_2_delete_reification, name="ajax_2_delete_reification"),
     url(r"^ajax_2_load_reification_form/$", views.ajax_2_load_reification_form, name="ajax_2_load_reification_form"),
     url(r"^ajax_2_load_contextual_triple_form/$", views.ajax_2_load_contextual_triple_form, name="ajax_2_load_contextual_triple_form"),
+    url(r"^ajax_2_delete_contextual_triple/$", views.ajax_2_delete_contextual_triple, name="ajax_2_delete_contextual_triple"),
 ]

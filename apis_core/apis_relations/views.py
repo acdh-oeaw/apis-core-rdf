@@ -520,6 +520,9 @@ def render_contextual_triple_form(
 
     triple_form = instantiate_form()
     triple_form = set_initial_values(triple_form)
+    triple_id = ""
+    if triple_instance is not None:
+        triple_id = str(triple_instance.pk)
 
     return render_to_string(
         template_name=triple_form.template_name,
@@ -527,6 +530,7 @@ def render_contextual_triple_form(
             "entity_type_self_str": entity_type_self_str,
             "entity_type_other_str": entity_type_other_str,
             "entity_id_self": entity_id_self_str,
+            "triple_id": triple_id,
             "contextual_triple_form": triple_form,
         }
     )
@@ -628,6 +632,17 @@ def ajax_2_load_contextual_triple_form(request):
     )
     return response
 
+def ajax_2_delete_contextual_triple(request):
+    triple_id = request.POST["triple_id"]
+    if triple_id != "":
+        Triple.objects.get(pk=triple_id).delete()
+    response = JsonResponse(
+        data="",
+        status=200,
+        safe=False
+    )
+    return response
+
 def ajax_2_load_reification_form(request):
     from ..apis_entities.forms import render_reification_form
     response = JsonResponse(
@@ -644,14 +659,23 @@ def ajax_2_load_reification_form(request):
 
 
 def ajax_2_delete_reification(request):
+    from apis_core.apis_entities.forms import render_reification_form
+    
     reification_class = AbstractEntity.get_entity_class_of_name(request.POST["reification_type"])
     reification_class.objects.get(pk=request.POST["reification_id"]).delete()
     
     response = JsonResponse(
-        data=render_reification_table(
-            request=request,
-            reification_type_str=request.POST["reification_type"],
-        ),
+        data={
+            "form": render_reification_form(
+                entity_type_self_str=request.POST["entity_type_self"],
+                reification_type_str=request.POST["reification_type"],
+                entity_id_self_str=request.POST["entity_id_self"],
+            ),
+            "table": render_reification_table(
+                request=request,
+                reification_type_str=request.POST["reification_type"],
+            )
+        },
         status=200,
         safe=False
     )

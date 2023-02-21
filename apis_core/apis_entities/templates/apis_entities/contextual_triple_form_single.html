@@ -1,4 +1,4 @@
-<form class="contextual_triple_form" onsubmit="return false;" data-entity_type_self="{{ entity_type_self_str }}" data-entity_type_other="{{ entity_type_other_str }}" data-entity_id_self="{{ entity_id_self }}">
+<form class="contextual_triple_form" onsubmit="return false;" data-entity_type_self="{{ entity_type_self_str }}" data-entity_type_other="{{ entity_type_other_str }}" data-entity_id_self="{{ entity_id_self }}" data-triple_id="{{ triple_id }}">
     {% for field in contextual_triple_form %}
         <div class="fieldWrapper">
             {{ field.errors }}
@@ -8,6 +8,6 @@
             {{ field }}
         </div>
     {% endfor %}
-    <input onclick="this.parentElement.remove()" type="submit" class="btn btn-primary" value="-" />
+    <input onclick="ajax_2_delete_contextual_triple(this)" type="submit" class="btn btn-primary" value="-" />
     <img src onerror='search_and_activate_dal_s2(this.parentElement)'>
 </form>
