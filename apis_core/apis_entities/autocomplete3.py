@@ -442,6 +442,7 @@ _cached_property_choices_dict = {}
 SELF_SUBJ_OTHER_OBJ_STR = "self_subj_other_obj"
 SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
 
+#TODO REIFICATION: Maybe delete the caching. Since it could become out of sync with the data model
 def get_cached_property_choices(entity_type_self_str, entity_type_other_str, search_name_str):
      res = _cached_property_choices_dict.get((entity_type_self_str, entity_type_other_str, search_name_str))
      if res is not None:

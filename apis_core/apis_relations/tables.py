@@ -1,6 +1,6 @@
 import django_tables2 as tables
 from django.conf import settings
-from django.db.models import Case, When, F
+from django.db.models import Case, When, F, Q
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django_tables2.utils import A
@@ -40,25 +40,37 @@ class GenericTripleTable(tables.Table):
             </a>
         """)
 
-def render_reification_table(request, reification_type_str):
+def render_reification_table(request, reification_type_str, entity_type_self_str, entity_id_self_str, ):
     from apis_core.apis_entities.models import AbstractEntity
     reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
 
     class ReificationTable(tables.Table):
+        related_entities = tables.Column(empty_values=())
         edit = tables.Column(empty_values=())
         delete = tables.Column(empty_values=())
         
         class Meta:
             model = reification_class
-            fields = ["name", "edit", "delete"]
+            fields = ["name", "related_entities","edit", "delete"]
             # If I would use `template_name` here, django-tables crashes. Perhaps it only expects some
             # of its own pre-integrated templates? But since I want to use a custom one and also attach it
             # to this class I renamed it to `template_name_custom`. I did not find a better solution quickly.
             template_name_custom = "apis_relations/reification_table_single.html"
-            # attrs = {"id": "reification_table_1"}
         
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs, data=reification_class.objects.all())
+            
+        def render_related_entities(self, record):
+            entity_self_class = AbstractEntity.get_entity_class_of_name(entity_type_self_str)
+            entity_self_instance = entity_self_class.objects.get(pk=entity_id_self_str)
+            related_other_entities = []
+            for triple in Triple.objects.filter(Q(subj=record) | Q(obj=record)):
+                if triple.subj != record and triple.subj != entity_self_instance:
+                    related_other_entities.append(triple.subj)
+                elif triple.obj != record and triple.obj != entity_self_instance:
+                    related_other_entities.append(triple.obj)
+            related_other_entities = ", ".join([e.name for e in related_other_entities])
+            return format_html(f"{related_other_entities}")
         
         def render_edit(self, record):
             return format_html(f"""

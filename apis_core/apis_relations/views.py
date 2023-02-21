@@ -598,6 +598,8 @@ def ajax_2_post_reification_form(request):
             "table": render_reification_table(
                 request=request,
                 reification_type_str=post_data["reification_type"],
+                entity_type_self_str=post_data["entity_type_self"],
+                entity_id_self_str=post_data["entity_id_self"],
             )
         },
         status=200,
@@ -674,6 +676,8 @@ def ajax_2_delete_reification(request):
             "table": render_reification_table(
                 request=request,
                 reification_type_str=request.POST["reification_type"],
+                entity_type_self_str=request.POST["entity_type_self"],
+                entity_id_self_str=request.POST["entity_id_self"],
             )
         },
         status=200,

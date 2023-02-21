@@ -287,6 +287,8 @@ def render_reification_form_and_table(
             "reification_table": render_reification_table(
                 request=request,
                 reification_type_str=reification_type_str,
+                entity_type_self_str=entity_type_self_str,
+                entity_id_self_str=entity_id_self_str,
             ),
         },
     )
