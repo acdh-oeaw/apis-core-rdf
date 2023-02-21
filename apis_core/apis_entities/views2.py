@@ -237,7 +237,7 @@ class GenericEntitiesEditView(View):
                 "reification_form": render_reification_form(
                     entity_type_self_str="f10_person",
                     entity_type_reification_str="bookpublicationrelationship",
-                    entity_id_self=str(pk),
+                    entity_id_self_str=str(pk),
                 ),
                 "entity_type_self": "f10_person",
                 "entity_type_reification": "bookpublicationrelationship",

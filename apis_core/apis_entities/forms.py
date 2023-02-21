@@ -318,7 +318,7 @@ def create_contextual_triple_form_class(
 #         }
 #     )
 
-def render_reification_form(entity_type_self_str, entity_type_reification_str, entity_id_self, entity_id_other="", reification_id=""):
+def render_reification_form(entity_type_self_str, entity_type_reification_str, entity_id_self_str, entity_id_other_str="", reification_id_str=""):
     entity_type_reification_class = AbstractEntity.get_entity_class_of_name(entity_type_reification_str)
     
     class ReificationForm(forms.ModelForm):
@@ -367,11 +367,11 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
     return render_to_string(
         template_name=ReificationForm.template_name,
         context={
-            "entity_id_self": entity_id_self,
+            "entity_id_self": entity_id_self_str,
             "entity_type_reification_str": entity_type_reification_str,
-            "reification_id": reification_id,
+            "reification_id": reification_id_str,
             "reification_form": ReificationForm(),
-            "triple_form_container_to_reification": create_triple_form_container_to_reification(entity_type_self_str, entity_type_reification_str, entity_id_self),
+            "triple_form_container_to_reification": create_triple_form_container_to_reification(entity_type_self_str, entity_type_reification_str, entity_id_self_str),
             "triple_form_container_list_from_reification": create_triple_form_container_list_from_reification(entity_type_reification_class),
         }
     )

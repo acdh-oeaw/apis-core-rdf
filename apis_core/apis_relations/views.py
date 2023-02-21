@@ -508,7 +508,7 @@ def ajax_2_post_reification_form(request):
             "form": render_reification_form(
                 entity_type_self_str=post_data["entity_type_self"],
                 entity_type_reification_str=post_data["entity_type_reification"],
-                entity_id_self=post_data["entity_id_self"],
+                entity_id_self_str=post_data["entity_id_self"],
             ),
             "table": render_reification_table(
                 request=request,
@@ -550,22 +550,19 @@ def ajax_2_load_contextual_triple_form(request):
     return response
 
 def ajax_2_load_reification_form(request):
+    from ..apis_entities.forms import render_reification_form
     response = JsonResponse(
-        data="XXX",
+        data=render_reification_form(
+            entity_type_self_str=request.POST["entity_type_self"],
+            entity_type_reification_str=request.POST["reification_type"],
+            entity_id_self_str=request.POST["entity_id_self"],
+            reification_id_str=request.POST["reification_id"],
+        ),
         status=200,
         safe=False
     )
     return response
 
-
-def ajax_2_load_reification_table(request):
-    response = JsonResponse(
-        data=reification_table.as_html(request),
-        status=200,
-        safe=False
-    )
-    return response
-    
 
 def ajax_2_delete_reification(request):
     reification_class = AbstractEntity.get_entity_class_of_name(request.POST["reification_type"])
