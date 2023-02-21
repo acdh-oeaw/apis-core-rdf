@@ -24,7 +24,7 @@ from apis_core.apis_relations.models import Property, TempTriple, Triple
 #     InstitutionWork, PlaceWork, EventWork, WorkWork
 # )
 #from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
-from .tables import LabelTableEdit, ReificationTable, render_reification_table
+from .tables import LabelTableEdit, render_reification_table
 
 form_module_list = [relation_form_module]
 
@@ -510,7 +510,12 @@ def ajax_2_post_reification_form(request):
                 entity_type_reification_str=post_data["entity_type_reification"],
                 entity_id_self=post_data["entity_id_self"],
             ),
-            "table": render_reification_table(request)
+            "table": render_reification_table(
+                request=request,
+                reification_type_str=post_data["entity_type_reification"],
+                entity_type_self_str=post_data["entity_type_self"],
+                entity_id_self_str=post_data["entity_id_self"],
+            )
         },
         status=200,
         safe=False
@@ -554,7 +559,6 @@ def ajax_2_load_reification_form(request):
 
 
 def ajax_2_load_reification_table(request):
-    reification_table = ReificationTable()
     response = JsonResponse(
         data=reification_table.as_html(request),
         status=200,
@@ -564,12 +568,16 @@ def ajax_2_load_reification_table(request):
     
 
 def ajax_2_delete_reification(request):
-    # form = UserForm()
-    # table = UserTable(User.objects.all().order_by(UserTable.Meta.fields[0]))
-    # return render(request, "user_table3.html", {"form": form, "table": table})
+    reification_class = AbstractEntity.get_entity_class_of_name(request.POST["reification_type"])
+    reification_class.objects.get(pk=request.POST["reification_id"]).delete()
     
     response = JsonResponse(
-        data="<h1>XXXXXX</h1>",
+        data=render_reification_table(
+            request=request,
+            reification_type_str=request.POST["reification_type"],
+            entity_type_self_str=request.POST["entity_type_self"],
+            entity_id_self_str=request.POST["entity_id_self"],
+        ),
         status=200,
         safe=False
     )

@@ -4,7 +4,6 @@ from django.db.models import Case, When, F
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django_tables2.utils import A
-
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_metainfo.tables import (
@@ -41,40 +40,56 @@ class GenericTripleTable(tables.Table):
             </a>
         """)
 
-class ReificationTable(tables.Table):
-    # If I would use `template_name` here, django-tables crashes. Perhaps it only expects some
-    # of its own pre-integrated templates? But since I want to use a custom one and also attach it
-    # to this class I renamed it to `template_name_custom`. I did not find a better solution quickly.
-    template_name_custom = "apis_relations/reification_table_single.html"
-    
-    class Meta:
-        model = BookPublicationRelationship
-        fields = ["name", "edit", "delete"]
-        attrs = {"id": "reification_table_1"}
+def render_reification_table(request, reification_type_str, entity_type_self_str, entity_id_self_str):
+    from apis_core.apis_entities.models import AbstractEntity
+    reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs, data=BookPublicationRelationship.objects.all())
-        self.base_columns["edit"] = tables.Column(empty_values=())
-        self.base_columns["delete"] = tables.Column(empty_values=())
+    class ReificationTable(tables.Table):
+        edit = tables.Column(empty_values=())
+        delete = tables.Column(empty_values=())
+        
+        class Meta:
+            model = reification_class
+            fields = ["name", "edit", "delete"]
+            # If I would use `template_name` here, django-tables crashes. Perhaps it only expects some
+            # of its own pre-integrated templates? But since I want to use a custom one and also attach it
+            # to this class I renamed it to `template_name_custom`. I did not find a better solution quickly.
+            template_name_custom = "apis_relations/reification_table_single.html"
+            # attrs = {"id": "reification_table_1"}
+        
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs, data=reification_class.objects.all())
+        
+        def render_edit(self, record):
+            return format_html(f"""
+                    <a class='reledit' onclick="ajax_2_load_reification_form(record_id={record.id}, div_origin=this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
+                        <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
+                    </svg>
+                </a>
+            """)
 
-    def render_edit(self, record):
-        return format_html(f'<button type="button" onclick="ajax_2_load_reification_form(record_id={record.id}, div_origin=this)">E</button>')
-        return format_html(f"""
-            <a class='reledit' onclick="load_existing_user_form_ajax_js('{record.id}')")>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
-                    <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
-                </svg>
-            </a>
-        """)
+        def render_delete(self, record):
+            return format_html(f"""
+                <a class='reledit' onclick="ajax_2_delete_reification(reification_id={record.id}, div_origin=this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+                        <polyline points="3 6 5 6 21 6">
+                        </polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                        </path>
+                    </svg>
+                </a>
+            """)
 
-    def render_delete(self, record):
-        return format_html(f'<button type="button" onclick="ajax_2_delete_reification({record.id})">D</button>')
-
-def render_reification_table(request):
     return render_to_string(
         request=request,
-        template_name=ReificationTable.template_name_custom,
-        context={"table": ReificationTable()},
+        template_name=ReificationTable.Meta.template_name_custom,
+        context={
+            "table": ReificationTable(),
+            "entity_type_self": entity_type_self_str,
+            "entity_id_self": entity_id_self_str,
+            "reification_type": reification_type_str,
+        },
     )
 
 

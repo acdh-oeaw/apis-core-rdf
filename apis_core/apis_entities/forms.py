@@ -376,9 +376,6 @@ def render_reification_form(entity_type_self_str, entity_type_reification_str, e
         }
     )
 
-def ajax_2_load_reification_form():
-    pass
-
 
 class VocabTable(tables.Table):
     

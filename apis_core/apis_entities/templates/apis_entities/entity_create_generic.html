@@ -267,13 +267,13 @@
 
     function ajax_2_load_reification_form(record_id, div_origin) {
         let csrftoken = '{{ csrf_token }}'
+        var div_form = div_origin.closest(".reification_form_and_table_anchor").querySelector(".reification_form_anchor");
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
             url: "{% url 'apis:apis_relations:ajax_2_load_reification_form' %}",
             data: {"record_id": record_id},
             success: function (response) {
-                var div_form = div_origin.closest(".reification_form_and_table_anchor").querySelector(".reification_form_anchor");
                 div_form.innerHTML = response;
             },
             error: function (response) {
@@ -298,15 +298,23 @@
         })
     }
 
-    function ajax_2_delete_reification(reification_id) {
+    function ajax_2_delete_reification(reification_id, div_origin) {
         let csrftoken = '{{ csrf_token }}'
+        var div_table_anchor = div_origin.closest(".reification_table_anchor");
+        var div_table = div_table_anchor.getElementsByClassName("reification_table")[0];
+        var post_data = {
+            "reification_id": reification_id,
+            "reification_type": div_table.getAttribute("data-reification_type"),
+            "entity_type_self": div_table.getAttribute("data-entity_type_self"),
+            "entity_id_self": div_table.getAttribute("data-entity_id_self"),
+        };
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
             url: "{% url 'apis:apis_relations:ajax_2_delete_reification' %}",
-            data: {"reification_id": reification_id},
+            data: post_data,
             success: function (response) {
-                document.getElementById("reification_table_1").innerHTML=response
+                div_table_anchor.innerHTML = response;
             },
             error: function (response) {
                 console.log(response)

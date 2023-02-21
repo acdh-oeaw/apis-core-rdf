@@ -144,7 +144,7 @@ class GenericEntitiesEditView(View):
         
         from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2, PropertyAutocompleteFormField, EntityAutocompleteFormField
         from apis_core.apis_entities.autocomplete3 import GenericEntitiesAutocomplete
-        from apis_core.apis_relations.tables import GenericTripleTable, ReificationTable
+        from apis_core.apis_relations.tables import GenericTripleTable
         from apis_ontology.models import E55_Type, BookPublicationRelationship
         context = {
             'entity_type': entity,
@@ -242,7 +242,12 @@ class GenericEntitiesEditView(View):
                 "entity_type_self": "f10_person",
                 "entity_type_reification": "bookpublicationrelationship",
                 "entity_id_self": str(pk),
-                "reification_table": render_reification_table(request),
+                "reification_table": render_reification_table(
+                    request=request,
+                    reification_type_str="bookpublicationrelationship",
+                    entity_type_self_str="f10_person",
+                    entity_id_self_str=str(pk),
+                ),
             },
         )
         return render(request, "apis_entities/entity_create_generic.html", context)
