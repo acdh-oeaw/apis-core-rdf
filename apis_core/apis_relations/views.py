@@ -1,7 +1,7 @@
 import json
 import re
 import inspect
-
+from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -12,12 +12,16 @@ from django.shortcuts import render
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
 from apis_core.apis_relations.forms2 import GenericTripleForm
-from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR
+from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR, \
+    get_cached_property_choices
 # from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
 # from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Property, TempTriple, Triple
+from dal import autocomplete
+from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
+from django.urls import reverse
 # from .models import (
 #     PersonPlace, PersonPerson, PersonInstitution, InstitutionPlace,
 #     InstitutionInstitution, PlacePlace, PersonEvent, InstitutionEvent, PlaceEvent, PersonWork,
@@ -429,24 +433,101 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
 def render_contextual_triple_form(
     entity_type_self_str,
     entity_type_other_str,
+    entity_self_instance=None,
+    entity_other_instance=None,
+    triple_instance=None,
     entity_id_self_str="",
     should_include_other_entity=True,
 ):
-    from apis_core.apis_entities.forms import create_contextual_triple_form_class
     
-    form_class = create_contextual_triple_form_class(
-        entity_type_self_str=entity_type_self_str,
-        entity_type_other_str=entity_type_other_str,
-        should_include_other_entity=should_include_other_entity,
-    )
+    def instantiate_form():
+        
+        class GenericContextualTripleForm(forms.Form):
+            template_name = "apis_entities/contextual_triple_form_single.html"
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.fields["property"] = autocomplete.Select2ListCreateChoiceField(
+                    label='property',
+                    widget=ListSelect2(
+                        url=reverse(
+                            'apis:apis_relations:generic_property_autocomplete',
+                            kwargs={"entity_self": entity_type_self_str, "entity_other": entity_type_other_str}
+                        ),
+                        attrs={
+                            'data-placeholder': 'Type to get suggestions',
+                            'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+                            'data-html': True,
+                            'style': 'width: 100%'
+                        },
+                    ),
+                
+                )
+                if should_include_other_entity:
+                    self.fields["entity_other"] = autocomplete.Select2ListCreateChoiceField(
+                        label='entity',
+                        widget=ListSelect2(
+                            url=reverse(
+                                'apis:apis_entities:generic_entities_autocomplete',
+                                kwargs={"entity": entity_type_other_str}
+                            ),
+                            attrs={
+                                'data-placeholder': 'Type to get suggestions',
+                                'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
+                                'data-html': True,
+                                'style': 'width: 100%'
+                            },
+                        ),
+                    )
+                property_initial_choice = get_cached_property_choices(
+                    entity_type_self_str=entity_type_self_str,
+                    entity_type_other_str=entity_type_other_str,
+                    search_name_str="",
+                )
+                if len(property_initial_choice) == 1:
+                    property_initial_choice = property_initial_choice[0]
+                    self.fields["property"].initial = property_initial_choice["id"]
+                    self.fields["property"].choices = [(property_initial_choice["id"], property_initial_choice["text"])]
+                # TODO REIFICATION do caching for related entities too
     
+        return GenericContextualTripleForm()
+    
+    def set_initial_values(triple_form):
+        
+        if triple_instance is not None:
+            property = triple_instance.prop
+            if entity_self_instance == triple_instance.subj:
+                property_initial_choice = {
+                    'id': f"id:{property.pk}__direction:{SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
+                    'text': property.name
+                }
+            elif entity_self_instance == triple_instance.obj:
+                property_initial_choice = {
+                    'id': f"id:{property.pk}__direction:{SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
+                    'text': property.name_reverse
+                }
+            else:
+                raise Exception("unhandled case.")
+            triple_form.fields["property"].initial = property_initial_choice["id"]
+            triple_form.fields["property"].choices = [(property_initial_choice["id"], property_initial_choice["text"])]
+    
+            if should_include_other_entity:
+                if entity_other_instance is None:
+                    raise Exception("entity_other_instance missing. Must be passed here for pre-loading triple form.")
+                triple_form.fields["entity_other"].initial = entity_other_instance.uri_set.all()[0]
+                triple_form.fields["entity_other"].choices = [(entity_other_instance.uri_set.all()[0], entity_other_instance.name)]
+                
+        return triple_form
+
+    triple_form = instantiate_form()
+    triple_form = set_initial_values(triple_form)
+
     return render_to_string(
-        template_name=form_class.template_name,
+        template_name=triple_form.template_name,
         context={
             "entity_type_self_str": entity_type_self_str,
             "entity_type_other_str": entity_type_other_str,
             "entity_id_self": entity_id_self_str,
-            "contextual_triple_form": form_class(),
+            "contextual_triple_form": triple_form,
         }
     )
 

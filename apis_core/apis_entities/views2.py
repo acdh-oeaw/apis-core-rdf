@@ -24,7 +24,7 @@ from apis_core.apis_relations.tables import get_generic_relations_table, get_gen
     LabelTableEdit, render_reification_table
 from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm, \
     render_single_autocomplete_form_property, render_single_autocomplete_form_entity_OLD, \
-    create_contextual_triple_form_class, render_reification_form, render_reification_form_and_table
+    render_reification_form, render_reification_form_and_table
 from .views import get_highlighted_texts
 from .views import set_session_variables
 from ..apis_relations.views import ajax_2_load_contextual_triple_form, ajax_2_delete_reification
