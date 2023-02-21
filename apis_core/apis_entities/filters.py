@@ -84,16 +84,14 @@ class GenericEntityListFilter(django_filters.FilterSet):
         """
         field_filters = OrderedDict()
 
-        try:
-            fields = self.entity_class.entity_settings["list_filters"]
+        fields = []
+        if settings.APIS_ENTITIES:
+            entity_settings = settings.APIS_ENTITIES.get(self.entity_class.__name__, {})
+            fields = entity_settings.get("list_filters", [])
             if fields == ["name", "related_entity_name", "related_property_name"]:
                 # for AbstractEntity, certain fields are defined to be filterable by default;
                 # ignore these for the purpose of sorting field names for filtering
                 fields = []
-        except KeyError as e:
-            fields = []
-        except Exception as e:
-            raise e
 
         # fields by which entity lists should not be filterable
         ignore_fields = [
