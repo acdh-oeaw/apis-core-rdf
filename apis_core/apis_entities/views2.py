@@ -22,7 +22,8 @@ from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Triple, TempTriple
 from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, \
     LabelTableEdit, render_reification_table
-from apis_core.apis_relations.forms import render_reification_form_and_table
+from apis_core.apis_relations.forms import render_reification_form_and_table, \
+    render_triple_form, render_triple_form_and_table
 from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm, \
     render_single_autocomplete_form_property, render_single_autocomplete_form_entity_OLD
 from .views import get_highlighted_texts
@@ -145,12 +146,10 @@ class GenericEntitiesEditView(View):
         
         from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2, PropertyAutocompleteFormField, EntityAutocompleteFormField
         from apis_core.apis_entities.autocomplete3 import GenericEntitiesAutocomplete
-        from apis_core.apis_relations.tables import GenericTripleTable
         from apis_ontology.models import E55_Type, BookPublicationRelationship
         context = {
             'entity_type': entity,
             'form': form,
-            "table_xyz": GenericTripleTable(Triple.objects.all()),
             # "reification_table": ReificationTable(),
             'form_text': form_text,
             'instance': instance,
@@ -166,9 +165,19 @@ class GenericEntitiesEditView(View):
         context['form_merge_with'] = form_merge_with
         
         context["reification_form_and_table"] = render_reification_form_and_table(
-            entity_type_self_str="f10_person",
+            entity_self_type_str="f10_person",
             reification_type_str="bookpublicationrelationship",
-            entity_id_self_str=str(pk),
+            entity_self_id_str=str(pk),
+            request=request,
+        )
+        context["triple_form"] = render_triple_form(
+            entity_self_type_str="f10_person",
+            entity_other_type_str="chapter",
+        )
+        context["triple_form_and_table"] = render_triple_form_and_table(
+            entity_self_type_str="f10_person",
+            entity_other_type_str="chapter",
+            entity_self_id_str=str(pk),
             request=request,
         )
         return render(request, "apis_entities/entity_create_generic.html", context)

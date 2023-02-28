@@ -1,0 +1,18 @@
+<form class="triple_form" onsubmit="return false;" data-triple_id="{{ triple_id }}">
+    {% for field in triple_form %}
+        <div class="fieldWrapper">
+            {{ field.errors }}
+            {% if not field.field.widget.is_hidden %}
+                {{ field.label_tag }}
+            {% endif %}
+            {{ field }}
+        </div>
+    {% endfor %}
+    {% if should_include_remove_button %}
+        <input onclick="ajax_2_delete_triple(this.closest('.triple_form'))" type="submit" class="btn btn-primary" value="-" />
+    {% endif %}
+    {% if should_include_create_button %}
+        <input onclick="ajax_2_post_triple_form(this.closest('.triple_form'))" type="submit" class="btn btn-primary" value="create/modify" />
+    {% endif %}
+    <img src onerror='search_and_activate_dal_s2(this.parentElement)'>
+</form>

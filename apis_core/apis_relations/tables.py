@@ -4,6 +4,7 @@ from django.db.models import Case, When, F, Q
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django_tables2.utils import A
+from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_metainfo.tables import (
@@ -12,35 +13,116 @@ from apis_core.apis_metainfo.tables import (
     generic_render_start_date_written,
     generic_render_end_date_written,
 )
-
-# from apis_core.apis_relations.models import AbstractRelation
-
-empty_text_default = "There are currently no relations"
-
 from apis_core.apis_relations.models import Triple, Property
 from apis_ontology.models import BookPublicationRelationship
 
-class GenericTripleTable(tables.Table):
+
+empty_text_default = "There are currently no relations"
+
+def render_triple_table(
+    entity_self_type_str,
+    entity_other_type_str,
+    entity_self_id_str,
+    request,
+):
     
-    class Meta:
-        model = Triple
-        fields = ["subj", "prop", "obj", "edit"]
-        attrs = {"id": "generic_triple_table_id_table"}
+    class TripleTable(tables.Table):
+        edit = tables.Column(empty_values=())
+        delete = tables.Column(empty_values=())
+        
+        class Meta:
+            model = Triple
+            fields = ["other_prop", "other_entity", "edit", "delete"]
+            if "apis_bibsonomy" in settings.INSTALLED_APPS:
+                fields = ["ref"] + fields
+            # If I would use `template_name` here, django-tables crashes. Perhaps it only expects some
+            # of its own pre-integrated templates? But since I want to use a custom one and also attach it
+            # to this class I renamed it to `template_name_custom`. I did not find a better solution quickly.
+            template_name_custom = "apis_relations/triple_table.html"
+    
+        def __init__(self, *args, **kwargs):
+            entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
+            entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
+            entity_other_class = AbstractEntity.get_entity_class_of_name(entity_other_type_str)
+            entity_other_content_type = entity_other_class.get_content_type()
+            data = Triple.objects.filter(
+                (
+                    Q(subj=entity_self_instance)
+                    & Q(prop__obj_class=entity_other_content_type)
+                )
+                | (
+                    Q(obj=entity_self_instance)
+                    & Q(prop__subj_class=entity_other_content_type)
+                )
+            ).distinct()
+            data = data.annotate(
+                other_entity=Case(
+                    When(subj__pk=entity_self_id_str, then="obj"),
+                    When(obj__pk=entity_self_id_str, then="subj"),
+                ),
+                other_prop=Case(
+                    When(subj__pk=entity_self_id_str, then="prop__name"),
+                    When(obj__pk=entity_self_id_str, then="prop__name_reverse"),
+                ),
+            )
+            self.base_columns["other_prop"].verbose_name = "Other property"
+            self.base_columns["other_entity"].verbose_name = \
+                f"Related {entity_other_class.__name__.title()}"
+            if "apis_bibsonomy" in settings.INSTALLED_APPS:
+                self.base_columns["ref"] = tables.TemplateColumn(
+                    template_name="apis_relations/references_button_generic_ajax_form.html"
+                )
+            super().__init__(data, *args, **kwargs)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.base_columns["edit"] = tables.Column(empty_values=())
+        def render_other_entity(self, record, value):
+            """
+            Custom render_FOO method for related entity linking. Since the 'other_related_entity' is a generated annotation
+            on the queryset, it does not return the related instance but only the foreign key as the integer it is.
+            Thus fetching the related instance is necessary.
+    
+            :param record: The 'row' of a queryset, i.e. an entity instance
+            :param value: The current column of the row, i.e. the 'other_related_entity' annotation
+            :return: related instance
+            """
+            if value == record.subj.pk:
+                return record.subj
+            elif value == record.obj.pk:
+                return record.obj
+            else:
+                raise Exception(
+                    "Did not find the entity this relation is supposed to come from!"
+                    + "Something must have went wrong when annotating for the related instance."
+                )
 
-    def render_edit(self, record):
-        return format_html(f"""
-            <a class='reledit' onclick="ajax_2_load_into_form('{record.id}')")>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
-                    <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
-                </svg>
-            </a>
-        """)
+        def render_edit(self, record):
+            #TODO REIFICATION: move these to template?
+            return format_html(f"""
+                    <a class='reledit' onclick="ajax_2_load_triple_form(div_data_carrier=this.closest('.triple_form_and_table_anchor'), div_form_anchor=this.closest('.triple_form_and_table_anchor').getElementsByClassName('triple_form_anchor')[0], triple_id={record.pk})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
+                        <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
+                    </svg>
+                </a>
+            """)
 
-def render_reification_table(request, reification_type_str, entity_type_self_str, entity_id_self_str, ):
+        def render_delete(self, record):
+            return format_html(f"""
+                <a class='reledit' onclick="ajax_2_delete_triple(triple_id={record.id}, div_origin=this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+                        <polyline points="3 6 5 6 21 6">
+                        </polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                        </path>
+                    </svg>
+                </a>
+            """)
+        
+    return render_to_string(
+        request=request,
+        template_name=TripleTable.Meta.template_name_custom,
+        context={"table": TripleTable()},
+    )
+
+def render_reification_table(request, reification_type_str, entity_self_type_str, entity_self_id_str, ):
     from apis_core.apis_entities.models import AbstractEntity
     reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
 
@@ -55,14 +137,15 @@ def render_reification_table(request, reification_type_str, entity_type_self_str
             # If I would use `template_name` here, django-tables crashes. Perhaps it only expects some
             # of its own pre-integrated templates? But since I want to use a custom one and also attach it
             # to this class I renamed it to `template_name_custom`. I did not find a better solution quickly.
-            template_name_custom = "apis_relations/reification_table_single.html"
+            template_name_custom = "apis_relations/reification_table.html"
         
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs, data=reification_class.objects.all())
             
         def render_related_entities(self, record):
-            entity_self_class = AbstractEntity.get_entity_class_of_name(entity_type_self_str)
-            entity_self_instance = entity_self_class.objects.get(pk=entity_id_self_str)
+            #TODO REIFICATION : consider optimization as in TripleTable
+            entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
+            entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
             related_other_entities = []
             for triple in Triple.objects.filter(Q(subj=record) | Q(obj=record)):
                 if triple.subj != record and triple.subj != entity_self_instance:
@@ -104,7 +187,7 @@ def render_reification_table(request, reification_type_str, entity_type_self_str
 
 # TODO RDF : combine this or re-use this class here in get_generic_triple_table
 # TODO RDF : Also consider implementing proper form search fields for this (instead of default drop-downs)
-class TripleTable(tables.Table):
+class TripleTable_OLD(tables.Table):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

@@ -443,13 +443,13 @@ SELF_SUBJ_OTHER_OBJ_STR = "self_subj_other_obj"
 SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
 
 #TODO REIFICATION: Maybe delete the caching. Since it could become out of sync with the data model
-def get_cached_property_choices(entity_type_self_str, entity_type_other_str, search_name_str):
-     res = _cached_property_choices_dict.get((entity_type_self_str, entity_type_other_str, search_name_str))
+def get_cached_property_choices(entity_self_type_str, entity_other_type_str, search_name_str):
+     res = _cached_property_choices_dict.get((entity_self_type_str, entity_other_type_str, search_name_str))
      if res is not None:
          return res
      else:
-         entity_self_contenttype = AbstractEntity.get_entity_class_of_name(entity_type_self_str).get_content_type()
-         entity_other_contenttype = AbstractEntity.get_entity_class_of_name(entity_type_other_str).get_content_type()
+         entity_self_contenttype = AbstractEntity.get_entity_class_of_name(entity_self_type_str).get_content_type()
+         entity_other_contenttype = AbstractEntity.get_entity_class_of_name(entity_other_type_str).get_content_type()
          from apis_core.apis_relations.models import Property
          rbc_self_subj_other_obj = Property.objects.filter(
              subj_class=entity_self_contenttype,
@@ -486,7 +486,7 @@ def get_cached_property_choices(entity_type_self_str, entity_type_other_str, sea
                      'text': rbc.name_reverse
                  }
              )
-         _cached_property_choices_dict[(entity_type_self_str, entity_type_other_str, search_name_str)] = choices
+         _cached_property_choices_dict[(entity_self_type_str, entity_other_type_str, search_name_str)] = choices
          return choices
 
 # __after_rdf_refactoring__

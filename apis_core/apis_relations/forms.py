@@ -11,7 +11,7 @@ from django.conf import settings
 from apis_core.apis_relations.models import Triple
 from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR, \
     get_cached_property_choices
-from apis_core.apis_relations.tables import render_reification_table
+from apis_core.apis_relations.tables import render_reification_table, render_triple_table
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.helper_functions import DateParser
@@ -130,20 +130,21 @@ class EntityLabelForm(forms.ModelForm):
 #             pl = RDFParser(cd['place_uri'], 'Place').get_or_create()
 #         return pl
 
-def render_contextual_triple_form(
-    entity_type_self_str,
-    entity_type_other_str,
+def render_triple_form(
+    entity_self_type_str,
+    entity_other_type_str,
     entity_self_instance=None,
     entity_other_instance=None,
     triple_instance=None,
-    entity_id_self_str="",
     should_include_other_entity=True,
+    should_include_remove_button=False,
+    should_include_create_button=True,
 ):
     
     def instantiate_form():
         
         class GenericContextualTripleForm(forms.Form):
-            template_name = "apis_relations/contextual_triple_form_single.html"
+            template_name = "apis_relations/triple_form_single.html"
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
                 self.fields["property"] = autocomplete.Select2ListCreateChoiceField(
@@ -151,7 +152,7 @@ def render_contextual_triple_form(
                     widget=ListSelect2(
                         url=reverse(
                             'apis:apis_relations:generic_property_autocomplete',
-                            kwargs={"entity_self": entity_type_self_str, "entity_other": entity_type_other_str}
+                            kwargs={"entity_self": entity_self_type_str, "entity_other": entity_other_type_str}
                         ),
                         attrs={
                             'data-placeholder': 'Type to get suggestions',
@@ -167,7 +168,7 @@ def render_contextual_triple_form(
                         widget=ListSelect2(
                             url=reverse(
                                 'apis:apis_entities:generic_entities_autocomplete',
-                                kwargs={"entity": entity_type_other_str}
+                                kwargs={"entity": entity_other_type_str}
                             ),
                             attrs={
                                 'data-placeholder': 'Type to get suggestions',
@@ -178,15 +179,16 @@ def render_contextual_triple_form(
                         ),
                     )
                 property_initial_choice = get_cached_property_choices(
-                    entity_type_self_str=entity_type_self_str,
-                    entity_type_other_str=entity_type_other_str,
+                    entity_self_type_str=entity_self_type_str,
+                    entity_other_type_str=entity_other_type_str,
                     search_name_str="",
                 )
                 if len(property_initial_choice) == 1:
                     property_initial_choice = property_initial_choice[0]
                     self.fields["property"].initial = property_initial_choice["id"]
                     self.fields["property"].choices = [(property_initial_choice["id"], property_initial_choice["text"])]
-                    
+                #TODO REIFICATION: recreate the logic above for the case where there is only one other entity
+                
         return GenericContextualTripleForm()
     
     def set_initial_values(triple_form):
@@ -216,29 +218,54 @@ def render_contextual_triple_form(
     
     triple_form = instantiate_form()
     triple_form = set_initial_values(triple_form)
-    triple_id = ""
     if triple_instance is not None:
         triple_id = str(triple_instance.pk)
+    else:
+        triple_id = ""
     
     return render_to_string(
         template_name=triple_form.template_name,
         context={
-            "entity_type_self_str": entity_type_self_str,
-            "entity_type_other_str": entity_type_other_str,
-            "entity_id_self": entity_id_self_str,
             "triple_id": triple_id,
-            "contextual_triple_form": triple_form,
+            "triple_form": triple_form,
+            "should_include_remove_button": should_include_remove_button,
+            "should_include_create_button": should_include_create_button,
         }
     )
 
+def render_triple_form_and_table(
+    entity_self_type_str,
+    entity_other_type_str,
+    entity_self_id_str,
+    request,
+):
+    return render_to_string(
+        "apis_relations/triple_form_and_table.html",
+        context={
+            "entity_self_type": entity_self_type_str,
+            "entity_other_type": entity_other_type_str,
+            "entity_self_id": entity_self_id_str,
+            "triple_form": render_triple_form(
+                entity_self_type_str=entity_self_type_str,
+                entity_other_type_str=entity_other_type_str,
+            ),
+            "triple_table": render_triple_table(
+                entity_self_type_str=entity_self_type_str,
+                entity_other_type_str=entity_other_type_str,
+                entity_self_id_str=entity_self_id_str,
+                request=request,
+            ),
+        },
+    )
 
-def render_reification_form(reification_type_str, entity_type_self_str, entity_id_self_str, reification_id_str=""):
+
+def render_reification_form(entity_self_type_str, reification_type_str, entity_self_id_str, reification_id_str=""):
     reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
     reification_instance = None
     if reification_id_str != "":
         reification_instance = reification_class.objects.get(pk=reification_id_str)
-    entity_self_class = AbstractEntity.get_entity_class_of_name(entity_type_self_str)
-    entity_self_instance = entity_self_class.objects.get(pk=entity_id_self_str)
+    entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
+    entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
     
     def instantiate_form():
         
@@ -265,30 +292,34 @@ def render_reification_form(reification_type_str, entity_type_self_str, entity_i
             )
             for triple in triple_list:
                 triple_form_to_reification_list.append(
-                    render_contextual_triple_form(
-                        entity_type_self_str=entity_type_self_str,
-                        entity_type_other_str=reification_type_str,
+                    render_triple_form(
+                        entity_self_type_str=entity_self_type_str,
+                        entity_other_type_str=reification_type_str,
                         entity_self_instance=entity_self_instance,
                         entity_other_instance=reification_instance,
                         triple_instance=triple,
                         should_include_other_entity=False,
+                        should_include_remove_button=True,
+                        should_include_create_button=False,
                     )
                 )
                 has_loaded_existing_triple = True
         if not has_loaded_existing_triple:
             triple_form_to_reification_list.append(
-                render_contextual_triple_form(
-                    entity_type_self_str=entity_type_self_str,
-                    entity_type_other_str=reification_type_str,
+                render_triple_form(
+                    entity_self_type_str=entity_self_type_str,
+                    entity_other_type_str=reification_type_str,
                     should_include_other_entity=False,
+                    should_include_remove_button=True,
+                    should_include_create_button=False,
                 )
             )
             
         return {
             "triple_form_to_reification": triple_form_to_reification_list,
-            "entity_type_self": entity_type_self_str,
+            "entity_self_type": entity_self_type_str,
             "reification_type": reification_type_str,
-            "entity_id_self": "",
+            "entity_self_id": entity_self_id_str,
         }
     
     def create_triple_form_container_from_reification_list():
@@ -321,36 +352,40 @@ def render_reification_form(reification_type_str, entity_type_self_str, entity_i
                             entity_other_instance = triple.subj
                         else:
                             raise Exception("this should not happen. Check that the correct triples are filtered beforehand.")
-                        if str(entity_other_instance.pk) != entity_id_self_str:
+                        if str(entity_other_instance.pk) != entity_self_id_str:
                             triple_form_to_reification_list.append(
-                                render_contextual_triple_form(
-                                    entity_type_self_str=reification_type_str,
-                                    entity_type_other_str=related_class.__name__.lower(),
+                                render_triple_form(
+                                    entity_self_type_str=reification_type_str,
+                                    entity_other_type_str=related_class.__name__.lower(),
                                     entity_self_instance=reification_instance,
                                     entity_other_instance=entity_other_instance,
                                     triple_instance=triple,
+                                    should_include_remove_button=True,
+                                    should_include_create_button=False,
                                 )
                             )
                             has_loaded_existing_triple = True
             if not has_loaded_existing_triple:
                 triple_form_to_reification_list.append(
-                    render_contextual_triple_form(
-                        entity_type_self_str=reification_type_str,
-                        entity_type_other_str=related_class.__name__.lower(),
+                    render_triple_form(
+                        entity_self_type_str=reification_type_str,
+                        entity_other_type_str=related_class.__name__.lower(),
+                        should_include_remove_button=True,
+                        should_include_create_button=False,
                     )
                 )
             triple_form_container_from_reification_list.append({
                 "triple_form_from_reification": triple_form_to_reification_list,
                 "reification_type": reification_type_str,
-                "entity_type_other": related_class.__name__.lower(),
-                "entity_id_self": "",
+                "entity_other_type": related_class.__name__.lower(),
+                "entity_self_id": entity_self_id_str,
             })
             
         return triple_form_container_from_reification_list
     
     reification_form = instantiate_form()
     context = {
-        "entity_id_self": entity_id_self_str,
+        "entity_self_id": entity_self_id_str,
         "entity_type_reification_str": reification_type_str,
         "reification_id": reification_id_str,
         "reification_form": reification_form,
@@ -365,9 +400,9 @@ def render_reification_form(reification_type_str, entity_type_self_str, entity_i
     return result_rendered
 
 def render_reification_form_and_table(
-    entity_type_self_str,
+    entity_self_type_str,
     reification_type_str,
-    entity_id_self_str,
+    entity_self_id_str,
     request,
 ):
     
@@ -375,18 +410,18 @@ def render_reification_form_and_table(
         "apis_relations/reification_form_and_table.html",
         context={
             "reification_form": render_reification_form(
+                entity_self_type_str=entity_self_type_str,
                 reification_type_str=reification_type_str,
-                entity_type_self_str=entity_type_self_str,
-                entity_id_self_str=entity_id_self_str,
+                entity_self_id_str=entity_self_id_str,
             ),
-            "entity_type_self": entity_type_self_str,
+            "entity_self_type": entity_self_type_str,
             "reification_type": reification_type_str,
-            "entity_id_self": entity_id_self_str,
+            "entity_self_id": entity_self_id_str,
             "reification_table": render_reification_table(
                 request=request,
                 reification_type_str=reification_type_str,
-                entity_type_self_str=entity_type_self_str,
-                entity_id_self_str=entity_id_self_str,
+                entity_self_type_str=entity_self_type_str,
+                entity_self_id_str=entity_self_id_str,
             ),
         },
     )

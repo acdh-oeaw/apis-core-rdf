@@ -342,7 +342,7 @@ class GenericTripleForm(forms.ModelForm):
             "prop": forms.HiddenInput(),
         }
 
-    def __init__(self, entity_type_self_str, entity_type_other_str):
+    def __init__(self, entity_self_type_str, entity_other_type_str):
         # __before_rdf_refactoring__
         #
         # css_notes = 'LS'
@@ -383,7 +383,7 @@ class GenericTripleForm(forms.ModelForm):
             widget=ListSelect2(
                 url=reverse(
                     'apis:apis_entities:generic_entities_autocomplete',
-                    kwargs={"entity": entity_type_other_str}
+                    kwargs={"entity": entity_other_type_str}
                 ),
                 attrs=attrs_target,
             ),
@@ -397,7 +397,7 @@ class GenericTripleForm(forms.ModelForm):
             widget=ListSelect2(
                 url=reverse(
                     'apis:apis_relations:generic_property_autocomplete',
-                    kwargs={"entity_self": entity_type_self_str, "entity_other": entity_type_other_str}
+                    kwargs={"entity_self": entity_self_type_str, "entity_other": entity_other_type_str}
                 ),
                 attrs=attrs_target
             ),

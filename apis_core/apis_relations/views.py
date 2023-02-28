@@ -12,7 +12,7 @@ from django.shortcuts import render
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
 from apis_core.apis_relations.forms2 import GenericTripleForm
-from apis_core.apis_relations.forms import render_reification_form, render_contextual_triple_form
+from apis_core.apis_relations.forms import render_reification_form, render_triple_form
 from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR, \
     get_cached_property_choices
 # from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
@@ -164,17 +164,17 @@ def get_form_ajax(request):
     SiteID = int(request.POST.get('SiteID'))
     ButtonText = request.POST.get('ButtonText')
     ObjectID = request.POST.get('ObjectID')
-    entity_type_self_str = request.POST.get('entity_type')
+    entity_self_type_str = request.POST.get('entity_type')
 
 
     if ObjectID is None and form_name.startswith("triple_form_"):
         # If this is the case, then instantiate an empty form
 
-        entity_type_other_str = form_name.split("_to_")[1]
+        entity_other_type_str = form_name.split("_to_")[1]
 
         form = GenericTripleForm(
-            entity_type_self_str=entity_type_self_str,
-            entity_type_other_str=entity_type_other_str,
+            entity_self_type_str=entity_self_type_str,
+            entity_other_type_str=entity_other_type_str,
         )
 
     elif ObjectID is not None and SiteID is not None:
@@ -194,13 +194,13 @@ def get_form_ajax(request):
         else:
             raise Exception("SiteID was not found in triple")
 
-        entity_type_other_str = entity_instance_other.__class__.__name__
-        entity_type_self_str = entity_instance_self.__class__.__name__
-        form_name = f"triple_form_{entity_type_self_str.lower()}_to_{entity_type_other_str.lower()}"
+        entity_other_type_str = entity_instance_other.__class__.__name__
+        entity_self_type_str = entity_instance_self.__class__.__name__
+        form_name = f"triple_form_{entity_self_type_str.lower()}_to_{entity_other_type_str.lower()}"
 
         form = GenericTripleForm(
-            entity_type_self_str=entity_type_self_str,
-            entity_type_other_str=entity_type_other_str,
+            entity_self_type_str=entity_self_type_str,
+            entity_other_type_str=entity_other_type_str,
         )
         form.load_subj_obj_prop(
             entity_instance_self,
@@ -230,7 +230,7 @@ def get_form_ajax(request):
     #
     # __after_rdf_refactoring__
     param_dict = {
-        "entity_type": entity_type_self_str,
+        "entity_type": entity_self_type_str,
         "form": form,
         'type1': form_name,
         'url2': 'save_ajax_'+ form_name,
@@ -297,12 +297,12 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #
     # __after_rdf_refactoring__
     self_other = kind_form.split("triple_form_")[1].split("_to_")
-    entity_type_self_str = self_other[0]
-    entity_type_other_str = self_other[1]
-    entity_type_self_class = AbstractEntity.get_entity_class_of_name(entity_type_self_str)
-    entity_type_other_class = AbstractEntity.get_entity_class_of_name(entity_type_other_str)
-    entity_instance_self = entity_type_self_class.objects.get(pk=SiteID)
-    entity_instance_other = entity_type_other_class.get_or_create_uri(uri=request.POST["other_entity"])
+    entity_self_type_str = self_other[0]
+    entity_other_type_str = self_other[1]
+    entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
+    entity_other_type_class = AbstractEntity.get_entity_class_of_name(entity_other_type_str)
+    entity_instance_self = entity_self_class.objects.get(pk=SiteID)
+    entity_instance_other = entity_other_type_class.get_or_create_uri(uri=request.POST["other_entity"])
     start_date_written =request.POST["start_date_written"]
     end_date_written =request.POST["end_date_written"]
     property_param_dict = {}
@@ -312,7 +312,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     property_instance = Property.objects.get(pk=property_param_dict["id"])
     property_direction = property_param_dict["direction"]
 
-    form = GenericTripleForm(entity_type_self_str, entity_type_other_str)
+    form = GenericTripleForm(entity_self_type_str, entity_other_type_str)
     form.load_subj_obj_prop(
         entity_instance_self,
         entity_instance_other,
@@ -438,26 +438,54 @@ def ajax_2_get(request):
     # maybe this works with UserForm(instance=instance) ?
     form = GenericTripleForm2(initial={"pk": t.pk, "subj": t.subj, "prop": t.prop, "obj": t.obj})
     rendered_form_str = render_to_string(template_name=form.template_name, context={"form_xyz": form})
+    
     return JsonResponse(rendered_form_str, status=200, safe=False)
 
 
 def ajax_2_load_triple_form(request):
-    should_include_other_entity = request.POST.get("should_include_other_entity")
-    if should_include_other_entity == "False":
-        should_include_other_entity = False
+    
+    def parse_boolean_val(request, key):
+        val = request.POST.get(key)
+        if val is None or val.lower() == "true":
+            return True
+        elif val.lower() == "false":
+            return False
+        
+    should_include_other_entity = parse_boolean_val(request, "should_include_other_entity")
+    should_include_remove_button = parse_boolean_val(request, "should_include_remove_button")
+    should_include_create_button = parse_boolean_val(request, "should_include_create_button")
+    entity_self_class = AbstractEntity.get_entity_class_of_name(request.POST["entity_self_type"])
+    entity_self_instance = entity_self_class.objects.get(pk=request.POST["entity_self_id"])
+    triple_id = request.POST.get("triple_id")
+    if triple_id is not None:
+        triple_instance = Triple.objects.get(pk=request.POST["triple_id"])
+        if triple_instance.subj == entity_self_instance:
+            entity_other_instance = triple_instance.obj
+        elif triple_instance.obj == entity_self_instance:
+            entity_other_instance = triple_instance.subj
+        else:
+            raise Exception(
+                "a triple instance and a supposedly related entity instance were passed. But the "
+                "entity is neither the triple's subject nor its object."
+            )
     else:
-        should_include_other_entity = True
-
+        triple_instance = None
+        entity_other_instance = None
     response = JsonResponse(
-        data=render_contextual_triple_form(
-            entity_type_self_str=request.POST["entity_type_self_str"],
-            entity_type_other_str=request.POST["entity_type_other_str"],
-            entity_id_self_str=request.POST.get("entity_id_self", ""),
+        data=render_triple_form(
+            entity_self_type_str=request.POST["entity_self_type"],
+            entity_other_type_str=request.POST["entity_other_type"],
+            entity_self_instance=entity_self_instance,
+            entity_other_instance=entity_other_instance,
+            triple_instance=triple_instance,
             should_include_other_entity=should_include_other_entity,
+            should_include_remove_button=should_include_remove_button,
+            should_include_create_button=should_include_create_button,
         ),
         status=200,
         safe=False
     )
+    
     return response
 
 def ajax_2_post_triple_form(request):
@@ -472,14 +500,15 @@ def ajax_2_delete_triple(request):
         status=200,
         safe=False
     )
+    
     return response
 
 def ajax_2_load_reification_form(request):
     response = JsonResponse(
         data=render_reification_form(
-            entity_type_self_str=request.POST["entity_type_self"],
+            entity_self_type_str=request.POST["entity_self_type"],
             reification_type_str=request.POST["reification_type"],
-            entity_id_self_str=request.POST["entity_id_self"],
+            entity_self_id_str=request.POST["entity_self_id"],
             reification_id_str=request.POST["reification_id"],
         ),
         status=200,
@@ -491,8 +520,8 @@ def ajax_2_load_reification_form(request):
 def ajax_2_post_reification_form(request):
     from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR
     post_data = json.loads(request.body)
-    entity_self_class = AbstractEntity.get_entity_class_of_name(post_data["entity_type_self"])
-    entity_self_instance = entity_self_class.objects.get(pk=post_data["entity_id_self"])
+    entity_self_class = AbstractEntity.get_entity_class_of_name(post_data["entity_self_type"])
+    entity_self_instance = entity_self_class.objects.get(pk=post_data["entity_self_id"])
     reification_class = AbstractEntity.get_entity_class_of_name(post_data["reification_type"])
     reification_instance_id = post_data["generic_reification_attr_form"].pop("reification_id")
     if reification_instance_id != "":
@@ -518,9 +547,9 @@ def ajax_2_post_reification_form(request):
                     prop=property
                 )
     for triple_form_data in post_data["triple_data_from_reification_list"]:
-        if triple_form_data["property_id"] != "" and triple_form_data["entity_id_other"] != "":
+        if triple_form_data["property_id"] != "" and triple_form_data["entity_other_id"] != "":
             property = Property.objects.get(pk=triple_form_data["property_id"])
-            entity_other_uri = Uri.objects.get(uri=triple_form_data["entity_id_other"])
+            entity_other_uri = Uri.objects.get(uri=triple_form_data["entity_other_id"])
             entity_other_instance = entity_other_uri.root_object
             if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
                 Triple.objects.get_or_create(
@@ -537,15 +566,15 @@ def ajax_2_post_reification_form(request):
     response = JsonResponse(
         data={
             "form": render_reification_form(
-                entity_type_self_str=post_data["entity_type_self"],
+                entity_self_type_str=post_data["entity_self_type"],
                 reification_type_str=post_data["reification_type"],
-                entity_id_self_str=post_data["entity_id_self"],
+                entity_self_id_str=post_data["entity_self_id"],
             ),
             "table": render_reification_table(
                 request=request,
                 reification_type_str=post_data["reification_type"],
-                entity_type_self_str=post_data["entity_type_self"],
-                entity_id_self_str=post_data["entity_id_self"],
+                entity_self_type_str=post_data["entity_self_type"],
+                entity_self_id_str=post_data["entity_self_id"],
             )
         },
         status=200,
@@ -561,15 +590,15 @@ def ajax_2_delete_reification(request):
     response = JsonResponse(
         data={
             "form": render_reification_form(
-                entity_type_self_str=request.POST["entity_type_self"],
+                entity_self_type_str=request.POST["entity_self_type"],
                 reification_type_str=request.POST["reification_type"],
-                entity_id_self_str=request.POST["entity_id_self"],
+                entity_self_id_str=request.POST["entity_self_id"],
             ),
             "table": render_reification_table(
                 request=request,
                 reification_type_str=request.POST["reification_type"],
-                entity_type_self_str=request.POST["entity_type_self"],
-                entity_id_self_str=request.POST["entity_id_self"],
+                entity_self_type_str=request.POST["entity_self_type"],
+                entity_self_id_str=request.POST["entity_self_id"],
             )
         },
         status=200,
