@@ -1,4 +1,3 @@
-import inspect
 import re
 import sys
 import unicodedata
@@ -233,8 +232,8 @@ class AbstractEntity(RootObject):
     # Methods dealing with all entities
     ###########################################################################
 
-    _all_entity_classes = None
-    _all_entity_names = None
+    _all_entity_classes = []
+    _all_entity_names = []
 
     @classmethod
     def get_all_entity_classes(cls):
@@ -247,37 +246,14 @@ class AbstractEntity(RootObject):
         - _all_entity_names to list of strings
         if they do not exist yet and returns _all_entity_classes.
 
-        :return: a list of classes, or None
+        :return: a list of classes, or an empty list of none found
         """
 
-        if cls._all_entity_classes is None:
-            entity_classes = []
-            entity_names = []
-
-            # this try-expect is a workaround, because `apis_ontology` module
-            # might not be installed
-            try:
-                from apis_ontology import models as ontology_models
-
-                for entity_name, entity_class in inspect.getmembers(
-                    ontology_models, inspect.isclass
-                ):
-
-                    # print(entity_name, entity_class)
-
-                    if (
-                        # entity_class.__module__ == "apis_core.apis_entities.models"
-                        entity_class.__module__ == "apis_ontology.models"
-                        and entity_name != "ent_class"
-                        and entity_class._meta.abstract is False
-                    ):
-                        entity_classes.append(entity_class)
-                    entity_names.append(entity_name.lower())
-            except ImportError:
-                pass
-
-            cls._all_entity_classes = entity_classes
-            cls._all_entity_names = entity_names
+        if not cls._all_entity_classes:
+            for model in sorted(apps.get_models(), key=lambda c: c._meta.object_name):
+                if TempEntityClass in model._meta.get_parent_list() and not model._meta.abstract and model._meta.object_name.lower() != "ent_class":
+                    cls._all_entity_classes.append(model)
+                    cls._all_entity_names.append(model._meta.object_name.lower())
 
         return cls._all_entity_classes
 
