@@ -222,6 +222,9 @@
 
             })            //$(".form.ajax_form").unbind()
             console.log($('#tab_'+data.tab+" select.listselect2"))
+            {% if apis_bibsonomy %}
+            reinitialize_bibsonomy_tooltips()
+            {% endif %}
         };
         if (!$.ApisForms) {
             $.ApisForms = {}
