@@ -48,11 +48,11 @@ def render_triple_table(
             data = Triple.objects.filter(
                 (
                     Q(subj=entity_self_instance)
-                    & Q(prop__obj_class=entity_other_content_type)
+                    & Q(obj__self_content_type=entity_other_content_type)
                 )
                 | (
                     Q(obj=entity_self_instance)
-                    & Q(prop__subj_class=entity_other_content_type)
+                    & Q(subj__self_content_type=entity_other_content_type)
                 )
             ).distinct()
             data = data.annotate(

@@ -230,6 +230,7 @@
     function parse_triple_form(triple_form) {
         var div_data_carrier = triple_form.closest('.triple_data_carrier');
         var triple_form_data = load_from_triple_data_carrier(div_data_carrier);
+        triple_form_data["triple_id"] = triple_form.getAttribute("data-triple_id");
         triple_form_data["property_id"] = "";
         triple_form_data["property_direction"] = "";
         triple_form_data["entity_other_id"] = "";

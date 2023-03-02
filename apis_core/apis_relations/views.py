@@ -444,6 +444,8 @@ def ajax_2_get(request):
 
 def create_triple_from_form_data(triple_form_data):
     triple = None
+    if triple_form_data["triple_id"] != "":
+        triple = Triple.objects.get(pk=triple_form_data["triple_id"])
     if triple_form_data["property_id"] != "" and triple_form_data["entity_other_id"] != "":
         entity_self_class = AbstractEntity.get_entity_class_of_name(triple_form_data["entity_self_type"])
         entity_self_instance = entity_self_class.objects.get(pk=triple_form_data["entity_self_id"])
@@ -453,17 +455,29 @@ def create_triple_from_form_data(triple_form_data):
         entity_other_instance = entity_other_uri.root_object
         property = Property.objects.get(pk=triple_form_data["property_id"])
         if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
-            triple = Triple.objects.get_or_create(
-                subj=entity_self_instance,
-                obj=entity_other_instance,
-                prop=property
-            )[0]
+            if triple is not None:
+                triple.subj = entity_self_instance
+                triple.obj = entity_other_instance
+                triple.prop = property
+                triple.save()
+            else:
+                triple = Triple.objects.get_or_create(
+                    subj=entity_self_instance,
+                    obj=entity_other_instance,
+                    prop=property
+                )[0]
         elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
-            triple = Triple.objects.get_or_create(
-                subj=entity_other_instance,
-                obj=entity_self_instance,
-                prop=property
-            )[0]
+            if triple is not None:
+                triple.subj = entity_other_instance
+                triple.obj = entity_self_instance
+                triple.prop = property
+                triple.save()
+            else:
+                triple = Triple.objects.get_or_create(
+                    subj=entity_other_instance,
+                    obj=entity_self_instance,
+                    prop=property
+                )[0]
         else:
             raise Exception("direction missing or invalid.")
         
