@@ -97,7 +97,7 @@ def render_triple_table(
         def render_edit(self, record):
             #TODO REIFICATION: move these to template?
             return format_html(f"""
-                    <a class='reledit' onclick="ajax_2_load_triple_form(div_data_carrier=this.closest('.triple_form_and_table_anchor'), div_form_anchor=this.closest('.triple_form_and_table_anchor').getElementsByClassName('triple_form_anchor')[0], triple_id={record.pk})">
+                    <a class='reledit' onclick="ajax_2_load_triple_form(div_origin=this, triple_id={record.pk})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
                         <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
                     </svg>
@@ -106,7 +106,7 @@ def render_triple_table(
 
         def render_delete(self, record):
             return format_html(f"""
-                <a class='reledit' onclick="ajax_2_delete_triple(triple_id={record.id}, div_origin=this)">
+                <a class='reledit' onclick="ajax_2_delete_triple_from_table(div_origin=this, triple_id={record.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
                         <polyline points="3 6 5 6 21 6">
                         </polyline>
@@ -157,7 +157,7 @@ def render_reification_table(request, reification_type_str, entity_self_type_str
         
         def render_edit(self, record):
             return format_html(f"""
-                    <a class='reledit' onclick="ajax_2_load_reification_form(reification_id={record.id}, div_origin=this)">
+                    <a class='reledit' onclick="ajax_2_load_reification_form(div_origin=this, reification_id={record.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
                         <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
                     </svg>
@@ -166,7 +166,7 @@ def render_reification_table(request, reification_type_str, entity_self_type_str
 
         def render_delete(self, record):
             return format_html(f"""
-                <a class='reledit' onclick="ajax_2_delete_reification(reification_id={record.id}, div_origin=this)">
+                <a class='reledit' onclick="ajax_2_delete_reification(div_origin=this, reification_id={record.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
                         <polyline points="3 6 5 6 21 6">
                         </polyline>

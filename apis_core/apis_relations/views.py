@@ -29,7 +29,7 @@ from django.urls import reverse
 #     InstitutionWork, PlaceWork, EventWork, WorkWork
 # )
 #from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
-from .tables import LabelTableEdit, render_reification_table
+from .tables import LabelTableEdit, render_reification_table, render_triple_table
 
 form_module_list = [relation_form_module]
 
@@ -441,14 +441,35 @@ def ajax_2_get(request):
     
     return JsonResponse(rendered_form_str, status=200, safe=False)
 
+def create_triple_from_form_data(triple_form_data):
+    if triple_form_data["property_id"] != "" and triple_form_data["entity_other_id"] != "":
+        entity_self_class = AbstractEntity.get_entity_class_of_name(triple_form_data["entity_self_type"])
+        entity_self_instance = entity_self_class.objects.get(pk=triple_form_data["entity_self_id"])
+        # because we reuse the entity-autocomplete which also queries external resources, we have to
+        # fetch entity_other by its URI here
+        entity_other_uri = Uri.objects.get(uri=triple_form_data["entity_other_id"])
+        entity_other_instance = entity_other_uri.root_object
+        property = Property.objects.get(pk=triple_form_data["property_id"])
+        if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
+            Triple.objects.get_or_create(
+                subj=entity_self_instance,
+                obj=entity_other_instance,
+                prop=property
+            )
+        elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
+            Triple.objects.get_or_create(
+                subj=entity_other_instance,
+                obj=entity_self_instance,
+                prop=property
+            )
 
 def ajax_2_load_triple_form(request):
     
     def parse_boolean_val(request, key):
         val = request.POST.get(key)
-        if val is None or val.lower() == "true":
+        if val is not None and val.lower() == "true":
             return True
-        elif val.lower() == "false":
+        else:
             return False
         
     should_include_other_entity = parse_boolean_val(request, "should_include_other_entity")
@@ -457,26 +478,15 @@ def ajax_2_load_triple_form(request):
     entity_self_class = AbstractEntity.get_entity_class_of_name(request.POST["entity_self_type"])
     entity_self_instance = entity_self_class.objects.get(pk=request.POST["entity_self_id"])
     triple_id = request.POST.get("triple_id")
-    if triple_id is not None:
-        triple_instance = Triple.objects.get(pk=request.POST["triple_id"])
-        if triple_instance.subj == entity_self_instance:
-            entity_other_instance = triple_instance.obj
-        elif triple_instance.obj == entity_self_instance:
-            entity_other_instance = triple_instance.subj
-        else:
-            raise Exception(
-                "a triple instance and a supposedly related entity instance were passed. But the "
-                "entity is neither the triple's subject nor its object."
-            )
+    if triple_id != "":
+        triple_instance = Triple.objects.get(pk=triple_id)
     else:
         triple_instance = None
-        entity_other_instance = None
     response = JsonResponse(
         data=render_triple_form(
             entity_self_type_str=request.POST["entity_self_type"],
             entity_other_type_str=request.POST["entity_other_type"],
             entity_self_instance=entity_self_instance,
-            entity_other_instance=entity_other_instance,
             triple_instance=triple_instance,
             should_include_other_entity=should_include_other_entity,
             should_include_remove_button=should_include_remove_button,
@@ -489,14 +499,41 @@ def ajax_2_load_triple_form(request):
     return response
 
 def ajax_2_post_triple_form(request):
-    pass
+    create_triple_from_form_data(request.POST)
+    response = JsonResponse(
+        data=render_triple_form(
+            entity_self_type_str=request.POST["entity_self_type"],
+            entity_other_type_str=request.POST["entity_other_type"],
+        ),
+        status=200,
+        safe=False
+    )
+    
+    return response
 
-def ajax_2_delete_triple(request):
+def ajax_2_delete_triple_from_form(request):
     triple_id = request.POST["triple_id"]
     if triple_id != "":
         Triple.objects.get(pk=triple_id).delete()
     response = JsonResponse(
         data="",
+        status=200,
+        safe=False
+    )
+    
+    return response
+
+def ajax_2_delete_triple_from_table(request):
+    triple_id = request.POST["triple_id"]
+    if triple_id != "":
+        Triple.objects.get(pk=triple_id).delete()
+    response = JsonResponse(
+        data=render_triple_table(
+            entity_self_type_str=request.POST["entity_self_type"],
+            entity_other_type_str=request.POST["entity_other_type"],
+            entity_self_id_str=request.POST["entity_self_id"],
+            request=request,
+        ),
         status=200,
         safe=False
     )
@@ -518,51 +555,60 @@ def ajax_2_load_reification_form(request):
     return response
 
 def ajax_2_post_reification_form(request):
-    from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR
+    
+    def process_reification_instance(post_data):
+        reification_class = AbstractEntity.get_entity_class_of_name(post_data["reification_type"])
+        reification_instance_id = post_data["reification_attr_form"].pop("reification_id")
+        if reification_instance_id != "":
+            reification_instance = reification_class.objects.get(pk=reification_instance_id)
+        else:
+            reification_instance = reification_class.objects.create()
+        for k, v in post_data["reification_attr_form"].items():
+            setattr(reification_instance, k, v)
+        reification_instance.save()
+        
+        return reification_instance
+        
+    def process_triples_to_reification(reification_instance, triple_form_data_list):
+        valid_property_counter = 0
+        for triple_form_data in triple_form_data_list:
+            if triple_form_data["property_id"] != "":
+                valid_property_counter += 1
+        if valid_property_counter == 0:
+            raise Exception(
+                "A reification post was passed, but no property from entity_self to the reification "
+                "was selected. This goes against the principle of a reification being a dependent "
+                "instance."
+            )
+        for triple_form_data in triple_form_data_list:
+            if (
+                triple_form_data["entity_other_id"] != ""
+                and triple_form_data["entity_other_id"] != str(reification_instance.pk)
+            ):
+                raise Exception(
+                    "A wrong id was passed. The 'entity_other' in this case must be the reification"
+                    ", however the reification's id is not equal to the one from 'entity_other'"
+                )
+            triple_form_data["entity_other_id"] = reification_instance.uri_set.first().uri
+            create_triple_from_form_data(triple_form_data)
+            
+    def process_triples_from_reification(reification_instance, triple_form_data_list):
+        for triple_form_data in triple_form_data_list:
+            if (
+                triple_form_data["entity_self_id"] != ""
+                and triple_form_data["entity_self_id"] != str(reification_instance.pk)
+            ):
+                raise Exception(
+                    "A wrong id was passed. The 'entity_other' in this case must be the reification"
+                    ", however the reification's id is not equal to the one from 'entity_other'"
+                )
+            triple_form_data["entity_self_id"] = str(reification_instance.pk)
+            create_triple_from_form_data(triple_form_data)
+
     post_data = json.loads(request.body)
-    entity_self_class = AbstractEntity.get_entity_class_of_name(post_data["entity_self_type"])
-    entity_self_instance = entity_self_class.objects.get(pk=post_data["entity_self_id"])
-    reification_class = AbstractEntity.get_entity_class_of_name(post_data["reification_type"])
-    reification_instance_id = post_data["generic_reification_attr_form"].pop("reification_id")
-    if reification_instance_id != "":
-        reification_instance = reification_class.objects.get(pk=reification_instance_id)
-    else:
-        reification_instance = reification_class.objects.create()
-    for k, v in post_data["generic_reification_attr_form"].items():
-        setattr(reification_instance, k, v)
-    reification_instance.save()
-    for triple_form_data in post_data["triple_data_to_reification_list"]:
-        if triple_form_data["property_id"] != "":
-            property = Property.objects.get(pk=triple_form_data["property_id"])
-            if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
-                Triple.objects.get_or_create(
-                    subj=entity_self_instance,
-                    obj=reification_instance,
-                    prop=property
-                )
-            elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
-                Triple.objects.get_or_create(
-                    subj=reification_instance,
-                    obj=entity_self_instance,
-                    prop=property
-                )
-    for triple_form_data in post_data["triple_data_from_reification_list"]:
-        if triple_form_data["property_id"] != "" and triple_form_data["entity_other_id"] != "":
-            property = Property.objects.get(pk=triple_form_data["property_id"])
-            entity_other_uri = Uri.objects.get(uri=triple_form_data["entity_other_id"])
-            entity_other_instance = entity_other_uri.root_object
-            if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
-                Triple.objects.get_or_create(
-                    subj=reification_instance,
-                    obj=entity_other_instance,
-                    prop=property
-                )
-            elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
-                Triple.objects.get_or_create(
-                    subj=entity_other_instance,
-                    obj=reification_instance,
-                    prop=property
-                )
+    reification_instance = process_reification_instance(post_data)
+    process_triples_to_reification(reification_instance, post_data["triple_data_to_reification_list"])
+    process_triples_from_reification(reification_instance, post_data["triple_data_from_reification_list"])
     response = JsonResponse(
         data={
             "form": render_reification_form(

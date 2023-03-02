@@ -207,70 +207,53 @@
 {{block.super}}
 {% if instance %}
 <script type="text/javascript">
-    function ajax_2_load_into_form(pk) {
-        $.ajax({
-            type: 'GET',
-            url: "{% url 'apis:apis_relations:ajax_2_get' %}",
-            data: {pk: pk},
-            success: function (response) {
-                $("#generic_triple_form_id_form").html(response)
-            },
-            error: function (response) {
-                console.log(response)
-            }
-        })
-    };
 
-    function load_reification_context_data(div_origin) {
-        var div_form_and_table_anchor = div_origin.closest(".reification_form_and_table_anchor");
+    function load_from_reification_data_carrier(reification_data_carrier) {
         return {
-            "reification_type": div_form_and_table_anchor.getAttribute("data-reification_type"),
-            "entity_self_type": div_form_and_table_anchor.getAttribute("data-entity_self_type"),
-            "entity_self_id": div_form_and_table_anchor.getAttribute("data-entity_self_id"),
+            "reification_type": reification_data_carrier.getAttribute("data-reification_type"),
+            "entity_self_type": reification_data_carrier.getAttribute("data-entity_self_type"),
+            "entity_self_id": reification_data_carrier.getAttribute("data-entity_self_id"),
         };
     };
-
-    function parse_triple_form(triple_form) {
-        var entity_self_type = triple_form.getAttribute("data-entity_self_type");
-        var entity_other_type = triple_form.getAttribute("data-entity_other_type");
-        var entity_self_id = triple_form.getAttribute("data-entity_self_id");
-        var property_id = "";
-        var property_direction = "";
-        var entity_other_id = "";
-        var form_serialized = $(triple_form).serializeArray();
-        form_serialized.forEach(field_dict => {
-            if (field_dict["name"] == "property") {
-                property_value = field_dict["value"];
-                property_value = property_value.split("__");
-                property_id = property_value[0].split(":")[1];
-                property_direction = property_value[1].split(":")[1];
-            } else if (field_dict["name"] == "entity_other") {
-                entity_other_id = field_dict["value"];
-            } else {
-                throw new Error('Unexpected form field found.');
-            }
-        });
+    
+    function load_from_triple_data_carrier(div_data_carrier) {
         return {
-            "entity_self_type": entity_self_type,
-            "entity_other_type": entity_other_type,
-            "entity_self_id": entity_self_id,
-            "entity_other_id": entity_other_id,
-            "property_id": property_id,
-            "property_direction": property_direction,
-        };
-    }
-
-    function ajax_2_load_triple_form(div_data_carrier, div_form_anchor, triple_id) {
-        let csrftoken = '{{ csrf_token }}';
-        var post_data = {
             "entity_self_type": div_data_carrier.getAttribute("data-entity_self_type"),
             "entity_other_type": div_data_carrier.getAttribute("data-entity_other_type"),
             "entity_self_id": div_data_carrier.getAttribute("data-entity_self_id"),
-            "triple_id": triple_id,
             "should_include_other_entity": div_data_carrier.getAttribute("data-should_include_other_entity"),
             "should_include_remove_button": div_data_carrier.getAttribute("data-should_include_remove_button"),
             "should_include_create_button": div_data_carrier.getAttribute("data-should_include_create_button"),
         };
+    };
+
+    function parse_triple_form(triple_form) {
+        var div_data_carrier = triple_form.closest('.triple_data_carrier');
+        var triple_form_data = load_from_triple_data_carrier(div_data_carrier);
+        triple_form_data["property_id"] = "";
+        triple_form_data["property_direction"] = "";
+        triple_form_data["entity_other_id"] = "";
+        $(triple_form).serializeArray().forEach(field_dict => {
+            if (field_dict["name"] == "property") {
+                property_value = field_dict["value"];
+                property_value = property_value.split("__");
+                triple_form_data["property_id"] = property_value[0].split(":")[1];
+                triple_form_data["property_direction"] = property_value[1].split(":")[1];
+            } else if (field_dict["name"] == "entity_other") {
+                triple_form_data["entity_other_id"] = field_dict["value"];
+            } else {
+                throw new Error('Unexpected form field found.');
+            }
+        });
+        return triple_form_data;
+    }
+
+    function ajax_2_load_triple_form(div_origin, triple_id) {
+        let csrftoken = '{{ csrf_token }}';
+        var div_data_carrier = div_origin.closest('.triple_data_carrier');
+        var div_form_anchor = div_data_carrier.getElementsByClassName("triple_form_anchor")[0];
+        var post_data = load_from_triple_data_carrier(div_data_carrier);
+        post_data["triple_id"] = triple_id;
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
@@ -290,17 +273,31 @@
         })
     };
 
-    function ajax_2_post_triple_form() {
-        alert(1);
+    function ajax_2_post_triple_form(div_origin) {
+        // #TODO REIFICATION : maybe the csrf_token can be defined globally?
+        let csrftoken = '{{ csrf_token }}';
+        var post_data = parse_triple_form(div_origin.closest('.triple_form'));
+        $.ajax({
+            type: 'POST',
+            headers: {'X-CSRFToken':csrftoken},
+            url: "{% url 'apis:apis_relations:ajax_2_post_triple_form' %}",
+            data: post_data,
+            success: function (response) {
+                div_origin.closest(".triple_form_anchor").innerHTML = response;
+            },
+            error: function (response) {
+                alert(response["responseJSON"]["error"]);
+            }
+        })
     };
 
-    function ajax_2_delete_triple(div_form) {
+    function ajax_2_delete_triple_from_form(div_form) {
         let csrftoken = '{{ csrf_token }}';
         var triple_id = div_form.getAttribute("data-triple_id")
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
-            url: "{% url 'apis:apis_relations:ajax_2_delete_triple' %}",
+            url: "{% url 'apis:apis_relations:ajax_2_delete_triple_from_form' %}",
             data: {"triple_id": triple_id},
             success: function (response) {
                 div_form.remove();
@@ -311,9 +308,31 @@
         })
     };
 
-    function ajax_2_load_reification_form(reification_id, div_origin) {
+    function ajax_2_delete_triple_from_table(div_origin, triple_id) {
+        let csrftoken = '{{ csrf_token }}';
+        var div_data_carrier = div_origin.closest('.triple_data_carrier');
+        var post_data = load_from_triple_data_carrier(div_data_carrier);
+        post_data["triple_id"] = triple_id;
+        $.ajax({
+            type: 'POST',
+            headers: {'X-CSRFToken':csrftoken},
+            url: "{% url 'apis:apis_relations:ajax_2_delete_triple_from_table' %}",
+            data: post_data,
+            success: function (response) {
+                var div_table_anchor = div_origin.closest(".triple_table_anchor");
+                div_table_anchor.innerHTML = response;
+            },
+            error: function (response) {
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    };
+
+
+    function ajax_2_load_reification_form(div_origin, reification_id) {
         let csrftoken = '{{ csrf_token }}'
-        var post_data = load_reification_context_data(div_origin);
+        var reification_data_carrier = div_origin.closest(".reification_data_carrier");
+        var post_data = load_from_reification_data_carrier(reification_data_carrier);
         post_data["reification_id"] = reification_id;
         $.ajax({
             type: 'POST',
@@ -321,7 +340,7 @@
             url: "{% url 'apis:apis_relations:ajax_2_load_reification_form' %}",
             data: post_data,
             success: function (response) {
-                var div_form_anchor = div_origin.closest(".reification_form_and_table_anchor").getElementsByClassName("reification_form_anchor")[0];
+                var div_form_anchor = reification_data_carrier.getElementsByClassName("reification_form_anchor")[0];
                 div_form_anchor.innerHTML = response;
             },
             error: function (response) {
@@ -332,28 +351,29 @@
 
     function ajax_2_post_reification_form(div_origin) {
         let csrftoken = '{{ csrf_token }}';
-        var post_data = load_reification_context_data(div_origin);
-        post_data["generic_reification_attr_form"] = {};
+        var reification_data_carrier = div_origin.closest(".reification_data_carrier");
+        var post_data = load_from_reification_data_carrier(reification_data_carrier);
+        post_data["reification_attr_form"] = {};
         post_data["triple_data_to_reification_list"] = [];
         post_data["triple_data_from_reification_list"] = [];
-        var div_form_and_table_anchor = div_origin.closest(".reification_form_and_table_anchor");
-        var div_form_anchor = div_form_and_table_anchor.getElementsByClassName("reification_form_anchor")[0];
-        var div_table_anchor = div_form_and_table_anchor.getElementsByClassName("reification_table_anchor")[0];
-        post_data["generic_reification_attr_form"]["reification_id"] = div_form_anchor.getElementsByClassName("generic_reification_attr_form")[0].getAttribute("data-reification_id");
-        $(div_form_anchor.getElementsByClassName("generic_reification_attr_form")).serializeArray().forEach(attr => {
-            post_data["generic_reification_attr_form"][attr["name"]] = attr["value"];
+        var div_form_anchor = reification_data_carrier.getElementsByClassName("reification_form_anchor")[0];
+        post_data["reification_attr_form"]["reification_id"] = div_form_anchor.getElementsByClassName("reification_attr_form")[0].getAttribute("data-reification_id");
+        $(div_form_anchor.getElementsByClassName("reification_attr_form")).serializeArray().forEach(attr => {
+            post_data["reification_attr_form"][attr["name"]] = attr["value"];
         });
         Array.from(div_form_anchor.getElementsByClassName("triple_form_anchor")).forEach(triple_form_container => {
             Array.from(triple_form_container.getElementsByClassName("triple_form")).forEach(triple_form => {
-                if (triple_form_container.getAttribute("data-direction") == "to_reification") {
+                var direction = triple_form_container.closest(".reification_triple_direction_carrier").getAttribute("data-direction");
+                if (direction == "to_reification") {
                     post_data["triple_data_to_reification_list"].push(parse_triple_form(triple_form));
-                } else if (triple_form_container.getAttribute("data-direction") == "from_reification") {
+                } else if (direction == "from_reification") {
                     post_data["triple_data_from_reification_list"].push(parse_triple_form(triple_form));
                 } else {
                     throw new Error('No reification direction found.');
                 }
             })
         });
+        // If the dictionary would be passed without stringifying it, the nested structure would get lost.
         post_data = JSON.stringify(post_data);
         $.ajax({
             type: 'POST',
@@ -361,8 +381,9 @@
             url: "{% url 'apis:apis_relations:ajax_2_post_reification_form' %}",
             data: post_data,
             success: function (response) {
-                div_table_anchor.innerHTML = response["table"];
                 div_form_anchor.innerHTML = response["form"];
+                var div_table_anchor = reification_data_carrier.getElementsByClassName("reification_table_anchor")[0];
+                div_table_anchor.innerHTML = response["table"];
             },
             error: function (response) {
                 alert(response["responseJSON"]["error"]);
@@ -370,21 +391,21 @@
         })
     };
 
-    function ajax_2_delete_reification(reification_id, div_origin) {
+    function ajax_2_delete_reification(div_origin, reification_id) {
         let csrftoken = '{{ csrf_token }}'
-        var post_data = load_reification_context_data(div_origin);
+        var reification_data_carrier = div_origin.closest(".reification_data_carrier");
+        var post_data = load_from_reification_data_carrier(reification_data_carrier);
         post_data["reification_id"] = reification_id;
-        var div_form_and_table_anchor = div_origin.closest(".reification_form_and_table_anchor");
-        var div_form_anchor = div_form_and_table_anchor.getElementsByClassName("reification_form_anchor")[0];
-        var div_table_anchor = div_form_and_table_anchor.getElementsByClassName("reification_table_anchor")[0];
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
             url: "{% url 'apis:apis_relations:ajax_2_delete_reification' %}",
             data: post_data,
             success: function (response) {
-                div_table_anchor.innerHTML = response["table"];
+                var div_form_anchor = reification_data_carrier.getElementsByClassName("reification_form_anchor")[0];
+                var div_table_anchor = reification_data_carrier.getElementsByClassName("reification_table_anchor")[0];
                 div_form_anchor.innerHTML = response["form"];
+                div_table_anchor.innerHTML = response["table"];
             },
             error: function (response) {
                 console.log(response)

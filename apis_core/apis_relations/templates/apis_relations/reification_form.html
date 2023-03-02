@@ -1,15 +1,17 @@
 <!-- entity to reification -->
-<div>
-    <div class="triple_form_anchor" data-direction="to_reification" data-entity_self_type="{{ triple_form_container_to_reification.entity_self_type }}" data-entity_other_type="{{ triple_form_container_to_reification.reification_type }}" data-entity_self_id="{{ triple_form_container_to_reification.entity_self_id }}" data-should_append="true" data-should_include_other_entity="false" data-should_include_remove_button="true">
-        {% for triple_form_to_reification in triple_form_container_to_reification.triple_form_to_reification %}
-            {{ triple_form_to_reification }}
-        {% endfor %}
+<div class="reification_triple_direction_carrier" data-direction="to_reification">
+    <div class="triple_data_carrier" data-entity_self_type="{{ triple_form_container_to_reification.entity_self_type }}" data-entity_other_type="{{ triple_form_container_to_reification.reification_type }}" data-entity_self_id="{{ triple_form_container_to_reification.entity_self_id }}" data-should_append="true" data-should_include_other_entity="false" data-should_include_remove_button="true" data-should_include_create_button="false">
+        <div class="triple_form_anchor">
+            {% for triple_form_to_reification in triple_form_container_to_reification.triple_form_to_reification %}
+                {{ triple_form_to_reification }}
+            {% endfor %}
+        </div>
+        <input onclick="ajax_2_load_triple_form(div_origin=this, triple_id='')" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
     </div>
-    <input onclick="ajax_2_load_triple_form(div_data_carrier=this.parentElement.getElementsByClassName('triple_form_anchor')[0], div_form_anchor=this.parentElement.getElementsByClassName('triple_form_anchor')[0])" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
 </div>
 <!-- reification attributes -->
 <h4>{{ entity_type_reification_str }}</h4>
-<form class="generic_reification_attr_form" onsubmit="return false;" data-reification_id="{{ reification_id }}">
+<form class="reification_attr_form" onsubmit="return false;" data-reification_id="{{ reification_id }}">
     {% for field in reification_form %}
         <div class="fieldWrapper">
             {{ field.errors }}
@@ -21,16 +23,18 @@
     {% endfor %}
 </form>
 <!-- from reification to other entities -->
-{% for triple_form_container_from_reification in triple_form_container_from_reification_list %}
-    <div>
-        <h4>{{ triple_form_container_from_reification.entity_other_type }}</h4>
-        <div class="triple_form_anchor" data-direction="from_reification" data-entity_self_type="{{ triple_form_container_from_reification.reification_type }}" data-entity_other_type="{{ triple_form_container_from_reification.entity_other_type }}" data-entity_self_id="{{ triple_form_container_from_reification.entity_self_id }}" data-should_append="true" data-should_include_other_entity="true" data-should_include_remove_button="true">
-            {% for triple_form_from_reification in triple_form_container_from_reification.triple_form_from_reification %}
-                {{ triple_form_from_reification }}
-            {% endfor %}
+<div class="reification_triple_direction_carrier" data-direction="from_reification">
+     {% for triple_form_container_from_reification in triple_form_container_from_reification_list %}
+        <div class="triple_data_carrier" data-entity_self_type="{{ triple_form_container_from_reification.reification_type }}" data-entity_other_type="{{ triple_form_container_from_reification.entity_other_type }}" data-entity_self_id="{{ triple_form_container_from_reification.entity_self_id }}" data-should_append="true" data-should_include_other_entity="true" data-should_include_remove_button="true" data-should_include_create_button="false">
+            <h4>{{ triple_form_container_from_reification.entity_other_type }}</h4>
+            <div class="triple_form_anchor">
+                {% for triple_form_from_reification in triple_form_container_from_reification.triple_form_from_reification %}
+                    {{ triple_form_from_reification }}
+                {% endfor %}
+            </div>
+            <input onclick="ajax_2_load_triple_form(div_origin=this, triple_id='')" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
+            <br>
         </div>
-        <input onclick="ajax_2_load_triple_form(div_data_carrier=this.parentElement.getElementsByClassName('triple_form_anchor')[0], div_form_anchor=this.parentElement.getElementsByClassName('triple_form_anchor')[0])" type="submit" class="btn btn-primary btn-triple-add" value="+"/>
-        <br>
-    </div>
-{% endfor %}
+    {% endfor %}
+</div>
 <input onclick="ajax_2_post_reification_form(div_origin=this)" type="submit" class="btn btn-primary" value="create/modify" />
