@@ -6,14 +6,15 @@ _all_entity_classes = None
 _all_entity_class_names = None
 _all_reification_classes = None
 _all_reification_class_names = None
-_all_concept_classes = None
-_all_concept_class_names = None
+_all_vocabulary_classes = None
+_all_vocabulary_class_names = None
+_has_been_initialized = False
 
 def initialize_all():
     from apis_ontology import models as ontology_models
     from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
     from apis_core.apis_relations.models import AbstractReification
-    from apis_core.apis_vocabularies.models import AbstractConcept
+    from apis_core.apis_vocabularies.models import AbstractVocabulary
     
     global _all_ontology_classes
     global _all_ontology_class_names
@@ -21,14 +22,21 @@ def initialize_all():
     global _all_entity_class_names
     global _all_reification_classes
     global _all_reification_class_names
-    global _all_concept_classes
-    global _all_concept_class_names
+    global _all_vocabulary_classes
+    global _all_vocabulary_class_names
+    global _has_been_initialized
+    if _has_been_initialized:
+        raise Exception(
+            "The function initialize_all has already been called, but it should only be called "
+            "once. Investigate into this second call and avoid it."
+        )
+    _has_been_initialized = True
     _all_entity_classes = []
     _all_entity_class_names = []
     _all_reification_classes = []
     _all_reification_class_names = []
-    _all_concept_classes = []
-    _all_concept_class_names = []
+    _all_vocabulary_classes = []
+    _all_vocabulary_class_names = []
     for ontology_class_name, ontology_class in inspect.getmembers(ontology_models, inspect.isclass):
         if (
             issubclass(ontology_class, AbstractEntity)
@@ -44,17 +52,17 @@ def initialize_all():
             _all_reification_classes.append(ontology_class)
             _all_reification_class_names.append(ontology_class_name.lower())
         elif (
-            issubclass(ontology_class, AbstractConcept)
+            issubclass(ontology_class, AbstractVocabulary)
             and not ontology_class._meta.abstract
         ):
-            _all_concept_classes.append(ontology_class)
-            _all_concept_class_names.append(ontology_class_name.lower())
-    _all_ontology_classes = _all_entity_classes + _all_reification_classes + _all_concept_classes
-    _all_ontology_class_names = _all_entity_class_names + _all_reification_class_names + _all_concept_class_names
+            _all_vocabulary_classes.append(ontology_class)
+            _all_vocabulary_class_names.append(ontology_class_name.lower())
+    _all_ontology_classes = _all_entity_classes + _all_reification_classes + _all_vocabulary_classes
+    _all_ontology_class_names = _all_entity_class_names + _all_reification_class_names + _all_vocabulary_class_names
 
 def get_all_ontology_classes():
     """
-    Retrieve all ontology classes from apis_ontology.models except for abstract classes, reifications, concepts
+    Retrieve all ontology classes from apis_ontology.models except for abstract classes, reifications, vocabularys
     
     :return: a list of ontology classes
     """
@@ -81,7 +89,7 @@ def get_ontology_class_of_name(ontology_name):
 def get_all_ontology_class_names():
     """
     Retrieve lower-cased names of all ontology classes from apis_ontology.models except for abstract
-    classes, reifications, concepts
+    classes, reifications, vocabularys
 
     :return: a list of strings
     """
@@ -93,7 +101,7 @@ def get_all_ontology_class_names():
 
 def get_all_entity_classes():
     """
-    Retrieve all entity classes from apis_ontology.models except for abstract classes, reifications, concepts
+    Retrieve all entity classes from apis_ontology.models except for abstract classes, reifications, vocabularys
     
     :return: a list of entity classes
     """
@@ -121,7 +129,7 @@ def get_entity_class_of_name(entity_name):
 def get_all_entity_class_names():
     """
     Retrieve lower-cased names of all entity classes from apis_ontology.models except for abstract
-    classes, reifications, concepts
+    classes, reifications, vocabularys
 
     :return: a list of strings
     """
@@ -134,7 +142,7 @@ def get_all_entity_class_names():
 
 def get_all_reification_classes():
     """
-    Retrieve all reification classes from apis_ontology.models except for abstract classes, reifications, concepts
+    Retrieve all reification classes from apis_ontology.models except for abstract classes, reifications, vocabularys
     
     :return: a list of reification classes
     """
@@ -162,7 +170,7 @@ def get_reification_class_of_name(reification_name):
 def get_all_reification_class_names():
     """
     Retrieve lower-cased names of all reification classes from apis_ontology.models except for abstract
-    classes, reifications, concepts
+    classes, reifications, vocabularys
 
     :return: a list of strings
     """

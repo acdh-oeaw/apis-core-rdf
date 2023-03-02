@@ -13,7 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
 
-class AbstractConcept(RootObject):
+class AbstractVocabulary(RootObject):
     
     class Meta:
         abstract = True
