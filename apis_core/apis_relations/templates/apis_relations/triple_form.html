@@ -9,7 +9,7 @@
         </div>
     {% endfor %}
     {% if should_include_remove_button %}
-        <input onclick="ajax_2_delete_triple_from_form(this.closest('.triple_form'))" type="submit" class="btn btn-primary" value="-" />
+        <input onclick="this.closest('.triple_form').remove()" type="submit" class="btn btn-primary" value="-" />
     {% endif %}
     {% if should_include_create_button %}
         <input onclick="ajax_2_post_triple_form(this)" type="submit" class="btn btn-primary" value="create/modify" />

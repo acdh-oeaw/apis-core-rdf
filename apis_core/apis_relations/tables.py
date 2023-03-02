@@ -106,7 +106,7 @@ def render_triple_table(
 
         def render_delete(self, record):
             return format_html(f"""
-                <a class='reledit' onclick="ajax_2_delete_triple_from_table(div_origin=this, triple_id={record.id})">
+                <a class='reledit' onclick="ajax_2_delete_triple(div_origin=this, triple_id={record.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
                         <polyline points="3 6 5 6 21 6">
                         </polyline>

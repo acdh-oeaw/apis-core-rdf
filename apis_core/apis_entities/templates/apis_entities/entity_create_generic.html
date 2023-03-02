@@ -283,7 +283,10 @@
             url: "{% url 'apis:apis_relations:ajax_2_post_triple_form' %}",
             data: post_data,
             success: function (response) {
-                div_origin.closest(".triple_form_anchor").innerHTML = response;
+                var div_form_anchor = div_origin.closest(".triple_data_carrier").getElementsByClassName("triple_form_anchor")[0]
+                var div_table_anchor = div_origin.closest(".triple_data_carrier").getElementsByClassName("triple_table_anchor")[0]
+                div_form_anchor.innerHTML = response["form"];
+                div_table_anchor.innerHTML = response["table"];
             },
             error: function (response) {
                 alert(response["responseJSON"]["error"]);
@@ -291,24 +294,7 @@
         })
     };
 
-    function ajax_2_delete_triple_from_form(div_form) {
-        let csrftoken = '{{ csrf_token }}';
-        var triple_id = div_form.getAttribute("data-triple_id")
-        $.ajax({
-            type: 'POST',
-            headers: {'X-CSRFToken':csrftoken},
-            url: "{% url 'apis:apis_relations:ajax_2_delete_triple_from_form' %}",
-            data: {"triple_id": triple_id},
-            success: function (response) {
-                div_form.remove();
-            },
-            error: function (response) {
-                alert(response["responseJSON"]["error"]);
-            }
-        })
-    };
-
-    function ajax_2_delete_triple_from_table(div_origin, triple_id) {
+    function ajax_2_delete_triple(div_origin, triple_id) {
         let csrftoken = '{{ csrf_token }}';
         var div_data_carrier = div_origin.closest('.triple_data_carrier');
         var post_data = load_from_triple_data_carrier(div_data_carrier);
@@ -316,7 +302,7 @@
         $.ajax({
             type: 'POST',
             headers: {'X-CSRFToken':csrftoken},
-            url: "{% url 'apis:apis_relations:ajax_2_delete_triple_from_table' %}",
+            url: "{% url 'apis:apis_relations:ajax_2_delete_triple' %}",
             data: post_data,
             success: function (response) {
                 var div_table_anchor = div_origin.closest(".triple_table_anchor");

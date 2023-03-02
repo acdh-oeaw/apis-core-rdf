@@ -5,6 +5,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.http import JsonResponse, HttpResponse, Http404
 from django.template.loader import render_to_string
 from apis_ontology.models import *
@@ -442,6 +443,7 @@ def ajax_2_get(request):
     return JsonResponse(rendered_form_str, status=200, safe=False)
 
 def create_triple_from_form_data(triple_form_data):
+    triple = None
     if triple_form_data["property_id"] != "" and triple_form_data["entity_other_id"] != "":
         entity_self_class = AbstractEntity.get_entity_class_of_name(triple_form_data["entity_self_type"])
         entity_self_instance = entity_self_class.objects.get(pk=triple_form_data["entity_self_id"])
@@ -451,17 +453,22 @@ def create_triple_from_form_data(triple_form_data):
         entity_other_instance = entity_other_uri.root_object
         property = Property.objects.get(pk=triple_form_data["property_id"])
         if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
-            Triple.objects.get_or_create(
+            triple = Triple.objects.get_or_create(
                 subj=entity_self_instance,
                 obj=entity_other_instance,
                 prop=property
-            )
+            )[0]
         elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
-            Triple.objects.get_or_create(
+            triple = Triple.objects.get_or_create(
                 subj=entity_other_instance,
                 obj=entity_self_instance,
                 prop=property
-            )
+            )[0]
+        else:
+            raise Exception("direction missing or invalid.")
+        
+    return triple
+    
 
 def ajax_2_load_triple_form(request):
     
@@ -501,29 +508,25 @@ def ajax_2_load_triple_form(request):
 def ajax_2_post_triple_form(request):
     create_triple_from_form_data(request.POST)
     response = JsonResponse(
-        data=render_triple_form(
-            entity_self_type_str=request.POST["entity_self_type"],
-            entity_other_type_str=request.POST["entity_other_type"],
-        ),
+        data={
+            "form": render_triple_form(
+                entity_self_type_str=request.POST["entity_self_type"],
+                entity_other_type_str=request.POST["entity_other_type"],
+            ),
+            "table": render_triple_table(
+                entity_self_type_str=request.POST["entity_self_type"],
+                entity_other_type_str=request.POST["entity_other_type"],
+                entity_self_id_str=request.POST["entity_self_id"],
+                request=request,
+            ),
+        },
         status=200,
         safe=False
     )
     
     return response
 
-def ajax_2_delete_triple_from_form(request):
-    triple_id = request.POST["triple_id"]
-    if triple_id != "":
-        Triple.objects.get(pk=triple_id).delete()
-    response = JsonResponse(
-        data="",
-        status=200,
-        safe=False
-    )
-    
-    return response
-
-def ajax_2_delete_triple_from_table(request):
+def ajax_2_delete_triple(request):
     triple_id = request.POST["triple_id"]
     if triple_id != "":
         Triple.objects.get(pk=triple_id).delete()
@@ -568,17 +571,18 @@ def ajax_2_post_reification_form(request):
         reification_instance.save()
         
         return reification_instance
-        
+    
     def process_triples_to_reification(reification_instance, triple_form_data_list):
+        related_triple_list = []
         valid_property_counter = 0
         for triple_form_data in triple_form_data_list:
             if triple_form_data["property_id"] != "":
                 valid_property_counter += 1
         if valid_property_counter == 0:
             raise Exception(
-                "A reification post was passed, but no property from entity_self to the reification "
-                "was selected. This goes against the principle of a reification being a dependent "
-                "instance."
+                "A reification without relation from main entity to the reification goes against "
+                "the principle of a reification being a dependent instance. Please provide a "
+                "relation between the main entity and the reification."
             )
         for triple_form_data in triple_form_data_list:
             if (
@@ -590,9 +594,14 @@ def ajax_2_post_reification_form(request):
                     ", however the reification's id is not equal to the one from 'entity_other'"
                 )
             triple_form_data["entity_other_id"] = reification_instance.uri_set.first().uri
-            create_triple_from_form_data(triple_form_data)
+            triple = create_triple_from_form_data(triple_form_data)
+            if triple is not None:
+                related_triple_list.append(triple)
+
+        return related_triple_list
             
     def process_triples_from_reification(reification_instance, triple_form_data_list):
+        related_triple_list = []
         for triple_form_data in triple_form_data_list:
             if (
                 triple_form_data["entity_self_id"] != ""
@@ -603,29 +612,45 @@ def ajax_2_post_reification_form(request):
                     ", however the reification's id is not equal to the one from 'entity_other'"
                 )
             triple_form_data["entity_self_id"] = str(reification_instance.pk)
-            create_triple_from_form_data(triple_form_data)
+            triple = create_triple_from_form_data(triple_form_data)
+            if triple is not None:
+                related_triple_list.append(triple)
+            
+        return related_triple_list
 
     post_data = json.loads(request.body)
-    reification_instance = process_reification_instance(post_data)
-    process_triples_to_reification(reification_instance, post_data["triple_data_to_reification_list"])
-    process_triples_from_reification(reification_instance, post_data["triple_data_from_reification_list"])
-    response = JsonResponse(
-        data={
-            "form": render_reification_form(
-                entity_self_type_str=post_data["entity_self_type"],
-                reification_type_str=post_data["reification_type"],
-                entity_self_id_str=post_data["entity_self_id"],
-            ),
-            "table": render_reification_table(
-                request=request,
-                reification_type_str=post_data["reification_type"],
-                entity_self_type_str=post_data["entity_self_type"],
-                entity_self_id_str=post_data["entity_self_id"],
-            )
-        },
-        status=200,
-        safe=False
-    )
+    try:
+        reification_instance = process_reification_instance(post_data)
+        related_triple_list_before = Triple.objects.filter(Q(subj=reification_instance) | Q(obj=reification_instance))
+        related_triple_list_after = process_triples_to_reification(reification_instance, post_data["triple_data_to_reification_list"])
+        related_triple_list_after += process_triples_from_reification(reification_instance, post_data["triple_data_from_reification_list"])
+        for triple in related_triple_list_before:
+            if triple not in related_triple_list_after:
+                triple.delete()
+    except Exception as e:
+        response = JsonResponse(
+            data={"error": str(e)},
+            status=500,
+            safe=False
+        )
+    else:
+        response = JsonResponse(
+            data={
+                "form": render_reification_form(
+                    entity_self_type_str=post_data["entity_self_type"],
+                    reification_type_str=post_data["reification_type"],
+                    entity_self_id_str=post_data["entity_self_id"],
+                ),
+                "table": render_reification_table(
+                    request=request,
+                    reification_type_str=post_data["reification_type"],
+                    entity_self_type_str=post_data["entity_self_type"],
+                    entity_self_id_str=post_data["entity_self_id"],
+                )
+            },
+            status=200,
+            safe=False
+        )
     
     return response
 

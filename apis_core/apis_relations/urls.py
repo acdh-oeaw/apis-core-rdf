@@ -29,7 +29,6 @@ urlpatterns = [
     url(r"^ajax_2_delete_reification/$", views.ajax_2_delete_reification, name="ajax_2_delete_reification"),
     url(r"^ajax_2_load_reification_form/$", views.ajax_2_load_reification_form, name="ajax_2_load_reification_form"),
     url(r"^ajax_2_load_triple_form/$", views.ajax_2_load_triple_form, name="ajax_2_load_triple_form"),
-    url(r"^ajax_2_delete_triple_from_form/$", views.ajax_2_delete_triple_from_form, name="ajax_2_delete_triple_from_form"),
-    url(r"^ajax_2_delete_triple_from_table/$", views.ajax_2_delete_triple_from_table, name="ajax_2_delete_triple_from_table"),
+    url(r"^ajax_2_delete_triple/$", views.ajax_2_delete_triple, name="ajax_2_delete_triple"),
     url(r"^ajax_2_post_triple_form/$", views.ajax_2_post_triple_form, name="ajax_2_post_triple_form"),
 ]
