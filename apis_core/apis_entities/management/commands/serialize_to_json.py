@@ -7,6 +7,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.serializers_generic import EntitySerializer
+from apis_core.helper_functions import caching
 
 
 class Command(BaseCommand):
@@ -62,7 +63,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        ent = AbstractEntity.get_entity_class_of_name(options['entity'])
+        ent = caching.get_ontology_class_of_name(options['entity'])
         res = []
         objcts = ent.objects.filter(**json.loads(options['filter']))
         if objcts.filter(uri__uri__icontains=' ').count() > 0:

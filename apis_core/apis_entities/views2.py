@@ -30,6 +30,7 @@ from .views import get_highlighted_texts
 from .views import set_session_variables
 from ..apis_relations.views import ajax_2_load_triple_form, ajax_2_delete_reification
 from ..apis_vocabularies.models import TextType
+from ..helper_functions import caching
 
 if 'apis_highlighter' in settings.INSTALLED_APPS:
     from apis_highlighter.forms import SelectAnnotatorAgreement
@@ -41,7 +42,7 @@ class GenericEntitiesEditView(View):
     def get(self, request, *args, **kwargs):
         entity = kwargs['entity']
         pk = kwargs['pk']
-        entity_model = AbstractEntity.get_entity_class_of_name(entity)
+        entity_model = caching.get_ontology_class_of_name(entity)
         instance = get_object_or_404(entity_model, pk=pk)
         request = set_session_variables(request)
 
@@ -144,9 +145,6 @@ class GenericEntitiesEditView(View):
                        'delete': perm.has_perm('delete_{}'.format(entity), instance),
                        'create': request.user.has_perm('entities.add_{}'.format(entity))}
         
-        from apis_core.apis_entities.forms import VocabTable, VocabForm, GenericTripleForm2, PropertyAutocompleteFormField, EntityAutocompleteFormField
-        from apis_core.apis_entities.autocomplete3 import GenericEntitiesAutocomplete
-        from apis_ontology.models import E55_Type, BookPublicationRelationship
         context = {
             'entity_type': entity,
             'form': form,
@@ -170,10 +168,6 @@ class GenericEntitiesEditView(View):
             entity_self_id_str=str(pk),
             request=request,
         )
-        context["triple_form"] = render_triple_form(
-            entity_self_type_str="f10_person",
-            entity_other_type_str="chapter",
-        )
         context["triple_form_and_table"] = render_triple_form_and_table(
             entity_self_type_str="f10_person",
             entity_other_type_str="chapter",
@@ -185,7 +179,7 @@ class GenericEntitiesEditView(View):
     def post(self, request, *args, **kwargs):
         entity = kwargs['entity']
         pk = kwargs['pk']
-        entity_model = AbstractEntity.get_entity_class_of_name(entity)
+        entity_model = caching.get_ontology_class_of_name(entity)
         instance = get_object_or_404(entity_model, pk=pk)
         form = get_entities_form(entity.title())
         form = form(request.POST, instance=instance)

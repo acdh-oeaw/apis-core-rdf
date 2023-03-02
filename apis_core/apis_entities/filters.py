@@ -37,6 +37,8 @@ from collections import OrderedDict
 #######################################################################
 
 # TODO __sresch__ : Do this better
+from apis_core.helper_functions import caching
+
 fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
 
@@ -516,7 +518,7 @@ def get_list_filter_of_entity(entity):
     :return: Entity specific FilterClass
     """
 
-    entity_class = AbstractEntity.get_entity_class_of_name(entity)
+    entity_class = caching.get_ontology_class_of_name(entity)
 
     entity_list_filter_class = entity_class.get_entity_list_filter()
 

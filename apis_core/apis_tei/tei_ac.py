@@ -17,7 +17,7 @@ class TeiEntAc(autocomplete.Select2ListView):
             ac_type = "institution"
         choices = []
         headers = {'Content-Type': 'application/json'}
-        ent_model = AbstractEntity.get_entity_class_of_name(ac_type)
+        ent_model = caching.get_ontology_class_of_name(ac_type)
         q = self.q.strip()
 
         res = ent_model.objects.filter(name__startswith=q)
@@ -48,7 +48,7 @@ class TeiCompleterAc(autocomplete.Select2ListView):
             ac_type = "institution"
         choices = []
         headers = {'Content-Type': 'application/json'}
-        ent_model = AbstractEntity.get_entity_class_of_name(ac_type)
+        ent_model = caching.get_ontology_class_of_name(ac_type)
         q = self.q.strip()
 
         res = ent_model.objects.filter(name__startswith=q)

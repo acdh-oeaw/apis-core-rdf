@@ -18,6 +18,8 @@ from django.db.models import Q
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.apis_entities.models import AbstractEntity
+from apis_core.helper_functions import caching
+
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
     ac_settings = importlib.import_module(path_ac_settings)
@@ -125,7 +127,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         ent_merge_pk = self.kwargs.get('ent_merge_pk', False)
         choices = []
         headers = {'Content-Type': 'application/json'}
-        ent_model = AbstractEntity.get_entity_class_of_name(ac_type)
+        ent_model = caching.get_ontology_class_of_name(ac_type)
         ent_model_name = ent_model.__name__
 
         # inspect user search query
@@ -341,7 +343,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         }), content_type='application/json')
 
 
-# TODO RDF : Adapt this Autocomplete class to triple architecture
+# TODO RDF: Adapt this Autocomplete class to triple architecture
 class GenericVocabulariesAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         page_size = 20
@@ -448,8 +450,8 @@ def get_cached_property_choices(entity_self_type_str, entity_other_type_str, sea
      if res is not None:
          return res
      else:
-         entity_self_contenttype = AbstractEntity.get_entity_class_of_name(entity_self_type_str).get_content_type()
-         entity_other_contenttype = AbstractEntity.get_entity_class_of_name(entity_other_type_str).get_content_type()
+         entity_self_contenttype = caching.get_ontology_class_of_name(entity_self_type_str).get_content_type()
+         entity_other_contenttype = caching.get_ontology_class_of_name(entity_other_type_str).get_content_type()
          from apis_core.apis_relations.models import Property
          rbc_self_subj_other_obj = Property.objects.filter(
              subj_class=entity_self_contenttype,
@@ -493,7 +495,7 @@ def get_cached_property_choices(entity_self_type_str, entity_other_type_str, sea
 class PropertyAutocomplete(autocomplete.Select2ListView):
 
     def get(self, request, *args, **kwargs):
-        # TODO RDF : pagination
+        # TODO RDF: pagination
         more = False
         choices = get_cached_property_choices(kwargs["entity_self"], kwargs["entity_other"], self.q)
         return http.HttpResponse(

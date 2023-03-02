@@ -16,6 +16,7 @@ from apis_core.helper_functions.utils import access_for_all
 from apis_core.apis_entities.models import AbstractEntity
 from .views import get_highlighted_texts
 from apis_core.apis_relations.models import TempTriple
+from ..helper_functions import caching
 
 
 class GenericEntitiesDetailView(UserPassesTestMixin, View):
@@ -30,7 +31,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
 
         entity = kwargs['entity'].lower()
         pk = kwargs['pk']
-        entity_model = AbstractEntity.get_entity_class_of_name(entity)
+        entity_model = caching.get_ontology_class_of_name(entity)
         instance = get_object_or_404(entity_model, pk=pk)
         side_bar = []
 
@@ -109,7 +110,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             )
 
 
-        # TODO RDF : Check / Adapt the following code to rdf architecture
+        # TODO RDF: Check / Adapt the following code to rdf architecture
 
         object_lod = Uri.objects.filter(root_object=instance)
         object_texts, ann_proj_form = get_highlighted_texts(request, instance)

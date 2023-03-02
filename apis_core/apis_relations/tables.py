@@ -14,8 +14,7 @@ from apis_core.apis_metainfo.tables import (
     generic_render_end_date_written,
 )
 from apis_core.apis_relations.models import Triple, Property
-from apis_ontology.models import BookPublicationRelationship
-
+from apis_core.helper_functions import caching
 
 empty_text_default = "There are currently no relations"
 
@@ -41,9 +40,9 @@ def render_triple_table(
             template_name_custom = "apis_relations/triple_table.html"
     
         def __init__(self, *args, **kwargs):
-            entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
+            entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
             entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
-            entity_other_class = AbstractEntity.get_entity_class_of_name(entity_other_type_str)
+            entity_other_class = caching.get_ontology_class_of_name(entity_other_type_str)
             entity_other_content_type = entity_other_class.get_content_type()
             data = Triple.objects.filter(
                 (
@@ -123,9 +122,8 @@ def render_triple_table(
     )
 
 def render_reification_table(request, reification_type_str, entity_self_type_str, entity_self_id_str, ):
-    from apis_core.apis_entities.models import AbstractEntity
-    reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
-    entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
+    reification_class = caching.get_reification_class_of_name(reification_type_str)
+    entity_self_class = caching.get_entity_class_of_name(entity_self_type_str)
     entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
 
     class ReificationTable(tables.Table):
@@ -192,8 +190,8 @@ def render_reification_table(request, reification_type_str, entity_self_type_str
     )
 
 
-# TODO RDF : combine this or re-use this class here in get_generic_triple_table
-# TODO RDF : Also consider implementing proper form search fields for this (instead of default drop-downs)
+# TODO RDF: combine this or re-use this class here in get_generic_triple_table
+# TODO RDF: Also consider implementing proper form search fields for this (instead of default drop-downs)
 class TripleTable_OLD(tables.Table):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -849,7 +847,7 @@ def get_generic_relations_table(relation_class, entity_instance, detail=None):
 # __after_rdf_refactoring__
 def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
-    # TODO RDF : add code from before refactoring and comment it out
+    # TODO RDF: add code from before refactoring and comment it out
     class TripleTableBase(tables.Table):
         """
         The base table from which detail or edit tables will inherit from in order to avoid redundant definitions

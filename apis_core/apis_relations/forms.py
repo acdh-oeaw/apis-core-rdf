@@ -14,7 +14,7 @@ from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_
 from apis_core.apis_relations.tables import render_reification_table, render_triple_table
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
-from apis_core.helper_functions import DateParser
+from apis_core.helper_functions import DateParser, caching
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 
@@ -265,11 +265,11 @@ def render_triple_form_and_table(
 
 
 def render_reification_form(entity_self_type_str, reification_type_str, entity_self_id_str, reification_id_str=""):
-    reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
+    reification_class = caching.get_reification_class_of_name(reification_type_str)
     reification_instance = None
     if reification_id_str != "":
         reification_instance = reification_class.objects.get(pk=reification_id_str)
-    entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
+    entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
     entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
     
     def instantiate_form():
@@ -278,7 +278,7 @@ def render_reification_form(entity_self_type_str, reification_type_str, entity_s
             template_name = "apis_relations/reification_form.html"
             class Meta:
                 model = reification_class
-                fields = ["name", "start_date"]
+                exclude = ["self_content_type"]
         
         reification_form = ReificationForm()
         if reification_instance is not None:

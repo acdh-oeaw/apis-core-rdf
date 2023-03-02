@@ -31,6 +31,7 @@ from django.urls import reverse
 # )
 #from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
 from .tables import LabelTableEdit, render_reification_table, render_triple_table
+from apis_core.helper_functions import caching
 
 form_module_list = [relation_form_module]
 
@@ -109,7 +110,7 @@ form_class_dict = turn_form_modules_into_dict(form_module_list)
 
 
 
-# TODO RDF : Check if rdf refactoring covers all use cases
+# TODO RDF: Check if rdf refactoring covers all use cases
 @login_required
 def get_form_ajax(request):
     '''Returns forms rendered in html'''
@@ -253,8 +254,8 @@ def get_form_ajax(request):
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 
-# TODO RDF : Implement highlighter and label form
-# TODO RDF : Check if rdf refactoring covers all use cases
+# TODO RDF: Implement highlighter and label form
+# TODO RDF: Check if rdf refactoring covers all use cases
 @login_required
 def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # rel_form_logic_breadcrumb (for refinding the implicit connections)
     '''Tests validity and saves AjaxForms, returns them when validity test fails'''
@@ -271,7 +272,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     # else:
     #     instance_id = ObjectID
     # entity_type_str = entity_type
-    # entity_type = AbstractEntity.get_entity_class_of_name(entity_type)
+    # entity_type = caching.get_ontology_class_of_name(entity_type)
     #
     # form_match = re.match(r'([A-Z][a-z]+)([A-Z][a-z]+)?(Highlighter)?Form', kind_form)
     # form_dict = {'data': request.POST,
@@ -300,8 +301,8 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     self_other = kind_form.split("triple_form_")[1].split("_to_")
     entity_self_type_str = self_other[0]
     entity_other_type_str = self_other[1]
-    entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
-    entity_other_type_class = AbstractEntity.get_entity_class_of_name(entity_other_type_str)
+    entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
+    entity_other_type_class = caching.get_ontology_class_of_name(entity_other_type_str)
     entity_instance_self = entity_self_class.objects.get(pk=SiteID)
     entity_instance_other = entity_other_type_class.get_or_create_uri(uri=request.POST["other_entity"])
     start_date_written =request.POST["start_date_written"]
@@ -447,7 +448,7 @@ def create_triple_from_form_data(triple_form_data):
     if triple_form_data["triple_id"] != "":
         triple = Triple.objects.get(pk=triple_form_data["triple_id"])
     if triple_form_data["property_id"] != "" and triple_form_data["entity_other_id"] != "":
-        entity_self_class = AbstractEntity.get_entity_class_of_name(triple_form_data["entity_self_type"])
+        entity_self_class = caching.get_ontology_class_of_name(triple_form_data["entity_self_type"])
         entity_self_instance = entity_self_class.objects.get(pk=triple_form_data["entity_self_id"])
         # because we reuse the entity-autocomplete which also queries external resources, we have to
         # fetch entity_other by its URI here
@@ -496,7 +497,7 @@ def ajax_2_load_triple_form(request):
     should_include_other_entity = parse_boolean_val(request, "should_include_other_entity")
     should_include_remove_button = parse_boolean_val(request, "should_include_remove_button")
     should_include_create_button = parse_boolean_val(request, "should_include_create_button")
-    entity_self_class = AbstractEntity.get_entity_class_of_name(request.POST["entity_self_type"])
+    entity_self_class = caching.get_ontology_class_of_name(request.POST["entity_self_type"])
     entity_self_instance = entity_self_class.objects.get(pk=request.POST["entity_self_id"])
     triple_id = request.POST.get("triple_id")
     if triple_id != "":
@@ -572,9 +573,11 @@ def ajax_2_load_reification_form(request):
     return response
 
 def ajax_2_post_reification_form(request):
+    class FormException(Exception):
+        pass
     
     def process_reification_instance(post_data):
-        reification_class = AbstractEntity.get_entity_class_of_name(post_data["reification_type"])
+        reification_class = caching.get_reification_class_of_name(post_data["reification_type"])
         reification_instance_id = post_data["reification_attr_form"].pop("reification_id")
         if reification_instance_id != "":
             reification_instance = reification_class.objects.get(pk=reification_instance_id)
@@ -593,7 +596,7 @@ def ajax_2_post_reification_form(request):
             if triple_form_data["property_id"] != "":
                 valid_property_counter += 1
         if valid_property_counter == 0:
-            raise Exception(
+            raise FormException(
                 "A reification without relation from main entity to the reification goes against "
                 "the principle of a reification being a dependent instance. Please provide a "
                 "relation between the main entity and the reification."
@@ -641,7 +644,7 @@ def ajax_2_post_reification_form(request):
         for triple in related_triple_list_before:
             if triple not in related_triple_list_after:
                 triple.delete()
-    except Exception as e:
+    except FormException as e:
         response = JsonResponse(
             data={"error": str(e)},
             status=500,
@@ -670,7 +673,7 @@ def ajax_2_post_reification_form(request):
 
 
 def ajax_2_delete_reification(request):
-    reification_class = AbstractEntity.get_entity_class_of_name(request.POST["reification_type"])
+    reification_class = caching.get_reification_class_of_name(request.POST["reification_type"])
     reification_class.objects.get(pk=request.POST["reification_id"]).delete()
     response = JsonResponse(
         data={

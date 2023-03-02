@@ -327,13 +327,14 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
 
 class RootObject(models.Model):
     """
-    In order to make the Triple architecture as versatile as possible, I defined a new super class 'RootObject'.
-    This class is being used as superclass for entities, vocabularies, and properties
+    The very root thing that can exist in a given ontology. Several classes inherit from it.
+    By having one overarching super class we gain the advantage of unique identifiers.
     """
-    is_entity = False
-    is_property = False
-    is_vocabulary = False
-    class_uri = None
+    
+    entity_settings = {
+        "list_filters": ["name", "related_entity_name", "related_property_name"],
+        "search": ["name"],
+    }
 
     # TODO RDF: consider renaming attribute 'name' to 'value'
     name = models.CharField(max_length=255, verbose_name='Name')
@@ -416,9 +417,7 @@ class Collection(models.Model):
         super().save(*args, **kwargs)
 
 
-# TODO RDF : Make Text also a Subclass of RootObject
-# TODO RDF : Maybe move text away from apis_metainfo?
-# TODO RDF : Maybe even remove text entirely?
+# TODO RDF: Remove text entirely
 @reversion.register()
 class Text(models.Model):
     """ Holds unstructured text associeted with
@@ -599,7 +598,7 @@ class Uri(models.Model):
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
     domain = models.CharField(max_length=255, blank=True)
     rdf_link = models.URLField(blank=True)
-    # TODO RDF : confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
+    # TODO RDF: confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
     # entity = models.ForeignKey(
     #     "apis_entities.TempEntityClass", blank=True, null=True, on_delete=models.CASCADE
     # )
@@ -651,7 +650,7 @@ class UriCandidate(models.Model):
     uri = models.URLField()
     confidence = models.FloatField(blank=True, null=True)
     responsible = models.CharField(max_length=255)
-    # TODO RDF : confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
+    # TODO RDF: confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
     # entity = models.ForeignKey(
     #     "apis_entities.TempEntityClass", blank=True, null=True, on_delete=models.CASCADE
     # )

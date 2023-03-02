@@ -15,7 +15,7 @@ from django.forms import ModelMultipleChoiceField, ModelChoiceField
 from django.urls import reverse
 from apis_core.apis_metainfo.models import Text, Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
-from apis_core.helper_functions import DateParser
+from apis_core.helper_functions import DateParser, caching
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 from apis_core.apis_entities.models import AbstractEntity
@@ -227,7 +227,7 @@ def get_entities_form(entity):
 
     class GenericEntitiesForm(forms.ModelForm):
         class Meta:
-            model = AbstractEntity.get_entity_class_of_name(entity)
+            model = caching.get_ontology_class_of_name(entity)
 
             # TODO RDF: Remove these hard-coded ontology specific fields, and delegate them to
             #  apis-ontologies

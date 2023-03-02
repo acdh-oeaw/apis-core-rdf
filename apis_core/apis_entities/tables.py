@@ -73,7 +73,7 @@ def get_entities_table(entity, edit_v, default_cols):
             id = tables.LinkColumn()
 
         class Meta:
-            model = AbstractEntity.get_entity_class_of_name(entity_name=entity)
+            model = caching.get_ontology_class_of_name(entity_name=entity)
 
             fields = default_cols
             attrs = {"class": "table table-hover table-striped table-condensed"}

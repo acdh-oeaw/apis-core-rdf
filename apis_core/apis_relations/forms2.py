@@ -96,7 +96,7 @@ def validate_target_autocomplete(value):
 #         x.notes = cd['notes']
 #         x.references = cd['references']
 #         setattr(x, self.rel_accessor[3], site_instance)
-#         target = AbstractEntity.get_entity_class_of_name(self.rel_accessor[0])
+#         target = caching.get_ontology_class_of_name(self.rel_accessor[0])
 #         t1 = target.get_or_create_uri(cd['target'])
 #         if not t1:
 #             t1 = RDFParser(cd['target'], self.rel_accessor[0]).get_or_create()
@@ -325,7 +325,7 @@ def validate_target_autocomplete(value):
 # __after_rdf_refactoring__
 class GenericTripleForm(forms.ModelForm):
 
-    # TODO RDF : Add Notes and references
+    # TODO RDF: Add Notes and references
 
     class Meta:
         model = TempTriple
@@ -440,7 +440,7 @@ class GenericTripleForm(forms.ModelForm):
         #         ]
         #     )
 
-        # __before_rdf_refactoring__ # TODO RDF :
+        # __before_rdf_refactoring__ # TODO RDF:
         #
         # if instance != None:
         #
@@ -556,7 +556,7 @@ class GenericTripleForm(forms.ModelForm):
         # x.notes = cd['notes']
         # x.references = cd['references']
         # setattr(x, self.rel_accessor[3], site_instance)
-        # target = AbstractEntity.get_entity_class_of_name(self.rel_accessor[0])
+        # target = caching.get_ontology_class_of_name(self.rel_accessor[0])
         # t1 = target.get_or_create_uri(cd['target'])
         # if not t1:
         #     t1 = RDFParser(cd['target'], self.rel_accessor[0]).get_or_create()
@@ -618,7 +618,7 @@ class GenericTripleForm(forms.ModelForm):
 
     def get_html_table(self, entity_instance_self, entity_instance_other):
 
-        # __before_rdf_refactoring__ # TODO RDF :
+        # __before_rdf_refactoring__ # TODO RDF:
         #
         # table = get_generic_relations_table(relation_class=self.relation_form, entity_instance=site_instance,
         #                                     detail=False)
