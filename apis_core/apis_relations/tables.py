@@ -125,6 +125,8 @@ def render_triple_table(
 def render_reification_table(request, reification_type_str, entity_self_type_str, entity_self_id_str, ):
     from apis_core.apis_entities.models import AbstractEntity
     reification_class = AbstractEntity.get_entity_class_of_name(reification_type_str)
+    entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
+    entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
 
     class ReificationTable(tables.Table):
         related_entities = tables.Column(empty_values=())
@@ -140,12 +142,17 @@ def render_reification_table(request, reification_type_str, entity_self_type_str
             template_name_custom = "apis_relations/reification_table.html"
         
         def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs, data=reification_class.objects.all())
+            super().__init__(
+                *args,
+                **kwargs,
+                data=reification_class.objects.filter(
+                    Q(triple_set_from_obj__subj=entity_self_instance)
+                    | Q(triple_set_from_obj__subj=entity_self_instance)
+                ).distinct()
+            )
             
         def render_related_entities(self, record):
             #TODO REIFICATION : consider optimization as in TripleTable
-            entity_self_class = AbstractEntity.get_entity_class_of_name(entity_self_type_str)
-            entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
             related_other_entities = []
             for triple in Triple.objects.filter(Q(subj=record) | Q(obj=record)):
                 if triple.subj != record and triple.subj != entity_self_instance:

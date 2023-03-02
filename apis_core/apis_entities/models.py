@@ -47,9 +47,7 @@ class AbstractEntity(RootObject):
     are considering contexts which depend on the subclass entity type.
     So they are to be understood in that dynamic context.
     """
-    is_entity = True
-    is_reification = False
-
+    
     entity_settings = {
         "list_filters": ["name", "related_entity_name", "related_property_name"],
         "search": ["name"],
