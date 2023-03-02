@@ -14,7 +14,6 @@ if "theme" in settings.INSTALLED_APPS:
         ),
         url(r"^", include("theme.urls", namespace="theme")),
         url(r"^admin/", admin.site.urls),
-        url(r"^info/", include("infos.urls", namespace="info")),
     ]
     if "webpage" in settings.INSTALLED_APPS:
         urlpatterns.append(
@@ -29,7 +28,6 @@ if "paas_theme" in settings.INSTALLED_APPS:
         ),
         url(r"^", include("paas_theme.urls", namespace="theme")),
         url(r"^admin/", admin.site.urls),
-        url(r"^info/", include("infos.urls", namespace="info")),
     ]
     if "webpage" in settings.INSTALLED_APPS:
         urlpatterns.append(
@@ -43,7 +41,6 @@ else:
             r"entity/<int:pk>/", GetEntityGeneric.as_view(), name="GetEntityGenericRoot"
         ),
         url(r"^admin/", admin.site.urls),
-        url(r"^info/", include("infos.urls", namespace="info")),
     ]
     if "webpage" in settings.INSTALLED_APPS:
         urlpatterns.append(url(r"^", include("webpage.urls", namespace="webpage")))
