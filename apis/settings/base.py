@@ -109,7 +109,6 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "guardian",
     "charts",
-    "infos",
     "csvexport",
     "apis_ontology",
 ]
