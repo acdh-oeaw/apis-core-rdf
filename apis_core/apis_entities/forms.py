@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import copy
 from crispy_forms.bootstrap import Accordion, AccordionGroup
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Field
@@ -9,7 +8,6 @@ from django import forms
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import URLValidator
-from django.db.models import Q
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import ModelMultipleChoiceField, ModelChoiceField
 from django.urls import reverse
@@ -18,10 +16,6 @@ from apis_core.apis_vocabularies.models import TextType
 from apis_core.helper_functions import DateParser, caching
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
-from apis_core.apis_entities.models import AbstractEntity
-from apis_core.apis_entities.autocomplete3 import get_cached_property_choices
-import django_tables2 as tables
-from django.template.loader import render_to_string
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import AnnotationProject
@@ -39,182 +33,6 @@ class SearchForm(forms.Form):
         helper.form_method = "GET"
         return helper
 
-# class GenericTripleForm2(forms.Form):
-class GenericTripleForm2(forms.ModelForm):
-    template_name = "apis_entities/ajax_triple_form_OLD.html"
-    
-    class Meta:
-        from apis_core.apis_relations.models import Triple
-        model = Triple
-        exclude = []
-
-    
-
-class PropertyAutocompleteFormField(forms.Form):
-    template_name = "apis_entities/property_autocomplete_form_field_OLD.html"
-    
-    def __init__(self, entity_self_type_str, entity_other_type_str, field_id, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
-            label='property',
-            widget=ListSelect2(
-                url=reverse(
-                    'apis:apis_relations:generic_property_autocomplete',
-                    kwargs={"entity_self": entity_self_type_str, "entity_other": entity_other_type_str}
-                ),
-                attrs={
-                    'data-placeholder': 'Type to get suggestions',
-                    'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-                    'data-html': True,
-                    'style': 'width: 100%'
-                }
-            ),
-        )
-
-class EntityAutocompleteFormField(forms.Form):
-    template_name = "apis_entities/entity_autocomplete_form_field.html"
-    
-    def __init__(self, entity_other_type_str, field_id, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
-            label='entity',
-            widget=ListSelect2(
-                url=reverse(
-                    'apis:apis_entities:generic_entities_autocomplete',
-                    kwargs={"entity": entity_other_type_str}
-                ),
-                attrs={
-                    'data-placeholder': 'Type to get suggestions',
-                    'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-                    'data-html': True,
-                    'style': 'width: 100%'
-                },
-            ),
-            help_text="bla"
-        )
-
-
-class VocabForm(forms.ModelForm):
-    pk = forms.CharField(widget=forms.HiddenInput(), required = False)
-    
-    def __init__(self, *args, **kwargs):
-        super(VocabForm, self).__init__(*args, **kwargs)
-        # for name in self.fields.keys():
-        #     self.fields[name].widget.attrs.update({
-        #         # add a "form-control" class to each form input for enabling bootstrap
-        #         'class': 'form-control',
-        #     })
-
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        attrs_target = {
-            'data-placeholder': 'Type to get suggestions',
-            'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-            'data-html': True,
-            'style': 'width: 100%',
-            'data-tags' : '1',
-        }.copy()
-        self.fields['other_entity'] = autocomplete.Select2ListCreateChoiceField(
-            label='entity',
-            widget=ListSelect2(
-                url=reverse(
-                    'apis:apis_entities:generic_entities_autocomplete',
-                    kwargs={"entity": "e55_type"}
-                ),
-                attrs=attrs_target,
-            ),
-            help_text="bla ble blo"
-        )
-        self.helper.include_media = False
-    
-    class Meta:
-        from apis_core.apis_relations.models import Triple
-        model = Triple
-        # fields = ["pk", "nick_name", "first_name"]
-        exclude = []
-        # widgets = {
-        #     "nick_name": autocomplete.ModelSelect2(url="autocomplete/")
-        # }
-        
-def render_single_autocomplete_form_property(entity_self_type_str, entity_other_type_str):
-    field_id = f"triple_form_property_{entity_self_type_str}_to_{entity_other_type_str}"
-    
-    class TemplateSingleAutocompletePropertyForm(forms.Form):
-        template_name = "apis_entities/single_autocomplete_property_form_OLD.html"
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
-                label='property',
-                widget=ListSelect2(
-                    url=reverse(
-                        'apis:apis_relations:generic_property_autocomplete',
-                        kwargs={"entity_self": entity_self_type_str, "entity_other": entity_other_type_str}
-                    ),
-                    attrs={
-                        'data-placeholder': 'Type to get suggestions',
-                        'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-                        'data-html': True,
-                        'style': 'width: 100%'
-                    },
-                ),
-            )
-            choices = get_cached_property_choices(
-                entity_self_type_str=entity_self_type_str,
-                entity_other_type_str=entity_other_type_str,
-                search_name_str="",
-            )
-            if len(choices) == 1:
-                self.fields[field_id].initial = choices[0]["id"]
-                self.fields[field_id].choices = [(choices[0]["id"], choices[0]["text"])]
-
-    return render_to_string(
-        template_name=TemplateSingleAutocompletePropertyForm.template_name,
-        context={
-            "autocomplete_property_form": TemplateSingleAutocompletePropertyForm(),
-            "id_single_field_id": f"id_{field_id}",
-            "autocomplete_url": f"/apis/relations/autocomplete/{entity_self_type_str}/{entity_other_type_str}/",
-        }
-    )
-
-def render_single_autocomplete_form_entity_OLD(entity_self_type_str, entity_other_type_str):
-    field_id = f"triple_form_entity_{entity_other_type_str}"
-    
-    class TemplateSingleAutocompleteEntityForm(forms.Form):
-        template_name = "apis_entities/single_autocomplete_entity_form_OLD.html"
-        def __init__(self):
-            super().__init__()
-            self.fields[field_id] = autocomplete.Select2ListCreateChoiceField(
-                label='entity',
-                widget=ListSelect2(
-                    url=reverse(
-                        'apis:apis_entities:generic_entities_autocomplete',
-                        kwargs={"entity": entity_other_type_str}
-                    ),
-                    attrs={
-                        'data-placeholder': 'Type to get suggestions',
-                        'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-                        'data-html': True,
-                        'style': 'width: 100%'
-                    },
-                ),
-            )
-
-    return render_to_string(
-        template_name=TemplateSingleAutocompleteEntityForm.template_name,
-        context={
-            "autocomplete_entity_form": TemplateSingleAutocompleteEntityForm(),
-            "id_single_field_id": f"id_{field_id}",
-            "autocomplete_url": f"/apis/entities/autocomplete/{entity_other_type_str}/",
-        }
-    )
-    
-class VocabTable(tables.Table):
-    
-    class Meta:
-        from apis_ontology.models import E55_Type
-        model = E55_Type
-        # exclude = []
-        fields = ["name"]
 
 def get_entities_form(entity):
     """

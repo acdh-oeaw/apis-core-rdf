@@ -432,16 +432,6 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #                 request=request)}
     #
 
-#TODO REIFICATION probably to delete
-def ajax_2_get(request):
-    from ..apis_entities.forms import GenericTripleForm2
-    t = Triple.objects.get(pk=request.GET["pk"])
-    # maybe this works with UserForm(instance=instance) ?
-    form = GenericTripleForm2(initial={"pk": t.pk, "subj": t.subj, "prop": t.prop, "obj": t.obj})
-    rendered_form_str = render_to_string(template_name=form.template_name, context={"form_xyz": form})
-    
-    return JsonResponse(rendered_form_str, status=200, safe=False)
-
 def create_triple_from_form_data(triple_form_data):
     triple = None
     if triple_form_data["triple_id"] != "":

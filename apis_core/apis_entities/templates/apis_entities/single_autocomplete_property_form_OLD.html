@@ -1,9 +1,0 @@
-{% for field in autocomplete_property_form %}
-<div class="fieldWrapper" id="XYZZ">
-    {{ field.errors }}
-    {% if not field.field.widget.is_hidden %}
-    {{ field.label_tag }}
-    {% endif %}
-    {{ field }}
-</div>
-{% endfor %}
