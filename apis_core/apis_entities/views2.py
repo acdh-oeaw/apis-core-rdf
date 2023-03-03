@@ -50,8 +50,7 @@ class GenericEntitiesEditView(View):
         triples_related_all = TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
 
         for entity_class in caching.get_all_entity_classes():
-            entity_content_type = entity_class.get_content_type()
-
+            entity_content_type = caching.get_contenttype_of_class_or_instance(entity_class)
             other_entity_class_name = entity_class.__name__.lower()
 
             # TODO __sresch__ : Check if this filter call results in additional db hits

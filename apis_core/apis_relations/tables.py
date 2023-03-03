@@ -43,7 +43,7 @@ def render_triple_table(
             entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
             entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
             entity_other_class = caching.get_ontology_class_of_name(entity_other_type_str)
-            entity_other_content_type = entity_other_class.get_content_type()
+            entity_other_content_type = caching.get_contenttype_of_class_or_instance(entity_other_class)
             data = Triple.objects.filter(
                 (
                     Q(subj=entity_self_instance)

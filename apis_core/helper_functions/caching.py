@@ -181,8 +181,8 @@ def get_property_choices(entity_self_type_str, entity_other_type_str, search_nam
     if res is not None:
         return res
     else:
-        entity_self_contenttype = get_ontology_class_of_name(entity_self_type_str).get_content_type()
-        entity_other_contenttype = get_ontology_class_of_name(entity_other_type_str).get_content_type()
+        entity_self_contenttype = get_contenttype_of_class_or_instance(get_ontology_class_of_name(entity_self_type_str))
+        entity_other_contenttype = get_contenttype_of_class_or_instance(get_ontology_class_of_name(entity_other_type_str))
         from apis_core.apis_relations.models import Property
         rbc_self_subj_other_obj = Property.objects.filter(
             subj_class=entity_self_contenttype,
@@ -299,7 +299,7 @@ def get_all_contenttype_module_and_class_names():
     return _contenttype_class_names
 
 
-def get_content_type_of_class_or_instance(model_class_or_instance):
+def get_contenttype_of_class_or_instance(model_class_or_instance):
     """
     Helper method which caches ContentType of a given model class or instance.
     When first called on a model, it fetches its respective ContentType from the DB

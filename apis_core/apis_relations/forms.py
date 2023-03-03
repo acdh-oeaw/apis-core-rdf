@@ -328,7 +328,7 @@ def render_reification_form(entity_self_type_str, reification_type_str, entity_s
         }
     
     def create_triple_form_container_from_reification_list():
-        entity_type_reification_content_type = reification_class.get_content_type()
+        entity_type_reification_content_type = caching.get_contenttype_of_class_or_instance(reification_class)
         related_ct_list = ContentType.objects.filter(
             Q(property_set_obj__subj_class=entity_type_reification_content_type)
             | Q(property_set_subj__obj_class=entity_type_reification_content_type)
