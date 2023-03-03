@@ -24,7 +24,6 @@ from apis_core.helper_functions import DateParser
 from apis_core.helper_functions.RDFParser import RDFParser, APIS_RDF_URI_SETTINGS
 from .tables import get_generic_relations_table, get_generic_triple_table
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete
-from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR
 
 # from dal.autocomplete import ListSelect2
 
@@ -469,13 +468,13 @@ class GenericTripleForm(forms.ModelForm):
         # Because here the direction of the property is respected. Hence the subject and object position of the
         # triple and the property name or name_reverse are loaded correctly here.
 
-        if property_direction == SELF_SUBJ_OTHER_OBJ_STR:
+        if property_direction == PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR:
 
             triple_subj = entity_instance_self
             triple_obj = entity_instance_other
             property_direction_name = property_instance.name
 
-        elif property_direction == SELF_OBJ_OTHER_SUBJ_STR:
+        elif property_direction == PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR:
 
             triple_subj = entity_instance_other
             triple_obj = entity_instance_self

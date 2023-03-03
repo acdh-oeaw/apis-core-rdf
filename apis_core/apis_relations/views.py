@@ -14,8 +14,7 @@ from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
 from apis_core.apis_relations.forms2 import GenericTripleForm
 from apis_core.apis_relations.forms import render_reification_form, render_triple_form
-from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR, \
-    get_cached_property_choices
+from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 # from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
 # from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
@@ -188,11 +187,11 @@ def get_form_ajax(request):
         if triple.subj.pk == SiteID:
             entity_instance_self = triple.subj
             entity_instance_other = triple.obj
-            property_direction = SELF_SUBJ_OTHER_OBJ_STR
+            property_direction = PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR
         elif triple.obj.pk == SiteID:
             entity_instance_self = triple.obj
             entity_instance_other = triple.subj
-            property_direction = SELF_OBJ_OTHER_SUBJ_STR
+            property_direction = PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR
         else:
             raise Exception("SiteID was not found in triple")
 
@@ -455,7 +454,7 @@ def create_triple_from_form_data(triple_form_data):
         entity_other_uri = Uri.objects.get(uri=triple_form_data["entity_other_id"])
         entity_other_instance = entity_other_uri.root_object
         property = Property.objects.get(pk=triple_form_data["property_id"])
-        if triple_form_data["property_direction"] == SELF_SUBJ_OTHER_OBJ_STR:
+        if triple_form_data["property_direction"] == PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR:
             if triple is not None:
                 triple.subj = entity_self_instance
                 triple.obj = entity_other_instance
@@ -467,7 +466,7 @@ def create_triple_from_form_data(triple_form_data):
                     obj=entity_other_instance,
                     prop=property
                 )[0]
-        elif triple_form_data["property_direction"] == SELF_OBJ_OTHER_SUBJ_STR:
+        elif triple_form_data["property_direction"] == PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR:
             if triple is not None:
                 triple.subj = entity_other_instance
                 triple.obj = entity_self_instance

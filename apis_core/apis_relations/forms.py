@@ -9,8 +9,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.conf import settings
 from apis_core.apis_relations.models import Triple
-from apis_core.apis_entities.autocomplete3 import SELF_SUBJ_OTHER_OBJ_STR, SELF_OBJ_OTHER_SUBJ_STR, \
-    get_cached_property_choices
+from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 from apis_core.apis_relations.tables import render_reification_table, render_triple_table
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
@@ -22,6 +21,8 @@ from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 ##############################################
 # Generic
 ##############################################
+from apis_core.helper_functions.caching import get_cached_property_choices
+
 
 class EntityLabelForm(forms.ModelForm):
 
@@ -195,12 +196,12 @@ def render_triple_form(
             property = triple_instance.prop
             if entity_self_instance == triple_instance.subj:
                 property_initial_choice = {
-                    'id': f"id:{property.pk}__direction:{SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
+                    'id': f"id:{property.pk}__direction:{PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
                     'text': property.name
                 }
             elif entity_self_instance == triple_instance.obj:
                 property_initial_choice = {
-                    'id': f"id:{property.pk}__direction:{SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
+                    'id': f"id:{property.pk}__direction:{PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
                     'text': property.name_reverse
                 }
             else:

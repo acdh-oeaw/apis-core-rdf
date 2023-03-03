@@ -19,8 +19,7 @@ from apis_core.helper_functions import DateParser, caching
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 from apis_core.apis_entities.models import AbstractEntity
-from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete, \
-    get_cached_property_choices
+from apis_core.apis_entities.autocomplete3 import get_cached_property_choices
 import django_tables2 as tables
 from django.template.loader import render_to_string
 
