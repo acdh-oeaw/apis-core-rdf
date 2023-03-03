@@ -877,7 +877,7 @@ def prepare_fields_dict(fields_list, vocabs, vocabs_m2m):
 def create_default_uri(sender, instance, **kwargs):
     from apis_core.apis_metainfo.models import Uri
 
-    if kwargs["created"] and sender in caching.get_all_entity_classes():
+    if kwargs["created"] and sender in caching.get_all_ontology_classes():
         if BASE_URI.endswith("/"):
             base1 = BASE_URI[:-1]
         else:
@@ -966,14 +966,10 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
 
 
 # __after_rdf_refactoring__
-# TODO RDF: This function is an ad hoc work around.
-#  It would be better done if entity settings would be fully moved
-#  into the entities themselves.
+# TODO RDF: remove this workaround here once the settings issue is resolved
 def fill_settings_with_entity_attributes():
-    for entity_class in caching.get_all_entity_classes():
+    for entity_class in caching.get_all_entity_classes() + caching.get_all_ontology_classes():
         entity_settings = entity_class.entity_settings
-
         settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
-
 
 fill_settings_with_entity_attributes()

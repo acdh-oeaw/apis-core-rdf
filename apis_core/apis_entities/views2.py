@@ -15,7 +15,7 @@ from guardian.core import ObjectPermissionChecker
 from reversion.models import Version
 from django.template.loader import render_to_string
 import importlib
-
+from apis_core.apis_relations.models import Property, AbstractReification
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
@@ -39,42 +39,51 @@ if 'apis_highlighter' in settings.INSTALLED_APPS:
 class GenericEntitiesEditView(View):
 
     def get(self, request, *args, **kwargs):
-        entity = kwargs['entity']
-        pk = kwargs['pk']
-        entity_model = caching.get_ontology_class_of_name(entity)
-        instance = get_object_or_404(entity_model, pk=pk)
+        entity_self_type_str = kwargs['entity']
+        entity_self_id = kwargs['pk']
+        entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
+        entity_self_contenttype = caching.get_contenttype_of_class_or_instance(entity_self_class)
+        entity_self_instance = get_object_or_404(entity_self_class, pk=entity_self_id)
         request = set_session_variables(request)
-
-        side_bar = []
-
-        triples_related_all = TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
-
-        for entity_class in caching.get_all_entity_classes():
-            entity_content_type = caching.get_contenttype_of_class_or_instance(entity_class)
-            other_entity_class_name = entity_class.__name__.lower()
-
-            # TODO __sresch__ : Check if this filter call results in additional db hits
-            triples_related_by_entity = triples_related_all.filter(
-                (
-                    Q(**{f"subj__self_content_type": entity_content_type}) & Q(**{f"obj__pk": pk})
-                )
-                | (
-                    Q(**{f"obj__self_content_type": entity_content_type}) & Q(**{f"subj__pk": pk})
-                )
+        triple_pane = []
+        for entity_other_class in caching.get_all_entity_classes() + caching.get_all_reification_classes():
+            # __before_rdf_refactoring__
+            # prefix = f"{entity_other_type_str}"
+            # title_card = prefix
+            # table_class = get_generic_triple_table(other_entity_class_name=entity_other_type_str, entity_pk_self=pk, detail=False)
+            # tb_object = table_class(data=triples_related_by_entity, prefix=prefix)
+            # tb_object_open = request.GET.get(prefix + 'page', None)
+            # RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
+            # side_bar.append((title_card, tb_object, f"triple_form_{entity}_to_{entity_other_type_str}", tb_object_open))
+            # __after_rdf_refactoring__
+            entity_other_contenttype = caching.get_contenttype_of_class_or_instance(entity_other_class)
+            entity_other_type_str = entity_other_class.__name__.lower()
+            allowed_property_list = Property.objects.filter(
+                Q(subj_class=entity_self_contenttype, obj_class=entity_other_contenttype)
+                | Q(subj_class=entity_other_contenttype, obj_class=entity_self_contenttype)
             )
-
-            table_class = get_generic_triple_table(other_entity_class_name=other_entity_class_name, entity_pk_self=pk, detail=False)
-
-            prefix = f"{other_entity_class_name}"
-            title_card = prefix
-            tb_object = table_class(data=triples_related_by_entity, prefix=prefix)
-            tb_object_open = request.GET.get(prefix + 'page', None)
-            RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
-            side_bar.append(
-                # (title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open)
-                (title_card, tb_object, f"triple_form_{entity}_to_{other_entity_class_name}", tb_object_open)
-            )
-
+            if len(allowed_property_list) > 0:
+                if issubclass(entity_other_class, AbstractEntity):
+                    relation_form = render_triple_form_and_table(
+                        entity_self_type_str=entity_self_type_str,
+                        entity_other_type_str=entity_other_type_str,
+                        entity_self_id_str=str(entity_self_id),
+                        request=request,
+                    )
+                elif issubclass(entity_other_class, AbstractReification):
+                    relation_form = render_reification_form_and_table(
+                        entity_self_type_str=entity_self_type_str,
+                        reification_type_str=entity_other_type_str,
+                        entity_self_id_str=str(entity_self_id),
+                        request=request,
+                    )
+                else:
+                    raise Exception("An invalid related entity class was passed")
+                triple_pane.append({
+                    "title": f"{entity_other_type_str}",
+                    "triple_form_and_table": relation_form,
+                    "some_tab_name": f"triple_form_{entity_self_type_str}_to_{entity_other_type_str}", #TODO REIFICATION: remove
+                })
         # __before_rdf_refactoring__
         #
         # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
@@ -111,10 +120,9 @@ class GenericEntitiesEditView(View):
         #     tb_object_open = request.GET.get(prefix + 'page', None)
         #     RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
         #     side_bar.append((title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open))
-
-        form = get_entities_form(entity.title())
-        form = form(instance=instance)
-        form_text = FullTextForm(entity=entity.title(), instance=instance)
+        form = get_entities_form(entity_self_type_str.title())
+        form = form(instance=entity_self_instance)
+        form_text = FullTextForm(entity=entity_self_type_str.title(), instance=entity_self_instance)
         if 'apis_highlighter' in settings.INSTALLED_APPS:
             form_ann_agreement = SelectAnnotatorAgreement()
         else:
@@ -128,26 +136,25 @@ class GenericEntitiesEditView(View):
                 apis_bibsonomy = '|'.join([x.strip() for x in apis_bibsonomy])
         else:
             apis_bibsonomy = False
-        object_revisions = Version.objects.get_for_object(instance)
-        object_lod = Uri.objects.filter(root_object=instance)
-        object_texts, ann_proj_form = get_highlighted_texts(request, instance)
-        object_labels = Label.objects.filter(temp_entity=instance)
-        tb_label = LabelTableEdit(data=object_labels, prefix=entity.title()[:2] + 'L-')
+        object_revisions = Version.objects.get_for_object(entity_self_instance)
+        object_lod = Uri.objects.filter(root_object=entity_self_instance)
+        object_texts, ann_proj_form = get_highlighted_texts(request, entity_self_instance)
+        object_labels = Label.objects.filter(temp_entity=entity_self_instance)
+        tb_label = LabelTableEdit(data=object_labels, prefix=entity_self_type_str.title()[:2] + 'L-')
         tb_label_open = request.GET.get('PL-page', None)
         # side_bar.append(('Label', tb_label, 'PersonLabel', tb_label_open))
         RequestConfig(request, paginate={"per_page": 10}).configure(tb_label)
         perm = ObjectPermissionChecker(request.user)
-        permissions = {'change': perm.has_perm('change_{}'.format(entity), instance),
-                       'delete': perm.has_perm('delete_{}'.format(entity), instance),
-                       'create': request.user.has_perm('entities.add_{}'.format(entity))}
+        permissions = {'change': perm.has_perm('change_{}'.format(entity_self_type_str), entity_self_instance),
+                       'delete': perm.has_perm('delete_{}'.format(entity_self_type_str), entity_self_instance),
+                       'create': request.user.has_perm('entities.add_{}'.format(entity_self_type_str))}
         
         context = {
-            'entity_type': entity,
+            'entity_type': entity_self_type_str,
             'form': form,
-            # "reification_table": ReificationTable(),
             'form_text': form_text,
-            'instance': instance,
-            'right_card': side_bar,
+            'instance': entity_self_instance,
+            'triple_pane': triple_pane,
             'object_revisions': object_revisions,
             'object_texts': object_texts,
             'object_lod': object_lod,
@@ -155,21 +162,9 @@ class GenericEntitiesEditView(View):
             'form_ann_agreement': form_ann_agreement,
             'apis_bibsonomy': apis_bibsonomy,
             'permissions': permissions}
-        form_merge_with = GenericEntitiesStanbolForm(entity, ent_merge_pk=pk)
+        form_merge_with = GenericEntitiesStanbolForm(entity_self_type_str, ent_merge_pk=entity_self_id)
         context['form_merge_with'] = form_merge_with
         
-        context["reification_form_and_table"] = render_reification_form_and_table(
-            entity_self_type_str="f10_person",
-            reification_type_str="bookpublicationrelationship",
-            entity_self_id_str=str(pk),
-            request=request,
-        )
-        context["triple_form_and_table"] = render_triple_form_and_table(
-            entity_self_type_str="f10_person",
-            entity_other_type_str="chapter",
-            entity_self_id_str=str(pk),
-            request=request,
-        )
         return render(request, "apis_entities/entity_create_generic.html", context)
 
     def post(self, request, *args, **kwargs):

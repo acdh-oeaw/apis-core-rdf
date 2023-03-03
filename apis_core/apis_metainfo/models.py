@@ -26,6 +26,7 @@ import importlib
 
 # from django.contrib.contenttypes.fields import GenericRelation
 # from helper_functions.highlighter import highlight_text
+from apis_core.helper_functions import caching
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
@@ -342,6 +343,12 @@ class RootObject(models.Model):
 
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
+
+    def save(self, *args, **kwargs):
+        if self.self_content_type is None:
+            self.self_content_type = caching.get_contenttype_of_class_or_instance(self.__class__)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
 
