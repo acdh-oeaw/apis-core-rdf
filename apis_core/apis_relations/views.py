@@ -487,7 +487,11 @@ def ajax_2_load_triple_form(request):
     should_include_remove_button = parse_boolean_val(request, "should_include_remove_button")
     should_include_create_button = parse_boolean_val(request, "should_include_create_button")
     model_self_class = caching.get_ontology_class_of_name(request.POST["model_self_class"])
-    model_self_instance = model_self_class.objects.get(pk=request.POST["model_self_id"])
+    model_self_id = request.POST["model_self_id"]
+    if model_self_id != "":
+        model_self_instance = model_self_class.objects.get(pk=request.POST["model_self_id"])
+    else:
+        model_self_instance = None
     triple_id = request.POST.get("triple_id")
     if triple_id != "":
         triple_instance = Triple.objects.get(pk=triple_id)
