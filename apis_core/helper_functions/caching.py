@@ -161,14 +161,14 @@ def get_reification_class_of_name(reification_name):
     raise Exception("Could not find reification class of name:", reification_name)
 
 
-def get_property_choices(entity_self_type_str, entity_other_type_str, search_name_str):
+def get_property_choices(model_self_class_str, model_other_class_str, search_name_str):
     """
     A function to cache for user search string in property autocomplet fields.
     WARNING: This will not work when properties are edited during runtime!
     But since properties are part of the ontology they should not be changed during runtime anyway.
     
-    :param entity_self_type_str: the entity from which side we are looking for
-    :param entity_other_type_str: the related entity class for which suitable properties are searched
+    :param model_self_class_str: the entity from which side we are looking for
+    :param model_other_class_str: the related entity class for which suitable properties are searched
     :param search_name_str: search string provided by user
     :return: a list of choices in the format which is used by the django-autocomplete field
     """
@@ -177,21 +177,21 @@ def get_property_choices(entity_self_type_str, entity_other_type_str, search_nam
     global _property_autocomplete_choices
     if _property_autocomplete_choices is None:
         _property_autocomplete_choices = {}
-    res = _property_autocomplete_choices.get((entity_self_type_str, entity_other_type_str, search_name_str))
+    res = _property_autocomplete_choices.get((model_self_class_str, model_other_class_str, search_name_str))
     if res is not None:
         return res
     else:
-        entity_self_contenttype = get_contenttype_of_class_or_instance(get_ontology_class_of_name(entity_self_type_str))
-        entity_other_contenttype = get_contenttype_of_class_or_instance(get_ontology_class_of_name(entity_other_type_str))
+        model_self_contenttype = get_contenttype_of_class_or_instance(get_ontology_class_of_name(model_self_class_str))
+        model_other_contenttype = get_contenttype_of_class_or_instance(get_ontology_class_of_name(model_other_class_str))
         from apis_core.apis_relations.models import Property
         rbc_self_subj_other_obj = Property.objects.filter(
-            subj_class=entity_self_contenttype,
-            obj_class=entity_other_contenttype,
+            subj_class=model_self_contenttype,
+            obj_class=model_other_contenttype,
             name__icontains=search_name_str
         )
         rbc_self_obj_other_subj = Property.objects.filter(
-            subj_class=entity_other_contenttype,
-            obj_class=entity_self_contenttype,
+            subj_class=model_other_contenttype,
+            obj_class=model_self_contenttype,
             name_reverse__icontains=search_name_str
         )
         choices = []
@@ -219,7 +219,7 @@ def get_property_choices(entity_self_type_str, entity_other_type_str, search_nam
                     'text': rbc.name_reverse
                 }
             )
-        _property_autocomplete_choices[(entity_self_type_str, entity_other_type_str, search_name_str)] = choices
+        _property_autocomplete_choices[(model_self_class_str, model_other_class_str, search_name_str)] = choices
         return choices
 
 

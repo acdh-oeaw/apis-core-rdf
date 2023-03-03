@@ -132,9 +132,9 @@ class EntityLabelForm(forms.ModelForm):
 #         return pl
 
 def render_triple_form(
-    entity_self_type_str,
-    entity_other_type_str,
-    entity_self_instance=None,
+    model_self_class_str,
+    model_other_class_str,
+    model_self_instance=None,
     triple_instance=None,
     should_include_other_entity=True,
     should_include_remove_button=False,
@@ -152,7 +152,7 @@ def render_triple_form(
                     widget=ListSelect2(
                         url=reverse(
                             'apis:apis_relations:generic_property_autocomplete',
-                            kwargs={"entity_self": entity_self_type_str, "entity_other": entity_other_type_str}
+                            kwargs={"entity_self": model_self_class_str, "entity_other": model_other_class_str}
                         ),
                         attrs={
                             'data-placeholder': 'Type to get suggestions',
@@ -168,7 +168,7 @@ def render_triple_form(
                         widget=ListSelect2(
                             url=reverse(
                                 'apis:apis_entities:generic_entities_autocomplete',
-                                kwargs={"entity": entity_other_type_str}
+                                kwargs={"entity": model_other_class_str}
                             ),
                             attrs={
                                 'data-placeholder': 'Type to get suggestions',
@@ -179,8 +179,8 @@ def render_triple_form(
                         ),
                     )
                 property_initial_choice = get_property_choices(
-                    entity_self_type_str=entity_self_type_str,
-                    entity_other_type_str=entity_other_type_str,
+                    model_self_class_str=model_self_class_str,
+                    model_other_class_str=model_other_class_str,
                     search_name_str="",
                 )
                 if len(property_initial_choice) == 1:
@@ -194,12 +194,12 @@ def render_triple_form(
     def set_initial_values(triple_form):
         if triple_instance is not None:
             property = triple_instance.prop
-            if entity_self_instance == triple_instance.subj:
+            if model_self_instance == triple_instance.subj:
                 property_initial_choice = {
                     'id': f"id:{property.pk}__direction:{PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
                     'text': property.name
                 }
-            elif entity_self_instance == triple_instance.obj:
+            elif model_self_instance == triple_instance.obj:
                 property_initial_choice = {
                     'id': f"id:{property.pk}__direction:{PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
                     'text': property.name_reverse
@@ -209,18 +209,18 @@ def render_triple_form(
             triple_form.fields["property"].initial = property_initial_choice["id"]
             triple_form.fields["property"].choices = [(property_initial_choice["id"], property_initial_choice["text"])]
             if should_include_other_entity:
-                if entity_self_instance == triple_instance.subj:
-                    entity_other_instance = triple_instance.obj
-                elif entity_self_instance == triple_instance.obj:
-                    entity_other_instance = triple_instance.subj
+                if model_self_instance == triple_instance.subj:
+                    model_other_instance = triple_instance.obj
+                elif model_self_instance == triple_instance.obj:
+                    model_other_instance = triple_instance.subj
                 else:
                     raise Exception("unhandled case.")
-                triple_form.fields["entity_other"].initial = entity_other_instance.uri_set.all()[0]
-                triple_form.fields["entity_other"].choices = [(entity_other_instance.uri_set.all()[0], entity_other_instance.name)]
+                triple_form.fields["entity_other"].initial = model_other_instance.uri_set.all()[0]
+                triple_form.fields["entity_other"].choices = [(model_other_instance.uri_set.all()[0], model_other_instance.name)]
                 
         return triple_form
     
-    if triple_instance is not None and entity_self_instance is None:
+    if triple_instance is not None and model_self_instance is None:
         raise Exception("a triple instance was passed but no corresponding subject or object instance which is needed.")
     triple_form = instantiate_form()
     triple_form = set_initial_values(triple_form)
@@ -240,38 +240,38 @@ def render_triple_form(
     )
 
 def render_triple_form_and_table(
-    entity_self_type_str,
-    entity_other_type_str,
-    entity_self_id_str,
+    model_self_class_str,
+    model_other_class_str,
+    model_self_id_str,
     request,
 ):
     return render_to_string(
         "apis_relations/triple_form_and_table.html",
         context={
-            "entity_self_type": entity_self_type_str,
-            "entity_other_type": entity_other_type_str,
-            "entity_self_id": entity_self_id_str,
+            "model_self_class": model_self_class_str,
+            "model_other_class": model_other_class_str,
+            "model_self_id": model_self_id_str,
             "triple_form": render_triple_form(
-                entity_self_type_str=entity_self_type_str,
-                entity_other_type_str=entity_other_type_str,
+                model_self_class_str=model_self_class_str,
+                model_other_class_str=model_other_class_str,
             ),
             "triple_table": render_triple_table(
-                entity_self_type_str=entity_self_type_str,
-                entity_other_type_str=entity_other_type_str,
-                entity_self_id_str=entity_self_id_str,
+                model_self_class_str=model_self_class_str,
+                model_other_class_str=model_other_class_str,
+                model_self_id_str=model_self_id_str,
                 request=request,
             ),
         },
     )
 
 
-def render_reification_form(entity_self_type_str, reification_type_str, entity_self_id_str, reification_id_str=""):
+def render_reification_form(model_self_class_str, reification_type_str, model_self_id_str, reification_id_str=""):
     reification_class = caching.get_reification_class_of_name(reification_type_str)
     reification_instance = None
     if reification_id_str != "":
         reification_instance = reification_class.objects.get(pk=reification_id_str)
-    entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
-    entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
+    model_self_class = caching.get_ontology_class_of_name(model_self_class_str)
+    model_self_instance = model_self_class.objects.get(pk=model_self_id_str)
     
     def instantiate_form():
         
@@ -293,15 +293,15 @@ def render_reification_form(entity_self_type_str, reification_type_str, entity_s
         has_loaded_existing_triple = False
         if reification_instance is not None:
             triple_list = Triple.objects.filter(
-                Q(subj=entity_self_instance, obj=reification_instance)
-                | Q(subj=reification_instance, obj=entity_self_instance)
+                Q(subj=model_self_instance, obj=reification_instance)
+                | Q(subj=reification_instance, obj=model_self_instance)
             )
             for triple in triple_list:
                 triple_form_to_reification_list.append(
                     render_triple_form(
-                        entity_self_type_str=entity_self_type_str,
-                        entity_other_type_str=reification_type_str,
-                        entity_self_instance=entity_self_instance,
+                        model_self_class_str=model_self_class_str,
+                        model_other_class_str=reification_type_str,
+                        model_self_instance=model_self_instance,
                         triple_instance=triple,
                         should_include_other_entity=False,
                         should_include_remove_button=True,
@@ -312,8 +312,8 @@ def render_reification_form(entity_self_type_str, reification_type_str, entity_s
         if not has_loaded_existing_triple:
             triple_form_to_reification_list.append(
                 render_triple_form(
-                    entity_self_type_str=entity_self_type_str,
-                    entity_other_type_str=reification_type_str,
+                    model_self_class_str=model_self_class_str,
+                    model_other_class_str=reification_type_str,
                     should_include_other_entity=False,
                     should_include_remove_button=True,
                     should_include_create_button=False,
@@ -322,9 +322,9 @@ def render_reification_form(entity_self_type_str, reification_type_str, entity_s
             
         return {
             "triple_form_to_reification": triple_form_to_reification_list,
-            "entity_self_type": entity_self_type_str,
+            "model_self_class": model_self_class_str,
             "reification_type": reification_type_str,
-            "entity_self_id": entity_self_id_str,
+            "model_self_id": model_self_id_str,
         }
     
     def create_triple_form_container_from_reification_list():
@@ -351,17 +351,17 @@ def render_reification_form(entity_self_type_str, reification_type_str, entity_s
                         or triple.obj.__class__ is related_class
                     ):
                         if triple.subj == reification_instance:
-                            entity_other_instance = triple.obj
+                            model_other_instance = triple.obj
                         elif triple.obj == reification_instance:
-                            entity_other_instance = triple.subj
+                            model_other_instance = triple.subj
                         else:
                             raise Exception("this should not happen. Check that the correct triples are filtered beforehand.")
-                        if str(entity_other_instance.pk) != entity_self_id_str:
+                        if str(model_other_instance.pk) != model_self_id_str:
                             triple_form_to_reification_list.append(
                                 render_triple_form(
-                                    entity_self_type_str=reification_type_str,
-                                    entity_other_type_str=related_class.__name__.lower(),
-                                    entity_self_instance=reification_instance,
+                                    model_self_class_str=reification_type_str,
+                                    model_other_class_str=related_class.__name__.lower(),
+                                    model_self_instance=reification_instance,
                                     triple_instance=triple,
                                     should_include_remove_button=True,
                                     should_include_create_button=False,
@@ -371,8 +371,8 @@ def render_reification_form(entity_self_type_str, reification_type_str, entity_s
             if not has_loaded_existing_triple:
                 triple_form_to_reification_list.append(
                     render_triple_form(
-                        entity_self_type_str=reification_type_str,
-                        entity_other_type_str=related_class.__name__.lower(),
+                        model_self_class_str=reification_type_str,
+                        model_other_class_str=related_class.__name__.lower(),
                         should_include_remove_button=True,
                         should_include_create_button=False,
                     )
@@ -380,15 +380,15 @@ def render_reification_form(entity_self_type_str, reification_type_str, entity_s
             triple_form_container_from_reification_list.append({
                 "triple_form_from_reification": triple_form_to_reification_list,
                 "reification_type": reification_type_str,
-                "entity_other_type": related_class.__name__.lower(),
-                "entity_self_id": reification_id_str,
+                "model_other_class": related_class.__name__.lower(),
+                "model_self_id": reification_id_str,
             })
             
         return triple_form_container_from_reification_list
     
     reification_form = instantiate_form()
     context = {
-        "entity_self_id": entity_self_id_str,
+        "model_self_id": model_self_id_str,
         "entity_type_reification_str": reification_type_str,
         "reification_id": reification_id_str,
         "reification_form": reification_form,
@@ -403,28 +403,28 @@ def render_reification_form(entity_self_type_str, reification_type_str, entity_s
     return result_rendered
 
 def render_reification_form_and_table(
-    entity_self_type_str,
+    model_self_class_str,
     reification_type_str,
-    entity_self_id_str,
+    model_self_id_str,
     request,
 ):
     
     return render_to_string(
         "apis_relations/reification_form_and_table.html",
         context={
-            "entity_self_type": entity_self_type_str,
-            "entity_self_id": entity_self_id_str,
+            "model_self_class": model_self_class_str,
+            "model_self_id": model_self_id_str,
             "reification_type": reification_type_str,
             "reification_form": render_reification_form(
-                entity_self_type_str=entity_self_type_str,
+                model_self_class_str=model_self_class_str,
                 reification_type_str=reification_type_str,
-                entity_self_id_str=entity_self_id_str,
+                model_self_id_str=model_self_id_str,
             ),
             "reification_table": render_reification_table(
                 request=request,
                 reification_type_str=reification_type_str,
-                entity_self_type_str=entity_self_type_str,
-                entity_self_id_str=entity_self_id_str,
+                model_self_class_str=model_self_class_str,
+                model_self_id_str=model_self_id_str,
             ),
         },
     )

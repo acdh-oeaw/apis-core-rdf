@@ -19,9 +19,9 @@ from apis_core.helper_functions import caching
 empty_text_default = "There are currently no relations"
 
 def render_triple_table(
-    entity_self_type_str,
-    entity_other_type_str,
-    entity_self_id_str,
+    model_self_class_str,
+    model_other_class_str,
+    model_self_id_str,
     request,
 ):
     
@@ -40,33 +40,33 @@ def render_triple_table(
             template_name_custom = "apis_relations/triple_table.html"
     
         def __init__(self, *args, **kwargs):
-            entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
-            entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
-            entity_other_class = caching.get_ontology_class_of_name(entity_other_type_str)
-            entity_other_content_type = caching.get_contenttype_of_class_or_instance(entity_other_class)
+            model_self_class = caching.get_ontology_class_of_name(model_self_class_str)
+            model_self_instance = model_self_class.objects.get(pk=model_self_id_str)
+            model_other_class = caching.get_ontology_class_of_name(model_other_class_str)
+            model_other_content_type = caching.get_contenttype_of_class_or_instance(model_other_class)
             data = Triple.objects.filter(
                 (
-                    Q(subj=entity_self_instance)
-                    & Q(obj__self_content_type=entity_other_content_type)
+                    Q(subj=model_self_instance)
+                    & Q(obj__self_content_type=model_other_content_type)
                 )
                 | (
-                    Q(obj=entity_self_instance)
-                    & Q(subj__self_content_type=entity_other_content_type)
+                    Q(obj=model_self_instance)
+                    & Q(subj__self_content_type=model_other_content_type)
                 )
             ).distinct()
             data = data.annotate(
                 other_entity=Case(
-                    When(subj__pk=entity_self_id_str, then="obj"),
-                    When(obj__pk=entity_self_id_str, then="subj"),
+                    When(subj__pk=model_self_id_str, then="obj"),
+                    When(obj__pk=model_self_id_str, then="subj"),
                 ),
                 other_prop=Case(
-                    When(subj__pk=entity_self_id_str, then="prop__name"),
-                    When(obj__pk=entity_self_id_str, then="prop__name_reverse"),
+                    When(subj__pk=model_self_id_str, then="prop__name"),
+                    When(obj__pk=model_self_id_str, then="prop__name_reverse"),
                 ),
             )
             self.base_columns["other_prop"].verbose_name = "Other property"
             self.base_columns["other_entity"].verbose_name = \
-                f"Related {entity_other_class.__name__.title()}"
+                f"Related {model_other_class.__name__.title()}"
             if "apis_bibsonomy" in settings.INSTALLED_APPS:
                 self.base_columns["ref"] = tables.TemplateColumn(
                     template_name="apis_relations/references_button_generic_ajax_form.html"
@@ -121,10 +121,10 @@ def render_triple_table(
         context={"table": TripleTable()},
     )
 
-def render_reification_table(request, reification_type_str, entity_self_type_str, entity_self_id_str, ):
+def render_reification_table(request, reification_type_str, model_self_class_str, model_self_id_str, ):
     reification_class = caching.get_reification_class_of_name(reification_type_str)
-    entity_self_class = caching.get_entity_class_of_name(entity_self_type_str)
-    entity_self_instance = entity_self_class.objects.get(pk=entity_self_id_str)
+    model_self_class = caching.get_entity_class_of_name(model_self_class_str)
+    model_self_instance = model_self_class.objects.get(pk=model_self_id_str)
 
     class ReificationTable(tables.Table):
         related_entities = tables.Column(empty_values=())
@@ -144,8 +144,8 @@ def render_reification_table(request, reification_type_str, entity_self_type_str
                 *args,
                 **kwargs,
                 data=reification_class.objects.filter(
-                    Q(triple_set_from_obj__subj=entity_self_instance)
-                    | Q(triple_set_from_obj__subj=entity_self_instance)
+                    Q(triple_set_from_obj__subj=model_self_instance)
+                    | Q(triple_set_from_obj__subj=model_self_instance)
                 ).distinct()
             )
             
@@ -153,9 +153,9 @@ def render_reification_table(request, reification_type_str, entity_self_type_str
             #TODO REIFICATION : consider optimization as in TripleTable
             related_other_entities = []
             for triple in Triple.objects.filter(Q(subj=record) | Q(obj=record)):
-                if triple.subj != record and triple.subj != entity_self_instance:
+                if triple.subj != record and triple.subj != model_self_instance:
                     related_other_entities.append(triple.subj)
-                elif triple.obj != record and triple.obj != entity_self_instance:
+                elif triple.obj != record and triple.obj != model_self_instance:
                     related_other_entities.append(triple.obj)
             related_other_entities = ", ".join([e.name for e in related_other_entities])
             return format_html(f"{related_other_entities}")

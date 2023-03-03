@@ -46,7 +46,7 @@ class GenericEntitiesEditView(View):
         entity_self_instance = get_object_or_404(entity_self_class, pk=entity_self_id)
         request = set_session_variables(request)
         triple_pane = []
-        for entity_other_class in caching.get_all_entity_classes() + caching.get_all_reification_classes():
+        for model_other_class in caching.get_all_entity_classes() + caching.get_all_reification_classes():
             # __before_rdf_refactoring__
             # prefix = f"{entity_other_type_str}"
             # title_card = prefix
@@ -56,33 +56,33 @@ class GenericEntitiesEditView(View):
             # RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
             # side_bar.append((title_card, tb_object, f"triple_form_{entity}_to_{entity_other_type_str}", tb_object_open))
             # __after_rdf_refactoring__
-            entity_other_contenttype = caching.get_contenttype_of_class_or_instance(entity_other_class)
-            entity_other_type_str = entity_other_class.__name__.lower()
+            model_other_contenttype = caching.get_contenttype_of_class_or_instance(model_other_class)
+            model_other_class_str = model_other_class.__name__.lower()
             allowed_property_list = Property.objects.filter(
-                Q(subj_class=entity_self_contenttype, obj_class=entity_other_contenttype)
-                | Q(subj_class=entity_other_contenttype, obj_class=entity_self_contenttype)
+                Q(subj_class=entity_self_contenttype, obj_class=model_other_contenttype)
+                | Q(subj_class=model_other_contenttype, obj_class=entity_self_contenttype)
             )
             if len(allowed_property_list) > 0:
-                if issubclass(entity_other_class, AbstractEntity):
+                if issubclass(model_other_class, AbstractEntity):
                     relation_form = render_triple_form_and_table(
-                        entity_self_type_str=entity_self_type_str,
-                        entity_other_type_str=entity_other_type_str,
-                        entity_self_id_str=str(entity_self_id),
+                        model_self_class_str=entity_self_type_str,
+                        model_other_class_str=model_other_class_str,
+                        model_self_id_str=str(entity_self_id),
                         request=request,
                     )
-                elif issubclass(entity_other_class, AbstractReification):
+                elif issubclass(model_other_class, AbstractReification):
                     relation_form = render_reification_form_and_table(
-                        entity_self_type_str=entity_self_type_str,
-                        reification_type_str=entity_other_type_str,
-                        entity_self_id_str=str(entity_self_id),
+                        model_self_class_str=entity_self_type_str,
+                        reification_type_str=model_other_class_str,
+                        model_self_id_str=str(entity_self_id),
                         request=request,
                     )
                 else:
                     raise Exception("An invalid related entity class was passed")
                 triple_pane.append({
-                    "title": f"{entity_other_type_str}",
+                    "title": f"{model_other_class_str}",
                     "triple_form_and_table": relation_form,
-                    "some_tab_name": f"triple_form_{entity_self_type_str}_to_{entity_other_type_str}", #TODO REIFICATION: remove
+                    "some_tab_name": f"triple_form_{entity_self_type_str}_to_{model_other_class_str}", #TODO REIFICATION: remove
                 })
         # __before_rdf_refactoring__
         #

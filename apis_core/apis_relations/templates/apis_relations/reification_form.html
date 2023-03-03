@@ -1,6 +1,6 @@
 <!-- entity to reification -->
 <div class="reification_triple_direction_carrier" data-direction="to_reification">
-    <div class="triple_data_carrier" data-entity_self_type="{{ triple_form_container_to_reification.entity_self_type }}" data-entity_other_type="{{ triple_form_container_to_reification.reification_type }}" data-entity_self_id="{{ triple_form_container_to_reification.entity_self_id }}" data-should_append="true" data-should_include_other_entity="false" data-should_include_remove_button="true" data-should_include_create_button="false">
+    <div class="triple_data_carrier" data-model_self_class="{{ triple_form_container_to_reification.model_self_class }}" data-model_other_class="{{ triple_form_container_to_reification.reification_type }}" data-model_self_id="{{ triple_form_container_to_reification.model_self_id }}" data-should_append="true" data-should_include_other_entity="false" data-should_include_remove_button="true" data-should_include_create_button="false">
         <div class="triple_form_anchor">
             {% for triple_form_to_reification in triple_form_container_to_reification.triple_form_to_reification %}
                 {{ triple_form_to_reification }}
@@ -25,8 +25,8 @@
 <!-- from reification to other entities -->
 <div class="reification_triple_direction_carrier" data-direction="from_reification">
      {% for triple_form_container_from_reification in triple_form_container_from_reification_list %}
-        <div class="triple_data_carrier" data-entity_self_type="{{ triple_form_container_from_reification.reification_type }}" data-entity_other_type="{{ triple_form_container_from_reification.entity_other_type }}" data-entity_self_id="{{ triple_form_container_from_reification.entity_self_id }}" data-should_append="true" data-should_include_other_entity="true" data-should_include_remove_button="true" data-should_include_create_button="false">
-            <h4>{{ triple_form_container_from_reification.entity_other_type }}</h4>
+        <div class="triple_data_carrier" data-model_self_class="{{ triple_form_container_from_reification.reification_type }}" data-model_other_class="{{ triple_form_container_from_reification.model_other_class }}" data-model_self_id="{{ triple_form_container_from_reification.model_self_id }}" data-should_append="true" data-should_include_other_entity="true" data-should_include_remove_button="true" data-should_include_create_button="false">
+            <h4>{{ triple_form_container_from_reification.model_other_class }}</h4>
             <div class="triple_form_anchor">
                 {% for triple_form_from_reification in triple_form_container_from_reification.triple_form_from_reification %}
                     {{ triple_form_from_reification }}
