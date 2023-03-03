@@ -3,6 +3,7 @@ import sys
 from operator import itemgetter
 from apis_core.apis_entities.models import AbstractEntity
 from django.conf import settings
+from apis_core.helper_functions import caching
 
 
 def list_entities(request):
@@ -12,7 +13,7 @@ def list_entities(request):
 
     :return a dictionary of context items
     """
-    entities_classes = AbstractEntity.get_all_entity_classes() or []
+    entities_classes = caching.get_all_entity_classes() or []
     # create (uri, label) tuples for entities for use in templates
     entities_links = [(e.__name__.lower(), e._meta.verbose_name.title()) for e in entities_classes]
     entities_links.sort(key=itemgetter(1))

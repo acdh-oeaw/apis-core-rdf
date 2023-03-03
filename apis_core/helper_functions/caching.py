@@ -1,79 +1,89 @@
+import importlib
 import inspect
+from django.contrib.contenttypes.models import ContentType
+from django.db.models.base import ModelBase
 
 
-_all_ontology_classes = None
-_all_ontology_class_names = None
-_all_entity_classes = None
-_all_entity_class_names = None
-_all_reification_classes = None
-_all_reification_class_names = None
-_all_vocabulary_classes = None
-_all_vocabulary_class_names = None
-_cached_property_choices_dict = None
-_has_been_initialized = False
+_ontology_classes = None
+_ontology_class_names = None
+_entity_classes = None
+_entity_class_names = None
+_reification_classes = None
+_reification_class_names = None
+_vocabulary_classes = None
+_vocabulary_class_names = None
+_contenttype_classes = None
+_contenttype_class_names = None
+_property_autocomplete_choices = None
+_class_contenttype_dict = None
 
-def initialize_all():
+def _init_all_ontology_classes():
     from apis_ontology import models as ontology_models
     from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
     from apis_core.apis_relations.models import AbstractReification
     from apis_core.apis_vocabularies.models import AbstractVocabulary
     
-    global _all_ontology_classes
-    global _all_ontology_class_names
-    global _all_entity_classes
-    global _all_entity_class_names
-    global _all_reification_classes
-    global _all_reification_class_names
-    global _all_vocabulary_classes
-    global _all_vocabulary_class_names
-    global _cached_property_choices_dict
-    global _has_been_initialized
-    if _has_been_initialized:
-        raise Exception(
-            "The function initialize_all has already been called, but it should only be called "
-            "once. Investigate into this second call and avoid it."
-        )
-    _has_been_initialized = True
-    _all_entity_classes = []
-    _all_entity_class_names = []
-    _all_reification_classes = []
-    _all_reification_class_names = []
-    _all_vocabulary_classes = []
-    _all_vocabulary_class_names = []
-    _cached_property_choices_dict = {}
+    global _ontology_classes
+    global _ontology_class_names
+    global _entity_classes
+    global _entity_class_names
+    global _reification_classes
+    global _reification_class_names
+    global _vocabulary_classes
+    global _vocabulary_class_names
+    if (
+        _ontology_classes is not None
+        or _ontology_class_names is not None
+        or _entity_classes is not None
+        or _entity_class_names is not None
+        or _reification_classes is not None
+        or _reification_class_names is not None
+        or _vocabulary_classes is not None
+        or _vocabulary_class_names is not None
+    ):
+        raise Exception("initialization was called but variables are not None anymore.")
+    _entity_classes = []
+    _entity_class_names = []
+    _reification_classes = []
+    _reification_class_names = []
+    _vocabulary_classes = []
+    _vocabulary_class_names = []
     for ontology_class_name, ontology_class in inspect.getmembers(ontology_models, inspect.isclass):
         if (
             issubclass(ontology_class, AbstractEntity)
             and not ontology_class._meta.abstract
             and ontology_class is not TempEntityClass # TODO RDF: remove this once TempEntityClass is removed
         ):
-            _all_entity_classes.append(ontology_class)
-            _all_entity_class_names.append(ontology_class_name.lower())
+            _entity_classes.append(ontology_class)
+            _entity_class_names.append(ontology_class_name.lower())
         elif (
             issubclass(ontology_class, AbstractReification)
             and not ontology_class._meta.abstract
         ):
-            _all_reification_classes.append(ontology_class)
-            _all_reification_class_names.append(ontology_class_name.lower())
+            _reification_classes.append(ontology_class)
+            _reification_class_names.append(ontology_class_name.lower())
         elif (
             issubclass(ontology_class, AbstractVocabulary)
             and not ontology_class._meta.abstract
         ):
-            _all_vocabulary_classes.append(ontology_class)
-            _all_vocabulary_class_names.append(ontology_class_name.lower())
-    _all_ontology_classes = _all_entity_classes + _all_reification_classes + _all_vocabulary_classes
-    _all_ontology_class_names = _all_entity_class_names + _all_reification_class_names + _all_vocabulary_class_names
+            _vocabulary_classes.append(ontology_class)
+            _vocabulary_class_names.append(ontology_class_name.lower())
+    _ontology_classes = _entity_classes + _reification_classes + _vocabulary_classes
+    _ontology_class_names = _entity_class_names + _reification_class_names + _vocabulary_class_names
 
 def get_all_ontology_classes():
-    """
-    Retrieve all ontology classes from apis_ontology.models except for abstract classes, reifications, vocabularys
+    if _ontology_classes is None:
+        _init_all_ontology_classes()
     
-    :return: a list of ontology classes
-    """
-    if _all_ontology_classes is None:
-        initialize_all()
+    return _ontology_classes
+
+
+def get_all_ontology_class_names():
+    if _ontology_class_names is None:
+        _init_all_ontology_classes()
     
-    return _all_ontology_classes
+    return _ontology_class_names
+
 
 def get_ontology_class_of_name(ontology_name):
     """
@@ -90,30 +100,20 @@ def get_ontology_class_of_name(ontology_name):
     
     raise Exception("Could not find ontology class of name:", ontology_name)
 
-def get_all_ontology_class_names():
-    """
-    Retrieve lower-cased names of all ontology classes from apis_ontology.models except for abstract
-    classes, reifications, vocabularys
-
-    :return: a list of strings
-    """
-    
-    if _all_ontology_class_names is None:
-        initialize_all()
-    
-    return _all_ontology_class_names
 
 def get_all_entity_classes():
-    """
-    Retrieve all entity classes from apis_ontology.models except for abstract classes, reifications, vocabularys
+    if _entity_classes is None:
+        _init_all_ontology_classes()
     
-    :return: a list of entity classes
-    """
-    global _all_entity_classes
-    if _all_entity_classes is None:
-        initialize_all()
+    return _entity_classes
+
+
+def get_all_entity_class_names():
+    if _entity_class_names is None:
+        _init_all_ontology_classes()
     
-    return _all_entity_classes
+    return _entity_class_names
+
 
 def get_entity_class_of_name(entity_name):
     """
@@ -130,35 +130,24 @@ def get_entity_class_of_name(entity_name):
 
     raise Exception("Could not find entity class of name:", entity_name)
 
-def get_all_entity_class_names():
-    """
-    Retrieve lower-cased names of all entity classes from apis_ontology.models except for abstract
-    classes, reifications, vocabularys
-
-    :return: a list of strings
-    """
-    
-    global _all_entity_class_names
-    if _all_entity_class_names is None:
-        initialize_all()
-
-    return _all_entity_class_names
 
 def get_all_reification_classes():
-    """
-    Retrieve all reification classes from apis_ontology.models except for abstract classes, reifications, vocabularys
+    if _reification_classes is None:
+        _init_all_ontology_classes()
     
-    :return: a list of reification classes
-    """
-    global _all_reification_classes
-    if _all_reification_classes is None:
-        initialize_all()
+    return _reification_classes
+
+
+def get_all_reification_class_names():
+    if _reification_class_names is None:
+        _init_all_ontology_classes()
     
-    return _all_reification_classes
+    return _reification_class_names
+
 
 def get_reification_class_of_name(reification_name):
     """
-    Look up an reification class based on a given name.
+    Look up a reification class based on a given name.
 
     :param reification_name: a string to compare against classes' __name__
                         values; need not be formatted (letter case does
@@ -171,24 +160,24 @@ def get_reification_class_of_name(reification_name):
     
     raise Exception("Could not find reification class of name:", reification_name)
 
-def get_all_reification_class_names():
-    """
-    Retrieve lower-cased names of all reification classes from apis_ontology.models except for abstract
-    classes, reifications, vocabularys
 
-    :return: a list of strings
+def get_property_choices(entity_self_type_str, entity_other_type_str, search_name_str):
     """
+    A function to cache for user search string in property autocomplet fields.
+    WARNING: This will not work when properties are edited during runtime!
+    But since properties are part of the ontology they should not be changed during runtime anyway.
     
-    global _all_reification_class_names
-    if _all_reification_class_names is None:
-        initialize_all()
-    
-    return _all_reification_class_names
-
-def get_cached_property_choices(entity_self_type_str, entity_other_type_str, search_name_str):
+    :param entity_self_type_str: the entity from which side we are looking for
+    :param entity_other_type_str: the related entity class for which suitable properties are searched
+    :param search_name_str: search string provided by user
+    :return: a list of choices in the format which is used by the django-autocomplete field
+    """
     from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
-    
-    res = _cached_property_choices_dict.get((entity_self_type_str, entity_other_type_str, search_name_str))
+
+    global _property_autocomplete_choices
+    if _property_autocomplete_choices is None:
+        _property_autocomplete_choices = {}
+    res = _property_autocomplete_choices.get((entity_self_type_str, entity_other_type_str, search_name_str))
     if res is not None:
         return res
     else:
@@ -230,5 +219,112 @@ def get_cached_property_choices(entity_self_type_str, entity_other_type_str, sea
                     'text': rbc.name_reverse
                 }
             )
-        _cached_property_choices_dict[(entity_self_type_str, entity_other_type_str, search_name_str)] = choices
+        _property_autocomplete_choices[(entity_self_type_str, entity_other_type_str, search_name_str)] = choices
         return choices
+
+
+def get_all_contenttype_classes():
+    """
+    Return a list of Django model classes.
+    """
+    
+    def init_contenttype_classes():
+        """
+        Iterate through a list of modules and filter for
+        - classes
+        - which are not abstract
+        - except for those explicitly ignored (via models_exclude list).
+        """
+        global _contenttype_classes
+        models_exclude = [
+            "texttype_collections",
+            "relationbaseclass",
+            "baserelationmanager",
+            "relationpublishedqueryset",
+            "inheritanceforwardmanytoonedescriptor",
+            "inheritanceforeignkey",
+        ]
+        apis_modules = [
+            "apis_core.apis_metainfo.models",
+            "apis_core.apis_vocabularies.models",
+            "apis_core.apis_entities.models",
+            "apis_core.apis_relations.models",
+            "apis_ontology.models",
+        ]
+        if _contenttype_classes is not None:
+            r2 = []
+            for c in _contenttype_classes:
+                for c2 in apis_modules:
+                    if c in c2:
+                        r2.append(c2)
+            apis_modules = r2
+        lst_cont_pre = [importlib.import_module(x) for x in apis_modules]
+        lst_cont = []
+        for m in lst_cont_pre:
+            for cls_n in dir(m):
+                if not cls_n.startswith("__") and "__module__" in list(
+                    dir(getattr(m, cls_n))
+                ):
+                    if (
+                        getattr(m, cls_n).__module__ in apis_modules
+                        and getattr(m, cls_n) not in lst_cont
+                        and cls_n.lower() not in models_exclude
+                        and inspect.isclass(getattr(m, cls_n))
+                        and getattr(m, cls_n)._meta.abstract is False
+                    ):
+                        lst_cont.append(getattr(m, cls_n))
+        lst_cont.append(ContentType)
+        _contenttype_classes = lst_cont
+        
+    if _contenttype_classes is None:
+        init_contenttype_classes()
+
+    return _contenttype_classes
+
+
+def get_all_contenttype_module_and_class_names():
+    """
+    Create tuples from a list of model classes to store their module names
+    and class names (as strings).
+
+    :return: a list of tuples
+    """
+    
+    global _contenttype_class_names
+    if _contenttype_class_names is None:
+        _contenttype_class_names = []
+        for cls in get_all_contenttype_classes():
+            _contenttype_class_names.append((cls.__module__.split(".")[-2], cls.__name__))
+            
+    return _contenttype_class_names
+
+
+def get_content_type_of_class_or_instance(model_class_or_instance):
+    """
+    Helper method which caches ContentType of a given model class or instance.
+    When first called on a model, it fetches its respective ContentType from the DB
+    and caches it in a class dictionary. Later, this dictionary is called.
+
+    :param model_class_or_instance: model class or instance of a model class
+    :return: dictionary holding Django ContentType object
+    """
+
+    global _class_contenttype_dict
+    if _class_contenttype_dict is None:
+        _class_contenttype_dict = {}
+    
+    if type(model_class_or_instance) is ModelBase:
+        # true if model_class_or_instance is model class
+        model_class = model_class_or_instance
+    elif type(type(model_class_or_instance)) is ModelBase:
+        # true if model_class_or_instance is model instance
+        model_class = type(model_class_or_instance)
+    else:
+        raise Exception(
+            f"Passed argument is neither model class nor model instance: "
+            f"{type(model_class_or_instance)}"
+        )
+    if model_class not in _class_contenttype_dict:
+        _class_contenttype_dict[model_class] = ContentType.objects.get(model=model_class.__name__)
+    
+    return _class_contenttype_dict[model_class]

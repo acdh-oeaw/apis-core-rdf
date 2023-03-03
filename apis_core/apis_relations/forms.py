@@ -21,7 +21,7 @@ from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 ##############################################
 # Generic
 ##############################################
-from apis_core.helper_functions.caching import get_cached_property_choices
+from apis_core.helper_functions.caching import get_property_choices
 
 
 class EntityLabelForm(forms.ModelForm):
@@ -178,7 +178,7 @@ def render_triple_form(
                             },
                         ),
                     )
-                property_initial_choice = get_cached_property_choices(
+                property_initial_choice = get_property_choices(
                     entity_self_type_str=entity_self_type_str,
                     entity_other_type_str=entity_other_type_str,
                     search_name_str="",

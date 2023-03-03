@@ -52,7 +52,6 @@ class AbstractEntity(RootObject):
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-        self.__class__.create_relation_methods_from_manytomany_fields()
 
     # Methods dealing with individual data retrievals of instances
     ###########################################################################
@@ -223,23 +222,6 @@ class AbstractEntity(RootObject):
                         ),
                     )
 
-    # Methods dealing with all entities
-    ###########################################################################
-
-    # TODO RDF: remove this function in favor of the caching module entirely.
-    @classmethod
-    def get_all_entity_classes(cls):
-        return caching.get_all_entity_classes()
-
-    # TODO RDF: remove this function in favor of the caching module entirely.
-    @classmethod
-    def get_entity_class_of_name(cls, entity_name):
-        return caching.get_entity_class_of_name(entity_name)
-
-    # TODO RDF: remove this function in favor of the caching module entirely.
-    @classmethod
-    def get_all_entity_names(cls):
-        return caching.get_all_entity_class_names()
 
     # Methods dealing with related entities
     ###########################################################################
@@ -895,7 +877,7 @@ def prepare_fields_dict(fields_list, vocabs, vocabs_m2m):
 def create_default_uri(sender, instance, **kwargs):
     from apis_core.apis_metainfo.models import Uri
 
-    if kwargs["created"] and sender in AbstractEntity.get_all_entity_classes():
+    if kwargs["created"] and sender in caching.get_all_entity_classes():
         if BASE_URI.endswith("/"):
             base1 = BASE_URI[:-1]
         else:
@@ -988,7 +970,7 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
 #  It would be better done if entity settings would be fully moved
 #  into the entities themselves.
 def fill_settings_with_entity_attributes():
-    for entity_class in AbstractEntity.get_all_entity_classes():
+    for entity_class in caching.get_all_entity_classes():
         entity_settings = entity_class.entity_settings
 
         settings.APIS_ENTITIES[entity_class.__name__] = entity_settings

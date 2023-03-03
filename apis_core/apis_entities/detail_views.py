@@ -73,7 +73,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         # __after_rdf_refactoring__
         triples_related_all = TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
 
-        for entity_class in AbstractEntity.get_all_entity_classes():
+        for entity_class in caching.get_all_entity_classes():
 
             # TODO __sresch__ : change this db fetch with the cached one from master
             entity_content_type = ContentType.objects.get_for_model(entity_class)

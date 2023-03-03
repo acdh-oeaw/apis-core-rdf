@@ -19,7 +19,7 @@ from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.helper_functions import caching
-from apis_core.helper_functions.caching import get_cached_property_choices
+from apis_core.helper_functions.caching import get_property_choices
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
@@ -448,7 +448,7 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         # TODO RDF: pagination
         more = False
-        choices = get_cached_property_choices(kwargs["entity_self"], kwargs["entity_other"], self.q)
+        choices = get_property_choices(kwargs["entity_self"], kwargs["entity_other"], self.q)
         return http.HttpResponse(
             json.dumps(
                 {
