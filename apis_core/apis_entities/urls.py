@@ -1,13 +1,13 @@
 from django.urls import include, path
 
-from . import views, views2, detail_views, merge_views
+from . import views, edit_generic, detail_generic, merge_views
 from .autocomplete3 import (
     GenericEntitiesAutocomplete,
     GenericNetworkEntitiesAutocomplete,
 )
 
 # from .views import ReversionCompareView TODO: add again when import is fixec
-from .views2 import GenericEntitiesCreateStanbolView
+from .edit_generic import GenericEntitiesCreateStanbolView
 
 app_name = "apis_entities"
 
@@ -15,16 +15,16 @@ entity_patterns = [
     path('list/', views.GenericListViewNew.as_view(),
          name='generic_entities_list',
          ),
-    path('create/', views2.GenericEntitiesCreateView.as_view(),
+    path('create/', edit_generic.GenericEntitiesCreateView.as_view(),
          name='generic_entities_create_view',
          ),
-    path('<int:pk>/detail/', detail_views.GenericEntitiesDetailView.as_view(),
+    path('<int:pk>/detail/', detail_generic.GenericEntitiesDetailView.as_view(),
          name='generic_entities_detail_view',
          ),
-    path('<int:pk>/edit/', views2.GenericEntitiesEditView.as_view(),
+    path('<int:pk>/edit/', edit_generic.GenericEntitiesEditView.as_view(),
          name='generic_entities_edit_view',
          ),
-    path('<int:pk>/delete/', views2.GenericEntitiesDeleteView.as_view(),
+    path('<int:pk>/delete/', edit_generic.GenericEntitiesDeleteView.as_view(),
          name='generic_entities_delete_view',
          ),
 ]
@@ -62,7 +62,7 @@ urlpatterns = [
 
     # TODO __sresch__ : This seems unused. Remove it once sure
     # url(r"^detail/work/(?P<pk>[0-9]+)$",
-    #     detail_views.WorkDetailView.as_view(), name="work_detail"),
+    #     detail_generic.WorkDetailView.as_view(), name="work_detail"),
 
     path('place/geojson/', views.getGeoJson, name='getGeoJson'),
     # __before_rdf_refactoring__
