@@ -339,14 +339,14 @@ class RootObject(models.Model):
 
     # TODO RDF: consider renaming attribute 'name' to 'value'
     name = models.CharField(max_length=255, verbose_name='Name')
-    self_content_type = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
+    self_contenttype = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
 
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
 
     def save(self, *args, **kwargs):
-        if self.self_content_type is None:
-            self.self_content_type = caching.get_contenttype_of_class_or_instance(self.__class__)
+        if self.self_contenttype is None:
+            self.self_contenttype = caching.get_contenttype_of_class_or_instance(self.__class__)
 
         super().save(*args, **kwargs)
 

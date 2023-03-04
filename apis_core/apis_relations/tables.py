@@ -22,18 +22,22 @@ def render_triple_table(
     model_self_class_str,
     model_other_class_str,
     model_self_id_str,
+    should_be_editable,
     request,
 ):
     
     class TripleTable(tables.Table):
-        edit = tables.Column(empty_values=())
-        delete = tables.Column(empty_values=())
+        if should_be_editable:
+            edit = tables.Column(empty_values=())
+            delete = tables.Column(empty_values=())
         
         class Meta:
             model = Triple
-            fields = ["other_prop", "other_entity", "edit", "delete"]
-            if "apis_bibsonomy" in settings.INSTALLED_APPS:
-                fields = ["ref"] + fields
+            fields = ["other_prop", "other_entity"]
+            if should_be_editable:
+                fields += ["edit", "delete"]
+                if "apis_bibsonomy" in settings.INSTALLED_APPS:
+                    fields = ["ref"] + fields
             # If I would use `template_name` here, django-tables crashes. Perhaps it only expects some
             # of its own pre-integrated templates? But since I want to use a custom one and also attach it
             # to this class I renamed it to `template_name_custom`. I did not find a better solution quickly.
@@ -43,15 +47,15 @@ def render_triple_table(
             model_self_class = caching.get_ontology_class_of_name(model_self_class_str)
             model_self_instance = model_self_class.objects.get(pk=model_self_id_str)
             model_other_class = caching.get_ontology_class_of_name(model_other_class_str)
-            model_other_content_type = caching.get_contenttype_of_class_or_instance(model_other_class)
+            model_other_contenttype = caching.get_contenttype_of_class_or_instance(model_other_class)
             data = Triple.objects.filter(
                 (
                     Q(subj=model_self_instance)
-                    & Q(obj__self_content_type=model_other_content_type)
+                    & Q(obj__self_contenttype=model_other_contenttype)
                 )
                 | (
                     Q(obj=model_self_instance)
-                    & Q(subj__self_content_type=model_other_content_type)
+                    & Q(subj__self_contenttype=model_other_contenttype)
                 )
             ).distinct()
             data = data.annotate(
@@ -121,19 +125,28 @@ def render_triple_table(
         context={"table": TripleTable()},
     )
 
-def render_reification_table(request, reification_type_str, model_self_class_str, model_self_id_str, ):
+def render_reification_table(
+    reification_type_str,
+    model_self_class_str,
+    model_self_id_str,
+    should_be_editable,
+    request,
+):
     reification_class = caching.get_reification_class_of_name(reification_type_str)
     model_self_class = caching.get_entity_class_of_name(model_self_class_str)
     model_self_instance = model_self_class.objects.get(pk=model_self_id_str)
 
     class ReificationTable(tables.Table):
         related_entities = tables.Column(empty_values=())
-        edit = tables.Column(empty_values=())
-        delete = tables.Column(empty_values=())
+        if should_be_editable:
+            edit = tables.Column(empty_values=())
+            delete = tables.Column(empty_values=())
         
         class Meta:
             model = reification_class
-            fields = ["name", "related_entities","edit", "delete"]
+            fields = ["name", "related_entities"]
+            if should_be_editable:
+                fields += ["edit", "delete"]
             # If I would use `template_name` here, django-tables crashes. Perhaps it only expects some
             # of its own pre-integrated templates? But since I want to use a custom one and also attach it
             # to this class I renamed it to `template_name_custom`. I did not find a better solution quickly.
@@ -184,9 +197,7 @@ def render_reification_table(request, reification_type_str, model_self_class_str
     return render_to_string(
         request=request,
         template_name=ReificationTable.Meta.template_name_custom,
-        context={
-            "table": ReificationTable(),
-        },
+        context={"table": ReificationTable()},
     )
 
 

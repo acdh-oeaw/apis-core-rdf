@@ -68,6 +68,7 @@ class GenericEntitiesEditView(View):
                         model_self_class_str=entity_self_type_str,
                         model_other_class_str=model_other_class_str,
                         model_self_id_str=str(entity_self_id),
+                        should_be_editable=True,
                         request=request,
                     )
                 elif issubclass(model_other_class, AbstractReification):
@@ -75,6 +76,7 @@ class GenericEntitiesEditView(View):
                         model_self_class_str=entity_self_type_str,
                         reification_type_str=model_other_class_str,
                         model_self_id_str=str(entity_self_id),
+                        should_be_editable=True,
                         request=request,
                     )
                 else:

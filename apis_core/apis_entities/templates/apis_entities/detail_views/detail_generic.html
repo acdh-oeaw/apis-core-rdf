@@ -238,22 +238,16 @@
                             <h3>Relations</h3>
                         </div>
                         <div class="card-body">
-                            {% block relations %}
-                                {% for obj in right_card %}
-                                    {% if obj.1.data|length > 0 %}
-                                        <div class="card card-default">
-                                            <div class="card-heading">
-                                                <h4 class="card-title"> {{ obj.0 }}</h4>
-                                            </div>
-                                            <div class="card-body">
-                                                <div id="tab_{{ obj.2 }}" class="card-body">
-                                                        {% render_table obj.1 %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endblock relations %}
+                            {% for triple_obj in triple_pane %}
+                            <div class="card card-default">
+                                <div class="card-header" role="tab" id="heading{{forloop.counter}}">
+                                    <h4 class="card-title">
+                                        {{ triple_obj.title }}
+                                    </h4>
+                                </div>
+                                {{ triple_obj.triple_form_and_table }}
+                            </div>
+                            {% endfor %}
                         </div>
                 </div>
             </div>

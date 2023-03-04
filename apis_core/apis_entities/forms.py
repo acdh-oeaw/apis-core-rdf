@@ -60,7 +60,7 @@ def get_entities_form(entity):
                 "text",
                 "source",
                 "published",
-                "self_content_type",
+                "self_contenttype",
             ]
             # exclude.extend(model.get_related_entity_field_names())
             # exclude.extend(model.get_related_relationtype_field_names())
@@ -112,7 +112,7 @@ def get_entities_form(entity):
                     # ):
                     #
                     # __after_rdf_refactoring__
-                    matching_content_type = ContentType.objects.filter(
+                    matching_contenttype = ContentType.objects.filter(
                         app_label__in=[
                             'apis_entities',
                             'apis_metainfo',
@@ -123,8 +123,8 @@ def get_entities_form(entity):
                         model=model_uri
                     )
                     if (
-                        len(matching_content_type) == 1
-                        and matching_content_type[0].app_label.lower() == 'apis_vocabularies'
+                        len(matching_contenttype) == 1
+                        and matching_contenttype[0].app_label.lower() == 'apis_vocabularies'
                     ):
                         self.fields[f].widget = widget1(
                             url=reverse(

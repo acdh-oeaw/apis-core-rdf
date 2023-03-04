@@ -243,25 +243,30 @@ def render_triple_form_and_table(
     model_self_class_str,
     model_other_class_str,
     model_self_id_str,
+    should_be_editable,
     request,
 ):
+    context={
+        "model_self_class": model_self_class_str,
+        "model_other_class": model_other_class_str,
+        "model_self_id": model_self_id_str,
+        "triple_table": render_triple_table(
+            model_self_class_str=model_self_class_str,
+            model_other_class_str=model_other_class_str,
+            model_self_id_str=model_self_id_str,
+            should_be_editable=should_be_editable,
+            request=request,
+        ),
+    }
+    if should_be_editable:
+        context["triple_form"] = render_triple_form(
+            model_self_class_str=model_self_class_str,
+            model_other_class_str=model_other_class_str,
+        )
+    
     return render_to_string(
-        "apis_relations/triple_form_and_table.html",
-        context={
-            "model_self_class": model_self_class_str,
-            "model_other_class": model_other_class_str,
-            "model_self_id": model_self_id_str,
-            "triple_form": render_triple_form(
-                model_self_class_str=model_self_class_str,
-                model_other_class_str=model_other_class_str,
-            ),
-            "triple_table": render_triple_table(
-                model_self_class_str=model_self_class_str,
-                model_other_class_str=model_other_class_str,
-                model_self_id_str=model_self_id_str,
-                request=request,
-            ),
-        },
+        template_name="apis_relations/triple_form_and_table.html",
+        context=context
     )
 
 
@@ -279,7 +284,7 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
             template_name = "apis_relations/reification_form.html"
             class Meta:
                 model = reification_class
-                exclude = ["self_content_type"]
+                exclude = ["self_contenttype"]
         
         reification_form = ReificationForm()
         if reification_instance is not None:
@@ -328,10 +333,10 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
         }
     
     def create_triple_form_container_from_reification_list():
-        entity_type_reification_content_type = caching.get_contenttype_of_class_or_instance(reification_class)
+        entity_type_reification_contenttype = caching.get_contenttype_of_class_or_instance(reification_class)
         related_ct_list = ContentType.objects.filter(
-            Q(property_set_obj__subj_class=entity_type_reification_content_type)
-            | Q(property_set_subj__obj_class=entity_type_reification_content_type)
+            Q(property_set_obj__subj_class=entity_type_reification_contenttype)
+            | Q(property_set_subj__obj_class=entity_type_reification_contenttype)
         ).distinct()
         related_class_list = [ct.model_class() for ct in related_ct_list]
         triple_form_container_from_reification_list = []
@@ -406,25 +411,29 @@ def render_reification_form_and_table(
     model_self_class_str,
     reification_type_str,
     model_self_id_str,
+    should_be_editable,
     request,
 ):
+    context = {
+        "model_self_class": model_self_class_str,
+        "model_self_id": model_self_id_str,
+        "reification_type": reification_type_str,
+        "reification_table": render_reification_table(
+            reification_type_str=reification_type_str,
+            model_self_class_str=model_self_class_str,
+            model_self_id_str=model_self_id_str,
+            should_be_editable=should_be_editable,
+            request=request,
+        ),
+    }
+    if should_be_editable:
+        context["reification_form"] = render_reification_form(
+            model_self_class_str=model_self_class_str,
+            reification_type_str=reification_type_str,
+            model_self_id_str=model_self_id_str,
+        )
     
     return render_to_string(
-        "apis_relations/reification_form_and_table.html",
-        context={
-            "model_self_class": model_self_class_str,
-            "model_self_id": model_self_id_str,
-            "reification_type": reification_type_str,
-            "reification_form": render_reification_form(
-                model_self_class_str=model_self_class_str,
-                reification_type_str=reification_type_str,
-                model_self_id_str=model_self_id_str,
-            ),
-            "reification_table": render_reification_table(
-                request=request,
-                reification_type_str=reification_type_str,
-                model_self_class_str=model_self_class_str,
-                model_self_id_str=model_self_id_str,
-            ),
-        },
+        template_name="apis_relations/reification_form_and_table.html",
+        context=context,
     )

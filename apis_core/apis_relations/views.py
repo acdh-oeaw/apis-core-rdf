@@ -525,6 +525,7 @@ def ajax_2_post_triple_form(request):
                 model_self_class_str=request.POST["model_self_class"],
                 model_other_class_str=request.POST["model_other_class"],
                 model_self_id_str=request.POST["model_self_id"],
+                should_be_editable=True,
                 request=request,
             ),
         },
@@ -543,6 +544,7 @@ def ajax_2_delete_triple(request):
             model_self_class_str=request.POST["model_self_class"],
             model_other_class_str=request.POST["model_other_class"],
             model_self_id_str=request.POST["model_self_id"],
+            should_be_editable=True,
             request=request,
         ),
         status=200,
@@ -656,6 +658,7 @@ def ajax_2_post_reification_form(request):
                     reification_type_str=post_data["reification_type"],
                     model_self_class_str=post_data["model_self_class"],
                     model_self_id_str=post_data["model_self_id"],
+                    should_be_editable=True,
                 )
             },
             status=200,
@@ -680,6 +683,7 @@ def ajax_2_delete_reification(request):
                 reification_type_str=request.POST["reification_type"],
                 model_self_class_str=request.POST["model_self_class"],
                 model_self_id_str=request.POST["model_self_id"],
+                should_be_editable=True,
             )
         },
         status=200,

@@ -12,7 +12,7 @@ from apis_core.apis_relations.tables import get_generic_relations_table, get_gen
 from apis_core.helper_functions.utils import access_for_all
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.views import get_highlighted_texts
-from apis_core.apis_relations.models import TempTriple, Property, AbstractReification
+from apis_core.apis_relations.models import Triple, Property, AbstractReification
 from apis_core.apis_relations.forms import render_triple_form_and_table, render_reification_form_and_table
 from apis_core.helper_functions import caching
 
@@ -48,34 +48,47 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
                 | Q(subj_class=model_other_contenttype, obj_class=entity_self_contenttype)
             )
             if len(allowed_property_list) > 0:
-                if issubclass(model_other_class, AbstractEntity):
-                    relation_form = render_triple_form_and_table(
-                        model_self_class_str=entity_self_type_str,
-                        model_other_class_str=model_other_class_str,
-                        model_self_id_str=str(entity_self_id),
-                        request=request,
+                related_triple_list = Triple.objects.filter(
+                    (
+                        Q(subj=entity_self_instance)
+                        & Q(obj__self_contenttype=model_other_contenttype)
                     )
-                elif issubclass(model_other_class, AbstractReification):
-                    relation_form = render_reification_form_and_table(
-                        model_self_class_str=entity_self_type_str,
-                        reification_type_str=model_other_class_str,
-                        model_self_id_str=str(entity_self_id),
-                        request=request,
+                    | (
+                        Q(obj=entity_self_instance)
+                        & Q(subj__self_contenttype=model_other_contenttype)
                     )
-                else:
-                    raise Exception("An invalid related entity class was passed")
-                triple_pane.append({
-                    "title": f"{model_other_class_str}",
-                    "triple_form_and_table": relation_form,
-                    "some_tab_name": f"triple_form_{entity_self_type_str}_to_{model_other_class_str}", #TODO REIFICATION: remove
-                })
+                ).distinct()
+                if len(related_triple_list) > 0:
+                    if issubclass(model_other_class, AbstractEntity):
+                        relation_form = render_triple_form_and_table(
+                            model_self_class_str=entity_self_type_str,
+                            model_other_class_str=model_other_class_str,
+                            model_self_id_str=str(entity_self_id),
+                            should_be_editable=False,
+                            request=request,
+                        )
+                    elif issubclass(model_other_class, AbstractReification):
+                        relation_form = render_reification_form_and_table(
+                            model_self_class_str=entity_self_type_str,
+                            reification_type_str=model_other_class_str,
+                            model_self_id_str=str(entity_self_id),
+                            should_be_editable=False,
+                            request=request,
+                        )
+                    else:
+                        raise Exception("An invalid related entity class was passed")
+                    triple_pane.append({
+                        "title": f"{model_other_class_str}",
+                        "triple_form_and_table": relation_form,
+                        "some_tab_name": f"triple_form_{entity_self_type_str}_to_{model_other_class_str}", #TODO REIFICATION: remove
+                    })
         # TODO RDF: Check / Adapt the following code to rdf architecture
         object_lod = Uri.objects.filter(root_object=entity_self_instance)
         object_texts, ann_proj_form = get_highlighted_texts(request, entity_self_instance)
         object_labels = Label.objects.filter(temp_entity=entity_self_instance)
         tb_label = LabelTableBase(data=object_labels, prefix=entity_self_type_str.title()[:2]+'L-')
         tb_label_open = request.GET.get('PL-page', None)
-        triple_pane.append(('Label', tb_label, 'PersonLabel', tb_label_open))
+        # triple_pane.append(('Label', tb_label, 'PersonLabel', tb_label_open))
         RequestConfig(request, paginate={"per_page": 10}).configure(tb_label)
         template = select_template([
             # 'apis_entities/detail_views/{}_detail_generic.html'.format(entity),
@@ -115,7 +128,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             attr_to_exclude = [
                 "id",
                 "name",
-                "self_content_type_id",
+                "self_contenttype_id",
                 "start_start_date",
                 "start_end_date",
                 "end_start_date",
@@ -149,7 +162,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
                 'entity_type': entity_self_type_str,
                 'object': entity_self_instance,
                 'relvant_fields': relvant_fields,
-                'right_card': triple_pane,
+                'triple_pane': triple_pane,
                 'no_merge_labels': no_merge_labels,
                 'object_lables': object_labels,
                 'object_texts': object_texts,
