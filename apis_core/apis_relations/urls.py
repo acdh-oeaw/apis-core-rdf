@@ -10,10 +10,6 @@ urlpatterns = [
     url(r'^ajax/get/$', views.get_form_ajax, name='get_form_ajax'), # rel_form_logic_breadcrumb (for refinding the implicit connections)
     url(
         r'^ajax/save/(?P<entity_type>\w+)/(?P<kind_form>\w+)/(?P<SiteID>[0-9]+)(?:/(?P<ObjectID>[0-9]*))?/$',
-        # r'^ajax/save/(?P<entity_type>\w+)/(?P<kind_form>\w+)/(?P<SiteID>[0-9]+)/$', # working without ObjectID
-        # r'^ajax/save/(?P<entity_type>\w+)/(?P<kind_form>\w+)/(?P<SiteID>[0-9]+)/(?P<abcde>[0])/$',
-        # r'^ajax/save/(?P<entity_type>\w+)/$',
-        # r'^ajax/save/(?P<entity_type>\w+)/$',
         views.save_ajax_form, name='save_ajax_form' # rel_form_logic_breadcrumb (for refinding the implicit connections)
     ),
     url(r'^(?P<entity>[a-z0-9_]+)/list/$',

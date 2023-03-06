@@ -167,7 +167,7 @@ class GenericEntitiesEditView(View):
         form_merge_with = GenericEntitiesStanbolForm(entity_self_type_str, ent_merge_pk=entity_self_id)
         context['form_merge_with'] = form_merge_with
         
-        return render(request, "apis_entities/view_edit_generic.html", context)
+        return render(request, "apis_entities/edit_generic.html", context)
 
     def post(self, request, *args, **kwargs):
         entity = kwargs['entity']
@@ -185,7 +185,7 @@ class GenericEntitiesEditView(View):
             }))
         else:
             template = select_template(['apis_entities/{}_create_generic.html'.format(entity),
-                                        'apis_entities/view_edit_generic.html'])
+                                        'apis_entities/edit_generic.html'])
             perm = ObjectPermissionChecker(request.user)
             permissions = {'change': perm.has_perm('change_{}'.format(entity), instance),
                            'delete': perm.has_perm('delete_{}'.format(entity), instance),
@@ -213,7 +213,7 @@ class GenericEntitiesCreateView(View):
         form_text = FullTextForm(entity=entity.title())
         permissions = {'create': request.user.has_perm('entities.add_{}'.format(entity))}
         template = select_template(['apis_entities/{}_create_generic.html'.format(entity),
-                                    'apis_entities/view_edit_generic.html'])
+                                    'apis_entities/edit_generic.html'])
         return HttpResponse(template.render(request=request, context={
             'entity_type': entity,
             'permissions': permissions,
@@ -234,7 +234,7 @@ class GenericEntitiesCreateView(View):
         else:
             permissions = {'create': request.user.has_perm('apis_entities.add_{}'.format(entity))}
             template = select_template(['apis_entities/{}_create_generic.html'.format(entity),
-                                        'apis_entities/view_edit_generic.html'])
+                                        'apis_entities/edit_generic.html'])
             return HttpResponse(template.render(request=request, context={
                 'permissions': permissions,
                 'form': form,
@@ -262,7 +262,7 @@ class GenericEntitiesCreateStanbolView(View):
         else:
             permissions = {'create': request.user.has_perm('apis_entities.add_{}'.format(entity))}
             template = select_template(['apis_entities/{}_create_generic.html'.format(entity),
-                                        'apis_entities/view_edit_generic.html'])
+                                        'apis_entities/edit_generic.html'])
             return HttpResponse(template.render(request=request, context={
                 'permissions': permissions,
                 'form': form}))
