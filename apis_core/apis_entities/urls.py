@@ -1,13 +1,13 @@
 from django.urls import include, path
 
-from . import views, edit_generic, detail_generic, merge_views
+from . import views, view_edit_generic, view_detail_generic, merge_views
 from .autocomplete3 import (
     GenericEntitiesAutocomplete,
     GenericNetworkEntitiesAutocomplete,
 )
 
 # from .views import ReversionCompareView TODO: add again when import is fixec
-from .edit_generic import GenericEntitiesCreateStanbolView
+from .view_edit_generic import GenericEntitiesCreateStanbolView
 
 app_name = "apis_entities"
 
@@ -15,16 +15,16 @@ entity_patterns = [
     path('list/', views.GenericListViewNew.as_view(),
          name='generic_entities_list',
          ),
-    path('create/', edit_generic.GenericEntitiesCreateView.as_view(),
+    path('create/', view_edit_generic.GenericEntitiesCreateView.as_view(),
          name='generic_entities_create_view',
          ),
-    path('<int:pk>/detail/', detail_generic.GenericEntitiesDetailView.as_view(),
+    path('<int:pk>/detail/', view_detail_generic.GenericEntitiesDetailView.as_view(),
          name='generic_entities_detail_view',
          ),
-    path('<int:pk>/edit/', edit_generic.GenericEntitiesEditView.as_view(),
+    path('<int:pk>/edit/', view_edit_generic.GenericEntitiesEditView.as_view(),
          name='generic_entities_edit_view',
          ),
-    path('<int:pk>/delete/', edit_generic.GenericEntitiesDeleteView.as_view(),
+    path('<int:pk>/delete/', view_edit_generic.GenericEntitiesDeleteView.as_view(),
          name='generic_entities_delete_view',
          ),
 ]
