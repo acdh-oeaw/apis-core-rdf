@@ -4,7 +4,6 @@ from django.urls import reverse
 
 from .models import Person, Event
 from apis_core.apis_metainfo.models import Text, Collection
-from apis_core.apis_vocabularies.models import ProfessionType
 from reversion import revisions as reversion
 
 from datetime import datetime
