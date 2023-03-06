@@ -17,7 +17,7 @@
 {% block content %}
 {% load django_tables2 %}
 {% if instance %}
-<script>
+<script type="text/javascript">
     function search_and_activate_dal_s2(elem) {
         if (elem instanceof Element) {
             if (elem.hasAttribute("data-autocomplete-light-url")) {
@@ -205,7 +205,6 @@
 {{block.super}}
 {% if instance %}
 <script type="text/javascript">
-
     function load_from_reification_data_carrier(reification_data_carrier) {
         return {
             "reification_type": reification_data_carrier.getAttribute("data-reification_type"),
@@ -282,8 +281,8 @@
             url: "{% url 'apis:apis_relations:ajax_2_post_triple_form' %}",
             data: post_data,
             success: function (response) {
-                var div_form_anchor = div_origin.closest(".triple_data_carrier").getElementsByClassName("triple_form_anchor")[0]
-                var div_table_anchor = div_origin.closest(".triple_data_carrier").getElementsByClassName("triple_table_anchor")[0]
+                var div_form_anchor = div_origin.closest(".triple_data_carrier").getElementsByClassName("triple_form_anchor")[0];
+                var div_table_anchor = div_origin.closest(".triple_data_carrier").getElementsByClassName("triple_table_anchor")[0];
                 div_form_anchor.innerHTML = response["form"];
                 div_table_anchor.innerHTML = response["table"];
             },
@@ -313,9 +312,8 @@
         })
     };
 
-
     function ajax_2_load_reification_form(div_origin, reification_id) {
-        let csrftoken = '{{ csrf_token }}'
+        let csrftoken = '{{ csrf_token }}';
         var reification_data_carrier = div_origin.closest(".reification_data_carrier");
         var post_data = load_from_reification_data_carrier(reification_data_carrier);
         post_data["reification_id"] = reification_id;
@@ -332,7 +330,7 @@
                 console.log(response);
             }
         })
-    }
+    };
 
     function ajax_2_post_reification_form(div_origin) {
         let csrftoken = '{{ csrf_token }}';
@@ -396,9 +394,8 @@
                 console.log(response)
             }
         })
-    }
-</script>
-<script type="text/javascript">
+    };
+
     function GetFormAjax(FormName , ObjectID , ButtonText) {
         function add_form(data) {
             // update our tooltip content with our returned data and cache it
@@ -423,7 +420,6 @@
                 // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
                 },
             })
-
 
             })            //$(".form.ajax_form").unbind()
             //console.log($('#tab_'+data.tab+" select.listselect2"))
@@ -471,9 +467,8 @@
                 }
             }
         );
-    }
-</script>
-<script type="text/javascript">
+    };
+
     function EntityRelationForm_response(response){
         if (response.test == false) {
             $('#'+response.DivID).replaceWith(response.form);
@@ -503,9 +498,8 @@
              {% endif %}
         };
         unbind_compare_forms();
-    }
-</script>
-<script type="text/javascript">
+    };
+
     function HighlForm_response(response){
         if (response.test == false) {
             $.ApisHigh.tt_instance.content(response.form);
@@ -521,9 +515,8 @@
              $('mark.highlight').on("click", highlight_detail);
              initiate_compare_tooltip();
         }
-    }
-</script>
-<script type="text/javascript">
+    };
+
     function PAddRelation_response(response){
         if (response.test == false) {
             $.ApisHigh.tt_instance.content(response.form);
@@ -535,9 +528,8 @@
              $('mark.highlight').off()
              $('mark.highlight').on("click", highlight_detail)
         }
-    }
-</script>
-<script type='text/javascript'>
+    };
+
     function DeleteTempEntity(pk, kind, app_name=false) {
         if (app_name){
             var url = '/apis/api/'+app_name+'/'+kind+'/'+pk.toString()
@@ -560,16 +552,13 @@
                 }
             }
         })
-    }
-</script>
-<script type='text/javascript'>
+    };
+
     function DeleteAnnTempEntity(an_pk, rel_class, rel_pk, app_name) {
         DeleteTempEntity(an_pk,"HLAnnotation");
         DeleteTempEntity(rel_pk, rel_class, app_name);
     };
-</script>
 
-<script type="text/javascript">
     function check_perms_relation(){
         {% if instance %}
         {% if "change" in permissions %}
@@ -578,34 +567,34 @@
         return false
         {% endif %}
         {% endif %}
-    }
-</script>
-<script type="text/javascript">
-function activate_editing(){
-        {% for obj in triple_pane %}
-        //GetFormAjax("{{obj.2}}");
-        //unbind_ajax_forms();
-        {% endfor %}
-{% if highlighter_active %}
-    init_apis_highlighter(1, {{instance.pk}});
-    if (typeof $.ApisHigh.vars == 'undefined') {
-        $.ApisHigh.vars = {}; };
-        $.ApisHigh.vars.entity_type = '{{entity_type}}';
-        $.ApisHigh.vars.instance_pk = '{{instance.pk}}';
-        $.ApisHigh.vars.urls = {};
-        $.ApisHigh.vars.urls.get_form_ajax = "{% url 'apis:apis_relations:get_form_ajax' %}";
-        $.ApisHigh.vars.urls.annotatoragreementview = "{% url 'apis:apis_api2:AnnotatorAgreementView' %}";
-        $.ApisHigh.vars.urls.showoverlappinghighlights = "{% url 'apis:apis_api2:ShowOverlappingHighlights' %}";
-      activate_context_menu_highlighter();
-      $('body').on("click", 'mark.highlight', highlight_detail);
-    {% endif %}
- };
-function deactivate_editing(){
-    $('.reldelete').addClass("disabled");
-    $('.reldelete').prop("disabled", true);
-    $('.reledit').addClass("disabled");
-    $('.reledit').prop("disabled", true);
- };
+    };
+
+    function activate_editing(){
+            {% for obj in triple_pane %}
+            //GetFormAjax("{{obj.2}}");
+            //unbind_ajax_forms();
+            {% endfor %}
+    {% if highlighter_active %}
+        init_apis_highlighter(1, {{instance.pk}});
+        if (typeof $.ApisHigh.vars == 'undefined') {
+            $.ApisHigh.vars = {}; };
+            $.ApisHigh.vars.entity_type = '{{entity_type}}';
+            $.ApisHigh.vars.instance_pk = '{{instance.pk}}';
+            $.ApisHigh.vars.urls = {};
+            $.ApisHigh.vars.urls.get_form_ajax = "{% url 'apis:apis_relations:get_form_ajax' %}";
+            $.ApisHigh.vars.urls.annotatoragreementview = "{% url 'apis:apis_api2:AnnotatorAgreementView' %}";
+            $.ApisHigh.vars.urls.showoverlappinghighlights = "{% url 'apis:apis_api2:ShowOverlappingHighlights' %}";
+          activate_context_menu_highlighter();
+          $('body').on("click", 'mark.highlight', highlight_detail);
+        {% endif %}
+     };
+
+    function deactivate_editing(){
+        $('.reldelete').addClass("disabled");
+        $('.reldelete').prop("disabled", true);
+        $('.reledit').addClass("disabled");
+        $('.reledit').prop("disabled", true);
+     };
 {% endif %}
 {% if instance %}
 {% if permissions.change %}
