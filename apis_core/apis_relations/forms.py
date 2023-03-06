@@ -8,6 +8,8 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.conf import settings
+
+from apis_core.apis_relations.forms2 import validate_target_autocomplete
 from apis_core.apis_relations.models import Triple
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 from apis_core.apis_relations.tables import render_reification_table, render_triple_table
@@ -21,7 +23,7 @@ from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 ##############################################
 # Generic
 ##############################################
-from apis_core.helper_functions.caching import get_property_choices
+from apis_core.helper_functions.caching import get_autocomplete_property_choices
 
 
 class EntityLabelForm(forms.ModelForm):
@@ -178,7 +180,7 @@ def render_triple_form(
                             },
                         ),
                     )
-                property_initial_choice = get_property_choices(
+                property_initial_choice = get_autocomplete_property_choices(
                     model_self_class_str=model_self_class_str,
                     model_other_class_str=model_other_class_str,
                     search_name_str="",

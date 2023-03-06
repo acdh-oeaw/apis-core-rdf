@@ -161,7 +161,7 @@ def get_reification_class_of_name(reification_name):
     raise Exception("Could not find reification class of name:", reification_name)
 
 
-def get_property_choices(model_self_class_str, model_other_class_str, search_name_str):
+def get_autocomplete_property_choices(model_self_class_str, model_other_class_str, search_name_str):
     """
     A function to cache for user search string in property autocomplet fields.
     WARNING: This will not work when properties are edited during runtime!

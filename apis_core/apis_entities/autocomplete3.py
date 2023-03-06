@@ -19,7 +19,7 @@ from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.helper_functions import caching
-from apis_core.helper_functions.caching import get_property_choices
+from apis_core.helper_functions.caching import get_autocomplete_property_choices
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
@@ -191,7 +191,14 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                     if r.lng and r.lat:
                         dataclass = 'data-vis-tooltip="{}" data-lat="{}" \
                         data-long="{}"  class="apis-autocomplete-span"'.format(ac_type, r.lat, r.lng)
-                f['text'] = '<span {}><small>db</small> {}</span>'.format(dataclass, str(r))
+                        
+                # TODO RDF: make the html format work again
+                # For now, the return value is overwritten with a non-html result
+                # also regard the other parts in this function where choices.append get something
+                # __before_rdf_refactoring__
+                # f['text'] = '<span {}><small>db</small> {}</span>'.format(dataclass, str(r))
+                # __after_rdf_refactoring__
+                f['text'] = r.name
                 choices.append(f)
             if len(choices) < page_size:
                 test_db = False
@@ -448,7 +455,7 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         # TODO RDF: pagination
         more = False
-        choices = get_property_choices(kwargs["entity_self"], kwargs["entity_other"], self.q)
+        choices = get_autocomplete_property_choices(kwargs["entity_self"], kwargs["entity_other"], self.q)
         return http.HttpResponse(
             json.dumps(
                 {
