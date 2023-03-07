@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.conf import settings
 
 from apis_core.apis_relations.forms2 import validate_target_autocomplete
-from apis_core.apis_relations.models import Triple
+from apis_core.apis_relations.models import Triple, Property
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 from apis_core.apis_relations.tables import render_reification_table, render_triple_table
 from apis_core.apis_entities.models import AbstractEntity
@@ -279,6 +279,26 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
         reification_instance = reification_class.objects.get(pk=reification_id_str)
     model_self_class = caching.get_ontology_class_of_name(model_self_class_str)
     model_self_instance = model_self_class.objects.get(pk=model_self_id_str)
+    allowed_property_list_to_reification = Property.objects.filter(
+        Q(
+            subj_class=caching.get_contenttype_of_class_or_instance(model_self_instance),
+            obj_class=caching.get_contenttype_of_class_or_instance(reification_class)
+        )
+        | Q(
+            subj_class=caching.get_contenttype_of_class_or_instance(reification_class),
+            obj_class=caching.get_contenttype_of_class_or_instance(model_self_instance)
+        )
+    )
+    if len(allowed_property_list_to_reification) == 1:
+        should_include_remove_and_add_button = False
+    elif len(allowed_property_list_to_reification) > 1:
+        should_include_remove_and_add_button = True
+    else:
+        raise Exception(
+            "With no valid property between classes of self and reification this render function "
+            "should have never been called in the first place. The code before calling this "
+            "function is responsible for only calling it when there are valid properties."
+        )
     
     def instantiate_form():
         
@@ -311,7 +331,7 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
                         model_self_instance=model_self_instance,
                         triple_instance=triple,
                         should_include_other_entity=False,
-                        should_include_remove_button=True,
+                        should_include_remove_button=should_include_remove_and_add_button,
                         should_include_create_button=False,
                     )
                 )
@@ -322,7 +342,7 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
                     model_self_class_str=model_self_class_str,
                     model_other_class_str=reification_type_str,
                     should_include_other_entity=False,
-                    should_include_remove_button=True,
+                    should_include_remove_button=should_include_remove_and_add_button,
                     should_include_create_button=False,
                 )
             )
@@ -401,6 +421,7 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
         "reification_form": reification_form,
         "triple_form_container_to_reification": create_triple_form_container_to_reification(),
         "triple_form_container_from_reification_list": create_triple_form_container_from_reification_list(),
+        "should_include_remove_and_add_button": should_include_remove_and_add_button,
     }
     result_rendered = render_to_string(
         template_name=reification_form.template_name,

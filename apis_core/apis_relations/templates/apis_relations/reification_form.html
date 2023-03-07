@@ -6,7 +6,9 @@
                 {{ triple_form_to_reification }}
             {% endfor %}
         </div>
-        <input onclick="ajax_2_load_triple_form(div_origin=this, triple_id='')" type="submit" class="btn btn-primary btn-triple-add" value="Add new relation"/>
+        {% if should_include_remove_and_add_button %}
+            <input onclick="ajax_2_load_triple_form(div_origin=this, triple_id='')" type="submit" class="btn btn-primary btn-triple-add" value="Add new relation"/>
+        {% endif %}
     </div>
 </div>
 <!-- reification attributes -->
