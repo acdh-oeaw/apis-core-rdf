@@ -1,0 +1,20 @@
+<!-- An individual triple form, possibly persisting an existing triple via its id, and the onsubmit="return false;" is so that it does not cause a full post signal -->
+<form class="triple_form" onsubmit="return false;" data-triple_id="{{ triple_id }}">
+    {% for field in triple_form %}
+        <div class="fieldWrapper">
+            {{ field.errors }}
+            {% if not field.field.widget.is_hidden %}
+                {{ field.label_tag }}
+            {% endif %}
+            {{ field }}
+        </div>
+    {% endfor %}
+    {% if should_include_remove_button %}
+        <input onclick="this.closest('.triple_form').remove()" type="submit" class="btn btn-primary" value="Remove relation" />
+    {% endif %}
+    {% if should_include_create_button %}
+        <input onclick="ajax_2_post_triple_form(this)" type="submit" class="btn btn-primary" value="create/modify relation" />
+    {% endif %}
+    <!-- This is a hack. Because of a bug in django-autocomplete we need to activate the form fields with a helper function search_and_activate_dal_s2, but this function needs to be called too, so I'm abusing an img tag that can trigger reliably, both when this html is loaded statically and with ajax. Other approaches did not work sadly. -->
+    <img src onerror='search_and_activate_dal_s2(this.parentElement)'>
+</form>

@@ -56,6 +56,7 @@ from .serializers_generic import EntitySerializer
 
 
 # from metainfo.models import TempEntityClass
+from apis_core.helper_functions import caching
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -438,7 +439,7 @@ class GetOrCreateEntity(APIView):
                 if len(r1_2) == 2:
                     q_d["first_name"] = r1_2[1].strip()
                     q_d["name"] = r1_2[0].strip()
-            ent = AbstractEntity.get_entity_class_of_name(entity).objects.create(**q_d)
+            ent = caching.get_ontology_class_of_name(entity).objects.create(**q_d)
         res = {
             "id": ent.pk,
             "url": reverse_lazy(

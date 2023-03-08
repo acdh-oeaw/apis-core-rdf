@@ -26,6 +26,7 @@ import importlib
 
 # from django.contrib.contenttypes.fields import GenericRelation
 # from helper_functions.highlighter import highlight_text
+from apis_core.helper_functions import caching
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
@@ -327,29 +328,29 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
 
 class RootObject(models.Model):
     """
-    In order to make the Triple architecture as versatile as possible, I defined a new super class 'RootObject'.
-    This class is being used as superclass for entities, vocabularies, and properties
+    The very root thing that can exist in a given ontology. Several classes inherit from it.
+    By having one overarching super class we gain the advantage of unique identifiers.
     """
+    
+    entity_settings = {
+        "list_filters": ["name", "related_entity_name", "related_property_name"],
+        "search": ["name"],
+    }
 
+    # TODO RDF : consider renaming attribute 'name' to 'value'
     name = models.CharField(max_length=255, verbose_name='Name')
+    # self_content_type: a foreign key to the respective contenttype comes in handy when querying for
+    # triples where the subject's or object's contenttype must be respected (e.g. get all triples
+    # where the subject is a Person)
     self_content_type = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
-    self_content_type_cached = None
-
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
 
     def save(self, *args, **kwargs):
         if self.self_content_type is None:
-            self.self_content_type = self.get_content_type()
+            self.self_content_type = caching.get_contenttype_of_class(self.__class__)
 
         super().save(*args, **kwargs)
-
-    @classmethod
-    def get_content_type(cls):
-        if cls.self_content_type_cached is None:
-            cls.self_content_type_cached = ContentType.objects.get_for_model(cls)
-        
-        return cls.self_content_type_cached
 
     def __str__(self):
 
@@ -411,9 +412,7 @@ class Collection(models.Model):
         super().save(*args, **kwargs)
 
 
-# TODO RDF : Make Text also a Subclass of RootObject
-# TODO RDF : Maybe move text away from apis_metainfo?
-# TODO RDF : Maybe even remove text entirely?
+# TODO RDF : Remove text entirely
 @reversion.register()
 class Text(models.Model):
     """ Holds unstructured text associeted with

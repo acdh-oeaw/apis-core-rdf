@@ -28,8 +28,8 @@ from django import forms
 from django_filters import rest_framework as filters
 from apis_core.apis_entities.models import TempEntityClass
 from .api_renderers import NetJsonRenderer
-from apis_core.helper_functions.ContentType import GetContentTypes
 from .apis_relations.models import Triple, Property
+from apis_core.helper_functions import caching
 
 if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
     from apis_highlighter.highlighter import highlight_text_new
@@ -204,7 +204,7 @@ if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
             fields = ["id", "start", "end", "related_object"]
 
 def generic_serializer_creation_factory():
-    lst_cont = GetContentTypes().get_model_classes()
+    lst_cont = caching.get_all_contenttype_classes()
     not_allowed_filter_fields = [
         "useradded",
         "vocab_name",

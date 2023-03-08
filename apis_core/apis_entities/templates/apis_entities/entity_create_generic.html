@@ -13,10 +13,27 @@
 {% block Titel %}Create a {{entity_type|title}}{% endblock %}
 {% load guardian_tags %}
 {% load static %}
-
+{% load render_table from django_tables2 %}
 {% block content %}
 {% load django_tables2 %}
 {% if instance %}
+<!-- the function search_and_activate_dal_s2 is needed by triple forms, so it needs to be parsed before them, hence this small block of JS code here -->
+<script type="text/javascript">
+    function search_and_activate_dal_s2(elem) {
+        if (elem instanceof Element) {
+            if (elem.hasAttribute("data-autocomplete-light-url")) {
+                $(elem).select2({
+                    ajax: {
+                        url: elem.getAttribute("data-autocomplete-light-url"),
+                        dataType: 'json'
+                    }
+                });
+            } else {
+                elem.childNodes.forEach(e => search_and_activate_dal_s2(e));
+            }
+        }
+    };
+</script>
 <div class="container-fluid">
     <div class="card">
         <div class="card-header" style="text-align: center;">
@@ -54,7 +71,6 @@
                                 <button hidden=True class="bibsonomy-anker-hidden" data-bibs-contenttype={{ entity_type }} data-bibs-object_pk={{instance.pk}} data-bibs-form-elements="{{ apis_bibsonomy }}">Ref</button>
                             {% endif %}
                                 <div class="card card-default">
-
                             	{% crispy form %}
 
                                     <div class="card-header" role="tab" id="headingFour">
@@ -126,22 +142,23 @@
                             <div class="card" id="accordion" role="tablist" aria-multiselectable="true">
                             {% block additional_accordion %}
                             {% endblock additional_accordion %}
-                            {% for obj in right_card %}
+                            {% for triple_obj in triple_pane %}
                                 <div class="card card-default">
                                     <div class="card-header" role="tab" id="heading{{forloop.counter}}">
                                         <h4 class="card-title">
                                             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
-                                                {{ obj.0 }}
+                                                {{ triple_obj.title }}
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="collapse{{forloop.counter}}" class="card-collapse collapse{% if obj.3 %} in{% endif %}" role="tabcard" aria-labelledby="heading{{forloop.counter}}">
-                                        <div id="tab_{{ obj.2 }}" class="card-body">
-                                            {% render_table obj.1 %}
+                                    <div id="collapse{{forloop.counter}}" class="card-collapse collapse" role="tabcard" aria-labelledby="heading{{forloop.counter}}">
+                                        <!-- #TODO REIFICATION check if this div can be removed -->
+                                        <div id="tab_{{ triple_obj.some_tab_name }}" class="card-body">
+                                            {{ triple_obj.triple_form_and_table }}
                                         </div>
                                     </div>
                                 </div>
-                                {% endfor %}
+                            {% endfor %}
                             </div>
                             </div>
                         </div>
@@ -151,9 +168,6 @@
             </div>
         </div>
     {% endif %}
-
-
-
 {% if object_texts %}
     {% if user.is_superuser %}
         {% if form_ann_agreement %}
@@ -175,11 +189,9 @@
 </div>
 {% endif %}
 {% for txt in object_texts %}
-
 <div class="card card-default">
 <div class="card-body">
     <div class="txt {{txt.kind|slugify}}" id="htxt_{{txt.id}}">{{txt.text|safe}}</div>
-
     <div class="agreement" id="agrm_{{txt.id}}"></div>
 </div>
 </div>
@@ -194,6 +206,205 @@
 {{block.super}}
 {% if instance %}
 <script type="text/javascript">
+    const ajax_headers = {'X-CSRFToken': '{{ csrf_token }}'};
+
+    // Common logic to fetch data from carrier, so there is this helper function for it
+    function load_from_reification_data_carrier(reification_data_carrier) {
+        return {
+            "reification_type": reification_data_carrier.getAttribute("data-reification_type"),
+            "model_self_class": reification_data_carrier.getAttribute("data-model_self_class"),
+            "model_self_id": reification_data_carrier.getAttribute("data-model_self_id"),
+        };
+    };
+
+    // Common logic to fetch data from carrier, so there is this helper function for it
+    function load_from_triple_data_carrier(div_data_carrier) {
+        return {
+            "model_self_class": div_data_carrier.getAttribute("data-model_self_class"),
+            "model_other_class": div_data_carrier.getAttribute("data-model_other_class"),
+            "model_self_id": div_data_carrier.getAttribute("data-model_self_id"),
+            "should_include_other_entity": div_data_carrier.getAttribute("data-should_include_other_entity"),
+            "should_include_remove_button": div_data_carrier.getAttribute("data-should_include_remove_button"),
+            "should_include_create_button": div_data_carrier.getAttribute("data-should_include_create_button"),
+        };
+    };
+
+    // parses a triple form, extracts data both from the form as well as from its contextual data carrier
+    function parse_triple_form(triple_form) {
+        var div_data_carrier = triple_form.closest('.triple_data_carrier');
+        var triple_form_data = load_from_triple_data_carrier(div_data_carrier);
+        triple_form_data["triple_id"] = triple_form.getAttribute("data-triple_id");
+        triple_form_data["property_id"] = "";
+        triple_form_data["property_direction"] = "";
+        triple_form_data["model_other_id"] = "";
+        $(triple_form).serializeArray().forEach(field_dict => {
+            if (field_dict["name"] == "property") {
+                // here we need to parse and split according to the hackish data format injected into autocomplete's get_autocomplete_property_choices
+                property_value = field_dict["value"];
+                property_value = property_value.split("__");
+                triple_form_data["property_id"] = property_value[0].split(":")[1];
+                triple_form_data["property_direction"] = property_value[1].split(":")[1];
+            } else if (field_dict["name"] == "entity_other") {
+                triple_form_data["model_other_id"] = field_dict["value"];
+            } else {
+                throw new Error('Unexpected form field found.');
+            }
+        });
+        return triple_form_data;
+    }
+
+    // calls the python function with same name, loads a populated form from a passed id
+    function ajax_2_load_triple_form(div_origin, triple_id) {
+        var div_data_carrier = div_origin.closest('.triple_data_carrier');
+        var div_form_anchor = div_data_carrier.getElementsByClassName("triple_form_anchor")[0];
+        var post_data = load_from_triple_data_carrier(div_data_carrier);
+        post_data["triple_id"] = triple_id;
+        $.ajax({
+            type: 'POST',
+            headers: ajax_headers,
+            url: "{% url 'apis:apis_relations:ajax_2_load_triple_form' %}",
+            data: post_data,
+            success: function (response) {
+                // In some cases we want to append a triple form instead of replacing them
+                // also, jquery should be used here, because if innerHTML is used, the autocomplete of pre-existing forms is screwed up. No idea why.
+                if (div_data_carrier.getAttribute("data-should_append") == "true") {
+                    $(div_form_anchor).append(response);
+                } else {
+                    $(div_form_anchor).html(response);
+                }
+            },
+            error: function (response) {
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    };
+
+    // calls the python function with same name, loads an empty form and updated table
+    function ajax_2_post_triple_form(div_origin) {
+        var post_data = parse_triple_form(div_origin.closest('.triple_form'));
+        $.ajax({
+            type: 'POST',
+            headers: ajax_headers,
+            url: "{% url 'apis:apis_relations:ajax_2_post_triple_form' %}",
+            data: post_data,
+            success: function (response) {
+                var div_form_anchor = div_origin.closest(".triple_data_carrier").getElementsByClassName("triple_form_anchor")[0];
+                var div_table_anchor = div_origin.closest(".triple_data_carrier").getElementsByClassName("triple_table_anchor")[0];
+                div_form_anchor.innerHTML = response["form"];
+                div_table_anchor.innerHTML = response["table"];
+            },
+            error: function (response) {
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    };
+
+    // calls the python function with same name, loads an updated table
+    function ajax_2_delete_triple(div_origin, triple_id) {
+        var div_data_carrier = div_origin.closest('.triple_data_carrier');
+        var post_data = load_from_triple_data_carrier(div_data_carrier);
+        post_data["triple_id"] = triple_id;
+        $.ajax({
+            type: 'POST',
+            headers: ajax_headers,
+            url: "{% url 'apis:apis_relations:ajax_2_delete_triple' %}",
+            data: post_data,
+            success: function (response) {
+                var div_table_anchor = div_origin.closest(".triple_table_anchor");
+                div_table_anchor.innerHTML = response;
+            },
+            error: function (response) {
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    };
+
+    // calls the python function with same name, loads a populated form from a passed id
+    function ajax_2_load_reification_form(div_origin, reification_id) {
+        var reification_data_carrier = div_origin.closest(".reification_data_carrier");
+        var post_data = load_from_reification_data_carrier(reification_data_carrier);
+        post_data["reification_id"] = reification_id;
+        $.ajax({
+            type: 'POST',
+            headers: ajax_headers,
+            url: "{% url 'apis:apis_relations:ajax_2_load_reification_form' %}",
+            data: post_data,
+            success: function (response) {
+                var div_form_anchor = reification_data_carrier.getElementsByClassName("reification_form_anchor")[0];
+                div_form_anchor.innerHTML = response;
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    };
+
+    // calls the python function with same name, loads an empty form and updated table
+    function ajax_2_post_reification_form(div_origin) {
+        var reification_data_carrier = div_origin.closest(".reification_data_carrier");
+        var post_data = load_from_reification_data_carrier(reification_data_carrier);
+        post_data["reification_attr_form"] = {};
+        post_data["triple_data_to_reification_list"] = [];
+        post_data["triple_data_from_reification_list"] = [];
+        var div_form_anchor = reification_data_carrier.getElementsByClassName("reification_form_anchor")[0];
+        post_data["reification_attr_form"]["reification_id"] = div_form_anchor.getElementsByClassName("reification_attr_form")[0].getAttribute("data-reification_id");
+        $(div_form_anchor.getElementsByClassName("reification_attr_form")).serializeArray().forEach(attr => {
+            post_data["reification_attr_form"][attr["name"]] = attr["value"];
+        });
+        Array.from(div_form_anchor.getElementsByClassName("triple_form_anchor")).forEach(triple_form_container => {
+            Array.from(triple_form_container.getElementsByClassName("triple_form")).forEach(triple_form => {
+                var direction = triple_form_container.closest(".reification_triple_direction_carrier").getAttribute("data-direction");
+                if (direction == "to_reification") {
+                    post_data["triple_data_to_reification_list"].push(parse_triple_form(triple_form));
+                } else if (direction == "from_reification") {
+                    post_data["triple_data_from_reification_list"].push(parse_triple_form(triple_form));
+                } else {
+                    throw new Error('No reification direction found.');
+                }
+            })
+        });
+        // If the dictionary were passed without stringifying it, the nested structure would get lost.
+        post_data = JSON.stringify(post_data);
+        $.ajax({
+            type: 'POST',
+            headers: ajax_headers,
+            url: "{% url 'apis:apis_relations:ajax_2_post_reification_form' %}",
+            data: post_data,
+            success: function (response) {
+                div_form_anchor.innerHTML = response["form"];
+                var div_table_anchor = reification_data_carrier.getElementsByClassName("reification_table_anchor")[0];
+                div_table_anchor.innerHTML = response["table"];
+            },
+            error: function (response) {
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    };
+
+    // calls the python function with same name, loads an updated table
+    function ajax_2_delete_reification(div_origin, reification_id) {
+        var reification_data_carrier = div_origin.closest(".reification_data_carrier");
+        var post_data = load_from_reification_data_carrier(reification_data_carrier);
+        post_data["reification_id"] = reification_id;
+        $.ajax({
+            type: 'POST',
+            headers: ajax_headers,
+            url: "{% url 'apis:apis_relations:ajax_2_delete_reification' %}",
+            data: post_data,
+            success: function (response) {
+                var div_form_anchor = reification_data_carrier.getElementsByClassName("reification_form_anchor")[0];
+                var div_table_anchor = reification_data_carrier.getElementsByClassName("reification_table_anchor")[0];
+                div_form_anchor.innerHTML = response["form"];
+                div_table_anchor.innerHTML = response["table"];
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+    };
+
+    // TODO RDF : This is probably only used by highlighter by now. Remove once the highlighter is
+    // adapted to new ajax logic.
     function GetFormAjax(FormName , ObjectID , ButtonText) {
         function add_form(data) {
             // update our tooltip content with our returned data and cache it
@@ -201,7 +412,7 @@
             $('#tab_'+data.tab).append(data.form);
 	        $('#form_PersonInstitutionForm div:first div:first select').focus();
             $('#tab_'+data.tab+" select.listselect2").each(function( index, element ){
-                console.log($(this).data("autocompleteLightUrl"))
+                //console.log($(this).data("autocompleteLightUrl"))
             $(this).select2({
                 escapeMarkup: function(markup) {
                 return markup;
@@ -219,9 +430,8 @@
                 },
             })
 
-
             })            //$(".form.ajax_form").unbind()
-            console.log($('#tab_'+data.tab+" select.listselect2"))
+            //console.log($('#tab_'+data.tab+" select.listselect2"))
         };
         if (!$.ApisForms) {
             $.ApisForms = {}
@@ -237,6 +447,7 @@
         if (ButtonText === undefined) {
             ButtonText = 'create/modify';
         };
+        //console.log("apis:apis_relations:get_form_ajax", "{% url 'apis:apis_relations:get_form_ajax' %}");
         return $.ajax(
             {
                 type: 'POST',
@@ -265,13 +476,11 @@
                 }
             }
         );
-    }
-</script>
-<script type="text/javascript">
+    };
+
+    // TODO RDF : This is probably only used by highlighter by now. Remove once the highlighter is
+    // adapted to new ajax logic.
     function EntityRelationForm_response(response){
-
-        console.log("apis_core/apis_entities/templates/apis_entities/entity_create_generic.html:EntityRelationForm_response")
-
         if (response.test == false) {
             $('#'+response.DivID).replaceWith(response.form);
             //$(".form.ajax_form").unbind();
@@ -280,15 +489,15 @@
                 $.ApisHigh.tt_instance_detail.content(response.form);
             } }
         } else {
-            console.log('test did not fail');
+            //console.log('test did not fail');
              $('#tab_'+response.tab).find('div').remove();
              $('#tab_'+response.tab).append(response.table_html);
              initiate_compare_tooltip();
              {% if instance %}
              if (check_perms_relation()){
-             if (response.right_card) {
-                 console.log('fetching form');
-                 console.log(response.tab);
+             if (response.triple_pane) {
+                 //console.log('fetching form');
+                 //console.log(response.tab);
              GetFormAjax(response.tab);};
              if ($.ApisHigh){
              if ($.ApisHigh.tt_instance_detail["__state"] == 'stable') {
@@ -300,9 +509,8 @@
              {% endif %}
         };
         unbind_compare_forms();
-    }
-</script>
-<script type="text/javascript">
+    };
+
     function HighlForm_response(response){
         if (response.test == false) {
             $.ApisHigh.tt_instance.content(response.form);
@@ -318,9 +526,8 @@
              $('mark.highlight').on("click", highlight_detail);
              initiate_compare_tooltip();
         }
-    }
-</script>
-<script type="text/javascript">
+    };
+
     function PAddRelation_response(response){
         if (response.test == false) {
             $.ApisHigh.tt_instance.content(response.form);
@@ -332,9 +539,8 @@
              $('mark.highlight').off()
              $('mark.highlight').on("click", highlight_detail)
         }
-    }
-</script>
-<script type='text/javascript'>
+    };
+
     function DeleteTempEntity(pk, kind, app_name=false) {
         if (app_name){
             var url = '/apis/api/'+app_name+'/'+kind+'/'+pk.toString()
@@ -357,16 +563,13 @@
                 }
             }
         })
-    }
-</script>
-<script type='text/javascript'>
+    };
+
     function DeleteAnnTempEntity(an_pk, rel_class, rel_pk, app_name) {
         DeleteTempEntity(an_pk,"HLAnnotation");
         DeleteTempEntity(rel_pk, rel_class, app_name);
     };
-</script>
 
-<script type="text/javascript">
     function check_perms_relation(){
         {% if instance %}
         {% if "change" in permissions %}
@@ -375,34 +578,34 @@
         return false
         {% endif %}
         {% endif %}
-    }
-</script>
-<script type="text/javascript">
- function activate_editing(){
-        {% for obj in right_card %}
-        GetFormAjax("{{obj.2}}");
-        //unbind_ajax_forms();
-        {% endfor %}
-{% if highlighter_active %}
-    init_apis_highlighter(1, {{instance.pk}});
-    if (typeof $.ApisHigh.vars == 'undefined') {
-        $.ApisHigh.vars = {}; };
-        $.ApisHigh.vars.entity_type = '{{entity_type}}';
-        $.ApisHigh.vars.instance_pk = '{{instance.pk}}';
-        $.ApisHigh.vars.urls = {};
-        $.ApisHigh.vars.urls.get_form_ajax = "{% url 'apis:apis_relations:get_form_ajax' %}";
-        $.ApisHigh.vars.urls.annotatoragreementview = "{% url 'apis:apis_api2:AnnotatorAgreementView' %}";
-        $.ApisHigh.vars.urls.showoverlappinghighlights = "{% url 'apis:apis_api2:ShowOverlappingHighlights' %}";
-      activate_context_menu_highlighter();
-      $('body').on("click", 'mark.highlight', highlight_detail);
-    {% endif %}
- };
-function deactivate_editing(){
-    $('.reldelete').addClass("disabled");
-    $('.reldelete').prop("disabled", true);
-    $('.reledit').addClass("disabled");
-    $('.reledit').prop("disabled", true);
- };
+    };
+
+    function activate_editing(){
+            {% for obj in triple_pane %}
+            //GetFormAjax("{{obj.2}}");
+            //unbind_ajax_forms();
+            {% endfor %}
+    {% if highlighter_active %}
+        init_apis_highlighter(1, {{instance.pk}});
+        if (typeof $.ApisHigh.vars == 'undefined') {
+            $.ApisHigh.vars = {}; };
+            $.ApisHigh.vars.entity_type = '{{entity_type}}';
+            $.ApisHigh.vars.instance_pk = '{{instance.pk}}';
+            $.ApisHigh.vars.urls = {};
+            $.ApisHigh.vars.urls.get_form_ajax = "{% url 'apis:apis_relations:get_form_ajax' %}";
+            $.ApisHigh.vars.urls.annotatoragreementview = "{% url 'apis:apis_api2:AnnotatorAgreementView' %}";
+            $.ApisHigh.vars.urls.showoverlappinghighlights = "{% url 'apis:apis_api2:ShowOverlappingHighlights' %}";
+          activate_context_menu_highlighter();
+          $('body').on("click", 'mark.highlight', highlight_detail);
+        {% endif %}
+     };
+
+    function deactivate_editing(){
+        $('.reldelete').addClass("disabled");
+        $('.reldelete').prop("disabled", true);
+        $('.reledit').addClass("disabled");
+        $('.reledit').prop("disabled", true);
+     };
 {% endif %}
 {% if instance %}
 {% if permissions.change %}

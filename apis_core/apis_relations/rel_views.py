@@ -7,7 +7,7 @@ from apis_core.apis_entities.views import GenericListViewNew
 # from apis_core.apis_relations.models import AbstractRelation
 from apis_core.apis_relations.models import Triple, Property
 from .rel_filters import get_generic_relation_filter, TripleFilter, PropertyFilter
-from .tables import get_generic_relation_listview_table, TripleTable, PropertyTable
+from .tables import get_generic_relation_listview_table, TripleTable_OLD, PropertyTable
 
 
 class GenericRelationView(GenericListViewNew):
@@ -50,7 +50,7 @@ class GenericRelationView(GenericListViewNew):
         if self.entity == "property":
             self.table_class = PropertyTable
         else:
-            self.table_class = TripleTable
+            self.table_class = TripleTable_OLD
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(
             self.request, paginate={"page": 1, "per_page": self.paginate_by}

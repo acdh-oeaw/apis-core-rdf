@@ -18,6 +18,9 @@ from django.db.models import Q
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.apis_entities.models import AbstractEntity
+from apis_core.helper_functions import caching
+from apis_core.helper_functions.caching import get_autocomplete_property_choices
+
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
     ac_settings = importlib.import_module(path_ac_settings)
@@ -124,7 +127,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         ent_merge_pk = self.kwargs.get('ent_merge_pk', False)
         choices = []
         headers = {'Content-Type': 'application/json'}
-        ent_model = AbstractEntity.get_entity_class_of_name(ac_type)
+        ent_model = caching.get_ontology_class_of_name(ac_type)
         ent_model_name = ent_model.__name__
 
         # inspect user search query
@@ -188,7 +191,14 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                     if r.lng and r.lat:
                         dataclass = 'data-vis-tooltip="{}" data-lat="{}" \
                         data-long="{}"  class="apis-autocomplete-span"'.format(ac_type, r.lat, r.lng)
-                f['text'] = '<span {}><small>db</small> {}</span>'.format(dataclass, str(r))
+                        
+                # TODO RDF : make the html format work again
+                # For now, the return value is overwritten with a non-html result
+                # also regard the other parts in this function where choices.append get something
+                # __before_rdf_refactoring__
+                # f['text'] = '<span {}><small>db</small> {}</span>'.format(dataclass, str(r))
+                # __after_rdf_refactoring__
+                f['text'] = r.name
                 choices.append(f)
             if len(choices) < page_size:
                 test_db = False
@@ -438,67 +448,14 @@ class GenericNetworkEntitiesAutocomplete(autocomplete.Select2ListView):
 
 # __after_rdf_refactoring__
 class PropertyAutocomplete(autocomplete.Select2ListView):
-
     # These constants are set so that they are defined in one place only and reused by fetching them elsewhere.
     SELF_SUBJ_OTHER_OBJ_STR = "self_subj_other_obj"
     SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
 
     def get(self, request, *args, **kwargs):
         # TODO RDF : pagination
-
-        search_name_str = self.q
-
         more = False
-
-        entity_self_str = kwargs["entity_self"]
-        entity_other_str = kwargs["entity_other"]
-
-        # TODO __sresch__ : Replace the db contenttype query with cached helper functions from GetContentTypes once this has been merged
-        entity_self_contenttype = ContentType.objects.get(model=entity_self_str)
-        entity_other_contenttype = ContentType.objects.get(model=entity_other_str)
-
-        from apis_core.apis_relations.models import Property
-
-        rbc_self_subj_other_obj = Property.objects.filter(
-            subj_class=entity_self_contenttype,
-            obj_class=entity_other_contenttype,
-            name__icontains=search_name_str
-        )
-        rbc_self_obj_other_subj = Property.objects.filter(
-            subj_class=entity_other_contenttype,
-            obj_class=entity_self_contenttype,
-            name_reverse__icontains=search_name_str
-        )
-
-        choices = []
-
-        # The Select2ListView class when finding results for some user input, returns these results in this 'choices' list.
-        # This is a list of dictionaries, where each dictionary has an id and a text.
-        # In our case however the results can come from two different sets:
-        # the one where result hits match on the forward name of a property and the other set where the result hits
-        # match on the reverse name. These hits need to re-used later, but additionally the direction of the property
-        # is also needed later to persist it correctly (e.g. when creating a triple between two persons, where one is
-        # the mother and the other is the daugther, then the property direction is needed).
-        # I could not find a way to return in this function a choices list with dictionaries or something else, that
-        # would pass additional data. So I am misusing the 'id' item in the dictionary by encoding the id and the direction
-        # into a string which will be parsed and split later on.
-
-        for rbc in rbc_self_subj_other_obj:
-            choices.append(
-                {
-                    'id': f"id:{rbc.pk}__direction:{self.SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
-                    'text': rbc.name
-                }
-            )
-
-        for rbc in rbc_self_obj_other_subj:
-            choices.append(
-                {
-                    'id': f"id:{rbc.pk}__direction:{self.SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
-                    'text': rbc.name_reverse
-                }
-            )
-
+        choices = get_autocomplete_property_choices(kwargs["entity_self"], kwargs["entity_other"], self.q)
         return http.HttpResponse(
             json.dumps(
                 {
@@ -509,3 +466,4 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
             ),
             content_type='application/json'
         )
+    

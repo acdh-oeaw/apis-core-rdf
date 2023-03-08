@@ -11,13 +11,11 @@ from django.core.validators import URLValidator
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import ModelMultipleChoiceField, ModelChoiceField
 from django.urls import reverse
-
 from apis_core.apis_metainfo.models import Text, Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
-from apis_core.helper_functions import DateParser
+from apis_core.helper_functions import DateParser, caching
 from apis_core.helper_functions.RDFParser import RDFParser
-from .fields import ListSelect2, Select2Multiple
-from apis_core.apis_entities.models import AbstractEntity
+from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import AnnotationProject
@@ -46,8 +44,10 @@ def get_entities_form(entity):
 
     class GenericEntitiesForm(forms.ModelForm):
         class Meta:
-            model = AbstractEntity.get_entity_class_of_name(entity)
+            model = caching.get_ontology_class_of_name(entity)
 
+            # TODO RDF : Remove these hard-coded ontology specific fields, and delegate them to
+            #  apis-ontologies
             exclude = [
                 "start_date",
                 "start_start_date",
@@ -185,10 +185,12 @@ def get_entities_form(entity):
 
             for field in sort_fields_list(main_fields, entity):
                 crispy_main_fields.append(Field(field))
-
-            self.helper.layout = Layout(Accordion(  # creates two blocks for fields
+                
+            self.helper.layout = Layout(Accordion(  # creates blocks for fields
+                # VocabTable(E55_Type.objects.all()),
                 crispy_main_fields,
-                crispy_meta_fields
+                # crispy_vocabulary_fields,
+                crispy_meta_fields,
             ))
             self.fields["status"].required = False
             self.fields["collection"].required = False
@@ -480,4 +482,3 @@ class GenericFilterFormHelper(FormHelper):
         self.form_class = "genericFilterForm"
         self.form_method = "GET"
         self.add_input(Submit("Filter", "Filter"))
-

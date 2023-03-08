@@ -1,13 +1,9 @@
 from django.urls import include, path
-
 from . import views, views2, detail_views, merge_views
-from .autocomplete3 import (
-    GenericEntitiesAutocomplete,
-    GenericNetworkEntitiesAutocomplete,
-)
-
-# from .views import ReversionCompareView TODO: add again when import is fixec
+from .autocomplete3 import GenericEntitiesAutocomplete, GenericNetworkEntitiesAutocomplete
+# from .views import ReversionCompareView TODO: add again when import is fixed
 from .views2 import GenericEntitiesCreateStanbolView
+
 
 app_name = "apis_entities"
 
@@ -62,7 +58,7 @@ urlpatterns = [
 
     # TODO __sresch__ : This seems unused. Remove it once sure
     # url(r"^detail/work/(?P<pk>[0-9]+)$",
-    #     detail_views.WorkDetailView.as_view(), name="work_detail"),
+    #     detail_generic.WorkDetailView.as_view(), name="work_detail"),
 
     path('place/geojson/', views.getGeoJson, name='getGeoJson'),
     # __before_rdf_refactoring__

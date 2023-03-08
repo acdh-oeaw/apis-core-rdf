@@ -2,7 +2,6 @@ import inspect
 import re
 import sys
 import unicodedata
-
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.functional import cached_property
@@ -14,6 +13,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
 
+class AbstractVocabulary(RootObject):
+    
+    class Meta:
+        abstract = True
+
 @reversion.register()
 class VocabNames(models.Model):
     """List of Vocabulary names to allow the easy retrieval\
@@ -24,6 +28,7 @@ class VocabNames(models.Model):
         return re.sub(r"([A-Z])", r" \1", self.name).strip()
 
 
+# TODO RDF : Remove VocabsBaseClass entirely
 @reversion.register()
 class VocabsBaseClass(RootObject):
     """ An abstract base class for other classes which contain so called
@@ -181,7 +186,7 @@ class VocabsUri(models.Model):
 #     """Holds controlled vocabularies about event-types"""
 #     pass
 
-
+# TODO RDF : Remove all these types
 @reversion.register(follow=['vocabsbaseclass_ptr'])
 class LabelType(VocabsBaseClass):
     """Holds controlled vocabularies about label-types"""

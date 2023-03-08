@@ -9,6 +9,7 @@ from apis_core.apis_metainfo.tables import (
     generic_render_start_date_written,
     generic_render_end_date_written
 )
+from apis_core.helper_functions import caching
 
 input_form = """
   <input type="checkbox" name="keep" value="{}" title="keep this"/> |
@@ -29,7 +30,6 @@ class MergeColumn(tables.Column):
 
 
 def get_entities_table(entity, edit_v, default_cols):
-
     if default_cols is None:
         default_cols = ['name', ]
 
@@ -48,7 +48,6 @@ def get_entities_table(entity, edit_v, default_cols):
         order_end_date_written = generic_order_end_date_written
         render_start_date_written = generic_render_start_date_written
         render_end_date_written = generic_render_end_date_written
-
         if edit_v:
             name = tables.LinkColumn(
                 'apis:apis_entities:generic_entities_edit_view',
@@ -73,11 +72,9 @@ def get_entities_table(entity, edit_v, default_cols):
             id = tables.LinkColumn()
 
         class Meta:
-            model = AbstractEntity.get_entity_class_of_name(entity_name=entity)
-
+            model = caching.get_ontology_class_of_name(entity)
             fields = default_cols
             attrs = {"class": "table table-hover table-striped table-condensed"}
-
             # quick ensurance if column is indeed a field of this entity
             for col in default_cols:
                 if not hasattr(model, col):

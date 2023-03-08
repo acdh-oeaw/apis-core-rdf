@@ -4,7 +4,7 @@ import sys
 import unicodedata
 import yaml
 from django.contrib.contenttypes.models import ContentType
-
+from apis_core.helper_functions import caching
 from reversion import revisions as reversion
 from django.apps import apps
 import reversion
@@ -34,8 +34,6 @@ from apis_core.apis_metainfo.models import RootObject, Collection
 BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
-# __before_rdf_refactoring__
-# class AbstractEntity(TempEntityClass):
 # __after_rdf_refactoring__
 class AbstractEntity(RootObject):
     """
@@ -59,7 +57,6 @@ class AbstractEntity(RootObject):
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
-        self.__class__.create_relation_methods_from_manytomany_fields()
 
     # Methods dealing with individual data retrievals of instances
     ###########################################################################
@@ -230,85 +227,6 @@ class AbstractEntity(RootObject):
                         ),
                     )
 
-    # Methods dealing with all entities
-    ###########################################################################
-
-    _all_entity_classes = None
-    _all_entity_names = None
-
-    @classmethod
-    def get_all_entity_classes(cls):
-        """
-        Retrieve all entity classes from an APIS Ontologies app's model.py
-        file – except for abstract classes or classes named "ent_class".
-
-        Attempts to set protected variables
-        - _all_entity_classes to list of classes
-        - _all_entity_names to list of strings
-        if they do not exist yet and returns _all_entity_classes.
-
-        :return: a list of classes, or None
-        """
-
-        if cls._all_entity_classes is None:
-            entity_classes = []
-            entity_names = []
-
-            # this try-expect is a workaround, because `apis_ontology` module
-            # might not be installed
-            try:
-                from apis_ontology import models as ontology_models
-
-                for entity_name, entity_class in inspect.getmembers(
-                    ontology_models, inspect.isclass
-                ):
-
-                    # print(entity_name, entity_class)
-
-                    if (
-                        # entity_class.__module__ == "apis_core.apis_entities.models"
-                        entity_class.__module__ == "apis_ontology.models"
-                        and entity_name != "ent_class"
-                        and entity_class._meta.abstract is False
-                    ):
-                        entity_classes.append(entity_class)
-                    entity_names.append(entity_name.lower())
-            except ImportError:
-                pass
-
-            cls._all_entity_classes = entity_classes
-            cls._all_entity_names = entity_names
-
-        return cls._all_entity_classes
-
-    @classmethod
-    def get_entity_class_of_name(cls, entity_name):
-        """
-        Look up an entity class based on a given name.
-
-        :param entity_name: a string to compare against classes' __name__
-                            values; need not be formatted (letter case does
-                            not matter)
-        :return: an entity class – or raise exception
-        """
-        for entity_class in cls.get_all_entity_classes():
-            if entity_class.__name__.lower() == entity_name.lower():
-                return entity_class
-
-        raise Exception("Could not find entity class of name:", entity_name)
-
-    @classmethod
-    def get_all_entity_names(cls):
-        """
-        Retrieve lower-cased names of all entity classes in an
-        APIS Ontologies app's model.py file.
-
-        :return: a list of strings, or None
-        """
-        if cls._all_entity_names is None:
-            cls.get_all_entity_classes()
-
-        return cls._all_entity_names
 
     # Methods dealing with related entities
     ###########################################################################
@@ -964,7 +882,7 @@ def prepare_fields_dict(fields_list, vocabs, vocabs_m2m):
 def create_default_uri(sender, instance, **kwargs):
     from apis_core.apis_metainfo.models import Uri
 
-    if kwargs["created"] and sender in AbstractEntity.get_all_entity_classes():
+    if kwargs["created"] and sender in caching.get_all_ontology_classes():
         if BASE_URI.endswith("/"):
             base1 = BASE_URI[:-1]
         else:
@@ -1053,17 +971,10 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
 
 
 # __after_rdf_refactoring__
-# TODO RDF : This function is an ad hoc work around.
-#  It would be better done if entity settings would be fully moved
-#  into the entities themselves.
+# TODO RDF : remove this workaround here once the settings issue is resolved
 def fill_settings_with_entity_attributes():
-    # if APIS_ENTITIES are not defined in the settings, we take the
-    # ones that are defined in the entity classes
-    if not settings.APIS_ENTITIES:
-        for entity_class in AbstractEntity.get_all_entity_classes():
-            entity_settings = entity_class.entity_settings
-
-            settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
-
+    for entity_class in caching.get_all_entity_classes() + caching.get_all_ontology_classes():
+        entity_settings = entity_class.entity_settings
+        settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
 
 fill_settings_with_entity_attributes()
