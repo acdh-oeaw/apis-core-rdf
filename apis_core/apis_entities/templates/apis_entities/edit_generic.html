@@ -17,6 +17,7 @@
 {% block content %}
 {% load django_tables2 %}
 {% if instance %}
+<!-- the function search_and_activate_dal_s2 is needed by triple forms, so it needs to be parsed before them, hence this small block of JS code here -->
 <script type="text/javascript">
     function search_and_activate_dal_s2(elem) {
         if (elem instanceof Element) {
@@ -207,6 +208,7 @@
 <script type="text/javascript">
     const ajax_headers = {'X-CSRFToken': '{{ csrf_token }}'};
 
+    // Common logic to fetch data from carrier, so there is this helper function for it
     function load_from_reification_data_carrier(reification_data_carrier) {
         return {
             "reification_type": reification_data_carrier.getAttribute("data-reification_type"),
@@ -214,7 +216,8 @@
             "model_self_id": reification_data_carrier.getAttribute("data-model_self_id"),
         };
     };
-    
+
+    // Common logic to fetch data from carrier, so there is this helper function for it
     function load_from_triple_data_carrier(div_data_carrier) {
         return {
             "model_self_class": div_data_carrier.getAttribute("data-model_self_class"),
@@ -226,6 +229,7 @@
         };
     };
 
+    // parses a triple form, extracts data both from the form as well as from its contextual data carrier
     function parse_triple_form(triple_form) {
         var div_data_carrier = triple_form.closest('.triple_data_carrier');
         var triple_form_data = load_from_triple_data_carrier(div_data_carrier);
@@ -235,6 +239,7 @@
         triple_form_data["model_other_id"] = "";
         $(triple_form).serializeArray().forEach(field_dict => {
             if (field_dict["name"] == "property") {
+                // here we need to parse and split according to the hackish data format injected into autocomplete's get_autocomplete_property_choices
                 property_value = field_dict["value"];
                 property_value = property_value.split("__");
                 triple_form_data["property_id"] = property_value[0].split(":")[1];
@@ -248,6 +253,7 @@
         return triple_form_data;
     }
 
+    // calls the python function with same name, loads a populated form from a passed id
     function ajax_2_load_triple_form(div_origin, triple_id) {
         var div_data_carrier = div_origin.closest('.triple_data_carrier');
         var div_form_anchor = div_data_carrier.getElementsByClassName("triple_form_anchor")[0];
@@ -259,8 +265,9 @@
             url: "{% url 'apis:apis_relations:ajax_2_load_triple_form' %}",
             data: post_data,
             success: function (response) {
+                // In some cases we want to append a triple form instead of replacing them
+                // also, jquery should be used here, because if innerHTML is used, the autocomplete of pre-existing forms is screwed up. No idea why.
                 if (div_data_carrier.getAttribute("data-should_append") == "true") {
-                    // here, jquery should be used, because if innerHTML is used, the autocomplete of pre-existing forms is screwed up. No idea why.
                     $(div_form_anchor).append(response);
                 } else {
                     $(div_form_anchor).html(response);
@@ -272,6 +279,7 @@
         })
     };
 
+    // calls the python function with same name, loads an empty form and updated table
     function ajax_2_post_triple_form(div_origin) {
         var post_data = parse_triple_form(div_origin.closest('.triple_form'));
         $.ajax({
@@ -291,6 +299,7 @@
         })
     };
 
+    // calls the python function with same name, loads an updated table
     function ajax_2_delete_triple(div_origin, triple_id) {
         var div_data_carrier = div_origin.closest('.triple_data_carrier');
         var post_data = load_from_triple_data_carrier(div_data_carrier);
@@ -310,6 +319,7 @@
         })
     };
 
+    // calls the python function with same name, loads a populated form from a passed id
     function ajax_2_load_reification_form(div_origin, reification_id) {
         var reification_data_carrier = div_origin.closest(".reification_data_carrier");
         var post_data = load_from_reification_data_carrier(reification_data_carrier);
@@ -329,6 +339,7 @@
         })
     };
 
+    // calls the python function with same name, loads an empty form and updated table
     function ajax_2_post_reification_form(div_origin) {
         var reification_data_carrier = div_origin.closest(".reification_data_carrier");
         var post_data = load_from_reification_data_carrier(reification_data_carrier);
@@ -370,6 +381,7 @@
         })
     };
 
+    // calls the python function with same name, loads an updated table
     function ajax_2_delete_reification(div_origin, reification_id) {
         var reification_data_carrier = div_origin.closest(".reification_data_carrier");
         var post_data = load_from_reification_data_carrier(reification_data_carrier);
@@ -391,6 +403,8 @@
         })
     };
 
+    // TODO RDF: This is probably only used by highlighter by now. Remove once the highlighter is
+    // adapted to new ajax logic.
     function GetFormAjax(FormName , ObjectID , ButtonText) {
         function add_form(data) {
             // update our tooltip content with our returned data and cache it
@@ -464,6 +478,8 @@
         );
     };
 
+    // TODO RDF: This is probably only used by highlighter by now. Remove once the highlighter is
+    // adapted to new ajax logic.
     function EntityRelationForm_response(response){
         if (response.test == false) {
             $('#'+response.DivID).replaceWith(response.form);

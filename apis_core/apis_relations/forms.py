@@ -18,14 +18,10 @@ from apis_core.apis_labels.models import Label
 from apis_core.helper_functions import DateParser, caching
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
-
-
-##############################################
-# Generic
-##############################################
 from apis_core.helper_functions.caching import get_autocomplete_property_choices
 
 
+# TODO RDF: Check if still relevant. Remove or adapt.
 class EntityLabelForm(forms.ModelForm):
 
     class Meta:
@@ -80,59 +76,6 @@ class EntityLabelForm(forms.ModelForm):
             else:
                 self.fields['end_date_written'].help_text = DateParser.get_date_help_text_default()
 
-
-# __before_rdf_refactoring__
-#
-# ##############################################
-# # Person
-# ##############################################
-#
-#
-# class PersonLabelForm(EntityLabelForm):
-#     pass
-#
-# ##############################################
-# # Institutions
-# ##############################################
-#
-#
-# class InstitutionLabelForm(EntityLabelForm):
-#     pass
-#
-#
-# ##############################################
-# # Places
-# ##############################################
-#
-# class PlaceLabelForm(EntityLabelForm):
-#     pass
-#
-#
-# ##############################################
-# # Events
-# ##############################################
-#
-#
-# class EventLabelForm(EntityLabelForm):
-#     pass
-#
-#
-# ##############################################
-# # Entities Base Forms
-# #############################################
-#
-#
-# class PlaceEntityForm(forms.Form):
-#     # place = forms.CharField(label='Place', widget=al.TextWidget('OrtAutocomplete'))
-#     place_uri = forms.CharField(required=False, widget=forms.HiddenInput())
-#
-#     def save(self, *args, **kwargs):
-#         cd = self.cleaned_data
-#         pl = Place.get_or_create_uri(cd['place_uri'])
-#         if not pl:
-#             pl = RDFParser(cd['place_uri'], 'Place').get_or_create()
-#         return pl
-
 def render_triple_form(
     model_self_class_str,
     model_other_class_str,
@@ -142,10 +85,32 @@ def render_triple_form(
     should_include_remove_button=False,
     should_include_create_button=True,
 ):
+    """
+    renders the triple form
+    
+    :param model_self_class_str: str representation of the main entity class, always referred as
+    self, in django's lowercase format
+    :param model_other_class_str: str representation of the other entity class, always referred as
+    self, in django's lowercase format
+    :param model_self_instance: instance of the current main entity in a edit or detail view
+    :param triple_instance: instance of triple
+    :param should_include_other_entity: In some cases we need to not display the other entity. But
+    it's rare, so the default is set to True
+    :param should_include_remove_button: In some cases we need to have a button to remove the
+    current triple form. But it's rare, so the default is set to False
+    :param should_include_create_button: In some cases we don't need to have a button to process a
+    triple form on its own. But it's rare, so the default is set to True
+    :return: a html rendered string to be integrated into the calling view
+    """
     
     def instantiate_form():
+        """
+        creates a Form instance with Triple as its model class
         
-        class GenericContextualTripleForm(forms.Form):
+        :return: django form instance
+        """
+        
+        class TripleForm(forms.Form):
             template_name = "apis_relations/triple_form.html"
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
@@ -180,41 +145,62 @@ def render_triple_form(
                             },
                         ),
                     )
+                # Check for possible properties between the two classes
                 property_initial_choice = get_autocomplete_property_choices(
                     model_self_class_str=model_self_class_str,
                     model_other_class_str=model_other_class_str,
                     search_name_str="",
                 )
+                # If there is only one possible property, pre-select it
                 if len(property_initial_choice) == 1:
                     property_initial_choice = property_initial_choice[0]
                     self.fields["property"].initial = property_initial_choice["id"]
                     self.fields["property"].choices = [(property_initial_choice["id"], property_initial_choice["text"])]
-                #TODO REIFICATION: recreate the logic above for the case where there is only one other entity
                 
-        return GenericContextualTripleForm()
+        return TripleForm()
     
     def set_initial_values(triple_form):
+        """
+        If an existing triple is passed, then use it to set initial values of the form it
+        
+        :param triple_form: instantiated form
+        :return: same form but initialised with values of the triple instance
+        """
+        
+        # if the surrounding function got passed a triple instance, use it
         if triple_instance is not None:
+            # get the right direction of the property with respect to the main entity instance
+            # also in the format defined in the autocomplete class
             property = triple_instance.prop
             if model_self_instance == triple_instance.subj:
                 property_initial_choice = {
-                    'id': f"id:{property.pk}__direction:{PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
+                    # misusing django-autocomplete return format to inject more values than
+                    # anticipated. Reasoning explained in get_autocomplete_property_choices
+                    'id': f"id:{property.pk}"
+                          + f"__direction:{PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR}",
                     'text': property.name
                 }
             elif model_self_instance == triple_instance.obj:
                 property_initial_choice = {
-                    'id': f"id:{property.pk}__direction:{PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
+                    # misusing django-autocomplete return format to inject more values than
+                    # anticipated. Reasoning explained in get_autocomplete_property_choices
+                    'id': f"id:{property.pk}"
+                          + f"__direction:{PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR}",
                     'text': property.name_reverse
                 }
+            # check for wrong value passed to this function
             else:
                 raise Exception("unhandled case.")
             triple_form.fields["property"].initial = property_initial_choice["id"]
             triple_form.fields["property"].choices = [(property_initial_choice["id"], property_initial_choice["text"])]
+            # check if the other entity is to displayed in the form at all
             if should_include_other_entity:
+                # get the right other entity instance
                 if model_self_instance == triple_instance.subj:
                     model_other_instance = triple_instance.obj
                 elif model_self_instance == triple_instance.obj:
                     model_other_instance = triple_instance.subj
+                # check for wrong value passed to this function
                 else:
                     raise Exception("unhandled case.")
                 triple_form.fields["entity_other"].initial = model_other_instance.uri_set.all()[0]
@@ -222,6 +208,7 @@ def render_triple_form(
                 
         return triple_form
     
+    # just a check to verify this function was called correctly
     if triple_instance is not None and model_self_instance is None:
         raise Exception("a triple instance was passed but no corresponding subject or object instance which is needed.")
     triple_form = instantiate_form()
@@ -245,26 +232,39 @@ def render_triple_form_and_table(
     model_self_class_str,
     model_other_class_str,
     model_self_id_str,
-    should_be_editable,
     request,
 ):
+    """
+    The main function for rendering both form and table of a triple. This is only called from
+    server's static rendering part, never with any ajax call. The ajax calls handle smaller
+    elements.
+    
+    :param model_self_class_str: str representation of the main entity class, always referred as
+    self, in django's lowercase format
+    :param model_other_class_str: str representation of the other entity class, always referred as
+    self, in django's lowercase format
+    :param model_self_id_str: the id of the main entity instance, needed for creating triples
+    :param request: the request object, needed for the table for whatever reason. Could not leave
+    it out.
+    :return: a html rendered string to be integrated into the calling view
+    """
+    
     context={
         "model_self_class": model_self_class_str,
         "model_other_class": model_other_class_str,
         "model_self_id": model_self_id_str,
+        "triple_form": render_triple_form(
+            model_self_class_str=model_self_class_str,
+            model_other_class_str=model_other_class_str,
+        ),
         "triple_table": render_triple_table(
             model_self_class_str=model_self_class_str,
             model_other_class_str=model_other_class_str,
             model_self_id_str=model_self_id_str,
-            should_be_editable=should_be_editable,
+            should_be_editable=True,
             request=request,
         ),
     }
-    if should_be_editable:
-        context["triple_form"] = render_triple_form(
-            model_self_class_str=model_self_class_str,
-            model_other_class_str=model_other_class_str,
-        )
     
     return render_to_string(
         template_name="apis_relations/triple_form_and_table.html",
@@ -272,27 +272,50 @@ def render_triple_form_and_table(
     )
 
 
-def render_reification_form(model_self_class_str, reification_type_str, model_self_id_str, reification_id_str=""):
+def render_reification_form(
+    model_self_class_str,
+    reification_type_str,
+    model_self_id_str,
+    reification_id_str=""
+):
+    """
+    renders the reification form with a lot of logic to render contained triple forms
+    
+    :param model_self_class_str: str representation of the main entity class, always referred as
+    self, in django's lowercase format
+    :param reification_type_str: str representation of the reification class, always referred as
+    self, in django's lowercase format
+    :param model_self_id_str: the id of the main entity instance, needed for creating triples
+    :param reification_id_str: the id of a reification instance, in case of loading a pre-existing
+    one into form for editing
+    :return: a html rendered string
+    """
+    
+    # process necessary context
     reification_class = caching.get_reification_class_of_name(reification_type_str)
     reification_instance = None
     if reification_id_str != "":
         reification_instance = reification_class.objects.get(pk=reification_id_str)
     model_self_class = caching.get_ontology_class_of_name(model_self_class_str)
     model_self_instance = model_self_class.objects.get(pk=model_self_id_str)
+    # check for properties from main entity to reification
     allowed_property_list_to_reification = Property.objects.filter(
         Q(
-            subj_class=caching.get_contenttype_of_class_or_instance(model_self_instance),
-            obj_class=caching.get_contenttype_of_class_or_instance(reification_class)
+            subj_class=model_self_instance.self_contenttype,
+            obj_class=caching.get_contenttype_of_class(reification_class),
         )
         | Q(
-            subj_class=caching.get_contenttype_of_class_or_instance(reification_class),
-            obj_class=caching.get_contenttype_of_class_or_instance(model_self_instance)
+            subj_class=caching.get_contenttype_of_class(reification_class),
+            obj_class=model_self_instance.self_contenttype,
         )
     )
+    # If only one property is allowed, then buttons to add or remove forms will not be rendered
     if len(allowed_property_list_to_reification) == 1:
         should_include_remove_and_add_button = False
+    # If multiple properties are allowed, then buttons to add or remove forms will be rendered
     elif len(allowed_property_list_to_reification) > 1:
         should_include_remove_and_add_button = True
+    # since we are already checking, why not check for calling this whole function wrongly
     else:
         raise Exception(
             "With no valid property between classes of self and reification this render function "
@@ -301,6 +324,11 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
         )
     
     def instantiate_form():
+        """
+        creates a Form instance with respect to the reification model class
+        
+        :return: django form instance
+        """
         
         class ReificationForm(forms.ModelForm):
             template_name = "apis_relations/reification_form.html"
@@ -309,6 +337,7 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
                 exclude = ["self_contenttype"]
         
         reification_form = ReificationForm()
+        # if a reification_instance is passed, use it to populate the form's fields.
         if reification_instance is not None:
             for k in reification_form.fields.keys():
                 reification_form.fields[k].initial = getattr(reification_instance, k)
@@ -316,8 +345,20 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
         return reification_form
     
     def create_triple_form_container_to_reification():
+        """
+        creates a container that carries potentially several triple forms FROM the main entity TO
+        the reification. It might be that there are several properties available. In such a case
+        there will be buttons rendered to add or remove triple forms. If only one property is
+        allowed, then no buttons to add or remove will be rendered.
+        
+        :return: a dictionary containing common meta-data and a list containing potentially several
+        triple forms.
+        """
+        
         triple_form_to_reification_list = []
         has_loaded_existing_triple = False
+        # If there is an existing reification instance, use it to populate the triples FROM main
+        # entity TO the reification
         if reification_instance is not None:
             triple_list = Triple.objects.filter(
                 Q(subj=model_self_instance, obj=reification_instance)
@@ -336,6 +377,7 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
                     )
                 )
                 has_loaded_existing_triple = True
+        # If no pre-existing triple was used, create a blank form
         if not has_loaded_existing_triple:
             triple_form_to_reification_list.append(
                 render_triple_form(
@@ -355,22 +397,37 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
         }
     
     def create_triple_form_container_from_reification_list():
-        entity_type_reification_contenttype = caching.get_contenttype_of_class_or_instance(reification_class)
+        """
+        creates a container that carries potentially several triple forms FROM the reification TO
+        the other entities. Since arbitrary other entities can be related here, buttons will be
+        rendered to add or remove triple forms
+        
+        :return: a list of dictionaries where each dictionary contains common meta-data and a list
+        containing potentially several triple forms.
+        """
+        
+        entity_type_reification_contenttype = caching.get_contenttype_of_class(reification_class)
+        # Properties are checked for which other entity classes are allowed FROM reification TO them
         related_ct_list = ContentType.objects.filter(
             Q(property_set_obj__subj_class=entity_type_reification_contenttype)
             | Q(property_set_subj__obj_class=entity_type_reification_contenttype)
         ).distinct()
         related_class_list = [ct.model_class() for ct in related_ct_list]
+        # main return list
         triple_form_container_from_reification_list = []
-        triple_list = None
+        # get potentially pre-existing triples related to this reification
         if reification_instance is not None:
             triple_list = Triple.objects.filter(
                 Q(subj=reification_instance)
                 | Q(obj=reification_instance)
             )
+        else:
+            triple_list = None
+        # iterate over all possibly relatable classes and generate triple form containers for each
         for related_class in related_class_list:
             has_loaded_existing_triple = False
-            triple_form_to_reification_list = []
+            triple_form_from_reification_list = []
+            # If there are existing triples, use them to populate the forms
             if triple_list is not None and len(triple_list) > 0:
                 for triple in triple_list:
                     if (
@@ -382,9 +439,13 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
                         elif triple.obj == reification_instance:
                             model_other_instance = triple.subj
                         else:
-                            raise Exception("this should not happen. Check that the correct triples are filtered beforehand.")
+                            raise Exception(
+                                "this should not happen. Check that the correct triples are "
+                                "filtered beforehand."
+                            )
+                        # exclude the case where entity is the current main entity
                         if str(model_other_instance.pk) != model_self_id_str:
-                            triple_form_to_reification_list.append(
+                            triple_form_from_reification_list.append(
                                 render_triple_form(
                                     model_self_class_str=reification_type_str,
                                     model_other_class_str=related_class.__name__.lower(),
@@ -395,8 +456,10 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
                                 )
                             )
                             has_loaded_existing_triple = True
+            # If it was not the case that an existing triple was used to populate the form, create
+            # a blank one
             if not has_loaded_existing_triple:
-                triple_form_to_reification_list.append(
+                triple_form_from_reification_list.append(
                     render_triple_form(
                         model_self_class_str=reification_type_str,
                         model_other_class_str=related_class.__name__.lower(),
@@ -405,7 +468,7 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
                     )
                 )
             triple_form_container_from_reification_list.append({
-                "triple_form_from_reification": triple_form_to_reification_list,
+                "triple_form_from_reification": triple_form_from_reification_list,
                 "reification_type": reification_type_str,
                 "model_other_class": related_class.__name__.lower(),
                 "model_self_id": reification_id_str,
@@ -421,7 +484,7 @@ def render_reification_form(model_self_class_str, reification_type_str, model_se
         "reification_form": reification_form,
         "triple_form_container_to_reification": create_triple_form_container_to_reification(),
         "triple_form_container_from_reification_list": create_triple_form_container_from_reification_list(),
-        "should_include_remove_and_add_button": should_include_remove_and_add_button,
+        "should_include_add_button": should_include_remove_and_add_button,
     }
     result_rendered = render_to_string(
         template_name=reification_form.template_name,
@@ -434,27 +497,40 @@ def render_reification_form_and_table(
     model_self_class_str,
     reification_type_str,
     model_self_id_str,
-    should_be_editable,
     request,
 ):
+    """
+    The main function for rendering both form and table of a reification. This is only called from
+    server's static rendering part, never with any ajax call. The ajax calls handle smaller
+    elements.
+    
+    :param model_self_class_str: str representation of the main entity class, always referred as
+    self, in django's lowercase format
+    :param reification_type_str: str representation of the reification class, always referred as
+    self, in django's lowercase format
+    :param model_self_id_str: the id of the main entity instance, needed for creating triples
+    :param request: the request object, needed for the table for whatever reason. Could not leave
+    it out.
+    :return: a html rendered string to be integrated into the calling view
+    """
+    
     context = {
         "model_self_class": model_self_class_str,
         "model_self_id": model_self_id_str,
         "reification_type": reification_type_str,
+        "reification_form": render_reification_form(
+            model_self_class_str=model_self_class_str,
+            reification_type_str=reification_type_str,
+            model_self_id_str=model_self_id_str,
+        ),
         "reification_table": render_reification_table(
             reification_type_str=reification_type_str,
             model_self_class_str=model_self_class_str,
             model_self_id_str=model_self_id_str,
-            should_be_editable=should_be_editable,
+            should_be_editable=True,
             request=request,
         ),
     }
-    if should_be_editable:
-        context["reification_form"] = render_reification_form(
-            model_self_class_str=model_self_class_str,
-            reification_type_str=reification_type_str,
-            model_self_id_str=model_self_id_str,
-        )
     
     return render_to_string(
         template_name="apis_relations/reification_form_and_table.html",

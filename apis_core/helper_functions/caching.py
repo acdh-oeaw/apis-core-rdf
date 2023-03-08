@@ -181,8 +181,8 @@ def get_autocomplete_property_choices(model_self_class_str, model_other_class_st
     if res is not None:
         return res
     else:
-        model_self_contenttype = get_contenttype_of_class_or_instance(get_ontology_class_of_name(model_self_class_str))
-        model_other_contenttype = get_contenttype_of_class_or_instance(get_ontology_class_of_name(model_other_class_str))
+        model_self_contenttype = get_contenttype_of_class(get_ontology_class_of_name(model_self_class_str))
+        model_other_contenttype = get_contenttype_of_class(get_ontology_class_of_name(model_other_class_str))
         from apis_core.apis_relations.models import Property
         rbc_self_subj_other_obj = Property.objects.filter(
             subj_class=model_self_contenttype,
@@ -299,31 +299,19 @@ def get_all_contenttype_module_and_class_names():
     return _contenttype_class_names
 
 
-def get_contenttype_of_class_or_instance(model_class_or_instance):
+def get_contenttype_of_class(model_class):
     """
-    Helper method which caches ContentType of a given model class or instance.
+    Helper method which caches ContentType of a given model class.
     When first called on a model, it fetches its respective ContentType from the DB
     and caches it in a class dictionary. Later, this dictionary is called.
 
-    :param model_class_or_instance: model class or instance of a model class
+    :param model_class: django model class object
     :return: dictionary holding Django ContentType object
     """
 
     global _class_contenttype_dict
     if _class_contenttype_dict is None:
         _class_contenttype_dict = {}
-    
-    if type(model_class_or_instance) is ModelBase:
-        # true if model_class_or_instance is model class
-        model_class = model_class_or_instance
-    elif type(type(model_class_or_instance)) is ModelBase:
-        # true if model_class_or_instance is model instance
-        model_class = type(model_class_or_instance)
-    else:
-        raise Exception(
-            f"Passed argument is neither model class nor model instance: "
-            f"{type(model_class_or_instance)}"
-        )
     if model_class not in _class_contenttype_dict:
         _class_contenttype_dict[model_class] = ContentType.objects.get(model=model_class.__name__)
     

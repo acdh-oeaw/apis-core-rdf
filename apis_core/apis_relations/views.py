@@ -12,28 +12,19 @@ from apis_ontology.models import *
 from django.shortcuts import render
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
-from apis_core.apis_relations.forms2 import GenericTripleForm
 from apis_core.apis_relations.forms import render_reification_form, render_triple_form
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
-# from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
-# from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Property, TempTriple, Triple
 from dal import autocomplete
 from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 from django.urls import reverse
-# from .models import (
-#     PersonPlace, PersonPerson, PersonInstitution, InstitutionPlace,
-#     InstitutionInstitution, PlacePlace, PersonEvent, InstitutionEvent, PlaceEvent, PersonWork,
-#     InstitutionWork, PlaceWork, EventWork, WorkWork
-# )
-#from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
 from .tables import LabelTableEdit, render_reification_table, render_triple_table
 from apis_core.helper_functions import caching
 
-form_module_list = [relation_form_module]
 
+form_module_list = [relation_form_module]
 if 'apis_highlighter' in settings.INSTALLED_APPS:
     from apis_highlighter.highlighter import highlight_text_new
     from apis_highlighter import forms as highlighter_form_module
@@ -109,7 +100,10 @@ form_class_dict = turn_form_modules_into_dict(form_module_list)
 
 
 
-# TODO RDF: Check if rdf refactoring covers all use cases
+# TODO RDF: Remove
+# this function became a hybrid between vanilla ajax logic and rdf triple logic. But it is now fully
+# superseded of new ajax logic, so it can be removed. However it probably is still used for
+# highlighter. So this needs to looked into and moved to the new ajax logic too.
 @login_required
 def get_form_ajax(request):
     '''Returns forms rendered in html'''
@@ -432,10 +426,17 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #                 request=request)}
     #
 
-def create_triple_from_form_data(triple_form_data):
+def create_triple_by_form_data(triple_form_data):
     triple = None
     if triple_form_data["triple_id"] != "":
-        triple = Triple.objects.get(pk=triple_form_data["triple_id"])
+        triple_set = Triple.objects.filter(pk=triple_form_data["triple_id"])
+        # There could be the edge-case where a user deleted a triple in the table but its values
+        # had been already loaded into the form and the form was posted. In this case we create a
+        # new triple. Hence, this len check:
+        if len(triple_set) == 0:
+            triple = None
+        else:
+            triple = triple_set[0]
     if triple_form_data["property_id"] != "" and triple_form_data["model_other_id"] != "":
         model_self_class = caching.get_ontology_class_of_name(triple_form_data["model_self_class"])
         model_self_instance = model_self_class.objects.get(pk=triple_form_data["model_self_id"])
@@ -514,7 +515,7 @@ def ajax_2_load_triple_form(request):
     return response
 
 def ajax_2_post_triple_form(request):
-    create_triple_from_form_data(request.POST)
+    create_triple_by_form_data(request.POST)
     response = JsonResponse(
         data={
             "form": render_triple_form(
@@ -606,7 +607,7 @@ def ajax_2_post_reification_form(request):
                     ", however the reification's id is not equal to the one from 'entity_other'"
                 )
             triple_form_data["model_other_id"] = reification_instance.uri_set.first().uri
-            triple = create_triple_from_form_data(triple_form_data)
+            triple = create_triple_by_form_data(triple_form_data)
             if triple is not None:
                 related_triple_list.append(triple)
 
@@ -624,7 +625,7 @@ def ajax_2_post_reification_form(request):
                     ", however the reification's id is not equal to the one from 'entity_other'"
                 )
             triple_form_data["model_self_id"] = str(reification_instance.pk)
-            triple = create_triple_from_form_data(triple_form_data)
+            triple = create_triple_by_form_data(triple_form_data)
             if triple is not None:
                 related_triple_list.append(triple)
             
