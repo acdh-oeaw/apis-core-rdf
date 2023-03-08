@@ -25,14 +25,41 @@ from .views import get_highlighted_texts
 from .views import set_session_variables
 from ..apis_vocabularies.models import TextType
 
+from apis_core.apis_relations.models import Property
+import itertools
+import functools
+
 if 'apis_highlighter' in settings.INSTALLED_APPS:
     from apis_highlighter.forms import SelectAnnotatorAgreement
+
+
+@functools.lru_cache
+def get_related_classes(entity_name: str):
+    
+    # Find all the properties where the entity is either subject or object
+    properties_with_entity_as_subject = Property.objects.filter(subj_class__model=entity_name).prefetch_related("obj_class")
+    properties_with_entity_as_object = Property.objects.filter(obj_class__model=entity_name).prefetch_related("subj_class")
+
+    content_type_querysets = []
+    
+    # Where entity is subject, get all the object content_types
+    for p in properties_with_entity_as_subject:
+        objs = p.obj_class.all()
+        content_type_querysets.append(objs)
+    # Where entity is object, get all the subject content_types
+    for p in properties_with_entity_as_object:
+        subjs = p.subj_class.all()
+        content_type_querysets.append(subjs)
+
+    # Join querysets with itertools.chain, call set to make unique, and extract the model class
+    return [content_type.model_class() for content_type in set(itertools.chain(*content_type_querysets))]
 
 
 @method_decorator(login_required, name='dispatch')
 class GenericEntitiesEditView(View):
 
     def get(self, request, *args, **kwargs):
+        
         entity = kwargs['entity']
         pk = kwargs['pk']
         entity_model = AbstractEntity.get_entity_class_of_name(entity)
@@ -41,9 +68,12 @@ class GenericEntitiesEditView(View):
 
         side_bar = []
 
+        #print(list(get_related_classes(entity)))
+ 
+
         triples_related_all = TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk)).all().select_subclasses()
 
-        for entity_class in AbstractEntity.get_all_entity_classes():
+        for entity_class in get_related_classes(entity): #AbstractEntity.get_all_entity_classes():
 
             # TODO __sresch__ : change this db fetch with the cached one from master
             entity_content_type = ContentType.objects.get_for_model(entity_class)
