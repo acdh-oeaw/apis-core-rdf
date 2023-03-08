@@ -600,12 +600,10 @@ views = dict()
 generic_serializer_creation_factory()
 
 def load_additional_serializers():
-
     try:
         additional_serializers_list= getattr(importlib.import_module("apis_ontology.additional_serializers"), "additional_serializers_list")
     except:
         return []
-
     # imports had to be done here, because if imported at top, python would mistake class 'InheritanceForwardManyToOneDescriptor'
     # from different module apis_metainfo. No idea how this is even possible or could be properly fixed.
     from django.db.models.query_utils import DeferredAttribute
@@ -616,12 +614,10 @@ def load_additional_serializers():
     def create_additional_viewset(path_structure):
 
         def create_additional_serializer(path_structure):
-
-            if len(path_structure.keys()) != 1 or len(path_structure.values()) == 0:
+            if len(path_structure.keys()) != 1:
                 raise Exception()
             target = list(path_structure.keys())[0]
             model_fields = list(path_structure.values())[0]
-
             if type(target) is ModelBase:
                 model_class = target
             elif (
@@ -634,10 +630,8 @@ def load_additional_serializers():
                 model_class = target.field.model
             else:
                 raise Exception(f"Unhandled case. Report to Stefan. type of field is: {type(target)}")
-
             meta_fields = []
             sub_serializers = {}
-
             for field in model_fields:
                 if (
                     type(field) is DeferredAttribute
@@ -675,7 +669,6 @@ def load_additional_serializers():
                     raise Exception(f"Unhandled case. Report to Stefan. type of field is: {type(field)}")
 
             class AdditionalSerializer(serializers.ModelSerializer):
-
                 for item in sub_serializers.items():
                     # Don't use temporary veriables here for the sub-serializer. Otherwise django would mistake
                     # the temporary variable as belonging to the parent serializer. Hence 'item[1]'
@@ -690,7 +683,6 @@ def load_additional_serializers():
             return AdditionalSerializer
 
         def construct_prefetch_path_set(path_structure):
-
             path_set = set()
             if type(path_structure) is dict:
                 path_current = path_structure.get("path_self")
@@ -704,34 +696,32 @@ def load_additional_serializers():
                     if path_current is not None:
                         path_set.add(path_current)
                     else:
-                        return None
+                        return set()
 
             return path_set
 
         def main():
-
             additional_serializer_class = create_additional_serializer(path_structure)
-
+            
             class AdditionalViewSet(viewsets.ModelViewSet):
-
                 queryset = additional_serializer_class.Meta.model.objects.all()
                 for prefetch_path in construct_prefetch_path_set(path_structure):
                     queryset = queryset.prefetch_related(prefetch_path)
                 serializer_class = additional_serializer_class
 
                 def get_queryset(self):
-
-                    # TODO: Improve this param handling by extending the parsing logic or by forwarding the params untouched
-                    # The original 'self.request.query_params' could not be forwarded directly to django's ORM filter
-                    # So as a work-around, a dictionary is created and its values are casted. M
-                    # Maybe there a possibility can be found to forward the params directly?
+                    # TODO: Improve this param handling by extending the parsing logic
+                    # or by  forwarding the params untouched The original
+                    # 'self.request.query_params' could not be forwarded directly to django's ORM
+                    # filter So as a work-around, a dictionary is created and its values are
+                    # casted. Maybe there a possibility can be found to forward the params
+                    # directly?
                     params = {}
                     was_parsed = False
                     for k, v in self.request.query_params.items():
                         # check for pagination params:
                         if k == "limit" or k == "offset":
                             continue
-
                         # check for int
                         try:
                             v = int(v)
@@ -739,7 +729,6 @@ def load_additional_serializers():
                             pass
                         else:
                             was_parsed = True
-
                         # check for boolean
                         if not was_parsed:
                             if v.lower() == "true":
@@ -748,7 +737,6 @@ def load_additional_serializers():
                             elif v.lower() == "false":
                                 v = False
                                 was_parsed = True
-
                         # check for list
                         if not was_parsed:
                             if k.endswith("__in"):
@@ -758,7 +746,6 @@ def load_additional_serializers():
                                     pass
                                 else:
                                     was_parsed = True
-
                         params[k] = v
 
                     return self.queryset.filter(**params)
