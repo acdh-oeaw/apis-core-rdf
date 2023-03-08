@@ -22,7 +22,7 @@ from apis_core.helper_functions import caching
 app_name = "apis_core"
 
 router = routers.DefaultRouter()
-for app_label, model_str in caching.get_all_contenttype_module_and_class_names():
+for app_label, model_str in caching.get_all_class_modules_and_names():
     if "_" in app_label:
         route_prefix = app_label.split("_")[1]
     else:

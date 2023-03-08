@@ -1,9 +1,9 @@
 import importlib
 import inspect
 from django.contrib.contenttypes.models import ContentType
-from django.db.models.base import ModelBase
 
 
+# global variables used in this module which acts as a singleton
 _ontology_classes = None
 _ontology_class_names = None
 _entity_classes = None
@@ -18,6 +18,15 @@ _property_autocomplete_choices = None
 _class_contenttype_dict = None
 
 def _init_all_ontology_classes():
+    """
+    internal function that initiales the lists containing all ontology classes (entities,
+    reifications, vocabularies)
+    
+    :return: None
+    """
+    
+    # the imports are done here as this module here might be called before full Django
+    # initialization. Otherwise, it would break.
     from apis_ontology import models as ontology_models
     from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
     from apis_core.apis_relations.models import AbstractReification
@@ -41,13 +50,14 @@ def _init_all_ontology_classes():
         or _vocabulary_classes is not None
         or _vocabulary_class_names is not None
     ):
-        raise Exception("initialization was called but variables are not None anymore.")
+        raise Exception("initialization is called but some variables are already initialized.")
     _entity_classes = []
     _entity_class_names = []
     _reification_classes = []
     _reification_class_names = []
     _vocabulary_classes = []
     _vocabulary_class_names = []
+    # iterate over classes in apis_ontology.models, and differentiate them by their parents
     for ontology_class_name, ontology_class in inspect.getmembers(ontology_models, inspect.isclass):
         if (
             issubclass(ontology_class, AbstractEntity)
@@ -85,20 +95,20 @@ def get_all_ontology_class_names():
     return _ontology_class_names
 
 
-def get_ontology_class_of_name(ontology_name):
+def get_ontology_class_of_name(ontology_name_str):
     """
     Look up an ontology class based on a given name.
 
-    :param ontology_name: a string to compare against classes' __name__
+    :param ontology_name_str: a string to compare against classes' __name__
                         values; need not be formatted (letter case does
                         not matter)
     :return: an ontology class – or raise exception
     """
     for ontology_class in get_all_ontology_classes():
-        if ontology_class.__name__.lower() == ontology_name.lower():
+        if ontology_class.__name__.lower() == ontology_name_str.lower():
             return ontology_class
     
-    raise Exception("Could not find ontology class of name:", ontology_name)
+    raise Exception("Could not find ontology class of name:", ontology_name_str)
 
 
 def get_all_entity_classes():
@@ -115,20 +125,20 @@ def get_all_entity_class_names():
     return _entity_class_names
 
 
-def get_entity_class_of_name(entity_name):
+def get_entity_class_of_name(entity_name_str):
     """
     Look up an entity class based on a given name.
 
-    :param entity_name: a string to compare against classes' __name__
+    :param entity_name_str: a string to compare against classes' __name__
                         values; need not be formatted (letter case does
                         not matter)
     :return: an entity class – or raise exception
     """
     for entity_class in get_all_entity_classes():
-        if entity_class.__name__.lower() == entity_name.lower():
+        if entity_class.__name__.lower() == entity_name_str.lower():
             return entity_class
 
-    raise Exception("Could not find entity class of name:", entity_name)
+    raise Exception("Could not find entity class of name:", entity_name_str)
 
 
 def get_all_reification_classes():
@@ -145,30 +155,30 @@ def get_all_reification_class_names():
     return _reification_class_names
 
 
-def get_reification_class_of_name(reification_name):
+def get_reification_class_of_name(reification_name_str):
     """
     Look up a reification class based on a given name.
 
-    :param reification_name: a string to compare against classes' __name__
+    :param reification_name_str: a string to compare against classes' __name__
                         values; need not be formatted (letter case does
                         not matter)
     :return: an reification class – or raise exception
     """
     for reification_class in get_all_reification_classes():
-        if reification_class.__name__.lower() == reification_name.lower():
+        if reification_class.__name__.lower() == reification_name_str.lower():
             return reification_class
     
-    raise Exception("Could not find reification class of name:", reification_name)
+    raise Exception("Could not find reification class of name:", reification_name_str)
 
 
 def get_autocomplete_property_choices(model_self_class_str, model_other_class_str, search_name_str):
     """
-    A function to cache for user search string in property autocomplet fields.
+    A function to cache for user search string in property autocomplete fields.
     WARNING: This will not work when properties are edited during runtime!
     But since properties are part of the ontology they should not be changed during runtime anyway.
     
-    :param model_self_class_str: the entity from which side we are looking for
-    :param model_other_class_str: the related entity class for which suitable properties are searched
+    :param model_self_class_str: entity class from which side we are looking for
+    :param model_other_class_str: related entity class for which suitable properties are searched
     :param search_name_str: search string provided by user
     :return: a list of choices in the format which is used by the django-autocomplete field
     """
@@ -177,12 +187,18 @@ def get_autocomplete_property_choices(model_self_class_str, model_other_class_st
     global _property_autocomplete_choices
     if _property_autocomplete_choices is None:
         _property_autocomplete_choices = {}
-    res = _property_autocomplete_choices.get((model_self_class_str, model_other_class_str, search_name_str))
+    res = _property_autocomplete_choices.get(
+        (model_self_class_str, model_other_class_str, search_name_str)
+    )
     if res is not None:
         return res
     else:
-        model_self_contenttype = get_contenttype_of_class(get_ontology_class_of_name(model_self_class_str))
-        model_other_contenttype = get_contenttype_of_class(get_ontology_class_of_name(model_other_class_str))
+        model_self_contenttype = get_contenttype_of_class(get_ontology_class_of_name(
+            model_self_class_str
+        ))
+        model_other_contenttype = get_contenttype_of_class(get_ontology_class_of_name(
+            model_other_class_str
+        ))
         from apis_core.apis_relations.models import Property
         rbc_self_subj_other_obj = Property.objects.filter(
             subj_class=model_self_contenttype,
@@ -195,37 +211,43 @@ def get_autocomplete_property_choices(model_self_class_str, model_other_class_st
             name_reverse__icontains=search_name_str
         )
         choices = []
-        # The Select2ListView class when finding results for some user input, returns these results in this 'choices' list.
-        # This is a list of dictionaries, where each dictionary has an id and a text.
-        # In our case however the results can come from two different sets:
-        # the one where result hits match on the forward name of a property and the other set where the result hits
-        # match on the reverse name. These hits need to re-used later, but additionally the direction of the property
-        # is also needed later to persist it correctly (e.g. when creating a triple between two persons, where one is
-        # the mother and the other is the daughter, then the property direction is needed).
-        # I could not find a way to return in this function a choices list with dictionaries or something else, that
-        # would pass additional data. So I am misusing the 'id' item in the dictionary by encoding the id and the direction
-        # into a string which will be parsed and split later on.
+        # The Select2ListView class when finding results for some user input, returns these
+        # results in this 'choices' list. This is a list of dictionaries, where each dictionary
+        # has an id and a text. In our case however the results can come from two different sets:
+        # the one where result hits match on the forward name of a property and the other set
+        # where the result hits match on the reverse name. These hits need to re-used later,
+        # but additionally the direction of the property is also needed later to persist it
+        # correctly (e.g. when creating a triple between two persons, where one is the mother and
+        # the other is the daughter, then the property direction is needed). I could not find a
+        # way to return in this function a choices list with dictionaries or something else,
+        # that would pass additional data. So I am misusing the 'id' item in the dictionary by
+        # encoding the id and the direction into a string which will be parsed and split later on.
         for rbc in rbc_self_subj_other_obj:
             choices.append(
                 {
-                    'id': f"id:{rbc.pk}__direction:{PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR}", # misuse of the id item as explained above
+                    # misuse of the id item as explained above
+                    'id': f"id:{rbc.pk}__direction:{PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR}",
                     'text': rbc.name
                 }
             )
         for rbc in rbc_self_obj_other_subj:
             choices.append(
                 {
-                    'id': f"id:{rbc.pk}__direction:{PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR}", # misuse of the id item as explained above
+                    # misuse of the id item as explained above
+                    'id': f"id:{rbc.pk}__direction:{PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR}",
                     'text': rbc.name_reverse
                 }
             )
-        _property_autocomplete_choices[(model_self_class_str, model_other_class_str, search_name_str)] = choices
+        _property_autocomplete_choices[
+            (model_self_class_str, model_other_class_str, search_name_str)
+        ] = choices
+        
         return choices
 
 
 def get_all_contenttype_classes():
     """
-    Return a list of Django model classes.
+    Return a list of all Django Contenttype classes.
     """
     
     def init_contenttype_classes():
@@ -282,12 +304,9 @@ def get_all_contenttype_classes():
     return _contenttype_classes
 
 
-def get_all_contenttype_module_and_class_names():
+def get_all_class_modules_and_names():
     """
-    Create tuples from a list of model classes to store their module names
-    and class names (as strings).
-
-    :return: a list of tuples
+    :return: a list of tuples where each contains a str for the app label and a str for the class
     """
     
     global _contenttype_class_names
@@ -301,12 +320,12 @@ def get_all_contenttype_module_and_class_names():
 
 def get_contenttype_of_class(model_class):
     """
-    Helper method which caches ContentType of a given model class.
-    When first called on a model, it fetches its respective ContentType from the DB
-    and caches it in a class dictionary. Later, this dictionary is called.
+    Helper method which caches ContentType of a given model class. When first called on a model, it
+    fetches its respective ContentType from the DB and caches it in a class dictionary. Later, this
+    dictionary is called.
 
-    :param model_class: django model class object
-    :return: dictionary holding Django ContentType object
+    :param model_class: django model class
+    :return: ContentType class representing the model class
     """
 
     global _class_contenttype_dict
