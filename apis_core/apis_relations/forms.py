@@ -76,6 +76,53 @@ class EntityLabelForm(forms.ModelForm):
             else:
                 self.fields['end_date_written'].help_text = DateParser.get_date_help_text_default()
 
+
+# This function here should serve as an example best-practice implementation of ajax logic within
+# APIS. While it still carries some context-overhead in the surrounding code, it nevertheless
+# boils down to a simplified logic flow of ajax like so:
+#
+#            ┌──────────────────────────────────────────┐
+#            │ main renderer (py)                       │
+#            │* renders full context                    │
+#            └──┬───────────────────────────────────────┘
+#               │* calls sub-renderer with context data
+#               ▼
+#            ┌──────────────────────────────────────────┐
+#     ┌─────►│ sub-renderer (py)                        │
+#     │      │* processes python and ORM logic          │
+#     │      └──┬───────────────────────────────────────┘
+#     │         │* injects context data
+#     │         │* renders template
+#     │         ▼
+#     │      ┌──────────────────────────────────────────┐
+#     ├─────►│ form (html)                              │
+#     │      │* contains surrounding data-carrier-div   │
+#     │      │* contains anchor-div for ajax results    │
+#     │      └──┬───────────────────────────────────────┘
+#     │         │* sends data-carrier-div
+#     │         │* sends reference to anchor-div
+#     │         ▼
+#     │      ┌──────────────────────────────────────────┐
+#     │      │ ajax function (JS)                       │
+#     │      │* processes data from data-carrier-div    │
+#     │      │* contains url route to sub-renderer (py) │
+#     │      └──┬───────────────────────────────────────┘
+#     │         │* sends prepared data to sub-renderer (py)
+#     │         │* injects response from renderer into
+#     └─────────┘  anchor-div of form (html)
+#
+# The most critical parts here are likely the 'data-carrier-div' acting as a tangible data exchange
+# between python and JS logic, as well as the 'anchor-div' which pins the dynamic part down.
+#
+#  In the case of this render_triple_form function it's important to note that the 'data-carrier'
+#  div is defined in the surrounding rendering (either 'render_triple_form_and_table' or
+#  'render_reification_form') and the form itself is something that is injected into the anchor-div.
+#  So, the ajax rendering here and with reification involves two functions:
+#  * a surrounding contextual one (defining the data-carrier-div and anchor-div)
+#  * the sub render function which handles the thing that is to injected into anchor-div via ajax
+#
+# It is possible to handle this whole logic with one rendering only as the diagram above displays,
+# but in the case of triple and reification forms it was better to split it for re-usability.
 def render_triple_form(
     model_self_class_str,
     model_other_class_str,
