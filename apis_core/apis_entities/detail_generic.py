@@ -96,7 +96,6 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
                             "triple_form_and_table": relation_form,
                         }
                     )
-        # TODO RDF: Check / Adapt the following code to rdf architecture
         object_lod = Uri.objects.filter(root_object=entity_self_instance)
         object_texts, ann_proj_form = get_highlighted_texts(
             request, entity_self_instance
@@ -141,7 +140,6 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         except AttributeError:
             no_merge_labels = []
 
-        # TODO : Hackish work-around, do this more properly later
         def get_relevant_fields(instance):
 
             list_key_val_pairs = []

@@ -45,9 +45,6 @@ def get_entities_form(entity):
     class GenericEntitiesForm(forms.ModelForm):
         class Meta:
             model = caching.get_ontology_class_of_name(entity)
-
-            # TODO RDF: Remove these hard-coded ontology specific fields, and delegate them to
-            #  apis-ontologies
             exclude = [
                 "start_date",
                 "start_start_date",

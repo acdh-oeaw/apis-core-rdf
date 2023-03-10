@@ -375,7 +375,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         )
 
 
-# TODO RDF: Adapt this Autocomplete class to triple architecture
+# TODO RDF: Check if this should be removed or adapted
 class GenericVocabulariesAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         page_size = 20
@@ -419,6 +419,7 @@ class GenericVocabulariesAutocomplete(autocomplete.Select2ListView):
         )
 
 
+# TODO RDF: Check if this should be removed or adapted
 class GenericNetworkEntitiesAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         entity = self.kwargs["entity"]
@@ -477,7 +478,6 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
     SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
 
     def get(self, request, *args, **kwargs):
-        # TODO RDF: pagination
         more = False
         choices = get_autocomplete_property_choices(
             kwargs["entity_self"], kwargs["entity_other"], self.q

@@ -61,9 +61,6 @@ class AbstractReification(RootObject):
         abstract = True
 
 
-# TODO RDF: Implement filtering for implicit superclasses
-# Currently if a Property.objects.filter() is used with param subj_class or obj_class, then it searches only for the
-# passed class, but not for implicit superclasses. For this to be possible, the object manager must be overriden
 @reversion.register(follow=["vocabsbaseclass_ptr"])
 class Property(RootObject):
     class Meta:
@@ -91,7 +88,6 @@ class Property(RootObject):
         blank=True,
     )
 
-    # TODO RDF: Rename subj_class to subj_classes
     subj_class = models.ManyToManyField(
         ContentType,
         related_name="property_set_subj",
@@ -608,9 +604,6 @@ class InheritanceForeignKey(models.ForeignKey):
 
 
 class Triple(models.Model):
-    # TODO RDF: (maybe) implement a convenient way of fetching related triples of a given root object
-    # TODO RDF: Make it so that triples are unique given their subj, obj, prop (With an aggregated primary key maybe?)
-    # TODO RDF: add ent filter shortcut so that e.g. this can be shortened: Triple.objects.filter(Q(subj__pk=113) | Q(obj__pk=113))
     subj = InheritanceForeignKey(
         RootObject,
         blank=True,
@@ -627,7 +620,6 @@ class Triple(models.Model):
         related_name="triple_set_from_obj",
         verbose_name="Object",
     )
-    # TODO RDF: consider changing this foreign key to RootObject for higher versatility
     prop = models.ForeignKey(
         Property,
         blank=True,
@@ -696,7 +688,7 @@ class Triple(models.Model):
 
     def save(self, *args, **kwargs):
 
-        # TODO RDF: Integrate proper check if subj and obj instances are of valid class as defined in prop.subj_class and prop.obj_class
+        # TODO RDF: Integrate more proper check if subj and obj instances are of valid class as defined in prop.subj_class and prop.obj_class
 
         # def get_all_parents(cls_current):
         #     parent_list = []

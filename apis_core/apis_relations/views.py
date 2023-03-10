@@ -248,8 +248,7 @@ def get_form_ajax(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-# TODO RDF: Implement highlighter and label form
-# TODO RDF: Check if rdf refactoring covers all use cases
+# TODO RDF: Re-implement highlighter and label form
 @login_required
 def save_ajax_form(
     request, entity_type, kind_form, SiteID, ObjectID=False

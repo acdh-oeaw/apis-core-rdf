@@ -497,8 +497,6 @@ class AbstractEntity(RootObject):
         return queryset_list
 
 
-# __after_rdf_refactoring__
-# TODO RDF: Consider moving TempEntityClass also into ontologies
 @reversion.register()
 class TempEntityClass(AbstractEntity):
     """

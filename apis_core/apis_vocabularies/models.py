@@ -190,21 +190,21 @@ class VocabsUri(models.Model):
 #     """Holds controlled vocabularies about event-types"""
 #     pass
 
-# TODO RDF: Remove all these types
+# TODO RDF: Remove this
 @reversion.register(follow=["vocabsbaseclass_ptr"])
 class LabelType(VocabsBaseClass):
     """Holds controlled vocabularies about label-types"""
 
     pass
 
-
+# TODO RDF: Remove this
 @reversion.register(follow=["vocabsbaseclass_ptr"])
 class CollectionType(VocabsBaseClass):
     """e.g. reseachCollection, importCollection"""
 
     pass
 
-
+# TODO RDF: Remove this
 @reversion.register(follow=["vocabsbaseclass_ptr"])
 class TextType(VocabsBaseClass):
     """used to store the Text types for the forms"""
@@ -448,6 +448,9 @@ class TextType(VocabsBaseClass):
 #
 # a_ents = getattr(settings, 'APIS_ADDITIONAL_ENTITIES', False)
 #
+
+
+# TODO RDF: Check if this should be removed or adapted
 # if a_ents:
 #     with open(a_ents, 'r') as ents_file:
 #         ents = yaml.load(ents_file, Loader=yaml.CLoader)
