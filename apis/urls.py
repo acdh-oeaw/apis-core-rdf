@@ -17,7 +17,9 @@ if "theme" in settings.INSTALLED_APPS:
         url(r"^info/", include("infos.urls", namespace="info")),
     ]
     if "webpage" in settings.INSTALLED_APPS:
-        urlpatterns.append(url(r"^webpage/", include("webpage.urls", namespace="webpage")))
+        urlpatterns.append(
+            url(r"^webpage/", include("webpage.urls", namespace="webpage"))
+        )
 if "paas_theme" in settings.INSTALLED_APPS:
     urlpatterns = [
         url(r"^apis/", include("apis_core.urls", namespace="apis")),
@@ -30,7 +32,9 @@ if "paas_theme" in settings.INSTALLED_APPS:
         url(r"^info/", include("infos.urls", namespace="info")),
     ]
     if "webpage" in settings.INSTALLED_APPS:
-        urlpatterns.append(url(r"^webpage/", include("webpage.urls", namespace="webpage")))
+        urlpatterns.append(
+            url(r"^webpage/", include("webpage.urls", namespace="webpage"))
+        )
 else:
     urlpatterns = [
         url(r"^apis/", include("apis_core.urls", namespace="apis")),
@@ -45,10 +49,12 @@ else:
         urlpatterns.append(url(r"^", include("webpage.urls", namespace="webpage")))
 
 
-if 'viecpro_vis' in settings.INSTALLED_APPS:
-    urlpatterns.insert(0, url(r'^visualisations/', include("viecpro_vis.urls", namespace="viecpro_vis"))
+if "viecpro_vis" in settings.INSTALLED_APPS:
+    urlpatterns.insert(
+        0,
+        url(r"^visualisations/", include("viecpro_vis.urls", namespace="viecpro_vis")),
     )
-        
+
 if "transkribus" in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + [
         url(r"^transkribus/", include("transkribus.urls")),
