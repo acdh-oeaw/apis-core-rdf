@@ -8,7 +8,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse, Http404
 from django.template.loader import render_to_string
-from apis_ontology.models import *
+try:
+    from apis_ontology.models import *
+except ImportError:
+    pass
 from django.shortcuts import render
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module

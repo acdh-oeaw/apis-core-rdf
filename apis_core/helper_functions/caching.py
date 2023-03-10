@@ -27,7 +27,6 @@ def _init_all_ontology_classes():
     
     # the imports are done here as this module here might be called before full Django
     # initialization. Otherwise, it would break.
-    from apis_ontology import models as ontology_models
     from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
     from apis_core.apis_relations.models import AbstractReification
     from apis_core.apis_vocabularies.models import AbstractVocabulary
@@ -58,26 +57,30 @@ def _init_all_ontology_classes():
     _vocabulary_classes = []
     _vocabulary_class_names = []
     # iterate over classes in apis_ontology.models, and differentiate them by their parents
-    for ontology_class_name, ontology_class in inspect.getmembers(ontology_models, inspect.isclass):
-        if (
-            issubclass(ontology_class, AbstractEntity)
-            and not ontology_class._meta.abstract
-            and ontology_class is not TempEntityClass # TODO RDF: remove this once TempEntityClass is removed
-        ):
-            _entity_classes.append(ontology_class)
-            _entity_class_names.append(ontology_class_name.lower())
-        elif (
-            issubclass(ontology_class, AbstractReification)
-            and not ontology_class._meta.abstract
-        ):
-            _reification_classes.append(ontology_class)
-            _reification_class_names.append(ontology_class_name.lower())
-        elif (
-            issubclass(ontology_class, AbstractVocabulary)
-            and not ontology_class._meta.abstract
-        ):
-            _vocabulary_classes.append(ontology_class)
-            _vocabulary_class_names.append(ontology_class_name.lower())
+    try:
+        from apis_ontology import models as ontology_models
+        for ontology_class_name, ontology_class in inspect.getmembers(ontology_models, inspect.isclass):
+            if (
+                issubclass(ontology_class, AbstractEntity)
+                and not ontology_class._meta.abstract
+                and ontology_class is not TempEntityClass # TODO RDF: remove this once TempEntityClass is removed
+            ):
+                _entity_classes.append(ontology_class)
+                _entity_class_names.append(ontology_class_name.lower())
+            elif (
+                issubclass(ontology_class, AbstractReification)
+                and not ontology_class._meta.abstract
+            ):
+                _reification_classes.append(ontology_class)
+                _reification_class_names.append(ontology_class_name.lower())
+            elif (
+                issubclass(ontology_class, AbstractVocabulary)
+                and not ontology_class._meta.abstract
+            ):
+                _vocabulary_classes.append(ontology_class)
+                _vocabulary_class_names.append(ontology_class_name.lower())
+    except ModuleNotFoundError:
+        pass
     _ontology_classes = _entity_classes + _reification_classes + _vocabulary_classes
     _ontology_class_names = _entity_class_names + _reification_class_names + _vocabulary_class_names
 
@@ -280,7 +283,12 @@ def get_all_contenttype_classes():
                     if c in c2:
                         r2.append(c2)
             apis_modules = r2
-        lst_cont_pre = [importlib.import_module(x) for x in apis_modules]
+        lst_cont_pre = []
+        for module in apis_modules:
+            try:
+                lst_cont_pre.append(importlib.import_module(module))
+            except ImportError:
+                pass
         lst_cont = []
         for m in lst_cont_pre:
             for cls_n in dir(m):
