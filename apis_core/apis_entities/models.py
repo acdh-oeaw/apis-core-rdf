@@ -309,11 +309,7 @@ class AbstractEntity(RootObject):
         place_instance.get_related_relation_classes()
         -> [ InstitutionPlace, PersonPlace, PlaceEvent, PlacePlace, PlaceWork ]
         """
-
-        # TODO __sresch__ : check for best practice on local imports vs
-        #  circularity problems.
         from apis_core.apis_relations.models import AbstractRelation
-
         return AbstractRelation.get_relation_classes_of_entity_class(cls)
 
     @classmethod
@@ -329,10 +325,7 @@ class AbstractEntity(RootObject):
         -> ["institutionplace_set", "personplace_set", "placeevent_set",
         "placeplace_set", "placework_set"]
         """
-        # TODO __sresch__ : check for best practice on local imports vs
-        #  circularity problems.
         from apis_core.apis_relations.models import AbstractRelation
-
         return AbstractRelation.get_relation_field_names_of_entity_class(cls)
 
     def get_related_relation_instances(self):
@@ -384,7 +377,7 @@ class AbstractEntity(RootObject):
             relationtype_classes = []
             relationtype_names = []
 
-            # TODO __sresch__: check for best practice on local imports vs.
+            # TODO: check for best practice on local imports vs.
             #  circularity problems.
             from apis_core.apis_vocabularies.models import AbstractRelationType
 

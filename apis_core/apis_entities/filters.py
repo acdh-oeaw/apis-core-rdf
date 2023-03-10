@@ -26,9 +26,6 @@ from collections import OrderedDict
 # where then such a key-value from the settings is overriding the respective key-value of a filter defined in this module
 # (e.g. using a different method)
 
-# TODO __sresch__ : Turn the logic of returing a filter object into a singleton pattern to avoid redundant instantiations
-# TODO __sresch__ : use the order of list of filter fields in settings
-
 
 #######################################################################
 #
@@ -36,7 +33,6 @@ from collections import OrderedDict
 #
 #######################################################################
 
-# TODO __sresch__ : Do this better
 from apis_core.helper_functions import caching
 
 fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
@@ -66,7 +62,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
         queryset=Collection.objects.all()
     )
 
-    # TODO __sresch__ : look into how the date values can be intercepted so that they can be parsed with the same logic as in edit forms
+    # TODO: look into how the date values can be intercepted so that they can be parsed with the same logic as in edit forms
     start_date = django_filters.DateFromToRangeFilter()
     end_date = django_filters.DateFromToRangeFilter()
 
@@ -232,7 +228,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
             return "__icontains", value
 
     def name_label_filter(self, queryset, name, value):
-        # TODO __sresch__ : include alternative names queries
+        # TODO: include alternative names queries
         lookup, value = self.construct_lookup(value)
 
         queryset_related_label = queryset.filter(**{"label__label" + lookup: value})
@@ -444,7 +440,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 #     name = django_filters.CharFilter(method="person_name_filter", label="Name or Label of person")
 #
 #
-#     # TODO __sresch__ : look into how the meta class can be inherited from the superclass so that the Meta class' exclude attribute must not be defined multiple times
+#     # TODO: look into how the meta class can be inherited from the superclass so that the Meta class' exclude attribute must not be defined multiple times
 #     class Meta:
 #         model = Person
 #         # exclude all hardcoded fields or nothing, however this exclude is only defined here as a temporary measure in
@@ -468,7 +464,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 #
 # class PlaceListFilter(GenericListFilter):
 #
-#     # TODO __sresch__ : decide on margin tolerance of input, for now the number must be precise
+#     # TODO: decide on margin tolerance of input, for now the number must be precise
 #     lng = django_filters.NumberFilter(label='Longitude')
 #     lat = django_filters.NumberFilter(label='Latitude')
 #

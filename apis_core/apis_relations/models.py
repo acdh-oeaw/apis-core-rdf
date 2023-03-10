@@ -121,7 +121,7 @@ class Property(RootObject):
         return self
 
 
-# TODO __sresch__ : comment and explain
+# TODO: comment and explain
 def subj_or_obj_class_changed(sender, is_subj, **kwargs):
     def cascade_subj_obj_class_to_children(
         contenttype_to_add_or_remove,
@@ -135,7 +135,7 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
 
             for class_parent in class_current.__bases__:
 
-                # TODO __sresch__ : Avoid ContentType DB fetch
+                # TODO: Avoid ContentType DB fetch
                 contenttype_parent = ContentType.objects.filter(
                     model=class_parent.__name__
                 )
@@ -153,7 +153,7 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
             class_current = contenttype_current.model_class()
 
             for class_child in class_current.__subclasses__():
-                # TODO __sresch__ : Avoid ContentType DB fetch
+                # TODO: Avoid ContentType DB fetch
                 contenttype_child = ContentType.objects.get(model=class_child.__name__)
                 child_list.append(contenttype_child)
                 child_list.extend(get_all_children(contenttype_child))
@@ -587,7 +587,7 @@ class RelationPublishedQueryset(models.QuerySet):
 #         return None
 
 
-# TODO __sresch__ : Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
+# TODO: Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
 

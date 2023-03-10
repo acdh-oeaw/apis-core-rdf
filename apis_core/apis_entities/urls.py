@@ -81,7 +81,7 @@ urlpatterns = [
         GenericNetworkEntitiesAutocomplete.as_view(),
         name="generic_network_entities_autocomplete",
     ),
-    # TODO __sresch__ : This seems unused. Remove it once sure
+    # TODO: This seems unused. Remove it once sure
     # url(r"^detail/work/(?P<pk>[0-9]+)$",
     #     detail_generic.WorkDetailView.as_view(), name="work_detail"),
     path("place/geojson/", views.getGeoJson, name="getGeoJson"),

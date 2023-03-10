@@ -590,7 +590,7 @@ class Text(models.Model):
         super().save(*args, **kwargs)
 
 
-# TODO __sresch__ : Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
+# TODO: Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
 

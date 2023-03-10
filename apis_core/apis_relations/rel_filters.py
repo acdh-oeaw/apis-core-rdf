@@ -11,7 +11,7 @@ from django.urls import reverse
 
 # from .models import AbstractRelation
 
-# TODO __sresch__ : Change this whole module according to the same logic as in apis_core/apis_entities/filters.py
+# TODO: Change this whole module according to the same logic as in apis_core/apis_entities/filters.py
 
 
 def get_excluded_fields(model):

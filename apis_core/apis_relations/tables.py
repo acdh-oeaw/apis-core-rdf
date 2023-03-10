@@ -983,7 +983,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
         class Meta:
 
-            # TODO __sresch__ : investigate if it's feasible to have different subclasses of triples and have them
+            # TODO: investigate if it's feasible to have different subclasses of triples and have them
             #  fill in these fields of this Table class automatically
 
             from apis_core.apis_relations.models import TempTriple

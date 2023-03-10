@@ -45,7 +45,7 @@ class Label(models.Model):
         verbose_name="End",
     )
 
-    # TODO __sresch__ add related_name="label_set" here to be consistent with other usages throughout django
+    # TODO  add related_name="label_set" here to be consistent with other usages throughout django
     temp_entity = models.ForeignKey(
         "apis_entities.TempEntityClass", on_delete=models.CASCADE
     )
