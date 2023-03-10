@@ -1,6 +1,6 @@
 def calculate_age(row, age_field):
     try:
-        year = row['year']
+        year = row["year"]
     except ValueError:
         year = None
     try:
@@ -8,6 +8,6 @@ def calculate_age(row, age_field):
     except ValueError:
         age = None
     if year and age:
-        return year-age
+        return year - age
     else:
         return 0

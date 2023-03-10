@@ -14,14 +14,15 @@ from django.db.models import Q
 
 
 class AbstractVocabulary(RootObject):
-    
     class Meta:
         abstract = True
+
 
 @reversion.register()
 class VocabNames(models.Model):
     """List of Vocabulary names to allow the easy retrieval\
     of Vovcabulary names and classes from the VocabsBaseClass"""
+
     name = models.CharField(max_length=255)
 
     def get_vocab_label(self):
@@ -31,33 +32,32 @@ class VocabNames(models.Model):
 # TODO RDF: Remove VocabsBaseClass entirely
 @reversion.register()
 class VocabsBaseClass(RootObject):
-    """ An abstract base class for other classes which contain so called
+    """An abstract base class for other classes which contain so called
     'controlled vocabulary' to describe subtypes of main temporalized
     entites"""
+
     choices_status = (
-        ('rej', 'rejected'),
-        ('ac', 'accepted'),
-        ('can', 'candidate'),
-        ('del', 'deleted')
+        ("rej", "rejected"),
+        ("ac", "accepted"),
+        ("can", "candidate"),
+        ("del", "deleted"),
     )
     description = models.TextField(
-        blank=True,
-        help_text="Brief description of the used term.")
-    parent_class = models.ForeignKey(
-        'self', blank=True, null=True,
-        on_delete=models.CASCADE
+        blank=True, help_text="Brief description of the used term."
     )
-    status = models.CharField(max_length=4, choices=choices_status, default='can')
+    parent_class = models.ForeignKey(
+        "self", blank=True, null=True, on_delete=models.CASCADE
+    )
+    status = models.CharField(max_length=4, choices=choices_status, default="can")
     userAdded = models.ForeignKey(
-        User, blank=True, null=True,
-        on_delete=models.SET_NULL
+        User, blank=True, null=True, on_delete=models.SET_NULL
     )
     vocab_name = models.ForeignKey(
-        VocabNames, blank=True, null=True,
-        on_delete=models.SET_NULL
+        VocabNames, blank=True, null=True, on_delete=models.SET_NULL
     )
-    if 'apis_highlighter' in settings.INSTALLED_APPS:
+    if "apis_highlighter" in settings.INSTALLED_APPS:
         from apis_highlighter.models import Annotation
+
         annotation_set = GenericRelation(Annotation)
 
     def __str__(self):
@@ -66,8 +66,10 @@ class VocabsBaseClass(RootObject):
     def save(self, *args, **kwargs):
         d, created = VocabNames.objects.get_or_create(name=type(self).__name__)
         self.vocab_name = d
-        if self.name != unicodedata.normalize('NFC', self.name):  # secure correct unicode encoding
-            self.name = unicodedata.normalize('NFC', self.name)
+        if self.name != unicodedata.normalize(
+            "NFC", self.name
+        ):  # secure correct unicode encoding
+            self.name = unicodedata.normalize("NFC", self.name)
         super(VocabsBaseClass, self).save(*args, **kwargs)
         return self
 
@@ -76,9 +78,10 @@ class VocabsBaseClass(RootObject):
         d = self
         res = self.name
         while d.parent_class:
-            res = d.parent_class.name + ' >> ' + res
+            res = d.parent_class.name + " >> " + res
             d = d.parent_class
         return res
+
 
 # __before_rdf_refactoring__
 #
@@ -134,11 +137,13 @@ class VocabsUri(models.Model):
     """Class to store URIs for imported types. URI class from metainfo is not
     used in order to keep the vocabularies module/app seperated from the rest of the application.
     """
+
     uri = models.URLField()
     domain = models.CharField(max_length=255, blank=True)
     rdf_link = models.URLField(blank=True)
-    vocab = models.ForeignKey(VocabsBaseClass, blank=True, null=True,
-                              on_delete=models.CASCADE)
+    vocab = models.ForeignKey(
+        VocabsBaseClass, blank=True, null=True, on_delete=models.CASCADE
+    )
     # loaded: set to True when RDF was loaded and parsed into the data model
     loaded = models.BooleanField(default=False)
     # loaded_time: Timestamp when file was loaded and parsed
@@ -146,7 +151,6 @@ class VocabsUri(models.Model):
 
     def __str__(self):
         return self.uri
-
 
 
 # __before_rdf_refactoring__
@@ -187,26 +191,34 @@ class VocabsUri(models.Model):
 #     pass
 
 # TODO RDF: Remove all these types
-@reversion.register(follow=['vocabsbaseclass_ptr'])
+@reversion.register(follow=["vocabsbaseclass_ptr"])
 class LabelType(VocabsBaseClass):
     """Holds controlled vocabularies about label-types"""
+
     pass
 
 
-@reversion.register(follow=['vocabsbaseclass_ptr'])
+@reversion.register(follow=["vocabsbaseclass_ptr"])
 class CollectionType(VocabsBaseClass):
-    """e.g. reseachCollection, importCollection """
+    """e.g. reseachCollection, importCollection"""
+
     pass
 
-@reversion.register(follow=['vocabsbaseclass_ptr'])
+
+@reversion.register(follow=["vocabsbaseclass_ptr"])
 class TextType(VocabsBaseClass):
     """used to store the Text types for the forms"""
+
     entity = models.CharField(max_length=255)
-    collections = models.ManyToManyField('apis_metainfo.Collection', blank=True)
+    collections = models.ManyToManyField("apis_metainfo.Collection", blank=True)
     lang = models.CharField(
-        max_length=3, blank=True, null=True,
+        max_length=3,
+        blank=True,
+        null=True,
         help_text="The ISO 639-3 (or 2) code for the label's language.",
-        verbose_name='ISO Code', default='deu')
+        verbose_name="ISO Code",
+        default="deu",
+    )
 
 
 # __before_rdf_refactoring__

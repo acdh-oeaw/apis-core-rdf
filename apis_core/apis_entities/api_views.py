@@ -25,6 +25,7 @@ from rest_framework.views import APIView
 from apis_core.apis_metainfo.api_renderers import PaginatedCSVRenderer
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_metainfo.models import Uri
+
 # from apis_core.apis_relations.models import PersonPlace, InstitutionPlace, AbstractRelation, PersonInstitution
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.helper_functions.RDFParser import RDFParser
@@ -37,6 +38,7 @@ from .api_renderers import (
     EntityToCIDOCNQUADS,
     EntityToCIDOCTURTLE,
 )
+
 # from .models import Event, Institution, Person, Place, Work,
 from apis_core.apis_entities.models import AbstractEntity
 
@@ -122,6 +124,7 @@ def uri_resolver(request):
                 "apis_core:apis_api2:GetEntityGeneric", kwargs={"pk": uri.entity_id}
             ) + "?format={}".format(f)
         return redirect(url)
+
 
 # __before_rdf_refactoring__
 # TODO RDF: Check if this is still necessary and needed to be adapted
@@ -449,6 +452,7 @@ class GetOrCreateEntity(APIView):
             ),
         }
         return Response(res)
+
 
 # __before_rdf_refactoring__
 # TODO RDF: Check if this is still necessary and needed to be adapted

@@ -11,7 +11,6 @@ from rest_framework.test import APIClient
 from django.contrib.auth.models import Permission
 
 
-
 class PermissionsModelTestCase(TestCase):
     name = "test name"
     first_name = "test first name"

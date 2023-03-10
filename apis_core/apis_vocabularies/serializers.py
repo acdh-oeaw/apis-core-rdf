@@ -14,7 +14,7 @@ from .models import (
     # __before_rdf_refactoring__
     # EventType,
     # WorkType,
-    LabelType
+    LabelType,
 )
 
 
@@ -54,8 +54,9 @@ class GenericVocabsSerializer(serializers.Serializer):
         else:
             rt = self.instance
         if "Relation" in rt.__class__.__name__:
-            self.fields['name_reverse'] = serializers.CharField()
-            self.fields['label_reverse'] = serializers.CharField()
+            self.fields["name_reverse"] = serializers.CharField()
+            self.fields["label_reverse"] = serializers.CharField()
+
 
 ###########################################################
 #
@@ -65,56 +66,48 @@ class GenericVocabsSerializer(serializers.Serializer):
 
 
 class UserAccSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ["username", "email"]
 
 
 class VocabsBaseSerializer(serializers.HyperlinkedModelSerializer):
     userAdded = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:user-detail",
-        lookup_field="pk",
-        read_only=True
+        view_name="apis:apis_api:user-detail", lookup_field="pk", read_only=True
     )
     parent_class = serializers.HyperlinkedRelatedField(
         view_name="apis:apis_api:vocabsbaseclass-detail",
         lookup_field="pk",
-        read_only=True
+        read_only=True,
     )
     vocab_name = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:vocabnames-detail",
-        lookup_field="pk",
-        read_only=True
+        view_name="apis:apis_api:vocabnames-detail", lookup_field="pk", read_only=True
     )
 
 
 class CollectionTypeSerializer(VocabsBaseSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:collectiontype-detail",
-        lookup_field="pk"
+        view_name="apis:apis_api:collectiontype-detail", lookup_field="pk"
     )
 
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
         model = CollectionType
 
 
 class VocabsBaseClassSerializer(VocabsBaseSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:vocabsbaseclass-detail",
-        lookup_field="pk"
+        view_name="apis:apis_api:vocabsbaseclass-detail", lookup_field="pk"
     )
 
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
         model = VocabsBaseClass
 
 
 class VocabNamesSerializer(VocabsBaseSerializer):
-
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
         model = VocabNames
 
 
@@ -127,18 +120,17 @@ class VocabNamesSerializer(VocabsBaseSerializer):
 
 class TextTypeSerializer(VocabsBaseSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:texttype-detail",
-        lookup_field="pk"
+        view_name="apis:apis_api:texttype-detail", lookup_field="pk"
     )
     collections = serializers.HyperlinkedRelatedField(
         view_name="apis:apis_api:collection-detail",
         lookup_field="pk",
         many=True,
-        read_only=True
+        read_only=True,
     )
 
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
         model = TextType
 
 
@@ -200,10 +192,10 @@ class TextTypeSerializer(VocabsBaseSerializer):
 #
 #
 class LabelTypeSerializer(serializers.ModelSerializer):
-
     class Meta:
-        fields = ('id', 'name')
+        fields = ("id", "name")
         model = LabelType
+
 
 #
 #

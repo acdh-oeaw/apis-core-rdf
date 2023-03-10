@@ -4,17 +4,20 @@ from rest_framework_csv.renderers import CSVRenderer
 
 
 class TEIBaseRenderer(renderers.BaseRenderer):
-    media_type = 'application/xml+tei'
-    format = 'xml'
+    media_type = "application/xml+tei"
+    format = "xml"
 
     def render(self, data, media_type=None, renderer_context=None):
-        data = render_to_string("apis_metainfo/TEI_renderer.xml", {'data': data, 'renderer_context': renderer_context})
+        data = render_to_string(
+            "apis_metainfo/TEI_renderer.xml",
+            {"data": data, "renderer_context": renderer_context},
+        )
 
         return data
 
 
 class PaginatedCSVRenderer(CSVRenderer):
-    results_field = 'results'
+    results_field = "results"
 
     def render(self, data, *args, **kwargs):
         if not isinstance(data, list):

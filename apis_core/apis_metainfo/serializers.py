@@ -10,7 +10,9 @@ class CollectionSerializer(serializers.HyperlinkedModelSerializer):
         view_name="apis:apis_api:text-detail", lookup_field="pk"
     )
     collection_type = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:collectiontype-detail", lookup_field="pk", read_only=True
+        view_name="apis:apis_api:collectiontype-detail",
+        lookup_field="pk",
+        read_only=True,
     )
     parent_class = serializers.HyperlinkedRelatedField(
         view_name="apis:apis_api:collection-detail", lookup_field="pk", read_only=True

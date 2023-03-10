@@ -12,8 +12,7 @@ from rdflib import XSD
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Collection, Uri
 from apis_core.apis_metainfo.models import Uri as genUri
-from apis_core.apis_vocabularies.models import (
-    LabelType)
+from apis_core.apis_vocabularies.models import LabelType
 from apis_core.default_settings.RDF_settings import sett_RDF_generic
 
 
@@ -21,8 +20,8 @@ def harmonize_geonames_id(uri):
 
     """checks if a geonames Url points to geonames' rdf expression"""
 
-    if 'geonames' in uri:
-        geo_id = "".join(re.findall(r'\d', uri))
+    if "geonames" in uri:
+        geo_id = "".join(re.findall(r"\d", uri))
         return "http://sws.geonames.org/{}/".format(geo_id)
     else:
         return uri
@@ -60,45 +59,55 @@ class GenericRDFParser(object):
         if exist.count() > 0:
             if exist[0].entity is not None:
                 return exist[0].entity
-        self.objct.status = 'distinct'
+        self.objct.status = "distinct"
         self.objct.save()
-        def_coll, created = Collection.objects.get_or_create(name='Default import collection')
+        def_coll, created = Collection.objects.get_or_create(
+            name="Default import collection"
+        )
         self.objct.collection.add(def_coll)
         self.saved = True
-        self._objct_uri.entity=self.objct
+        self._objct_uri.entity = self.objct
         self._objct_uri.save()
         for lab in self.labels:
             lab.temp_entity = self.objct
             lab.save()
         for obj in self.related_objcts:
-            if hasattr(obj, 'related_'+self.kind.lower()+'B'):
-                setattr(obj, 'related_' + self.kind.lower() + 'A_id', self.objct.pk)
+            if hasattr(obj, "related_" + self.kind.lower() + "B"):
+                setattr(obj, "related_" + self.kind.lower() + "A_id", self.objct.pk)
             else:
-                setattr(obj, 'related_'+self.kind.lower()+'_id', self.objct.pk)
+                setattr(obj, "related_" + self.kind.lower() + "_id", self.objct.pk)
             obj.save()
         return self.objct
 
-    def merge(self, m_obj, app_label_relations='apis_relations'):
+    def merge(self, m_obj, app_label_relations="apis_relations"):
         """
         :param m_obj: the object to merge with (must be an django model object instance)
         :param app_label_relations: (string) the label of the Django app that contains the relations
         :return: django object saved to db or False if nothing was saved
         """
-        for rel in ContentType.objects.filter(app_label=app_label_relations, model__icontains=self.kind.lower()):
-            rel_q = {'related_' + self.kind.lower(): m_obj}
+        for rel in ContentType.objects.filter(
+            app_label=app_label_relations, model__icontains=self.kind.lower()
+        ):
+            rel_q = {"related_" + self.kind.lower(): m_obj}
             rel2 = rel.model_class()
             try:
                 for rel_exst in rel2.objects.filter(**rel_q):
-                    setattr(rel_exst, 'related_'+self.kind.lower()+'_id', self.objct.pk)
+                    setattr(
+                        rel_exst, "related_" + self.kind.lower() + "_id", self.objct.pk
+                    )
                     rel_exst.save()
             except FieldError:  # e.g. PlacePlace relations have different related_ fields
-                rel_q = {'related_' + self.kind.lower()+'A': m_obj}
+                rel_q = {"related_" + self.kind.lower() + "A": m_obj}
                 for rel_exst in rel2.objects.filter(**rel_q):
-                    setattr(rel_exst, 'related_'+self.kind.lower()+'A_id', self.objct.pk)
+                    setattr(
+                        rel_exst, "related_" + self.kind.lower() + "A_id", self.objct.pk
+                    )
                     rel_exst.save()
-                rel_q = {'related_' + self.kind.lower() + 'B': m_obj}
+                rel_q = {"related_" + self.kind.lower() + "B": m_obj}
                 for rel_exst in rel2.objects.filter(**rel_q):
-                    setattr(rel_exst, 'related_'+self.kind.lower()+'B_id', self.objct.pk)
+                    setattr(
+                        rel_exst, "related_" + self.kind.lower() + "B_id", self.objct.pk
+                    )
                     rel_exst.save()
         for z in genUri.objects.filter(root_object=m_obj):
             z.entity_id = self.objct.pk
@@ -106,16 +115,22 @@ class GenericRDFParser(object):
         for z in Label.objects.filter(temp_entity=m_obj):
             z.temp_entity_id = self.objct.pk
             z.save()
-        if hasattr(m_obj, 'first_name'):
-            legacy_name = '{}, {}'.format(m_obj.name, m_obj.first_name)
+        if hasattr(m_obj, "first_name"):
+            legacy_name = "{}, {}".format(m_obj.name, m_obj.first_name)
         else:
             legacy_name = m_obj.name
-        lt, created = LabelType.objects.get_or_create(name='legacy name')
-        Label.objects.create(temp_entity_id=self.objct.pk, label=legacy_name, label_type=lt)
+        lt, created = LabelType.objects.get_or_create(name="legacy name")
+        Label.objects.create(
+            temp_entity_id=self.objct.pk, label=legacy_name, label_type=lt
+        )
         for col in m_obj.collection.all():
             self.objct.collection.add(col)
-        if 'apis_highlighter' in settings.INSTALLED_APPS:
-            for ann in m_obj.annotation_set.all():  # Todo: check if this works now with highlighter
+        if "apis_highlighter" in settings.INSTALLED_APPS:
+            for (
+                ann
+            ) in (
+                m_obj.annotation_set.all()
+            ):  # Todo: check if this works now with highlighter
                 ann.entity_link = self.objct
                 ann.save()
         for txt in m_obj.text.all():
@@ -139,8 +154,15 @@ class GenericRDFParser(object):
             else:
                 return self.objct
 
-    def __init__(self, uri, kind, app_label_entities="apis_entities",
-                 app_label_relations="apis_relations", app_label_vocabularies="apis_vocabularies", **kwargs):
+    def __init__(
+        self,
+        uri,
+        kind,
+        app_label_entities="apis_entities",
+        app_label_relations="apis_relations",
+        app_label_vocabularies="apis_vocabularies",
+        **kwargs
+    ):
         """
         :param uri: (url) Uri to parse the object from (http://test.at). The uri must start with a base url mentioned in the RDF parser settings file.
         :param kind: (string) Kind of entity (Person, Place, Institution, Work, Event)
@@ -176,10 +198,13 @@ class GenericRDFParser(object):
             else:
                 res = tupl[0]
             if len(res) > 255:
-                res = res[:250] + '...'
+                res = res[:250] + "..."
             return res.strip()
-        objct = ContentType.objects.get(app_label=app_label_entities, model=kind.lower()).model_class()
-        force = kwargs.get('force', None)
+
+        objct = ContentType.objects.get(
+            app_label=app_label_entities, model=kind.lower()
+        ).model_class()
+        force = kwargs.get("force", None)
         res_attrb = dict()
         labels = []
         related_objcts = []
@@ -194,18 +219,20 @@ class GenericRDFParser(object):
         else:
             self.created = True
             rdf_t = dict()
-            for x in sett_RDF_generic[kind]['data']:
+            for x in sett_RDF_generic[kind]["data"]:
                 self.settings_defined = False
-                if not uri.startswith(x['base_url']):
+                if not uri.startswith(x["base_url"]):
                     continue
                 self.settings_defined = True
                 g = rdflib.Graph()
                 uri_2 = uri
-                if not uri_2.endswith('/'):
-                    uri_2 += '/'
+                if not uri_2.endswith("/"):
+                    uri_2 += "/"
                 o2 = rdflib.term.Literal(uri, datatype=XSD.string)
-                duri = rdflib.term.URIRef('http://d-nb.info/standards/elementset/dnb#deprecatedUri')
-                #g.parse('{}{}'.format(uri_2.strip(), x['url_appendix']), format='xml')
+                duri = rdflib.term.URIRef(
+                    "http://d-nb.info/standards/elementset/dnb#deprecatedUri"
+                )
+                # g.parse('{}{}'.format(uri_2.strip(), x['url_appendix']), format='xml')
                 g.parse(uri)
                 list_sameas = []
                 if (None, duri, o2) in g:
@@ -221,12 +248,12 @@ class GenericRDFParser(object):
                         list_sameas.append(str(o2))
                 else:
                     o2 = rdflib.term.URIRef(uri)
-                sameas = rdflib.term.URIRef(owl+'sameAs')
+                sameas = rdflib.term.URIRef(owl + "sameAs")
                 for p in g.objects(subject=o2, predicate=sameas):
                     list_sameas.append(genUri(uri=p))
                 self.sameas = list_sameas
-                if 'kind' in x.keys():
-                    for k in x['kind']:
+                if "kind" in x.keys():
+                    for k in x["kind"]:
                         kind_rdf = rdflib.term.URIRef(k[0])
                         kind_val = g.value(o2, kind_rdf)
                         if kind_val is not None:
@@ -235,9 +262,13 @@ class GenericRDFParser(object):
                             kind_val = k[1]
                     if kind_val is not None:
                         kind_objct = ContentType.objects.get(
-                        app_label=app_label_vocabularies, model=kind.lower() + 'Type'.lower()).model_class()
-                        kind_objct, created = kind_objct.objects.get_or_create(name=kind_val)
-                        res_attrb['kind'] = kind_objct
+                            app_label=app_label_vocabularies,
+                            model=kind.lower() + "Type".lower(),
+                        ).model_class()
+                        kind_objct, created = kind_objct.objects.get_or_create(
+                            name=kind_val
+                        )
+                        res_attrb["kind"] = kind_objct
                 for uri_2 in list_sameas:
                     test = exist(uri_2)
                     if test[0]:
@@ -245,12 +276,12 @@ class GenericRDFParser(object):
                         self.created = False
                         uri_3 = genUri(uri=uri, entity=self.objct)
                         uri_3.save()
-                for xx in x['attributes']:
-                    rdf_t[xx['name']] = ()
+                for xx in x["attributes"]:
+                    rdf_t[xx["name"]] = ()
                     subj2 = []
                     results = []
                     ind_type = ()
-                    for z in xx['identifiers']:
+                    for z in xx["identifiers"]:
                         if len(results) > 0:
                             continue
                         cnt = 0
@@ -258,22 +289,27 @@ class GenericRDFParser(object):
                         try:
                             k = z[cnt_2]
                         except:
-                            k = '='
-                        subj = [o2, ]
+                            k = "="
+                        subj = [
+                            o2,
+                        ]
                         while k:
                             for indx, s in enumerate(subj):
-                                if z[cnt][0] == 'objects':
+                                if z[cnt][0] == "objects":
                                     pred = rdflib.term.URIRef(z[cnt][2])
                                     res = g.objects(subject=s, predicate=pred)
                                     if not isinstance(res, types.GeneratorType):
                                         break
                                     for r in res:
                                         if z[cnt][3]:
-                                            if not getattr(r, z[cnt][3][0]) == z[cnt][3][1]:
+                                            if (
+                                                not getattr(r, z[cnt][3][0])
+                                                == z[cnt][3][1]
+                                            ):
                                                 continue
-                                        if k == '>':
+                                        if k == ">":
                                             subj2.append(r)
-                                        elif k == '=':
+                                        elif k == "=":
                                             results.append((z[cnt][1], r, indx))
                                             ind_type += ((len(ind_type), z[cnt][1]),)
                                             k = False
@@ -281,54 +317,94 @@ class GenericRDFParser(object):
                             try:
                                 k = z[cnt_2]
                             except:
-                                k = '='
+                                k = "="
                             if cnt + 2 > len(z):
                                 k = None
                             cnt += 2
                             subj = subj2
                     print(results)
-                    for attrb in sett_RDF_generic[kind]['matching']['attributes'].keys():
+                    for attrb in sett_RDF_generic[kind]["matching"][
+                        "attributes"
+                    ].keys():
                         res_2 = []
-                        for x in sett_RDF_generic[kind]['matching']['attributes'][attrb]:
-                            print('new print: {}'.format(x))
+                        for x in sett_RDF_generic[kind]["matching"]["attributes"][
+                            attrb
+                        ]:
+                            print("new print: {}".format(x))
                             for s in x:
-                                for ind, elem in filter(lambda x: x[1] == s[0], ind_type):
+                                for ind, elem in filter(
+                                    lambda x: x[1] == s[0], ind_type
+                                ):
                                     elem = results[ind][1]
                                     res_2.append(prep_string((elem, s[1])))
                                 if isinstance(s, str):
                                     res_2.append(s)
                             if len(res_2) == len(x):
-                                res_attrb[attrb] = ''.join(res_2)
+                                res_attrb[attrb] = "".join(res_2)
                     print(res_attrb)
-                    for lab in sett_RDF_generic[kind]['matching']['labels'].keys():
+                    for lab in sett_RDF_generic[kind]["matching"]["labels"].keys():
                         lb_type, created = LabelType.objects.get_or_create(name=lab)
-                        for x in sett_RDF_generic[kind]['matching']['labels'][lab]:
-                            for ind, elem in filter(lambda a: a[1]==x[0], ind_type):
+                        for x in sett_RDF_generic[kind]["matching"]["labels"][lab]:
+                            for ind, elem in filter(lambda a: a[1] == x[0], ind_type):
                                 elem = results[ind][1]
-                                lb = Label(label=prep_string((elem, x[1])), isoCode_639_3=elem.language, label_type=lb_type)
+                                lb = Label(
+                                    label=prep_string((elem, x[1])),
+                                    isoCode_639_3=elem.language,
+                                    label_type=lb_type,
+                                )
                                 labels.append(lb)
-                    if kwargs.get('drill_down', True):
-                        for con in sett_RDF_generic[kind]['matching']['linked objects']:
-                            for x in con['object']:
-                                for ind, elem in filter(lambda a: a[1]==x[0], ind_type):
+                    if kwargs.get("drill_down", True):
+                        for con in sett_RDF_generic[kind]["matching"]["linked objects"]:
+                            for x in con["object"]:
+                                for ind, elem in filter(
+                                    lambda a: a[1] == x[0], ind_type
+                                ):
                                     elem = results[ind][1]
-                                    ob = GenericRDFParser(elem, con['type'], drill_down=False)
+                                    ob = GenericRDFParser(
+                                        elem, con["type"], drill_down=False
+                                    )
                                     if ob.created and not ob.saved:
-                                        ob.save()   # TODO: We should move the save of related objects in the save routine
+                                        ob.save()  # TODO: We should move the save of related objects in the save routine
                                     try:
-                                        u = ContentType.objects.get(app_label=app_label_relations, model=kind.lower()+con['type'].lower())
-                                        u_kind = ContentType.objects.get(app_label=app_label_vocabularies, model=kind.lower()+con['type'].lower()+'Relation'.lower())
+                                        u = ContentType.objects.get(
+                                            app_label=app_label_relations,
+                                            model=kind.lower() + con["type"].lower(),
+                                        )
+                                        u_kind = ContentType.objects.get(
+                                            app_label=app_label_vocabularies,
+                                            model=kind.lower()
+                                            + con["type"].lower()
+                                            + "Relation".lower(),
+                                        )
                                     except ContentType.DoesNotExist:
-                                        u = ContentType.objects.get(app_label=app_label_relations, model=con['type'].lower()+kind.lower())
-                                        u_kind = ContentType.objects.get(app_label=app_label_vocabularies, model=con['type'].lower()+kind.lower()+'Relation'.lower())
+                                        u = ContentType.objects.get(
+                                            app_label=app_label_relations,
+                                            model=con["type"].lower() + kind.lower(),
+                                        )
+                                        u_kind = ContentType.objects.get(
+                                            app_label=app_label_vocabularies,
+                                            model=con["type"].lower()
+                                            + kind.lower()
+                                            + "Relation".lower(),
+                                        )
                                     u_kind_2 = u_kind.model_class()
                                     u2 = u.model_class()()
-                                    uk, created = u_kind_2.objects.get_or_create(name=con['kind'])
-                                    if con['type'] == kind:
-                                        setattr(u2, 'related_' + con['type'].lower() + 'B_id', ob.objct.pk)
+                                    uk, created = u_kind_2.objects.get_or_create(
+                                        name=con["kind"]
+                                    )
+                                    if con["type"] == kind:
+                                        setattr(
+                                            u2,
+                                            "related_" + con["type"].lower() + "B_id",
+                                            ob.objct.pk,
+                                        )
                                     else:
-                                        setattr(u2, 'related_' + con['type'].lower() + '_id', ob.objct.pk)
-                                    setattr(u2, 'relation_type_id', uk.pk)
+                                        setattr(
+                                            u2,
+                                            "related_" + con["type"].lower() + "_id",
+                                            ob.objct.pk,
+                                        )
+                                    setattr(u2, "relation_type_id", uk.pk)
                                     related_objcts.append(u2)
             if self.created:
                 self.objct = objct(**res_attrb)
