@@ -100,7 +100,7 @@ class EntityLabelForm(forms.ModelForm):
 #     │      │* contains anchor-div for ajax results    │
 #     │      └──┬───────────────────────────────────────┘
 #     │         │* sends data-carrier-div
-#     │         │* sends reference to anchor-div
+#     │         │* sends anchor-div
 #     │         ▼
 #     │      ┌──────────────────────────────────────────┐
 #     │      │ ajax function (JS)                       │
