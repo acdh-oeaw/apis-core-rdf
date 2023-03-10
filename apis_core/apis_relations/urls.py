@@ -16,11 +16,6 @@ urlpatterns = [
         name="save_ajax_form",  # rel_form_logic_breadcrumb (for refinding the implicit connections)
     ),
     url(
-        r"^(?P<entity>[a-z0-9_]+)/list/$",
-        rel_views.GenericRelationView.as_view(),
-        name="generic_relations_list",
-    ),
-    url(
         r"^(?P<entity>[a-z0-9_]+)/(?P<pk>[0-9]+)/detail$",
         rel_views.GenericRelationDetailView.as_view(),
         name="generic_relations_detail_view",

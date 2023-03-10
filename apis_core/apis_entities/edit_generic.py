@@ -20,12 +20,7 @@ from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Triple, TempTriple
-from apis_core.apis_relations.tables import (
-    get_generic_relations_table,
-    get_generic_triple_table,
-    LabelTableEdit,
-    render_reification_table,
-)
+from apis_core.apis_relations.tables import LabelTableEdit, render_reification_table
 from apis_core.apis_relations.forms import (
     render_reification_form_and_table,
     render_triple_form,

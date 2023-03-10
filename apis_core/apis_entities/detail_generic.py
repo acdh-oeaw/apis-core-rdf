@@ -9,8 +9,6 @@ from django_tables2 import RequestConfig
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.tables import (
-    get_generic_relations_table,
-    get_generic_triple_table,
     LabelTableBase,
     render_triple_table,
     render_reification_table,
