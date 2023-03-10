@@ -310,6 +310,7 @@ class AbstractEntity(RootObject):
         -> [ InstitutionPlace, PersonPlace, PlaceEvent, PlacePlace, PlaceWork ]
         """
         from apis_core.apis_relations.models import AbstractRelation
+
         return AbstractRelation.get_relation_classes_of_entity_class(cls)
 
     @classmethod
@@ -326,6 +327,7 @@ class AbstractEntity(RootObject):
         "placeplace_set", "placework_set"]
         """
         from apis_core.apis_relations.models import AbstractRelation
+
         return AbstractRelation.get_relation_field_names_of_entity_class(cls)
 
     def get_related_relation_instances(self):
