@@ -27,7 +27,6 @@ def _init_all_ontology_classes():
     
     # the imports are done here as this module here might be called before full Django
     # initialization. Otherwise, it would break.
-    from apis_ontology import models as ontology_models
     from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
     from apis_core.apis_relations.models import AbstractReification
     from apis_core.apis_vocabularies.models import AbstractVocabulary
