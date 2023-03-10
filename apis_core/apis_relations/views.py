@@ -100,7 +100,7 @@ form_class_dict = turn_form_modules_into_dict(form_module_list)
 
 
 
-# TODO RDF : Remove
+# TODO RDF: Remove
 # this function became a hybrid between vanilla ajax logic and rdf triple logic. But it is now fully
 # superseded of new ajax logic, so it can be removed. However it probably is still used for
 # highlighter. So this needs to looked into and moved to the new ajax logic too.
@@ -247,8 +247,8 @@ def get_form_ajax(request):
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 
-# TODO RDF : Implement highlighter and label form
-# TODO RDF : Check if rdf refactoring covers all use cases
+# TODO RDF: Implement highlighter and label form
+# TODO RDF: Check if rdf refactoring covers all use cases
 @login_required
 def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # rel_form_logic_breadcrumb (for refinding the implicit connections)
     '''Tests validity and saves AjaxForms, returns them when validity test fails'''

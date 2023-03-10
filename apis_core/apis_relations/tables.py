@@ -295,8 +295,8 @@ def render_reification_table(
     )
 
 
-# TODO RDF : combine this or re-use this class here in get_generic_triple_table
-# TODO RDF : Also consider implementing proper form search fields for this (instead of default drop-downs)
+# TODO RDF: combine this or re-use this class here in get_generic_triple_table
+# TODO RDF: Also consider implementing proper form search fields for this (instead of default drop-downs)
 class TripleTable_OLD(tables.Table):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -952,7 +952,7 @@ def get_generic_relations_table(relation_class, entity_instance, detail=None):
 # __after_rdf_refactoring__
 def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
-    # TODO RDF : add code from before refactoring and comment it out
+    # TODO RDF: add code from before refactoring and comment it out
     class TripleTableBase(tables.Table):
         """
         The base table from which detail or edit tables will inherit from in order to avoid redundant definitions

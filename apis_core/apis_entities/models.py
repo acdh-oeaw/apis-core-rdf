@@ -543,7 +543,7 @@ class TempEntityClass(AbstractEntity):
         null=True,
         verbose_name="End",
     )
-    # TODO RDF : Make Text also a Subclass of RootObject
+    # TODO RDF: Make Text also a Subclass of RootObject
     text = models.ManyToManyField("apis_metainfo.Text", blank=True)
     collection = models.ManyToManyField("apis_metainfo.Collection")
     status = models.CharField(max_length=100)
@@ -971,7 +971,7 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
 
 
 # __after_rdf_refactoring__
-# TODO RDF : remove this workaround here once the settings issue is resolved
+# TODO RDF: remove this workaround here once the settings issue is resolved
 def fill_settings_with_entity_attributes():
     for entity_class in caching.get_all_entity_classes() + caching.get_all_ontology_classes():
         entity_settings = entity_class.entity_settings

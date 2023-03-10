@@ -124,7 +124,7 @@ def uri_resolver(request):
         return redirect(url)
 
 # __before_rdf_refactoring__
-# TODO RDF : Check if this is still necessary and needed to be adapted
+# TODO RDF: Check if this is still necessary and needed to be adapted
 #
 # class InstitutionViewSet(viewsets.ModelViewSet):
 #     """Serialization of the institution class.
@@ -451,7 +451,7 @@ class GetOrCreateEntity(APIView):
         return Response(res)
 
 # __before_rdf_refactoring__
-# TODO RDF : Check if this is still necessary and needed to be adapted
+# TODO RDF: Check if this is still necessary and needed to be adapted
 #
 # class GetRelatedPlaces(APIView):
 #     #map_qs = {

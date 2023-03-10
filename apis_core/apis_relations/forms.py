@@ -21,7 +21,7 @@ from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
 from apis_core.helper_functions.caching import get_autocomplete_property_choices
 
 
-# TODO RDF : Check if still relevant. Remove or adapt.
+# TODO RDF: Check if still relevant. Remove or adapt.
 class EntityLabelForm(forms.ModelForm):
 
     class Meta:

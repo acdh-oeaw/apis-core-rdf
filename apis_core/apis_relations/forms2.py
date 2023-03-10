@@ -30,7 +30,7 @@ if 'apis_highlighter' in settings.INSTALLED_APPS:
     from apis_highlighter.models import Annotation, AnnotationProject
 
 
-# TODO RDF : what was this used for? Remove or adapt.
+# TODO RDF: what was this used for? Remove or adapt.
 def validate_target_autocomplete(value):
     try:
         value = int(value)

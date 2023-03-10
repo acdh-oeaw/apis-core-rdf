@@ -192,7 +192,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                         dataclass = 'data-vis-tooltip="{}" data-lat="{}" \
                         data-long="{}"  class="apis-autocomplete-span"'.format(ac_type, r.lat, r.lng)
                         
-                # TODO RDF : make the html format work again
+                # TODO RDF: make the html format work again
                 # For now, the return value is overwritten with a non-html result
                 # also regard the other parts in this function where choices.append get something
                 # __before_rdf_refactoring__
@@ -350,7 +350,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         }), content_type='application/json')
 
 
-# TODO RDF : Adapt this Autocomplete class to triple architecture
+# TODO RDF: Adapt this Autocomplete class to triple architecture
 class GenericVocabulariesAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         page_size = 20
@@ -453,7 +453,7 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
     SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
 
     def get(self, request, *args, **kwargs):
-        # TODO RDF : pagination
+        # TODO RDF: pagination
         more = False
         choices = get_autocomplete_property_choices(kwargs["entity_self"], kwargs["entity_other"], self.q)
         return http.HttpResponse(

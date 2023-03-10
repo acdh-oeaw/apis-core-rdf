@@ -337,7 +337,7 @@ class RootObject(models.Model):
         "search": ["name"],
     }
 
-    # TODO RDF : consider renaming attribute 'name' to 'value'
+    # TODO RDF: consider renaming attribute 'name' to 'value'
     name = models.CharField(max_length=255, verbose_name='Name')
     # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
     # triples where the subject's or object's contenttype must be respected (e.g. get all triples
@@ -412,7 +412,7 @@ class Collection(models.Model):
         super().save(*args, **kwargs)
 
 
-# TODO RDF : Remove text entirely
+# TODO RDF: Remove text entirely
 @reversion.register()
 class Text(models.Model):
     """ Holds unstructured text associeted with
@@ -593,7 +593,7 @@ class Uri(models.Model):
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
     domain = models.CharField(max_length=255, blank=True)
     rdf_link = models.URLField(blank=True)
-    # TODO RDF : confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
+    # TODO RDF: confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
     # entity = models.ForeignKey(
     #     "apis_entities.TempEntityClass", blank=True, null=True, on_delete=models.CASCADE
     # )
@@ -645,7 +645,7 @@ class UriCandidate(models.Model):
     uri = models.URLField()
     confidence = models.FloatField(blank=True, null=True)
     responsible = models.CharField(max_length=255)
-    # TODO RDF : confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
+    # TODO RDF: confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
     # entity = models.ForeignKey(
     #     "apis_entities.TempEntityClass", blank=True, null=True, on_delete=models.CASCADE
     # )

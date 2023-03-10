@@ -79,7 +79,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
                         "title": f"{model_other_class_str}",
                         "triple_form_and_table": relation_form,
                     })
-        # TODO RDF : Check / Adapt the following code to rdf architecture
+        # TODO RDF: Check / Adapt the following code to rdf architecture
         object_lod = Uri.objects.filter(root_object=entity_self_instance)
         object_texts, ann_proj_form = get_highlighted_texts(request, entity_self_instance)
         object_labels = Label.objects.filter(temp_entity=entity_self_instance)

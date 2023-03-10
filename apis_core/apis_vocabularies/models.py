@@ -28,7 +28,7 @@ class VocabNames(models.Model):
         return re.sub(r"([A-Z])", r" \1", self.name).strip()
 
 
-# TODO RDF : Remove VocabsBaseClass entirely
+# TODO RDF: Remove VocabsBaseClass entirely
 @reversion.register()
 class VocabsBaseClass(RootObject):
     """ An abstract base class for other classes which contain so called
@@ -186,7 +186,7 @@ class VocabsUri(models.Model):
 #     """Holds controlled vocabularies about event-types"""
 #     pass
 
-# TODO RDF : Remove all these types
+# TODO RDF: Remove all these types
 @reversion.register(follow=['vocabsbaseclass_ptr'])
 class LabelType(VocabsBaseClass):
     """Holds controlled vocabularies about label-types"""
