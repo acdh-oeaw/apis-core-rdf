@@ -973,8 +973,9 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
 # __after_rdf_refactoring__
 # TODO RDF: remove this workaround here once the settings issue is resolved
 def fill_settings_with_entity_attributes():
-    for entity_class in caching.get_all_entity_classes() + caching.get_all_ontology_classes():
-        entity_settings = entity_class.entity_settings
-        settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
+    if not settings.APIS_ENTITIES:
+        for entity_class in caching.get_all_entity_classes() + caching.get_all_ontology_classes():
+                entity_settings = entity_class.entity_settings
+                settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
 
 fill_settings_with_entity_attributes()
