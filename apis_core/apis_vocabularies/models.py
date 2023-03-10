@@ -197,12 +197,14 @@ class LabelType(VocabsBaseClass):
 
     pass
 
+
 # TODO RDF: Remove this
 @reversion.register(follow=["vocabsbaseclass_ptr"])
 class CollectionType(VocabsBaseClass):
     """e.g. reseachCollection, importCollection"""
 
     pass
+
 
 # TODO RDF: Remove this
 @reversion.register(follow=["vocabsbaseclass_ptr"])
