@@ -57,7 +57,6 @@ class BaseRelationManager(models.Manager):
 
 
 class AbstractReification(RootObject):
-    
     class Meta:
         abstract = True
 

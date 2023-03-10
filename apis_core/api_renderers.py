@@ -23,9 +23,9 @@ class NetJsonRenderer(renderers.JSONRenderer):
                     rel2 = re.match("^{}[a-z]*".format(r2), rel)
                     if rel2:
                         source = r
-                    elif r.endswith('A'):
+                    elif r.endswith("A"):
                         source = r
-                    elif r.endswith('B'):
+                    elif r.endswith("B"):
                         target = r
                     rel2 = re.match("^[a-z]*?{}$".format(r2), rel)
                     if rel2:
@@ -44,5 +44,7 @@ class NetJsonRenderer(renderers.JSONRenderer):
                 )
                 results2.append(d2)
             data["results"] = results2
-            res3 = super().render(data, accepted_media_type=media_type, renderer_context=renderer_context)
+            res3 = super().render(
+                data, accepted_media_type=media_type, renderer_context=renderer_context
+            )
             return res3

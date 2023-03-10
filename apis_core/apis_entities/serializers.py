@@ -14,19 +14,19 @@ class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
         view_name="apis:apis_api:uri-detail",
         lookup_field="pk",
         many=True,
-        read_only=True
+        read_only=True,
     )
     collection = serializers.HyperlinkedRelatedField(
         view_name="apis:apis_api:collection-detail",
         lookup_field="pk",
         many=True,
-        read_only=True
+        read_only=True,
     )
     text = serializers.HyperlinkedRelatedField(
         view_name="apis:apis_api:text-detail",
         lookup_field="pk",
         many=True,
-        read_only=True
+        read_only=True,
     )
 
 
@@ -289,6 +289,7 @@ class NetJsonNodeSerializer(serializers.BaseSerializer):
             if obj.gender:
                 r["data"]["gender"] = obj.gender
         return r
+
 
 # __before_rdf_refactoring__
 #

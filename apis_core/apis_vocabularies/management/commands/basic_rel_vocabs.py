@@ -7,9 +7,6 @@ class Command(BaseCommand):
     help = "creates 'related' vocabs entries for all Relation classes"
 
     def handle(self, *args, **kwargs):
-        for x in apps.get_app_config('apis_vocabularies').get_models():
-            if x.__name__.endswith('Relation'):
-                x.objects.get_or_create(
-                    name="related",
-                    name_reverse="related"
-                )
+        for x in apps.get_app_config("apis_vocabularies").get_models():
+            if x.__name__.endswith("Relation"):
+                x.objects.get_or_create(name="related", name_reverse="related")

@@ -19,7 +19,12 @@ lst_orth_dict = dict()
 
 
 def extract_verbs_from_entity(
-        ent, lst_orth, lst_orth_dict, accept_pos=['VERB', 'AUX', 'NOUN', 'ADP', 'PART'], add=True):
+    ent,
+    lst_orth,
+    lst_orth_dict,
+    accept_pos=["VERB", "AUX", "NOUN", "ADP", "PART"],
+    add=True,
+):
     res = []
     for y in ent:
         head = y
@@ -48,28 +53,37 @@ def extract_verbs_from_entity(
 
 def test_model(model, sent):
     K.clear_session()
-    script_dir = os.path.dirname(os.path.realpath('__file__'))
-    fileh = open(os.path.join(script_dir,
-                              'data/nlp_models/{}_vocab.obj'.format(model)), 'rb')
-    lst_orth, lst_orth_dict, lst_labels, lst_labels_dict, lst_zero_label, lst_labels_dhae2 = pickle.load(fileh)
-    model = load_model(os.path.join(script_dir,
-                       'data/nlp_models/{}.h5'.format(model)))
+    script_dir = os.path.dirname(os.path.realpath("__file__"))
+    fileh = open(
+        os.path.join(script_dir, "data/nlp_models/{}_vocab.obj".format(model)), "rb"
+    )
+    (
+        lst_orth,
+        lst_orth_dict,
+        lst_labels,
+        lst_labels_dict,
+        lst_zero_label,
+        lst_labels_dhae2,
+    ) = pickle.load(fileh)
+    model = load_model(os.path.join(script_dir, "data/nlp_models/{}.h5".format(model)))
     result = []
     txt = nlp(sent)
     tokens_lst = []
     for ent in txt.ents:
         print(ent)
-        tokens, lemmas, pos_tags, shapes = extract_verbs_from_entity(ent, lst_orth, lst_orth_dict, add=False)
+        tokens, lemmas, pos_tags, shapes = extract_verbs_from_entity(
+            ent, lst_orth, lst_orth_dict, add=False
+        )
         if len(tokens) > 0:
             tokens_lst.append(tokens)
     x_matrix2 = np.array(tokens_lst)
     print(x_matrix2)
     tokenizer = Tokenizer(num_words=len(lst_orth))
-    x_matrix3 = tokenizer.sequences_to_matrix(tokens_lst, mode='binary')
+    x_matrix3 = tokenizer.sequences_to_matrix(tokens_lst, mode="binary")
     zz = model.predict(x_matrix3, batch_size=32, verbose=1)
     for idx1, z in enumerate(zz):
         for idx, x in enumerate(zz[idx1]):
-            v_id = '-'
+            v_id = "-"
             for k in lst_labels_dict.keys():
                 if lst_labels_dict[k] == idx:
                     v_id = VocabsBaseClass.objects.get(id=k).name

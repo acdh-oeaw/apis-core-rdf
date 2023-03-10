@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.schemas import get_schema_view
 from apis_core.api_routers import load_additional_serializers
 from apis_core.api_routers import views
+
 # from apis_core.apis_entities.api_views import (
 #     NetJsonViewSet,
 #     PlaceGeoJsonViewSet,
@@ -40,7 +41,7 @@ for additional_serializer in load_additional_serializers():
     router.register(
         additional_serializer.url,
         additional_serializer.viewset,
-        additional_serializer.name
+        additional_serializer.name,
     )
 
 if "apis_highlighter" in settings.INSTALLED_APPS:

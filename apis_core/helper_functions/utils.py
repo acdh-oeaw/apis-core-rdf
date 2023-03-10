@@ -22,24 +22,25 @@ def access_for_all(self, viewtype="list"):
 
 def access_for_all_function(user):
     if user.is_anonymous:
-        print(getattr(settings, 'APIS_DETAIL_VIEWS_ALLOWED', False))
-        return getattr(settings, 'APIS_DETAIL_VIEWS_ALLOWED', False)
+        print(getattr(settings, "APIS_DETAIL_VIEWS_ALLOWED", False))
+        return getattr(settings, "APIS_DETAIL_VIEWS_ALLOWED", False)
     else:
         return True
 
 
 ENTITIES_DEFAULT_COLS = [
-    'start_date',
-    'start_date_written',
-    'end_date',
-    'end_date_written',
-    'text',
-    'collection',
-    'status',
-    'source',
-    'references',
-    'notes',
+    "start_date",
+    "start_date_written",
+    "end_date",
+    "end_date_written",
+    "text",
+    "collection",
+    "status",
+    "source",
+    "references",
+    "notes",
 ]
+
 
 def get_child_classes(objids, obclass, labels=False):
     """used to retrieve a list of primary keys of sub classes"""

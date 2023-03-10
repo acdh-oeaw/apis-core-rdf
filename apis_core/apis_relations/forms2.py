@@ -11,22 +11,28 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.urls import reverse
+
 # import autocomplete_light.shortcuts as al
 from django.utils.translation import ugettext_lazy as _
 from apis_core.apis_relations.models import TempTriple, Property
 from apis_core.apis_entities.fields import ListSelect2
+
 # from apis_core.apis_entities.models import AbstractEntity
 # from dal.autocomplete import ListSelect2
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_metainfo.models import Text, Uri
+
 # from apis_core.apis_relations.models import AbstractRelation
 from apis_core.helper_functions import DateParser
 from apis_core.helper_functions.RDFParser import RDFParser, APIS_RDF_URI_SETTINGS
 from .tables import get_generic_relations_table, get_generic_triple_table
-from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete, GenericEntitiesAutocomplete
+from apis_core.apis_entities.autocomplete3 import (
+    PropertyAutocomplete,
+    GenericEntitiesAutocomplete,
+)
 
 
-if 'apis_highlighter' in settings.INSTALLED_APPS:
+if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import Annotation, AnnotationProject
 
 
@@ -35,29 +41,32 @@ def validate_target_autocomplete(value):
     try:
         value = int(value)
     except ValueError:
-        if value.startswith('http'):
+        if value.startswith("http"):
             test = False
-            sett = yaml.load(open(APIS_RDF_URI_SETTINGS, 'r'))
-            regx = [x['regex'] for x in sett['mappings']]
-            regx.append('http.*oeaw\.ac\.at')
-            for k, v in getattr(settings, 'APIS_AC_INSTANCES', {}).items():
-                regx.append(v['url'].replace('.', '\.'))
+            sett = yaml.load(open(APIS_RDF_URI_SETTINGS, "r"))
+            regx = [x["regex"] for x in sett["mappings"]]
+            regx.append("http.*oeaw\.ac\.at")
+            for k, v in getattr(settings, "APIS_AC_INSTANCES", {}).items():
+                regx.append(v["url"].replace(".", "\."))
             for r in regx:
                 if re.match(r, value):
                     test = True
             if not test:
                 if Uri.objects.filter(uri=value).count() != 1:
                     raise ValidationError(
-                        _('Invalid value: %(value)s, the url you are using is not configured'),
-                        code='invalid',
-                        params={'value': value},
+                        _(
+                            "Invalid value: %(value)s, the url you are using is not configured"
+                        ),
+                        code="invalid",
+                        params={"value": value},
                     )
         else:
             raise ValidationError(
-                _('Invalid value: %(value)s, use either URLs or select a value'),
-                code='invalid',
-                params={'value': value},
+                _("Invalid value: %(value)s, use either URLs or select a value"),
+                code="invalid",
+                params={"value": value},
             )
+
 
 # __before_rdf_refactoring__
 #

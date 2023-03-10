@@ -13,9 +13,11 @@ def create_qs(row, cell, q_field="dateOfBirth", char_limit=0):
     return qs
 
 
-def lobid_qs(row, q_field='name', add_fields=[], base_url="https://lobid.org/gnd/search?q="):
-    """ creates a lobid query string from the passed in fields"""
-    search_url = base_url+row[q_field]+"&filter=type:Person"
+def lobid_qs(
+    row, q_field="name", add_fields=[], base_url="https://lobid.org/gnd/search?q="
+):
+    """creates a lobid query string from the passed in fields"""
+    search_url = base_url + row[q_field] + "&filter=type:Person"
     if add_fields:
         filters = []
         for x in add_fields:
@@ -25,37 +27,31 @@ def lobid_qs(row, q_field='name', add_fields=[], base_url="https://lobid.org/gnd
     return search_url
 
 
-def search_lobid(row, qs_field='query'):
-    """ sends the value of the passed in field to lobid and returns the results in a dict """
+def search_lobid(row, qs_field="query"):
+    """sends the value of the passed in field to lobid and returns the results in a dict"""
     query = row[qs_field]
-    result = {
-        'query': query,
-        'status': 0,
-        'error': "",
-        'hits': 0,
-        'gnd': []
-    }
+    result = {"query": query, "status": 0, "error": "", "hits": 0, "gnd": []}
     r = requests.get(query)
     try:
         r = requests.get(query)
     except requests.ConnectionError:
-        result['error'] = "Connection Error"
+        result["error"] = "Connection Error"
         return result
     if r:
         if r.status_code == 200:
-            result['status'] = r.status_code
-            result['hits'] = r.json()['totalItems']
-            if result['hits'] == 0:
+            result["status"] = r.status_code
+            result["hits"] = r.json()["totalItems"]
+            if result["hits"] == 0:
                 gnd = []
-                print('zero hits')
-            elif result['hits'] == 1:
+                print("zero hits")
+            elif result["hits"] == 1:
                 print("one hit")
-                result['gnd'] = [r.json()['member'][0]['gndIdentifier']]
+                result["gnd"] = [r.json()["member"][0]["gndIdentifier"]]
             else:
-                print("{} hits".format(result['hits']))
-                result['gnd'] = [x['gndIdentifier'] for x in r.json()['member']]
+                print("{} hits".format(result["hits"]))
+                result["gnd"] = [x["gndIdentifier"] for x in r.json()["member"]]
         else:
-            result['status'] = r.status_code
+            result["status"] = r.status_code
     return result
 
 

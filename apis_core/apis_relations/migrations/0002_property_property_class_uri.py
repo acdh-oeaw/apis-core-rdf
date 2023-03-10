@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('apis_relations', '0001_initial'),
+        ("apis_relations", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='property',
-            name='property_class_uri',
-            field=models.CharField(blank=True, max_length=255, verbose_name='Property Class URI'),
+            model_name="property",
+            name="property_class_uri",
+            field=models.CharField(
+                blank=True, max_length=255, verbose_name="Property Class URI"
+            ),
         ),
     ]

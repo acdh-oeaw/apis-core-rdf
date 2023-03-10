@@ -25,9 +25,12 @@ from .models import Uri
 # In the case of e.g. start_date_written,
 # the table class thus must have a method / class variable 'order_start_date_written = generic_order_start_date_written'
 
+
 def generic_order_start_date_written(self, queryset, is_descending):
     if is_descending:
-        queryset = queryset.order_by(F("start_date").desc(nulls_last=True)) #nulls_last=True puts null values behind non-null values
+        queryset = queryset.order_by(
+            F("start_date").desc(nulls_last=True)
+        )  # nulls_last=True puts null values behind non-null values
     else:
         queryset = queryset.order_by(F("start_date").asc(nulls_last=True))
 
@@ -41,7 +44,6 @@ def generic_order_end_date_written(self, queryset, is_descending):
         queryset = queryset.order_by(F("end_date").asc(nulls_last=True))
 
     return (queryset, True)
-
 
 
 def helper_render_date(value, var_date, var_start_date, var_end_date):
@@ -58,7 +60,6 @@ def helper_render_date(value, var_date, var_start_date, var_end_date):
     :param var_end_date: datetime : The sub-date of var_date, indicating the end date of the range
     :return: html string : which has the value of the written date and the parsed dates as mouse overlay helptext
     """
-
 
     # Various if-else branches checking which of the date fields are not None and should be used
 
@@ -82,37 +83,37 @@ def helper_render_date(value, var_date, var_start_date, var_end_date):
 def generic_render_start_date_written(self, record, value):
 
     return helper_render_date(
-        value = value,
-        var_date = record.start_date,
-        var_start_date = record.start_start_date,
-        var_end_date = record.start_end_date
+        value=value,
+        var_date=record.start_date,
+        var_start_date=record.start_start_date,
+        var_end_date=record.start_end_date,
     )
 
 
 def generic_render_end_date_written(self, record, value):
 
     return helper_render_date(
-        value = value,
-        var_date = record.end_date,
-        var_start_date = record.end_start_date,
-        var_end_date = record.end_end_date
+        value=value,
+        var_date=record.end_date,
+        var_start_date=record.end_start_date,
+        var_end_date=record.end_end_date,
     )
-
-
 
 
 class UriTable(tables.Table):
     id = tables.LinkColumn()
     entity = tables.TemplateColumn(
         "<a href='{{ record.entity.get_absolute_url }}'>{{ record.entity }}</a>",
-        orderable=True, verbose_name="related Entity"
+        orderable=True,
+        verbose_name="related Entity",
     )
     ent_type = tables.TemplateColumn(
         "{{ record.entity.get_child_class }}",
-        orderable=False, verbose_name="Entity Type"
+        orderable=False,
+        verbose_name="Entity Type",
     )
 
     class Meta:
         model = Uri
-        sequence = ('id', 'uri')
+        sequence = ("id", "uri")
         attrs = {"class": "table table-responsive table-hover"}

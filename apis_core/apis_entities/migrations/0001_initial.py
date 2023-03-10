@@ -9,34 +9,68 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('apis_metainfo', '0001_initial'),
+        ("apis_metainfo", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TempEntityClass',
+            name="TempEntityClass",
             fields=[
-                ('rootobject_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='apis_metainfo.rootobject')),
-                ('review', models.BooleanField(default=False, help_text='Should be set to True, if the data record holds up quality standards.')),
-                ('start_date', models.DateField(blank=True, null=True)),
-                ('start_start_date', models.DateField(blank=True, null=True)),
-                ('start_end_date', models.DateField(blank=True, null=True)),
-                ('end_date', models.DateField(blank=True, null=True)),
-                ('end_start_date', models.DateField(blank=True, null=True)),
-                ('end_end_date', models.DateField(blank=True, null=True)),
-                ('start_date_written', models.CharField(blank=True, max_length=255, null=True, verbose_name='Start')),
-                ('end_date_written', models.CharField(blank=True, max_length=255, null=True, verbose_name='End')),
-                ('status', models.CharField(max_length=100)),
-                ('references', models.TextField(blank=True, null=True)),
-                ('notes', models.TextField(blank=True, null=True)),
-                ('published', models.BooleanField(default=False)),
-                ('collection', models.ManyToManyField(to='apis_metainfo.Collection')),
-                ('source', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='apis_metainfo.source')),
-                ('text', models.ManyToManyField(blank=True, to='apis_metainfo.Text')),
+                (
+                    "rootobject_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="apis_metainfo.rootobject",
+                    ),
+                ),
+                (
+                    "review",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Should be set to True, if the data record holds up quality standards.",
+                    ),
+                ),
+                ("start_date", models.DateField(blank=True, null=True)),
+                ("start_start_date", models.DateField(blank=True, null=True)),
+                ("start_end_date", models.DateField(blank=True, null=True)),
+                ("end_date", models.DateField(blank=True, null=True)),
+                ("end_start_date", models.DateField(blank=True, null=True)),
+                ("end_end_date", models.DateField(blank=True, null=True)),
+                (
+                    "start_date_written",
+                    models.CharField(
+                        blank=True, max_length=255, null=True, verbose_name="Start"
+                    ),
+                ),
+                (
+                    "end_date_written",
+                    models.CharField(
+                        blank=True, max_length=255, null=True, verbose_name="End"
+                    ),
+                ),
+                ("status", models.CharField(max_length=100)),
+                ("references", models.TextField(blank=True, null=True)),
+                ("notes", models.TextField(blank=True, null=True)),
+                ("published", models.BooleanField(default=False)),
+                ("collection", models.ManyToManyField(to="apis_metainfo.Collection")),
+                (
+                    "source",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="apis_metainfo.source",
+                    ),
+                ),
+                ("text", models.ManyToManyField(blank=True, to="apis_metainfo.Text")),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('apis_metainfo.rootobject',),
+            bases=("apis_metainfo.rootobject",),
         ),
     ]

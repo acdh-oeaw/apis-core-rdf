@@ -6,6 +6,3 @@ admin.site.register(Source)
 admin.site.register(Collection)
 admin.site.register(Text)
 admin.site.register(Uri)
-
-
-

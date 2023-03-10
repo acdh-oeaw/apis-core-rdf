@@ -14,16 +14,16 @@ class GetVisJson(ListAPIView):
     # TODO: add a generic filter thing
 
     def get_serializer(self, instance=None, data=None, many=False, partial=False):
-        vis = self.request.query_params.get('vis', None)
-        if vis == 'av-age':
+        vis = self.request.query_params.get("vis", None)
+        if vis == "av-age":
             return VisAgeSerializer(self.get_queryset(), many=False)
-        elif vis == 'avg-relations':
+        elif vis == "avg-relations":
             return AvRelations(self.get_queryset(), many=False)
         else:
             return None
 
     def get_queryset(self, **kwargs):
-        relation = self.kwargs['relation'].lower()
+        relation = self.kwargs["relation"].lower()
         # relation_model = AbstractRelation.get_relation_class_of_name(relation)
         relation_model = None
         print("from get_queryset {}".format(relation))
