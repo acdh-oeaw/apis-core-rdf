@@ -42,7 +42,7 @@ class GenericEntitiesEditView(View):
         entity_self_type_str = kwargs['entity']
         entity_self_id = kwargs['pk']
         entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
-        entity_self_content_type = caching.get_contenttype_of_class(entity_self_class)
+        entity_self_contenttype = caching.get_contenttype_of_class(entity_self_class)
         entity_self_instance = get_object_or_404(entity_self_class, pk=entity_self_id)
         request = set_session_variables(request)
         triple_pane = []
@@ -52,8 +52,8 @@ class GenericEntitiesEditView(View):
             model_other_class_str = model_other_class.__name__.lower()
             # check for allowed properties, then display only those classes where there properties
             allowed_property_list = Property.objects.filter(
-                Q(subj_class=entity_self_content_type, obj_class=model_other_contenttype)
-                | Q(subj_class=model_other_contenttype, obj_class=entity_self_content_type)
+                Q(subj_class=entity_self_contenttype, obj_class=model_other_contenttype)
+                | Q(subj_class=model_other_contenttype, obj_class=entity_self_contenttype)
             )
             if len(allowed_property_list) > 0:
                 # if it's an entity class, load a simple triple form and table

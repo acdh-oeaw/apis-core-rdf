@@ -29,7 +29,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         entity_self_type_str = kwargs['entity'].lower()
         entity_self_id = kwargs['pk']
         entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
-        entity_self_content_type = caching.get_contenttype_of_class(entity_self_class)
+        entity_self_contenttype = caching.get_contenttype_of_class(entity_self_class)
         entity_self_instance = get_object_or_404(entity_self_class, pk=entity_self_id)
         triple_pane = []
         # Iterate over all entity and reification classes for the relation view on the right pane
@@ -37,19 +37,19 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             model_other_contenttype = caching.get_contenttype_of_class(model_other_class)
             model_other_class_str = model_other_class.__name__.lower()
             allowed_property_list = Property.objects.filter(
-                Q(subj_class=entity_self_content_type, obj_class=model_other_contenttype)
-                | Q(subj_class=model_other_contenttype, obj_class=entity_self_content_type)
+                Q(subj_class=entity_self_contenttype, obj_class=model_other_contenttype)
+                | Q(subj_class=model_other_contenttype, obj_class=entity_self_contenttype)
             )
             if len(allowed_property_list) > 0:
                 # check if there are any relations to that respective class
                 related_triple_list = Triple.objects.filter(
                     (
                         Q(subj=entity_self_instance)
-                        & Q(obj__self_content_type=model_other_contenttype)
+                        & Q(obj__self_contenttype=model_other_contenttype)
                     )
                     | (
                         Q(obj=entity_self_instance)
-                        & Q(subj__self_content_type=model_other_contenttype)
+                        & Q(subj__self_contenttype=model_other_contenttype)
                     )
                 ).distinct()
                 # only load when there are relations
@@ -125,7 +125,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             attr_to_exclude = [
                 "id",
                 "name",
-                "self_content_type_id",
+                "self_contenttype_id",
                 "start_start_date",
                 "start_end_date",
                 "end_start_date",

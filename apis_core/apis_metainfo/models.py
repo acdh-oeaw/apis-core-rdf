@@ -339,16 +339,16 @@ class RootObject(models.Model):
 
     # TODO RDF : consider renaming attribute 'name' to 'value'
     name = models.CharField(max_length=255, verbose_name='Name')
-    # self_content_type: a foreign key to the respective contenttype comes in handy when querying for
+    # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
     # triples where the subject's or object's contenttype must be respected (e.g. get all triples
     # where the subject is a Person)
-    self_content_type = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
+    self_contenttype = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
 
     def save(self, *args, **kwargs):
-        if self.self_content_type is None:
-            self.self_content_type = caching.get_contenttype_of_class(self.__class__)
+        if self.self_contenttype is None:
+            self.self_contenttype = caching.get_contenttype_of_class(self.__class__)
 
         super().save(*args, **kwargs)
 

@@ -193,7 +193,7 @@ def get_autocomplete_property_choices(model_self_class_str, model_other_class_st
     if res is not None:
         return res
     else:
-        model_self_content_type = get_contenttype_of_class(get_ontology_class_of_name(
+        model_self_contenttype = get_contenttype_of_class(get_ontology_class_of_name(
             model_self_class_str
         ))
         model_other_contenttype = get_contenttype_of_class(get_ontology_class_of_name(
@@ -201,13 +201,13 @@ def get_autocomplete_property_choices(model_self_class_str, model_other_class_st
         ))
         from apis_core.apis_relations.models import Property
         rbc_self_subj_other_obj = Property.objects.filter(
-            subj_class=model_self_content_type,
+            subj_class=model_self_contenttype,
             obj_class=model_other_contenttype,
             name__icontains=search_name_str
         )
         rbc_self_obj_other_subj = Property.objects.filter(
             subj_class=model_other_contenttype,
-            obj_class=model_self_content_type,
+            obj_class=model_self_contenttype,
             name_reverse__icontains=search_name_str
         )
         choices = []

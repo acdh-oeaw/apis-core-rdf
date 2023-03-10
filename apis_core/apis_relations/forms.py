@@ -348,12 +348,12 @@ def render_reification_form(
     # check for properties from main entity to reification
     allowed_property_list_to_reification = Property.objects.filter(
         Q(
-            subj_class=model_self_instance.self_content_type,
+            subj_class=model_self_instance.self_contenttype,
             obj_class=caching.get_contenttype_of_class(reification_class),
         )
         | Q(
             subj_class=caching.get_contenttype_of_class(reification_class),
-            obj_class=model_self_instance.self_content_type,
+            obj_class=model_self_instance.self_contenttype,
         )
     )
     # If only one property is allowed, then buttons to add or remove forms will not be rendered
@@ -381,7 +381,7 @@ def render_reification_form(
             template_name = "apis_relations/reification_form.html"
             class Meta:
                 model = reification_class
-                exclude = ["self_content_type"]
+                exclude = ["self_contenttype"]
         
         reification_form = ReificationForm()
         # if a reification_instance is passed, use it to populate the form's fields.

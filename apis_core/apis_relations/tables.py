@@ -71,11 +71,11 @@ def render_triple_table(
             data = Triple.objects.filter(
                 (
                     Q(subj=model_self_instance)
-                    & Q(obj__self_content_type=model_other_contenttype)
+                    & Q(obj__self_contenttype=model_other_contenttype)
                 )
                 | (
                     Q(obj=model_self_instance)
-                    & Q(subj__self_content_type=model_other_contenttype)
+                    & Q(subj__self_contenttype=model_other_contenttype)
                 )
             ).distinct()
             self.base_columns["other_prop"].verbose_name = "Other property"
