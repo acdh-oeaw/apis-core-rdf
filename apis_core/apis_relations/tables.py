@@ -206,6 +206,7 @@ def render_reification_table(
     model_self_instance = model_self_class.objects.get(pk=model_self_id_str)
 
     class ReificationTable(tables.Table):
+        relation_type = tables.Column(empty_values=())
         related_entities = tables.Column(empty_values=())
         if should_be_editable:
             # It needs empty_values=(), otherwise the button icons would only render on the second
@@ -215,7 +216,7 @@ def render_reification_table(
 
         class Meta:
             model = reification_class
-            fields = ["name", "related_entities"]
+            fields = ["relation_type", "related_entities"]
             if should_be_editable:
                 fields += ["edit", "delete"]
             # If I would use `template_name` here, django-tables crashes. Perhaps it only expects
@@ -229,10 +230,20 @@ def render_reification_table(
                 *args,
                 **kwargs,
                 data=reification_class.objects.filter(
-                    Q(triple_set_from_obj__subj=model_self_instance)
+                    Q(triple_set_from_subj__obj=model_self_instance)
                     | Q(triple_set_from_obj__subj=model_self_instance)
                 ).distinct(),
             )
+            
+        def render_relation_type(self, record):
+            related_properties = []
+            for triple in Triple.objects.filter(Q(subj=record) | Q(obj=record)):
+                if triple.subj == model_self_instance and triple.obj == record:
+                    related_properties.append(triple.prop.name)
+                elif triple.obj == model_self_instance and triple.subj == record:
+                    related_properties.append(triple.prop.name_reverse)
+            related_properties = ", ".join(p for p in related_properties)
+            return format_html(related_properties)
 
         def render_related_entities(self, record):
             """
@@ -253,7 +264,7 @@ def render_reification_table(
                 elif triple.obj != record and triple.obj != model_self_instance:
                     related_other_entities.append(triple.obj)
             related_other_entities = ", ".join([e.name for e in related_other_entities])
-            return format_html(f"{related_other_entities}")
+            return format_html(related_other_entities)
 
         def render_edit(self, record):
             """

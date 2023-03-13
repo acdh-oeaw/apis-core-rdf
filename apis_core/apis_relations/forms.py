@@ -415,7 +415,7 @@ def render_reification_form(
 
             class Meta:
                 model = reification_class
-                exclude = ["self_contenttype"]
+                exclude = ["name", "self_contenttype"]
 
         reification_form = ReificationForm()
         # if a reification_instance is passed, use it to populate the form's fields.
