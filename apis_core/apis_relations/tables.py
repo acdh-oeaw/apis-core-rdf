@@ -234,7 +234,7 @@ def render_reification_table(
                     | Q(triple_set_from_obj__subj=model_self_instance)
                 ).distinct(),
             )
-            
+
         def render_relation_type(self, record):
             related_properties = []
             for triple in Triple.objects.filter(Q(subj=record) | Q(obj=record)):
