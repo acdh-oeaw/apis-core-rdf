@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vocabularies &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RDFParser" href="helper_functions.html" />
+    <link rel="prev" title="Relations" href="relations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_model.html">Data Model</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../internal_api.html">Internal API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="metainfo.html">Metainfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="entities.html">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="relations.html">Relations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Vocabularies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-apis_core.apis_vocabularies.models">Models</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#apis_core.apis_vocabularies.models.AbstractVocabulary"><code class="docutils literal notranslate"><span class="pre">AbstractVocabulary</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apis_core.apis_vocabularies.models.CollectionType"><code class="docutils literal notranslate"><span class="pre">CollectionType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apis_core.apis_vocabularies.models.LabelType"><code class="docutils literal notranslate"><span class="pre">LabelType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apis_core.apis_vocabularies.models.TextType"><code class="docutils literal notranslate"><span class="pre">TextType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apis_core.apis_vocabularies.models.VocabNames"><code class="docutils literal notranslate"><span class="pre">VocabNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apis_core.apis_vocabularies.models.VocabsBaseClass"><code class="docutils literal notranslate"><span class="pre">VocabsBaseClass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apis_core.apis_vocabularies.models.VocabsUri"><code class="docutils literal notranslate"><span class="pre">VocabsUri</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="helper_functions.html">RDFParser</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../internal_api.html">Internal API</a></li>
+      <li class="breadcrumb-item active">Vocabularies</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/vocabularies.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vocabularies">
+<h1>Vocabularies<a class="headerlink" href="#vocabularies" title="Permalink to this heading"></a></h1>
+<p>In the vocabularies app we store all the controlled vocabularies used for APIS.</p>
+<section id="module-apis_core.apis_vocabularies.models">
+<span id="models"></span><h2>Models<a class="headerlink" href="#module-apis_core.apis_vocabularies.models" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.AbstractVocabulary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.models.</span></span><span class="sig-name descname"><span class="pre">AbstractVocabulary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#AbstractVocabulary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.AbstractVocabulary" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.CollectionType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.models.</span></span><span class="sig-name descname"><span class="pre">CollectionType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#CollectionType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.CollectionType" title="Permalink to this definition"></a></dt>
+<dd><p>e.g. reseachCollection, importCollection</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.CollectionType.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.CollectionType.DoesNotExist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.CollectionType.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.CollectionType.MultipleObjectsReturned" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.LabelType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.models.</span></span><span class="sig-name descname"><span class="pre">LabelType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#LabelType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.LabelType" title="Permalink to this definition"></a></dt>
+<dd><p>Holds controlled vocabularies about label-types</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.LabelType.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.LabelType.DoesNotExist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.LabelType.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.LabelType.MultipleObjectsReturned" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.TextType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.models.</span></span><span class="sig-name descname"><span class="pre">TextType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#TextType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.TextType" title="Permalink to this definition"></a></dt>
+<dd><p>used to store the Text types for the forms</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.TextType.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.TextType.DoesNotExist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.TextType.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.TextType.MultipleObjectsReturned" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabNames">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.models.</span></span><span class="sig-name descname"><span class="pre">VocabNames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#VocabNames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabNames" title="Permalink to this definition"></a></dt>
+<dd><p>List of Vocabulary names to allow the easy retrieval    of Vovcabulary names and classes from the VocabsBaseClass</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabNames.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabNames.DoesNotExist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabNames.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabNames.MultipleObjectsReturned" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsBaseClass">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.models.</span></span><span class="sig-name descname"><span class="pre">VocabsBaseClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#VocabsBaseClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabsBaseClass" title="Permalink to this definition"></a></dt>
+<dd><p>An abstract base class for other classes which contain so called
+‘controlled vocabulary’ to describe subtypes of main temporalized
+entites</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsBaseClass.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabsBaseClass.DoesNotExist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsBaseClass.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabsBaseClass.MultipleObjectsReturned" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsBaseClass.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#VocabsBaseClass.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabsBaseClass.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save the current instance. Override this in a subclass if you want to
+control the saving process.</p>
+<p>The ‘force_insert’ and ‘force_update’ parameters can be used to insist
+that the “save” must be an SQL insert or update (or equivalent for
+non-SQL backends), respectively. Normally, they should not be set.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsUri">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.models.</span></span><span class="sig-name descname"><span class="pre">VocabsUri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#VocabsUri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabsUri" title="Permalink to this definition"></a></dt>
+<dd><p>Class to store URIs for imported types. URI class from metainfo is not
+used in order to keep the vocabularies module/app seperated from the rest of the application.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsUri.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabsUri.DoesNotExist" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsUri.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabsUri.MultipleObjectsReturned" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="relations.html" class="btn btn-neutral float-left" title="Relations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="helper_functions.html" class="btn btn-neutral float-right" title="RDFParser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
