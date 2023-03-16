@@ -11,11 +11,13 @@ from django.core.validators import URLValidator
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import ModelMultipleChoiceField, ModelChoiceField
 from django.urls import reverse
+
 from apis_core.apis_metainfo.models import Text, Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
 from apis_core.helper_functions import DateParser, caching
 from apis_core.helper_functions.RDFParser import RDFParser
-from apis_core.apis_entities.fields import ListSelect2, Select2Multiple
+from .fields import ListSelect2, Select2Multiple
+from apis_core.apis_entities.models import AbstractEntity
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import AnnotationProject
@@ -44,7 +46,8 @@ def get_entities_form(entity):
 
     class GenericEntitiesForm(forms.ModelForm):
         class Meta:
-            model = caching.get_ontology_class_of_name(entity)
+            model = caching.get_entity_class_of_name(entity)
+
             exclude = [
                 "start_date",
                 "start_start_date",
@@ -190,11 +193,8 @@ def get_entities_form(entity):
                 crispy_main_fields.append(Field(field))
 
             self.helper.layout = Layout(
-                Accordion(  # creates blocks for fields
-                    # VocabTable(E55_Type.objects.all()),
-                    crispy_main_fields,
-                    # crispy_vocabulary_fields,
-                    crispy_meta_fields,
+                Accordion(  # creates two blocks for fields
+                    crispy_main_fields, crispy_meta_fields
                 )
             )
             self.fields["status"].required = False

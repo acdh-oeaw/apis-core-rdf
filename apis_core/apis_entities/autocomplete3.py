@@ -197,14 +197,9 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                         data-long="{}"  class="apis-autocomplete-span"'.format(
                             ac_type, r.lat, r.lng
                         )
-
-                # TODO RDF: make the html format work again
-                # For now, the return value is overwritten with a non-html result
-                # also regard the other parts in this function where choices.append get something
-                # __before_rdf_refactoring__
-                # f['text'] = '<span {}><small>db</small> {}</span>'.format(dataclass, str(r))
-                # __after_rdf_refactoring__
-                f["text"] = r.name
+                f["text"] = "<span {}><small>db</small> {}</span>".format(
+                    dataclass, str(r)
+                )
                 choices.append(f)
             if len(choices) < page_size:
                 test_db = False

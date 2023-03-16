@@ -8,10 +8,10 @@ _ontology_classes = None
 _ontology_class_names = None
 _entity_classes = None
 _entity_class_names = None
-_reification_classes = None
-_reification_class_names = None
-_vocabulary_classes = None
-_vocabulary_class_names = None
+# _reification_classes = None
+# _reification_class_names = None
+# _vocabulary_classes = None
+# _vocabulary_class_names = None
 _contenttype_classes = None
 _contenttype_class_names = None
 _property_autocomplete_choices = None
@@ -29,26 +29,27 @@ def _init_all_ontology_classes():
     # the imports are done here as this module here might be called before full Django
     # initialization. Otherwise, it would break.
     from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
-    from apis_core.apis_relations.models import AbstractReification
-    from apis_core.apis_vocabularies.models import AbstractVocabulary
+
+    # from apis_core.apis_relations.models import AbstractReification
+    # from apis_core.apis_vocabularies.models import AbstractVocabulary
 
     global _ontology_classes
     global _ontology_class_names
     global _entity_classes
     global _entity_class_names
-    global _reification_classes
-    global _reification_class_names
-    global _vocabulary_classes
-    global _vocabulary_class_names
+    # global _reification_classes
+    # global _reification_class_names
+    # global _vocabulary_classes
+    # global _vocabulary_class_names
     if (
         _ontology_classes is not None
         or _ontology_class_names is not None
         or _entity_classes is not None
         or _entity_class_names is not None
-        or _reification_classes is not None
-        or _reification_class_names is not None
-        or _vocabulary_classes is not None
-        or _vocabulary_class_names is not None
+        # or _reification_classes is not None
+        # or _reification_class_names is not None
+        # or _vocabulary_classes is not None
+        # or _vocabulary_class_names is not None
     ):
         raise Exception(
             "initialization is called but some variables are already initialized."
@@ -57,10 +58,10 @@ def _init_all_ontology_classes():
     _ontology_class_names = []
     _entity_classes = []
     _entity_class_names = []
-    _reification_classes = []
-    _reification_class_names = []
-    _vocabulary_classes = []
-    _vocabulary_class_names = []
+    # _reification_classes = []
+    # _reification_class_names = []
+    # _vocabulary_classes = []
+    # _vocabulary_class_names = []
 
     try:
         from apis_ontology import models as ontology_models
@@ -79,21 +80,23 @@ def _init_all_ontology_classes():
             ):
                 _entity_classes.append(ontology_class)
                 _entity_class_names.append(ontology_class_name.lower())
-            elif (
-                issubclass(ontology_class, AbstractReification)
-                and not ontology_class._meta.abstract
-            ):
-                _reification_classes.append(ontology_class)
-                _reification_class_names.append(ontology_class_name.lower())
-            elif (
-                issubclass(ontology_class, AbstractVocabulary)
-                and not ontology_class._meta.abstract
-            ):
-                _vocabulary_classes.append(ontology_class)
-                _vocabulary_class_names.append(ontology_class_name.lower())
-        _ontology_classes = _entity_classes + _reification_classes + _vocabulary_classes
+            # elif (
+            #     issubclass(ontology_class, AbstractReification)
+            #     and not ontology_class._meta.abstract
+            # ):
+            #     _reification_classes.append(ontology_class)
+            #     _reification_class_names.append(ontology_class_name.lower())
+            # elif (
+            #     issubclass(ontology_class, AbstractVocabulary)
+            #     and not ontology_class._meta.abstract
+            # ):
+            #     _vocabulary_classes.append(ontology_class)
+            #     _vocabulary_class_names.append(ontology_class_name.lower())
+        # _ontology_classes = _entity_classes + _reification_classes + _vocabulary_classes
+        _ontology_classes = _entity_classes
         _ontology_class_names = (
-            _entity_class_names + _reification_class_names + _vocabulary_class_names
+            # _entity_class_names + _reification_class_names + _vocabulary_class_names
+            _entity_class_names
         )
 
 
@@ -157,34 +160,34 @@ def get_entity_class_of_name(entity_name_str):
     raise Exception("Could not find entity class of name:", entity_name_str)
 
 
-def get_all_reification_classes():
-    if _reification_classes is None:
-        _init_all_ontology_classes()
-
-    return _reification_classes
-
-
-def get_all_reification_class_names():
-    if _reification_class_names is None:
-        _init_all_ontology_classes()
-
-    return _reification_class_names
+# def get_all_reification_classes():
+#     if _reification_classes is None:
+#         _init_all_ontology_classes()
+#
+#     return _reification_classes
 
 
-def get_reification_class_of_name(reification_name_str):
-    """
-    Look up a reification class based on a given name.
+# def get_all_reification_class_names():
+#     if _reification_class_names is None:
+#         _init_all_ontology_classes()
+#
+#     return _reification_class_names
 
-    :param reification_name_str: a string to compare against classes' __name__
-                        values; need not be formatted (letter case does
-                        not matter)
-    :return: an reification class – or raise exception
-    """
-    for reification_class in get_all_reification_classes():
-        if reification_class.__name__.lower() == reification_name_str.lower():
-            return reification_class
 
-    raise Exception("Could not find reification class of name:", reification_name_str)
+# def get_reification_class_of_name(reification_name_str):
+#     """
+#     Look up a reification class based on a given name.
+#
+#     :param reification_name_str: a string to compare against classes' __name__
+#                         values; need not be formatted (letter case does
+#                         not matter)
+#     :return: an reification class – or raise exception
+#     """
+#     for reification_class in get_all_reification_classes():
+#         if reification_class.__name__.lower() == reification_name_str.lower():
+#             return reification_class
+#
+#     raise Exception("Could not find reification class of name:", reification_name_str)
 
 
 def get_autocomplete_property_choices(

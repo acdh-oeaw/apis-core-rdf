@@ -1,30 +1,31 @@
 from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import select_template
 from django.views import View
 from django_tables2 import RequestConfig
+
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
+
+# from apis_core.apis_relations.models import AbstractRelation
 from apis_core.apis_relations.tables import (
+    get_generic_relations_table,
+    get_generic_triple_table,
     LabelTableBase,
-    render_triple_table,
-    render_reification_table,
 )  # , EntityDetailViewLabelTable
 from apis_core.helper_functions.utils import access_for_all
 from apis_core.apis_entities.models import AbstractEntity
-from apis_core.apis_entities.views import get_highlighted_texts
-from apis_core.apis_relations.models import Triple, Property, AbstractReification
-from apis_core.apis_relations.forms import (
-    render_triple_form_and_table,
-    render_reification_form_and_table,
-)
-from apis_core.helper_functions import caching
+from .views import get_highlighted_texts
+from apis_core.apis_relations.models import TempTriple
+from ..helper_functions import caching
 
 
 class GenericEntitiesDetailView(UserPassesTestMixin, View):
+
     login_url = "/accounts/login/"
 
     def test_func(self):
@@ -32,88 +33,111 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         return access
 
     def get(self, request, *args, **kwargs):
-        entity_self_type_str = kwargs["entity"].lower()
-        entity_self_id = kwargs["pk"]
-        entity_self_class = caching.get_ontology_class_of_name(entity_self_type_str)
-        entity_self_contenttype = caching.get_contenttype_of_class(entity_self_class)
-        entity_self_instance = get_object_or_404(entity_self_class, pk=entity_self_id)
-        triple_pane = []
-        # Iterate over all entity and reification classes for the relation view on the right pane
-        for model_other_class in (
-            caching.get_all_entity_classes() + caching.get_all_reification_classes()
-        ):
-            model_other_contenttype = caching.get_contenttype_of_class(
-                model_other_class
+
+        entity = kwargs["entity"].lower()
+        pk = kwargs["pk"]
+        entity_model = caching.get_entity_class_of_name(entity)
+        instance = get_object_or_404(entity_model, pk=pk)
+        side_bar = []
+
+        # __before_rdf_refactoring__
+        #
+        # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
+        # for rel in relations:
+        #     match = [
+        #         rel.get_related_entity_classA().__name__.lower(),
+        #         rel.get_related_entity_classB().__name__.lower()
+        #     ]
+        #     prefix = "{}{}-".format(match[0].title()[:2], match[1].title()[:2])
+        #     table = get_generic_relations_table(relation_class=rel, entity_instance=instance, detail=True)
+        #     if match[0] == match[1]:
+        #         title_card = entity.title()
+        #         dict_1 = {'related_' + entity.lower() + 'A': instance}
+        #         dict_2 = {'related_' + entity.lower() + 'B': instance}
+        #         if 'apis_highlighter' in settings.INSTALLED_APPS:
+        #             objects = rel.objects.filter_ann_proj(request=request).filter_for_user().filter(
+        #                 Q(**dict_1) | Q(**dict_2))
+        #         else:
+        #             objects = rel.objects.filter(
+        #                 Q(**dict_1) | Q(**dict_2))
+        #             if callable(getattr(objects, 'filter_for_user', None)):
+        #                 objects = objects.filter_for_user()
+        #     else:
+        #         if match[0].lower() == entity.lower():
+        #             title_card = match[1].title()
+        #         else:
+        #             title_card = match[0].title()
+        #         dict_1 = {'related_' + entity.lower(): instance}
+        #         if 'apis_highlighter' in settings.INSTALLED_APPS:
+        #             objects = rel.objects.filter_ann_proj(request=request).filter_for_user().filter(**dict_1)
+        #         else:
+        #             objects = rel.objects.filter(**dict_1)
+        #             if callable(getattr(objects, 'filter_for_user', None)):
+        #                 objects = objects.filter_for_user()
+        #
+        # __after_rdf_refactoring__
+        triples_related_all = (
+            TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk))
+            .all()
+            .select_subclasses()
+        )
+
+        for entity_class in caching.get_all_entity_classes():
+
+            # TODO __sresch__ : change this db fetch with the cached one from master
+            entity_content_type = ContentType.objects.get_for_model(entity_class)
+
+            other_entity_class_name = entity_class.__name__.lower()
+
+            # TODO __sresch__ : Check if this filter call results in additional db hits
+            triples_related_by_entity = triples_related_all.filter(
+                (
+                    # TODO RDF is filtering for pk necessary if it's already done above?
+                    Q(subj__self_contenttype=entity_content_type)
+                    & Q(obj__pk=pk)
+                )
+                | (Q(obj__self_contenttype=entity_content_type) & Q(subj__pk=pk))
             )
-            model_other_class_str = model_other_class.__name__.lower()
-            allowed_property_list = Property.objects.filter(
-                Q(subj_class=entity_self_contenttype, obj_class=model_other_contenttype)
-                | Q(
-                    subj_class=model_other_contenttype,
-                    obj_class=entity_self_contenttype,
+
+            table = get_generic_triple_table(
+                other_entity_class_name=other_entity_class_name,
+                entity_pk_self=pk,
+                detail=True,
+            )
+
+            prefix = f"{other_entity_class_name}"
+            title_card = prefix
+            match = [prefix]
+            tb_object = table(data=triples_related_by_entity, prefix=prefix)
+            tb_object_open = request.GET.get(prefix + "page", None)
+            RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
+            side_bar.append(
+                (
+                    title_card,
+                    tb_object,
+                    "".join([x.title() for x in match]),
+                    tb_object_open,
                 )
             )
-            if len(allowed_property_list) > 0:
-                # check if there are any relations to that respective class
-                related_triple_list = Triple.objects.filter(
-                    (
-                        Q(subj=entity_self_instance)
-                        & Q(obj__self_contenttype=model_other_contenttype)
-                    )
-                    | (
-                        Q(obj=entity_self_instance)
-                        & Q(subj__self_contenttype=model_other_contenttype)
-                    )
-                ).distinct()
-                # only load when there are relations
-                if len(related_triple_list) > 0:
-                    # if it's an entity class, load a simple triple table
-                    if issubclass(model_other_class, AbstractEntity):
-                        relation_form = render_triple_table(
-                            model_self_class_str=entity_self_type_str,
-                            model_other_class_str=model_other_class_str,
-                            model_self_id_str=str(entity_self_id),
-                            should_be_editable=False,
-                            request=request,
-                        )
-                    # if it's an reification class, load the reification table
-                    elif issubclass(model_other_class, AbstractReification):
-                        relation_form = render_reification_table(
-                            model_self_class_str=entity_self_type_str,
-                            reification_type_str=model_other_class_str,
-                            model_self_id_str=str(entity_self_id),
-                            should_be_editable=False,
-                            request=request,
-                        )
-                    # to be sure the surrounding code has not been wrongly modified
-                    else:
-                        raise Exception("An invalid related entity class was passed")
-                    triple_pane.append(
-                        {
-                            "title": f"{model_other_class_str}",
-                            "triple_form_and_table": relation_form,
-                        }
-                    )
-        object_lod = Uri.objects.filter(root_object=entity_self_instance)
-        object_texts, ann_proj_form = get_highlighted_texts(
-            request, entity_self_instance
-        )
-        object_labels = Label.objects.filter(temp_entity=entity_self_instance)
-        tb_label = LabelTableBase(
-            data=object_labels, prefix=entity_self_type_str.title()[:2] + "L-"
-        )
+
+        # TODO RDF : Check / Adapt the following code to rdf architecture
+
+        object_lod = Uri.objects.filter(root_object=instance)
+        object_texts, ann_proj_form = get_highlighted_texts(request, instance)
+        object_labels = Label.objects.filter(temp_entity=instance)
+        tb_label = LabelTableBase(data=object_labels, prefix=entity.title()[:2] + "L-")
         tb_label_open = request.GET.get("PL-page", None)
-        # triple_pane.append(('Label', tb_label, 'PersonLabel', tb_label_open))
+        side_bar.append(("Label", tb_label, "PersonLabel", tb_label_open))
         RequestConfig(request, paginate={"per_page": 10}).configure(tb_label)
         template = select_template(
             [
-                # 'apis_entities/detail_views/{}_detail_generic.html'.format(entity),
-                "apis_entities/detail_views/detail_generic.html"
+                "apis_entities/detail_views/{}_detail_generic.html".format(entity),
+                "apis_entities/detail_views/detail_generic.html",
             ]
         )
         tei = getattr(settings, "APIS_TEI_TEXTS", [])
         if tei:
-            tei = set(tei) & set([x.kind.name for x in entity_self_instance.text.all()])
+            tei = set(tei) & set([x.kind.name for x in instance.text.all()])
         ceteicean_css = getattr(settings, "APIS_CETEICEAN_CSS", None)
         ceteicean_js = getattr(settings, "APIS_CETEICEAN_JS", None)
         openseadragon_js = getattr(settings, "APIS_OSD_JS", None)
@@ -121,7 +145,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         iiif_field = getattr(settings, "APIS_IIIF_WORK_KIND", None)
         if iiif_field:
             try:
-                if "{}".format(entity_self_instance.kind) == "{}".format(iiif_field):
+                if "{}".format(instance.kind) == "{}".format(iiif_field):
                     iiif = True
                 else:
                     iiif = False
@@ -130,7 +154,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         else:
             iiif = False
         iiif_server = getattr(settings, "APIS_IIIF_SERVER", None)
-        iiif_info_json = entity_self_instance.name
+        iiif_info_json = instance.name
         try:
             no_merge_labels = [
                 x for x in object_labels if not x.label_type.name.startswith("Legacy")
@@ -138,6 +162,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         except AttributeError:
             no_merge_labels = []
 
+        # TODO : Hackish work-around, do this more properly later
         def get_relevant_fields(instance):
 
             list_key_val_pairs = []
@@ -173,16 +198,16 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
 
             return list_key_val_pairs
 
-        relvant_fields = get_relevant_fields(entity_self_instance)
+        relvant_fields = get_relevant_fields(instance)
 
         return HttpResponse(
             template.render(
                 request=request,
                 context={
-                    "entity_type": entity_self_type_str,
-                    "object": entity_self_instance,
+                    "entity_type": entity,
+                    "object": instance,
                     "relvant_fields": relvant_fields,
-                    "triple_pane": triple_pane,
+                    "right_card": side_bar,
                     "no_merge_labels": no_merge_labels,
                     "object_lables": object_labels,
                     "object_texts": object_texts,

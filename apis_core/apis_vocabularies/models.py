@@ -13,11 +13,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
 
-class AbstractVocabulary(RootObject):
-    class Meta:
-        abstract = True
-
-
 @reversion.register()
 class VocabNames(models.Model):
     """List of Vocabulary names to allow the easy retrieval\
