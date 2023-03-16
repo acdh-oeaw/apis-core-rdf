@@ -12,58 +12,57 @@ from django.views.generic.edit import CreateView, UpdateView
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, Div, MultiField, HTML
 
-from . models import BrowsConf
+from .models import BrowsConf
 
-if 'charts' in settings.INSTALLED_APPS:
+if "charts" in settings.INSTALLED_APPS:
     from charts.models import ChartConfig
     from charts.views import create_payload
 
 
 def get_entities_table(model_class):
-
     class GenericEntitiesTable(django_tables2.Table):
         id = django_tables2.LinkColumn()
 
         class Meta:
             model = model_class
             attrs = {"class": "table table-hover table-striped table-condensed"}
+
     return GenericEntitiesTable
 
 
 class GenericFilterFormHelper(FormHelper):
-
     def __init__(self, *args, **kwargs):
         super(GenericFilterFormHelper, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.form_class = 'genericFilterForm'
-        self.form_method = 'GET'
+        self.form_class = "genericFilterForm"
+        self.form_method = "GET"
         self.helper.form_tag = False
-        self.add_input(Submit('Filter', 'Search'))
+        self.add_input(Submit("Filter", "Search"))
 
 
 django_filters.filters.LOOKUP_TYPES = [
-    ('', '---------'),
-    ('exact', 'Is equal to'),
-    ('iexact', 'Is equal to (case insensitive)'),
-    ('not_exact', 'Is not equal to'),
-    ('lt', 'Lesser than/before'),
-    ('gt', 'Greater than/after'),
-    ('gte', 'Greater than or equal to'),
-    ('lte', 'Lesser than or equal to'),
-    ('startswith', 'Starts with'),
-    ('endswith', 'Ends with'),
-    ('contains', 'Contains'),
-    ('icontains', 'Contains (case insensitive)'),
-    ('not_contains', 'Does not contain'),
+    ("", "---------"),
+    ("exact", "Is equal to"),
+    ("iexact", "Is equal to (case insensitive)"),
+    ("not_exact", "Is not equal to"),
+    ("lt", "Lesser than/before"),
+    ("gt", "Greater than/after"),
+    ("gte", "Greater than or equal to"),
+    ("lte", "Lesser than or equal to"),
+    ("startswith", "Starts with"),
+    ("endswith", "Ends with"),
+    ("contains", "Contains"),
+    ("icontains", "Contains (case insensitive)"),
+    ("not_contains", "Does not contain"),
 ]
 
 
 class GenericListView(django_tables2.SingleTableView):
     filter_class = None
     formhelper_class = None
-    context_filter_name = 'filter'
+    context_filter_name = "filter"
     paginate_by = 25
-    template_name = 'browsing/generic_list.html'
+    template_name = "browsing/generic_list.html"
     init_columns = []
 
     def get_table_class(self):
@@ -73,11 +72,13 @@ class GenericListView(django_tables2.SingleTableView):
             return get_entities_table(self.model)
 
         raise ImproperlyConfigured(
-            "You must either specify {0}.table_class or {0}.model".format(type(self).__name__)
+            "You must either specify {0}.table_class or {0}.model".format(
+                type(self).__name__
+            )
         )
 
     def get_all_cols(self):
-        print('get_table')
+        print("get_table")
         print(self.get_table().base_columns.keys())
         all_cols = list(self.get_table().base_columns.keys())
         return all_cols
@@ -99,91 +100,99 @@ class GenericListView(django_tables2.SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super(GenericListView, self).get_context_data()
-        togglable_colums = [x for x in self.get_all_cols() if x not in self.init_columns]
-        context['togglable_colums'] = togglable_colums
+        togglable_colums = [
+            x for x in self.get_all_cols() if x not in self.init_columns
+        ]
+        context["togglable_colums"] = togglable_colums
         context[self.context_filter_name] = self.filter
-        context['docstring'] = "{}".format(self.model.__doc__)
+        context["docstring"] = "{}".format(self.model.__doc__)
         if self.model._meta.verbose_name_plural:
-            context['class_name'] = "{}".format(self.model._meta.verbose_name.title())
+            context["class_name"] = "{}".format(self.model._meta.verbose_name.title())
         else:
-            if self.model.__name__.endswith('s'):
-                context['class_name'] = "{}".format(self.model.__name__)
+            if self.model.__name__.endswith("s"):
+                context["class_name"] = "{}".format(self.model.__name__)
             else:
-                context['class_name'] = "{}s".format(self.model.__name__)
+                context["class_name"] = "{}s".format(self.model.__name__)
         try:
-            context['get_arche_dump'] = self.model.get_arche_dump()
+            context["get_arche_dump"] = self.model.get_arche_dump()
         except AttributeError:
-            context['get_arche_dump'] = None
+            context["get_arche_dump"] = None
         try:
-            context['create_view_link'] = self.model.get_createview_url()
+            context["create_view_link"] = self.model.get_createview_url()
         except AttributeError:
-            context['create_view_link'] = None
+            context["create_view_link"] = None
         try:
-            context['download'] = self.model.get_dl_url()
+            context["download"] = self.model.get_dl_url()
         except AttributeError:
-            context['download'] = None
+            context["download"] = None
         model_name = self.model.__name__.lower()
-        context['entity'] = model_name
-        context['conf_items'] = list(
-            BrowsConf.objects.filter(model_name=model_name)
-            .values_list('field_path', 'label')
+        context["entity"] = model_name
+        context["conf_items"] = list(
+            BrowsConf.objects.filter(model_name=model_name).values_list(
+                "field_path", "label"
+            )
         )
-        if 'charts' in settings.INSTALLED_APPS:
+        if "charts" in settings.INSTALLED_APPS:
             model = self.model
             app_label = model._meta.app_label
             print(app_label)
             filtered_objs = ChartConfig.objects.filter(
-                model_name=model.__name__.lower(),
-                app_name=app_label
+                model_name=model.__name__.lower(), app_name=app_label
             )
-            context['vis_list'] = filtered_objs
-            context['property_name'] = self.request.GET.get('property')
-            context['charttype'] = self.request.GET.get('charttype')
-            if context['charttype'] and context['property_name']:
+            context["vis_list"] = filtered_objs
+            context["property_name"] = self.request.GET.get("property")
+            context["charttype"] = self.request.GET.get("charttype")
+            if context["charttype"] and context["property_name"]:
                 qs = self.get_queryset()
                 chartdata = create_payload(
-                    context['entity'],
-                    context['property_name'],
-                    context['charttype'],
+                    context["entity"],
+                    context["property_name"],
+                    context["charttype"],
                     qs,
-                    app_label=app_label
+                    app_label=app_label,
                 )
                 context = dict(context, **chartdata)
         return context
 
     def render_to_response(self, context, **kwargs):
-        download = self.request.GET.get('sep', None)
+        download = self.request.GET.get("sep", None)
         if download:
-            sep = self.request.GET.get('sep', ',')
-            timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d-%H-%M-%S')
+            sep = self.request.GET.get("sep", ",")
+            timestamp = datetime.datetime.fromtimestamp(time.time()).strftime(
+                "%Y-%m-%d-%H-%M-%S"
+            )
             filename = "export_{}".format(timestamp)
-            response = HttpResponse(content_type='text/csv')
-            if context['conf_items']:
-                conf_items = context['conf_items']
+            response = HttpResponse(content_type="text/csv")
+            if context["conf_items"]:
+                conf_items = context["conf_items"]
                 try:
                     df = pd.DataFrame(
                         list(
                             self.get_queryset().values_list(*[x[0] for x in conf_items])
                         ),
-                        columns=[x[1] for x in conf_items]
+                        columns=[x[1] for x in conf_items],
                     )
                 except AssertionError:
-                    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
-                        filename
-                    )
+                    response[
+                        "Content-Disposition"
+                    ] = 'attachment; filename="{}.csv"'.format(filename)
                     return response
             else:
-                response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)
+                response[
+                    "Content-Disposition"
+                ] = 'attachment; filename="{}.csv"'.format(filename)
                 return response
             if sep == "comma":
-                df.to_csv(response, sep=',', index=False)
+                df.to_csv(response, sep=",", index=False)
             elif sep == "semicolon":
-                df.to_csv(response, sep=';', index=False)
+                df.to_csv(response, sep=";", index=False)
             elif sep == "tab":
-                df.to_csv(response, sep='\t', index=False)
+                df.to_csv(response, sep="\t", index=False)
             else:
-                df.to_csv(response, sep=',', index=False)
-            response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(filename)
+                df.to_csv(response, sep=",", index=False)
+            response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(
+                filename
+            )
             return response
         else:
             response = super(GenericListView, self).render_to_response(context)
@@ -193,24 +202,24 @@ class GenericListView(django_tables2.SingleTableView):
 class BaseCreateView(CreateView):
     model = None
     form_class = None
-    template_name = 'browsing/generic_create.html'
+    template_name = "browsing/generic_create.html"
 
     def get_context_data(self, **kwargs):
         context = super(BaseCreateView, self).get_context_data()
-        context['docstring'] = "{}".format(self.model.__doc__)
-        context['class_name'] = "{}".format(self.model.__name__)
+        context["docstring"] = "{}".format(self.model.__doc__)
+        context["class_name"] = "{}".format(self.model.__name__)
         return context
 
 
 class BaseUpdateView(UpdateView):
     model = None
     form_class = None
-    template_name = 'browsing/generic_create.html'
+    template_name = "browsing/generic_create.html"
 
     def get_context_data(self, **kwargs):
         context = super(BaseUpdateView, self).get_context_data()
-        context['docstring'] = "{}".format(self.model.__doc__)
-        context['class_name'] = "{}".format(self.model.__name__)
+        context["docstring"] = "{}".format(self.model.__doc__)
+        context["class_name"] = "{}".format(self.model.__name__)
         # if self.model.__name__.endswith('s'):
         #     context['class_name'] = "{}".format(self.model.__name__)
         # else:
@@ -232,7 +241,9 @@ def model_to_dict(instance):
                 data[f.name] = []
             else:
                 try:
-                    data[f.name] = list(f.value_from_object(instance).values_list('pk', flat=True))
+                    data[f.name] = list(
+                        f.value_from_object(instance).values_list("pk", flat=True)
+                    )
                 except Exception as e:
                     print(e)
                     data[f.name] = []
@@ -258,14 +269,9 @@ def create_brows_config_obj(app_name, exclude_fields=[]):
         for f in x._meta.get_fields(include_parents=False):
             if f.name not in exclude:
                 field_name = f.name
-                verbose_name = getattr(f, 'verbose_name', f.name)
-                help_text = getattr(f, 'help_text', 'no helptext')
-                print("{}: {} ({})".format(
-                    model_name,
-                    field_name,
-                    help_text
-                    )
-                )
+                verbose_name = getattr(f, "verbose_name", f.name)
+                help_text = getattr(f, "help_text", "no helptext")
+                print("{}: {} ({})".format(model_name, field_name, help_text))
                 brc, _ = BrowsConf.objects.get_or_create(
                     model_name=model_name,
                     field_path=field_name,
