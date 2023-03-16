@@ -83,11 +83,11 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             triples_related_by_entity = triples_related_all.filter(
                 (
                     # TODO RDF is filtering for pk necessary if it's already done above?
-                    Q(subj__self_content_type=entity_content_type)
+                    Q(subj__self_contenttype=entity_content_type)
                     & Q(obj__pk=pk)
                 )
                 | (
-                    Q(obj__self_content_type=entity_content_type)
+                    Q(obj__self_contenttype=entity_content_type)
                     & Q(subj__pk=pk)
                 )
             )
@@ -156,7 +156,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             attr_to_exclude = [
                 "id",
                 "name",
-                "self_content_type_id",
+                "self_contenttype_id",
                 "start_start_date",
                 "start_end_date",
                 "end_start_date",

@@ -104,7 +104,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
         # fields by which entity lists should not be filterable
         ignore_fields = [
-            "self_content_type",
+            "self_contenttype",
             "review",
             "start_date",
             "start_start_date",

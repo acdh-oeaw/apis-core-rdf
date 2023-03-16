@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='rootobject',
-            name='self_content_type',
+            name='self_contenttype',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype'),
         ),
         migrations.AddField(

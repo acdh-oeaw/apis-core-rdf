@@ -60,7 +60,7 @@ def get_entities_form(entity):
                 "text",
                 "source",
                 "published",
-                "self_content_type",
+                "self_contenttype",
             ]
             # exclude.extend(model.get_related_entity_field_names())
             # exclude.extend(model.get_related_relationtype_field_names())

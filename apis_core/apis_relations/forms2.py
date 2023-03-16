@@ -668,11 +668,11 @@ class GenericTripleForm(forms.ModelForm):
         table_object = table_class(
             data=TempTriple.objects.filter(
                 (
-                    Q(subj__self_content_type=entity_instance_other.self_content_type)
+                    Q(subj__self_contenttype=entity_instance_other.self_contenttype)
                     & Q(obj=entity_instance_self)
                 )
                 | (
-                    Q(obj__self_content_type=entity_instance_other.self_content_type)
+                    Q(obj__self_contenttype=entity_instance_other.self_contenttype)
                     & Q(subj=entity_instance_self)
                 )
             ),

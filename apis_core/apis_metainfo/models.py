@@ -332,24 +332,24 @@ class RootObject(models.Model):
     """
 
     name = models.CharField(max_length=255, verbose_name='Name')
-    self_content_type = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
-    self_content_type_cached = None
+    self_contenttype = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
+    self_contenttype_cached = None
 
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
 
     def save(self, *args, **kwargs):
-        if self.self_content_type is None:
-            self.self_content_type = self.get_content_type()
+        if self.self_contenttype is None:
+            self.self_contenttype = self.get_content_type()
 
         super().save(*args, **kwargs)
 
     @classmethod
     def get_content_type(cls):
-        if cls.self_content_type_cached is None:
-            cls.self_content_type_cached = ContentType.objects.get_for_model(cls)
+        if cls.self_contenttype_cached is None:
+            cls.self_contenttype_cached = ContentType.objects.get_for_model(cls)
         
-        return cls.self_content_type_cached
+        return cls.self_contenttype_cached
 
     def __str__(self):
 

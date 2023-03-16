@@ -53,10 +53,10 @@ class GenericEntitiesEditView(View):
             # TODO __sresch__ : Check if this filter call results in additional db hits
             triples_related_by_entity = triples_related_all.filter(
                 (
-                    Q(**{f"subj__self_content_type": entity_content_type}) & Q(**{f"obj__pk": pk})
+                    Q(**{f"subj__self_contenttype": entity_content_type}) & Q(**{f"obj__pk": pk})
                 )
                 | (
-                    Q(**{f"obj__self_content_type": entity_content_type}) & Q(**{f"subj__pk": pk})
+                    Q(**{f"obj__self_contenttype": entity_content_type}) & Q(**{f"subj__pk": pk})
                 )
             )
 
