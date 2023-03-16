@@ -1,45 +1,94 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>apis_core.apis_relations.views &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
 
           
+            <a href="../../../index.html" class="icon icon-home"> APIS
           
-          <a href="../../../index.html" class="icon icon-home">
-            APIS
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 1.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
@@ -50,71 +99,103 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../internal_api.html">Internal API</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">APIS</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.apis_relations.views</li>
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>apis_core.apis_relations.views</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <h1>Source code for apis_core.apis_relations.views</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
-<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">JsonResponse</span><span class="p">,</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">Http404</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">Http404</span>
 <span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">render_to_string</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">apis_ontology.models</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="k">pass</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations</span> <span class="kn">import</span> <span class="n">forms</span> <span class="k">as</span> <span class="n">relation_form_module</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_relations.forms</span> <span class="kn">import</span> <span class="n">render_reification_form</span><span class="p">,</span> <span class="n">render_triple_form</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.autocomplete3</span> <span class="kn">import</span> <span class="n">PropertyAutocomplete</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Institution</span><span class="p">,</span> <span class="n">Place</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Work</span><span class="p">,</span> <span class="n">AbstractEntity</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_labels.models</span> <span class="kn">import</span> <span class="n">Label</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">TempTriple</span><span class="p">,</span> <span class="n">Triple</span>
-<span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.fields</span> <span class="kn">import</span> <span class="n">ListSelect2</span><span class="p">,</span> <span class="n">Select2Multiple</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
-<span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">LabelTableEdit</span><span class="p">,</span> <span class="n">render_reification_table</span><span class="p">,</span> <span class="n">render_triple_table</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">caching</span>
-
+<span class="kn">from</span> <span class="nn">.forms2</span> <span class="kn">import</span> <span class="n">GenericRelationForm</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PersonPlace</span><span class="p">,</span> <span class="n">PersonPerson</span><span class="p">,</span> <span class="n">PersonInstitution</span><span class="p">,</span> <span class="n">InstitutionPlace</span><span class="p">,</span>
+    <span class="n">InstitutionInstitution</span><span class="p">,</span> <span class="n">PlacePlace</span><span class="p">,</span> <span class="n">PersonEvent</span><span class="p">,</span> <span class="n">InstitutionEvent</span><span class="p">,</span> <span class="n">PlaceEvent</span><span class="p">,</span> <span class="n">PersonWork</span><span class="p">,</span>
+    <span class="n">InstitutionWork</span><span class="p">,</span> <span class="n">PlaceWork</span><span class="p">,</span> <span class="n">EventWork</span><span class="p">,</span> <span class="n">WorkWork</span>
+<span class="p">)</span>
+<span class="c1">#from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm</span>
+<span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">LabelTableEdit</span>
 
 <span class="n">form_module_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">relation_form_module</span><span class="p">]</span>
-<span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="s1">&#39;apis_highlighter&#39;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">apis_highlighter.highlighter</span> <span class="kn">import</span> <span class="n">highlight_text_new</span>
     <span class="kn">from</span> <span class="nn">apis_highlighter</span> <span class="kn">import</span> <span class="n">forms</span> <span class="k">as</span> <span class="n">highlighter_form_module</span>
-
     <span class="n">form_module_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">highlighter_form_module</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="turn_form_modules_into_dict"><a class="viewcode-back" href="../../../modules/relations.html#apis_core.apis_relations.views.turn_form_modules_into_dict">[docs]</a><span class="k">def</span> <span class="nf">turn_form_modules_into_dict</span><span class="p">(</span><span class="n">form_module_list</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Since form classes are loaded dynamically from the respective modules and it&#39;s settings-dependent which modules</span>
 <span class="sd">    are imported and which not, it&#39;s better to differentiate here which modules are imported close to their imports</span>
 <span class="sd">    and then providing a dict for later extraction of the required form class.</span>
@@ -126,7 +207,6 @@
             <span class="n">form_class_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
 
     <span class="k">return</span> <span class="n">form_class_dict</span></div>
-
 
 <span class="n">form_class_dict</span> <span class="o">=</span> <span class="n">turn_form_modules_into_dict</span><span class="p">(</span><span class="n">form_module_list</span><span class="p">)</span>
 
@@ -144,697 +224,249 @@
 <span class="c1">######################################################</span>
 
 
-<span class="c1"># __before_rdf_refactoring__</span>
-<span class="c1">#</span>
 <span class="c1"># Model-classes must be registered together with their ModelForm-classes</span>
-<span class="c1"># registered_forms = {&#39;WorkWorkForm&#39;: [WorkWork, Work, Work],</span>
-<span class="c1">#                     &#39;PersonPlaceForm&#39;: [PersonPlace, Person, Place],</span>
-<span class="c1">#                     &#39;PersonPlaceHighlighterForm&#39;: [PersonPlace, Person, Place],</span>
-<span class="c1">#                     &#39;PersonPersonForm&#39;: [PersonPerson, Person, Person],</span>
-<span class="c1">#                     &#39;PersonPersonHighlighterForm&#39;: [PersonPerson, Person, Person],</span>
-<span class="c1">#                     &#39;PersonInstitutionForm&#39;: [PersonInstitution, Person, Institution],</span>
-<span class="c1">#                     &#39;PersonEventForm&#39;: [PersonEvent, Person, Event],</span>
-<span class="c1">#                     &#39;PersonWorkForm&#39;: [PersonWork, Person, Work],</span>
-<span class="c1">#                     &#39;PersonInstitutionHighlighterForm&#39;: [PersonInstitution, Person, Institution],</span>
-<span class="c1">#                     &#39;PersonWorkHighlighterForm&#39;: [PersonWork, Person, Work],</span>
-<span class="c1">#                     &#39;PlaceWorkHighlighterForm&#39;: [PlaceWork, Place, Work],</span>
-<span class="c1">#                     &#39;InstitutionWorkHighlighterForm&#39;: [InstitutionWork, Institution, Work],</span>
-<span class="c1">#                     &#39;InstitutionPlaceForm&#39;: [InstitutionPlace, Institution, Place],</span>
-<span class="c1">#                     &#39;InstitutionInstitutionForm&#39;: [</span>
-<span class="c1">#                         InstitutionInstitution,</span>
-<span class="c1">#                         Institution,</span>
-<span class="c1">#                         Institution],</span>
-<span class="c1">#                     &#39;InstitutionPersonForm&#39;: [PersonInstitution, Institution, Person],</span>
-<span class="c1">#                     &#39;InstitutionEventForm&#39;: [InstitutionEvent, Institution, Event],</span>
-<span class="c1">#                     &#39;InstitutionWorkForm&#39;: [InstitutionWork, Institution, Work],</span>
-<span class="c1">#                     &#39;PlaceEventForm&#39;: [PlaceEvent, Place, Event],</span>
-<span class="c1">#                     &#39;PlaceWorkForm&#39;: [PlaceWork, Place, Work],</span>
-<span class="c1">#                     &#39;PlacePlaceForm&#39;: [PlacePlace, Place, Place],</span>
-<span class="c1">#                     &#39;EventWorkForm&#39;: [EventWork, Event, Work],</span>
-<span class="c1">#                     &#39;InstitutionLabelForm&#39;: [Label, Institution, Label],</span>
-<span class="c1">#                     &#39;PersonLabelForm&#39;: [Label, Person, Label],</span>
-<span class="c1">#                     &#39;EventLabelForm&#39;: [Label, Event, Label],</span>
-<span class="c1">#                     &#39;PersonResolveUriForm&#39;: [Uri, Person, Uri],</span>
-<span class="c1">#                     &#39;SundayHighlighterForm&#39;: [ ],</span>
-<span class="c1">#                     &#39;AddRelationHighlighterPersonForm&#39;: [],</span>
-<span class="c1">#                     #&#39;PlaceHighlighterForm&#39;: [Annotation, ],</span>
-<span class="c1">#                     #&#39;PersonHighlighterForm&#39;: [Annotation, ]</span>
-<span class="c1">#                     }</span>
+<span class="n">registered_forms</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;WorkWorkForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">WorkWork</span><span class="p">,</span> <span class="n">Work</span><span class="p">,</span> <span class="n">Work</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonPlaceForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonPlace</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Place</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonPlaceHighlighterForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonPlace</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Place</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonPersonForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonPerson</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Person</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonPersonHighlighterForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonPerson</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Person</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonInstitutionForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonInstitution</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Institution</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonEventForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonEvent</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Event</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonWorkForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonWork</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Work</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonInstitutionHighlighterForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonInstitution</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Institution</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonWorkHighlighterForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonWork</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Work</span><span class="p">],</span>
+                    <span class="s1">&#39;PlaceWorkHighlighterForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PlaceWork</span><span class="p">,</span> <span class="n">Place</span><span class="p">,</span> <span class="n">Work</span><span class="p">],</span>
+                    <span class="s1">&#39;InstitutionWorkHighlighterForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">InstitutionWork</span><span class="p">,</span> <span class="n">Institution</span><span class="p">,</span> <span class="n">Work</span><span class="p">],</span>
+                    <span class="s1">&#39;InstitutionPlaceForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">InstitutionPlace</span><span class="p">,</span> <span class="n">Institution</span><span class="p">,</span> <span class="n">Place</span><span class="p">],</span>
+                    <span class="s1">&#39;InstitutionInstitutionForm&#39;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="n">InstitutionInstitution</span><span class="p">,</span>
+                        <span class="n">Institution</span><span class="p">,</span>
+                        <span class="n">Institution</span><span class="p">],</span>
+                    <span class="s1">&#39;InstitutionPersonForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PersonInstitution</span><span class="p">,</span> <span class="n">Institution</span><span class="p">,</span> <span class="n">Person</span><span class="p">],</span>
+                    <span class="s1">&#39;InstitutionEventForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">InstitutionEvent</span><span class="p">,</span> <span class="n">Institution</span><span class="p">,</span> <span class="n">Event</span><span class="p">],</span>
+                    <span class="s1">&#39;InstitutionWorkForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">InstitutionWork</span><span class="p">,</span> <span class="n">Institution</span><span class="p">,</span> <span class="n">Work</span><span class="p">],</span>
+                    <span class="s1">&#39;PlaceEventForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PlaceEvent</span><span class="p">,</span> <span class="n">Place</span><span class="p">,</span> <span class="n">Event</span><span class="p">],</span>
+                    <span class="s1">&#39;PlaceWorkForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PlaceWork</span><span class="p">,</span> <span class="n">Place</span><span class="p">,</span> <span class="n">Work</span><span class="p">],</span>
+                    <span class="s1">&#39;PlacePlaceForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">PlacePlace</span><span class="p">,</span> <span class="n">Place</span><span class="p">,</span> <span class="n">Place</span><span class="p">],</span>
+                    <span class="s1">&#39;EventWorkForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">EventWork</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Work</span><span class="p">],</span>
+                    <span class="s1">&#39;InstitutionLabelForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Label</span><span class="p">,</span> <span class="n">Institution</span><span class="p">,</span> <span class="n">Label</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonLabelForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Label</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Label</span><span class="p">],</span>
+                    <span class="s1">&#39;EventLabelForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Label</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Label</span><span class="p">],</span>
+                    <span class="s1">&#39;PersonResolveUriForm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Uri</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Uri</span><span class="p">],</span>
+                    <span class="s1">&#39;SundayHighlighterForm&#39;</span><span class="p">:</span> <span class="p">[</span> <span class="p">],</span>
+                    <span class="s1">&#39;AddRelationHighlighterPersonForm&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="c1">#&#39;PlaceHighlighterForm&#39;: [Annotation, ],</span>
+                    <span class="c1">#&#39;PersonHighlighterForm&#39;: [Annotation, ]</span>
+                    <span class="p">}</span>
 
 
-<span class="c1"># TODO RDF: Remove</span>
-<span class="c1"># this function became a hybrid between vanilla ajax logic and rdf triple logic. But it is now fully</span>
-<span class="c1"># superseded of new ajax logic, so it can be removed. However it probably is still used for</span>
-<span class="c1"># highlighter. So this needs to looked into and moved to the new ajax logic too.</span>
 <div class="viewcode-block" id="get_form_ajax"><a class="viewcode-back" href="../../../modules/relations.html#apis_core.apis_relations.views.get_form_ajax">[docs]</a><span class="nd">@login_required</span>
 <span class="k">def</span> <span class="nf">get_form_ajax</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns forms rendered in html&quot;&quot;&quot;</span>
+    <span class="sd">&#39;&#39;&#39;Returns forms rendered in html&#39;&#39;&#39;</span>
 
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># FormName = request.POST.get(&#39;FormName&#39;)</span>
-    <span class="c1"># SiteID = request.POST.get(&#39;SiteID&#39;)</span>
-    <span class="c1"># ButtonText = request.POST.get(&#39;ButtonText&#39;)</span>
-    <span class="c1"># ObjectID = request.POST.get(&#39;ObjectID&#39;)</span>
-    <span class="c1"># entity_type_str = request.POST.get(&#39;entity_type&#39;)</span>
-    <span class="c1"># form_match = re.match(r&#39;([A-Z][a-z]+)([A-Z][a-z]+)(Highlighter)?Form&#39;, FormName)</span>
-    <span class="c1"># form_match2 = re.match(r&#39;([A-Z][a-z]+)(Highlighter)?Form&#39;, FormName)</span>
-    <span class="c1"># if FormName and form_match:</span>
-    <span class="c1">#     entity_type_v1 = ContentType.objects.filter(</span>
-    <span class="c1">#         model=&#39;{}{}&#39;.format(form_match.group(1).lower(), form_match.group(2)).lower(),</span>
-    <span class="c1">#         app_label=&#39;apis_relations&#39;)</span>
-    <span class="c1">#     entity_type_v2 = ContentType.objects.none()</span>
-    <span class="c1"># elif FormName and form_match2:</span>
-    <span class="c1">#     entity_type_v2 = ContentType.objects.filter(</span>
-    <span class="c1">#         model=&#39;{}&#39;.format(</span>
-    <span class="c1">#             form_match.group(1).lower(),</span>
-    <span class="c1">#             app_label=&#39;apis_entities&#39;))</span>
-    <span class="c1">#     entity_type_v1 = ContentType.objects.none()</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     entity_type_v1 = ContentType.objects.none()</span>
-    <span class="c1">#     entity_type_v2 = ContentType.objects.none()</span>
-    <span class="c1"># if ObjectID == &#39;false&#39; or ObjectID is None or ObjectID == &#39;None&#39;:</span>
-    <span class="c1">#     ObjectID = False</span>
-    <span class="c1">#     form_dict = {&#39;entity_type&#39;: entity_type_str}</span>
-    <span class="c1"># elif entity_type_v1.count() &gt; 0:</span>
-    <span class="c1">#     d = entity_type_v1[0].model_class().objects.get(pk=ObjectID)</span>
-    <span class="c1">#     form_dict = {&#39;instance&#39;: d, &#39;siteID&#39;: SiteID, &#39;entity_type&#39;: entity_type_str}</span>
-    <span class="c1"># elif entity_type_v2.count() &gt; 0:</span>
-    <span class="c1">#     d = entity_type_v2[0].model_class().objects.get(pk=ObjectID)</span>
-    <span class="c1">#     form_dict = {&#39;instance&#39;: d, &#39;siteID&#39;: SiteID, &#39;entity_type&#39;: entity_type_str}</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     if FormName not in registered_forms.keys():</span>
-    <span class="c1">#         raise Http404</span>
-    <span class="c1">#     d = registered_forms[FormName][0].objects.get(pk=ObjectID)</span>
-    <span class="c1">#     form_dict = {&#39;instance&#39;: d, &#39;siteID&#39;: SiteID, &#39;entity_type&#39;: entity_type_str}</span>
-    <span class="c1"># if entity_type_v1.count() &gt; 0:</span>
-    <span class="c1">#     form_dict[&#39;relation_form&#39;] = &#39;{}{}&#39;.format(form_match.group(1), form_match.group(2))</span>
-    <span class="c1">#     if form_match.group(3) == &#39;Highlighter&#39;:</span>
-    <span class="c1">#         form_dict[&#39;highlighter&#39;] = True</span>
-    <span class="c1">#     form = GenericRelationForm(**form_dict)</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     form_class = form_class_dict[FormName]</span>
-    <span class="c1">#     form = form_class(**form_dict)</span>
-    <span class="c1">#</span>
-    <span class="c1"># __after_rdf_refactoring__</span>
-    <span class="n">form_name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FormName&quot;</span><span class="p">)</span>
-    <span class="n">SiteID</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SiteID&quot;</span><span class="p">))</span>
-    <span class="n">ButtonText</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ButtonText&quot;</span><span class="p">)</span>
-    <span class="n">ObjectID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ObjectID&quot;</span><span class="p">)</span>
-    <span class="n">model_self_class_str</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity_type&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">ObjectID</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">form_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;triple_form_&quot;</span><span class="p">):</span>
-        <span class="c1"># If this is the case, then instantiate an empty form</span>
-
-        <span class="n">model_other_class_str</span> <span class="o">=</span> <span class="n">form_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_to_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="n">form</span> <span class="o">=</span> <span class="n">GenericTripleForm</span><span class="p">(</span>
-            <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">model_self_class_str</span><span class="p">,</span>
-            <span class="n">model_other_class_str</span><span class="o">=</span><span class="n">model_other_class_str</span><span class="p">,</span>
-        <span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">ObjectID</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">SiteID</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># If this is the case, then instantiate a form and pre-load with existing data</span>
-
-        <span class="n">triple</span> <span class="o">=</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">ObjectID</span><span class="p">)</span>
-        <span class="n">property_instance</span> <span class="o">=</span> <span class="n">triple</span><span class="o">.</span><span class="n">prop</span>
-
-        <span class="k">if</span> <span class="n">triple</span><span class="o">.</span><span class="n">subj</span><span class="o">.</span><span class="n">pk</span> <span class="o">==</span> <span class="n">SiteID</span><span class="p">:</span>
-            <span class="n">entity_instance_self</span> <span class="o">=</span> <span class="n">triple</span><span class="o">.</span><span class="n">subj</span>
-            <span class="n">entity_instance_other</span> <span class="o">=</span> <span class="n">triple</span><span class="o">.</span><span class="n">obj</span>
-            <span class="n">property_direction</span> <span class="o">=</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_SUBJ_OTHER_OBJ_STR</span>
-        <span class="k">elif</span> <span class="n">triple</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span> <span class="o">==</span> <span class="n">SiteID</span><span class="p">:</span>
-            <span class="n">entity_instance_self</span> <span class="o">=</span> <span class="n">triple</span><span class="o">.</span><span class="n">obj</span>
-            <span class="n">entity_instance_other</span> <span class="o">=</span> <span class="n">triple</span><span class="o">.</span><span class="n">subj</span>
-            <span class="n">property_direction</span> <span class="o">=</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_OBJ_OTHER_SUBJ_STR</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;SiteID was not found in triple&quot;</span><span class="p">)</span>
-
-        <span class="n">model_other_class_str</span> <span class="o">=</span> <span class="n">entity_instance_other</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
-        <span class="n">model_self_class_str</span> <span class="o">=</span> <span class="n">entity_instance_self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
-        <span class="n">form_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;triple_form_</span><span class="si">{</span><span class="n">model_self_class_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">_to_</span><span class="si">{</span><span class="n">model_other_class_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-
-        <span class="n">form</span> <span class="o">=</span> <span class="n">GenericTripleForm</span><span class="p">(</span>
-            <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">model_self_class_str</span><span class="p">,</span>
-            <span class="n">model_other_class_str</span><span class="o">=</span><span class="n">model_other_class_str</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">form</span><span class="o">.</span><span class="n">load_subj_obj_prop</span><span class="p">(</span>
-            <span class="n">entity_instance_self</span><span class="p">,</span>
-            <span class="n">entity_instance_other</span><span class="p">,</span>
-            <span class="n">property_instance</span><span class="p">,</span>
-            <span class="n">property_direction</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">form</span><span class="o">.</span><span class="n">load_remaining_data_from_triple</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
-
+    <span class="n">FormName</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;FormName&#39;</span><span class="p">)</span>
+    <span class="n">SiteID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SiteID&#39;</span><span class="p">)</span>
+    <span class="n">ButtonText</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ButtonText&#39;</span><span class="p">)</span>
+    <span class="n">ObjectID</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ObjectID&#39;</span><span class="p">)</span>
+    <span class="n">entity_type_str</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;entity_type&#39;</span><span class="p">)</span>
+    <span class="n">form_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([A-Z][a-z]+)([A-Z][a-z]+)(Highlighter)?Form&#39;</span><span class="p">,</span> <span class="n">FormName</span><span class="p">)</span>
+    <span class="n">form_match2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([A-Z][a-z]+)(Highlighter)?Form&#39;</span><span class="p">,</span> <span class="n">FormName</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">FormName</span> <span class="ow">and</span> <span class="n">form_match</span><span class="p">:</span>
+        <span class="n">entity_type_v1</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+            <span class="n">app_label</span><span class="o">=</span><span class="s1">&#39;apis_relations&#39;</span><span class="p">)</span>
+        <span class="n">entity_type_v2</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">none</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">FormName</span> <span class="ow">and</span> <span class="n">form_match2</span><span class="p">:</span>
+        <span class="n">entity_type_v2</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                <span class="n">app_label</span><span class="o">=</span><span class="s1">&#39;apis_entities&#39;</span><span class="p">))</span>
+        <span class="n">entity_type_v1</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">none</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
+        <span class="n">entity_type_v1</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">none</span><span class="p">()</span>
+        <span class="n">entity_type_v2</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">none</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">ObjectID</span> <span class="o">==</span> <span class="s1">&#39;false&#39;</span> <span class="ow">or</span> <span class="n">ObjectID</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">ObjectID</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+        <span class="n">ObjectID</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">form_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;entity_type&#39;</span><span class="p">:</span> <span class="n">entity_type_str</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">entity_type_v1</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">entity_type_v1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">ObjectID</span><span class="p">)</span>
+        <span class="n">form_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;instance&#39;</span><span class="p">:</span> <span class="n">d</span><span class="p">,</span> <span class="s1">&#39;siteID&#39;</span><span class="p">:</span> <span class="n">SiteID</span><span class="p">,</span> <span class="s1">&#39;entity_type&#39;</span><span class="p">:</span> <span class="n">entity_type_str</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">entity_type_v2</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">entity_type_v2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">ObjectID</span><span class="p">)</span>
+        <span class="n">form_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;instance&#39;</span><span class="p">:</span> <span class="n">d</span><span class="p">,</span> <span class="s1">&#39;siteID&#39;</span><span class="p">:</span> <span class="n">SiteID</span><span class="p">,</span> <span class="s1">&#39;entity_type&#39;</span><span class="p">:</span> <span class="n">entity_type_str</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">FormName</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">registered_forms</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">Http404</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">registered_forms</span><span class="p">[</span><span class="n">FormName</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">ObjectID</span><span class="p">)</span>
+        <span class="n">form_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;instance&#39;</span><span class="p">:</span> <span class="n">d</span><span class="p">,</span> <span class="s1">&#39;siteID&#39;</span><span class="p">:</span> <span class="n">SiteID</span><span class="p">,</span> <span class="s1">&#39;entity_type&#39;</span><span class="p">:</span> <span class="n">entity_type_str</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">entity_type_v1</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">form_dict</span><span class="p">[</span><span class="s1">&#39;relation_form&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;Highlighter&#39;</span><span class="p">:</span>
+            <span class="n">form_dict</span><span class="p">[</span><span class="s1">&#39;highlighter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">GenericRelationForm</span><span class="p">(</span><span class="o">**</span><span class="n">form_dict</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form_class</span> <span class="o">=</span> <span class="n">form_class_dict</span><span class="p">[</span><span class="n">FormName</span><span class="p">]</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">form_class</span><span class="p">(</span><span class="o">**</span><span class="n">form_dict</span><span class="p">)</span>
+    <span class="n">tab</span> <span class="o">=</span> <span class="n">FormName</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;tab&#39;</span><span class="p">:</span> <span class="n">tab</span><span class="p">,</span> <span class="s1">&#39;form&#39;</span><span class="p">:</span> <span class="n">render_to_string</span><span class="p">(</span><span class="s2">&quot;apis_relations/_ajax_form.html&quot;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="n">entity_type_str</span><span class="p">,</span>
+                <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
+                <span class="s1">&#39;type1&#39;</span><span class="p">:</span> <span class="n">FormName</span><span class="p">,</span>
+                <span class="s1">&#39;url2&#39;</span><span class="p">:</span> <span class="s1">&#39;save_ajax_&#39;</span><span class="o">+</span><span class="n">FormName</span><span class="p">,</span>
+                <span class="s1">&#39;button_text&#39;</span><span class="p">:</span> <span class="n">ButtonText</span><span class="p">,</span>
+                <span class="s1">&#39;ObjectID&#39;</span><span class="p">:</span> <span class="n">ObjectID</span><span class="p">,</span>
+                <span class="s1">&#39;SiteID&#39;</span><span class="p">:</span> <span class="n">SiteID</span><span class="p">})}</span>
 
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Missing necessary form data&quot;</span><span class="p">)</span>
-
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># tab = FormName[:-4]</span>
-    <span class="c1"># data = {&#39;tab&#39;: tab, &#39;form&#39;: render_to_string(&quot;apis_relations/_ajax_form.html&quot;, {</span>
-    <span class="c1">#             &quot;entity_type&quot;: entity_type_str,</span>
-    <span class="c1">#             &quot;form&quot;: form,</span>
-    <span class="c1">#             &#39;type1&#39;: FormName,</span>
-    <span class="c1">#             &#39;url2&#39;: &#39;save_ajax_&#39;+FormName,</span>
-    <span class="c1">#             &#39;button_text&#39;: ButtonText,</span>
-    <span class="c1">#             &#39;ObjectID&#39;: ObjectID,</span>
-    <span class="c1">#             &#39;SiteID&#39;: SiteID})}</span>
-    <span class="c1">#</span>
-    <span class="c1"># return HttpResponse(json.dumps(data), content_type=&#39;application/json&#39;)</span>
-    <span class="c1">#</span>
-    <span class="c1"># __after_rdf_refactoring__</span>
-    <span class="n">param_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="n">model_self_class_str</span><span class="p">,</span>
-        <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
-        <span class="s2">&quot;type1&quot;</span><span class="p">:</span> <span class="n">form_name</span><span class="p">,</span>
-        <span class="s2">&quot;url2&quot;</span><span class="p">:</span> <span class="s2">&quot;save_ajax_&quot;</span> <span class="o">+</span> <span class="n">form_name</span><span class="p">,</span>
-        <span class="s2">&quot;button_text&quot;</span><span class="p">:</span> <span class="n">ButtonText</span><span class="p">,</span>
-        <span class="s2">&quot;ObjectID&quot;</span><span class="p">:</span> <span class="n">ObjectID</span><span class="p">,</span>
-        <span class="s2">&quot;SiteID&quot;</span><span class="p">:</span> <span class="n">SiteID</span><span class="p">,</span>
-    <span class="p">}</span>
-
-    <span class="n">rendered_form_str</span> <span class="o">=</span> <span class="n">render_to_string</span><span class="p">(</span>
-        <span class="s2">&quot;apis_relations/_ajax_form.html&quot;</span><span class="p">,</span>  <span class="c1"># rel_form_logic_breadcrumb (for refinding the implicit connections)</span>
-        <span class="n">context</span><span class="o">=</span><span class="n">param_dict</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;tab&quot;</span><span class="p">:</span> <span class="n">form_name</span><span class="p">,</span> <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">rendered_form_str</span><span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span></div>
 
 
-<span class="c1"># TODO RDF: Re-implement highlighter and label form</span>
 <div class="viewcode-block" id="save_ajax_form"><a class="viewcode-back" href="../../../modules/relations.html#apis_core.apis_relations.views.save_ajax_form">[docs]</a><span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">save_ajax_form</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">,</span> <span class="n">entity_type</span><span class="p">,</span> <span class="n">kind_form</span><span class="p">,</span> <span class="n">SiteID</span><span class="p">,</span> <span class="n">ObjectID</span><span class="o">=</span><span class="kc">False</span>
-<span class="p">):</span>  <span class="c1"># rel_form_logic_breadcrumb (for refinding the implicit connections)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests validity and saves AjaxForms, returns them when validity test fails&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">save_ajax_form</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">entity_type</span><span class="p">,</span> <span class="n">kind_form</span><span class="p">,</span> <span class="n">SiteID</span><span class="p">,</span> <span class="n">ObjectID</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Tests validity and saves AjaxForms, returns them when validity test fails&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">kind_form</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">registered_forms</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">Http404</span>
 
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># if kind_form not in registered_forms.keys():</span>
-    <span class="c1">#     raise Http404</span>
-    <span class="c1">#</span>
-    <span class="c1"># button_text = &quot;create/modify&quot;</span>
-    <span class="c1">#</span>
-    <span class="c1"># if not ObjectID:</span>
-    <span class="c1">#     instance_id = &#39;&#39;</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     instance_id = ObjectID</span>
-    <span class="c1"># entity_type_str = entity_type</span>
-    <span class="c1"># entity_type = caching.get_ontology_class_of_name(entity_type)</span>
-    <span class="c1">#</span>
-    <span class="c1"># form_match = re.match(r&#39;([A-Z][a-z]+)([A-Z][a-z]+)?(Highlighter)?Form&#39;, kind_form)</span>
-    <span class="c1"># form_dict = {&#39;data&#39;: request.POST,</span>
-    <span class="c1">#              &#39;entity_type&#39;: entity_type,</span>
-    <span class="c1">#              &#39;request&#39;: request}</span>
-    <span class="c1">#</span>
-    <span class="c1">#</span>
-    <span class="c1"># test_form_relations = ContentType.objects.filter(</span>
-    <span class="c1">#     model=&#39;{}{}&#39;.format(form_match.group(1).lower(), form_match.group(2)).lower(),</span>
-    <span class="c1">#     app_label=&#39;apis_relations&#39;)</span>
-    <span class="c1"># tab = re.match(r&#39;(.*)Form&#39;, kind_form).group(1)</span>
-    <span class="c1"># call_function = &#39;EntityRelationForm_response&#39;</span>
-    <span class="c1"># if test_form_relations.count() &gt; 0:</span>
-    <span class="c1">#     relation_form = test_form_relations[0].model_class()</span>
-    <span class="c1">#     form_dict[&#39;relation_form&#39;] = relation_form</span>
-    <span class="c1">#     if form_match.group(3) == &#39;Highlighter&#39;:</span>
-    <span class="c1">#         form_dict[&#39;highlighter&#39;] = True</span>
-    <span class="c1">#         tab = form_match.group(1)+form_match.group(2)</span>
-    <span class="c1">#         call_function = &#39;HighlForm_response&#39;</span>
-    <span class="c1">#     form = GenericRelationForm(**form_dict)</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     form_class = form_class_dict[kind_form]</span>
-    <span class="c1">#     form = form_class(**form_dict)</span>
-    <span class="c1">#</span>
-    <span class="c1"># __after_rdf_refactoring__</span>
-    <span class="n">self_other</span> <span class="o">=</span> <span class="n">kind_form</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;triple_form_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_to_&quot;</span><span class="p">)</span>
-    <span class="n">model_self_class_str</span> <span class="o">=</span> <span class="n">self_other</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">model_other_class_str</span> <span class="o">=</span> <span class="n">self_other</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">model_self_class</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_ontology_class_of_name</span><span class="p">(</span><span class="n">model_self_class_str</span><span class="p">)</span>
-    <span class="n">model_other_class_class</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_ontology_class_of_name</span><span class="p">(</span><span class="n">model_other_class_str</span><span class="p">)</span>
-    <span class="n">entity_instance_self</span> <span class="o">=</span> <span class="n">model_self_class</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">SiteID</span><span class="p">)</span>
-    <span class="n">entity_instance_other</span> <span class="o">=</span> <span class="n">model_other_class_class</span><span class="o">.</span><span class="n">get_or_create_uri</span><span class="p">(</span>
-        <span class="n">uri</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span>
-    <span class="p">)</span>
-    <span class="n">start_date_written</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">]</span>
-    <span class="n">end_date_written</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span>
-    <span class="n">property_param_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">param_pair</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">):</span>
-        <span class="n">param_pair_split</span> <span class="o">=</span> <span class="n">param_pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
-        <span class="n">property_param_dict</span><span class="p">[</span><span class="n">param_pair_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">param_pair_split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">property_instance</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">property_param_dict</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
-    <span class="n">property_direction</span> <span class="o">=</span> <span class="n">property_param_dict</span><span class="p">[</span><span class="s2">&quot;direction&quot;</span><span class="p">]</span>
+    <span class="n">button_text</span> <span class="o">=</span> <span class="s2">&quot;create/modify&quot;</span>
 
-    <span class="n">form</span> <span class="o">=</span> <span class="n">GenericTripleForm</span><span class="p">(</span><span class="n">model_self_class_str</span><span class="p">,</span> <span class="n">model_other_class_str</span><span class="p">)</span>
-    <span class="n">form</span><span class="o">.</span><span class="n">load_subj_obj_prop</span><span class="p">(</span>
-        <span class="n">entity_instance_self</span><span class="p">,</span>
-        <span class="n">entity_instance_other</span><span class="p">,</span>
-        <span class="n">property_instance</span><span class="p">,</span>
-        <span class="n">property_direction</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">ObjectID</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
-
-        <span class="n">triple</span> <span class="o">=</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">ObjectID</span><span class="p">)</span>
-        <span class="n">form</span><span class="o">.</span><span class="n">load_remaining_data_from_triple</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
-
-    <span class="n">form</span><span class="o">.</span><span class="n">load_remaining_data_from_input</span><span class="p">(</span>
-        <span class="n">start_date_written</span><span class="p">,</span>
-        <span class="n">end_date_written</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># data = {</span>
-    <span class="c1">#     &#39;test&#39;: False,</span>
-    <span class="c1">#     &#39;call_function&#39;: call_function,</span>
-    <span class="c1">#         &#39;DivID&#39;: &#39;div_&#39; + kind_form + instance_id,</span>
-    <span class="c1">#         &#39;form&#39;: render_to_string(</span>
-    <span class="c1">#             &quot;apis_relations/_ajax_form.html&quot;, context={</span>
-    <span class="c1">#                 &quot;entity_type&quot;: entity_type_str,</span>
-    <span class="c1">#                 &quot;form&quot;: form,</span>
-    <span class="c1">#                 &#39;type1&#39;: kind_form,</span>
-    <span class="c1">#                 &#39;url2&#39;: &#39;save_ajax_&#39; + kind_form,</span>
-    <span class="c1">#                 &#39;button_text&#39;: button_text,</span>
-    <span class="c1">#                 &#39;ObjectID&#39;: ObjectID,</span>
-    <span class="c1">#                 &#39;SiteID&#39;: SiteID</span>
-    <span class="c1">#             },</span>
-    <span class="c1">#             request=request</span>
-    <span class="c1">#         )</span>
-    <span class="c1"># }</span>
-    <span class="c1">#</span>
-    <span class="c1"># __after_rdf_refactoring__</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s2">&quot;tab&quot;</span><span class="p">:</span> <span class="n">kind_form</span><span class="p">,</span>
-        <span class="s2">&quot;call_function&quot;</span><span class="p">:</span> <span class="s2">&quot;EntityRelationForm_response&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;instance&quot;</span><span class="p">:</span> <span class="n">form</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">get_web_object</span><span class="p">(),</span>
-        <span class="s2">&quot;table_html&quot;</span><span class="p">:</span> <span class="n">form</span><span class="o">.</span><span class="n">get_html_table</span><span class="p">(</span>
-            <span class="n">entity_instance_self</span><span class="p">,</span> <span class="n">entity_instance_other</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">as_html</span><span class="p">(</span><span class="n">request</span><span class="p">),</span>
-        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;right_card&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">)</span></div>
-
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># if form.is_valid():</span>
-    <span class="c1">#     site_instance = entity_type.objects.get(pk=SiteID)</span>
-    <span class="c1">#     set_ann_proj = request.session.get(&#39;annotation_project&#39;, 1)</span>
-    <span class="c1">#     entity_types_highlighter = request.session.get(&#39;entity_types_highlighter&#39;)</span>
-    <span class="c1">#     users_show = request.session.get(&#39;users_show_highlighter&#39;, None)</span>
-    <span class="c1">#     hl_text = None</span>
-    <span class="c1">#     if ObjectID:</span>
-    <span class="c1">#         # kommt hier rein, wenn form vorgefertigte Daten hat</span>
-    <span class="c1">#         instance = form.save(instance=ObjectID, site_instance=site_instance)</span>
-    <span class="c1">#     else:</span>
-    <span class="c1">#         # kommt hier rein, wenn form neuen Daten hat</span>
-    <span class="c1">#         instance = form.save(site_instance=site_instance)</span>
-    <span class="c1">#     right_card = True</span>
-    <span class="c1">#     if test_form_relations.count() &gt; 0:</span>
-    <span class="c1">#         table_html = form.get_html_table(entity_type_str, request, site_instance, form_match)</span>
-    <span class="c1">#     if &#39;Highlighter&#39; in tab or form_match.group(3) == &#39;Highlighter&#39;:</span>
-    <span class="c1">#         hl_text = {</span>
-    <span class="c1">#             &#39;text&#39;: highlight_text_new(form.get_text_id(),</span>
-    <span class="c1">#                                    users_show=users_show,</span>
-    <span class="c1">#                                    set_ann_proj=set_ann_proj,</span>
-    <span class="c1">#                                    types=entity_types_highlighter)[0].strip(),</span>
-    <span class="c1">#             &#39;id&#39;: form.get_text_id()}</span>
-    <span class="c1">#     if tab == &#39;PersonLabel&#39;:</span>
-    <span class="c1">#         table_html = LabelTableEdit(</span>
-    <span class="c1">#                 data=site_instance.label_set.all(),</span>
-    <span class="c1">#                 prefix=&#39;PL-&#39;)</span>
-    <span class="c1">#     elif tab == &#39;InstitutionLabel&#39;:</span>
-    <span class="c1">#         table_html = LabelTableEdit(</span>
-    <span class="c1">#                 data=site_instance.label_set.all(),</span>
-    <span class="c1">#                 prefix=&#39;IL-&#39;)</span>
-    <span class="c1">#     elif tab == &#39;PersonResolveUri&#39;:</span>
-    <span class="c1">#         table_html = EntityUriTable(</span>
-    <span class="c1">#             Uri.objects.filter(entity=site_instance),</span>
-    <span class="c1">#             prefix=&#39;PURI-&#39;</span>
-    <span class="c1">#         )</span>
-    <span class="c1">#</span>
-    <span class="c1">#     elif tab == &#39;AddRelationHighlighterPerson&#39; or tab == &#39;PlaceHighlighter&#39; or tab == &#39;PersonHighlighter&#39; or tab == &#39;SundayHighlighter&#39;:</span>
-    <span class="c1">#         table_html = None</span>
-    <span class="c1">#         right_card = False</span>
-    <span class="c1">#         call_function = &#39;PAddRelation_response&#39;</span>
-    <span class="c1">#         instance = None</span>
-    <span class="c1">#     if instance:</span>
-    <span class="c1">#         instance2 = instance.get_web_object()</span>
-    <span class="c1">#     else:</span>
-    <span class="c1">#         instance2 = None</span>
-    <span class="c1">#     if table_html:</span>
-    <span class="c1">#         table_html2 = table_html.as_html(request)</span>
-    <span class="c1">#     else:</span>
-    <span class="c1">#         table_html2 = None</span>
-    <span class="c1">#     data = {&#39;test&#39;: True, &#39;tab&#39;: tab, &#39;call_function&#39;: call_function,</span>
-    <span class="c1">#             &#39;instance&#39;: instance2,</span>
-    <span class="c1">#             &#39;table_html&#39;: table_html2,</span>
-    <span class="c1">#             &#39;text&#39;: hl_text,</span>
-    <span class="c1">#             &#39;right_card&#39;: right_card}</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     if &#39;Highlighter&#39; in tab:</span>
-    <span class="c1">#         call_function = &#39;HighlForm_response&#39;</span>
-    <span class="c1">#     data = {&#39;test&#39;: False, &#39;call_function&#39;: call_function,</span>
-    <span class="c1">#             &#39;DivID&#39;: &#39;div_&#39;+kind_form+instance_id,</span>
-    <span class="c1">#             &#39;form&#39;: render_to_string(&quot;apis_relations/_ajax_form.html&quot;, context={</span>
-    <span class="c1">#                 &quot;entity_type&quot;: entity_type_str,</span>
-    <span class="c1">#                 &quot;form&quot;: form, &#39;type1&#39;: kind_form, &#39;url2&#39;: &#39;save_ajax_&#39;+kind_form,</span>
-    <span class="c1">#                 &#39;button_text&#39;: button_text, &#39;ObjectID&#39;: ObjectID, &#39;SiteID&#39;: SiteID},</span>
-    <span class="c1">#                 request=request)}</span>
-    <span class="c1">#</span>
-
-
-<span class="k">def</span> <span class="nf">create_triple_by_form_data</span><span class="p">(</span><span class="n">triple_form_data</span><span class="p">):</span>
-    <span class="n">triple</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;triple_id&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">triple_set</span> <span class="o">=</span> <span class="n">Triple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;triple_id&quot;</span><span class="p">])</span>
-        <span class="c1"># There could be the edge-case where a user deleted a triple in the table but its values</span>
-        <span class="c1"># had been already loaded into the form and the form was posted. In this case we create a</span>
-        <span class="c1"># new triple. Hence, this len check:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">triple_set</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">triple</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">triple</span> <span class="o">=</span> <span class="n">triple_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span>
-        <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;property_id&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
-        <span class="ow">and</span> <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;model_other_id&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
-    <span class="p">):</span>
-        <span class="n">model_self_class</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_ontology_class_of_name</span><span class="p">(</span>
-            <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="n">model_self_instance</span> <span class="o">=</span> <span class="n">model_self_class</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="n">pk</span><span class="o">=</span><span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="c1"># because we reuse the entity-autocomplete which also queries external resources, we have to</span>
-        <span class="c1"># fetch entity_other by its URI here</span>
-        <span class="n">model_other_uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;model_other_id&quot;</span><span class="p">])</span>
-        <span class="n">model_other_instance</span> <span class="o">=</span> <span class="n">model_other_uri</span><span class="o">.</span><span class="n">root_object</span>
-        <span class="nb">property</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;property_id&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;property_direction&quot;</span><span class="p">]</span>
-            <span class="o">==</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_SUBJ_OTHER_OBJ_STR</span>
-        <span class="p">):</span>
-            <span class="k">if</span> <span class="n">triple</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">triple</span><span class="o">.</span><span class="n">subj</span> <span class="o">=</span> <span class="n">model_self_instance</span>
-                <span class="n">triple</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="n">model_other_instance</span>
-                <span class="n">triple</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="nb">property</span>
-                <span class="n">triple</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">triple</span> <span class="o">=</span> <span class="n">Triple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
-                    <span class="n">subj</span><span class="o">=</span><span class="n">model_self_instance</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">model_other_instance</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="nb">property</span>
-                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="p">(</span>
-            <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;property_direction&quot;</span><span class="p">]</span>
-            <span class="o">==</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_OBJ_OTHER_SUBJ_STR</span>
-        <span class="p">):</span>
-            <span class="k">if</span> <span class="n">triple</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">triple</span><span class="o">.</span><span class="n">subj</span> <span class="o">=</span> <span class="n">model_other_instance</span>
-                <span class="n">triple</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="n">model_self_instance</span>
-                <span class="n">triple</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="nb">property</span>
-                <span class="n">triple</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">triple</span> <span class="o">=</span> <span class="n">Triple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
-                    <span class="n">subj</span><span class="o">=</span><span class="n">model_other_instance</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">model_self_instance</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="nb">property</span>
-                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;direction missing or invalid.&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">triple</span>
-
-
-<span class="k">def</span> <span class="nf">ajax_2_load_triple_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">parse_boolean_val</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">val</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
-
-    <span class="n">should_include_other_entity</span> <span class="o">=</span> <span class="n">parse_boolean_val</span><span class="p">(</span>
-        <span class="n">request</span><span class="p">,</span> <span class="s2">&quot;should_include_other_entity&quot;</span>
-    <span class="p">)</span>
-    <span class="n">should_include_remove_button</span> <span class="o">=</span> <span class="n">parse_boolean_val</span><span class="p">(</span>
-        <span class="n">request</span><span class="p">,</span> <span class="s2">&quot;should_include_remove_button&quot;</span>
-    <span class="p">)</span>
-    <span class="n">should_include_create_button</span> <span class="o">=</span> <span class="n">parse_boolean_val</span><span class="p">(</span>
-        <span class="n">request</span><span class="p">,</span> <span class="s2">&quot;should_include_create_button&quot;</span>
-    <span class="p">)</span>
-    <span class="n">model_self_class</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_ontology_class_of_name</span><span class="p">(</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">]</span>
-    <span class="p">)</span>
-    <span class="n">model_self_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">model_self_id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">model_self_instance</span> <span class="o">=</span> <span class="n">model_self_class</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="n">pk</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ObjectID</span><span class="p">:</span>
+        <span class="n">instance_id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">model_self_instance</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">triple_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;triple_id&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">triple_id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">triple_instance</span> <span class="o">=</span> <span class="n">Triple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">triple_id</span><span class="p">)</span>
+        <span class="n">instance_id</span> <span class="o">=</span> <span class="n">ObjectID</span>
+    <span class="n">entity_type_str</span> <span class="o">=</span> <span class="n">entity_type</span>
+    <span class="n">entity_type</span> <span class="o">=</span> <span class="n">AbstractEntity</span><span class="o">.</span><span class="n">get_entity_class_of_name</span><span class="p">(</span><span class="n">entity_type</span><span class="p">)</span>
+
+    <span class="n">form_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([A-Z][a-z]+)([A-Z][a-z]+)?(Highlighter)?Form&#39;</span><span class="p">,</span> <span class="n">kind_form</span><span class="p">)</span>
+    <span class="n">form_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span>
+                 <span class="s1">&#39;entity_type&#39;</span><span class="p">:</span> <span class="n">entity_type</span><span class="p">,</span>
+                 <span class="s1">&#39;request&#39;</span><span class="p">:</span> <span class="n">request</span><span class="p">}</span>
+
+    <span class="n">test_form_relations</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+        <span class="n">app_label</span><span class="o">=</span><span class="s1">&#39;apis_relations&#39;</span><span class="p">)</span>
+    <span class="n">tab</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(.*)Form&#39;</span><span class="p">,</span> <span class="n">kind_form</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">call_function</span> <span class="o">=</span> <span class="s1">&#39;EntityRelationForm_response&#39;</span>
+    <span class="k">if</span> <span class="n">test_form_relations</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">relation_form</span> <span class="o">=</span> <span class="n">test_form_relations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
+        <span class="n">form_dict</span><span class="p">[</span><span class="s1">&#39;relation_form&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relation_form</span>
+        <span class="k">if</span> <span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;Highlighter&#39;</span><span class="p">:</span>
+            <span class="n">form_dict</span><span class="p">[</span><span class="s1">&#39;highlighter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">tab</span> <span class="o">=</span> <span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">call_function</span> <span class="o">=</span> <span class="s1">&#39;HighlForm_response&#39;</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">GenericRelationForm</span><span class="p">(</span><span class="o">**</span><span class="n">form_dict</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">triple_instance</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">JsonResponse</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">render_triple_form</span><span class="p">(</span>
-            <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">],</span>
-            <span class="n">model_other_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_other_class&quot;</span><span class="p">],</span>
-            <span class="n">model_self_instance</span><span class="o">=</span><span class="n">model_self_instance</span><span class="p">,</span>
-            <span class="n">triple_instance</span><span class="o">=</span><span class="n">triple_instance</span><span class="p">,</span>
-            <span class="n">should_include_other_entity</span><span class="o">=</span><span class="n">should_include_other_entity</span><span class="p">,</span>
-            <span class="n">should_include_remove_button</span><span class="o">=</span><span class="n">should_include_remove_button</span><span class="p">,</span>
-            <span class="n">should_include_create_button</span><span class="o">=</span><span class="n">should_include_create_button</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="n">status</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-        <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">response</span>
-
-
-<span class="k">def</span> <span class="nf">ajax_2_post_triple_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">create_triple_by_form_data</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">JsonResponse</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">render_triple_form</span><span class="p">(</span>
-                <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">],</span>
-                <span class="n">model_other_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_other_class&quot;</span><span class="p">],</span>
-            <span class="p">),</span>
-            <span class="s2">&quot;table&quot;</span><span class="p">:</span> <span class="n">render_triple_table</span><span class="p">(</span>
-                <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">],</span>
-                <span class="n">model_other_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_other_class&quot;</span><span class="p">],</span>
-                <span class="n">model_self_id_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">],</span>
-                <span class="n">should_be_editable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">},</span>
-        <span class="n">status</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-        <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">response</span>
-
-
-<span class="k">def</span> <span class="nf">ajax_2_delete_triple</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">triple_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;triple_id&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">triple_id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">Triple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">triple_id</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">JsonResponse</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">render_triple_table</span><span class="p">(</span>
-            <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">],</span>
-            <span class="n">model_other_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_other_class&quot;</span><span class="p">],</span>
-            <span class="n">model_self_id_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">],</span>
-            <span class="n">should_be_editable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="n">status</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-        <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">response</span>
-
-
-<span class="k">def</span> <span class="nf">ajax_2_load_reification_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">JsonResponse</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">render_reification_form</span><span class="p">(</span>
-            <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">],</span>
-            <span class="n">reification_type_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;reification_type&quot;</span><span class="p">],</span>
-            <span class="n">model_self_id_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">],</span>
-            <span class="n">reification_id_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;reification_id&quot;</span><span class="p">],</span>
-        <span class="p">),</span>
-        <span class="n">status</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-        <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">response</span>
-
-
-<span class="k">def</span> <span class="nf">ajax_2_post_reification_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">class</span> <span class="nc">FormException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">process_reification_instance</span><span class="p">(</span><span class="n">post_data</span><span class="p">):</span>
-        <span class="n">reification_class</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_reification_class_of_name</span><span class="p">(</span>
-            <span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;reification_type&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="n">reification_instance_id</span> <span class="o">=</span> <span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;reification_attr_form&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
-            <span class="s2">&quot;reification_id&quot;</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="n">reification_instance_id</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-            <span class="n">reification_instance</span> <span class="o">=</span> <span class="n">reification_class</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                <span class="n">pk</span><span class="o">=</span><span class="n">reification_instance_id</span>
+        <span class="n">form_class</span> <span class="o">=</span> <span class="n">form_class_dict</span><span class="p">[</span><span class="n">kind_form</span><span class="p">]</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">form_class</span><span class="p">(</span><span class="o">**</span><span class="n">form_dict</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+        <span class="n">site_instance</span> <span class="o">=</span> <span class="n">entity_type</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">SiteID</span><span class="p">)</span>
+        <span class="n">set_ann_proj</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;annotation_project&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">entity_types_highlighter</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;entity_types_highlighter&#39;</span><span class="p">)</span>
+        <span class="n">users_show</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;users_show_highlighter&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">hl_text</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">ObjectID</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">ObjectID</span><span class="p">,</span> <span class="n">site_instance</span><span class="o">=</span><span class="n">site_instance</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">site_instance</span><span class="o">=</span><span class="n">site_instance</span><span class="p">)</span>
+        <span class="n">right_card</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">test_form_relations</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">table_html</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">get_html_table</span><span class="p">(</span><span class="n">entity_type_str</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">site_instance</span><span class="p">,</span> <span class="n">form_match</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;Highlighter&#39;</span> <span class="ow">in</span> <span class="n">tab</span> <span class="ow">or</span> <span class="n">form_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;Highlighter&#39;</span><span class="p">:</span>
+            <span class="n">hl_text</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">highlight_text_new</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">get_text_id</span><span class="p">(),</span>
+                                       <span class="n">users_show</span><span class="o">=</span><span class="n">users_show</span><span class="p">,</span>
+                                       <span class="n">set_ann_proj</span><span class="o">=</span><span class="n">set_ann_proj</span><span class="p">,</span>
+                                       <span class="n">types</span><span class="o">=</span><span class="n">entity_types_highlighter</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">form</span><span class="o">.</span><span class="n">get_text_id</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="n">tab</span> <span class="o">==</span> <span class="s1">&#39;PersonLabel&#39;</span><span class="p">:</span>
+            <span class="n">table_html</span> <span class="o">=</span> <span class="n">LabelTableEdit</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">site_instance</span><span class="o">.</span><span class="n">label_set</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+                    <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;PL-&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tab</span> <span class="o">==</span> <span class="s1">&#39;InstitutionLabel&#39;</span><span class="p">:</span>
+            <span class="n">table_html</span> <span class="o">=</span> <span class="n">LabelTableEdit</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">site_instance</span><span class="o">.</span><span class="n">label_set</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+                    <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;IL-&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tab</span> <span class="o">==</span> <span class="s1">&#39;PersonResolveUri&#39;</span><span class="p">:</span>
+            <span class="n">table_html</span> <span class="o">=</span> <span class="n">EntityUriTable</span><span class="p">(</span>
+                <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">site_instance</span><span class="p">),</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;PURI-&#39;</span>
             <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">tab</span> <span class="o">==</span> <span class="s1">&#39;AddRelationHighlighterPerson&#39;</span> <span class="ow">or</span> <span class="n">tab</span> <span class="o">==</span> <span class="s1">&#39;PlaceHighlighter&#39;</span> <span class="ow">or</span> <span class="n">tab</span> <span class="o">==</span> <span class="s1">&#39;PersonHighlighter&#39;</span> <span class="ow">or</span> <span class="n">tab</span> <span class="o">==</span> <span class="s1">&#39;SundayHighlighter&#39;</span><span class="p">:</span>
+            <span class="n">table_html</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">right_card</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">call_function</span> <span class="o">=</span> <span class="s1">&#39;PAddRelation_response&#39;</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">instance</span><span class="p">:</span>
+            <span class="n">instance2</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_web_object</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">reification_instance</span> <span class="o">=</span> <span class="n">reification_class</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;reification_attr_form&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="n">reification_instance</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-        <span class="n">reification_instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">reification_instance</span>
-
-    <span class="k">def</span> <span class="nf">process_triples_to_reification</span><span class="p">(</span><span class="n">reification_instance</span><span class="p">,</span> <span class="n">triple_form_data_list</span><span class="p">):</span>
-        <span class="n">related_triple_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">valid_property_counter</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">triple_form_data</span> <span class="ow">in</span> <span class="n">triple_form_data_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;property_id&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="n">valid_property_counter</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">valid_property_counter</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">FormException</span><span class="p">(</span>
-                <span class="s2">&quot;A reification without relation from main entity to the reification goes against &quot;</span>
-                <span class="s2">&quot;the principle of a reification being a dependent instance. Please provide a &quot;</span>
-                <span class="s2">&quot;relation between the main entity and the reification.&quot;</span>
-            <span class="p">)</span>
-        <span class="k">for</span> <span class="n">triple_form_data</span> <span class="ow">in</span> <span class="n">triple_form_data_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;model_other_id&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">triple_form_data</span><span class="p">[</span>
-                <span class="s2">&quot;model_other_id&quot;</span>
-            <span class="p">]</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reification_instance</span><span class="o">.</span><span class="n">pk</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="s2">&quot;A wrong id was passed. The &#39;entity_other&#39; in this case must be the reification&quot;</span>
-                    <span class="s2">&quot;, however the reification&#39;s id is not equal to the one from &#39;entity_other&#39;&quot;</span>
-                <span class="p">)</span>
-            <span class="n">triple_form_data</span><span class="p">[</span>
-                <span class="s2">&quot;model_other_id&quot;</span>
-            <span class="p">]</span> <span class="o">=</span> <span class="n">reification_instance</span><span class="o">.</span><span class="n">uri_set</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">uri</span>
-            <span class="n">triple</span> <span class="o">=</span> <span class="n">create_triple_by_form_data</span><span class="p">(</span><span class="n">triple_form_data</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">triple</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">related_triple_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">related_triple_list</span>
-
-    <span class="k">def</span> <span class="nf">process_triples_from_reification</span><span class="p">(</span><span class="n">reification_instance</span><span class="p">,</span> <span class="n">triple_form_data_list</span><span class="p">):</span>
-        <span class="n">related_triple_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">triple_form_data</span> <span class="ow">in</span> <span class="n">triple_form_data_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">triple_form_data</span><span class="p">[</span>
-                <span class="s2">&quot;model_self_id&quot;</span>
-            <span class="p">]</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reification_instance</span><span class="o">.</span><span class="n">pk</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="s2">&quot;A wrong id was passed. The &#39;entity_other&#39; in this case must be the reification&quot;</span>
-                    <span class="s2">&quot;, however the reification&#39;s id is not equal to the one from &#39;entity_other&#39;&quot;</span>
-                <span class="p">)</span>
-            <span class="n">triple_form_data</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">reification_instance</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
-            <span class="n">triple</span> <span class="o">=</span> <span class="n">create_triple_by_form_data</span><span class="p">(</span><span class="n">triple_form_data</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">triple</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">related_triple_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">related_triple_list</span>
-
-    <span class="n">post_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">reification_instance</span> <span class="o">=</span> <span class="n">process_reification_instance</span><span class="p">(</span><span class="n">post_data</span><span class="p">)</span>
-        <span class="n">related_triple_list_before</span> <span class="o">=</span> <span class="n">Triple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-            <span class="n">Q</span><span class="p">(</span><span class="n">subj</span><span class="o">=</span><span class="n">reification_instance</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">reification_instance</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">related_triple_list_after</span> <span class="o">=</span> <span class="n">process_triples_to_reification</span><span class="p">(</span>
-            <span class="n">reification_instance</span><span class="p">,</span> <span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;triple_data_to_reification_list&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="n">related_triple_list_after</span> <span class="o">+=</span> <span class="n">process_triples_from_reification</span><span class="p">(</span>
-            <span class="n">reification_instance</span><span class="p">,</span> <span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;triple_data_from_reification_list&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="k">for</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">related_triple_list_before</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">triple</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">related_triple_list_after</span><span class="p">:</span>
-                <span class="n">triple</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-    <span class="k">except</span> <span class="n">FormException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)},</span> <span class="n">status</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">instance2</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">table_html</span><span class="p">:</span>
+            <span class="n">table_html2</span> <span class="o">=</span> <span class="n">table_html</span><span class="o">.</span><span class="n">as_html</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">table_html2</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;tab&#39;</span><span class="p">:</span> <span class="n">tab</span><span class="p">,</span> <span class="s1">&#39;call_function&#39;</span><span class="p">:</span> <span class="n">call_function</span><span class="p">,</span>
+                <span class="s1">&#39;instance&#39;</span><span class="p">:</span> <span class="n">instance2</span><span class="p">,</span>
+                <span class="s1">&#39;table_html&#39;</span><span class="p">:</span> <span class="n">table_html2</span><span class="p">,</span>
+                <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">hl_text</span><span class="p">,</span>
+                <span class="s1">&#39;right_card&#39;</span><span class="p">:</span> <span class="n">right_card</span><span class="p">}</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">JsonResponse</span><span class="p">(</span>
-            <span class="n">data</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">render_reification_form</span><span class="p">(</span>
-                    <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">],</span>
-                    <span class="n">reification_type_str</span><span class="o">=</span><span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;reification_type&quot;</span><span class="p">],</span>
-                    <span class="n">model_self_id_str</span><span class="o">=</span><span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">],</span>
-                <span class="p">),</span>
-                <span class="s2">&quot;table&quot;</span><span class="p">:</span> <span class="n">render_reification_table</span><span class="p">(</span>
-                    <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
-                    <span class="n">reification_type_str</span><span class="o">=</span><span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;reification_type&quot;</span><span class="p">],</span>
-                    <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">],</span>
-                    <span class="n">model_self_id_str</span><span class="o">=</span><span class="n">post_data</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">],</span>
-                    <span class="n">should_be_editable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="p">),</span>
-            <span class="p">},</span>
-            <span class="n">status</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-            <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;Highlighter&#39;</span> <span class="ow">in</span> <span class="n">tab</span><span class="p">:</span>
+            <span class="n">call_function</span> <span class="o">=</span> <span class="s1">&#39;HighlForm_response&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;call_function&#39;</span><span class="p">:</span> <span class="n">call_function</span><span class="p">,</span>
+                <span class="s1">&#39;DivID&#39;</span><span class="p">:</span> <span class="s1">&#39;div_&#39;</span><span class="o">+</span><span class="n">kind_form</span><span class="o">+</span><span class="n">instance_id</span><span class="p">,</span>
+                <span class="s1">&#39;form&#39;</span><span class="p">:</span> <span class="n">render_to_string</span><span class="p">(</span><span class="s2">&quot;apis_relations/_ajax_form.html&quot;</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="n">entity_type_str</span><span class="p">,</span>
+                    <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s1">&#39;type1&#39;</span><span class="p">:</span> <span class="n">kind_form</span><span class="p">,</span> <span class="s1">&#39;url2&#39;</span><span class="p">:</span> <span class="s1">&#39;save_ajax_&#39;</span><span class="o">+</span><span class="n">kind_form</span><span class="p">,</span>
+                    <span class="s1">&#39;button_text&#39;</span><span class="p">:</span> <span class="n">button_text</span><span class="p">,</span> <span class="s1">&#39;ObjectID&#39;</span><span class="p">:</span> <span class="n">ObjectID</span><span class="p">,</span> <span class="s1">&#39;SiteID&#39;</span><span class="p">:</span> <span class="n">SiteID</span><span class="p">},</span>
+                    <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">)}</span>
 
-    <span class="k">return</span> <span class="n">response</span>
-
-
-<span class="k">def</span> <span class="nf">ajax_2_delete_reification</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">reification_class</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_reification_class_of_name</span><span class="p">(</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;reification_type&quot;</span><span class="p">]</span>
-    <span class="p">)</span>
-    <span class="n">reification_class</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;reification_id&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">JsonResponse</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">render_reification_form</span><span class="p">(</span>
-                <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">],</span>
-                <span class="n">reification_type_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;reification_type&quot;</span><span class="p">],</span>
-                <span class="n">model_self_id_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">],</span>
-            <span class="p">),</span>
-            <span class="s2">&quot;table&quot;</span><span class="p">:</span> <span class="n">render_reification_table</span><span class="p">(</span>
-                <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
-                <span class="n">reification_type_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;reification_type&quot;</span><span class="p">],</span>
-                <span class="n">model_self_class_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_class&quot;</span><span class="p">],</span>
-                <span class="n">model_self_id_str</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;model_self_id&quot;</span><span class="p">],</span>
-                <span class="n">should_be_editable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">},</span>
-        <span class="n">status</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-        <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">response</span>
+    <span class="c1"># except Exception as e:</span>
+    <span class="c1">#     print(&#39;Error in save method&#39;)</span>
+    <span class="c1">#     print(e)</span>
+    <span class="c1">#     data = {&#39;test&#39;: False, &#39;error&#39;: json.dumps(str(e))}</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
-  </div>
+    <p>
+        &#169; Copyright 2021, Matthias Schlögl.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
