@@ -247,6 +247,8 @@ class GenericEntitiesCreateView(View):
             "create": request.user.has_perm("entities.add_{}".format(entity))
         }
         template = get_template("apis_entities/edit_generic.html")
+        entity_class = caching.get_ontology_class_of_name(entity)
+        print(entity_class)
         return HttpResponse(
             template.render(
                 request=request,
@@ -255,6 +257,7 @@ class GenericEntitiesCreateView(View):
                     "permissions": permissions,
                     "form": form,
                     "form_text": form_text,
+                    "entity_verbose_name": entity_class._meta.verbose_name,
                 },
             )
         )
@@ -269,7 +272,7 @@ class GenericEntitiesCreateView(View):
             form_text.save(entity_2)
             return redirect(
                 reverse(
-                    "apis:apis_entities:generic_entities_detail_view",
+                    "apis:apis_entities:generic_entities_edit_view",
                     kwargs={"pk": entity_2.pk, "entity": entity},
                 )
             )
