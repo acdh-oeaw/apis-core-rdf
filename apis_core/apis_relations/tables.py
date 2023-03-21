@@ -219,6 +219,8 @@ def render_reification_table(
             fields = ["relation_type", "related_entities"]
             if should_be_editable:
                 fields += ["edit", "delete"]
+                if "apis_bibsonomy" in settings.INSTALLED_APPS:
+                    fields = ["ref"] + fields
             # If I would use `template_name` here, django-tables crashes. Perhaps it only expects
             # some of its own pre-integrated templates? But since we want to use a custom one and
             # also attach it to this class I renamed it to `template_name_custom`. I did not find a
@@ -226,6 +228,10 @@ def render_reification_table(
             template_name_custom = "apis_relations/reification_table.html"
 
         def __init__(self, *args, **kwargs):
+            if "apis_bibsonomy" in settings.INSTALLED_APPS:
+                self.base_columns["ref"] = tables.TemplateColumn(
+                    template_name="apis_relations/references_button_generic_ajax_form.html"
+                )
             super().__init__(
                 *args,
                 **kwargs,
