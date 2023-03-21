@@ -232,7 +232,9 @@ def get_entities_form(entity):
 class GenericEntitiesStanbolForm(forms.Form):
     def save(self, *args, **kwargs):
         cd = self.cleaned_data
-        entity = RDFParser(cd["entity"], self.entity.title()).get_or_create()
+        entity = RDFParser(
+            cd["entity"], self.entity.title(), app_label_entities="apis_ontology"
+        ).get_or_create()
         return entity
 
     def __init__(self, entity, *args, **kwargs):
