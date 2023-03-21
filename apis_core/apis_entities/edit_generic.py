@@ -248,7 +248,6 @@ class GenericEntitiesCreateView(View):
         }
         template = get_template("apis_entities/edit_generic.html")
         entity_class = caching.get_ontology_class_of_name(entity)
-        print(entity_class)
         return HttpResponse(
             template.render(
                 request=request,
