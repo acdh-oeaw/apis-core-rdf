@@ -283,9 +283,7 @@ class TempEntityClass(AbstractEntity):
         from apis_core.apis_metainfo.models import Uri
 
         e_a = type(self).__name__
-        self_model_class = ContentType.objects.get(
-            app_label="apis_entities", model__iexact=e_a
-        ).model_class()
+        self_model_class = ContentType.objects.get(model__iexact=e_a).model_class()
         if isinstance(entities, int):
             entities = self_model_class.objects.get(pk=entities)
         if not isinstance(entities, list) and not isinstance(entities, QuerySet):
