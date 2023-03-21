@@ -56,6 +56,11 @@ class BaseRelationManager(models.Manager):
             return self.get_queryset()
 
 
+class AbstractReification(RootObject):
+    class Meta:
+        abstract = True
+
+
 @reversion.register(follow=["vocabsbaseclass_ptr"])
 class Property(RootObject):
     class Meta:

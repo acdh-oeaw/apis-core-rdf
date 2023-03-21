@@ -1,0 +1,46 @@
+<!-- triples FROM main entity TO reification -->
+<div class="reification_triple_direction_carrier" data-direction="to_reification">
+    <!-- A container to carry the data relevant for the several forms-->
+    <div class="triple_data_carrier" data-model_self_class="{{ triple_form_container_to_reification.model_self_class }}" data-model_other_class="{{ triple_form_container_to_reification.reification_type }}" data-model_self_id="{{ triple_form_container_to_reification.model_self_id }}" data-should_append="true" data-should_include_other_entity="false" data-should_include_remove_button="true" data-should_include_create_button="false">
+        <!-- anchor classes are defined for ajax targets to inject their responses nicely into their proper place -->
+        <div class="triple_form_anchor">
+            {% for triple_form_to_reification in triple_form_container_to_reification.triple_form_to_reification %}
+                {{ triple_form_to_reification }}
+            {% endfor %}
+        </div>
+        {% if should_include_add_button %}
+            <input onclick="ajax_2_load_triple_form(div_origin=this, triple_id='')" type="submit" class="btn btn-primary btn-triple-add" value="Add new relation"/>
+        {% endif %}
+    </div>
+</div>
+<!-- reification attributes, possibly storing an instance via its id -->
+<h4>{{ entity_type_reification_str }}</h4>
+<form class="reification_attr_form" onsubmit="return false;" data-reification_id="{{ reification_id }}">
+    {% for field in reification_form %}
+        <div class="fieldWrapper">
+            {{ field.errors }}
+            {% if not field.field.widget.is_hidden %}
+                {{ field.label_tag }}
+            {% endif %}
+            {{ field }}
+        </div>
+    {% endfor %}
+</form>
+<!-- triples FROM reification TO other entities -->
+<div class="reification_triple_direction_carrier" data-direction="from_reification">
+    <!-- Several containers to carry the data relevant for their several forms-->
+     {% for triple_form_container_from_reification in triple_form_container_from_reification_list %}
+        <div class="triple_data_carrier" data-model_self_class="{{ triple_form_container_from_reification.reification_type }}" data-model_other_class="{{ triple_form_container_from_reification.model_other_class }}" data-model_self_id="{{ triple_form_container_from_reification.model_self_id }}" data-should_append="true" data-should_include_other_entity="true" data-should_include_remove_button="true" data-should_include_create_button="false">
+            <h4>{{ triple_form_container_from_reification.model_other_class }}</h4>
+            <!-- anchor classes are defined for ajax targets to inject their responses nicely into their proper place -->
+            <div class="triple_form_anchor">
+                {% for triple_form_from_reification in triple_form_container_from_reification.triple_form_from_reification %}
+                    {{ triple_form_from_reification }}
+                {% endfor %}
+            </div>
+            <input onclick="ajax_2_load_triple_form(div_origin=this, triple_id='')" type="submit" class="btn btn-primary btn-triple-add" value="Add new relation"/>
+            <br>
+        </div>
+    {% endfor %}
+</div>
+<input onclick="ajax_2_post_reification_form(div_origin=this)" type="submit" class="btn btn-primary" value="create/modify all relations" />
