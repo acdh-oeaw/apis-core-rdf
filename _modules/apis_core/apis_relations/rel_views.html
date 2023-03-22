@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.apis_relations.rel_views &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.apis_relations.rel_views</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.apis_relations.rel_views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.detail</span> <span class="kn">import</span> <span class="n">DetailView</span>
+<span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">RequestConfig</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.views</span> <span class="kn">import</span> <span class="n">GenericListViewNew</span>
+
+<span class="c1"># from apis_core.apis_relations.models import AbstractRelation</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Triple</span><span class="p">,</span> <span class="n">Property</span>
+<span class="kn">from</span> <span class="nn">.rel_filters</span> <span class="kn">import</span> <span class="n">get_generic_relation_filter</span><span class="p">,</span> <span class="n">TripleFilter</span><span class="p">,</span> <span class="n">PropertyFilter</span>
+<span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">get_generic_relation_listview_table</span><span class="p">,</span> <span class="n">TripleTable</span><span class="p">,</span> <span class="n">PropertyTable</span>
+
+
+<div class="viewcode-block" id="GenericRelationView"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView">[docs]</a><span class="k">class</span> <span class="nc">GenericRelationView</span><span class="p">(</span><span class="n">GenericListViewNew</span><span class="p">):</span>
+
+    <span class="n">context_filter_name</span> <span class="o">=</span> <span class="s2">&quot;filter&quot;</span>
+    <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+        <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_VIEW_TEMPLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;apis_entities/generic_list.html&quot;</span>
+    <span class="p">)</span>
+    <span class="n">login_url</span> <span class="o">=</span> <span class="s2">&quot;/accounts/login/&quot;</span>
+
+<div class="viewcode-block" id="GenericRelationView.get_queryset"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity&quot;</span><span class="p">)</span>
+        <span class="c1"># qs = AbstractRelation.get_relation_class_of_name(self.entity).objects.all()</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Note: the column by which to sort a table by default can also be defined</span>
+        <span class="c1"># via a table&#39;s order_by field, which will override whatever value order_field</span>
+        <span class="c1"># is set to, but Django needs order_field to be set to *something* so as not</span>
+        <span class="c1"># to complain about the queryset missing ordering (&quot;unordered object_list&quot;)</span>
+        <span class="n">order_field</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span>
+
+        <span class="c1"># self.filter = get_generic_relation_filter(</span>
+        <span class="c1">#     self.entity.title())(self.request.GET, queryset=qs)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">==</span> <span class="s2">&quot;property&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="n">PropertyFilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">,</span> <span class="n">queryset</span><span class="o">=</span><span class="n">qs</span><span class="p">)</span>
+            <span class="n">order_field</span> <span class="o">=</span> <span class="s2">&quot;subj_class&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="n">TripleFilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">,</span> <span class="n">queryset</span><span class="o">=</span><span class="n">qs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formhelper_class</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">qs</span><span class="p">,</span> <span class="s2">&quot;filter_for_user&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">qs</span><span class="o">.</span><span class="n">filter_for_user</span><span class="p">()</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">order_field</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">qs</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">order_field</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericRelationView.get_table"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># relation_name = self.kwargs[&quot;entity&quot;].lower()</span>
+        <span class="c1"># self.table_class = get_generic_relation_listview_table(relation_name=relation_name)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">==</span> <span class="s2">&quot;property&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span> <span class="o">=</span> <span class="n">PropertyTable</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span> <span class="o">=</span> <span class="n">TripleTable</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericListViewNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span>
+        <span class="n">RequestConfig</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">paginate_by</span><span class="p">}</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">table</span></div></div>
+
+
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
+<div class="viewcode-block" id="GenericRelationDetailView"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationDetailView">[docs]</a><span class="k">class</span> <span class="nc">GenericRelationDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+
+    <span class="n">template_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+        <span class="n">settings</span><span class="p">,</span>
+        <span class="s2">&quot;APIS_RELATIONS_DETAIL_VIEW_TEMPLATE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;apis_relations/relations_detail_generic.html&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="GenericRelationDetailView.get_object"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationDetailView.get_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="c1"># entity_model = AbstractRelation.get_relation_class_of_name(entity)</span>
+        <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="s2">&quot;property&quot;</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">Triple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">instance</span></div>
+
+<div class="viewcode-block" id="GenericRelationDetailView.get_context_data"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationDetailView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericRelationDetailView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">()</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">context</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

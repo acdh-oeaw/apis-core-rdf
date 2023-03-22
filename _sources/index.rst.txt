@@ -10,13 +10,20 @@ Welcome to APIS's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Documentation:
 
    installation
    configuration
    user_documentation
    data_model
-   internal_api
+   glossary
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Internals:
+
+   genindex
+   modindex
 
 
 Indices and tables

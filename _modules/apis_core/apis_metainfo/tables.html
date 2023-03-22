@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.apis_metainfo.tables &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.apis_metainfo.tables</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.apis_metainfo.tables</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">django_tables2</span> <span class="k">as</span> <span class="nn">tables</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">F</span>
+<span class="kn">from</span> <span class="nn">django.utils.html</span> <span class="kn">import</span> <span class="n">format_html</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Uri</span>
+
+
+<span class="c1"># generic order_FOO methods for start_date_written and end_date_written to be used in all kinds of tables where a queryset is loaded</span>
+<span class="c1"># whose model has start_date_written and end_date_written. These methods order the *_date_written by their corresponding</span>
+<span class="c1"># parsed date objects.</span>
+<span class="c1">#</span>
+<span class="c1"># In order to use them in a table using django-tables2, the table class must be assigned *_date_written columns</span>
+<span class="c1"># (either through fields in Meta inner class or through custom Column() definitions).</span>
+<span class="c1"># Important however is that the names between the columns and the order methods are correlated to each other.</span>
+<span class="c1">#</span>
+<span class="c1"># The django-tables2 plugin searches for each column through the table class for corresponding order_* and render_* methods</span>
+<span class="c1"># E.g. to define custom ordering and rendering for a field column &#39;name&#39; the table class must have</span>
+<span class="c1"># &#39;order_name&#39; and &#39;render_name&#39; methods. This approach is called order_FOO and render_FOO by django-tables2.</span>
+<span class="c1">#</span>
+<span class="c1"># So in order to use these functions here, define within the table class</span>
+<span class="c1"># 1.) the respective column</span>
+<span class="c1"># 2.) a correspondingly named method for each column</span>
+<span class="c1"># 3.) assign to this method one of the two functions below</span>
+<span class="c1">#</span>
+<span class="c1"># In the case of e.g. start_date_written,</span>
+<span class="c1"># the table class thus must have a method / class variable &#39;order_start_date_written = generic_order_start_date_written&#39;</span>
+
+
+<div class="viewcode-block" id="generic_order_start_date_written"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_start_date_written">[docs]</a><span class="k">def</span> <span class="nf">generic_order_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">is_descending</span><span class="p">:</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+            <span class="n">F</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># nulls_last=True puts null values behind non-null values</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">asc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generic_order_end_date_written"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_end_date_written">[docs]</a><span class="k">def</span> <span class="nf">generic_order_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">is_descending</span><span class="p">:</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">asc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="helper_render_date"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.helper_render_date">[docs]</a><span class="k">def</span> <span class="nf">helper_render_date</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">var_date</span><span class="p">,</span> <span class="n">var_start_date</span><span class="p">,</span> <span class="n">var_end_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    helper function to avoid duplicated code. It checks the various sub-dates of a model&#39;s date field for them being None</span>
+<span class="sd">    or having values. If a field is None then check for the next, and if all are None, return &#39;—&#39; inditcating no value.</span>
+
+<span class="sd">    If there are values, use them as mouse overlay helptext to inform the user about the parsing result behind a written</span>
+<span class="sd">    date field.</span>
+
+<span class="sd">    :param value: str : the *_date_written (either start_date_written or end_date_written) field of an entity or relation</span>
+<span class="sd">    :param var_date: datetime : either the precisely parsed date or the average in between two dates when *_date_written is a range</span>
+<span class="sd">    :param var_start_date: datetime : The sub-date of var_date, indicating the start date of the range</span>
+<span class="sd">    :param var_end_date: datetime : The sub-date of var_date, indicating the end date of the range</span>
+<span class="sd">    :return: html string : which has the value of the written date and the parsed dates as mouse overlay helptext</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Various if-else branches checking which of the date fields are not None and should be used</span>
+
+    <span class="k">if</span> <span class="n">var_start_date</span> <span class="o">!=</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">var_end_date</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="n">overlay_help_text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">var_start_date</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">var_end_date</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">var_date</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="n">overlay_help_text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">var_date</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="s2">&quot;—&quot;</span>
+
+    <span class="k">return</span> <span class="n">format_html</span><span class="p">(</span><span class="s2">&quot;&lt;abbr title=&#39;&quot;</span> <span class="o">+</span> <span class="n">overlay_help_text</span> <span class="o">+</span> <span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt;&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># Again this function serves a generic purpose and must be assigned as class method to django-tables2 tables.Table class</span>
+<span class="c1"># The whole logic is very similare to the generic_order_* functions above, so see their comments for more details.</span>
+<div class="viewcode-block" id="generic_render_start_date_written"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_render_start_date_written">[docs]</a><span class="k">def</span> <span class="nf">generic_render_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="n">helper_render_date</span><span class="p">(</span>
+        <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">var_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">start_date</span><span class="p">,</span>
+        <span class="n">var_start_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">start_start_date</span><span class="p">,</span>
+        <span class="n">var_end_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">start_end_date</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generic_render_end_date_written"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_render_end_date_written">[docs]</a><span class="k">def</span> <span class="nf">generic_render_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="n">helper_render_date</span><span class="p">(</span>
+        <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+        <span class="n">var_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">end_date</span><span class="p">,</span>
+        <span class="n">var_start_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">end_start_date</span><span class="p">,</span>
+        <span class="n">var_end_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">end_end_date</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UriTable"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable">[docs]</a><span class="k">class</span> <span class="nc">UriTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">()</span>
+    <span class="n">entity</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+        <span class="s2">&quot;&lt;a href=&#39;{{ record.entity.get_absolute_url }}&#39;&gt;{{ record.entity }}&lt;/a&gt;&quot;</span><span class="p">,</span>
+        <span class="n">orderable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;related Entity&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ent_type</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+        <span class="s2">&quot;{{ record.entity.get_child_class }}&quot;</span><span class="p">,</span>
+        <span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Entity Type&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="UriTable.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-responsive table-hover&quot;</span><span class="p">}</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

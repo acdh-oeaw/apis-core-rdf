@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.apis_entities.serializers &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.apis_entities.serializers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.apis_entities.serializers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse_lazy</span>
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+
+<span class="c1"># from .models import Institution, Person, Place, Event, Work</span>
+<span class="c1"># from ..apis_relations.models import PersonInstitution, InstitutionPlace, PersonPlace</span>
+<span class="c1"># from ..apis_vocabularies.models import Property, InstitutionPlaceRelation</span>
+
+
+<div class="viewcode-block" id="BaseEntitySerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.BaseEntitySerializer">[docs]</a><span class="k">class</span> <span class="nc">BaseEntitySerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
+    <span class="n">uri_set</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedRelatedField</span><span class="p">(</span>
+        <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:uri-detail&quot;</span><span class="p">,</span>
+        <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span><span class="p">,</span>
+        <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">collection</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedRelatedField</span><span class="p">(</span>
+        <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:collection-detail&quot;</span><span class="p">,</span>
+        <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span><span class="p">,</span>
+        <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedRelatedField</span><span class="p">(</span>
+        <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:text-detail&quot;</span><span class="p">,</span>
+        <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span><span class="p">,</span>
+        <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<span class="c1"># __before_rdf_refactoring__</span>
+<span class="c1">#</span>
+<span class="c1"># class InstitutionSerializer(BaseEntitySerializer):</span>
+<span class="c1">#     url = serializers.HyperlinkedIdentityField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:institution-detail&quot;,</span>
+<span class="c1">#         lookup_field=&quot;pk&quot;</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     kind = serializers.HyperlinkedRelatedField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:institutiontype-detail&quot;,</span>
+<span class="c1">#         read_only=True</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     class Meta:</span>
+<span class="c1">#         model = Institution</span>
+<span class="c1">#         fields = (&#39;url&#39;, &#39;id&#39;, &#39;name&#39;, &#39;uri_set&#39;, &#39;kind&#39;, &#39;collection&#39;, &#39;text&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># class PersonSerializer(BaseEntitySerializer):</span>
+<span class="c1">#</span>
+<span class="c1">#     url = serializers.HyperlinkedIdentityField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:person-detail&quot;,</span>
+<span class="c1">#         lookup_field=&quot;pk&quot;</span>
+<span class="c1">#     )</span>
+<span class="c1">#     profession = serializers.HyperlinkedRelatedField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:professiontype-detail&quot;,</span>
+<span class="c1">#         lookup_field=&quot;pk&quot;,</span>
+<span class="c1">#         many=True,</span>
+<span class="c1">#         read_only=True</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     class Meta:</span>
+<span class="c1">#         model = Person</span>
+<span class="c1">#         fields = (</span>
+<span class="c1">#             &#39;url&#39;, &#39;id&#39;, &#39;name&#39;, &#39;first_name&#39;, &#39;uri_set&#39;, &#39;profession&#39;, &#39;collection&#39;, &#39;text&#39;</span>
+<span class="c1">#         )</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># class PlaceSerializer(BaseEntitySerializer):</span>
+<span class="c1">#</span>
+<span class="c1">#     url = serializers.HyperlinkedIdentityField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:place-detail&quot;,</span>
+<span class="c1">#         lookup_field=&quot;pk&quot;</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     kind = serializers.HyperlinkedRelatedField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:placetype-detail&quot;,</span>
+<span class="c1">#         lookup_field=&quot;pk&quot;,</span>
+<span class="c1">#         read_only=True</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     class Meta:</span>
+<span class="c1">#         model = Place</span>
+<span class="c1">#         fields = (</span>
+<span class="c1">#             &#39;url&#39;, &#39;id&#39;, &#39;name&#39;, &#39;uri_set&#39;, &#39;collection&#39;, &#39;text&#39;, &#39;kind&#39;, &#39;lng&#39;, &#39;lat&#39;</span>
+<span class="c1">#         )</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># class EventSerializer(BaseEntitySerializer):</span>
+<span class="c1">#</span>
+<span class="c1">#     url = serializers.HyperlinkedIdentityField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:event-detail&quot;,</span>
+<span class="c1">#         lookup_field=&quot;pk&quot;</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     kind = serializers.HyperlinkedRelatedField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:eventtype-detail&quot;,</span>
+<span class="c1">#         lookup_field=&quot;pk&quot;,</span>
+<span class="c1">#         read_only=True</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     class Meta:</span>
+<span class="c1">#         model = Event</span>
+<span class="c1">#         fields = (</span>
+<span class="c1">#             &#39;url&#39;, &#39;id&#39;, &#39;name&#39;, &#39;uri_set&#39;, &#39;collection&#39;, &#39;text&#39;, &#39;kind&#39;</span>
+<span class="c1">#         )</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># class WorkSerializer(BaseEntitySerializer):</span>
+<span class="c1">#</span>
+<span class="c1">#     url = serializers.HyperlinkedIdentityField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:work-detail&quot;,</span>
+<span class="c1">#         lookup_field=&quot;pk&quot;</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     kind = serializers.HyperlinkedRelatedField(</span>
+<span class="c1">#         view_name=&quot;apis:apis_api:worktype-detail&quot;,</span>
+<span class="c1">#         lookup_field=&quot;pk&quot;,</span>
+<span class="c1">#         read_only=True</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     class Meta:</span>
+<span class="c1">#         model = Work</span>
+<span class="c1">#         fields = (</span>
+<span class="c1">#             &#39;url&#39;, &#39;id&#39;, &#39;name&#39;, &#39;uri_set&#39;, &#39;collection&#39;, &#39;text&#39;, &#39;kind&#39;</span>
+<span class="c1">#         )</span>
+
+
+<div class="viewcode-block" id="GeoJsonSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.GeoJsonSerializer">[docs]</a><span class="k">class</span> <span class="nc">GeoJsonSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">BaseSerializer</span><span class="p">):</span>
+<div class="viewcode-block" id="GeoJsonSerializer.to_representation"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.GeoJsonSerializer.to_representation">[docs]</a>    <span class="k">def</span> <span class="nf">to_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">p_pk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;p_pk&quot;</span><span class="p">)</span>
+        <span class="n">short</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">url_r</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span>
+            <span class="s2">&quot;apis:apis_entities:resolve_ambigue_place&quot;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">p_pk</span><span class="p">),</span> <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">][</span><span class="mi">7</span><span class="p">:]},</span>
+        <span class="p">)</span>
+        <span class="n">long</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s2">&quot;http://www.w3.org/2003/01/geo/wgs84_pos#long&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">long</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;http://www.w3.org/2003/01/geo/wgs84_pos#long&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;http://www.w3.org/2003/01/geo/wgs84_pos#lat&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="s2">&quot;long&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">long</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;long&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+            <span class="n">short</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">long</span><span class="p">:</span>
+            <span class="n">popup</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;id&quot;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;long&quot;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;lat&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">short</span> <span class="ow">or</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+                    <span class="n">title</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">title</span> <span class="o">=</span> <span class="n">k</span>
+                <span class="n">popup</span> <span class="o">+=</span> <span class="s2">&quot;&lt;b&gt;</span><span class="si">{}</span><span class="s2">:&lt;/b&gt; </span><span class="si">{}</span><span class="s2">&lt;br/&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">obj</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">long</span><span class="p">,</span> <span class="n">lat</span><span class="p">]},</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;popupContent&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span><span class="si">{}</span>
+<span class="s2">                    &lt;b&gt;Geonames:&lt;/b&gt; &lt;a href=&#39;</span><span class="si">{}</span><span class="s2">&#39;&gt;Select this URI&lt;/a&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">popup</span><span class="p">,</span> <span class="n">url_r</span>
+                    <span class="p">)</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">url_r</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="GeoJsonSerializerTheme"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.GeoJsonSerializerTheme">[docs]</a><span class="k">class</span> <span class="nc">GeoJsonSerializerTheme</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">BaseSerializer</span><span class="p">):</span>
+<div class="viewcode-block" id="GeoJsonSerializerTheme.to_representation"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.GeoJsonSerializerTheme.to_representation">[docs]</a>    <span class="k">def</span> <span class="nf">to_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">url_r</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span>
+            <span class="s2">&quot;apis:apis_core:place-detail&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pk</span><span class="p">)}</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lng</span><span class="p">:</span>
+            <span class="n">relations</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">rel2</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">rel2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">res_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rel2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">rel2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">res_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rel2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="n">rel2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">res_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="n">rel2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">-&quot;</span>
+                <span class="k">if</span> <span class="n">rel2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">res_str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">):</span>
+                        <span class="n">res_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rel2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">res_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; (-</span><span class="si">{</span><span class="n">rel2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;(&quot;</span> <span class="ow">in</span> <span class="n">res_str</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">res_str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">):</span>
+                    <span class="n">res_str</span> <span class="o">+=</span> <span class="s2">&quot;)&quot;</span>
+                <span class="c1"># relations.append((res_str, rel2[2], rel2[3]))</span>
+                <span class="n">relations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">rel2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+                        <span class="s2">&quot;relation&quot;</span><span class="p">:</span> <span class="n">res_str</span><span class="p">,</span>
+                        <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="n">rel2</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="n">rel2</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lng</span><span class="p">,</span> <span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lat</span><span class="p">]},</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="s2">&quot;uris&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">uri</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">uri_set</span><span class="o">.</span><span class="n">all</span><span class="p">()],</span>
+                    <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">kind</span><span class="o">.</span><span class="n">name</span>
+                    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="k">else</span> <span class="s2">&quot;undefined&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url_r</span><span class="p">,</span>
+                    <span class="c1"># &quot;relation_kind&quot;: &quot;, &quot;.join([x[0].name for x in obj[1]])</span>
+                    <span class="s2">&quot;relations&quot;</span><span class="p">:</span> <span class="n">relations</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">url_r</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">r</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="NetJsonEdgeSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.NetJsonEdgeSerializer">[docs]</a><span class="k">class</span> <span class="nc">NetJsonEdgeSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">BaseSerializer</span><span class="p">):</span>
+<div class="viewcode-block" id="NetJsonEdgeSerializer.to_representation"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.NetJsonEdgeSerializer.to_representation">[docs]</a>    <span class="k">def</span> <span class="nf">to_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">ent_obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">ob_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;([A-Z][a-z]+)([A-Z][a-z]+)$&quot;</span><span class="p">,</span> <span class="n">ent_obj</span><span class="p">)</span>
+        <span class="n">rel_a</span> <span class="o">=</span> <span class="s2">&quot;related_&quot;</span> <span class="o">+</span> <span class="n">ob_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">rel_b</span> <span class="o">=</span> <span class="s2">&quot;related_&quot;</span> <span class="o">+</span> <span class="n">ob_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">rel_a</span> <span class="o">==</span> <span class="n">rel_b</span><span class="p">:</span>
+            <span class="n">rel_a</span> <span class="o">+=</span> <span class="s2">&quot;A&quot;</span>
+            <span class="n">rel_b</span> <span class="o">+=</span> <span class="s2">&quot;B&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel_a</span><span class="p">)</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+            <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel_b</span><span class="p">)</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;arrow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;start_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">start_date_written</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;end_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">end_date_written</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;relation_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">relation_type</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">return</span> <span class="n">r</span></div></div>
+
+
+<div class="viewcode-block" id="NetJsonNodeSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.NetJsonNodeSerializer">[docs]</a><span class="k">class</span> <span class="nc">NetJsonNodeSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">BaseSerializer</span><span class="p">):</span>
+<div class="viewcode-block" id="NetJsonNodeSerializer.to_representation"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.NetJsonNodeSerializer.to_representation">[docs]</a>    <span class="k">def</span> <span class="nf">to_representation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">ent_obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">ent_url</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span>
+            <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">),</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">ent_obj</span><span class="o">.</span><span class="n">lower</span><span class="p">()},</span>
+        <span class="p">)</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;&lt;div class=&#39;arrow&#39;&gt;&lt;/div&gt;</span>
+<span class="s2">            &lt;div class=&#39;sigma-tooltip-header&#39;&gt;</span><span class="si">{}</span><span class="s2">&lt;/div&gt;</span>
+<span class="s2">            &lt;div class=&#39;sigma-tooltip-body&#39;&gt;</span>
+<span class="s2">            &lt;table&gt;</span>
+<span class="s2">                &lt;tr&gt;&lt;th&gt;Type&lt;/th&gt; &lt;td&gt;</span><span class="si">{}</span><span class="s2">&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="s2">                &lt;tr&gt;&lt;th&gt;Entity&lt;/th&gt; &lt;td&gt;&lt;a href=&#39;</span><span class="si">{}</span><span class="s2">&#39;&gt;Link&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="s2">            &lt;/table&gt;</span>
+<span class="s2">            &lt;button class=&#39;small-button&#39; onclick=&#39;expand_node(&quot;</span><span class="si">{}</span><span class="s2">&quot;, </span><span class="si">{}</span><span class="s2">)&#39;&gt;expand&lt;/button&gt;</span>
+<span class="s2">            &lt;/div&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">ent_obj</span><span class="p">,</span> <span class="n">ent_url</span><span class="p">,</span> <span class="n">ent_obj</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">pk</span>
+        <span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">ent_obj</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+            <span class="s2">&quot;tooltip&quot;</span><span class="p">:</span> <span class="n">tt</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">uri</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">uri_set</span><span class="o">.</span><span class="n">all</span><span class="p">()]</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;collections&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">all</span><span class="p">()]</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;notes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">notes</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;references&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">references</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;start_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">start_date_written</span>
+        <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;end_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">end_date_written</span>
+        <span class="k">if</span> <span class="n">ent_obj</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;person&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">kind</span><span class="p">:</span>
+                <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;kind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">kind</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="n">ent_obj</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;place&quot;</span><span class="p">:</span>
+            <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;lat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">lat</span>
+            <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;lon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">lng</span>
+        <span class="k">if</span> <span class="n">ent_obj</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;person&quot;</span><span class="p">:</span>
+            <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;profession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">()]</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">gender</span><span class="p">:</span>
+                <span class="n">r</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;gender&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">gender</span>
+        <span class="k">return</span> <span class="n">r</span></div></div>
+
+
+<span class="c1"># __before_rdf_refactoring__</span>
+<span class="c1">#</span>
+<span class="c1"># class LifePathPlaceSerializer(serializers.ModelSerializer):</span>
+<span class="c1">#     id = serializers.ReadOnlyField()</span>
+<span class="c1">#     name = serializers.CharField()</span>
+<span class="c1">#     lat = serializers.FloatField()</span>
+<span class="c1">#     long = serializers.FloatField(source=&#39;lng&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#     class Meta:</span>
+<span class="c1">#         fields = [&#39;id&#39;, &#39;name&#39;, &#39;lat&#39;, &#39;long&#39;]</span>
+<span class="c1">#         model = Place</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># class LifePathSerializer(serializers.BaseSerializer):</span>
+<span class="c1">#     place = serializers.SerializerMethodField(method_name=&#39;get_place&#39;)</span>
+<span class="c1">#     year = serializers.SerializerMethodField(method_name=&#39;get_year&#39;)</span>
+<span class="c1">#     relation_type = serializers.CharField(source=&#39;relation_type__name&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#     def get_place(self, obj):</span>
+<span class="c1">#         if isinstance(obj, PersonInstitution):</span>
+<span class="c1">#             inst = obj.related_institution</span>
+<span class="c1">#             rel_type = getattr(settings, &#39;APIS_LOCATED_IN_ATTR&#39;, [&#39;situated in&#39;,])</span>
+<span class="c1">#             ipl_rel = InstitutionPlaceRelation.objects.filter(name__in=rel_type).values_list(&#39;pk&#39;, flat=True)</span>
+<span class="c1">#             plc = InstitutionPlace.objects.filter(relation_type_id__in=ipl_rel, related_institution=inst)</span>
+<span class="c1">#             if plc.count() == 1:</span>
+<span class="c1">#                 plc = plc.first().related_place</span>
+<span class="c1">#                 if plc.lng and plc.lat:</span>
+<span class="c1">#                     return LifePathPlaceSerializer(plc).data</span>
+<span class="c1">#         elif isinstance(obj, PersonPlace):</span>
+<span class="c1">#             plc = obj.related_place</span>
+<span class="c1">#             if plc.lat and plc.lng:</span>
+<span class="c1">#                 return LifePathPlaceSerializer(plc).data</span>
+<span class="c1">#</span>
+<span class="c1">#     def get_year(self, obj):</span>
+<span class="c1">#         if not obj.start_date and not obj.end_date:</span>
+<span class="c1">#             return None</span>
+<span class="c1">#         if obj.start_date and obj.end_date:</span>
+<span class="c1">#             start = int(obj.start_date.strftime(&quot;%Y&quot;))</span>
+<span class="c1">#             end = int(obj.end_date.strftime(&quot;%Y&quot;))</span>
+<span class="c1">#             return int((start + end) / 2)</span>
+<span class="c1">#         elif obj.start_date:</span>
+<span class="c1">#             return int(obj.start_date.strftime(&quot;%Y&quot;))</span>
+<span class="c1">#         elif obj.end_date:</span>
+<span class="c1">#             return int(obj.end_date.strftime(&quot;%Y&quot;))</span>
+<span class="c1">#</span>
+<span class="c1">#     def to_representation(self, instance):</span>
+<span class="c1">#         p = self.get_place(instance)</span>
+<span class="c1">#         if p is None:</span>
+<span class="c1">#             return None</span>
+<span class="c1">#         res = {</span>
+<span class="c1">#             &#39;id&#39;: instance.pk,</span>
+<span class="c1">#             &#39;coords&#39;: [p[&#39;lat&#39;], p[&#39;long&#39;]],</span>
+<span class="c1">#             &#39;name&#39;: p[&#39;name&#39;],</span>
+<span class="c1">#             &#39;year&#39;: self.get_year(instance),</span>
+<span class="c1">#             &#39;relation_type&#39;: str(instance.relation_type)</span>
+<span class="c1">#         }</span>
+<span class="c1">#         return res</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

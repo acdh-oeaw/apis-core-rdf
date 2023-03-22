@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.apis_relations.tables &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.apis_relations.tables</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.apis_relations.tables</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">django_tables2</span> <span class="k">as</span> <span class="nn">tables</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Case</span><span class="p">,</span> <span class="n">When</span><span class="p">,</span> <span class="n">F</span>
+<span class="kn">from</span> <span class="nn">django.utils.html</span> <span class="kn">import</span> <span class="n">format_html</span>
+<span class="kn">from</span> <span class="nn">django_tables2.utils</span> <span class="kn">import</span> <span class="n">A</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_labels.models</span> <span class="kn">import</span> <span class="n">Label</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.tables</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">generic_order_start_date_written</span><span class="p">,</span>
+    <span class="n">generic_order_end_date_written</span><span class="p">,</span>
+    <span class="n">generic_render_start_date_written</span><span class="p">,</span>
+    <span class="n">generic_render_end_date_written</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># from apis_core.apis_relations.models import AbstractRelation</span>
+
+<span class="n">empty_text_default</span> <span class="o">=</span> <span class="s2">&quot;There are currently no relations&quot;</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Triple</span><span class="p">,</span> <span class="n">Property</span>
+
+
+<span class="c1"># TODO RDF : combine this or re-use this class here in get_generic_triple_table</span>
+<span class="c1"># TODO RDF : Also consider implementing proper form search fields for this (instead of default drop-downs)</span>
+<div class="viewcode-block" id="TripleTable"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTable">[docs]</a><span class="k">class</span> <span class="nc">TripleTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TripleTable.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTable.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Triple</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;subj&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;prop&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;obj&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-hover table-striped table-condensed&quot;</span><span class="p">}</span></div></div>
+
+
+<div class="viewcode-block" id="PropertyTable"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.PropertyTable">[docs]</a><span class="k">class</span> <span class="nc">PropertyTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct table for properties.</span>
+
+<span class="sd">    The table shows how entities connect with one another via properties (relations).</span>
+<span class="sd">    It uses the format of an RDF triple – Subject-Predicate-Object – plus</span>
+<span class="sd">    &quot;Reverse Predicate&quot; for the inverse relationship and is displayed on the frontend</span>
+<span class="sd">     on the Relations &gt; Property page.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Note on constructing table columns / usage of variables:</span>
+    <span class="c1"># The variables used to declare table columns need to have the same names</span>
+    <span class="c1"># as the model field names from which the columns should be created,</span>
+    <span class="c1"># or tables.Column needs to contain an attribute &quot;accessor&quot; which references</span>
+    <span class="c1"># the original field name.</span>
+    <span class="c1"># For columns which allow sorting, the variable names are used as sort strings</span>
+    <span class="c1"># in the user&#39;s browser address bar, so for UX reasons, it may make sense to</span>
+    <span class="c1"># use different variable names than the original field names.</span>
+
+    <span class="n">predicate</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">accessor</span><span class="o">=</span><span class="s2">&quot;name_forward&quot;</span><span class="p">,</span>  <span class="c1"># original field name in model class</span>
+        <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Predicate&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">predicate_reverse</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">accessor</span><span class="o">=</span><span class="s2">&quot;name_reverse&quot;</span><span class="p">,</span>  <span class="c1"># original field name in model class</span>
+        <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Reverse predicate&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">subject</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">ManyToManyColumn</span><span class="p">(</span>
+        <span class="n">accessor</span><span class="o">=</span><span class="s2">&quot;subj_class&quot;</span><span class="p">,</span>  <span class="c1"># original field name in model class</span>
+        <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Subject&quot;</span><span class="p">,</span>
+        <span class="n">separator</span><span class="o">=</span><span class="n">format_html</span><span class="p">(</span><span class="s2">&quot;,&lt;br&gt;&quot;</span><span class="p">),</span>
+        <span class="n">orderable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="nb">filter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">qs</span><span class="p">:</span> <span class="n">qs</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+            <span class="s2">&quot;model&quot;</span>
+        <span class="p">),</span>  <span class="c1"># order retrieved objects within table cell</span>
+        <span class="c1"># use .name for model verbose name, .model for model class name</span>
+        <span class="n">transform</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ent</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ent</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">linkify_item</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;viewname&quot;</span><span class="p">:</span> <span class="s2">&quot;apis_core:apis_entities:generic_entities_list&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">tables</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">)],</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="nb">object</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">ManyToManyColumn</span><span class="p">(</span>
+        <span class="n">accessor</span><span class="o">=</span><span class="s2">&quot;obj_class&quot;</span><span class="p">,</span>  <span class="c1"># original field name in model class</span>
+        <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Object&quot;</span><span class="p">,</span>
+        <span class="n">separator</span><span class="o">=</span><span class="n">format_html</span><span class="p">(</span><span class="s2">&quot;,&lt;br&gt;&quot;</span><span class="p">),</span>
+        <span class="n">orderable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="nb">filter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">qs</span><span class="p">:</span> <span class="n">qs</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+            <span class="s2">&quot;model&quot;</span>
+        <span class="p">),</span>  <span class="c1"># order retrieved objects within table cell</span>
+        <span class="c1"># use .name for model verbose name, .model for model class name</span>
+        <span class="n">transform</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ent</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ent</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">linkify_item</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;viewname&quot;</span><span class="p">:</span> <span class="s2">&quot;apis_core:apis_entities:generic_entities_list&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">tables</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">)],</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="PropertyTable.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.PropertyTable.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Property</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;predicate&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;predicate_reverse&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">order_by</span> <span class="o">=</span> <span class="s2">&quot;predicate&quot;</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-hover table-striped table-condensed&quot;</span><span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Use order_ methods to define how individual columns should be sorted.</span>
+    <span class="c1"># Method names are column names prefixed with &quot;order_&quot;.</span>
+    <span class="c1"># By default, columns for regular fields are sorted alphabetically; for</span>
+    <span class="c1"># ManyToMany fields, however, the row IDs of the originating table are</span>
+    <span class="c1"># used as basis for sorting.</span>
+    <span class="c1"># When column names and field names differ (see earlier note), the original</span>
+    <span class="c1"># field names need to be referenced when constructing queryset.</span>
+<div class="viewcode-block" id="PropertyTable.order_subject"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.PropertyTable.order_subject">[docs]</a>    <span class="k">def</span> <span class="nf">order_subject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;subj_class__model&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+            <span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="k">if</span> <span class="n">is_descending</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;entity&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PropertyTable.order_object"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.PropertyTable.order_object">[docs]</a>    <span class="k">def</span> <span class="nf">order_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;obj_class__model&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+            <span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="k">if</span> <span class="n">is_descending</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;entity&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="get_generic_relation_listview_table"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.get_generic_relation_listview_table">[docs]</a><span class="k">def</span> <span class="nf">get_generic_relation_listview_table</span><span class="p">(</span><span class="n">relation_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a table class according to the relation class given by the relation_name parameter.</span>
+<span class="sd">    Instantiates corresponding columns which also provide linking to the respectively related entities.</span>
+
+<span class="sd">    :param relation_name: str : The name of the relation class to be loaded</span>
+<span class="sd">    :return: a django-tables2 Table Class tailored for the respective relation class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># create all variables which save the foreign key fields which are different for each relation class</span>
+    <span class="n">relation_class</span> <span class="o">=</span> <span class="n">AbstractRelation</span><span class="o">.</span><span class="n">get_relation_class_of_name</span><span class="p">(</span><span class="n">relation_name</span><span class="p">)</span>
+    <span class="n">related_entity_class_name_a</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_classA</span><span class="p">()</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">related_entity_class_name_b</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_classB</span><span class="p">()</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">related_entity_field_name_a</span> <span class="o">=</span> <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_field_nameA</span><span class="p">()</span>
+    <span class="n">related_entity_field_name_b</span> <span class="o">=</span> <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_field_nameB</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">GenericRelationListViewTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+
+        <span class="c1"># reuse the logic for ordering and rendering *_date_written</span>
+        <span class="c1"># Important: The names of these class variables must correspond to the column field name,</span>
+        <span class="c1"># e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written</span>
+        <span class="n">order_start_date_written</span> <span class="o">=</span> <span class="n">generic_order_start_date_written</span>
+        <span class="n">order_end_date_written</span> <span class="o">=</span> <span class="n">generic_order_end_date_written</span>
+        <span class="n">render_start_date_written</span> <span class="o">=</span> <span class="n">generic_render_start_date_written</span>
+        <span class="n">render_end_date_written</span> <span class="o">=</span> <span class="n">generic_render_end_date_written</span>
+
+        <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">relation_class</span>
+
+            <span class="c1"># the fields list also serves as the defining order of them, as to avoid duplicated definitions</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">related_entity_field_name_a</span><span class="p">,</span>
+                <span class="n">related_entity_field_name_b</span><span class="p">,</span>
+                <span class="s2">&quot;relation_type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;start_date_written&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;end_date_written&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="c1"># reuse the list for ordering</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+
+            <span class="c1"># This attrs dictionary I took over from the tables implementation before. No idea if and where it would be needed.</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-hover table-striped table-condensed&quot;</span><span class="p">}</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+            <span class="c1"># LinkColumn objects provied hyperlinking to the related entities</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="n">related_entity_field_name_a</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
+                <span class="c1"># which url to use:</span>
+                <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span>
+                    <span class="c1"># which entity sub-url to load from:</span>
+                    <span class="n">related_entity_class_name_a</span><span class="p">,</span>
+                    <span class="c1"># which instance identifier to use:</span>
+                    <span class="n">A</span><span class="p">(</span><span class="n">related_entity_field_name_a</span> <span class="o">+</span> <span class="s2">&quot;.pk&quot;</span><span class="p">),</span>
+                <span class="p">],</span>
+            <span class="p">)</span>
+
+            <span class="c1"># same as above</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="n">related_entity_field_name_b</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
+                <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">related_entity_class_name_b</span><span class="p">,</span>
+                    <span class="n">A</span><span class="p">(</span><span class="n">related_entity_field_name_b</span> <span class="o">+</span> <span class="s2">&quot;.pk&quot;</span><span class="p">),</span>
+                <span class="p">],</span>
+            <span class="p">)</span>
+
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">GenericRelationListViewTable</span></div>
+
+
+<div class="viewcode-block" id="get_generic_relations_table"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.get_generic_relations_table">[docs]</a><span class="k">def</span> <span class="nf">get_generic_relations_table</span><span class="p">(</span><span class="n">relation_class</span><span class="p">,</span> <span class="n">entity_instance</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a table class according to the relation and entity class given by the parameters.</span>
+
+<span class="sd">    :param relation_class: the class where the entity_instance can have instantiated relations to</span>
+<span class="sd">    :param entity_instance: the entity instance of which related relations and entities are to be displayed</span>
+<span class="sd">    :param detail: boolean : if this Table is to be displayed in an detail or edit UI</span>
+<span class="sd">    :return: a django-tables2 Table Class tailored for the respective relation class and entity instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># create all variables which save the foreign key fields which are different for each relation class</span>
+    <span class="n">entity_class_name</span> <span class="o">=</span> <span class="n">entity_instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">related_entity_class_name_a</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_classA</span><span class="p">()</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">related_entity_class_name_b</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_classB</span><span class="p">()</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">related_entity_field_name_a</span> <span class="o">=</span> <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_field_nameA</span><span class="p">()</span>
+    <span class="n">related_entity_field_name_b</span> <span class="o">=</span> <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_field_nameB</span><span class="p">()</span>
+
+    <span class="c1"># find out what other entity class the current entity instance in a given relation class is related to</span>
+    <span class="c1"># (needed for linkg towards instances of related entities)</span>
+    <span class="k">if</span> <span class="n">entity_class_name</span> <span class="o">==</span> <span class="n">related_entity_class_name_a</span> <span class="o">==</span> <span class="n">related_entity_class_name_b</span><span class="p">:</span>
+        <span class="n">other_related_entity_class_name</span> <span class="o">=</span> <span class="n">entity_class_name</span>
+
+    <span class="k">elif</span> <span class="n">entity_class_name</span> <span class="o">==</span> <span class="n">related_entity_class_name_a</span><span class="p">:</span>
+        <span class="n">other_related_entity_class_name</span> <span class="o">=</span> <span class="n">related_entity_class_name_b</span>
+
+    <span class="k">elif</span> <span class="n">entity_class_name</span> <span class="o">==</span> <span class="n">related_entity_class_name_b</span><span class="p">:</span>
+        <span class="n">other_related_entity_class_name</span> <span class="o">=</span> <span class="n">related_entity_class_name_a</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">&quot;Did not find the entity instance in the given relation class fields!&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;Either a wrong entity instance or wrong relation class was passed to this function.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">RelationTableBase</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The base table from which detail or edit tables will inherit from in order to avoid redundant definitions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># reuse the logic for ordering and rendering *_date_written</span>
+        <span class="c1"># Important: The names of these class variables must correspond to the column field name,</span>
+        <span class="c1"># e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written</span>
+        <span class="n">order_start_date_written</span> <span class="o">=</span> <span class="n">generic_order_start_date_written</span>
+        <span class="n">order_end_date_written</span> <span class="o">=</span> <span class="n">generic_order_end_date_written</span>
+        <span class="n">render_start_date_written</span> <span class="o">=</span> <span class="n">generic_render_start_date_written</span>
+        <span class="n">render_end_date_written</span> <span class="o">=</span> <span class="n">generic_render_end_date_written</span>
+
+        <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Meta class needed for django-tables2 plugin.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="n">empty_text</span> <span class="o">=</span> <span class="n">empty_text_default</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">relation_class</span>
+
+            <span class="c1"># the fields list also serves as the defining order of them, as to avoid duplicated definitions</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;start_date_written&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;end_date_written&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;other_relation_type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;other_related_entity&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="c1"># reuse the list for ordering</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+
+            <span class="c1"># This attrs dictionary I took over from the tables implementation before. No idea if and where it would be needed.</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-hover table-striped table-condensed&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">related_entity_class_name_a</span><span class="o">.</span><span class="n">title</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
+                <span class="o">+</span> <span class="n">related_entity_class_name_b</span><span class="o">.</span><span class="n">title</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
+                <span class="o">+</span> <span class="s2">&quot;_conn&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">render_other_related_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Custom render_FOO method for related entity linking. Since the &#39;other_related_entity&#39; is a generated annotation</span>
+<span class="sd">            on the queryset, it does not return the related instance but only the foreign key as the integer it is.</span>
+<span class="sd">            Thus fetching the related instance is necessary.</span>
+
+<span class="sd">            :param record: The &#39;row&#39; of a queryset, i.e. an entity instance</span>
+<span class="sd">            :param value: The current column of the row, i.e. the &#39;other_related_entity&#39; annotation</span>
+<span class="sd">            :return: related instance</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">record</span><span class="o">.</span><span class="n">get_related_entity_instanceA</span><span class="p">()</span><span class="o">.</span><span class="n">pk</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">get_related_entity_instanceA</span><span class="p">()</span>
+
+            <span class="k">elif</span> <span class="n">value</span> <span class="o">==</span> <span class="n">record</span><span class="o">.</span><span class="n">get_related_entity_instanceB</span><span class="p">()</span><span class="o">.</span><span class="n">pk</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">get_related_entity_instanceB</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Did not find the entity this relation is supposed to come from!&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;Something must have went wrong when annotating for the related instance.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+            <span class="c1"># annotations for displaying data about the &#39;other side&#39; of the relation.</span>
+            <span class="c1"># Both of them (&#39;other_related_entity&#39; and &#39;other_relation_type&#39;) are necessary for displaying relations</span>
+            <span class="c1"># in context to what entity we are calling this from.</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="c1"># In order to provide the &#39;other instance&#39; for each instance of a table where this whole logic is called from,</span>
+                <span class="c1"># the queryset must be annotated accordingly. The following Case searches which of the two related instances</span>
+                <span class="c1"># of a relation queryset entry is the one corresponding to the current entity instance. When found, take the</span>
+                <span class="c1"># other related entity (since this is the one we are interested in displaying).</span>
+                <span class="c1">#</span>
+                <span class="c1"># The approach of using queryset&#39;s annotate method allows for per-instance case decision and thus</span>
+                <span class="c1"># guarantees that the other related entity is always correctly picked,</span>
+                <span class="c1"># even in case two entities are of the same class.</span>
+                <span class="n">other_related_entity</span><span class="o">=</span><span class="n">Case</span><span class="p">(</span>
+                    <span class="c1"># **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.</span>
+                    <span class="n">When</span><span class="p">(</span>
+                        <span class="o">**</span><span class="p">{</span>
+                            <span class="n">related_entity_field_name_a</span> <span class="o">+</span> <span class="s2">&quot;__pk&quot;</span><span class="p">:</span> <span class="n">entity_instance</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+                            <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="n">related_entity_field_name_b</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">),</span>
+                    <span class="n">When</span><span class="p">(</span>
+                        <span class="o">**</span><span class="p">{</span>
+                            <span class="n">related_entity_field_name_b</span> <span class="o">+</span> <span class="s2">&quot;__pk&quot;</span><span class="p">:</span> <span class="n">entity_instance</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+                            <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="n">related_entity_field_name_a</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="c1"># Get the correct side of the relation type given the current entity instance.</span>
+                <span class="c1">#</span>
+                <span class="c1"># The approach of using queryset&#39;s annotate method allows for per-instance case decision and thus</span>
+                <span class="c1"># guarantees that the other related entity is always correctly picked,</span>
+                <span class="c1"># even in case two entities are of the same class.</span>
+                <span class="n">other_relation_type</span><span class="o">=</span><span class="n">Case</span><span class="p">(</span>
+                    <span class="n">When</span><span class="p">(</span>
+                        <span class="o">**</span><span class="p">{</span>
+                            <span class="c1"># A-&gt;B relation and current entity instance is A, hence take forward name</span>
+                            <span class="n">related_entity_field_name_a</span> <span class="o">+</span> <span class="s2">&quot;__pk&quot;</span><span class="p">:</span> <span class="n">entity_instance</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+                            <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="s2">&quot;relation_type__name&quot;</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">),</span>
+                    <span class="n">When</span><span class="p">(</span>
+                        <span class="o">**</span><span class="p">{</span>
+                            <span class="c1"># A-&gt;B relation and current entity instance is B, hence take reverse name.</span>
+                            <span class="n">related_entity_field_name_b</span> <span class="o">+</span> <span class="s2">&quot;__pk&quot;</span><span class="p">:</span> <span class="n">entity_instance</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+                            <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="s2">&quot;relation_type__name_reverse&quot;</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">an</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">related_entity_field_name_a</span><span class="si">}</span><span class="s2">_id&quot;</span><span class="p">)</span>
+                    <span class="o">==</span> <span class="n">entity_instance</span><span class="o">.</span><span class="n">pk</span>
+                <span class="p">):</span>
+                    <span class="n">an</span><span class="o">.</span><span class="n">other_relation_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">an</span><span class="o">.</span><span class="n">relation_type</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">an</span><span class="o">.</span><span class="n">other_relation_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">an</span><span class="o">.</span><span class="n">relation_type</span><span class="p">,</span> <span class="s2">&quot;label_reverse&quot;</span><span class="p">)</span>
+
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">detail</span><span class="p">:</span>
+
+        <span class="k">class</span> <span class="nc">RelationTableDetail</span><span class="p">(</span><span class="n">RelationTableBase</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Sublcass inheriting the bulk of logic from parent. This table is used for the &#39;detail&#39; views.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+                <span class="c1"># Only addition with respect to parent class is which main url is to be used when clicking on a</span>
+                <span class="c1"># related entity column.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_related_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
+                    <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
+                    <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">other_related_entity_class_name</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;other_related_entity&quot;</span><span class="p">)],</span>
+                    <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Related &quot;</span> <span class="o">+</span> <span class="n">other_related_entity_class_name</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span>
+                <span class="p">)</span>
+
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">RelationTableDetail</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="k">class</span> <span class="nc">RelationTableEdit</span><span class="p">(</span><span class="n">RelationTableBase</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Sublcass inheriting the bulk of logic from parent. This table is used for the &#39;edit&#39; view.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">RelationTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Additional Meta fields are necessary for editing functionalities</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+
+                <span class="c1"># This fields list also defines the order of the elements.</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">RelationTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;edit&quot;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="s2">&quot;apis_bibsonomy&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+                    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">fields</span>
+
+                <span class="c1"># again reuse the fields list for ordering</span>
+                <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+                <span class="c1"># Clicking on a related entity will lead also the edit view of the related entity instance</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_related_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
+                    <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
+                    <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">other_related_entity_class_name</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;other_related_entity&quot;</span><span class="p">)],</span>
+                    <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Related &quot;</span> <span class="o">+</span> <span class="n">other_related_entity_class_name</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span>
+                <span class="p">)</span>
+
+                <span class="c1"># delete button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+                    <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/delete_button_generic_ajax_form.html&quot;</span>
+                <span class="p">)</span>
+
+                <span class="c1"># edit button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;edit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+                    <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/edit_button_generic_ajax_form.html&quot;</span>
+                <span class="p">)</span>
+
+                <span class="c1"># bibsonomy button</span>
+                <span class="k">if</span> <span class="s2">&quot;apis_bibsonomy&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+                        <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/references_button_generic_ajax_form.html&quot;</span>
+                    <span class="p">)</span>
+
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">RelationTableEdit</span></div>
+
+
+<div class="viewcode-block" id="get_generic_triple_table"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.get_generic_triple_table">[docs]</a><span class="k">def</span> <span class="nf">get_generic_triple_table</span><span class="p">(</span><span class="n">other_entity_class_name</span><span class="p">,</span> <span class="n">entity_pk_self</span><span class="p">,</span> <span class="n">detail</span><span class="p">):</span>
+
+    <span class="c1"># TODO RDF : add code from before refactoring and comment it out</span>
+    <span class="k">class</span> <span class="nc">TripleTableBase</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The base table from which detail or edit tables will inherit from in order to avoid redundant definitions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># reuse the logic for ordering and rendering *_date_written</span>
+        <span class="c1"># Important: The names of these class variables must correspond to the column field name,</span>
+        <span class="c1"># e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written</span>
+        <span class="n">order_start_date_written</span> <span class="o">=</span> <span class="n">generic_order_start_date_written</span>
+        <span class="n">order_end_date_written</span> <span class="o">=</span> <span class="n">generic_order_end_date_written</span>
+        <span class="n">render_start_date_written</span> <span class="o">=</span> <span class="n">generic_render_start_date_written</span>
+        <span class="n">render_end_date_written</span> <span class="o">=</span> <span class="n">generic_render_end_date_written</span>
+
+        <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+
+            <span class="c1"># TODO __sresch__ : investigate if it&#39;s feasible to have different subclasses of triples and have them</span>
+            <span class="c1">#  fill in these fields of this Table class automatically</span>
+
+            <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
+
+            <span class="n">model</span> <span class="o">=</span> <span class="n">TempTriple</span>
+
+            <span class="c1"># the fields list also serves as the defining order of them, as to avoid duplicated definitions</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;start_date_written&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;end_date_written&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;other_prop&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;other_entity&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="c1"># reuse the list for ordering</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">render_other_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Custom render_FOO method for related entity linking. Since the &#39;other_related_entity&#39; is a generated annotation</span>
+<span class="sd">            on the queryset, it does not return the related instance but only the foreign key as the integer it is.</span>
+<span class="sd">            Thus fetching the related instance is necessary.</span>
+
+<span class="sd">            :param record: The &#39;row&#39; of a queryset, i.e. an entity instance</span>
+<span class="sd">            :param value: The current column of the row, i.e. the &#39;other_related_entity&#39; annotation</span>
+<span class="sd">            :return: related instance</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">record</span><span class="o">.</span><span class="n">subj</span><span class="o">.</span><span class="n">pk</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">subj</span>
+
+            <span class="k">elif</span> <span class="n">value</span> <span class="o">==</span> <span class="n">record</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">obj</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Did not find the entity this relation is supposed to come from!&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;Something must have went wrong when annotating for the related instance.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+            <span class="c1"># __before_rdf_refactoring__</span>
+            <span class="c1">#</span>
+            <span class="c1"># # annotations for displaying data about the &#39;other side&#39; of the relation.</span>
+            <span class="c1"># # Both of them (&#39;other_related_entity&#39; and &#39;other_relation_type&#39;) are necessary for displaying relations</span>
+            <span class="c1"># # in context to what entity we are calling this from.</span>
+            <span class="c1"># data = data.annotate(</span>
+            <span class="c1">#     # In order to provide the &#39;other instance&#39; for each instance of a table where this whole logic is called from,</span>
+            <span class="c1">#     # the queryset must be annotated accordingly. The following Case searches which of the two related instances</span>
+            <span class="c1">#     # of a relation queryset entry is the one corresponding to the current entity instance. When found, take the</span>
+            <span class="c1">#     # other related entity (since this is the one we are interested in displaying).</span>
+            <span class="c1">#     #</span>
+            <span class="c1">#     # The approach of using queryset&#39;s annotate method allows for per-instance case decision and thus</span>
+            <span class="c1">#     # guarantees that the other related entity is always correctly picked,</span>
+            <span class="c1">#     # even in case two entities are of the same class.</span>
+            <span class="c1">#     other_related_entity=Case(</span>
+            <span class="c1">#         # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.</span>
+            <span class="c1">#         When(**{</span>
+            <span class="c1">#             related_entity_field_name_a + &quot;__pk&quot;: entity_instance.pk,</span>
+            <span class="c1">#             &quot;then&quot;: related_entity_field_name_b</span>
+            <span class="c1">#         }),</span>
+            <span class="c1">#         When(**{</span>
+            <span class="c1">#             related_entity_field_name_b + &quot;__pk&quot;: entity_instance.pk,</span>
+            <span class="c1">#             &quot;then&quot;: related_entity_field_name_a</span>
+            <span class="c1">#         }),</span>
+            <span class="c1">#     )</span>
+            <span class="c1"># ).annotate(</span>
+            <span class="c1">#     # Get the correct side of the relation type given the current entity instance.</span>
+            <span class="c1">#     #</span>
+            <span class="c1">#     # The approach of using queryset&#39;s annotate method allows for per-instance case decision and thus</span>
+            <span class="c1">#     # guarantees that the other related entity is always correctly picked,</span>
+            <span class="c1">#     # even in case two entities are of the same class.</span>
+            <span class="c1">#     other_relation_type=Case(</span>
+            <span class="c1">#         When(**{</span>
+            <span class="c1">#             # A-&gt;B relation and current entity instance is A, hence take forward name</span>
+            <span class="c1">#             related_entity_field_name_a + &quot;__pk&quot;: entity_instance.pk,</span>
+            <span class="c1">#             &quot;then&quot;: &quot;relation_type__name&quot;</span>
+            <span class="c1">#         }),</span>
+            <span class="c1">#         When(**{</span>
+            <span class="c1">#             # A-&gt;B relation and current entity instance is B, hence take reverse name.</span>
+            <span class="c1">#             related_entity_field_name_b + &quot;__pk&quot;: entity_instance.pk,</span>
+            <span class="c1">#             &quot;then&quot;: &quot;relation_type__name_reverse&quot;</span>
+            <span class="c1">#         }),</span>
+            <span class="c1">#     )</span>
+            <span class="c1"># )</span>
+            <span class="c1"># for an in data:</span>
+            <span class="c1">#     if getattr(an, f&quot;{related_entity_field_name_a}_id&quot;) == entity_instance.pk:</span>
+            <span class="c1">#         an.other_relation_type = getattr(an.relation_type, &quot;label&quot;)</span>
+            <span class="c1">#     else:</span>
+            <span class="c1">#         an.other_relation_type = getattr(an.relation_type, &quot;label_reverse&quot;)</span>
+            <span class="c1">#</span>
+            <span class="c1">#</span>
+            <span class="c1"># super().__init__(data, *args, **kwargs)</span>
+            <span class="c1">#</span>
+            <span class="c1"># __after_rdf_refactoring__</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+                <span class="n">other_entity</span><span class="o">=</span><span class="n">Case</span><span class="p">(</span>
+                    <span class="c1"># **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.</span>
+                    <span class="n">When</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;subj__pk&quot;</span><span class="p">:</span> <span class="n">entity_pk_self</span><span class="p">,</span> <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="s2">&quot;obj&quot;</span><span class="p">}),</span>
+                    <span class="n">When</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;obj__pk&quot;</span><span class="p">:</span> <span class="n">entity_pk_self</span><span class="p">,</span> <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="s2">&quot;subj&quot;</span><span class="p">}),</span>
+                <span class="p">),</span>
+                <span class="n">other_prop</span><span class="o">=</span><span class="n">Case</span><span class="p">(</span>
+                    <span class="c1"># **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.</span>
+                    <span class="n">When</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;subj__pk&quot;</span><span class="p">:</span> <span class="n">entity_pk_self</span><span class="p">,</span> <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="s2">&quot;prop__name&quot;</span><span class="p">}),</span>
+                    <span class="n">When</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;obj__pk&quot;</span><span class="p">:</span> <span class="n">entity_pk_self</span><span class="p">,</span> <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="s2">&quot;prop__name_reverse&quot;</span><span class="p">}),</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_prop&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Other property&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span>
+                <span class="s2">&quot;other_entity&quot;</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">verbose_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Related </span><span class="si">{</span><span class="n">other_entity_class_name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">detail</span><span class="p">:</span>
+
+        <span class="k">class</span> <span class="nc">TripleTableDetail</span><span class="p">(</span><span class="n">TripleTableBase</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Sublcass inheriting the bulk of logic from parent. This table is used for the &#39;detail&#39; views.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+                <span class="c1"># __before_rdf_refactoring__</span>
+                <span class="c1">#</span>
+                <span class="c1"># # Only addition with respect to parent class is which main url is to be used when clicking on a</span>
+                <span class="c1"># # related entity column.</span>
+                <span class="c1"># self.base_columns[&quot;other_related_entity&quot;] = tables.LinkColumn(</span>
+                <span class="c1">#     &#39;apis:apis_entities:generic_entities_detail_view&#39;,</span>
+                <span class="c1">#     args=[</span>
+                <span class="c1">#         other_related_entity_class_name,</span>
+                <span class="c1">#         A(&quot;other_related_entity&quot;)</span>
+                <span class="c1">#     ],</span>
+                <span class="c1">#     verbose_name=&quot;Related &quot; + other_related_entity_class_name.title()</span>
+                <span class="c1"># )</span>
+                <span class="c1">#</span>
+                <span class="c1"># super().__init__(data=data, *args, **kwargs)</span>
+                <span class="c1">#</span>
+                <span class="c1"># __after_rdf_refactoring__</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
+                    <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
+                    <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">other_entity_class_name</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)],</span>
+                <span class="p">)</span>
+
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">TripleTableDetail</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="k">class</span> <span class="nc">TripleTableEdit</span><span class="p">(</span><span class="n">TripleTableBase</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Sublcass inheriting the bulk of logic from parent. This table is used for the &#39;edit&#39; view.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Additional Meta fields are necessary for editing functionalities</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+
+                <span class="c1"># This fields list also defines the order of the elements.</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;edit&quot;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="s2">&quot;apis_bibsonomy&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+                    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">fields</span>
+
+                <span class="c1"># again reuse the fields list for ordering</span>
+                <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+                <span class="c1"># __before_rdf_refactoring__ TODO RDF:</span>
+                <span class="c1">#</span>
+                <span class="c1"># # Clicking on a related entity will lead also the edit view of the related entity instance</span>
+                <span class="c1"># self.base_columns[&quot;other_related_entity&quot;] = tables.LinkColumn(</span>
+                <span class="c1">#     &#39;apis:apis_entities:generic_entities_edit_view&#39;,</span>
+                <span class="c1">#     args=[</span>
+                <span class="c1">#         other_related_entity_class_name, A(&quot;other_related_entity&quot;)</span>
+                <span class="c1">#     ],</span>
+                <span class="c1">#     verbose_name=&quot;Related &quot; + other_related_entity_class_name.title()</span>
+                <span class="c1"># )</span>
+                <span class="c1">#</span>
+                <span class="c1"># # delete button</span>
+                <span class="c1"># self.base_columns[&#39;delete&#39;] = tables.TemplateColumn(</span>
+                <span class="c1">#     template_name=&#39;apis_relations/delete_button_generic_ajax_form.html&#39;</span>
+                <span class="c1"># )</span>
+                <span class="c1">#</span>
+                <span class="c1"># # edit button</span>
+                <span class="c1"># self.base_columns[&#39;edit&#39;] = tables.TemplateColumn(</span>
+                <span class="c1">#     template_name=&#39;apis_relations/edit_button_generic_ajax_form.html&#39;</span>
+                <span class="c1"># )</span>
+                <span class="c1">#</span>
+                <span class="c1"># # bibsonomy button</span>
+                <span class="c1"># if &#39;apis_bibsonomy&#39; in settings.INSTALLED_APPS:</span>
+                <span class="c1">#     self.base_columns[&#39;ref&#39;] = tables.TemplateColumn(</span>
+                <span class="c1">#         template_name=&#39;apis_relations/references_button_generic_ajax_form.html&#39;</span>
+                <span class="c1">#     )</span>
+                <span class="c1">#</span>
+                <span class="c1"># super().__init__(*args, **kwargs)</span>
+                <span class="c1">#</span>
+                <span class="c1"># __after_rdf_refactoring__</span>
+                <span class="c1"># linking entity</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
+                    <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
+                    <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">other_entity_class_name</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)],</span>
+                <span class="p">)</span>
+
+                <span class="c1"># edit button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;edit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+                    <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/edit_button_generic_ajax_form.html&quot;</span>
+                <span class="p">)</span>
+
+                <span class="c1"># delete button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+                    <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/delete_button_generic_ajax_form.html&quot;</span>
+                <span class="p">)</span>
+                <span class="c1"># bibsonomy button</span>
+                <span class="k">if</span> <span class="s2">&quot;apis_bibsonomy&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+                        <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/references_button_generic_ajax_form.html&quot;</span>
+                    <span class="p">)</span>
+
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">TripleTableEdit</span></div>
+
+
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
+<div class="viewcode-block" id="EntityUriTable"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.EntityUriTable">[docs]</a><span class="k">class</span> <span class="nc">EntityUriTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+
+    <span class="n">delete</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+        <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/delete_button_Uri_ajax_form.html&quot;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="EntityUriTable.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.EntityUriTable.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">empty_text</span> <span class="o">=</span> <span class="n">empty_text_default</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span>
+        <span class="c1"># add class=&quot;paleblue&quot; to &lt;table&gt; tag</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-hover table-striped table-condensed&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;PURI_conn&quot;</span><span class="p">,</span>
+        <span class="p">}</span></div></div>
+
+
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
+<div class="viewcode-block" id="LabelTableBase"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.LabelTableBase">[docs]</a><span class="k">class</span> <span class="nc">LabelTableBase</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+
+    <span class="n">label2</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span><span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/labels_label.html&quot;</span><span class="p">)</span>
+
+    <span class="c1"># reuse the logic for ordering and rendering *_date_written</span>
+    <span class="c1"># Important: The names of these class variables must correspond to the column field name,</span>
+    <span class="c1"># e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written</span>
+    <span class="n">order_start_date_written</span> <span class="o">=</span> <span class="n">generic_order_start_date_written</span>
+    <span class="n">order_end_date_written</span> <span class="o">=</span> <span class="n">generic_order_end_date_written</span>
+    <span class="n">render_start_date_written</span> <span class="o">=</span> <span class="n">generic_render_start_date_written</span>
+    <span class="n">render_end_date_written</span> <span class="o">=</span> <span class="n">generic_render_end_date_written</span>
+
+<div class="viewcode-block" id="LabelTableBase.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.LabelTableBase.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+
+        <span class="n">empty_text</span> <span class="o">=</span> <span class="n">empty_text_default</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Label</span>
+
+        <span class="c1"># Note that as the next attribute &#39;sequence&#39; builds on this list &#39;fields&#39;, the order defined within this list</span>
+        <span class="c1"># will be reused for the tuple &#39;sequence&#39;. So if the order needs to be changed, better do it here in the list &#39;fields&#39;.</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;start_date_written&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;end_date_written&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;label_type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;isoCode_639_3&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;label2&quot;</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+
+        <span class="c1"># add class=&quot;paleblue&quot; to &lt;table&gt; tag</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-hover table-striped table-condensed&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;PL_conn&quot;</span><span class="p">,</span>
+        <span class="p">}</span></div></div>
+
+
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
+<div class="viewcode-block" id="LabelTableEdit"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.LabelTableEdit">[docs]</a><span class="k">class</span> <span class="nc">LabelTableEdit</span><span class="p">(</span><span class="n">LabelTableBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reuse most of the base table class for labels. Only addition is editing functionality.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">edit</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+        <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/edit_button_persLabel_ajax_form.html&quot;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="LabelTableEdit.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.LabelTableEdit.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">LabelTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="n">LabelTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">sequence</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;edit&quot;</span><span class="p">,)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.apis_relations.rel_filters &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.apis_relations.rel_filters</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.apis_relations.rel_filters</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+
+<span class="kn">import</span> <span class="nn">django_filters</span>
+<span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+
+
+<span class="c1"># from .models import AbstractRelation</span>
+
+<span class="c1"># TODO: Change this whole module according to the same logic as in apis_core/apis_entities/filters.py</span>
+
+
+<div class="viewcode-block" id="get_excluded_fields"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_excluded_fields">[docs]</a><span class="k">def</span> <span class="nf">get_excluded_fields</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="n">modelname</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="n">base_list</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS_FILTER_EXCLUDE&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">rel_model_conf</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="s2">&quot;exclude&quot;</span> <span class="ow">in</span> <span class="n">rel_model_conf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rel_model_conf</span><span class="p">[</span><span class="s2">&quot;exclude&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">base_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">rel_model_conf</span><span class="p">[</span><span class="s2">&quot;exclude&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">modelname</span> <span class="ow">in</span> <span class="n">rel_model_conf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">&quot;exclude&quot;</span> <span class="ow">in</span> <span class="n">rel_model_conf</span><span class="p">[</span><span class="n">modelname</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rel_model_conf</span><span class="p">[</span><span class="n">modelname</span><span class="p">][</span><span class="s2">&quot;exclude&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">base_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">rel_model_conf</span><span class="p">[</span><span class="n">modelname</span><span class="p">][</span><span class="s2">&quot;exclude&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">base_list</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_included_fields"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_included_fields">[docs]</a><span class="k">def</span> <span class="nf">get_included_fields</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="n">modelname</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="n">rel_model_conf</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="n">modelname</span> <span class="ow">in</span> <span class="n">rel_model_conf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">rel_model_conf</span><span class="p">[</span><span class="n">modelname</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;include&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="n">FIELD_TO_FILTER</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ForeignKey&quot;</span><span class="p">:</span> <span class="s2">&quot;MultipleChoiceFilter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ManyToManyField&quot;</span><span class="p">:</span> <span class="s2">&quot;MultipleChoiceFilter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TextField&quot;</span><span class="p">:</span> <span class="s2">&quot;CharFilter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CharField&quot;</span><span class="p">:</span> <span class="s2">&quot;CharFilter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DateField&quot;</span><span class="p">:</span> <span class="s2">&quot;DateFromToRangeFilter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;BooleanField&quot;</span><span class="p">:</span> <span class="s2">&quot;BooleanFilter&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="get_field_dicts"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_field_dicts">[docs]</a><span class="k">def</span> <span class="nf">get_field_dicts</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">include_parents</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;f_name&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;f_v_name&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;verbose_name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;f_help_text&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;helptext&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;f_class_name&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
+            <span class="s2">&quot;f_model&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;related_model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">include_parents</span><span class="o">=</span><span class="n">include_parents</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">fields</span></div>
+
+
+<div class="viewcode-block" id="get_filters"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_filters">[docs]</a><span class="k">def</span> <span class="nf">get_filters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_parents</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">filters</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">field_dicts</span> <span class="o">=</span> <span class="n">get_field_dicts</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">include_parents</span><span class="o">=</span><span class="n">include_parents</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">field_dicts</span><span class="p">:</span>
+        <span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;f_name&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;f_model&quot;</span><span class="p">]:</span>
+            <span class="n">rel_fields</span> <span class="o">=</span> <span class="n">get_field_dicts</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;f_model&quot;</span><span class="p">],</span> <span class="n">include_parents</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">rel_fields</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;apis_relations&quot;</span> <span class="ow">in</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;f_model&quot;</span><span class="p">]):</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">rel_field_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">__</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;f_name&quot;</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="s2">&quot;f_name&quot;</span><span class="p">])</span>
+                    <span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rel_field_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">include</span><span class="p">:</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">filters</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">include</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">exclude</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                <span class="n">filters</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">())]</span>
+            <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                <span class="n">filters</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                <span class="n">filters</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+                <span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">filters</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="n">filters</span></div>
+
+
+<div class="viewcode-block" id="get_generic_relation_filter"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_generic_relation_filter">[docs]</a><span class="k">def</span> <span class="nf">get_generic_relation_filter</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">GenericListFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
+        <span class="c1"># search = django_filters.CharFilter(method=&#39;search_filter_method&#39;)</span>
+
+        <span class="k">def</span> <span class="nf">name_label_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Filter for including the alternative names in the names search.\</span>
+<span class="sd">            The types of labels included in the query are</span>
+<span class="sd">            currently hardcoded in a list.</span>
+
+<span class="sd">            :param queryset: queryset that the filters are applied on</span>
+<span class="sd">            :param name: name of the attribute to filter on (not used as label types are hardcoded)</span>
+<span class="sd">            :param value: value for the filter</span>
+<span class="sd">            :return: filtered queryset</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">alternate_names</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+                <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_ALTERNATE_NAMES&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;alternative name&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">orig_value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;label__label&quot;</span><span class="p">]:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">orig_value</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">__&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">):</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;i&quot;</span>
+                <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                    <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;contains&quot;</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                    <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;endswith&quot;</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                    <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;startswith&quot;</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;exact&quot;</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="s2">&quot;label__label&quot;</span><span class="p">:</span>
+                    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;label__label_type__name__in&quot;</span><span class="p">:</span> <span class="n">alternate_names</span><span class="p">})</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
+            <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">|</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">wildcard_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">__&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;i&quot;</span>
+            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;contains&quot;</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;endswith&quot;</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+                <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;startswith&quot;</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;exact&quot;</span>
+            <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+
+        <span class="k">def</span> <span class="nf">search_filter_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="bp">cls</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">sett_filters</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">sett_filters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">filter_attr</span> <span class="o">=</span> <span class="n">sett_filters</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+                <span class="n">query</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span>
+                    <span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">,</span> <span class="p">[</span><span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">attr</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">filter_attr</span><span class="p">]</span>
+                <span class="p">)</span>
+
+        <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+            <span class="c1"># model = AbstractRelation.get_relation_class_of_name(entity)</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">get_filters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[],</span> <span class="n">include_parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;data-placeholder&quot;</span><span class="p">:</span> <span class="s2">&quot;Type to get suggestions&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;data-minimum-input-length&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_MIN_CHAR&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                <span class="s2">&quot;data-html&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">GenericListFilter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;ModelChoiceField&quot;</span><span class="p">:</span>
+                    <span class="n">current_model_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">queryset</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="n">current_qs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">queryset</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                            <span class="n">app_label</span><span class="o">=</span><span class="s2">&quot;apis_entities&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">current_model_name</span>
+                        <span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+                        <span class="o">&gt;</span> <span class="mi">0</span>
+                    <span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">ModelMultipleChoiceFilter</span><span class="p">(</span>
+                            <span class="n">field_name</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                            <span class="n">queryset</span><span class="o">=</span><span class="n">current_qs</span><span class="p">,</span>
+                            <span class="n">widget</span><span class="o">=</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2Multiple</span><span class="p">(</span>
+                                <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
+                                    <span class="s2">&quot;apis:apis_entities:generic_network_entities_autocomplete&quot;</span><span class="p">,</span>
+                                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">current_model_name</span><span class="p">},</span>
+                                <span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="p">(</span>
+                        <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                            <span class="n">app_label</span><span class="o">=</span><span class="s2">&quot;apis_vocabularies&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">current_model_name</span>
+                        <span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+                        <span class="o">&gt;</span> <span class="mi">0</span>
+                    <span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">ModelMultipleChoiceFilter</span><span class="p">(</span>
+                            <span class="n">field_name</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                            <span class="n">queryset</span><span class="o">=</span><span class="n">current_qs</span><span class="p">,</span>
+                            <span class="n">widget</span><span class="o">=</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2Multiple</span><span class="p">(</span>
+                                <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
+                                    <span class="s2">&quot;apis:apis_vocabularies:generic_vocabularies_autocomplete&quot;</span><span class="p">,</span>
+                                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span>
+                                        <span class="s2">&quot;vocab&quot;</span><span class="p">:</span> <span class="n">current_model_name</span><span class="p">,</span>
+                                        <span class="s2">&quot;direct&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                                    <span class="p">},</span>
+                                <span class="p">),</span>
+                            <span class="p">),</span>
+                        <span class="p">)</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;DateField&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">DateFromToRangeFilter</span><span class="p">(</span>
+                        <span class="n">field_name</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;CharField&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">(</span>
+                        <span class="n">lookup_expr</span><span class="o">=</span><span class="s2">&quot;icontains&quot;</span><span class="p">,</span>
+                        <span class="n">field_name</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;ModelMultipleChoiceField&quot;</span><span class="p">:</span>
+                    <span class="n">current_model_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">queryset</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="n">current_qs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">queryset</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">ModelMultipleChoiceFilter</span><span class="p">(</span>
+                        <span class="n">field_name</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                        <span class="n">queryset</span><span class="o">=</span><span class="n">current_qs</span><span class="p">,</span>
+                        <span class="n">widget</span><span class="o">=</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2Multiple</span><span class="p">(</span>
+                            <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
+                                <span class="s2">&quot;apis:apis_entities:generic_network_entities_autocomplete&quot;</span><span class="p">,</span>
+                                <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">current_model_name</span><span class="p">},</span>
+                            <span class="p">),</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">GenericListFilter</span></div>
+
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Triple</span><span class="p">,</span> <span class="n">Property</span>
+
+
+<div class="viewcode-block" id="TripleFilter"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.TripleFilter">[docs]</a><span class="k">class</span> <span class="nc">TripleFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TripleFilter.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.TripleFilter.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Triple</span>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+
+
+<div class="viewcode-block" id="PropertyFilter"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.PropertyFilter">[docs]</a><span class="k">class</span> <span class="nc">PropertyFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PropertyFilter.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.PropertyFilter.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Property</span>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.apis_tei.tei &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.apis_tei.tei</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.apis_tei.tei</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">xml.sax.saxutils</span> <span class="kn">import</span> <span class="n">escape</span><span class="p">,</span> <span class="n">unescape</span>
+
+<span class="kn">import</span> <span class="nn">lxml.etree</span> <span class="k">as</span> <span class="nn">ET</span>
+
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.utils.text</span> <span class="kn">import</span> <span class="n">slugify</span>
+
+<span class="kn">from</span> <span class="nn">.partials</span> <span class="kn">import</span> <span class="n">TEI_NSMAP</span><span class="p">,</span> <span class="n">tei_gen_header</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Text</span>
+
+<span class="c1"># __before_rdf_refactoring__</span>
+<span class="c1"># from apis_core.apis_entities.models import Person, Place, Event, Work, Institution</span>
+
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">import</span> <span class="nn">pprint</span>
+
+<span class="n">pp</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="custom_escape"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.custom_escape">[docs]</a><span class="k">def</span> <span class="nf">custom_escape</span><span class="p">(</span><span class="n">somestring</span><span class="p">):</span>
+    <span class="n">un_escaped</span> <span class="o">=</span> <span class="n">unescape</span><span class="p">(</span><span class="n">somestring</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">escape</span><span class="p">(</span><span class="n">un_escaped</span><span class="p">)</span></div>
+
+
+<span class="c1"># __before_rdf_refactoring__</span>
+<span class="c1"># When serializing texts, we need to be able to look up</span>
+<span class="c1"># the entity in DB to check we have all the texts (not just the</span>
+<span class="c1"># annotated ones) — so need to map string values to classes.</span>
+<span class="c1"># REPLACE THIS WITH LIST OF TEXTS IN ent_dict!</span>
+<span class="c1"># entity_type_string_to_class = {</span>
+<span class="c1">#     &quot;Person&quot;: Person,</span>
+<span class="c1">#     &quot;Place&quot;: Place,</span>
+<span class="c1">#     &quot;Event&quot;: Event,</span>
+<span class="c1">#     &quot;Work&quot;: Work,</span>
+<span class="c1">#     &quot;Institution&quot;: Institution,</span>
+<span class="c1"># }</span>
+<span class="c1">#</span>
+<span class="c1"># relation_type_to_tei_tag = {</span>
+<span class="c1">#     &quot;events&quot;: &quot;EVENT&quot;,  # What to do with this?</span>
+<span class="c1">#     &quot;institutions&quot;: &quot;orgName&quot;,</span>
+<span class="c1">#     &quot;persons&quot;: &quot;persName&quot;,</span>
+<span class="c1">#     &quot;places&quot;: &quot;placeName&quot;,</span>
+<span class="c1"># }</span>
+
+
+<div class="viewcode-block" id="TeiEntCreator"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator">[docs]</a><span class="k">class</span> <span class="nc">TeiEntCreator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ent_dict</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;entity/&quot;</span><span class="p">,</span> <span class="n">include_entity_tagged_texts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Entry point: called from apis_core/apis_entities/api_renderers.py</span>
+
+<span class="sd">        ent_dict is dict representing the entity</span>
+
+<span class="sd">        This class is initialised, then has the serialize_full_doc method called</span>
+<span class="sd">        on it, which in turn calls all the other methods on this class (apparently).</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsmap</span> <span class="o">=</span> <span class="n">TEI_NSMAP</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="s2">&quot;APIS&quot;</span>
+        <span class="n">s_url</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_BASE_URI&quot;</span><span class="p">,</span> <span class="s2">&quot;http://apis.info/&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s_url</span><span class="si">}{</span><span class="n">base_url</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span> <span class="o">=</span> <span class="n">ent_dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ent_name</span> <span class="o">=</span> <span class="n">custom_escape</span><span class="p">(</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;No name provided&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ent_type</span> <span class="o">=</span> <span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity_type&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ent_apis_id</span> <span class="o">=</span> <span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen_tei_header</span> <span class="o">=</span> <span class="n">tei_gen_header</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">include_entity_tagged_texts</span> <span class="o">=</span> <span class="n">include_entity_tagged_texts</span>
+
+<div class="viewcode-block" id="TeiEntCreator.relation_groups"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.relation_groups">[docs]</a>    <span class="k">def</span> <span class="nf">relation_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ent_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span>
+        <span class="n">ent_types</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ent_dict</span><span class="p">[</span><span class="s2">&quot;relations&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">self_type</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ent_dict</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="n">relations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ent_types</span><span class="p">:</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ent_dict</span><span class="p">[</span><span class="s2">&quot;relations&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]:</span>
+                <span class="n">ent_key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">rel</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;rel_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+                <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;rel_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;relation_type&quot;</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="s2">&quot;target&quot;</span> <span class="ow">in</span> <span class="n">y</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">key_1</span> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">key_1</span> <span class="o">=</span> <span class="s2">&quot;source&quot;</span>
+                <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">key_1</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                <span class="n">rel</span><span class="p">[</span><span class="s2">&quot;target_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">key_1</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+                <span class="n">group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rel</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">group</span><span class="p">:</span>
+                <span class="n">relations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">relations</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.relation_notes"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.relation_notes">[docs]</a>    <span class="k">def</span> <span class="nf">relation_notes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">notes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation_groups</span><span class="p">():</span>
+            <span class="n">note</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;{http://www.tei-c.org/ns/1.0}note&quot;</span><span class="p">)</span>
+            <span class="n">note_type</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;rel_type&quot;</span><span class="p">]</span>
+            <span class="n">note</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">note_type</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+                <span class="n">ptr</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;ptr&quot;</span><span class="p">)</span>
+                <span class="n">ptr</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;rel_label&quot;</span><span class="p">]</span>
+                <span class="n">ptr</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">])</span>
+                <span class="n">note</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+            <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">note</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">notes</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.uris_to_idnos"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.uris_to_idnos">[docs]</a>    <span class="k">def</span> <span class="nf">uris_to_idnos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">uris</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uris&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uris&quot;</span><span class="p">):</span>
+                <span class="n">idno</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;idno&quot;</span><span class="p">)</span>
+                <span class="n">idno</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;URL&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;d-nb.info&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">):</span>
+                    <span class="n">idno</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;subtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;GND&quot;</span>
+                <span class="n">idno</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">)</span>
+                <span class="n">uris</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idno</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">uris</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.create_work_node"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.create_work_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_work_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">work</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;{http://www.tei-c.org/ns/1.0}item&quot;</span><span class="p">)</span>
+        <span class="n">work</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;work__</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ent_apis_id</span>
+        <span class="p">)</span>
+        <span class="n">work</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">custom_escape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation_notes</span><span class="p">():</span>
+            <span class="n">work</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">work</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.create_event_node"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.create_event_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_event_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;{http://www.tei-c.org/ns/1.0}event&quot;</span><span class="p">)</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;event__</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ent_apis_id</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">):</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;notBefore&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">):</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;notAfter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation_notes</span><span class="p">():</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_name</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uris&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uris&quot;</span><span class="p">):</span>
+                <span class="n">event</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">event</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.create_org_node"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.create_org_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_org_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">org</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;{http://www.tei-c.org/ns/1.0}org&quot;</span><span class="p">)</span>
+        <span class="n">org</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;org__</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ent_apis_id</span>
+        <span class="p">)</span>
+        <span class="n">orgName</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;orgName&quot;</span><span class="p">)</span>
+        <span class="n">orgName</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;orgName&quot;</span><span class="p">)</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;alt&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">node_subtype</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;label_type&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">node_subtype</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">node_subtype</span><span class="p">:</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;subtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">node_subtype</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span>
+                        <span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}lang&quot;</span>
+                    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;isoCode_639_3&quot;</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                <span class="n">org</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">):</span>
+            <span class="n">orgName</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;notBefore&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">):</span>
+            <span class="n">orgName</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;notAfter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span>
+        <span class="n">org</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orgName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uris_to_idnos</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">uris_to_idnos</span><span class="p">():</span>
+                <span class="n">org</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation_notes</span><span class="p">():</span>
+            <span class="n">org</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">org</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.create_place_node"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.create_place_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_place_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">place</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;{http://www.tei-c.org/ns/1.0}place&quot;</span><span class="p">)</span>
+        <span class="n">place</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;place__</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ent_apis_id</span>
+        <span class="p">)</span>
+        <span class="n">placeName</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;placeName&quot;</span><span class="p">)</span>
+        <span class="n">placeName</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">):</span>
+            <span class="n">placeName</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;notBefore&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">):</span>
+            <span class="n">placeName</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;notAfter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span>
+        <span class="n">place</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">placeName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;placeName&quot;</span><span class="p">)</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;alt&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">node_subtype</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;label_type&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">node_subtype</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">node_subtype</span><span class="p">:</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;subtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">node_subtype</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span>
+                        <span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}lang&quot;</span>
+                    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;isoCode_639_3&quot;</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                <span class="n">place</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">):</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="p">[</span><span class="s2">&quot;lng&quot;</span><span class="p">])</span>
+            <span class="n">location</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">)</span>
+            <span class="n">geo</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;geo&quot;</span><span class="p">)</span>
+            <span class="n">geo</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">coords</span>
+            <span class="n">location</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geo</span><span class="p">)</span>
+            <span class="n">place</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation_notes</span><span class="p">():</span>
+            <span class="n">place</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uris_to_idnos</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">uris_to_idnos</span><span class="p">():</span>
+                <span class="n">place</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">place</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.create_person_node"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.create_person_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_person_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;{http://www.tei-c.org/ns/1.0}person&quot;</span><span class="p">)</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;person__</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ent_apis_id</span>
+        <span class="p">)</span>
+        <span class="n">persName</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;persName&quot;</span><span class="p">)</span>
+        <span class="n">surname</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;surname&quot;</span><span class="p">)</span>
+        <span class="n">surname</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="n">persName</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">surname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;first_name&quot;</span><span class="p">):</span>
+            <span class="n">forename</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;forename&quot;</span><span class="p">)</span>
+            <span class="n">forename</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;first_name&quot;</span><span class="p">)</span>
+            <span class="n">persName</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">forename</span><span class="p">)</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">persName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;persName&quot;</span><span class="p">)</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;alt&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">node_subtype</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;label_type&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">node_subtype</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">node_subtype</span><span class="p">:</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;subtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">node_subtype</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span>
+                        <span class="s2">&quot;{http://www.w3.org/XML/1998/namespace}lang&quot;</span>
+                    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;isoCode_639_3&quot;</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                <span class="n">person</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">):</span>
+            <span class="n">birth</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;birth&quot;</span><span class="p">)</span>
+            <span class="n">birth</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;when&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span>
+            <span class="n">birth</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">)</span>
+            <span class="c1"># If we wanted to add birth place, we&#39;d need a specific lookup on</span>
+            <span class="c1"># the place rel types here ... relations[&quot;places&quot;][&quot;relation_type&quot;][&quot;label&quot;] == &quot;BirthPlace&quot;</span>
+
+            <span class="c1"># It seems the only way to do this is to specify something in a controlled vocabulary --- some form of special status;</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relations&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relations&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;places&quot;</span>
+            <span class="p">):</span>
+                <span class="n">places</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relations&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;places&quot;</span><span class="p">)</span>
+                <span class="k">pass</span>
+
+            <span class="n">person</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">birth</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">):</span>
+            <span class="n">death</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;death&quot;</span><span class="p">)</span>
+            <span class="n">death</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;when&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span>
+            <span class="n">death</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">)</span>
+            <span class="n">person</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">death</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;profession&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;profession&quot;</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;occupation&quot;</span><span class="p">)</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;scheme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#apis_vocabularies/professiontype/&quot;</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+                <span class="n">person</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation_notes</span><span class="p">():</span>
+            <span class="n">person</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uris_to_idnos</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">uris_to_idnos</span><span class="p">():</span>
+                <span class="n">person</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">person</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.populate_header"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.populate_header">[docs]</a>    <span class="k">def</span> <span class="nf">populate_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">main</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ent_type</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ent_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_tei_header</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">header</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.create_header_node"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.create_header_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_header_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">populate_header</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">header</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.create_full_doc"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.create_full_doc">[docs]</a>    <span class="k">def</span> <span class="nf">create_full_doc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ent_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_header_node</span><span class="p">()</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_type</span> <span class="o">==</span> <span class="s2">&quot;Person&quot;</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_person_node</span><span class="p">()</span>
+            <span class="n">ent_list</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;listPerson&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_type</span> <span class="o">==</span> <span class="s2">&quot;Place&quot;</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_place_node</span><span class="p">()</span>
+            <span class="n">ent_list</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;listPlace&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_type</span> <span class="o">==</span> <span class="s2">&quot;Institution&quot;</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_org_node</span><span class="p">()</span>
+            <span class="n">ent_list</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;listOrg&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_type</span> <span class="o">==</span> <span class="s2">&quot;Event&quot;</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_event_node</span><span class="p">()</span>
+            <span class="n">ent_list</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;listEvent&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_type</span> <span class="o">==</span> <span class="s2">&quot;Work&quot;</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_work_node</span><span class="p">()</span>
+            <span class="n">ent_list</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">)</span>
+        <span class="c1"># xpath modified to add entity nodes to &lt;text type=&quot;entity&quot;/&gt;</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//tei:text[@type=&quot;entity&quot;]/tei:body&#39;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nsmap</span><span class="p">)[</span>
+            <span class="mi">0</span>
+        <span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ent_list</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">ent_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="c1"># Insert annotated texts into doc, as a separate text under</span>
+        <span class="c1"># //tei:group</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;//tei:group&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nsmap</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_annotated_texts_objects</span><span class="p">():</span>
+            <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">doc</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.build_annotated_texts_objects"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.build_annotated_texts_objects">[docs]</a>    <span class="k">def</span> <span class="nf">build_annotated_texts_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get annotations grouped by text</span>
+
+        <span class="n">annotations_by_text_id</span> <span class="o">=</span> <span class="n">group_annotations_by_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ent_dict</span><span class="p">)</span>
+
+        <span class="n">texts</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Here, we need to look up the entity in the DB</span>
+        <span class="c1">####  IDEALLY, pre-do this in initial query and add to ent_dict</span>
+        <span class="c1"># though, this is likely to be quite a lot of stuff when not necessary...</span>
+        <span class="n">this_entity</span> <span class="o">=</span> <span class="n">entity_type_string_to_class</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ent_type</span><span class="p">]</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ent_apis_id</span>
+        <span class="p">)</span>
+        <span class="n">this_entity_texts</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">this_entity</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">text</span><span class="p">}</span>
+
+        <span class="nb">print</span><span class="p">([</span><span class="n">text</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">this_entity_texts</span><span class="p">])</span>
+
+        <span class="c1"># Then, check all the entity texts to see whether it&#39;s an annotated one;</span>
+        <span class="c1"># otherwise, we&#39;ll need to include it here...</span>
+        <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">this_entity_texts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">annotations_by_text_id</span><span class="p">:</span>
+                <span class="n">wrapped_text</span> <span class="o">=</span> <span class="s2">&quot;&lt;p&gt;</span><span class="si">{}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;/p&gt;&lt;p&gt;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">))</span>
+                <span class="p">)</span>
+                <span class="c1"># Embed the text in some TEI tags</span>
+                <span class="n">embedded_text</span> <span class="o">=</span> <span class="s1">&#39;&lt;text xml:id=&quot;text__</span><span class="si">{}</span><span class="s1">&quot;&gt;&lt;body&gt;</span><span class="si">{}</span><span class="s1">&lt;/body&gt;&lt;/text&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">text</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">wrapped_text</span>
+                <span class="p">)</span>
+                <span class="n">texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">embedded_text</span><span class="p">)</span>
+
+        <span class="c1"># This loop here iterates texts from self.ent_dict annotations and embeds</span>
+        <span class="c1"># annotations as TEI tags</span>
+        <span class="k">for</span> <span class="n">text_id</span><span class="p">,</span> <span class="n">anns</span> <span class="ow">in</span> <span class="n">annotations_by_text_id</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="c1"># Get the text object from database via its ID</span>
+            <span class="c1">### (in future, this should be embedded in ent_dict to avoid further query??)</span>
+            <span class="n">text_obj</span> <span class="o">=</span> <span class="n">Text</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">text_id</span><span class="p">)</span>
+            <span class="n">text_obj_pk</span> <span class="o">=</span> <span class="n">text_obj</span><span class="o">.</span><span class="n">tempentityclass_set</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">pk</span>
+
+            <span class="c1"># If we *don&#39;t* want to include other entity_tagged texts,</span>
+            <span class="c1"># skip this text if the object to which the text is not the</span>
+            <span class="c1"># object we&#39;re serializing</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">include_entity_tagged_texts</span> <span class="ow">and</span> <span class="n">text_obj_pk</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_apis_id</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># On the other hand, if there is a text attached to this entity,</span>
+            <span class="c1"># we might want to serialize it even if there is no annotation mentioning</span>
+            <span class="c1"># this entity... (TAKEN CARE OF ABOVE)</span>
+
+            <span class="c1"># Convert each annotation range from string-offset field (&#39;34-52&#39;) into start and end indexes, and convert into tuple</span>
+            <span class="c1"># of (start, end, tag) to run through standoff_to_inline function</span>
+            <span class="c1"># (tag arg is got through looking up annotation type in relation_type_to_tei_tag — customisable</span>
+            <span class="c1"># lookup at the top of this file)</span>
+            <span class="n">annotations</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;string_offset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;string_offset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">relation_type_to_tei_tag</span><span class="p">[</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;annotation_type&quot;</span><span class="p">]]</span><span class="si">}</span><span class="s1"> ref=&quot;</span><span class="si">{</span><span class="n">ann</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">anns</span>
+            <span class="p">]</span>
+
+            <span class="n">tagged_text</span> <span class="o">=</span> <span class="n">stand_off_to_inline</span><span class="p">(</span><span class="n">text_obj</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+
+            <span class="c1"># Assuming the text has two-line separated paragraphs, wrap them in &lt;p&gt; tags</span>
+            <span class="n">wrapped_text</span> <span class="o">=</span> <span class="s2">&quot;&lt;p&gt;</span><span class="si">{}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;&lt;/p&gt;&lt;p&gt;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tagged_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)))</span>
+
+            <span class="c1"># Embed the text in some TEI tags</span>
+            <span class="n">embedded_text</span> <span class="o">=</span> <span class="s1">&#39;&lt;text xml:id=&quot;text__</span><span class="si">{}</span><span class="s1">&quot;&gt;&lt;body&gt;</span><span class="si">{}</span><span class="s1">&lt;/body&gt;&lt;/text&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">text_obj</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">wrapped_text</span>
+            <span class="p">)</span>
+            <span class="n">texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">embedded_text</span><span class="p">)</span>
+
+        <span class="c1"># For each text string, convert to ET element</span>
+        <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">convert_to_etree</span><span class="p">(</span><span class="n">text_as_string</span><span class="p">)</span> <span class="k">for</span> <span class="n">text_as_string</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">texts</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.serialize_full_doc"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.serialize_full_doc">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_full_doc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ET</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_full_doc</span><span class="p">(),</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TeiEntCreator.export_full_doc"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.TeiEntCreator.export_full_doc">[docs]</a>    <span class="k">def</span> <span class="nf">export_full_doc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;temp.xml&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="n">ET</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_full_doc</span><span class="p">(),</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">file</span></div></div>
+
+
+<div class="viewcode-block" id="convert_to_etree"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.convert_to_etree">[docs]</a><span class="k">def</span> <span class="nf">convert_to_etree</span><span class="p">(</span><span class="n">text_as_string</span><span class="p">):</span>
+    <span class="c1"># Function here to catch any XML syntax errors</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">text_as_string</span><span class="p">)</span>
+    <span class="c1"># If there&#39;s some problem, most likely overlapping hierarchies,</span>
+    <span class="c1"># we should return something to serialize</span>
+    <span class="k">except</span> <span class="n">ET</span><span class="o">.</span><span class="n">XMLSyntaxError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;text type=&quot;conversion-error&quot;&gt;&lt;!-- There was an error inserting annotations into this document, probably due to overlaps --&gt;&lt;/text&gt;&#39;</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="group_annotations_by_text"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.group_annotations_by_text">[docs]</a><span class="k">def</span> <span class="nf">group_annotations_by_text</span><span class="p">(</span><span class="n">ent_dict</span><span class="p">):</span>
+    <span class="n">annotations_by_text</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">rel_type_name</span><span class="p">,</span> <span class="n">rel_type_list</span> <span class="ow">in</span> <span class="n">ent_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relations&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">rel_type_list</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">rel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotation&quot;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">ann</span> <span class="ow">in</span> <span class="n">rel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotation&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                    <span class="n">text_id</span> <span class="o">=</span> <span class="n">ann</span><span class="p">[</span><span class="s2">&quot;text_url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span>
+                        <span class="o">-</span><span class="mi">2</span>
+                    <span class="p">]</span>  <span class="c1"># parse the url to get the text id...</span>
+                    <span class="n">target</span> <span class="o">=</span> <span class="n">rel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="c1"># add the annotation to the text-group, also adding in a type for conversion later</span>
+                    <span class="n">annotations_by_text</span><span class="p">[</span><span class="n">text_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span><span class="o">**</span><span class="n">ann</span><span class="p">,</span> <span class="s2">&quot;annotation_type&quot;</span><span class="p">:</span> <span class="n">rel_type_name</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">target</span><span class="p">}</span>
+                    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">annotations_by_text</span></div>
+
+
+<div class="viewcode-block" id="stand_off_to_inline"><a class="viewcode-back" href="../../../modules/apis_core.apis_tei.html#apis_core.apis_tei.tei.stand_off_to_inline">[docs]</a><span class="k">def</span> <span class="nf">stand_off_to_inline</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">annot</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function from: https://gist.github.com/emsrc/c7aba4506214a20505ed</span>
+
+<span class="sd">    Convert stand-off annotation to inline annotation</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : str</span>
+<span class="sd">        unannotated text</span>
+<span class="sd">    annot: list of tuples</span>
+<span class="sd">        stand-off annotation as tuples in the form (i, j, tag)</span>
+<span class="sd">        where integers i and j are the start and end character offset,</span>
+<span class="sd">        and tag is a string for the tag label and - optionally - attributes.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    inline: str</span>
+<span class="sd">        text in xml format with inline annotation</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Will not detect partly overlapping text spans, which will give rise</span>
+<span class="sd">    to ill-formed xml.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># sort on decreasing span size</span>
+    <span class="n">annot</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># create dict mapping offsets to tags</span>
+    <span class="n">offsets2tags</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">annot</span><span class="p">:</span>
+        <span class="n">offsets2tags</span><span class="p">[</span><span class="n">start</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
+        <span class="n">offsets2tags</span><span class="p">[</span><span class="n">end</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&lt;/</span><span class="si">{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="c1"># merge text and tags</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">offsets2tags</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">offsets2tags</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">j</span>
+
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

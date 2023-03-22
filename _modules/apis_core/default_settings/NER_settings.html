@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.default_settings.NER_settings &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.default_settings.NER_settings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.default_settings.NER_settings</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="n">gn</span> <span class="o">=</span> <span class="s2">&quot;http://www.geonames.org/ontology#&quot;</span>
+<span class="n">stb_base</span> <span class="o">=</span> <span class="s2">&quot;https://enrich.acdh.oeaw.ac.at/entityhub/site/&quot;</span>
+<span class="n">URL_geonames</span> <span class="o">=</span> <span class="n">stb_base</span> <span class="o">+</span> <span class="s2">&quot;geoNames_</span><span class="si">%s</span><span class="s2">/query&quot;</span>
+<span class="n">wgs84_pos</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2003/01/geo/wgs84_pos#&quot;</span>
+<span class="n">gnd_geo</span> <span class="o">=</span> <span class="s2">&quot;http://www.opengis.net/ont/geosparql#&quot;</span>
+<span class="n">stb_find</span> <span class="o">=</span> <span class="n">stb_base</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/find&quot;</span>
+<span class="n">GenderMappingGND</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;male&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/vocab/gnd/Gender#male&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;männlich&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/vocab/gnd/Gender#male&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mann&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/vocab/gnd/Gender#male&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;female&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/vocab/gnd/Gender#female&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;weiblich&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/vocab/gnd/Gender#female&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Frau&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/vocab/gnd/Gender#female&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="date_conversion"><a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.date_conversion">[docs]</a><span class="k">def</span> <span class="nf">date_conversion</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">T00:00:00.000Z&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="p">)</span></div>
+
+
+<span class="n">autocomp_settings</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="s2">&quot;http://stanbol.apache.org/ontology/entityhub/query#score&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#label&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Place&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;Geonames&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">stb_find</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;geoNames_S_P_A&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;descr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;featureCode&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;long&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">wgs84_pos</span> <span class="o">+</span> <span class="s2">&quot;long&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">wgs84_pos</span> <span class="o">+</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;GeonamesRGN&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">stb_find</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;geoNames_RGN&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;descr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;featureCode&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;long&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">wgs84_pos</span> <span class="o">+</span> <span class="s2">&quot;long&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">wgs84_pos</span> <span class="o">+</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;GeonamesVAL&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">stb_find</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;geoNames_VAL&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;descr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;featureCode&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;long&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">wgs84_pos</span> <span class="o">+</span> <span class="s2">&quot;long&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">wgs84_pos</span> <span class="o">+</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;GND&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#TerritorialCorporateBodyOrAdministrativeUnit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">stb_find</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;gndTerritorialCorporateBodyOrAdministrativeUnits&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#preferredNameForThePlaceOrGeographicName&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;descr&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#definition&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;long&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">gnd_geo</span> <span class="o">+</span> <span class="s2">&quot;asWKT&quot;</span><span class="p">,</span> <span class="s2">&quot;gndLong&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">wgs84_pos</span> <span class="o">+</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;String&quot;</span><span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;Institution&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;GND&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#CorporateBody&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">stb_find</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;gndCorporateBodyAndOrganOfCorporateBody&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;descr&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#definition&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#preferredNameForTheCorporateBody&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;GND&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#OrganOfCorporateBody&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">stb_find</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;gndCorporateBodyAndOrganOfCorporateBody&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;descr&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#definition&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#preferredNameForTheCorporateBody&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;Person&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;GND&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#DifferentiatedPerson&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">stb_find</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;gndPersons&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;search fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;gender&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#gender&quot;</span><span class="p">,</span>
+                    <span class="n">GenderMappingGND</span><span class="p">,</span>
+                    <span class="s2">&quot;reference&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_exact&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfDeath&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_exact&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;start_date__gt&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_gt&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;start_date__lt&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_lt&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;end_date__gt&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_gt&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;end_date__lt&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfDeath&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_lt&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;descr&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#biographicalOrHistoricalInformation&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#preferredNameForThePerson&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;dateOfBirth&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;GNDDate&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;dateOfDeath&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfDeath&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;GNDDate&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;GND&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;http://enrich.acdh.oeaw.ac.at/stanbol/entityhub/site/gndRoyalOrMemberOfARoyalHouse/&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">stb_find</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;gndRoyalOrMemberOfARoyalHouse&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;search fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;gender&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#gender&quot;</span><span class="p">,</span>
+                    <span class="n">GenderMappingGND</span><span class="p">,</span>
+                    <span class="s2">&quot;reference&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_exact&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;end_date&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfDeath&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_exact&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;start_date__gt&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_gt&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;start_date__lt&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_lt&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;end_date__gt&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_gt&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;end_date__lt&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfDeath&quot;</span><span class="p">,</span>
+                    <span class="n">date_conversion</span><span class="p">,</span>
+                    <span class="s2">&quot;date_lt&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;descr&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#biographicalOrHistoricalInformation&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#preferredNameForThePerson&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;dateOfBirth&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfBirth&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;GNDDate&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;dateOfDeath&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#dateOfDeath&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;GNDDate&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;Event&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;GND&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#HistoricSingleEventOrEra&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">stb_find</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;gndHistoricEvent&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;descr&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#definition&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;http://d-nb.info/standards/elementset/gnd#preferredNameForTheSubjectHeading&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;String&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;Work&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="p">}</span>
+
+<span class="n">geonames_feature_codes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ADM1&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;first-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a primary administrative division of a country, such as a state in the United States&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADM1H&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;historical first-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a former first-order administrative division&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADM2&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;second-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a subdivision of a first-order administrative division&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADM2H&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;historical second-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a former second-order administrative division&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADM3&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;third-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a subdivision of a second-order administrative division&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADM3H&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;historical third-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a former third-order administrative division&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADM4&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;fourth-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a subdivision of a third-order administrative division&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADM4H&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;historical fourth-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a former fourth-order administrative division&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADM5&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;fifth-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a subdivision of a fourth-order administrative division&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADMD&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;an administrative division of a country, undifferentiated as to administrative level&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ADMDH&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;historical administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a former administrative division of a political entity, </span><span class="se">\</span>
+<span class="s2">        undifferentiated as to administrative level&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;LTER&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;leased area&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a tract of land leased to another country, usually for military installations&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PCL&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;political entity&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PCLD&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;dependent political entity&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PCLF&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;freely associated state&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PCLH&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;historical political entity&quot;</span><span class="p">,</span> <span class="s2">&quot;a former political entity&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PCLI&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;independent political entity&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PCLIX&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;section of independent political entity&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PCLS&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;semi-independent political entity&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PRSH&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;parish&quot;</span><span class="p">,</span> <span class="s2">&quot;an ecclesiastical district&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;TERR&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;territory&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;ZN&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;zone&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;ZNB&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;buffer zone&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a zone recognized as a buffer between two nations in which </span><span class="se">\</span>
+<span class="s2">        military presence is minimal or absent&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PPL&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;populated place&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a city, town, village, or other agglomeration of buildings where people live and work&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PPLA&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;seat of a first-order administrative division&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;seat of a first-order administrative division (PPLC takes precedence over PPLA),&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PPLA2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;seat of a second-order administrative division&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PPLA3&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;seat of a third-order administrative division&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PPLA4&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;seat of a fourth-order administrative division&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PPLC&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;capital of a political entity&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PPLCH&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;historical capital of a political entity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a former capital of a political entity&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PPLF&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;farm village&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a populated place where the population is largely engaged in agricultural activities&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PPLG&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;seat of government of a political entity&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PPLH&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;historical populated place&quot;</span><span class="p">,</span> <span class="s2">&quot;a populated place that no longer exists&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PPLL&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;populated locality&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;an area similar to a locality but with a small group of dwellings or other buildings&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PPLQ&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;abandoned populated place&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PPLR&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;religious populated place&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a populated place whose population is largely engaged in religious occupations&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PPLS&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;populated places&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cities, towns, villages, or other agglomerations of buildings where people live and work&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PPLW&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;destroyed populated place&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a village, town or city destroyed by a natural disaster, or by war&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;PPLX&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;section of populated place&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;STLMT&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;israeli settlement&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;RGN&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;region&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;an area distinguished by one or more observable physical or cultural characteristics&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="StbGeoQuerySettings"><a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings">[docs]</a><span class="k">class</span> <span class="nc">StbGeoQuerySettings</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;place&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="s2">&quot;http://stanbol.apache.org/ontology/entityhub/query#score&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#label&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_selected</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;place&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;parentPCLI&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;parentCountry&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;parentADM1&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;parentADM2&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;parentADM3&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;population&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;featureCode&quot;</span><span class="p">,</span>
+                <span class="n">wgs84_pos</span> <span class="o">+</span> <span class="s2">&quot;lat&quot;</span><span class="p">,</span>
+                <span class="n">wgs84_pos</span> <span class="o">+</span> <span class="s2">&quot;long&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;alternateName&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;officialName&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;shortName&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;countryCode&quot;</span><span class="p">,</span>
+                <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;parentFeature&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stored_feature</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;PPLC&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;PPLC&quot;</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;PPLC&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;PPLC&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;PPLA&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;PPLA&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;PPLA2&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;PPLA2&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;PPLA3&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;PPLA3&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;PPLA4&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;PPLA4&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;PPL&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;PPL&quot;</span><span class="p">},</span>
+            <span class="p">]</span>
+        <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selected</span> <span class="o">=</span> <span class="p">[</span><span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;featureCode&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stored_feature</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;PCLI&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;PCLI&quot;</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;PCLI&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;PCLI&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;ADM1&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;ADM1&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;ADM2&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;ADM2&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;ADM3&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;ADM3&quot;</span><span class="p">},</span>
+            <span class="p">]</span>
+
+<div class="viewcode-block" id="StbGeoQuerySettings.get_next_feature"><a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings.get_next_feature">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ft</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_selected</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stored_feature</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ft</span><span class="p">:</span>
+            <span class="n">ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_selected</span><span class="p">][</span><span class="s2">&quot;feature&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">idnx</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;feature&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ft</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">last_selected</span> <span class="o">=</span> <span class="n">idnx</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stored_feature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">idnx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">idnx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="StbGeoQuerySettings.get_data"><a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">adm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;place&quot;</span> <span class="ow">and</span> <span class="n">adm</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                <span class="s2">&quot;constraints&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#label&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;reference&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="n">adm</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">adm</span><span class="p">[</span><span class="mi">0</span><span class="p">]},</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;selected&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                <span class="s2">&quot;constraints&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.w3.org/2000/01/rdf-schema#label&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;selected&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">data</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

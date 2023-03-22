@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.apis_entities.api_renderers &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.apis_entities.api_renderers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.apis_entities.api_renderers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.core.serializers.json</span> <span class="kn">import</span> <span class="n">DjangoJSONEncoder</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">XSD</span><span class="p">,</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">,</span> <span class="n">ConjunctiveGraph</span><span class="p">,</span> <span class="n">OWL</span>
+<span class="kn">from</span> <span class="nn">rdflib.namespace</span> <span class="kn">import</span> <span class="n">DCTERMS</span><span class="p">,</span> <span class="n">VOID</span>
+<span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">plugin</span>
+<span class="kn">from</span> <span class="nn">rdflib.void</span> <span class="kn">import</span> <span class="n">generateVoID</span>
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">renderers</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_tei.tei</span> <span class="kn">import</span> <span class="n">TeiEntCreator</span>
+<span class="kn">from</span> <span class="nn">.api_mappings.cidoc_mapping</span> <span class="kn">import</span> <span class="n">m_person</span><span class="p">,</span> <span class="n">m_place</span><span class="p">,</span> <span class="n">m_work</span><span class="p">,</span> <span class="n">m_institution</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">webpage.metadata</span> <span class="kn">import</span> <span class="n">PROJECT_METADATA</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">webpage.utils</span> <span class="kn">import</span> <span class="n">PROJECT_METADATA</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">PROJECT_METADATA</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;PROJECT_DEFAULT_MD&quot;</span><span class="p">)</span>
+
+
+<span class="n">base_uri</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_BASE_URI&quot;</span><span class="p">,</span> <span class="s2">&quot;http://apis.info&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">base_uri</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+    <span class="n">base_uri</span> <span class="o">=</span> <span class="n">base_uri</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">lang</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;LANGUAGE_CODE&quot;</span><span class="p">,</span> <span class="s2">&quot;de&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="EntityToTEI"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToTEI">[docs]</a><span class="k">class</span> <span class="nc">EntityToTEI</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
+
+    <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;text/xml&quot;</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;tei&quot;</span>
+
+<div class="viewcode-block" id="EntityToTEI.render"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToTEI.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">tei_doc</span> <span class="o">=</span> <span class="n">TeiEntCreator</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tei_doc</span><span class="o">.</span><span class="n">serialize_full_doc</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="EntityToCIDOC"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOC">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOC</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
+
+    <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;text/rdf&quot;</span>
+
+    <span class="n">ent_func</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Person&quot;</span><span class="p">:</span> <span class="n">m_person</span><span class="p">,</span>
+        <span class="s2">&quot;Place&quot;</span><span class="p">:</span> <span class="n">m_place</span><span class="p">,</span>
+        <span class="s2">&quot;Work&quot;</span><span class="p">:</span> <span class="n">m_work</span><span class="p">,</span>
+        <span class="s2">&quot;Institution&quot;</span><span class="p">:</span> <span class="n">m_institution</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<div class="viewcode-block" id="EntityToCIDOC.render"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOC.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data1</span><span class="p">,</span>
+        <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">format_1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">binary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">store</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">named_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">provenance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">data1</span> <span class="o">=</span> <span class="p">[</span><span class="n">data1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">format_1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="n">format_1</span>
+        <span class="n">cidoc</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span><span class="s2">&quot;http://www.cidoc-crm.org/cidoc-crm/&quot;</span><span class="p">)</span>
+        <span class="n">geo</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span><span class="s2">&quot;http://www.opengis.net/ont/geosparql#&quot;</span><span class="p">)</span>
+        <span class="n">frbroo</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span><span class="s2">&quot;http://iflastandards.info/ns/fr/frbr/frbroo#&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">store</span><span class="p">:</span>
+            <span class="n">store</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Memory&quot;</span><span class="p">,</span> <span class="n">Store</span><span class="p">)()</span>
+        <span class="k">if</span> <span class="n">named_graph</span><span class="p">:</span>
+            <span class="n">uri_entities</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">named_graph</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">uri_entities</span> <span class="o">=</span> <span class="n">URIRef</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_uri</span><span class="si">}</span><span class="s2">/entities#&quot;</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="n">uri_entities</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;cidoc&quot;</span><span class="p">,</span> <span class="n">cidoc</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;geo&quot;</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;owl&quot;</span><span class="p">,</span> <span class="n">OWL</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;frbroo&quot;</span><span class="p">,</span> <span class="n">frbroo</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cidoc&quot;</span><span class="p">:</span> <span class="n">cidoc</span><span class="p">,</span> <span class="s2">&quot;geo&quot;</span><span class="p">:</span> <span class="n">geo</span><span class="p">,</span> <span class="s2">&quot;frbroo&quot;</span><span class="p">:</span> <span class="n">frbroo</span><span class="p">}</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data1</span><span class="p">:</span>
+                <span class="n">g</span><span class="p">,</span> <span class="n">ent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_func</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]](</span>
+                    <span class="n">g</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">drill_down</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">data1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fsencode</span><span class="p">(</span><span class="n">data1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">fn</span><span class="p">),</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">inf</span><span class="p">:</span>
+                    <span class="n">data2</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">inf</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data2</span><span class="p">:</span>
+                        <span class="n">g</span><span class="p">,</span> <span class="n">ent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_func</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]](</span>
+                            <span class="n">g</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">drill_down</span><span class="o">=</span><span class="kc">True</span>
+                        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">provenance</span><span class="p">:</span>
+            <span class="n">g_prov</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span>
+                <span class="n">store</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="n">URIRef</span><span class="p">(</span><span class="s2">&quot;https://omnipot.acdh.oeaw.ac.at/provenance&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">g_prov</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;dct&quot;</span><span class="p">,</span> <span class="n">DCTERMS</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">g_prov</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;void&quot;</span><span class="p">,</span> <span class="n">VOID</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">g_prov</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">uri_entities</span><span class="p">,</span>
+                    <span class="n">DCTERMS</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                    <span class="n">Literal</span><span class="p">(</span><span class="n">PROJECT_METADATA</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span> <span class="n">lang</span><span class="o">=</span><span class="n">lang</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">g_prov</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">uri_entities</span><span class="p">,</span>
+                    <span class="n">DCTERMS</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+                    <span class="n">Literal</span><span class="p">(</span><span class="n">PROJECT_METADATA</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span> <span class="n">lang</span><span class="o">=</span><span class="n">lang</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">g_prov</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">uri_entities</span><span class="p">,</span>
+                    <span class="n">DCTERMS</span><span class="o">.</span><span class="n">creator</span><span class="p">,</span>
+                    <span class="n">Literal</span><span class="p">(</span><span class="n">PROJECT_METADATA</span><span class="p">[</span><span class="s2">&quot;author&quot;</span><span class="p">],</span> <span class="n">lang</span><span class="o">=</span><span class="n">lang</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">g_prov</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">uri_entities</span><span class="p">,</span> <span class="n">DCTERMS</span><span class="o">.</span><span class="n">publisher</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="s2">&quot;ACDH-OeAW&quot;</span><span class="p">,</span> <span class="n">lang</span><span class="o">=</span><span class="n">lang</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="n">g_prov</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">uri_entities</span><span class="p">,</span> <span class="n">DCTERMS</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">base_uri</span><span class="p">)))</span>
+            <span class="n">g_prov</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">uri_entities</span><span class="p">,</span>
+                    <span class="n">DCTERMS</span><span class="o">.</span><span class="n">created</span><span class="p">,</span>
+                    <span class="n">Literal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()),</span> <span class="n">datatype</span><span class="o">=</span><span class="n">XSD</span><span class="o">.</span><span class="n">date</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">g_prov</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">generateVoID</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="n">uri_entities</span><span class="p">,</span> <span class="n">res</span><span class="o">=</span><span class="n">g_prov</span><span class="p">)</span>
+        <span class="n">g_all</span> <span class="o">=</span> <span class="n">ConjunctiveGraph</span><span class="p">(</span><span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">binary</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">g_all</span><span class="p">,</span> <span class="n">store</span>
+        <span class="k">return</span> <span class="n">g_all</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="EntityToCIDOCXML"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCXML">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOCXML</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
+
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+xml&quot;</span></div>
+
+
+<div class="viewcode-block" id="EntityToCIDOCN3"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCN3">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOCN3</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
+
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+n3&quot;</span></div>
+
+
+<div class="viewcode-block" id="EntityToCIDOCNQUADS"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCNQUADS">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOCNQUADS</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
+
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+nquads&quot;</span></div>
+
+
+<div class="viewcode-block" id="EntityToCIDOCTURTLE"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCTURTLE">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOCTURTLE</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
+
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+turtle&quot;</span></div>
+
+
+<div class="viewcode-block" id="EntityToProsopogrAPhI"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToProsopogrAPhI">[docs]</a><span class="k">class</span> <span class="nc">EntityToProsopogrAPhI</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
+
+    <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;text/json+prosop&quot;</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;json+prosop&quot;</span>
+
+<div class="viewcode-block" id="EntityToProsopogrAPhI.render"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToProsopogrAPhI.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">factoids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fact_settings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;PROSOPOGRAPHI_API&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">stmt_temp</span> <span class="o">=</span> <span class="s2">&quot;Stmt</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="s2">&quot;apis_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])}</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])}</span>
+        <span class="n">f</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="n">PROJECT_METADATA</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> export&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PROJECT_METADATA</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]),</span>
+        <span class="p">}</span>
+        <span class="n">f</span><span class="p">[</span><span class="s2">&quot;createdBy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> export&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PROJECT_METADATA</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">])</span>
+        <span class="n">f</span><span class="p">[</span><span class="s2">&quot;createdWhen&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">stmt_count</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">stmts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()][</span><span class="s2">&quot;uris&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;uris&quot;</span><span class="p">]:</span>
+            <span class="n">f</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()][</span><span class="s2">&quot;uris&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;person&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="n">stmt_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">stmt_count</span><span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;first_name&quot;</span><span class="p">]),</span>
+            <span class="p">}</span>
+            <span class="n">stmts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">stmt_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="s2">&quot;end_date&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_date&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_date&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="n">stmt_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">stmt_count</span><span class="p">),</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;sortdate&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_date&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">],</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;stirbt&quot;</span><span class="p">},</span>
+                <span class="p">}</span>
+                <span class="n">stmts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                <span class="n">stmt_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="s2">&quot;start_date&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="n">stmt_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">stmt_count</span><span class="p">),</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;sortdate&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">],</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">],</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;geboren&quot;</span><span class="p">},</span>
+                <span class="p">}</span>
+                <span class="n">stmts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                <span class="n">stmt_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="s2">&quot;gender&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="n">stmt_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">stmt_count</span><span class="p">),</span>
+                    <span class="s2">&quot;statmentType&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">]}],</span>
+                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;bio-crm:gender&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;gender&quot;</span><span class="p">},</span>
+                <span class="p">}</span>
+                <span class="n">stmts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                <span class="n">stmt_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="s2">&quot;profession&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;profession&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="n">stmt_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">stmt_count</span><span class="p">),</span>
+                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;profession&quot;</span><span class="p">},</span>
+                    <span class="s2">&quot;statementType&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;profession&quot;</span><span class="p">]:</span>
+                    <span class="n">s2</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;apis_profession_type:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]),</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">],</span>
+                    <span class="p">}</span>
+                    <span class="n">s</span><span class="p">[</span><span class="s2">&quot;statementType&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+                <span class="n">stmts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                <span class="n">stmt_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">f</span><span class="p">[</span><span class="s2">&quot;statements&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stmts</span>
+        <span class="n">factoids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">facts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">facts_ind</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s2">&quot;relations&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;relations&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">rel_1</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;relations&quot;</span><span class="p">][</span><span class="n">ent</span><span class="p">]:</span>
+                    <span class="n">s</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="s2">&quot;Stmt</span><span class="si">{}</span><span class="s2">_rel_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]),</span>
+                        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;relation_type&quot;</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">],</span>
+                            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;relation_type&quot;</span><span class="p">][</span><span class="s2">&quot;url&quot;</span><span class="p">],</span>
+                        <span class="p">},</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="s2">&quot;start_date&quot;</span> <span class="ow">in</span> <span class="n">rel_1</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                            <span class="n">s</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                                <span class="s2">&quot;sortdate&quot;</span><span class="p">:</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">],</span>
+                                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">],</span>
+                            <span class="p">}</span>
+                            <span class="k">if</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                                <span class="n">s</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;-</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                    <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span>
+                                <span class="p">)</span>
+                    <span class="n">ext_stc</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">t1</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/api2/entity/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">base_uri</span><span class="p">,</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                        <span class="p">),</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="n">fact_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">fact_settings</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="p">(</span>
+                                <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;relation_type&quot;</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                                <span class="ow">in</span> <span class="n">fact_settings</span><span class="p">[</span><span class="n">ent</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                            <span class="p">):</span>
+                                <span class="n">s</span><span class="p">[</span>
+                                    <span class="n">fact_settings</span><span class="p">[</span><span class="n">ent</span><span class="p">][</span><span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;relation_type&quot;</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]]</span>
+                                <span class="p">]</span> <span class="o">=</span> <span class="n">t1</span>
+                                <span class="n">ext_stc</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ext_stc</span><span class="p">:</span>
+                        <span class="n">s</span><span class="p">[</span><span class="s2">&quot;statementType&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">t1</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;annotation&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">s</span><span class="p">[</span><span class="s2">&quot;statementContent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;annotation&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                        <span class="c1"># stct = {</span>
+                        <span class="c1">#    &quot;@id&quot;: &quot;Annotation_{}&quot;.format(rel_1[&quot;annotation&quot;][0][&quot;id&quot;]),</span>
+                        <span class="c1">#    &quot;label&quot;: rel_1[&quot;annotation&quot;][0][&quot;text&quot;]</span>
+                        <span class="c1"># }</span>
+                        <span class="c1"># if &quot;statementContent&quot; in s.keys():</span>
+                        <span class="c1">#    s[&quot;statementContent&quot;].append(stct)</span>
+                        <span class="c1"># else:</span>
+                        <span class="c1">#    s[&quot;statementContent&quot;] = [stct,]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;revisions&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">user_1</span> <span class="o">=</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;revisions&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;user_created&quot;</span><span class="p">]</span>
+                        <span class="n">date_1</span> <span class="o">=</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;revisions&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;date_created&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                            <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                        <span class="n">rev_id</span> <span class="o">=</span> <span class="n">rel_1</span><span class="p">[</span><span class="s2">&quot;revisions&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_1</span><span class="p">,</span> <span class="n">date_1</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">facts_ind</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="n">facts_ind</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_1</span><span class="p">,</span> <span class="n">date_1</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">factoids</span><span class="p">)</span>
+                            <span class="n">s3</span> <span class="o">=</span> <span class="p">{</span>
+                                <span class="s2">&quot;person&quot;</span><span class="p">:</span> <span class="n">factoids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;person&quot;</span><span class="p">],</span>
+                                <span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">factoids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;@id&quot;</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">stmts</span><span class="p">)),</span>
+                                <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                    <span class="s2">&quot;@id&quot;</span><span class="p">:</span> <span class="s2">&quot;APIS&quot;</span><span class="p">,</span>
+                                    <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;APIS highlighter annotations rev. </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                        <span class="n">rev_id</span>
+                                    <span class="p">),</span>
+                                <span class="p">},</span>
+                                <span class="s2">&quot;createdBy&quot;</span><span class="p">:</span> <span class="n">user_1</span><span class="p">,</span>
+                                <span class="s2">&quot;createdWhen&quot;</span><span class="p">:</span> <span class="n">date_1</span><span class="p">,</span>
+                                <span class="s2">&quot;statements&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">s</span><span class="p">],</span>
+                            <span class="p">}</span>
+                            <span class="n">factoids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s3</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">factoids</span><span class="p">[</span><span class="n">facts_ind</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_1</span><span class="p">,</span> <span class="n">date_1</span><span class="p">)]][</span>
+                                <span class="s2">&quot;statements&quot;</span>
+                            <span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+                            <span class="n">factoids</span><span class="p">[</span><span class="n">facts_ind</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_1</span><span class="p">,</span> <span class="n">date_1</span><span class="p">)]][</span>
+                                <span class="s2">&quot;source&quot;</span>
+                            <span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; / </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rev_id</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">factoids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;statements&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;factoids&quot;</span><span class="p">:</span> <span class="n">factoids</span><span class="p">},</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">DjangoJSONEncoder</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

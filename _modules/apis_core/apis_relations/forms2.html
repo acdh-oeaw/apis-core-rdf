@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.apis_relations.forms2 &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.apis_relations.forms2</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.apis_relations.forms2</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">crispy_forms.bootstrap</span> <span class="kn">import</span> <span class="n">Accordion</span><span class="p">,</span> <span class="n">AccordionGroup</span>
+<span class="kn">from</span> <span class="nn">crispy_forms.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
+<span class="kn">from</span> <span class="nn">crispy_forms.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+
+<span class="c1"># import autocomplete_light.shortcuts as al</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span><span class="p">,</span> <span class="n">Property</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.fields</span> <span class="kn">import</span> <span class="n">ListSelect2</span>
+
+<span class="c1"># from apis_core.apis_entities.models import AbstractEntity</span>
+<span class="c1"># from dal.autocomplete import ListSelect2</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Uri</span>
+
+<span class="c1"># from apis_core.apis_relations.models import AbstractRelation</span>
+<span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">DateParser</span>
+<span class="kn">from</span> <span class="nn">apis_core.helper_functions.RDFParser</span> <span class="kn">import</span> <span class="n">RDFParser</span><span class="p">,</span> <span class="n">APIS_RDF_URI_SETTINGS</span>
+<span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">get_generic_relations_table</span><span class="p">,</span> <span class="n">get_generic_triple_table</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.autocomplete3</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PropertyAutocomplete</span><span class="p">,</span>
+    <span class="n">GenericEntitiesAutocomplete</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># from dal.autocomplete import ListSelect2</span>
+
+<span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">apis_highlighter.models</span> <span class="kn">import</span> <span class="n">Annotation</span><span class="p">,</span> <span class="n">AnnotationProject</span>
+
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
+<div class="viewcode-block" id="validate_target_autocomplete"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.validate_target_autocomplete">[docs]</a><span class="k">def</span> <span class="nf">validate_target_autocomplete</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+            <span class="n">test</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">sett</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">APIS_RDF_URI_SETTINGS</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">))</span>
+            <span class="n">regx</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;regex&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sett</span><span class="p">[</span><span class="s2">&quot;mappings&quot;</span><span class="p">]]</span>
+            <span class="n">regx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;http.*oeaw\.ac\.at&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_AC_INSTANCES&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">regx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;\.&quot;</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regx</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+                    <span class="n">test</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">test</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+                        <span class="n">_</span><span class="p">(</span>
+                            <span class="s2">&quot;Invalid value: </span><span class="si">%(value)s</span><span class="s2">, the url you are using is not configured&quot;</span>
+                        <span class="p">),</span>
+                        <span class="n">code</span><span class="o">=</span><span class="s2">&quot;invalid&quot;</span><span class="p">,</span>
+                        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">},</span>
+                    <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Invalid value: </span><span class="si">%(value)s</span><span class="s2">, use either URLs or select a value&quot;</span><span class="p">),</span>
+                <span class="n">code</span><span class="o">=</span><span class="s2">&quot;invalid&quot;</span><span class="p">,</span>
+                <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">},</span>
+            <span class="p">)</span></div>
+
+
+<span class="c1"># __before_rdf_refactoring__</span>
+<span class="c1">#</span>
+<span class="c1"># class GenericRelationForm(forms.ModelForm):</span>
+<span class="c1">#</span>
+<span class="c1">#     class Meta:</span>
+<span class="c1">#         model = TempEntityClass</span>
+<span class="c1">#         fields = [&#39;start_date_written&#39;, &#39;end_date_written&#39;, &#39;references&#39;, &#39;notes&#39;]</span>
+<span class="c1">#         labels = {</span>
+<span class="c1">#             &#39;start_date_written&#39;: _(&#39;Start&#39;),</span>
+<span class="c1">#             &#39;end_date_written&#39;: _(&#39;End&#39;),</span>
+<span class="c1">#         }</span>
+<span class="c1">#</span>
+<span class="c1">#     def save(self, site_instance, instance=None, commit=True):</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         Save function of the GenericRelationForm.</span>
+<span class="c1">#         :param site_instance: Instance where the form is used on</span>
+<span class="c1">#         :param instance: PK of the relation that is saved</span>
+<span class="c1">#         :param commit: Whether to already commit the save.</span>
+<span class="c1">#         :type site_instance: object</span>
+<span class="c1">#         :type instance: int</span>
+<span class="c1">#         :type commit: bool</span>
+<span class="c1">#         :rtype: object</span>
+<span class="c1">#         :return: instance of relation</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         cd = self.cleaned_data</span>
+<span class="c1">#         if instance:</span>
+<span class="c1">#             x = self.relation_form.objects.get(pk=instance)</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             x = self.relation_form()</span>
+<span class="c1">#         x.relation_type_id = cd[&#39;relation_type&#39;]</span>
+<span class="c1">#         x.start_date_written = cd[&#39;start_date_written&#39;]</span>
+<span class="c1">#         x.end_date_written = cd[&#39;end_date_written&#39;]</span>
+<span class="c1">#         x.notes = cd[&#39;notes&#39;]</span>
+<span class="c1">#         x.references = cd[&#39;references&#39;]</span>
+<span class="c1">#         setattr(x, self.rel_accessor[3], site_instance)</span>
+<span class="c1">#         target = caching.get_entity_class_of_name(self.rel_accessor[0])</span>
+<span class="c1">#         t1 = target.get_or_create_uri(cd[&#39;target&#39;])</span>
+<span class="c1">#         if not t1:</span>
+<span class="c1">#             t1 = RDFParser(cd[&#39;target&#39;], self.rel_accessor[0]).get_or_create()</span>
+<span class="c1">#         setattr(x, self.rel_accessor[2], t1)</span>
+<span class="c1">#         if self.highlighter:</span>
+<span class="c1">#             an_proj = AnnotationProject.objects.get(pk=int(self.request.session.get(&#39;annotation_project&#39;, 1)))</span>
+<span class="c1">#             x.published = an_proj.published</span>
+<span class="c1">#         if commit:</span>
+<span class="c1">#             x.save()</span>
+<span class="c1">#         if self.highlighter:</span>
+<span class="c1">#             if not commit:</span>
+<span class="c1">#                 x.save()</span>
+<span class="c1">#             txt = Text.objects.get(pk=cd[&#39;HL_text_id&#39;][5:])</span>
+<span class="c1">#             a = Annotation(</span>
+<span class="c1">#                 start=cd[&#39;HL_start&#39;],</span>
+<span class="c1">#                 end=cd[&#39;HL_end&#39;],</span>
+<span class="c1">#                 text=txt,</span>
+<span class="c1">#                 user_added=self.request.user,</span>
+<span class="c1">#                 annotation_project_id=int(self.request.session.get(&#39;annotation_project&#39;, 1)))</span>
+<span class="c1">#             a.save()</span>
+<span class="c1">#             a.entity_link.add(x)</span>
+<span class="c1">#         print(&#39;saved: {}&#39;.format(x))</span>
+<span class="c1">#         return x</span>
+<span class="c1">#</span>
+<span class="c1">#     def get_text_id(self):</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         Function to retrieve the highlighted text.</span>
+<span class="c1">#         :return: ID of text that was highlighted</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         return self.cleaned_data[&#39;HL_text_id&#39;][5:]</span>
+<span class="c1">#</span>
+<span class="c1">#     def get_html_table(self, entity_type, request, site_instance, form_match):</span>
+<span class="c1">#</span>
+<span class="c1">#         table = get_generic_relations_table(relation_class=self.relation_form, entity_instance=site_instance, detail=False)</span>
+<span class="c1">#         prefix = re.match(r&#39;([A-Z][a-z])[^A-Z]*([A-Z][a-z])&#39;, self.relation_form.__name__)</span>
+<span class="c1">#         prefix = prefix.group(1)+prefix.group(2)+&#39;-&#39;</span>
+<span class="c1">#         if form_match.group(1) == form_match.group(2):</span>
+<span class="c1">#             dic_a = {&#39;related_&#39;+entity_type.lower()+&#39;A&#39;: site_instance}</span>
+<span class="c1">#             dic_b = {&#39;related_&#39; + entity_type.lower() + &#39;B&#39;: site_instance}</span>
+<span class="c1">#             if &#39;apis_highlighter&#39; in settings.INSTALLED_APPS:</span>
+<span class="c1">#                 objects = self.relation_form.objects.filter_ann_proj(request=request).filter(</span>
+<span class="c1">#                     Q(**dic_a) | Q(**dic_b)</span>
+<span class="c1">#                 )</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 objects = self.relation_form.objects.filter(</span>
+<span class="c1">#                     Q(**dic_a) | Q(**dic_b)</span>
+<span class="c1">#                 )</span>
+<span class="c1">#</span>
+<span class="c1">#             table_html = table(data=objects, prefix=prefix)</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             tab_query = {&#39;related_&#39;+entity_type.lower(): site_instance}</span>
+<span class="c1">#             if &#39;apis_highlighter&#39; in settings.INSTALLED_APPS:</span>
+<span class="c1">#                 ttab = self.relation_form.objects.filter_ann_proj(</span>
+<span class="c1">#                     request=request).filter(**tab_query)</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 ttab = self.relation_form.objects.filter(**tab_query)</span>
+<span class="c1">#             table_html = table(data=ttab, prefix=prefix)</span>
+<span class="c1">#         return table_html</span>
+<span class="c1">#</span>
+<span class="c1">#     def __init__(self, siteID=None, highlighter=False, *args, **kwargs):</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         Generic Form for relations.</span>
+<span class="c1">#         :param siteID: ID of the entity the form is used on</span>
+<span class="c1">#         :param entity_type: Entity type of the entity the form is used on</span>
+<span class="c1">#         :param relation_form: Type of relation form.</span>
+<span class="c1">#         :param instance: instance of relation.</span>
+<span class="c1">#         :param highlighter: whether the form is used in the highlighter</span>
+<span class="c1">#         :type siteID: int</span>
+<span class="c1">#         :type entity_type: object or int</span>
+<span class="c1">#         :type relation_form: object or int</span>
+<span class="c1">#         :type instance: object</span>
+<span class="c1">#         :type highlighter: bool</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         attrs = {&#39;data-placeholder&#39;: &#39;Type to get suggestions&#39;,</span>
+<span class="c1">#                  &#39;data-minimum-input-length&#39;: getattr(settings, &quot;APIS_MIN_CHAR&quot;, 3),</span>
+<span class="c1">#                  &#39;data-html&#39;: True,</span>
+<span class="c1">#                  &#39;style&#39;: &#39;width: 100%&#39;}</span>
+<span class="c1">#         help_text_target = &quot;Search and select or use an URL from a reference resource&quot;</span>
+<span class="c1">#         attrs_target = copy.deepcopy(attrs)</span>
+<span class="c1">#         attrs_target[&#39;data-tags&#39;] = &#39;1&#39;</span>
+<span class="c1">#         css_notes = &#39;LS&#39;</span>
+<span class="c1">#         self.highlighter = highlighter</span>
+<span class="c1">#         entity_type = kwargs.pop(&#39;entity_type&#39;)</span>
+<span class="c1">#         if type(entity_type) != str:</span>
+<span class="c1">#             entity_type = entity_type.__name__</span>
+<span class="c1">#         self.relation_form = kwargs.pop(&#39;relation_form&#39;)</span>
+<span class="c1">#         if type(self.relation_form) == str:</span>
+<span class="c1">#             self.relation_form = AbstractRelation.get_relation_class_of_name(self.relation_form)</span>
+<span class="c1">#         self.request = kwargs.pop(&#39;request&#39;, False)</span>
+<span class="c1">#         super(GenericRelationForm, self).__init__(*args, **kwargs)</span>
+<span class="c1">#         instance = getattr(self, &#39;instance&#39;, None)</span>
+<span class="c1">#         self.fields[&#39;relation_type&#39;] = forms.CharField(label=&#39;Relation type&#39;, required=True)</span>
+<span class="c1">#         self.helper = FormHelper()</span>
+<span class="c1">#         self.helper.form_class = &#39;{}Form&#39;.format(str(self.relation_form))</span>
+<span class="c1">#         self.helper.form_tag = False</span>
+<span class="c1">#         lst_src_target = re.findall(&#39;[A-Z][^A-Z]*&#39;, self.relation_form.__name__)</span>
+<span class="c1">#         if lst_src_target[0] == lst_src_target[1]:</span>
+<span class="c1">#             if instance and instance.id:</span>
+<span class="c1">#                 if getattr(instance, &#39;related_{}A_id&#39;.format(lst_src_target[0].lower())) == int(siteID):</span>
+<span class="c1">#                     self.rel_accessor = (lst_src_target[1], True,</span>
+<span class="c1">#                                          &#39;related_{}B&#39;.format(lst_src_target[1].lower()),</span>
+<span class="c1">#                                          &#39;related_{}A&#39;.format(lst_src_target[0].lower()))</span>
+<span class="c1">#                 else:</span>
+<span class="c1">#                     self.rel_accessor = (lst_src_target[1], False,</span>
+<span class="c1">#                                          &#39;related_{}A&#39;.format(lst_src_target[1].lower()),</span>
+<span class="c1">#                                          &#39;related_{}B&#39;.format(lst_src_target[0].lower()))</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 self.rel_accessor = (lst_src_target[1], True,</span>
+<span class="c1">#                                      &#39;related_{}B&#39;.format(lst_src_target[1].lower()),</span>
+<span class="c1">#                                      &#39;related_{}A&#39;.format(lst_src_target[0].lower()))</span>
+<span class="c1">#             self.fields[&#39;relation_type&#39;] = autocomplete.Select2ListCreateChoiceField(</span>
+<span class="c1">#                 label=&#39;Relation type&#39;,</span>
+<span class="c1">#                 widget=ListSelect2(</span>
+<span class="c1">#                     #url=&#39;/vocabularies/autocomplete/{}{}relation/normal&#39;.format(lst_src_target[0].lower(), lst_src_target[1].lower()),</span>
+<span class="c1">#                     url=reverse(&#39;apis:apis_vocabularies:generic_vocabularies_autocomplete&#39;, args=[&#39;&#39;.join([lst_src_target[0].lower(), lst_src_target[1].lower(), &#39;relation&#39;]), &#39;normal&#39;]),</span>
+<span class="c1">#                     attrs=attrs))</span>
+<span class="c1">#             self.fields[&#39;target&#39;] = autocomplete.Select2ListCreateChoiceField(</span>
+<span class="c1">#                 label=lst_src_target[1],</span>
+<span class="c1">#                 widget=ListSelect2(</span>
+<span class="c1">#                     #url=&#39;/entities/autocomplete/{}&#39;.format(lst_src_target[1].lower()),</span>
+<span class="c1">#                     url = reverse(&#39;apis:apis_entities:generic_entities_autocomplete&#39;, args=[lst_src_target[1].lower()]),</span>
+<span class="c1">#                     attrs=attrs_target),</span>
+<span class="c1">#                 validators=[validate_target_autocomplete],</span>
+<span class="c1">#                 help_text=help_text_target)</span>
+<span class="c1">#         elif entity_type.lower() == lst_src_target[0].lower():</span>
+<span class="c1">#             self.rel_accessor = (lst_src_target[1], True,</span>
+<span class="c1">#                                  &#39;related_{}&#39;.format(lst_src_target[1].lower()),</span>
+<span class="c1">#                                  &#39;related_{}&#39;.format(lst_src_target[0].lower()))</span>
+<span class="c1">#             self.fields[&#39;relation_type&#39;] = autocomplete.Select2ListCreateChoiceField(</span>
+<span class="c1">#                 label=&#39;Relation type&#39;,</span>
+<span class="c1">#                 widget=ListSelect2(</span>
+<span class="c1">#                     #url=&#39;/vocabularies/autocomplete/{}{}relation/normal&#39;.format(lst_src_target[0].lower(), lst_src_target[1].lower()),</span>
+<span class="c1">#                     url=reverse(&#39;apis:apis_vocabularies:generic_vocabularies_autocomplete&#39;, args=[&#39;&#39;.join([lst_src_target[0].lower(), lst_src_target[1].lower(), &#39;relation&#39;]), &#39;normal&#39;]),</span>
+<span class="c1">#                     attrs=attrs))</span>
+<span class="c1">#             self.fields[&#39;target&#39;] = autocomplete.Select2ListCreateChoiceField(</span>
+<span class="c1">#                 label=lst_src_target[1],</span>
+<span class="c1">#                 widget=ListSelect2(</span>
+<span class="c1">#                     #url=&#39;/entities/autocomplete/{}&#39;.format(lst_src_target[1].lower()),</span>
+<span class="c1">#                     url = reverse(&#39;apis:apis_entities:generic_entities_autocomplete&#39;, args=[lst_src_target[1].lower()]),</span>
+<span class="c1">#                     attrs=attrs_target),</span>
+<span class="c1">#                 validators=[validate_target_autocomplete],</span>
+<span class="c1">#                 help_text=help_text_target)</span>
+<span class="c1">#         elif entity_type.lower() == lst_src_target[1].lower():</span>
+<span class="c1">#             self.rel_accessor = (lst_src_target[0], False,</span>
+<span class="c1">#                                  &#39;related_{}&#39;.format(lst_src_target[0].lower()),</span>
+<span class="c1">#                                  &#39;related_{}&#39;.format(lst_src_target[1].lower()))</span>
+<span class="c1">#             self.fields[&#39;relation_type&#39;] = autocomplete.Select2ListCreateChoiceField(</span>
+<span class="c1">#                 label=&#39;Relation type&#39;,</span>
+<span class="c1">#                 widget=ListSelect2(</span>
+<span class="c1">#                     #url=&#39;/vocabularies/autocomplete/{}{}relation/reverse&#39;.format(lst_src_target[0].lower(), lst_src_target[1].lower()),</span>
+<span class="c1">#                     url=reverse(&#39;apis:apis_vocabularies:generic_vocabularies_autocomplete&#39;, args=[&#39;&#39;.join([lst_src_target[0].lower(), lst_src_target[1].lower(), &#39;relation&#39;]), &#39;reverse&#39;]),</span>
+<span class="c1">#                     attrs=attrs))</span>
+<span class="c1">#             self.fields[&#39;target&#39;] = autocomplete.Select2ListCreateChoiceField(</span>
+<span class="c1">#                 label=lst_src_target[0],</span>
+<span class="c1">#                 widget=ListSelect2(</span>
+<span class="c1">#                     #url=&#39;/entities/autocomplete/{}&#39;.format(lst_src_target[0].lower()),</span>
+<span class="c1">#                     url = reverse(&#39;apis:apis_entities:generic_entities_autocomplete&#39;, args=[lst_src_target[0].lower()]),</span>
+<span class="c1">#                     attrs=attrs_target),</span>
+<span class="c1">#                 validators=[validate_target_autocomplete],</span>
+<span class="c1">#                 help_text=help_text_target)</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             print(&#39;no hit rel_accessor&#39;)</span>
+<span class="c1">#         if instance and instance.id:</span>
+<span class="c1">#             self.fields[&#39;target&#39;].choices = [</span>
+<span class="c1">#                 (str(Uri.objects.filter(entity=getattr(instance, self.rel_accessor[2]))[0]),</span>
+<span class="c1">#                  str(getattr(instance, self.rel_accessor[2])))]</span>
+<span class="c1">#             self.fields[&#39;target&#39;].initial = (str(Uri.objects.filter(entity=getattr(instance, self.rel_accessor[2]))[0]),</span>
+<span class="c1">#                                              str(getattr(instance, self.rel_accessor[2])))</span>
+<span class="c1">#             if self.rel_accessor[1]:</span>
+<span class="c1">#                 self.fields[&#39;relation_type&#39;].choices = [(instance.relation_type.id,</span>
+<span class="c1">#                                                          instance.relation_type.label)]</span>
+<span class="c1">#                 self.fields[&#39;relation_type&#39;].initial = (instance.relation_type.id, instance.relation_type.label)</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 self.fields[&#39;relation_type&#39;].choices = [(instance.relation_type.id,</span>
+<span class="c1">#                                                          instance.relation_type.label_reverse)]</span>
+<span class="c1">#                 self.fields[&#39;relation_type&#39;].initial = (instance.relation_type.id, instance.relation_type.label_reverse)</span>
+<span class="c1">#         if highlighter:</span>
+<span class="c1">#             css_notes = &#39;HL&#39;</span>
+<span class="c1">#</span>
+<span class="c1">#         self.helper.include_media = False</span>
+<span class="c1">#         self.helper.layout = Layout(</span>
+<span class="c1">#             &#39;relation_type&#39;,</span>
+<span class="c1">#             &#39;target&#39;,</span>
+<span class="c1">#             &#39;start_date_written&#39;,</span>
+<span class="c1">#             &#39;end_date_written&#39;,</span>
+<span class="c1">#             Accordion(</span>
+<span class="c1">#                 AccordionGroup(</span>
+<span class="c1">#                     &#39;Notes and References&#39;,</span>
+<span class="c1">#                     &#39;notes&#39;,</span>
+<span class="c1">#                     &#39;references&#39;,</span>
+<span class="c1">#                     active=False,</span>
+<span class="c1">#                     css_id=&quot;{}_{}_notes_refs&quot;.format(self.relation_form.__name__, css_notes))))</span>
+<span class="c1">#</span>
+<span class="c1">#         if highlighter:</span>
+<span class="c1">#             self.fields[&#39;HL_start&#39;] = forms.IntegerField(widget=forms.HiddenInput)</span>
+<span class="c1">#             self.fields[&#39;HL_end&#39;] = forms.IntegerField(widget=forms.HiddenInput)</span>
+<span class="c1">#             self.fields[&#39;HL_text_id&#39;] = forms.CharField(widget=forms.HiddenInput)</span>
+<span class="c1">#             self.helper.layout.extend([</span>
+<span class="c1">#                 &#39;HL_start&#39;,</span>
+<span class="c1">#                 &#39;HL_end&#39;,</span>
+<span class="c1">#                 &#39;HL_text_id&#39;])</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#         if instance != None:</span>
+<span class="c1">#</span>
+<span class="c1">#             if instance.start_date_written:</span>
+<span class="c1">#                 self.fields[&#39;start_date_written&#39;].help_text = DateParser.get_date_help_text_from_dates(</span>
+<span class="c1">#                     single_date=instance.start_date,</span>
+<span class="c1">#                     single_start_date=instance.start_start_date,</span>
+<span class="c1">#                     single_end_date=instance.start_end_date,</span>
+<span class="c1">#                     single_date_written=instance.start_date_written,</span>
+<span class="c1">#                 )</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 self.fields[&#39;start_date_written&#39;].help_text = DateParser.get_date_help_text_default()</span>
+<span class="c1">#</span>
+<span class="c1">#             if instance.end_date_written:</span>
+<span class="c1">#                 self.fields[&#39;end_date_written&#39;].help_text = DateParser.get_date_help_text_from_dates(</span>
+<span class="c1">#                     single_date=instance.end_date,</span>
+<span class="c1">#                     single_start_date=instance.end_start_date,</span>
+<span class="c1">#                     single_end_date=instance.end_end_date,</span>
+<span class="c1">#                     single_date_written=instance.end_date_written,</span>
+<span class="c1">#                 )</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 self.fields[&#39;end_date_written&#39;].help_text = DateParser.get_date_help_text_default()</span>
+<span class="c1">#</span>
+<span class="c1"># __after_rdf_refactoring__</span>
+<div class="viewcode-block" id="GenericTripleForm"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm">[docs]</a><span class="k">class</span> <span class="nc">GenericTripleForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+
+    <span class="c1"># TODO RDF : Add Notes and references</span>
+
+<div class="viewcode-block" id="GenericTripleForm.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">TempTriple</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;subj&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;obj&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;prop&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;start_date_written&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;end_date_written&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">widgets</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;subj&quot;</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">HiddenInput</span><span class="p">(),</span>
+            <span class="s2">&quot;obj&quot;</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">HiddenInput</span><span class="p">(),</span>
+            <span class="s2">&quot;prop&quot;</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">HiddenInput</span><span class="p">(),</span>
+        <span class="p">}</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_type_self_str</span><span class="p">,</span> <span class="n">entity_type_other_str</span><span class="p">):</span>
+
+        <span class="c1"># __before_rdf_refactoring__</span>
+        <span class="c1">#</span>
+        <span class="c1"># css_notes = &#39;LS&#39;</span>
+        <span class="c1"># self.highlighter = highlighter</span>
+        <span class="c1"># entity_type = kwargs.pop(&#39;entity_type&#39;)</span>
+        <span class="c1"># if type(entity_type) != str:</span>
+        <span class="c1">#     entity_type = entity_type.__name__</span>
+        <span class="c1"># self.relation_form = kwargs.pop(&#39;relation_form&#39;)</span>
+        <span class="c1"># if type(self.relation_form) == str:</span>
+        <span class="c1">#     self.relation_form = AbstractRelation.get_relation_class_of_name(self.relation_form)</span>
+        <span class="c1"># self.request = kwargs.pop(&#39;request&#39;, False)</span>
+        <span class="c1"># super(GenericRelationForm, self).__init__(*args, **kwargs)</span>
+        <span class="c1"># instance = getattr(self, &#39;instance&#39;, None)</span>
+        <span class="c1"># self.fields[&#39;relation_type&#39;] = forms.CharField(label=&#39;Relation type&#39;, required=True)</span>
+        <span class="c1"># self.helper = FormHelper()</span>
+        <span class="c1"># self.helper.form_class = &#39;{}Form&#39;.format(str(self.relation_form))</span>
+        <span class="c1"># self.helper.form_tag = False</span>
+        <span class="c1"># lst_src_target = re.findall(&#39;[A-Z][^A-Z]*&#39;, self.relation_form.__name__)</span>
+        <span class="c1">#</span>
+        <span class="c1"># __after_rdf_refactoring__</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_tag</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;data-placeholder&quot;</span><span class="p">:</span> <span class="s2">&quot;Type to get suggestions&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;data-minimum-input-length&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_MIN_CHAR&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="s2">&quot;data-html&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;width: 100%&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">help_text_other_entity</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Search and select or use an URL from a reference resource&quot;</span>
+        <span class="p">)</span>
+        <span class="n">attrs_target</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+        <span class="n">attrs_target</span><span class="p">[</span><span class="s2">&quot;data-tags&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+
+        <span class="c1"># This assert only serves as a linking for us devs, to make explicit what internal object the class</span>
+        <span class="c1"># Select2ListCreateChoiceField object afterwards uses.</span>
+        <span class="k">assert</span> <span class="n">GenericEntitiesAutocomplete</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListCreateChoiceField</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;entity&quot;</span><span class="p">,</span>
+            <span class="n">widget</span><span class="o">=</span><span class="n">ListSelect2</span><span class="p">(</span>
+                <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
+                    <span class="s2">&quot;apis:apis_entities:generic_entities_autocomplete&quot;</span><span class="p">,</span>
+                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity_type_other_str</span><span class="p">},</span>
+                <span class="p">),</span>
+                <span class="n">attrs</span><span class="o">=</span><span class="n">attrs_target</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">help_text</span><span class="o">=</span><span class="n">help_text_other_entity</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># This assert only serves as a linking for us devs, to make explicit what internal object the class</span>
+        <span class="c1"># Select2ListCreateChoiceField object afterwards uses.</span>
+        <span class="k">assert</span> <span class="n">PropertyAutocomplete</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListCreateChoiceField</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;property&quot;</span><span class="p">,</span>
+            <span class="n">widget</span><span class="o">=</span><span class="n">ListSelect2</span><span class="p">(</span>
+                <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
+                    <span class="s2">&quot;apis:apis_relations:generic_property_autocomplete&quot;</span><span class="p">,</span>
+                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;entity_self&quot;</span><span class="p">:</span> <span class="n">entity_type_self_str</span><span class="p">,</span>
+                        <span class="s2">&quot;entity_other&quot;</span><span class="p">:</span> <span class="n">entity_type_other_str</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">),</span>
+                <span class="n">attrs</span><span class="o">=</span><span class="n">attrs_target</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># if self.highlighter: # TODO RDF</span>
+        <span class="c1">#     css_notes = &#39;HL&#39;</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     css_notes = &#39;LS&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">include_media</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># __before_rdf_refactoring__ # TODO RDF</span>
+        <span class="c1">#</span>
+        <span class="c1"># self.helper.layout = Layout(</span>
+        <span class="c1">#     &#39;relation_type&#39;,</span>
+        <span class="c1">#     &#39;target&#39;,</span>
+        <span class="c1">#     &#39;start_date_written&#39;,</span>
+        <span class="c1">#     &#39;end_date_written&#39;,</span>
+        <span class="c1">#     Accordion(</span>
+        <span class="c1">#         AccordionGroup(</span>
+        <span class="c1">#             &#39;Notes and References&#39;,</span>
+        <span class="c1">#             &#39;notes&#39;,</span>
+        <span class="c1">#             &#39;references&#39;,</span>
+        <span class="c1">#             active=False,</span>
+        <span class="c1">#             css_id=&quot;{}_{}_notes_refs&quot;.format(self.relation_form.__name__, css_notes)</span>
+        <span class="c1">#         )</span>
+        <span class="c1">#     )</span>
+        <span class="c1"># )</span>
+
+        <span class="c1"># __before_rdf_refactoring__ # TODO RDF</span>
+        <span class="c1">#</span>
+        <span class="c1"># self.</span>
+        <span class="c1"># if self.highlighter:</span>
+        <span class="c1">#     self.fields[&#39;HL_start&#39;] = forms.IntegerField(widget=forms.HiddenInput)</span>
+        <span class="c1">#     self.fields[&#39;HL_end&#39;] = forms.IntegerField(widget=forms.HiddenInput)</span>
+        <span class="c1">#     self.fields[&#39;HL_text_id&#39;] = forms.CharField(widget=forms.HiddenInput)</span>
+        <span class="c1">#     self.helper.layout.extend(</span>
+        <span class="c1">#         [</span>
+        <span class="c1">#             &#39;HL_start&#39;,</span>
+        <span class="c1">#             &#39;HL_end&#39;,</span>
+        <span class="c1">#             &#39;HL_text_id&#39;</span>
+        <span class="c1">#         ]</span>
+        <span class="c1">#     )</span>
+
+        <span class="c1"># __before_rdf_refactoring__ # TODO RDF :</span>
+        <span class="c1">#</span>
+        <span class="c1"># if instance != None:</span>
+        <span class="c1">#</span>
+        <span class="c1">#     if instance.start_date_written:</span>
+        <span class="c1">#         self.fields[&#39;start_date_written&#39;].help_text = DateParser.get_date_help_text_from_dates(</span>
+        <span class="c1">#             single_date=instance.start_date,</span>
+        <span class="c1">#             single_start_date=instance.start_start_date,</span>
+        <span class="c1">#             single_end_date=instance.start_end_date,</span>
+        <span class="c1">#             single_date_written=instance.start_date_written,</span>
+        <span class="c1">#         )</span>
+        <span class="c1">#     else:</span>
+        <span class="c1">#         self.fields[&#39;start_date_written&#39;].help_text = DateParser.get_date_help_text_default()</span>
+        <span class="c1">#</span>
+        <span class="c1">#     if instance.end_date_written:</span>
+        <span class="c1">#         self.fields[&#39;end_date_written&#39;].help_text = DateParser.get_date_help_text_from_dates(</span>
+        <span class="c1">#             single_date=instance.end_date,</span>
+        <span class="c1">#             single_start_date=instance.end_start_date,</span>
+        <span class="c1">#             single_end_date=instance.end_end_date,</span>
+        <span class="c1">#             single_date_written=instance.end_date_written,</span>
+        <span class="c1">#         )</span>
+        <span class="c1">#     else:</span>
+        <span class="c1">#         self.fields[&#39;end_date_written&#39;].help_text = DateParser.get_date_help_text_default()</span>
+
+<div class="viewcode-block" id="GenericTripleForm.load_subj_obj_prop"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_subj_obj_prop">[docs]</a>    <span class="k">def</span> <span class="nf">load_subj_obj_prop</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">entity_instance_self</span><span class="p">,</span>
+        <span class="n">entity_instance_other</span><span class="p">,</span>
+        <span class="n">property_instance</span><span class="p">,</span>
+        <span class="n">property_direction</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="c1"># the more important function here when writing data from an user input via an ajax call into this form.</span>
+        <span class="c1"># Because here the direction of the property is respected. Hence the subject and object position of the</span>
+        <span class="c1"># triple and the property name or name_reverse are loaded correctly here.</span>
+
+        <span class="k">if</span> <span class="n">property_direction</span> <span class="o">==</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_SUBJ_OTHER_OBJ_STR</span><span class="p">:</span>
+
+            <span class="n">triple_subj</span> <span class="o">=</span> <span class="n">entity_instance_self</span>
+            <span class="n">triple_obj</span> <span class="o">=</span> <span class="n">entity_instance_other</span>
+            <span class="n">property_direction_name</span> <span class="o">=</span> <span class="n">property_instance</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">elif</span> <span class="n">property_direction</span> <span class="o">==</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_OBJ_OTHER_SUBJ_STR</span><span class="p">:</span>
+
+            <span class="n">triple_subj</span> <span class="o">=</span> <span class="n">entity_instance_other</span>
+            <span class="n">triple_obj</span> <span class="o">=</span> <span class="n">entity_instance_self</span>
+            <span class="n">property_direction_name</span> <span class="o">=</span> <span class="n">property_instance</span><span class="o">.</span><span class="n">name_reverse</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No valid property direction given.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">triple_subj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">triple_obj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;prop&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">property_instance</span>
+
+        <span class="n">property_initial_value</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;id:</span><span class="si">{</span><span class="n">property_instance</span><span class="o">.</span><span class="n">pk</span><span class="si">}</span><span class="s2">__direction:</span><span class="si">{</span><span class="n">property_direction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">property_direction_name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">property_initial_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span><span class="n">property_initial_value</span><span class="p">]</span>
+
+        <span class="n">other_entity_initial_value</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="n">entity_instance_other</span><span class="p">)),</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;span &gt;&lt;small&gt;db&lt;/small&gt; </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">entity_instance_other</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/span&gt;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">other_entity_initial_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span><span class="n">other_entity_initial_value</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="GenericTripleForm.load_remaining_data_from_triple"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_triple">[docs]</a>    <span class="k">def</span> <span class="nf">load_remaining_data_from_triple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triple</span><span class="p">):</span>
+        <span class="c1"># Most data is loaded via the set_subj_obj function.</span>
+        <span class="c1"># Here, load the rest from a pre-existing triple.</span>
+        <span class="c1">#</span>
+        <span class="c1"># This function is both used in get_form_ajax and save_form_ajax,</span>
+        <span class="c1"># hence it&#39;s not feasible to assume existing user input as done</span>
+        <span class="c1"># in &#39;load_remaining_data_from_input&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">triple</span><span class="o">.</span><span class="n">start_date_written</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">triple</span><span class="o">.</span><span class="n">end_date_written</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">triple</span></div>
+
+<div class="viewcode-block" id="GenericTripleForm.load_remaining_data_from_input"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_input">[docs]</a>    <span class="k">def</span> <span class="nf">load_remaining_data_from_input</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">start_date_written</span><span class="p">,</span>
+        <span class="n">end_date_written</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="c1"># Most data is loaded via the set_subj_obj function.</span>
+        <span class="c1"># Here, load the rest from the user input via the ajax post</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">start_date_written</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">end_date_written</span></div>
+
+<div class="viewcode-block" id="GenericTripleForm.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1"># __before_rdf_refactoring__</span>
+        <span class="c1">#</span>
+        <span class="c1"># &quot;&quot;&quot;</span>
+        <span class="c1"># Save function of the GenericRelationForm.</span>
+        <span class="c1"># :param site_instance: Instance where the form is used on</span>
+        <span class="c1"># :param instance: PK of the relation that is saved</span>
+        <span class="c1"># :param commit: Whether to already commit the save.</span>
+        <span class="c1"># :type site_instance: object</span>
+        <span class="c1"># :type instance: int</span>
+        <span class="c1"># :type commit: bool</span>
+        <span class="c1"># :rtype: object</span>
+        <span class="c1"># :return: instance of relation</span>
+        <span class="c1"># &quot;&quot;&quot;</span>
+        <span class="c1"># cd = self.cleaned_data</span>
+        <span class="c1"># if instance:</span>
+        <span class="c1">#     x = self.relation_form.objects.get(pk=instance)</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     x = self.relation_form()</span>
+        <span class="c1"># x.relation_type_id = cd[&#39;relation_type&#39;]</span>
+        <span class="c1"># x.start_date_written = cd[&#39;start_date_written&#39;]</span>
+        <span class="c1"># x.end_date_written = cd[&#39;end_date_written&#39;]</span>
+        <span class="c1"># x.notes = cd[&#39;notes&#39;]</span>
+        <span class="c1"># x.references = cd[&#39;references&#39;]</span>
+        <span class="c1"># setattr(x, self.rel_accessor[3], site_instance)</span>
+        <span class="c1"># target = caching.get_entity_class_of_name(self.rel_accessor[0])</span>
+        <span class="c1"># t1 = target.get_or_create_uri(cd[&#39;target&#39;])</span>
+        <span class="c1"># if not t1:</span>
+        <span class="c1">#     t1 = RDFParser(cd[&#39;target&#39;], self.rel_accessor[0]).get_or_create()</span>
+        <span class="c1"># setattr(x, self.rel_accessor[2], t1)</span>
+        <span class="c1"># if self.highlighter:</span>
+        <span class="c1">#     an_proj = AnnotationProject.objects.get(pk=int(self.request.session.get(&#39;annotation_project&#39;, 1)))</span>
+        <span class="c1">#     x.published = an_proj.published</span>
+        <span class="c1"># if commit:</span>
+        <span class="c1">#     x.save()</span>
+        <span class="c1"># if self.highlighter:</span>
+        <span class="c1">#     if not commit:</span>
+        <span class="c1">#         x.save()</span>
+        <span class="c1">#     txt = Text.objects.get(pk=cd[&#39;HL_text_id&#39;][5:])</span>
+        <span class="c1">#     a = Annotation(</span>
+        <span class="c1">#         start=cd[&#39;HL_start&#39;],</span>
+        <span class="c1">#         end=cd[&#39;HL_end&#39;],</span>
+        <span class="c1">#         text=txt,</span>
+        <span class="c1">#         user_added=self.request.user,</span>
+        <span class="c1">#         annotation_project_id=int(self.request.session.get(&#39;annotation_project&#39;, 1)))</span>
+        <span class="c1">#     a.entity_link = x</span>
+        <span class="c1">#     a.save()</span>
+        <span class="c1"># print(&#39;saved: {}&#39;.format(x))</span>
+        <span class="c1"># return x</span>
+        <span class="c1">#</span>
+        <span class="c1"># __after_rdf_refactoring__</span>
+        <span class="c1"># TODO RDF: make programmatic way to fetch fields and insert them as kwargs to existing or new triple</span>
+        <span class="c1"># Ideally, the form would be linked to an instance and the form fields are correctly set so that they correspond</span>
+        <span class="c1"># to the fields of the model defined in the Meta subclass of the form class. Then a save call on this form</span>
+        <span class="c1"># should actually save the model automatically. However I couldn&#39;t get this to work for whatever reason.</span>
+        <span class="c1"># Hence this save function where the model instance is saved manually.</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">pk</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">subj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span><span class="p">,</span>
+                <span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span><span class="p">,</span>
+                <span class="n">prop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;prop&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">subj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;prop&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">start_date_written</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">end_date_written</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span></div>
+
+<div class="viewcode-block" id="GenericTripleForm.get_text_id"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.get_text_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_text_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to retrieve the highlighted text.</span>
+<span class="sd">        :return: ID of text that was highlighted</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;HL_text_id&quot;</span><span class="p">][</span><span class="mi">5</span><span class="p">:]</span></div>
+
+<div class="viewcode-block" id="GenericTripleForm.get_html_table"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.get_html_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_html_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_instance_self</span><span class="p">,</span> <span class="n">entity_instance_other</span><span class="p">):</span>
+
+        <span class="c1"># __before_rdf_refactoring__ # TODO RDF :</span>
+        <span class="c1">#</span>
+        <span class="c1"># table = get_generic_relations_table(relation_class=self.relation_form, entity_instance=site_instance,</span>
+        <span class="c1">#                                     detail=False)</span>
+        <span class="c1"># prefix = re.match(r&#39;([A-Z][a-z])[^A-Z]*([A-Z][a-z])&#39;, self.relation_form.__name__)</span>
+        <span class="c1"># prefix = prefix.group(1) + prefix.group(2) + &#39;-&#39;</span>
+        <span class="c1"># if form_match.group(1) == form_match.group(2):</span>
+        <span class="c1">#     dic_a = {&#39;related_&#39; + entity_type.lower() + &#39;A&#39;: site_instance}</span>
+        <span class="c1">#     dic_b = {&#39;related_&#39; + entity_type.lower() + &#39;B&#39;: site_instance}</span>
+        <span class="c1">#     if &#39;apis_highlighter&#39; in settings.INSTALLED_APPS:</span>
+        <span class="c1">#         objects = self.relation_form.objects.filter_ann_proj(request=request).filter(</span>
+        <span class="c1">#             Q(**dic_a) | Q(**dic_b)</span>
+        <span class="c1">#         )</span>
+        <span class="c1">#     else:</span>
+        <span class="c1">#         objects = self.relation_form.objects.filter(</span>
+        <span class="c1">#             Q(**dic_a) | Q(**dic_b)</span>
+        <span class="c1">#         )</span>
+        <span class="c1">#</span>
+        <span class="c1">#     table_html = table(data=objects, prefix=prefix)</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     tab_query = {&#39;related_&#39; + entity_type.lower(): site_instance}</span>
+        <span class="c1">#     if &#39;apis_highlighter&#39; in settings.INSTALLED_APPS:</span>
+        <span class="c1">#         ttab = self.relation_form.objects.filter_ann_proj(</span>
+        <span class="c1">#             request=request).filter(**tab_query)</span>
+        <span class="c1">#     else:</span>
+        <span class="c1">#         ttab = self.relation_form.objects.filter(**tab_query)</span>
+        <span class="c1">#     table_html = table(data=ttab, prefix=prefix)</span>
+        <span class="c1"># return table_html</span>
+        <span class="c1">#</span>
+        <span class="c1"># __after_rdf_refactoring__</span>
+        <span class="n">table_class</span> <span class="o">=</span> <span class="n">get_generic_triple_table</span><span class="p">(</span>
+            <span class="n">other_entity_class_name</span><span class="o">=</span><span class="n">entity_instance_other</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+            <span class="n">entity_pk_self</span><span class="o">=</span><span class="n">entity_instance_self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">table_object</span> <span class="o">=</span> <span class="n">table_class</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">Q</span><span class="p">(</span><span class="n">subj__self_contenttype</span><span class="o">=</span><span class="n">entity_instance_other</span><span class="o">.</span><span class="n">self_contenttype</span><span class="p">)</span>
+                    <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">entity_instance_self</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="o">|</span> <span class="p">(</span>
+                    <span class="n">Q</span><span class="p">(</span><span class="n">obj__self_contenttype</span><span class="o">=</span><span class="n">entity_instance_other</span><span class="o">.</span><span class="n">self_contenttype</span><span class="p">)</span>
+                    <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">subj</span><span class="o">=</span><span class="n">entity_instance_self</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="n">entity_instance_other</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">table_object</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
