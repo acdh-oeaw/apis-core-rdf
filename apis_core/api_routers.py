@@ -4,13 +4,19 @@ import importlib
 import inspect
 from ast import literal_eval
 from django.conf import settings
-from apis_ontology.models import *
+
+try:
+    from apis_ontology.models import *
+except ImportError:
+    pass
 from apis_core.apis_metainfo.models import *
+
 # from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from rest_framework import pagination, serializers, viewsets
 from rest_framework import renderers
 from rest_framework.response import Response
+
 # from drf_spectacular.contrib.django_filters import (
 #     DjangoFilterBackend as DjangoFilterbackendSpectacular,
 # )
@@ -25,8 +31,8 @@ from django import forms
 from django_filters import rest_framework as filters
 from apis_core.apis_entities.models import TempEntityClass
 from .api_renderers import NetJsonRenderer
-from apis_core.helper_functions.ContentType import GetContentTypes
 from .apis_relations.models import Triple, Property
+from apis_core.helper_functions import caching
 
 if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
     from apis_highlighter.highlighter import highlight_text_new
@@ -151,7 +157,9 @@ class VocabsBaseSerializer(LabelSerializer, EntitySerializer):
 
 
 class RelatedTripleSerializer(ApisBaseSerializer):
-    relation_type =  serializers.SerializerMethodField(method_name="add_related_property")
+    relation_type = serializers.SerializerMethodField(
+        method_name="add_related_property"
+    )
     related_entity = serializers.SerializerMethodField(method_name="add_related_entity")
 
     class Meta:
@@ -167,18 +175,24 @@ class RelatedTripleSerializer(ApisBaseSerializer):
 
             class RelatedPropertySerializer(ApisBaseSerializer):
                 label = serializers.CharField(source="name_forward")
+
                 class Meta:
                     model = Property
                     fields = ["id", "label", "url"]
+
         elif triple.obj.pk == self._pk_instance:
 
             class RelatedPropertySerializer(ApisBaseSerializer):
                 label = serializers.CharField(source="name_reverse")
+
                 class Meta:
                     model = Property
                     fields = ["id", "label", "url"]
+
         else:
-            raise Exception("Did not find entity in triple where it is supposed to be. Something must be wrong with the code.")
+            raise Exception(
+                "Did not find entity in triple where it is supposed to be. Something must be wrong with the code."
+            )
         return RelatedPropertySerializer(triple.prop, context=self.context).data
 
     def add_related_entity(self, triple):
@@ -187,7 +201,10 @@ class RelatedTripleSerializer(ApisBaseSerializer):
         elif triple.obj.pk == self._pk_instance:
             return EntitySerializer(triple.subj, context=self.context).data
         else:
-            raise Exception("Did not find entity in triple where it is supposed to be. Something must be wrong with the code.")
+            raise Exception(
+                "Did not find entity in triple where it is supposed to be. Something must be wrong with the code."
+            )
+
 
 if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
 
@@ -200,8 +217,9 @@ if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
             model = Annotation
             fields = ["id", "start", "end", "related_object"]
 
+
 def generic_serializer_creation_factory():
-    lst_cont = GetContentTypes().get_model_classes()
+    lst_cont = caching.get_all_contenttype_classes()
     not_allowed_filter_fields = [
         "useradded",
         "vocab_name",
@@ -245,7 +263,9 @@ def generic_serializer_creation_factory():
         class TemplateSerializer(serializers.HyperlinkedModelSerializer):
 
             id = serializers.ReadOnlyField()
-            url = serializers.HyperlinkedIdentityField(view_name=f"apis:apis_api:{entity_str.lower()}-detail")
+            url = serializers.HyperlinkedIdentityField(
+                view_name=f"apis:apis_api:{entity_str.lower()}-detail"
+            )
             _entity = entity
             _exclude_lst = exclude_lst_fin
             _app_label = app_label
@@ -286,29 +306,33 @@ def generic_serializer_creation_factory():
                         ck_many = f.__class__.__name__ == "ManyToManyField"
                         if f.name in self._exclude_lst:
                             continue
-                        elif (
-                            f.__class__.__name__
-                            in [
-                                "ManyToManyField",
-                                "ForeignKey",
-                                "InheritanceForeignKey"
-                            ]
-                            and "apis_vocabularies" not in str(f.related_model)
-                        ):
+                        elif f.__class__.__name__ in [
+                            "ManyToManyField",
+                            "ForeignKey",
+                            "InheritanceForeignKey",
+                        ] and "apis_vocabularies" not in str(f.related_model):
                             self.fields[f.name] = ApisBaseSerializer(
                                 many=ck_many, read_only=True
                             )
                         elif f.__class__.__name__ in ["ManyToManyField", "ForeignKey"]:
-                            self.fields[f.name] = LabelSerializer(many=ck_many, read_only=True)
+                            self.fields[f.name] = LabelSerializer(
+                                many=ck_many, read_only=True
+                            )
 
-        TemplateSerializer.__name__ = TemplateSerializer.__qualname__ = f"{entity_str.title().replace(' ', '')}Serializer"
+        TemplateSerializer.__name__ = (
+            TemplateSerializer.__qualname__
+        ) = f"{entity_str.title().replace(' ', '')}Serializer"
 
         class TemplateSerializerRetrieve(TemplateSerializer):
 
             if entity_str.lower() == "text":
-                text = serializers.SerializerMethodField(method_name="txt_serializer_add_text")
+                text = serializers.SerializerMethodField(
+                    method_name="txt_serializer_add_text"
+                )
                 if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
-                    annotations = serializers.SerializerMethodField(method_name="txt_serializer_add_annotations")
+                    annotations = serializers.SerializerMethodField(
+                        method_name="txt_serializer_add_annotations"
+                    )
 
                     @extend_schema_field(AnnotationSerializer(many=True))
                     def txt_serializer_add_annotations(self, instance):
@@ -335,7 +359,9 @@ def generic_serializer_creation_factory():
                         self._ann_proj_pk = self.context.get("ann_proj_pk", None)
                         self._types = self.context.get("types", None)
                         self._users_show = self.context.get("users_show", None)
-                        self._inline_annotations = self.context.get("inline_annotations", True)
+                        self._inline_annotations = self.context.get(
+                            "inline_annotations", True
+                        )
                         if not isinstance(self._inline_annotations, bool):
                             if self._inline_annotations.lower() == "false":
                                 self._inline_annotations = False
@@ -354,9 +380,9 @@ def generic_serializer_creation_factory():
                                 qs_an["users_added__in"] = self._users_show
                             if self._ann_proj_pk is not None:
                                 qs_an["annotation_project_id"] = self._ann_proj_pk
-                            #self._annotations = Annotation.objects.filter(
+                            # self._annotations = Annotation.objects.filter(
                             #    **qs_an
-                            #)  # FIXME: Currently this QS is called twice (highlight_text_new)
+                            # )  # FIXME: Currently this QS is called twice (highlight_text_new)
                         except Exception as e:
                             self._txt_html = ""
                             self._annotations = []
@@ -391,19 +417,17 @@ def generic_serializer_creation_factory():
                         ck_many = f.__class__.__name__ == "ManyToManyField"
                         if f.name in self._exclude_lst:
                             continue
-                        elif (
-                            f.__class__.__name__
-                            in [
-                                "ManyToManyField",
-                                "ForeignKey",
-                            ]
-                            and "apis_vocabularies" not in str(f.related_model)
-                        ):
+                        elif f.__class__.__name__ in [
+                            "ManyToManyField",
+                            "ForeignKey",
+                        ] and "apis_vocabularies" not in str(f.related_model):
                             self.fields[f.name] = ApisBaseSerializer(
                                 many=ck_many, read_only=True
                             )
                         elif f.__class__.__name__ in ["ManyToManyField", "ForeignKey"]:
-                            self.fields[f.name] = LabelSerializer(many=ck_many, read_only=True)
+                            self.fields[f.name] = LabelSerializer(
+                                many=ck_many, read_only=True
+                            )
                     # __before_rdf_refactoring__
                     #
                     # # include = list(ContentType.objects.filter(app_label="apis_relations", model__icontains=entity_str).values_list('model', flat=True))
@@ -425,7 +449,9 @@ def generic_serializer_creation_factory():
                     # __after_rdf_refactoring__
                     if len(args) > 0:
                         entity = args[0]
-                        if hasattr(entity, "triple_set_from_subj") or hasattr(entity, "triple_set_from_obj"):
+                        if hasattr(entity, "triple_set_from_subj") or hasattr(
+                            entity, "triple_set_from_obj"
+                        ):
                             self.fields["relations"] = RelatedTripleSerializer(
                                 read_only=True,
                                 source="get_triples",
@@ -433,7 +459,9 @@ def generic_serializer_creation_factory():
                                 pk_instance=entity.pk,
                             )
 
-        TemplateSerializerRetrieve.__name__ = TemplateSerializerRetrieve.__qualname__ = f"{entity_str.title().replace(' ', '')}DetailSerializer"
+        TemplateSerializerRetrieve.__name__ = (
+            TemplateSerializerRetrieve.__qualname__
+        ) = f"{entity_str.title().replace(' ', '')}DetailSerializer"
 
         allowed_fields_filter = {
             "IntegerField": ["in", "range", "exact"],
@@ -497,7 +525,7 @@ def generic_serializer_creation_factory():
             pagination_class = CustomPagination
             model = entity
             # filter_backends = (DjangoFilterbackendSpectacular,)
-            filter_backends = (filters.DjangoFilterBackend, )
+            filter_backends = (filters.DjangoFilterBackend,)
             filterset_fields = filter_fields
             depth = 2
             renderer_classes = (
@@ -519,9 +547,13 @@ def generic_serializer_creation_factory():
                 if self.action == "retrieve" and self.model.__name__.lower() == "text":
                     cont = {}
                     cont["highlight"] = self.request.query_params.get("highlight", None)
-                    cont["ann_proj_pk"] = self.request.query_params.get("ann_proj_pk", None)
+                    cont["ann_proj_pk"] = self.request.query_params.get(
+                        "ann_proj_pk", None
+                    )
                     cont["types"] = self.request.query_params.get("types", None)
-                    cont["users_show"] = self.request.query_params.get("users_show", None)
+                    cont["users_show"] = self.request.query_params.get(
+                        "users_show", None
+                    )
                     cont["inline_annotations"] = self.request.query_params.get(
                         "inline_annotations", True
                     )
@@ -548,6 +580,7 @@ def generic_serializer_creation_factory():
                 return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
             if entity_str.lower() == "text":
+
                 @extend_schema(
                     parameters=[
                         OpenApiParameter(
@@ -582,10 +615,13 @@ def generic_serializer_creation_factory():
                     res = super(self.__class__, self).retrieve(request, pk=pk)
                     return res
 
-        TemplateViewSet.__name__ = TemplateViewSet.__qualname__ = f"Generic{entity_str.title().replace(' ', '')}ViewSet"
+        TemplateViewSet.__name__ = (
+            TemplateViewSet.__qualname__
+        ) = f"Generic{entity_str.title().replace(' ', '')}ViewSet"
 
         serializers_dict[TemplateSerializer] = TemplateSerializer
         views[f"{entity_str.lower().replace(' ', '')}"] = TemplateViewSet
+
 
 # TODO: What is this dict 'serializers_dict' used for?
 # I don't find any usage anywhere else and above it gets filled with classes where they are key and value at the same time,
@@ -596,29 +632,32 @@ views = dict()
 # lst_filter_classes_check = []
 generic_serializer_creation_factory()
 
-def load_additional_serializers():
 
+def load_additional_serializers():
     try:
-        additional_serializers_list= getattr(importlib.import_module("apis_ontology.additional_serializers"), "additional_serializers_list")
+        additional_serializers_list = getattr(
+            importlib.import_module("apis_ontology.additional_serializers"),
+            "additional_serializers_list",
+        )
     except:
         return []
-
     # imports had to be done here, because if imported at top, python would mistake class 'InheritanceForwardManyToOneDescriptor'
     # from different module apis_metainfo. No idea how this is even possible or could be properly fixed.
     from django.db.models.query_utils import DeferredAttribute
-    from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor, ReverseManyToOneDescriptor, ManyToManyDescriptor
+    from django.db.models.fields.related_descriptors import (
+        ForwardManyToOneDescriptor,
+        ReverseManyToOneDescriptor,
+        ManyToManyDescriptor,
+    )
     from django.db.models.base import ModelBase
     from apis_core.apis_relations.models import InheritanceForwardManyToOneDescriptor
 
     def create_additional_viewset(path_structure):
-
         def create_additional_serializer(path_structure):
-
-            if len(path_structure.keys()) != 1 or len(path_structure.values()) == 0:
+            if len(path_structure.keys()) != 1:
                 raise Exception()
             target = list(path_structure.keys())[0]
             model_fields = list(path_structure.values())[0]
-
             if type(target) is ModelBase:
                 model_class = target
             elif (
@@ -630,11 +669,11 @@ def load_additional_serializers():
             elif type(target) is ReverseManyToOneDescriptor:
                 model_class = target.field.model
             else:
-                raise Exception(f"Unhandled case. Report to Stefan. type of field is: {type(target)}")
-
+                raise Exception(
+                    f"Unhandled case. Report to Stefan. type of field is: {type(target)}"
+                )
             meta_fields = []
             sub_serializers = {}
-
             for field in model_fields:
                 if (
                     type(field) is DeferredAttribute
@@ -644,7 +683,9 @@ def load_additional_serializers():
                     meta_fields.append(field.field.name)
                     # In case the referenced model class by the foreign key is parent class
                     # of designated target class, use the target class:
-                    if field.field.model is not model_class and issubclass(field.field.model, model_class):
+                    if field.field.model is not model_class and issubclass(
+                        field.field.model, model_class
+                    ):
                         model_class = field.field.model
                 elif type(field) is ReverseManyToOneDescriptor:
                     meta_fields.append(field.rel.related_name)
@@ -663,16 +704,21 @@ def load_additional_serializers():
                         target_name = target.rel.name
                         is_many = True
                     else:
-                        raise Exception(f"Unhandled case. Report to Stefan. type of field is: {type(field)}")
+                        raise Exception(
+                            f"Unhandled case. Report to Stefan. type of field is: {type(field)}"
+                        )
 
-                    sub_serializers[target_name] = create_additional_serializer(field)(read_only=True, many=is_many)
+                    sub_serializers[target_name] = create_additional_serializer(field)(
+                        read_only=True, many=is_many
+                    )
                     field["path_self"] = target_name
                     meta_fields.append(target_name)
                 else:
-                    raise Exception(f"Unhandled case. Report to Stefan. type of field is: {type(field)}")
+                    raise Exception(
+                        f"Unhandled case. Report to Stefan. type of field is: {type(field)}"
+                    )
 
             class AdditionalSerializer(serializers.ModelSerializer):
-
                 for item in sub_serializers.items():
                     # Don't use temporary veriables here for the sub-serializer. Otherwise django would mistake
                     # the temporary variable as belonging to the parent serializer. Hence 'item[1]'
@@ -682,12 +728,13 @@ def load_additional_serializers():
                     model = model_class
                     fields = meta_fields
 
-            AdditionalSerializer.__name__ = AdditionalSerializer.__qualname__ = f"Additional{model_class.__name__.title().replace(' ', '')}Serializer"
+            AdditionalSerializer.__name__ = (
+                AdditionalSerializer.__qualname__
+            ) = f"Additional{model_class.__name__.title().replace(' ', '')}Serializer"
 
             return AdditionalSerializer
 
         def construct_prefetch_path_set(path_structure):
-
             path_set = set()
             if type(path_structure) is dict:
                 path_current = path_structure.get("path_self")
@@ -701,34 +748,32 @@ def load_additional_serializers():
                     if path_current is not None:
                         path_set.add(path_current)
                     else:
-                        return None
+                        return set()
 
             return path_set
 
         def main():
-
             additional_serializer_class = create_additional_serializer(path_structure)
 
             class AdditionalViewSet(viewsets.ModelViewSet):
-
                 queryset = additional_serializer_class.Meta.model.objects.all()
                 for prefetch_path in construct_prefetch_path_set(path_structure):
                     queryset = queryset.prefetch_related(prefetch_path)
                 serializer_class = additional_serializer_class
 
                 def get_queryset(self):
-
-                    # TODO: Improve this param handling by extending the parsing logic or by forwarding the params untouched
-                    # The original 'self.request.query_params' could not be forwarded directly to django's ORM filter
-                    # So as a work-around, a dictionary is created and its values are casted. M
-                    # Maybe there a possibility can be found to forward the params directly?
+                    # TODO: Improve this param handling by extending the parsing logic
+                    # or by  forwarding the params untouched The original
+                    # 'self.request.query_params' could not be forwarded directly to django's ORM
+                    # filter So as a work-around, a dictionary is created and its values are
+                    # casted. Maybe there a possibility can be found to forward the params
+                    # directly?
                     params = {}
                     was_parsed = False
                     for k, v in self.request.query_params.items():
                         # check for pagination params:
                         if k == "limit" or k == "offset":
                             continue
-
                         # check for int
                         try:
                             v = int(v)
@@ -736,7 +781,6 @@ def load_additional_serializers():
                             pass
                         else:
                             was_parsed = True
-
                         # check for boolean
                         if not was_parsed:
                             if v.lower() == "true":
@@ -745,7 +789,6 @@ def load_additional_serializers():
                             elif v.lower() == "false":
                                 v = False
                                 was_parsed = True
-
                         # check for list
                         if not was_parsed:
                             if k.endswith("__in"):
@@ -755,18 +798,21 @@ def load_additional_serializers():
                                     pass
                                 else:
                                     was_parsed = True
-
                         params[k] = v
 
                     return self.queryset.filter(**params)
 
-            AdditionalViewSet.__name__ = AdditionalViewSet.__qualname__ = f"Additional{additional_serializer_class.Meta.model.__name__.title().replace(' ', '')}ViewSet"
+            AdditionalViewSet.__name__ = (
+                AdditionalViewSet.__qualname__
+            ) = f"Additional{additional_serializer_class.Meta.model.__name__.title().replace(' ', '')}ViewSet"
 
             return AdditionalViewSet
 
         return main()
 
     for additional_serializer in additional_serializers_list:
-        additional_serializer.viewset = create_additional_viewset(additional_serializer.path_structure)
+        additional_serializer.viewset = create_additional_viewset(
+            additional_serializer.path_structure
+        )
 
     return additional_serializers_list

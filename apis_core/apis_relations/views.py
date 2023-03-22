@@ -12,24 +12,28 @@ from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
 from apis_core.apis_relations.forms2 import GenericTripleForm
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
+
 # from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
 # from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Property, TempTriple
+
 # from .models import (
 #     PersonPlace, PersonPerson, PersonInstitution, InstitutionPlace,
 #     InstitutionInstitution, PlacePlace, PersonEvent, InstitutionEvent, PlaceEvent, PersonWork,
 #     InstitutionWork, PlaceWork, EventWork, WorkWork
 # )
-#from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
+# from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
 from .tables import LabelTableEdit
+from ..helper_functions import caching
 
 form_module_list = [relation_form_module]
 
-if 'apis_highlighter' in settings.INSTALLED_APPS:
+if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.highlighter import highlight_text_new
     from apis_highlighter import forms as highlighter_form_module
+
     form_module_list.append(highlighter_form_module)
 
 
@@ -46,6 +50,7 @@ def turn_form_modules_into_dict(form_module_list):
             form_class_dict[name] = cls
 
     return form_class_dict
+
 
 form_class_dict = turn_form_modules_into_dict(form_module_list)
 
@@ -101,11 +106,10 @@ form_class_dict = turn_form_modules_into_dict(form_module_list)
 #                     }
 
 
-
 # TODO RDF : Check if rdf refactoring covers all use cases
 @login_required
 def get_form_ajax(request):
-    '''Returns forms rendered in html'''
+    """Returns forms rendered in html"""
 
     # __before_rdf_refactoring__
     #
@@ -154,12 +158,11 @@ def get_form_ajax(request):
     #     form = form_class(**form_dict)
     #
     # __after_rdf_refactoring__
-    form_name = request.POST.get('FormName')
-    SiteID = int(request.POST.get('SiteID'))
-    ButtonText = request.POST.get('ButtonText')
-    ObjectID = request.POST.get('ObjectID')
-    entity_type_self_str = request.POST.get('entity_type')
-
+    form_name = request.POST.get("FormName")
+    SiteID = int(request.POST.get("SiteID"))
+    ButtonText = request.POST.get("ButtonText")
+    ObjectID = request.POST.get("ObjectID")
+    entity_type_self_str = request.POST.get("entity_type")
 
     if ObjectID is None and form_name.startswith("triple_form_"):
         # If this is the case, then instantiate an empty form
@@ -226,31 +229,29 @@ def get_form_ajax(request):
     param_dict = {
         "entity_type": entity_type_self_str,
         "form": form,
-        'type1': form_name,
-        'url2': 'save_ajax_'+ form_name,
-        'button_text': ButtonText,
-        'ObjectID': ObjectID,
-        'SiteID': SiteID,
+        "type1": form_name,
+        "url2": "save_ajax_" + form_name,
+        "button_text": ButtonText,
+        "ObjectID": ObjectID,
+        "SiteID": SiteID,
     }
 
     rendered_form_str = render_to_string(
-        "apis_relations/_ajax_form.html", # rel_form_logic_breadcrumb (for refinding the implicit connections)
-        context=param_dict
+        "apis_relations/_ajax_form.html",  # rel_form_logic_breadcrumb (for refinding the implicit connections)
+        context=param_dict,
     )
 
-    data = {
-        'tab': form_name,
-        'form': rendered_form_str
-    }
+    data = {"tab": form_name, "form": rendered_form_str}
 
-    return HttpResponse(json.dumps(data), content_type='application/json')
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-# TODO RDF : Implement highlighter and label form
-# TODO RDF : Check if rdf refactoring covers all use cases
+# TODO RDF: Re-implement highlighter and label form
 @login_required
-def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # rel_form_logic_breadcrumb (for refinding the implicit connections)
-    '''Tests validity and saves AjaxForms, returns them when validity test fails'''
+def save_ajax_form(
+    request, entity_type, kind_form, SiteID, ObjectID=False
+):  # rel_form_logic_breadcrumb (for refinding the implicit connections)
+    """Tests validity and saves AjaxForms, returns them when validity test fails"""
 
     # __before_rdf_refactoring__
     #
@@ -264,7 +265,7 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     # else:
     #     instance_id = ObjectID
     # entity_type_str = entity_type
-    # entity_type = AbstractEntity.get_entity_class_of_name(entity_type)
+    # entity_type = caching.get_entity_class_of_name(entity_type)
     #
     # form_match = re.match(r'([A-Z][a-z]+)([A-Z][a-z]+)?(Highlighter)?Form', kind_form)
     # form_dict = {'data': request.POST,
@@ -293,12 +294,14 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     self_other = kind_form.split("triple_form_")[1].split("_to_")
     entity_type_self_str = self_other[0]
     entity_type_other_str = self_other[1]
-    entity_type_self_class = AbstractEntity.get_entity_class_of_name(entity_type_self_str)
-    entity_type_other_class = AbstractEntity.get_entity_class_of_name(entity_type_other_str)
+    entity_type_self_class = caching.get_entity_class_of_name(entity_type_self_str)
+    entity_type_other_class = caching.get_entity_class_of_name(entity_type_other_str)
     entity_instance_self = entity_type_self_class.objects.get(pk=SiteID)
-    entity_instance_other = entity_type_other_class.get_or_create_uri(uri=request.POST["other_entity"])
-    start_date_written =request.POST["start_date_written"]
-    end_date_written =request.POST["end_date_written"]
+    entity_instance_other = entity_type_other_class.get_or_create_uri(
+        uri=request.POST["other_entity"]
+    )
+    start_date_written = request.POST["start_date_written"]
+    end_date_written = request.POST["end_date_written"]
     property_param_dict = {}
     for param_pair in request.POST["property"].split("__"):
         param_pair_split = param_pair.split(":")
@@ -347,15 +350,17 @@ def save_ajax_form(request, entity_type, kind_form, SiteID, ObjectID=False): # r
     #
     # __after_rdf_refactoring__
     data = {
-        'test': True,
-        'tab': kind_form,
-        'call_function': 'EntityRelationForm_response',
-        'instance': form.instance.get_web_object(),
-        'table_html': form.get_html_table(entity_instance_self, entity_instance_other).as_html(request),
-        'text': None,
-        'right_card': True
+        "test": True,
+        "tab": kind_form,
+        "call_function": "EntityRelationForm_response",
+        "instance": form.instance.get_web_object(),
+        "table_html": form.get_html_table(
+            entity_instance_self, entity_instance_other
+        ).as_html(request),
+        "text": None,
+        "right_card": True,
     }
-    return HttpResponse(json.dumps(data), content_type='application/json')
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
     # __before_rdf_refactoring__
     #

@@ -15,18 +15,20 @@ class Select2WidgetMixin(DALSelect2WidgetMixin):
     def media(self):
         m = super().media
         js = list(m._js)
-        css = list(m._css['screen'])
-        js_remove_list = ['admin/js/vendor/jquery/jquery.js',
-                          'admin/js/vendor/jquery/jquery.min.js',
-                          'autocomplete_light/jquery.post-setup.js',
-                          'admin/js/vendor/select2/select2.full.js',
-                          'admin/js/vendor/select2/select2.full.min.js',
-                          'admin/js/vendor/select2/i18n/en.js'
-                         ]
-        css_remove_list = ['admin/css/vendor/select2/select2.css',
-                           'admin/css/vendor/select2/select2.min.css',
-                           'admin/css/autocomplete.css',
-                          ]
+        css = list(m._css["screen"])
+        js_remove_list = [
+            "admin/js/vendor/jquery/jquery.js",
+            "admin/js/vendor/jquery/jquery.min.js",
+            "autocomplete_light/jquery.post-setup.js",
+            "admin/js/vendor/select2/select2.full.js",
+            "admin/js/vendor/select2/select2.full.min.js",
+            "admin/js/vendor/select2/i18n/en.js",
+        ]
+        css_remove_list = [
+            "admin/css/vendor/select2/select2.css",
+            "admin/css/vendor/select2/select2.min.css",
+            "admin/css/autocomplete.css",
+        ]
         for e in js_remove_list:
             try:
                 js.remove(e)
@@ -38,9 +40,14 @@ class Select2WidgetMixin(DALSelect2WidgetMixin):
             except ValueError:
                 pass
 
-        js.append('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js')
-        css.insert(0, 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css')
-        return forms.Media(css={'screen': css}, js=js)
+        js.append(
+            "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"
+        )
+        css.insert(
+            0,
+            "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css",
+        )
+        return forms.Media(css={"screen": css}, js=js)
 
 
 class Select2(Select2WidgetMixin, DALSelect2):

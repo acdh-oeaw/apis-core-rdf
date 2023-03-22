@@ -17,16 +17,16 @@ class UriListView(GenericListView):
     formhelper_class = UriFilterFormHelper
     table_class = UriTable
     init_columns = [
-        'id',
-        'uri',
-        'entity',
+        "id",
+        "uri",
+        "entity",
     ]
     enable_merge = True
 
 
 class UriDetailView(DetailView):
     model = Uri
-    template_name = 'apis_metainfo/uri_detail.html'
+    template_name = "apis_metainfo/uri_detail.html"
 
 
 class UriCreate(BaseCreateView):
@@ -51,8 +51,8 @@ class UriUpdate(BaseUpdateView):
 
 class UriDelete(DeleteView):
     model = Uri
-    template_name = 'webpage/confirm_delete.html'
-    success_url = reverse_lazy('apis_core:apis_metainfo:uri_browse')
+    template_name = "webpage/confirm_delete.html"
+    success_url = reverse_lazy("apis_core:apis_metainfo:uri_browse")
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

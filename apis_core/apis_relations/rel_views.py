@@ -58,6 +58,7 @@ class GenericRelationView(GenericListViewNew):
         return table
 
 
+# TODO RDF: Check if this should be removed or adapted
 class GenericRelationDetailView(DetailView):
 
     template_name = getattr(

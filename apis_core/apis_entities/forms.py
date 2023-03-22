@@ -14,7 +14,7 @@ from django.urls import reverse
 
 from apis_core.apis_metainfo.models import Text, Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
-from apis_core.helper_functions import DateParser
+from apis_core.helper_functions import DateParser, caching
 from apis_core.helper_functions.RDFParser import RDFParser
 from .fields import ListSelect2, Select2Multiple
 from apis_core.apis_entities.models import AbstractEntity
@@ -46,7 +46,7 @@ def get_entities_form(entity):
 
     class GenericEntitiesForm(forms.ModelForm):
         class Meta:
-            model = AbstractEntity.get_entity_class_of_name(entity)
+            model = caching.get_entity_class_of_name(entity)
 
             exclude = [
                 "start_date",
@@ -72,11 +72,16 @@ def get_entities_form(entity):
             self.helper.form_tag = False
             self.helper.help_text_inline = True
             main_fields = []  # fields to display for entity
-            meta_fields = ["references", "notes", "review"]  # fields for separate meta info section
-            crispy_main_fields = Fieldset(f"Entity type: {entity.title()}")  # crispy forms field collection for entity fields
+            meta_fields = [
+                "references",
+                "notes",
+                "review",
+            ]  # fields for separate meta info section
+            crispy_main_fields = Fieldset(
+                f"Entity type: {entity.title()}"
+            )  # crispy forms field collection for entity fields
             crispy_meta_fields = AccordionGroup(  # crispy forms Accordion Group needs be expanded manually
-                "MetaInfo",
-                *[Field(f) for f in meta_fields]
+                "MetaInfo", *[Field(f) for f in meta_fields]
             )
             attrs = {
                 "data-placeholder": "Type to get suggestions",
@@ -114,17 +119,18 @@ def get_entities_form(entity):
                     # __after_rdf_refactoring__
                     matching_content_type = ContentType.objects.filter(
                         app_label__in=[
-                            'apis_entities',
-                            'apis_metainfo',
-                            'apis_relations',
-                            'apis_vocabularies',
-                            'apis_labels'
+                            "apis_entities",
+                            "apis_metainfo",
+                            "apis_relations",
+                            "apis_vocabularies",
+                            "apis_labels",
                         ],
-                        model=model_uri
+                        model=model_uri,
                     )
                     if (
                         len(matching_content_type) == 1
-                        and matching_content_type[0].app_label.lower() == 'apis_vocabularies'
+                        and matching_content_type[0].app_label.lower()
+                        == "apis_vocabularies"
                     ):
                         self.fields[f].widget = widget1(
                             url=reverse(
@@ -169,11 +175,11 @@ def get_entities_form(entity):
                 :param entity_name: string representation of an entity name
                 :return: a list of strings
                 """
-                entity_settings = getattr(settings, 'APIS_ENTITIES', None)
+                entity_settings = getattr(settings, "APIS_ENTITIES", None)
 
                 if entity_settings is not None:
                     try:
-                        form_order = entity_settings[entity_name].get('form_order', [])
+                        form_order = entity_settings[entity_name].get("form_order", [])
                     except KeyError as e:
                         form_order = []
 
@@ -186,10 +192,11 @@ def get_entities_form(entity):
             for field in sort_fields_list(main_fields, entity):
                 crispy_main_fields.append(Field(field))
 
-            self.helper.layout = Layout(Accordion(  # creates two blocks for fields
-                crispy_main_fields,
-                crispy_meta_fields
-            ))
+            self.helper.layout = Layout(
+                Accordion(  # creates two blocks for fields
+                    crispy_main_fields, crispy_meta_fields
+                )
+            )
             self.fields["status"].required = False
             self.fields["collection"].required = False
             self.fields["start_date_written"].required = False
@@ -480,4 +487,3 @@ class GenericFilterFormHelper(FormHelper):
         self.form_class = "genericFilterForm"
         self.form_method = "GET"
         self.add_input(Submit("Filter", "Filter"))
-

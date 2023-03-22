@@ -56,9 +56,6 @@ class BaseRelationManager(models.Manager):
             return self.get_queryset()
 
 
-# TODO RDF : Implement filtering for implicit superclasses
-# Currently if a Property.objects.filter() is used with param subj_class or obj_class, then it searches only for the
-# passed class, but not for implicit superclasses. For this to be possible, the object manager must be overriden
 @reversion.register(follow=["vocabsbaseclass_ptr"])
 class Property(RootObject):
     class Meta:
@@ -70,7 +67,7 @@ class Property(RootObject):
         max_length=255, verbose_name="Property Class URI", blank=True
     )
 
-    # TODO RDF : Redundancy between name_forward and name, solve this.
+    # TODO RDF: Redundancy between name_forward and name, solve this.
     name_forward = models.CharField(
         max_length=255,
         verbose_name="Name forward",
@@ -78,7 +75,7 @@ class Property(RootObject):
         blank=True,
     )
 
-    # TODO RDF : Maybe rename name to name_subj_to_obj and name_reverse to name_obj_to_subj
+    # TODO RDF: Maybe rename name to name_subj_to_obj and name_reverse to name_obj_to_subj
     name_reverse = models.CharField(
         max_length=255,
         verbose_name="Name reverse",
@@ -86,11 +83,10 @@ class Property(RootObject):
         blank=True,
     )
 
-    # TODO RDF : Rename subj_class to subj_classes
     subj_class = models.ManyToManyField(
         ContentType,
         related_name="property_set_subj",
-        limit_choices_to=Q(app_label="apis_entities"),  # TODO RDF : Add vocab
+        limit_choices_to=Q(app_label="apis_entities"),  # TODO RDF: Add vocab
     )
 
     obj_class = models.ManyToManyField(
@@ -103,23 +99,20 @@ class Property(RootObject):
         return self.name
 
     def save(self, *args, **kwargs):
-        # TODO RDF : Temporary hack, remove this once better solution is found
-        self.name_forward = self.name
-
-        if self.name_reverse is None or self.name_reverse == "":
-            self.name_reverse = self.name_forward + " [REVERSE]"
-
-        if unicodedata.is_normalized("NFC", self.name_forward) is False:
-            self.name_forward = unicodedata.normalize("NFC", self.name_forward)
-
-        if unicodedata.is_normalized("NFC", self.name_reverse) is False:
+        if self.name_reverse != unicodedata.normalize("NFC", self.name_reverse):
             self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
+
+        if self.name_reverse == "" or self.name_reverse == None:
+            self.name_reverse = self.name + " [REVERSE]"
+
+        # TODO RDF: Temporary hack, remove this once better solution is found
+        self.name_forward = self.name
 
         super(Property, self).save(*args, **kwargs)
         return self
 
 
-# TODO __sresch__ : comment and explain
+# TODO: comment and explain
 def subj_or_obj_class_changed(sender, is_subj, **kwargs):
     def cascade_subj_obj_class_to_children(
         contenttype_to_add_or_remove,
@@ -133,7 +126,7 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
 
             for class_parent in class_current.__bases__:
 
-                # TODO __sresch__ : Avoid ContentType DB fetch
+                # TODO: Avoid ContentType DB fetch
                 contenttype_parent = ContentType.objects.filter(
                     model=class_parent.__name__
                 )
@@ -151,7 +144,7 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
             class_current = contenttype_current.model_class()
 
             for class_child in class_current.__subclasses__():
-                # TODO __sresch__ : Avoid ContentType DB fetch
+                # TODO: Avoid ContentType DB fetch
                 contenttype_child = ContentType.objects.get(model=class_child.__name__)
                 child_list.append(contenttype_child)
                 child_list.extend(get_all_children(contenttype_child))
@@ -585,7 +578,7 @@ class RelationPublishedQueryset(models.QuerySet):
 #         return None
 
 
-# TODO __sresch__ : Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
+# TODO: Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
 
@@ -606,9 +599,6 @@ class InheritanceForeignKey(models.ForeignKey):
 
 
 class Triple(models.Model):
-    # TODO RDF : (maybe) implement a convenient way of fetching related triples of a given root object
-    # TODO RDF : Make it so that triples are unique given their subj, obj, prop (With an aggregated primary key maybe?)
-    # TODO RDF : add ent filter shortcut so that e.g. this can be shortened: Triple.objects.filter(Q(subj__pk=113) | Q(obj__pk=113))
     subj = InheritanceForeignKey(
         RootObject,
         blank=True,
@@ -693,7 +683,7 @@ class Triple(models.Model):
 
     def save(self, *args, **kwargs):
 
-        # TODO RDF : Integrate proper check if subj and obj instances are of valid class as defined in prop.subj_class and prop.obj_class
+        # TODO RDF: Integrate more proper check if subj and obj instances are of valid class as defined in prop.subj_class and prop.obj_class
 
         # def get_all_parents(cls_current):
         #     parent_list = []

@@ -3,6 +3,7 @@ import django
 import unicodedata
 from difflib import SequenceMatcher
 import requests
+
 # from reversion import revisions as reversion
 import reversion
 from django.apps import apps
@@ -26,6 +27,7 @@ import importlib
 
 # from django.contrib.contenttypes.fields import GenericRelation
 # from helper_functions.highlighter import highlight_text
+from apis_core.helper_functions import caching
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
@@ -324,32 +326,31 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
 # moved TempEntityClass to apis_entities.models
 
 
-
 class RootObject(models.Model):
     """
-    In order to make the Triple architecture as versatile as possible, I defined a new super class 'RootObject'.
-    This class is being used as superclass for entities, vocabularies, and properties
+    The very root thing that can exist in a given ontology. Several classes inherit from it.
+    By having one overarching super class we gain the advantage of unique identifiers.
     """
 
-    name = models.CharField(max_length=255, verbose_name='Name')
-    self_contenttype = models.ForeignKey(ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True)
-    self_contenttype_cached = None
-
+    entity_settings = {
+        "list_filters": ["name", "related_entity_name", "related_property_name"],
+        "search": ["name"],
+    }
+    name = models.CharField(max_length=255, verbose_name="Name")
+    # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
+    # triples where the subject's or object's contenttype must be respected (e.g. get all triples
+    # where the subject is a Person)
+    self_contenttype = models.ForeignKey(
+        ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True
+    )
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
 
     def save(self, *args, **kwargs):
         if self.self_contenttype is None:
-            self.self_contenttype = self.get_content_type()
+            self.self_contenttype = caching.get_contenttype_of_class(self.__class__)
 
         super().save(*args, **kwargs)
-
-    @classmethod
-    def get_content_type(cls):
-        if cls.self_contenttype_cached is None:
-            cls.self_contenttype_cached = ContentType.objects.get_for_model(cls)
-        
-        return cls.self_contenttype_cached
 
     def __str__(self):
 
@@ -361,7 +362,7 @@ class RootObject(models.Model):
 
 @reversion.register()
 class Source(models.Model):
-    """ Holds information about entities and their relations"""
+    """Holds information about entities and their relations"""
 
     orig_filename = models.CharField(max_length=255, blank=True)
     indexed = models.BooleanField(default=False)
@@ -378,7 +379,7 @@ class Source(models.Model):
 
 @reversion.register()
 class Collection(models.Model):
-    """ Allows to group entities and relation. """
+    """Allows to group entities and relation."""
 
     from apis_core.apis_vocabularies.models import CollectionType
 
@@ -411,13 +412,12 @@ class Collection(models.Model):
         super().save(*args, **kwargs)
 
 
-# TODO RDF : Make Text also a Subclass of RootObject
-# TODO RDF : Maybe move text away from apis_metainfo?
-# TODO RDF : Maybe even remove text entirely?
+# TODO RDF: Remove text entirely
 @reversion.register()
 class Text(models.Model):
-    """ Holds unstructured text associeted with
-    one ore many entities/relations. """
+    """Holds unstructured text associeted with
+    one ore many entities/relations."""
+
     from apis_core.apis_vocabularies.models import TextType
 
     kind = models.ForeignKey(TextType, blank=True, null=True, on_delete=models.SET_NULL)
@@ -433,13 +433,16 @@ class Text(models.Model):
     def check_for_deleted_annotations(self):
 
         from apis_highlighter.models import Annotation
+
         if self.pk is not None:
             deleted = []
             orig = Text.objects.get(pk=self.pk)
             if orig.text != self.text and "apis_highlighter" in settings.INSTALLED_APPS:
                 ann = Annotation.objects.filter(text_id=self.pk).order_by("start")
-                min_ann_len = min([x.end-x.start for x in ann])
-                seq = SequenceMatcher(lambda x: len(x) > min_ann_len, orig.text, self.text)
+                min_ann_len = min([x.end - x.start for x in ann])
+                seq = SequenceMatcher(
+                    lambda x: len(x) > min_ann_len, orig.text, self.text
+                )
                 for a in ann:
                     changed = False
                     count = 0
@@ -449,8 +452,11 @@ class Text(models.Model):
                             old_start = copy.deepcopy(a.start)
                             old_end = copy.deepcopy(a.end)
                             new_start = a.start + (s.b - s.a)
-                            new_end =  a.end + (s.b - s.a)
-                            if orig.text[old_start:old_end] == self.text[new_start:new_end]:
+                            new_end = a.end + (s.b - s.a)
+                            if (
+                                orig.text[old_start:old_end]
+                                == self.text[new_start:new_end]
+                            ):
                                 changed = True
                                 break
                     if not changed:
@@ -475,7 +481,7 @@ class Text(models.Model):
                     pre-existing annotation has moved to given its relative position in a text (
                     because the annotated sub-text alone is not enough to give this information
                     because there can exist multiple of the same sub-text).
-                    
+
                     So we use a heuristic here where for each annotation embedded in an old text
                     we compute its textual neighbourhood and give each word a weight where the
                     weight depends on proximity to the annotation. For example the word to the
@@ -484,15 +490,14 @@ class Text(models.Model):
                     have the lowest score. Now when we receive a new text we do the same
                     computation again and then correspond the annotations with each other that
                     have the closes score (i.e. the most similar textual context).
-                    
+
                     :param text_old: the old text coming from the db
                     :param text_new: the new text coming from the user
                     :param annotations_old: the list of pre-existing annotations in the old text
                     :return: None - the computed changes are persisted in the annotations
                     """
-                    
+
                     def calculate_context_weights(text, i_start, i_end):
-        
                         def calculate_word_dict(text, direction):
                             word_list = re.split(" |\\n", text)
                             word_list = [w for w in word_list if w != ""]
@@ -504,38 +509,42 @@ class Text(models.Model):
                                     word_value = word_dict.get(word, 0)
                                     word_dict[word] = word_value + value_current
                                     value_current -= value_step
-            
+
                             return word_dict
-        
+
                         text_left = text[:i_start]
                         text_right = text[i_end:]
-                        word_dict_left = calculate_word_dict(text=text_left, direction=-1)
-                        word_dict_right = calculate_word_dict(text=text_right, direction=1)
-                        
+                        word_dict_left = calculate_word_dict(
+                            text=text_left, direction=-1
+                        )
+                        word_dict_right = calculate_word_dict(
+                            text=text_right, direction=1
+                        )
+
                         return {
                             "word_dict_left": word_dict_left,
                             "word_dict_right": word_dict_right,
                         }
 
                     def make_diff(word_dict_a, word_dict_b):
-                        words_all = set(word_dict_a.keys()).union(set(word_dict_b.keys()))
+                        words_all = set(word_dict_a.keys()).union(
+                            set(word_dict_b.keys())
+                        )
                         diff_all = 0
                         for word in words_all:
                             word_value_a = word_dict_a.get(word, 0)
                             word_value_b = word_dict_b.get(word, 0)
                             diff_all += abs(word_value_a - word_value_b)
-        
+
                         return diff_all
-        
+
                     for ann in annotations_old:
                         i_old_start = ann.start
                         i_old_end = ann.end
                         context_weights_dict_old = calculate_context_weights(
-                            text=text_old,
-                            i_start=i_old_start,
-                            i_end=i_old_end
+                            text=text_old, i_start=i_old_start, i_end=i_old_end
                         )
-                        ann_text = text_old[ann.start:ann.end]
+                        ann_text = text_old[ann.start : ann.end]
                         diff_min = inf
                         i_new_start = None
                         i_new_end = None
@@ -543,15 +552,17 @@ class Text(models.Model):
                             i_candidate_start = i.start()
                             i_candidate_end = i_candidate_start + len(ann_text)
                             context_weights_dict_new = calculate_context_weights(
-                                text=text_new, i_start=i_candidate_start, i_end=i_candidate_end
+                                text=text_new,
+                                i_start=i_candidate_start,
+                                i_end=i_candidate_end,
                             )
                             diff_left = make_diff(
                                 context_weights_dict_new["word_dict_left"],
-                                context_weights_dict_old["word_dict_left"]
+                                context_weights_dict_old["word_dict_left"],
                             )
                             diff_right = make_diff(
                                 context_weights_dict_new["word_dict_right"],
-                                context_weights_dict_old["word_dict_right"]
+                                context_weights_dict_old["word_dict_right"],
                             )
                             diff_current = diff_left + diff_right
                             if diff_current < diff_min:
@@ -564,29 +575,32 @@ class Text(models.Model):
                             ann.end = i_new_end
                             ann.save()
                         else:
-                            ann.delete() # TODO: we might want to delete relations as well.
+                            ann.delete()  # TODO: we might want to delete relations as well.
 
                 correlate_annotations(
                     text_old=orig.text,
                     text_new=self.text,
-                    annotations_old=Annotation.objects.filter(text_id=self.pk).order_by("start")
+                    annotations_old=Annotation.objects.filter(text_id=self.pk).order_by(
+                        "start"
+                    ),
                 )
 
         super().save(*args, **kwargs)
 
 
-
-# TODO __sresch__ : Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
+# TODO: Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
+
 
 class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):
     def get_queryset(self, **hints):
-        return self.field.remote_field.model.objects_inheritance.db_manager(hints=hints).select_subclasses()
+        return self.field.remote_field.model.objects_inheritance.db_manager(
+            hints=hints
+        ).select_subclasses()
+
 
 class InheritanceForeignKey(models.ForeignKey):
     forward_related_accessor_class = InheritanceForwardManyToOneDescriptor
-
-
 
 
 @reversion.register()
@@ -594,11 +608,6 @@ class Uri(models.Model):
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
     domain = models.CharField(max_length=255, blank=True)
     rdf_link = models.URLField(blank=True)
-    # TODO RDF : confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
-    # entity = models.ForeignKey(
-    #     "apis_entities.TempEntityClass", blank=True, null=True, on_delete=models.CASCADE
-    # )
-
     root_object = InheritanceForeignKey(
         RootObject, blank=True, null=True, on_delete=models.CASCADE
     )
@@ -646,10 +655,6 @@ class UriCandidate(models.Model):
     uri = models.URLField()
     confidence = models.FloatField(blank=True, null=True)
     responsible = models.CharField(max_length=255)
-    # TODO RDF : confirm the replacement 'root_object' works as intented like this old 'entity' foreign key
-    # entity = models.ForeignKey(
-    #     "apis_entities.TempEntityClass", blank=True, null=True, on_delete=models.CASCADE
-    # )
     root_object = models.ForeignKey(
         RootObject, blank=True, null=True, on_delete=models.CASCADE
     )
@@ -677,9 +682,7 @@ class UriCandidate(models.Model):
                 return (label, desc)
 
 
-#@receiver(post_save, sender=Uri, dispatch_uid="remove_default_uri")
-#def remove_default_uri(sender, instance, **kwargs):
+# @receiver(post_save, sender=Uri, dispatch_uid="remove_default_uri")
+# def remove_default_uri(sender, instance, **kwargs):
 #    if Uri.objects.filter(root_object=instance.entity).count() > 1:
 #        Uri.objects.filter(root_object=instance.entity, domain="apis default").delete()
-
-

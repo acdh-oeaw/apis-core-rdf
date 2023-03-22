@@ -14,9 +14,11 @@ if "theme" in settings.INSTALLED_APPS:
         ),
         url(r"^", include("theme.urls", namespace="theme")),
         url(r"^admin/", admin.site.urls),
-        url(r"^info/", include("infos.urls", namespace="info")),
-        url(r"^webpage/", include("webpage.urls", namespace="webpage")),
     ]
+    if "webpage" in settings.INSTALLED_APPS:
+        urlpatterns.append(
+            url(r"^webpage/", include("webpage.urls", namespace="webpage"))
+        )
 if "paas_theme" in settings.INSTALLED_APPS:
     urlpatterns = [
         url(r"^apis/", include("apis_core.urls", namespace="apis")),
@@ -26,9 +28,11 @@ if "paas_theme" in settings.INSTALLED_APPS:
         ),
         url(r"^", include("paas_theme.urls", namespace="theme")),
         url(r"^admin/", admin.site.urls),
-        url(r"^info/", include("infos.urls", namespace="info")),
-        url(r"^webpage/", include("webpage.urls", namespace="webpage")),
     ]
+    if "webpage" in settings.INSTALLED_APPS:
+        urlpatterns.append(
+            url(r"^webpage/", include("webpage.urls", namespace="webpage"))
+        )
 else:
     urlpatterns = [
         url(r"^apis/", include("apis_core.urls", namespace="apis")),
@@ -37,15 +41,17 @@ else:
             r"entity/<int:pk>/", GetEntityGeneric.as_view(), name="GetEntityGenericRoot"
         ),
         url(r"^admin/", admin.site.urls),
-        url(r"^info/", include("infos.urls", namespace="info")),
-        url(r"^", include("webpage.urls", namespace="webpage")),
     ]
+    if "webpage" in settings.INSTALLED_APPS:
+        urlpatterns.append(url(r"^", include("webpage.urls", namespace="webpage")))
 
 
-if 'viecpro_vis' in settings.INSTALLED_APPS:
-    urlpatterns.insert(0, url(r'^visualisations/', include("viecpro_vis.urls", namespace="viecpro_vis"))
+if "viecpro_vis" in settings.INSTALLED_APPS:
+    urlpatterns.insert(
+        0,
+        url(r"^visualisations/", include("viecpro_vis.urls", namespace="viecpro_vis")),
     )
-        
+
 if "transkribus" in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + [
         url(r"^transkribus/", include("transkribus.urls")),
@@ -63,4 +69,5 @@ if "oebl_irs_workflow" in settings.INSTALLED_APPS:
             include("oebl_irs_workflow.urls", namespace="oebl_irs_workflow"),
         )
     )
-handler404 = "webpage.views.handler404"
+if "webpage" in settings.INSTALLED_APPS:
+    handler404 = "webpage.views.handler404"

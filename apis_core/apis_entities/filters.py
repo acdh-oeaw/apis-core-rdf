@@ -1,14 +1,13 @@
 from functools import reduce
 import importlib
-
 import django_filters
 from django.conf import settings
 from django.db.models import Q
-
 from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
-
 from collections import OrderedDict
+from apis_core.helper_functions import caching
+
 
 # The following classes define the filter sets respective to their models.
 # Also by what was enabled in the global settings file (or disabled by not explicitley enabling it).
@@ -25,18 +24,6 @@ from collections import OrderedDict
 # The filters defined there can provide a dictionary which can have a "method" or "label" key-value pair
 # where then such a key-value from the settings is overriding the respective key-value of a filter defined in this module
 # (e.g. using a different method)
-
-# TODO __sresch__ : Turn the logic of returing a filter object into a singleton pattern to avoid redundant instantiations
-# TODO __sresch__ : use the order of list of filter fields in settings
-
-
-#######################################################################
-#
-#   Generic super class for sharing filters accross all entities
-#
-#######################################################################
-
-# TODO __sresch__ : Do this better
 fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
 
@@ -48,16 +35,23 @@ class GenericEntityListFilter(django_filters.FilterSet):
     Combines config options in an app's settings file with entity-specific
     settings defined in models.
     """
+
     fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
     # add default labels to form fields on frontend
     name = django_filters.CharFilter(method="name_label_filter", label="Name or label")
-    related_entity_name = django_filters.CharFilter(method="related_entity_name_method", label="Related entity")
-    related_property_name = django_filters.CharFilter(method="related_property_name_method", label="Related property")
+    related_entity_name = django_filters.CharFilter(
+        method="related_entity_name_method", label="Related entity"
+    )
+    related_property_name = django_filters.CharFilter(
+        method="related_property_name_method", label="Related property"
+    )
 
-    collection = django_filters.ModelMultipleChoiceFilter(queryset=Collection.objects.all())
+    collection = django_filters.ModelMultipleChoiceFilter(
+        queryset=Collection.objects.all()
+    )
 
-    # TODO __sresch__ : look into how the date values can be intercepted so that they can be parsed with the same logic as in edit forms
+    # TODO: look into how the date values can be intercepted so that they can be parsed with the same logic as in edit forms
     start_date = django_filters.DateFromToRangeFilter()
     end_date = django_filters.DateFromToRangeFilter()
 
@@ -92,8 +86,8 @@ class GenericEntityListFilter(django_filters.FilterSet):
         field_filters = OrderedDict()
 
         try:
-            fields = self.entity_class.entity_settings['list_filters']
-            if fields == ['name', 'related_entity_name', 'related_property_name']:
+            fields = self.entity_class.entity_settings["list_filters"]
+            if fields == ["name", "related_entity_name", "related_property_name"]:
                 # for AbstractEntity, certain fields are defined to be filterable by default;
                 # ignore these for the purpose of sorting field names for filtering
                 fields = []
@@ -141,7 +135,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
                     f"Filters for individual entities need to be of type "
                     f"string or dictionary.\n"
                     f"Got instead: {type(f)}"
-                 )
+                )
 
         for f_name, f_filter in default_filters.items():
             if f_name not in ignore_fields and f_name not in field_filters:
@@ -192,7 +186,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
         # temporary hack replacement end
 
-
     def construct_lookup(self, value):
         """
         Parses user input for wildcards and returns a tuple containing the interpreted django lookup string and the trimmed value
@@ -224,13 +217,13 @@ class GenericEntityListFilter(django_filters.FilterSet):
             return "__icontains", value
 
     def name_label_filter(self, queryset, name, value):
-        # TODO __sresch__ : include alternative names queries
+        # TODO: include alternative names queries
         lookup, value = self.construct_lookup(value)
 
-        queryset_related_label = queryset.filter(**{"label__label"+lookup : value})
-        queryset_self_name = queryset.filter(**{name+lookup : value})
+        queryset_related_label = queryset.filter(**{"label__label" + lookup: value})
+        queryset_self_name = queryset.filter(**{name + lookup: value})
 
-        return (queryset_related_label|queryset_self_name).distinct().all()
+        return (queryset_related_label | queryset_self_name).distinct().all()
 
     def related_entity_name_method(self, queryset, name, value):
         # __before_rdf_refactoring__
@@ -417,8 +410,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
         lookup, value = self.construct_lookup(value)
 
         # name variable is the name of the filter and needs the corresponding field within the model
-        return queryset.filter( **{ name + "__name" + lookup : value } )
-
+        return queryset.filter(**{name + "__name" + lookup: value})
 
 
 #######################################################################
@@ -437,7 +429,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 #     name = django_filters.CharFilter(method="person_name_filter", label="Name or Label of person")
 #
 #
-#     # TODO __sresch__ : look into how the meta class can be inherited from the superclass so that the Meta class' exclude attribute must not be defined multiple times
+#     # TODO: look into how the meta class can be inherited from the superclass so that the Meta class' exclude attribute must not be defined multiple times
 #     class Meta:
 #         model = Person
 #         # exclude all hardcoded fields or nothing, however this exclude is only defined here as a temporary measure in
@@ -461,7 +453,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 #
 # class PlaceListFilter(GenericListFilter):
 #
-#     # TODO __sresch__ : decide on margin tolerance of input, for now the number must be precise
+#     # TODO: decide on margin tolerance of input, for now the number must be precise
 #     lng = django_filters.NumberFilter(label='Longitude')
 #     lat = django_filters.NumberFilter(label='Latitude')
 #
@@ -516,11 +508,12 @@ def get_list_filter_of_entity(entity):
     :return: Entity specific FilterClass
     """
 
-    entity_class = AbstractEntity.get_entity_class_of_name(entity)
+    entity_class = caching.get_entity_class_of_name(entity)
 
     entity_list_filter_class = entity_class.get_entity_list_filter()
 
     if entity_list_filter_class is None:
+
         class AdHocEntityListFilter(GenericEntityListFilter):
             class Meta(GenericEntityListFilter.Meta):
                 model = entity_class

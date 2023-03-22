@@ -8,6 +8,7 @@ from django.utils.text import slugify
 from .partials import TEI_NSMAP, tei_gen_header
 
 from apis_core.apis_metainfo.models import Text
+
 # __before_rdf_refactoring__
 # from apis_core.apis_entities.models import Person, Place, Event, Work, Institution
 
@@ -46,12 +47,10 @@ def custom_escape(somestring):
 
 
 class TeiEntCreator:
-    def __init__(
-        self, ent_dict, base_url="entity/", include_entity_tagged_texts=False
-    ):
+    def __init__(self, ent_dict, base_url="entity/", include_entity_tagged_texts=False):
         """
         Entry point: called from apis_core/apis_entities/api_renderers.py
-        
+
         ent_dict is dict representing the entity
 
         This class is initialised, then has the serialize_full_doc method called
@@ -509,4 +508,3 @@ def stand_off_to_inline(text, annot):
         i = j
 
     return "".join(parts)
-

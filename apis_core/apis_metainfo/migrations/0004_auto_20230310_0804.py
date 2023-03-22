@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RenameField(
             model_name="rootobject",
-            old_name="self_contenttype",
+            old_name="self_content_type",
             new_name="self_contenttype",
         ),
     ]

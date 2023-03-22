@@ -12,17 +12,18 @@ from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.schemas import get_schema_view
 from apis_core.api_routers import load_additional_serializers
 from apis_core.api_routers import views
+
 # from apis_core.apis_entities.api_views import (
 #     NetJsonViewSet,
 #     PlaceGeoJsonViewSet,
 # )
 # from apis_core.apis_vocabularies.api_views import UserViewSet
-from apis_core.helper_functions.ContentType import GetContentTypes
+from apis_core.helper_functions import caching
 
 app_name = "apis_core"
 
 router = routers.DefaultRouter()
-for app_label, model_str in GetContentTypes().get_names():
+for app_label, model_str in caching.get_all_class_modules_and_names():
     if "_" in app_label:
         route_prefix = app_label.split("_")[1]
     else:
@@ -40,7 +41,7 @@ for additional_serializer in load_additional_serializers():
     router.register(
         additional_serializer.url,
         additional_serializer.viewset,
-        additional_serializer.name
+        additional_serializer.name,
     )
 
 if "apis_highlighter" in settings.INSTALLED_APPS:

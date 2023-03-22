@@ -1,0 +1,418 @@
+{% extends "webpage/base.html" %}
+{% load static %}
+{% block scriptHeader %}
+{{block.super}}
+{% if highlighter_active %}
+      <link rel="stylesheet" href="{% static 'apis_highlighter/apis_highlighter.css' %}" />
+	<script type="text/javascript" src="{% static 'apis_highlighter/apis_highlighter.js' %}?arbitrary_tag_to_avoid_cache"></script>
+	{% endif %}
+    {% if apis_bibsonomy %}
+{% include 'apis_bibsonomy/apis_bibsonomy_include.html' %}
+    {% endif %}
+{% endblock %}
+{% block Titel %}Create a {{entity_type|title}}{% endblock %}
+{% load guardian_tags %}
+{% load static %}
+
+{% block content %}
+{% load django_tables2 %}
+{% if instance %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header" style="text-align: center;">
+            <h1><a href="{{ instance.get_listview_url }}">
+                <small>{{ entity_type }}s</small>
+            </a>
+                <strong>{{ instance }} </strong> <a href="{{ instance.get_absolute_url }}">
+                    <i data-feather="eye" title="eye"></i>
+                </a>
+                <a href="/entity/{{instance.id}}">
+                    <i data-feather="database" title="database"></i>
+                </a>
+            </h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-5">
+            {% endif %}
+            {% load crispy_forms_tags %}
+                    <div class="card">
+                        <div class="card-header">
+                        	{% if instance %}
+                                <h3>
+                                    <small>Edit the Entity</small>
+                                </h3>
+            		        {% else %}
+                                <h2>
+                                    <small>create new object type:</small> <strong>{{ entity_type|title }}</strong>
+                                </h2>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <form action="" method="post">
+                            {% if apis_bibsonomy %}
+                                <button hidden=True class="bibsonomy-anker-hidden" data-bibs-contenttype={{ entity_type }} data-bibs-object_pk={{instance.pk}} data-bibs-form-elements="{{ apis_bibsonomy }}">Ref</button>
+                            {% endif %}
+                                <div class="card card-default">
+
+                            	{% crispy form %}
+
+                                    <div class="card-header" role="tab" id="headingFour">
+                                        <h4 class="card-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            Texts
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFour" class="card-collapse collapse" role="tabcard" aria-labelledby="headingFour">
+                                        <div class="card-body">
+                                            {% block texts %}
+                                            {% crispy form_text %}
+                                            {% endblock %}
+                                        </div>
+                                    </div>
+                            {% block linkedOpenData %}
+                            {% if object_lod %}
+                                <div class="card card-default">
+                                    <div class="card-header" role="tab" id="headingSix">
+                                        <h4 class="card-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne3" aria-expanded="false" aria-controls="collapseOne3">
+                                                Linked Open Data
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne3" class="card-collapse collapse" role="tabcard" aria-labelledby="headingSix">
+                                        <div id="tab_Revisions" class="card-body">
+                                            <p>{% for lod in object_lod %}{% if forloop.last %}<a href="{{ lod.uri }}">{{ lod.uri }}</a>{% else %}<a href="{{ lod.uri }}">{{ lod.uri }}</a> <br  /> {% endif %}{% endfor %}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% endblock %}
+                            {% block editbuttons %}
+                                {% if instance %}
+                                {% if "change" in permissions %}
+                                   <input class="btn btn-primary" type="submit" value="modify" />
+                                {% endif %}
+                                {% if instance %}
+                                <button class="compare_tooltip btn btn-default" data-tooltip='{"app":"apis_entities","kind":"{{entity_type|lower}}","pk":"{{ instance.pk }}"}'>Revisions</button>
+                                {% endif %}
+                                {% if "delete" in permissions %}
+                                   <a class ="btn btn-danger btn-primary" href="delete">Delete</a>
+                                {% endif %}
+
+            		    <a class ="btn btn-success" href="{% url 'apis:apis_entities:generic_entities_create_view' entity_type %}">Create new {{entity_type|title}}</a>
+                                    {% else %}
+                                    {% if "create" in permissions %}
+                                    <input class="btn btn-primary" type="submit" value="create" />
+                                        {% endif %}
+                                                {% endif %}
+
+                            {% endblock editbuttons %}
+                            </div>
+                        </form>
+                        </div>
+            {% if instance %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if instance %}
+                <div class="col-md-7">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3><small> the Entity is related to</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="card" id="accordion" role="tablist" aria-multiselectable="true">
+                            {% block additional_accordion %}
+                            {% endblock additional_accordion %}
+                            {% for obj in right_card %}
+                                <div class="card card-default">
+                                    <div class="card-header" role="tab" id="heading{{forloop.counter}}">
+                                        <h4 class="card-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" aria-expanded="true" aria-controls="collapse{{forloop.counter}}">
+                                                {{ obj.0 }}
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse{{forloop.counter}}" class="card-collapse collapse{% if obj.3 %} in{% endif %}" role="tabcard" aria-labelledby="heading{{forloop.counter}}">
+                                        <div id="tab_{{ obj.2 }}" class="card-body">
+                                            {% render_table obj.1 %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+    {% if instance %}
+            </div>
+        </div>
+    {% endif %}
+
+
+
+{% if object_texts %}
+    {% if user.is_superuser %}
+        {% if form_ann_agreement %}
+    <div class="row">
+<div class="col-md-12">
+<div class="card card-default">
+    {% crispy form_ann_agreement form_ann_agreement.helper %}
+    <div id="ann_agreement_tables"></div>
+</div>
+</div>
+    </div>
+            {% endif %}
+        {% endif %}
+<div class="row">
+<div class="col-md-12">
+  {% if ann_proj_form %}
+<div class="card card-default">
+{% crispy ann_proj_form ann_proj_form.helper %}
+</div>
+{% endif %}
+{% for txt in object_texts %}
+
+<div class="card card-default">
+<div class="card-body">
+    <div class="txt {{txt.kind|slugify}}" id="htxt_{{txt.id}}">{{txt.text|safe}}</div>
+
+    <div class="agreement" id="agrm_{{txt.id}}"></div>
+</div>
+</div>
+{% endfor %}
+</div>
+</div>
+</div>
+{% endif %}
+{% load crispy_forms_tags %}
+{% endblock %}
+{% block scripts %}
+{{block.super}}
+{% if instance %}
+<script type="text/javascript">
+    function GetFormAjax(FormName , ObjectID , ButtonText) {
+        function add_form(data) {
+            // update our tooltip content with our returned data and cache it
+            $('#tab_'+data.tab).find('div:eq(1)').remove();
+            $('#tab_'+data.tab).append(data.form);
+	        $('#form_PersonInstitutionForm div:first div:first select').focus();
+            $('#tab_'+data.tab+" select.listselect2").each(function( index, element ){
+                console.log($(this).data("autocompleteLightUrl"))
+            $(this).select2({
+                escapeMarkup: function(markup) {
+                return markup;
+            },
+            templateResult: function(data) {
+                return data.text;
+            },
+            templateSelection: function(data) {
+                return data.text;
+            },
+                ajax: {
+                url: $(this).data("autocompleteLightUrl"),
+                dataType: 'json'
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+                },
+            })
+
+
+            })            //$(".form.ajax_form").unbind()
+            console.log($('#tab_'+data.tab+" select.listselect2"))
+            {% if apis_bibsonomy %}
+            reinitialize_bibsonomy_tooltips()
+            {% endif %}
+        };
+        if (!$.ApisForms) {
+            $.ApisForms = {}
+        };
+        if (ObjectID === undefined) {
+            if ($.ApisForms[FormName+'_'+'{{entity_type}}']) {
+                var new_data = $.ApisForms[FormName+'_'+'{{entity_type}}']
+                new_data.form = new_data.form.replace('##ENT_PK##', {{instance.pk}});
+                add_form(new_data);
+                return;
+            };
+        };
+        if (ButtonText === undefined) {
+            ButtonText = 'create/modify';
+        };
+        return $.ajax(
+            {
+                type: 'POST',
+                url: '{% url 'apis:apis_relations:get_form_ajax' %}',
+                beforeSend: function(request) {
+                    var csrftoken = getCookie('csrftoken');
+                    request.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                data: {
+                    'FormName':FormName,
+                    'SiteID':{{instance.pk}},
+                    'ObjectID':ObjectID,
+                    'ButtonText':ButtonText,
+                    'entity_type': '{{entity_type}}',
+                },
+                success: function(data) {
+                    add_form(data);
+                    if (!ObjectID) {
+                        $.ApisForms[FormName+'_'+'{{entity_type}}'] = data;
+                        $.ApisForms[FormName+'_'+'{{entity_type}}'].form = $.ApisForms[FormName+'_'+'{{entity_type}}'].form
+                        .replace('/{{instance.pk}}/', '/##ENT_PK##/');
+                    };
+                },
+                error: function(error) {
+                    console.log(error)
+                }
+            }
+        );
+    }
+</script>
+<script type="text/javascript">
+    function EntityRelationForm_response(response){
+
+        console.log("apis_core/apis_entities/templates/apis_entities/edit_generic.html:EntityRelationForm_response")
+
+        if (response.test == false) {
+            $('#'+response.DivID).replaceWith(response.form);
+            //$(".form.ajax_form").unbind();
+            if ($.ApisHigh.tt_instance_detail) {
+            if ($.ApisHigh.tt_instance_detail["__state"] == 'stable') {
+                $.ApisHigh.tt_instance_detail.content(response.form);
+            } }
+        } else {
+            console.log('test did not fail');
+             $('#tab_'+response.tab).find('div').remove();
+             $('#tab_'+response.tab).append(response.table_html);
+             initiate_compare_tooltip();
+             {% if instance %}
+             if (check_perms_relation()){
+             if (response.right_card) {
+                 console.log('fetching form');
+                 console.log(response.tab);
+             GetFormAjax(response.tab);};
+             if ($.ApisHigh){
+             if ($.ApisHigh.tt_instance_detail["__state"] == 'stable') {
+                $.ApisHigh.tt_instance_detail.close()
+             } else {
+
+             $('.reldelete').addClass('disabled')
+           }}}
+             {% endif %}
+        };
+        unbind_compare_forms();
+    }
+</script>
+<script type="text/javascript">
+    function HighlForm_response(response){
+        if (response.test == false) {
+            $.ApisHigh.tt_instance.content(response.form);
+            //$(".form.ajax_form").unbind()
+        } else {
+             $('#tab_'+response.tab+' div.table-container').remove();
+             $('#tab_'+response.tab).prepend(response.table_html);
+             //GetFormAjax(response.tab+'Form');
+             $('#htxt_'+response.text.id).html($.parseHTML(response.text.text))
+             $.ApisHigh.tt_instance.close()
+             $('html, body').animate({ scrollTop: ($('#'+$.ApisHigh.selected_text.id).offset().top)}, 'slow');
+             $('mark.highlight').off();
+             $('mark.highlight').on("click", highlight_detail);
+             initiate_compare_tooltip();
+        }
+    }
+</script>
+<script type="text/javascript">
+    function PAddRelation_response(response){
+        if (response.test == false) {
+            $.ApisHigh.tt_instance.content(response.form);
+            //$(".form.ajax_form").unbind()
+        } else {
+             $('#htxt_'+response.text.id).html($.parseHTML(response.text.text))
+             $.ApisHigh.tt_instance.close()
+             $('html, body').animate({ scrollTop: ($('#'+$.ApisHigh.selected_text.id).offset().top)}, 'slow');
+             $('mark.highlight').off()
+             $('mark.highlight').on("click", highlight_detail)
+        }
+    }
+</script>
+<script type='text/javascript'>
+    function DeleteTempEntity(pk, kind, app_name=false) {
+        if (app_name){
+            var url = '/apis/api/'+app_name+'/'+kind+'/'+pk.toString()
+        } else {
+        var url = '/apis/api/'+kind+'/'+pk.toString()}
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            beforeSend: function(request) {
+                  var csrftoken = getCookie('csrftoken');
+                    request.setRequestHeader("X-CSRFToken", csrftoken);
+                  },
+            statusCode : {
+                204: function() {
+                    if (kind=='HLAnnotation') {
+                        $('*[data-hl-ann-id="'+pk+'"]').contents().unwrap()
+                    } else {
+                    $('#tempEntity_'+pk).parents('tr').remove()
+                }
+                }
+            }
+        })
+    }
+</script>
+<script type='text/javascript'>
+    function DeleteAnnTempEntity(an_pk, rel_class, rel_pk, app_name) {
+        DeleteTempEntity(an_pk,"HLAnnotation");
+        DeleteTempEntity(rel_pk, rel_class, app_name);
+    };
+</script>
+
+<script type="text/javascript">
+    function check_perms_relation(){
+        {% if instance %}
+        {% if "change" in permissions %}
+        return true
+        {% else %}
+        return false
+        {% endif %}
+        {% endif %}
+    }
+</script>
+<script type="text/javascript">
+ function activate_editing(){
+        {% for obj in right_card %}
+        GetFormAjax("{{obj.2}}");
+        //unbind_ajax_forms();
+        {% endfor %}
+{% if highlighter_active %}
+    init_apis_highlighter(1, {{instance.pk}});
+    if (typeof $.ApisHigh.vars == 'undefined') {
+        $.ApisHigh.vars = {}; };
+        $.ApisHigh.vars.entity_type = '{{entity_type}}';
+        $.ApisHigh.vars.instance_pk = '{{instance.pk}}';
+        $.ApisHigh.vars.urls = {};
+        $.ApisHigh.vars.urls.get_form_ajax = "{% url 'apis:apis_relations:get_form_ajax' %}";
+        $.ApisHigh.vars.urls.annotatoragreementview = "{% url 'apis:apis_api2:AnnotatorAgreementView' %}";
+        $.ApisHigh.vars.urls.showoverlappinghighlights = "{% url 'apis:apis_api2:ShowOverlappingHighlights' %}";
+      activate_context_menu_highlighter();
+      $('body').on("click", 'mark.highlight', highlight_detail);
+    {% endif %}
+ };
+function deactivate_editing(){
+    $('.reldelete').addClass("disabled");
+    $('.reldelete').prop("disabled", true);
+    $('.reledit').addClass("disabled");
+    $('.reledit').prop("disabled", true);
+ };
+{% endif %}
+{% if instance %}
+{% if permissions.change %}
+activate_editing();
+{% else %}
+deactivate_editing();
+{% endif %}
+{% endif %}
+</script>
+{% endblock %}

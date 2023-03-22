@@ -3,7 +3,7 @@ import re
 from datetime import datetime, timedelta
 
 
-def parse_date( date_string: str ) -> (datetime, datetime, datetime):
+def parse_date(date_string: str) -> (datetime, datetime, datetime):
     """
     function to parse a string date field of an entity
 
@@ -19,7 +19,6 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
     :return date_bis : datetime :
         ending date of a range if user passed a range value either implicit or explicit.
     """
-
 
     def parse_date_range_individual(date, ab=False, bis=False):
         """
@@ -46,7 +45,6 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
             One datetime object representing the date.
             if a single date was given.
         """
-
 
         def get_last_day_of_month(month, year):
             """
@@ -88,10 +86,10 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
                 # no valid month
                 raise ValueError("Month " + str(month) + " does not exist.")
 
-
-
         # replace all kinds of delimiters
-        date = date.replace(" ", "").replace("-", ".").replace("/", ".").replace("\\", ".")
+        date = (
+            date.replace(" ", "").replace("-", ".").replace("/", ".").replace("\\", ".")
+        )
 
         # parse into variables for use later
         year = None
@@ -132,7 +130,6 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
             # No sensical interpretation found
             raise ValueError("Could not interpret date.")
 
-
         if (ab and bis) or year is None:
             # both ab and bis in one single date are not valid, neither is the absence of a year.
             raise ValueError("Could not interpret date.")
@@ -157,11 +154,10 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
                 day_ab = day
                 day_bis = day
 
-
             # return a tuple from a single date (which the calling function has to further process)
             return (
                 datetime(year=year, month=month_ab, day=day_ab),
-                datetime(year=year, month=month_bis, day=day_bis)
+                datetime(year=year, month=month_bis, day=day_bis),
             )
 
         else:
@@ -188,7 +184,6 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
 
             return datetime(year=year, month=month, day=day)
 
-
     try:
 
         # return variables
@@ -199,14 +194,17 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
         # split for angle brackets, check if explicit iso date is contained within them
         date_split_angle = re.split(r"(<.*?>)", date_string)
 
-
         if len(date_split_angle) > 1:
             # date string contains angle brackets. Parse them, ignore the rest
 
             def parse_iso_date(date_string):
                 date_string_split = date_string.split("-")
                 try:
-                    return datetime(year=int(date_string_split[0]), month=int(date_string_split[1]), day=int(date_string_split[2]) )
+                    return datetime(
+                        year=int(date_string_split[0]),
+                        month=int(date_string_split[1]),
+                        day=int(date_string_split[2]),
+                    )
                 except:
                     raise ValueError("Invalid iso date: ", date_string)
 
@@ -226,7 +224,8 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
                 if len(dates_iso) != 1 and len(dates_iso) != 3:
                     # only either one iso date or three are allowed
                     raise ValueError(
-                        "Incorrect number of dates given. Within angle brackets only one or three (separated by commas) are allowed.")
+                        "Incorrect number of dates given. Within angle brackets only one or three (separated by commas) are allowed."
+                    )
 
                 elif len(dates_iso) == 3:
                     # three iso dates indicate further start and end dates
@@ -245,7 +244,6 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
                 date_single_string = dates_iso[0].strip()
                 if date_single_string != "":
                     date_single = parse_iso_date(date_single_string)
-
 
         else:
             # date string contains no angle brackets. Interpret the possible date formats
@@ -270,7 +268,9 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
                     found_ab = True
 
                     # parse the next value which must be a parsable date string
-                    date_ab = parse_date_range_individual(date_split_ab_bis[i + 1], ab=True)
+                    date_ab = parse_date_range_individual(
+                        date_split_ab_bis[i + 1], ab=True
+                    )
 
                 elif v == "bis":
                     # indicates that the next value must be an end date
@@ -281,7 +281,9 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
                     found_bis = True
 
                     # parse the next value which must be a parsable date string
-                    date_bis = parse_date_range_individual(date_split_ab_bis[i + 1], bis=True)
+                    date_bis = parse_date_range_individual(
+                        date_split_ab_bis[i + 1], bis=True
+                    )
 
                 elif v != "" and not found_ab and not found_bis and not found_single:
                     # indicates that this value must be a date
@@ -305,7 +307,9 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
 
                 # calculate difference between start and end date of range,
                 # and use it to calculate a single date for usage as median.
-                days_delta_half = math.floor((date_bis - date_ab).days / 2, )
+                days_delta_half = math.floor(
+                    (date_bis - date_ab).days / 2,
+                )
                 date_single = date_ab + timedelta(days=days_delta_half)
 
             elif date_ab is not None and date_bis is None:
@@ -324,8 +328,9 @@ def parse_date( date_string: str ) -> (datetime, datetime, datetime):
     return date_single, date_ab, date_bis
 
 
-
-def get_date_help_text_from_dates(single_date, single_start_date, single_end_date, single_date_written):
+def get_date_help_text_from_dates(
+    single_date, single_start_date, single_end_date, single_date_written
+):
     """
     function for creating string help text from parsed dates, to provide feedback to the user
     about the parsing status of a given date field.
@@ -346,7 +351,6 @@ def get_date_help_text_from_dates(single_date, single_start_date, single_end_dat
         The text to be displayed underneath a date field, informing the user about the parsing result
     """
 
-
     # check which of the dates could be parsed to construct the relevant feedback text
 
     help_text = ""
@@ -361,10 +365,14 @@ def get_date_help_text_from_dates(single_date, single_start_date, single_end_dat
             if single_start_date:
                 # date has start range
 
-                help_text += \
-                    str(single_start_date.year) + "-" + \
-                    str(single_start_date.month) + "-" + \
-                    str(single_start_date.day) + " until "
+                help_text += (
+                    str(single_start_date.year)
+                    + "-"
+                    + str(single_start_date.month)
+                    + "-"
+                    + str(single_start_date.day)
+                    + " until "
+                )
 
             else:
                 # date has no start range, then write "undefined"
@@ -374,10 +382,13 @@ def get_date_help_text_from_dates(single_date, single_start_date, single_end_dat
             if single_end_date:
                 # date has end range
 
-                help_text += \
-                    str(single_end_date.year) + "-" + \
-                    str(single_end_date.month) + "-" + \
-                    str(single_end_date.day)
+                help_text += (
+                    str(single_end_date.year)
+                    + "-"
+                    + str(single_end_date.month)
+                    + "-"
+                    + str(single_end_date.day)
+                )
 
             else:
                 # date has no start range, then write "undefined"
@@ -387,15 +398,20 @@ def get_date_help_text_from_dates(single_date, single_start_date, single_end_dat
         else:
             # date has no start nor end range. Use single date then.
 
-            help_text += \
-                str(single_date.year) + "-" + \
-                str(single_date.month) + "-" + \
-                str(single_date.day)
+            help_text += (
+                str(single_date.year)
+                + "-"
+                + str(single_date.month)
+                + "-"
+                + str(single_date.day)
+            )
 
     elif single_date_written is not None:
         # date input field is not empty but it could not be parsed either. Show parsing info and help text
 
-        help_text = "<b>Date could not be interpreted</b><br>" + get_date_help_text_default()
+        help_text = (
+            "<b>Date could not be interpreted</b><br>" + get_date_help_text_default()
+        )
 
     else:
         # date field is completely empty. Show help text only
@@ -403,7 +419,6 @@ def get_date_help_text_from_dates(single_date, single_start_date, single_end_dat
         help_text = get_date_help_text_default()
 
     return help_text
-
 
 
 def get_date_help_text_default():

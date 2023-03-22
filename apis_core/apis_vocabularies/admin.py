@@ -7,16 +7,16 @@ from csvexport.actions import csvexport
 
 
 class BaseAdminVocabularies(admin.ModelAdmin):
-    '''Base class used to store the User foreign key in the background when someone adds a vocab.'''
+    """Base class used to store the User foreign key in the background when someone adds a vocab."""
 
-    search_fields = ('name', 'parent_class__name')
-    exclude = ('userAdded',)
+    search_fields = ("name", "parent_class__name")
+    exclude = ("userAdded",)
     actions = [csvexport]
 
     def get_fields(self, request, obj=None):
         lst = super(BaseAdminVocabularies, self).get_fields(request, obj=None)
         if not request.user.is_superuser:
-            lst.remove('status')
+            lst.remove("status")
         return lst
 
     def get_queryset(self, request):
@@ -31,25 +31,28 @@ class BaseAdminVocabularies(admin.ModelAdmin):
         obj.save()
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        attrs = {'data-placeholder': 'Type to get suggestions',
-                 'data-minimum-input-length': getattr(settings, "APIS_MIN_CHAR", 3),
-                 'data-html': True}
+        attrs = {
+            "data-placeholder": "Type to get suggestions",
+            "data-minimum-input-length": getattr(settings, "APIS_MIN_CHAR", 3),
+            "data-html": True,
+        }
         c_name = db_field.model.__name__
         qs = super(BaseAdminVocabularies, self).get_queryset(request)
-        if c_name.endswith('Relation') and db_field.name == 'parent_class':
+        if c_name.endswith("Relation") and db_field.name == "parent_class":
             qs = db_field.model
         if db_field.name == "parent_class" and request.user.is_superuser:
             kwargs["queryset"] = qs.all()
         elif db_field.name == "parent_class":
-            kwargs["queryset"] = qs.filter(userAdded__groups__in=request.user.groups.all())
-        kwargs['widget'] = autocomplete.Select2(
+            kwargs["queryset"] = qs.filter(
+                userAdded__groups__in=request.user.groups.all()
+            )
+        kwargs["widget"] = autocomplete.Select2(
             url=reverse(
-                'apis:apis_vocabularies:generic_vocabularies_autocomplete',
-                kwargs={
-                    'vocab': self.model.__name__.lower(),
-                    'direct': 'normal'
-                }
-            ), attrs=attrs)
+                "apis:apis_vocabularies:generic_vocabularies_autocomplete",
+                kwargs={"vocab": self.model.__name__.lower(), "direct": "normal"},
+            ),
+            attrs=attrs,
+        )
 
         return super(BaseAdminVocabularies, self).formfield_for_foreignkey(
             db_field, request, **kwargs
@@ -57,17 +60,16 @@ class BaseAdminVocabularies(admin.ModelAdmin):
 
 
 class VocabsRelationAdmin(BaseAdminVocabularies):
-    list_display = ('name', 'label')
-    search_fields = ('name', 'parent_class__name')
+    list_display = ("name", "label")
+    search_fields = ("name", "parent_class__name")
 
 
-
-app = apps.get_app_config('apis_vocabularies')
+app = apps.get_app_config("apis_vocabularies")
 
 
 for model_name, model in app.models.items():
 
-    if model_name.endswith('relation'):
+    if model_name.endswith("relation"):
         admin.site.register(model, VocabsRelationAdmin)
     else:
         admin.site.register(model, BaseAdminVocabularies)

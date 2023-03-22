@@ -24,11 +24,11 @@ class Command(BaseCommand):
     help = "creates vocab entries (for relations) stored in the passed in Excel-Sheet"
 
     def add_arguments(self, parser):
-        parser.add_argument('data', type=str, help='Location of your Excel-Sheet')
+        parser.add_argument("data", type=str, help="Location of your Excel-Sheet")
 
     # A command must define handle()
     def handle(self, *args, **kwargs):
-        file = kwargs['data']
+        file = kwargs["data"]
         excel_book = pd.read_excel(file, None)
         for x in excel_book.keys():
             df = pd.read_excel(file, x)
@@ -41,7 +41,7 @@ class Command(BaseCommand):
                     if isinstance(row[row_key], str):
                         temp_item = create_vocab_item(vocab_class, row, row_key)
                         if c > 1:
-                            parent_key = "ebene_{}".format(c-1)
+                            parent_key = "ebene_{}".format(c - 1)
                             parent = create_vocab_item(vocab_class, row, parent_key)
                             temp_item.parent_class = parent
                             temp_item.save()

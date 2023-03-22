@@ -25,6 +25,7 @@ from rest_framework.views import APIView
 from apis_core.apis_metainfo.api_renderers import PaginatedCSVRenderer
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_metainfo.models import Uri
+
 # from apis_core.apis_relations.models import PersonPlace, InstitutionPlace, AbstractRelation, PersonInstitution
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.helper_functions.RDFParser import RDFParser
@@ -37,6 +38,7 @@ from .api_renderers import (
     EntityToCIDOCNQUADS,
     EntityToCIDOCTURTLE,
 )
+
 # from .models import Event, Institution, Person, Place, Work,
 from apis_core.apis_entities.models import AbstractEntity
 
@@ -56,6 +58,7 @@ from .serializers_generic import EntitySerializer
 
 
 # from metainfo.models import TempEntityClass
+from apis_core.helper_functions import caching
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -122,8 +125,9 @@ def uri_resolver(request):
             ) + "?format={}".format(f)
         return redirect(url)
 
+
 # __before_rdf_refactoring__
-# TODO RDF : Check if this is still necessary and needed to be adapted
+# TODO RDF: Check if this should be removed or adapted
 #
 # class InstitutionViewSet(viewsets.ModelViewSet):
 #     """Serialization of the institution class.
@@ -438,7 +442,7 @@ class GetOrCreateEntity(APIView):
                 if len(r1_2) == 2:
                     q_d["first_name"] = r1_2[1].strip()
                     q_d["name"] = r1_2[0].strip()
-            ent = AbstractEntity.get_entity_class_of_name(entity).objects.create(**q_d)
+            ent = caching.get_ontology_class_of_name(entity).objects.create(**q_d)
         res = {
             "id": ent.pk,
             "url": reverse_lazy(
@@ -449,8 +453,9 @@ class GetOrCreateEntity(APIView):
         }
         return Response(res)
 
+
 # __before_rdf_refactoring__
-# TODO RDF : Check if this is still necessary and needed to be adapted
+# TODO RDF: Check if this should be removed or adapted
 #
 # class GetRelatedPlaces(APIView):
 #     #map_qs = {

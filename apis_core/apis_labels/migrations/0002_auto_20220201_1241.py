@@ -9,20 +9,28 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('apis_labels', '0001_initial'),
-        ('apis_vocabularies', '0001_initial'),
-        ('apis_entities', '0001_initial'),
+        ("apis_labels", "0001_initial"),
+        ("apis_vocabularies", "0001_initial"),
+        ("apis_entities", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='label',
-            name='label_type',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='apis_vocabularies.labeltype'),
+            model_name="label",
+            name="label_type",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="apis_vocabularies.labeltype",
+            ),
         ),
         migrations.AddField(
-            model_name='label',
-            name='temp_entity',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='apis_entities.tempentityclass'),
+            model_name="label",
+            name="temp_entity",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="apis_entities.tempentityclass",
+            ),
         ),
     ]
