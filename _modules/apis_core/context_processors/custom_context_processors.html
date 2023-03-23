@@ -106,20 +106,7 @@
 
 
 <div class="viewcode-block" id="list_relations"><a class="viewcode-back" href="../../../modules/apis_core.context_processors.html#apis_core.context_processors.custom_context_processors.list_relations">[docs]</a><span class="k">def</span> <span class="nf">list_relations</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">relations_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">&quot;apis_core.apis_relations.models&quot;</span><span class="p">],</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span>
-    <span class="p">):</span>
-        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">==</span> <span class="s2">&quot;apis_core.apis_relations.models&quot;</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="s2">&quot;AbstractRelation&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;AnnotationRelationLinkManager&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ent_class&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;BaseRelationManager&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;RelationPublishedQueryset&quot;</span><span class="p">,</span>
-        <span class="p">]:</span>
-            <span class="n">relations_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;relations_list&quot;</span><span class="p">:</span> <span class="n">relations_list</span><span class="p">,</span> <span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="n">request</span><span class="p">}</span>
-    <span class="k">return</span> <span class="n">res</span></div>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;relations_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">,</span> <span class="s2">&quot;triple&quot;</span><span class="p">],</span> <span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="n">request</span><span class="p">}</span></div>
 
 
 <div class="viewcode-block" id="list_apis_settings"><a class="viewcode-back" href="../../../modules/apis_core.context_processors.html#apis_core.context_processors.custom_context_processors.list_apis_settings">[docs]</a><span class="k">def</span> <span class="nf">list_apis_settings</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
