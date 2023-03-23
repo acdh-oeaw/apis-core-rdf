@@ -24,20 +24,7 @@ def list_entities(request):
 
 
 def list_relations(request):
-    relations_list = []
-    for name, obj in inspect.getmembers(
-        sys.modules["apis_core.apis_relations.models"], inspect.isclass
-    ):
-        if obj.__module__ == "apis_core.apis_relations.models" and name not in [
-            "AbstractRelation",
-            "AnnotationRelationLinkManager",
-            "ent_class",
-            "BaseRelationManager",
-            "RelationPublishedQueryset",
-        ]:
-            relations_list.append(str(name).lower())
-    res = {"relations_list": relations_list, "request": request}
-    return res
+    return {"relations_list": ["property", "triple"], "request": request}
 
 
 def list_apis_settings(request):
