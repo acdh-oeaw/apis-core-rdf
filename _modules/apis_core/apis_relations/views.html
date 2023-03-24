@@ -137,58 +137,7 @@
 <span class="n">form_class_dict</span> <span class="o">=</span> <span class="n">turn_form_modules_into_dict</span><span class="p">(</span><span class="n">form_module_list</span><span class="p">)</span>
 
 
-<span class="c1">############################################################################</span>
-<span class="c1">############################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#   Generic views for AjaxForms</span>
-<span class="c1">#</span>
-<span class="c1">############################################################################</span>
-<span class="c1">############################################################################</span>
-
-<span class="c1">######################################################</span>
-<span class="c1"># test for class-ignoring _ajax_form-functions</span>
-<span class="c1">######################################################</span>
-
-
-<span class="c1"># __before_rdf_refactoring__</span>
-<span class="c1">#</span>
-<span class="c1"># Model-classes must be registered together with their ModelForm-classes</span>
-<span class="c1"># registered_forms = {&#39;WorkWorkForm&#39;: [WorkWork, Work, Work],</span>
-<span class="c1">#                     &#39;PersonPlaceForm&#39;: [PersonPlace, Person, Place],</span>
-<span class="c1">#                     &#39;PersonPlaceHighlighterForm&#39;: [PersonPlace, Person, Place],</span>
-<span class="c1">#                     &#39;PersonPersonForm&#39;: [PersonPerson, Person, Person],</span>
-<span class="c1">#                     &#39;PersonPersonHighlighterForm&#39;: [PersonPerson, Person, Person],</span>
-<span class="c1">#                     &#39;PersonInstitutionForm&#39;: [PersonInstitution, Person, Institution],</span>
-<span class="c1">#                     &#39;PersonEventForm&#39;: [PersonEvent, Person, Event],</span>
-<span class="c1">#                     &#39;PersonWorkForm&#39;: [PersonWork, Person, Work],</span>
-<span class="c1">#                     &#39;PersonInstitutionHighlighterForm&#39;: [PersonInstitution, Person, Institution],</span>
-<span class="c1">#                     &#39;PersonWorkHighlighterForm&#39;: [PersonWork, Person, Work],</span>
-<span class="c1">#                     &#39;PlaceWorkHighlighterForm&#39;: [PlaceWork, Place, Work],</span>
-<span class="c1">#                     &#39;InstitutionWorkHighlighterForm&#39;: [InstitutionWork, Institution, Work],</span>
-<span class="c1">#                     &#39;InstitutionPlaceForm&#39;: [InstitutionPlace, Institution, Place],</span>
-<span class="c1">#                     &#39;InstitutionInstitutionForm&#39;: [</span>
-<span class="c1">#                         InstitutionInstitution,</span>
-<span class="c1">#                         Institution,</span>
-<span class="c1">#                         Institution],</span>
-<span class="c1">#                     &#39;InstitutionPersonForm&#39;: [PersonInstitution, Institution, Person],</span>
-<span class="c1">#                     &#39;InstitutionEventForm&#39;: [InstitutionEvent, Institution, Event],</span>
-<span class="c1">#                     &#39;InstitutionWorkForm&#39;: [InstitutionWork, Institution, Work],</span>
-<span class="c1">#                     &#39;PlaceEventForm&#39;: [PlaceEvent, Place, Event],</span>
-<span class="c1">#                     &#39;PlaceWorkForm&#39;: [PlaceWork, Place, Work],</span>
-<span class="c1">#                     &#39;PlacePlaceForm&#39;: [PlacePlace, Place, Place],</span>
-<span class="c1">#                     &#39;EventWorkForm&#39;: [EventWork, Event, Work],</span>
-<span class="c1">#                     &#39;InstitutionLabelForm&#39;: [Label, Institution, Label],</span>
-<span class="c1">#                     &#39;PersonLabelForm&#39;: [Label, Person, Label],</span>
-<span class="c1">#                     &#39;EventLabelForm&#39;: [Label, Event, Label],</span>
-<span class="c1">#                     &#39;PersonResolveUriForm&#39;: [Uri, Person, Uri],</span>
-<span class="c1">#                     &#39;SundayHighlighterForm&#39;: [ ],</span>
-<span class="c1">#                     &#39;AddRelationHighlighterPersonForm&#39;: [],</span>
-<span class="c1">#                     #&#39;PlaceHighlighterForm&#39;: [Annotation, ],</span>
-<span class="c1">#                     #&#39;PersonHighlighterForm&#39;: [Annotation, ]</span>
-<span class="c1">#                     }</span>
-
-
-<span class="c1"># TODO RDF : Check if rdf refactoring covers all use cases</span>
+<span class="c1"># TODO RDF: After full conversion to ne ajax logic, remove this function</span>
 <div class="viewcode-block" id="get_form_ajax"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.views.get_form_ajax">[docs]</a><span class="nd">@login_required</span>
 <span class="k">def</span> <span class="nf">get_form_ajax</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns forms rendered in html&quot;&quot;&quot;</span>

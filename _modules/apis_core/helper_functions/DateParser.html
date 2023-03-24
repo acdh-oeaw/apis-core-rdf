@@ -91,13 +91,10 @@
 
 <span class="sd">    :param date_string : str :</span>
 <span class="sd">        the field value passed by a user</span>
-
 <span class="sd">    :return date_single : datetime :</span>
 <span class="sd">        single date which represents either the precise date given by user or median in between a range.</span>
-
 <span class="sd">    :return date_ab : datetime :</span>
 <span class="sd">        starting date of a range if user passed a range value either implicit or explicit.</span>
-
 <span class="sd">    :return date_bis : datetime :</span>
 <span class="sd">        ending date of a range if user passed a range value either implicit or explicit.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -107,17 +104,12 @@
 <span class="sd">        As a sub function to parse_date, this function parse_date_individual handles a very single date since</span>
 <span class="sd">        in a text field a user can pass multiple dates.</span>
 
-
 <span class="sd">        :param date : str :</span>
 <span class="sd">            recognized sub string which potentially is a date (in julian calendar format)</span>
-
 <span class="sd">        :param ab : boolean : optional</span>
 <span class="sd">            indicates if a single date shall be intepreted as a starting date of a range</span>
-
 <span class="sd">        :param bis : boolean : optional</span>
 <span class="sd">            indicates if a single date shall be intepreted as an ending date of a range</span>
-
-
 <span class="sd">        :return tuple (datetime, datetime) :</span>
 <span class="sd">            two datetime objects representing the dates.</span>
 <span class="sd">            Two indicate that an implicit single date range was given (e.g. a year without months or days).</span>
@@ -133,9 +125,7 @@
 <span class="sd">            Helper function to return the last day of a given month and year (respecting leap years)</span>
 
 <span class="sd">            :param month : int</span>
-
 <span class="sd">            :param year : int</span>
-
 <span class="sd">            :return day : int</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
@@ -172,36 +162,30 @@
         <span class="n">date</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
         <span class="p">)</span>
-
         <span class="c1"># parse into variables for use later</span>
         <span class="n">year</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">month</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">day</span> <span class="o">=</span> <span class="kc">None</span>
-
         <span class="c1"># check for all kind of Y-M-D combinations</span>
         <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d{3,4}$&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
             <span class="c1"># year</span>
             <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
-
         <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d{1,2}\.\d{3,4}$&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
             <span class="c1"># month - year</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span>
             <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
         <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d{1,2}\.\d{1,2}\.\d{3,4}$&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
             <span class="c1"># day - month - year</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span>
             <span class="n">day</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-
         <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d{3,4}\.\d{1,2}\.?$&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
             <span class="c1"># year - month</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span>
             <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
         <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d{3,4}\.\d{1,2}\.\d{1,2}\.?$&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
             <span class="c1"># year - month - day</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.&quot;</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span>
@@ -211,15 +195,12 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># No sensical interpretation found</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not interpret date.&quot;</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="p">(</span><span class="n">ab</span> <span class="ow">and</span> <span class="n">bis</span><span class="p">)</span> <span class="ow">or</span> <span class="n">year</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># both ab and bis in one single date are not valid, neither is the absence of a year.</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not interpret date.&quot;</span><span class="p">)</span>
-
         <span class="k">elif</span> <span class="ow">not</span> <span class="n">ab</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">bis</span> <span class="ow">and</span> <span class="p">(</span><span class="n">month</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">day</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
             <span class="c1"># if both ab and bis are False and either month or day is empty, then it was given</span>
             <span class="c1"># an implicit date range (range of all months if given a year or all days if given a month)</span>
-
             <span class="c1"># construct implicit month range</span>
             <span class="k">if</span> <span class="n">month</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">month_ab</span> <span class="o">=</span> <span class="mi">1</span>
@@ -227,7 +208,6 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">month_ab</span> <span class="o">=</span> <span class="n">month</span>
                 <span class="n">month_bis</span> <span class="o">=</span> <span class="n">month</span>
-
             <span class="c1"># construct implicit day range</span>
             <span class="k">if</span> <span class="n">day</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">day_ab</span> <span class="o">=</span> <span class="mi">1</span>
@@ -241,11 +221,9 @@
                 <span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">month_ab</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="n">day_ab</span><span class="p">),</span>
                 <span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">month_bis</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="n">day_bis</span><span class="p">),</span>
             <span class="p">)</span>
-
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Either ab or bis is True. Then use the respective beginning or end of range and construct a precise date</span>
             <span class="c1"># Or both ab and bis are False. Then construct a precise date from parsed values</span>
-
             <span class="c1"># construct implicit month range if month is None</span>
             <span class="k">if</span> <span class="n">month</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">ab</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">bis</span><span class="p">:</span>
@@ -254,7 +232,6 @@
                 <span class="k">elif</span> <span class="ow">not</span> <span class="n">ab</span> <span class="ow">and</span> <span class="n">bis</span><span class="p">:</span>
                     <span class="c1"># is an ending date, thus take last month of year</span>
                     <span class="n">month</span> <span class="o">=</span> <span class="mi">12</span>
-
             <span class="c1"># construct implicit day range if day is None</span>
             <span class="k">if</span> <span class="n">day</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">ab</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">bis</span><span class="p">:</span>
@@ -267,18 +244,14 @@
             <span class="k">return</span> <span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="n">day</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-
         <span class="c1"># return variables</span>
         <span class="n">date_single</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">date_ab</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">date_bis</span> <span class="o">=</span> <span class="kc">None</span>
-
         <span class="c1"># split for angle brackets, check if explicit iso date is contained within them</span>
         <span class="n">date_split_angle</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(&lt;.*?&gt;)&quot;</span><span class="p">,</span> <span class="n">date_string</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">date_split_angle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># date string contains angle brackets. Parse them, ignore the rest</span>
-
             <span class="k">def</span> <span class="nf">parse_iso_date</span><span class="p">(</span><span class="n">date_string</span><span class="p">):</span>
                 <span class="n">date_string_split</span> <span class="o">=</span> <span class="n">date_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -293,14 +266,11 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">date_split_angle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="c1"># invalid case</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Too many angle brackets.&quot;</span><span class="p">)</span>
-
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">date_split_angle</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="c1"># the right amount of substrings, indicating exactly one pair of angle brackets.</span>
                 <span class="c1"># Parse the iso date in between</span>
-
                 <span class="c1"># remove angle brackets and split by commas</span>
                 <span class="n">dates_iso</span> <span class="o">=</span> <span class="n">date_split_angle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
                 <span class="c1"># check for commas, which would indicate that either one iso date or three are being input</span>
                 <span class="n">dates_iso</span> <span class="o">=</span> <span class="n">dates_iso</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates_iso</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates_iso</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
@@ -308,55 +278,43 @@
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                         <span class="s2">&quot;Incorrect number of dates given. Within angle brackets only one or three (separated by commas) are allowed.&quot;</span>
                     <span class="p">)</span>
-
                 <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates_iso</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                     <span class="c1"># three iso dates indicate further start and end dates</span>
-
                     <span class="c1"># parse start date</span>
                     <span class="n">date_ab_string</span> <span class="o">=</span> <span class="n">dates_iso</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">date_ab_string</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
                         <span class="n">date_ab</span> <span class="o">=</span> <span class="n">parse_iso_date</span><span class="p">(</span><span class="n">date_ab_string</span><span class="p">)</span>
-
                     <span class="c1"># parse end date</span>
                     <span class="n">date_bis_string</span> <span class="o">=</span> <span class="n">dates_iso</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">date_bis_string</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
                         <span class="n">date_bis</span> <span class="o">=</span> <span class="n">parse_iso_date</span><span class="p">(</span><span class="n">date_bis_string</span><span class="p">)</span>
-
                 <span class="c1"># parse single date</span>
                 <span class="n">date_single_string</span> <span class="o">=</span> <span class="n">dates_iso</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">date_single_string</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
                     <span class="n">date_single</span> <span class="o">=</span> <span class="n">parse_iso_date</span><span class="p">(</span><span class="n">date_single_string</span><span class="p">)</span>
-
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># date string contains no angle brackets. Interpret the possible date formats</span>
             <span class="n">date_string</span> <span class="o">=</span> <span class="n">date_string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
             <span class="n">date_string</span> <span class="o">=</span> <span class="n">date_string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-
             <span class="c1"># helper variables for the following loop</span>
             <span class="n">found_ab</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">found_bis</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">found_single</span> <span class="o">=</span> <span class="kc">False</span>
-
             <span class="c1"># split by allowed keywords &#39;ab&#39; and &#39;bis&#39; and iterate over them</span>
             <span class="n">date_split_ab_bis</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(ab|bis)&quot;</span><span class="p">,</span> <span class="n">date_string</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">date_split_ab_bis</span><span class="p">):</span>
-
                 <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;ab&quot;</span><span class="p">:</span>
                     <span class="c1"># indicates that the next value must be a start date</span>
-
                     <span class="k">if</span> <span class="n">found_ab</span> <span class="ow">or</span> <span class="n">found_single</span><span class="p">:</span>
                         <span class="c1"># if already found a ab_date or single date before then there is non-conformative redundancy</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Redundant dates found.&quot;</span><span class="p">)</span>
                     <span class="n">found_ab</span> <span class="o">=</span> <span class="kc">True</span>
-
                     <span class="c1"># parse the next value which must be a parsable date string</span>
                     <span class="n">date_ab</span> <span class="o">=</span> <span class="n">parse_date_range_individual</span><span class="p">(</span>
                         <span class="n">date_split_ab_bis</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ab</span><span class="o">=</span><span class="kc">True</span>
                     <span class="p">)</span>
-
                 <span class="k">elif</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;bis&quot;</span><span class="p">:</span>
                     <span class="c1"># indicates that the next value must be an end date</span>
-
                     <span class="k">if</span> <span class="n">found_bis</span> <span class="ow">or</span> <span class="n">found_single</span><span class="p">:</span>
                         <span class="c1"># if already found a bis_date or single date before then there is non-conformative redundancy</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Redundant dates found.&quot;</span><span class="p">)</span>
@@ -366,42 +324,31 @@
                     <span class="n">date_bis</span> <span class="o">=</span> <span class="n">parse_date_range_individual</span><span class="p">(</span>
                         <span class="n">date_split_ab_bis</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">bis</span><span class="o">=</span><span class="kc">True</span>
                     <span class="p">)</span>
-
                 <span class="k">elif</span> <span class="n">v</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">found_ab</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">found_bis</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">found_single</span><span class="p">:</span>
                     <span class="c1"># indicates that this value must be a date</span>
-
                     <span class="n">found_single</span> <span class="o">=</span> <span class="kc">True</span>
-
                     <span class="c1"># parse the this value which must be a parsable date string</span>
                     <span class="n">date_single</span> <span class="o">=</span> <span class="n">parse_date_range_individual</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-
                     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">date_single</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
                         <span class="c1">#  if result of parse_date_range_individual is a tuple then the date was an implict range.</span>
                         <span class="c1">#  Then split it into start and end dates</span>
                         <span class="n">date_ab</span> <span class="o">=</span> <span class="n">date_single</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                         <span class="n">date_bis</span> <span class="o">=</span> <span class="n">date_single</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
             <span class="k">if</span> <span class="n">date_ab</span> <span class="ow">and</span> <span class="n">date_bis</span><span class="p">:</span>
                 <span class="c1"># date is a range</span>
-
                 <span class="k">if</span> <span class="n">date_ab</span> <span class="o">&gt;</span> <span class="n">date_bis</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;ab-date&#39; must be before &#39;bis-date&#39; in time&quot;</span><span class="p">)</span>
-
                 <span class="c1"># calculate difference between start and end date of range,</span>
                 <span class="c1"># and use it to calculate a single date for usage as median.</span>
                 <span class="n">days_delta_half</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span>
                     <span class="p">(</span><span class="n">date_bis</span> <span class="o">-</span> <span class="n">date_ab</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">date_single</span> <span class="o">=</span> <span class="n">date_ab</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">days_delta_half</span><span class="p">)</span>
-
             <span class="k">elif</span> <span class="n">date_ab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">date_bis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># date is only the start of a range, save it also as the single date</span>
-
                 <span class="n">date_single</span> <span class="o">=</span> <span class="n">date_ab</span>
-
             <span class="k">elif</span> <span class="n">date_ab</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">date_bis</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># date is only the end of a range, save it also as the single date</span>
-
                 <span class="n">date_single</span> <span class="o">=</span> <span class="n">date_bis</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -419,34 +366,25 @@
 
 <span class="sd">    :param single_date: datetime :</span>
 <span class="sd">        the individual date point</span>
-
 <span class="sd">    :param single_start_date: datetime :</span>
 <span class="sd">        the start range of a date</span>
-
 <span class="sd">    :param single_end_date: datetime :</span>
 <span class="sd">        the endrange of a date</span>
-
 <span class="sd">    :param single_date_written: str :</span>
 <span class="sd">        the textual user entry of a date field (needed to check if empty or not)</span>
-
 <span class="sd">    :return help_text: str :</span>
 <span class="sd">        The text to be displayed underneath a date field, informing the user about the parsing result</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># check which of the dates could be parsed to construct the relevant feedback text</span>
-
     <span class="n">help_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="n">single_date</span><span class="p">:</span>
         <span class="c1"># single date could be parsed</span>
-
         <span class="n">help_text</span> <span class="o">=</span> <span class="s2">&quot;Date interpreted as &quot;</span>
-
         <span class="k">if</span> <span class="n">single_start_date</span> <span class="ow">or</span> <span class="n">single_end_date</span><span class="p">:</span>
             <span class="c1"># date has also start or end ranges, then ignore single date</span>
-
             <span class="k">if</span> <span class="n">single_start_date</span><span class="p">:</span>
                 <span class="c1"># date has start range</span>
-
                 <span class="n">help_text</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="nb">str</span><span class="p">(</span><span class="n">single_start_date</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
                     <span class="o">+</span> <span class="s2">&quot;-&quot;</span>
@@ -455,15 +393,11 @@
                     <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">single_start_date</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
                     <span class="o">+</span> <span class="s2">&quot; until &quot;</span>
                 <span class="p">)</span>
-
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># date has no start range, then write &quot;undefined&quot;</span>
-
                 <span class="n">help_text</span> <span class="o">+=</span> <span class="s2">&quot;undefined start until &quot;</span>
-
             <span class="k">if</span> <span class="n">single_end_date</span><span class="p">:</span>
                 <span class="c1"># date has end range</span>
-
                 <span class="n">help_text</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="nb">str</span><span class="p">(</span><span class="n">single_end_date</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
                     <span class="o">+</span> <span class="s2">&quot;-&quot;</span>
@@ -471,15 +405,11 @@
                     <span class="o">+</span> <span class="s2">&quot;-&quot;</span>
                     <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">single_end_date</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
                 <span class="p">)</span>
-
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># date has no start range, then write &quot;undefined&quot;</span>
-
                 <span class="n">help_text</span> <span class="o">+=</span> <span class="s2">&quot;undefined end&quot;</span>
-
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># date has no start nor end range. Use single date then.</span>
-
             <span class="n">help_text</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">single_date</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
                 <span class="o">+</span> <span class="s2">&quot;-&quot;</span>
@@ -487,17 +417,13 @@
                 <span class="o">+</span> <span class="s2">&quot;-&quot;</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">single_date</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
             <span class="p">)</span>
-
     <span class="k">elif</span> <span class="n">single_date_written</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># date input field is not empty but it could not be parsed either. Show parsing info and help text</span>
-
         <span class="n">help_text</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;&lt;b&gt;Date could not be interpreted&lt;/b&gt;&lt;br&gt;&quot;</span> <span class="o">+</span> <span class="n">get_date_help_text_default</span><span class="p">()</span>
         <span class="p">)</span>
-
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># date field is completely empty. Show help text only</span>
-
         <span class="n">help_text</span> <span class="o">=</span> <span class="n">get_date_help_text_default</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">help_text</span></div>

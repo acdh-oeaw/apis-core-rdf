@@ -182,23 +182,6 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">widget1</span> <span class="o">=</span> <span class="n">ListSelect2</span>
 
-                    <span class="c1"># __before_rdf_refactoring__</span>
-                    <span class="c1">#</span>
-                    <span class="c1"># if (</span>
-                    <span class="c1">#     ContentType.objects.get(</span>
-                    <span class="c1">#         app_label__in=[</span>
-                    <span class="c1">#             &quot;apis_entities&quot;,</span>
-                    <span class="c1">#             &quot;apis_metainfo&quot;,</span>
-                    <span class="c1">#             &quot;apis_relations&quot;,</span>
-                    <span class="c1">#             &quot;apis_vocabularies&quot;,</span>
-                    <span class="c1">#             &quot;apis_labels&quot;,</span>
-                    <span class="c1">#         ],</span>
-                    <span class="c1">#         model=v_name_p.lower(),</span>
-                    <span class="c1">#     ).app_label.lower()</span>
-                    <span class="c1">#     == &quot;apis_vocabularies&quot;</span>
-                    <span class="c1"># ):</span>
-                    <span class="c1">#</span>
-                    <span class="c1"># __after_rdf_refactoring__</span>
                     <span class="n">matching_content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
                         <span class="n">app_label__in</span><span class="o">=</span><span class="p">[</span>
                             <span class="s2">&quot;apis_entities&quot;</span><span class="p">,</span>

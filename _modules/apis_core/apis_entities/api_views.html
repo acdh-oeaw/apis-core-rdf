@@ -83,9 +83,7 @@
 <span></span><span class="kn">import</span> <span class="nn">fnmatch</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">TextIOWrapper</span>
-
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Prefetch</span>
@@ -103,13 +101,9 @@
 <span class="kn">from</span> <span class="nn">rest_framework.reverse</span> <span class="kn">import</span> <span class="n">reverse_lazy</span>
 <span class="kn">from</span> <span class="nn">rest_framework.settings</span> <span class="kn">import</span> <span class="n">api_settings</span>
 <span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
-
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.api_renderers</span> <span class="kn">import</span> <span class="n">PaginatedCSVRenderer</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-
-<span class="c1"># from apis_core.apis_relations.models import PersonPlace, InstitutionPlace, AbstractRelation, PersonInstitution</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_vocabularies.models</span> <span class="kn">import</span> <span class="n">VocabsBaseClass</span>
 <span class="kn">from</span> <span class="nn">apis_core.helper_functions.RDFParser</span> <span class="kn">import</span> <span class="n">RDFParser</span>
 <span class="kn">from</span> <span class="nn">apis_core.helper_functions.stanbolQueries</span> <span class="kn">import</span> <span class="n">find_loc</span>
 <span class="kn">from</span> <span class="nn">.api_renderers</span> <span class="kn">import</span> <span class="p">(</span>
@@ -120,26 +114,7 @@
     <span class="n">EntityToCIDOCNQUADS</span><span class="p">,</span>
     <span class="n">EntityToCIDOCTURTLE</span><span class="p">,</span>
 <span class="p">)</span>
-
-<span class="c1"># from .models import Event, Institution, Person, Place, Work,</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span>
-
-<span class="c1"># __before_rdf_refactoring__</span>
-<span class="c1"># from .serializers import (</span>
-<span class="c1">#     EventSerializer,</span>
-<span class="c1">#     GeoJsonSerializer,</span>
-<span class="c1">#     InstitutionSerializer,</span>
-<span class="c1">#     NetJsonEdgeSerializer,</span>
-<span class="c1">#     NetJsonNodeSerializer,</span>
-<span class="c1">#     PersonSerializer,</span>
-<span class="c1">#     PlaceSerializer,</span>
-<span class="c1">#     WorkSerializer,</span>
-<span class="c1">#     # GeoJsonSerializerTheme, LifePathSerializer</span>
-<span class="c1"># )</span>
 <span class="kn">from</span> <span class="nn">.serializers_generic</span> <span class="kn">import</span> <span class="n">EntitySerializer</span>
-
-
-<span class="c1"># from metainfo.models import TempEntityClass</span>
 <span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">caching</span>
 
 
@@ -208,7 +183,6 @@
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
 
 
-<span class="c1"># __before_rdf_refactoring__</span>
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
 <span class="c1">#</span>
 <span class="c1"># class InstitutionViewSet(viewsets.ModelViewSet):</span>
@@ -536,7 +510,6 @@
         <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div></div>
 
 
-<span class="c1"># __before_rdf_refactoring__</span>
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
 <span class="c1">#</span>
 <span class="c1"># class GetRelatedPlaces(APIView):</span>

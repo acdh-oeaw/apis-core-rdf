@@ -225,8 +225,7 @@
 
         <span class="k">return</span> <span class="n">field_filters</span></div>
 
-        <span class="c1"># __before_rdf_refactoring__</span>
-        <span class="c1"># temporary hack replacement old</span>
+        <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
         <span class="c1">#</span>
         <span class="c1"># enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__][&quot;list_filters&quot;]</span>
         <span class="c1">#</span>
@@ -265,8 +264,6 @@
         <span class="c1">#          )</span>
         <span class="c1">#</span>
         <span class="c1"># return filter_dict_tmp</span>
-
-        <span class="c1"># temporary hack replacement end</span>
 
 <div class="viewcode-block" id="GenericEntityListFilter.construct_lookup"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.construct_lookup">[docs]</a>    <span class="k">def</span> <span class="nf">construct_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -307,93 +304,8 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="n">queryset_related_label</span> <span class="o">|</span> <span class="n">queryset_self_name</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
 
+    <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
 <div class="viewcode-block" id="GenericEntityListFilter.related_entity_name_method"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_entity_name_method">[docs]</a>    <span class="k">def</span> <span class="nf">related_entity_name_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="c1"># __before_rdf_refactoring__</span>
-        <span class="c1">#</span>
-        <span class="c1"># &quot;&quot;&quot;</span>
-        <span class="c1"># Searches through the all name fields of all related entities of a given queryset</span>
-        <span class="c1">#</span>
-        <span class="c1"># For performance reasons it was not sensible to use django&#39;s usual lookup foreign key fields</span>
-        <span class="c1"># (e.g. Person.objects.filter(personwork__related_work__name__icontains=value))</span>
-        <span class="c1"># Because such naive (but convenient) django ORM approach starts from a given model, goes to the related relation,</span>
-        <span class="c1"># goes to the related entity and searches therein. But such lookups create a lot of joins in the underlying sql,</span>
-        <span class="c1"># which get expensive very fast.</span>
-        <span class="c1">#</span>
-        <span class="c1"># So the following algorithms reverses this order and always selects primary keys which are then used further to look</span>
-        <span class="c1"># for related models.</span>
-        <span class="c1"># Basically what the following does is:</span>
-        <span class="c1"># step 1: looks up the search value in tempentity class (since all entities inherit from there) and selects their primary keys</span>
-        <span class="c1"># step 2: uses the keys from step 1 to filter for related relations and selects their primary keys</span>
-        <span class="c1"># step 3: uses the keys from step 2 to filter for related entities</span>
-        <span class="c1"># step 4: merge the results from step 3 into one queryset and returns this.</span>
-        <span class="c1">#</span>
-        <span class="c1"># :param queryset: the queryset currently to be filtered on</span>
-        <span class="c1"># :param name: Here not used, because this method filters on names of related entities</span>
-        <span class="c1"># :param value: The value to be filtered for, input by the user or a programmatic call</span>
-        <span class="c1"># :return: filtered queryset</span>
-        <span class="c1"># &quot;&quot;&quot;</span>
-        <span class="c1">#</span>
-        <span class="c1"># # step 1</span>
-        <span class="c1"># # first find all tempentities where the lookup and value applies, select only their primary keys.</span>
-        <span class="c1"># lookup, value = self.construct_lookup(value)</span>
-        <span class="c1"># tempentity_hit = TempEntityClass.objects.filter(**{&quot;name&quot; + lookup: value}).values_list(&quot;pk&quot;, flat=True)</span>
-        <span class="c1">#</span>
-        <span class="c1"># # list for querysets where relations will be saved which are related to the primary keys of the tempentity list above</span>
-        <span class="c1"># related_relations_to_hit_list = []</span>
-        <span class="c1">#</span>
-        <span class="c1"># # step 2</span>
-        <span class="c1"># # iterate over every relation related to the current queryset model (e.g for Person: PersonWork, PersonPerson, etc)</span>
-        <span class="c1"># for relation_class in queryset.model.get_related_relation_classes():</span>
-        <span class="c1">#</span>
-        <span class="c1">#     # get the related classes and lookup names of the current relation</span>
-        <span class="c1">#     # (e.g. for PersonWork: class Person, class Work, &quot;related_person&quot;, &quot;related_work&quot;)</span>
-        <span class="c1">#     related_entity_classA = relation_class.get_related_entity_classA()</span>
-        <span class="c1">#     related_entity_classB = relation_class.get_related_entity_classB()</span>
-        <span class="c1">#     related_entity_field_nameA = relation_class.get_related_entity_field_nameA()</span>
-        <span class="c1">#     related_entity_field_nameB = relation_class.get_related_entity_field_nameB()</span>
-        <span class="c1">#</span>
-        <span class="c1">#     # Within a relation class, there is two fields which relate to entities, check now which of the two</span>
-        <span class="c1">#     # is the same as the current one.</span>
-        <span class="c1">#     if queryset.model == related_entity_classA:</span>
-        <span class="c1">#</span>
-        <span class="c1">#         # append filtered relation queryset to list for use later</span>
-        <span class="c1">#         related_relations_to_hit_list.append(</span>
-        <span class="c1">#             # filter the current relation for if the other related entity&#39;s pk is in the hit list of tempentity class</span>
-        <span class="c1">#             # from before (e.g. if a tempentity&#39;s name contains &quot;seu&quot;, then its primary key will be used here, to check</span>
-        <span class="c1">#             # if there is a related entity which has the same primary key.</span>
-        <span class="c1">#             relation_class.objects.filter(</span>
-        <span class="c1">#                 **{related_entity_field_nameB + &quot;_id__in&quot;: tempentity_hit}</span>
-        <span class="c1">#             ).values_list(related_entity_field_nameA + &quot;_id&quot;, flat=True)</span>
-        <span class="c1">#         )</span>
-        <span class="c1">#</span>
-        <span class="c1">#     # also check the related entity field B (because it can be that both A and B are of the same entity class, e.g. PersonPerson,</span>
-        <span class="c1">#     # or that only A is the other one, e.g. when filtering for Work within PersonWork, then the other related class is Person)</span>
-        <span class="c1">#     if queryset.model == related_entity_classB:</span>
-        <span class="c1">#</span>
-        <span class="c1">#         # same procedure as above, just with related class and related name being reversed.</span>
-        <span class="c1">#         related_relations_to_hit_list.append(</span>
-        <span class="c1">#             relation_class.objects.filter(</span>
-        <span class="c1">#                 **{related_entity_field_nameA + &quot;_id__in&quot;: tempentity_hit}</span>
-        <span class="c1">#             ).values_list(related_entity_field_nameB + &quot;_id&quot;, flat=True)</span>
-        <span class="c1">#         )</span>
-        <span class="c1">#</span>
-        <span class="c1">#     # A safety check which should never arise. But if it does, we know there is something wrong with the automated wiring of</span>
-        <span class="c1">#     # entities and their respective relation classes (e.g. for Person, there should never be EventWork arising here)</span>
-        <span class="c1">#     if queryset.model != related_entity_classA and queryset.model != related_entity_classB:</span>
-        <span class="c1">#</span>
-        <span class="c1">#         raise ValueError(&quot;queryset model class has a wrong relation class associated!&quot;)</span>
-        <span class="c1">#</span>
-        <span class="c1"># # step 3</span>
-        <span class="c1"># # Filter the entity queryset for each of the resulting relation querysets produced in the loop before</span>
-        <span class="c1"># queryset_filtered_list = [ queryset.filter(pk__in=related_relation) for related_relation in related_relations_to_hit_list ]</span>
-        <span class="c1">#</span>
-        <span class="c1"># # step 4</span>
-        <span class="c1"># # merge them all</span>
-        <span class="c1"># result = reduce( lambda a,b : a | b, queryset_filtered_list).distinct()</span>
-        <span class="c1">#</span>
-        <span class="c1"># return result</span>
-        <span class="c1">#</span>
-        <span class="c1"># __after_rdf_refactoring__</span>
         <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
         <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
@@ -404,7 +316,7 @@
         <span class="k">return</span> <span class="n">queryset</span></div>
 
 <div class="viewcode-block" id="GenericEntityListFilter.related_property_name_method"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_property_name_method">[docs]</a>    <span class="k">def</span> <span class="nf">related_property_name_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="c1"># __before_rdf_refactoring__</span>
+        <span class="c1"># TODO RDF: Check if this should be removed or adapted_</span>
         <span class="c1">#</span>
         <span class="c1"># &quot;&quot;&quot;</span>
         <span class="c1"># Searches through the all name fields of all related relationtypes of a given queryset</span>
@@ -501,7 +413,7 @@
 <span class="c1">#</span>
 <span class="c1">#######################################################################</span>
 
-<span class="c1"># __before_rdf_refactoring__</span>
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
 <span class="c1">#</span>
 <span class="c1"># class PersonListFilter(GenericListFilter):</span>
 <span class="c1">#</span>
@@ -580,8 +492,8 @@
 <span class="c1">#         # order to load all filters of all model fields by default so that they are available in the first place.</span>
 <span class="c1">#         # Later those which are not referenced in the settings file will be removed again</span>
 <span class="c1">#         exclude = GenericListFilter.fields_to_exclude</span>
-<span class="c1">#</span>
-<span class="c1"># __after_rdf_refactoring__</span>
+
+
 <div class="viewcode-block" id="get_list_filter_of_entity"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.get_list_filter_of_entity">[docs]</a><span class="k">def</span> <span class="nf">get_list_filter_of_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Main method to be called somewhere else in the codebase in order to get the FilterClass respective to the entity string input</span>
@@ -591,9 +503,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">entity_class</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_entity_class_of_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-
     <span class="n">entity_list_filter_class</span> <span class="o">=</span> <span class="n">entity_class</span><span class="o">.</span><span class="n">get_entity_list_filter</span><span class="p">()</span>
-
     <span class="k">if</span> <span class="n">entity_list_filter_class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
         <span class="k">class</span> <span class="nc">AdHocEntityListFilter</span><span class="p">(</span><span class="n">GenericEntityListFilter</span><span class="p">):</span>

@@ -89,13 +89,6 @@
 
 <span class="c1"># from apis_core.apis_entities.models import Person</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">RootObject</span><span class="p">,</span> <span class="n">TempEntityClass</span>
-
-<span class="c1">#######################################################################</span>
-<span class="c1">#</span>
-<span class="c1"># Custom Managers</span>
-<span class="c1">#</span>
-<span class="c1">#######################################################################</span>
-<span class="c1"># from apis_core.apis_vocabularies.models import Property</span>
 <span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">DateParser</span>
 <span class="kn">from</span> <span class="nn">crum</span> <span class="kn">import</span> <span class="n">get_current_request</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
@@ -105,6 +98,7 @@
 <span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">m2m_changed</span>
 <span class="kn">from</span> <span class="nn">django.utils.functional</span> <span class="kn">import</span> <span class="n">cached_property</span>
 <span class="kn">from</span> <span class="nn">model_utils.managers</span> <span class="kn">import</span> <span class="n">InheritanceManager</span>
+<span class="kn">from</span> <span class="nn">django.db.models.fields.related_descriptors</span> <span class="kn">import</span> <span class="n">ForwardManyToOneDescriptor</span>
 
 
 <div class="viewcode-block" id="find_if_user_accepted"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.find_if_user_accepted">[docs]</a><span class="k">def</span> <span class="nf">find_if_user_accepted</span><span class="p">():</span>
@@ -144,11 +138,9 @@
         <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Properties&quot;</span>
 
     <span class="n">objects</span> <span class="o">=</span> <span class="n">BaseRelationManager</span><span class="p">()</span>
-
     <span class="n">property_class_uri</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Property Class URI&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
-
     <span class="c1"># TODO RDF: Redundancy between name_forward and name, solve this.</span>
     <span class="n">name_forward</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span>
@@ -156,7 +148,6 @@
         <span class="n">help_text</span><span class="o">=</span><span class="s1">&#39;Inverse relation like: &quot;is sub-class of&quot; vs. &quot;is super-class of&quot;.&#39;</span><span class="p">,</span>
         <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
-
     <span class="c1"># TODO RDF: Maybe rename name to name_subj_to_obj and name_reverse to name_obj_to_subj</span>
     <span class="n">name_reverse</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span>
@@ -164,13 +155,11 @@
         <span class="n">help_text</span><span class="o">=</span><span class="s1">&#39;Inverse relation like: &quot;is sub-class of&quot; vs. &quot;is super-class of&quot;.&#39;</span><span class="p">,</span>
         <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
-
     <span class="n">subj_class</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span>
         <span class="n">ContentType</span><span class="p">,</span>
         <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;property_set_subj&quot;</span><span class="p">,</span>
         <span class="n">limit_choices_to</span><span class="o">=</span><span class="n">Q</span><span class="p">(</span><span class="n">app_label</span><span class="o">=</span><span class="s2">&quot;apis_entities&quot;</span><span class="p">),</span>  <span class="c1"># TODO RDF: Add vocab</span>
     <span class="p">)</span>
-
     <span class="n">obj_class</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span>
         <span class="n">ContentType</span><span class="p">,</span>
         <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;property_set_obj&quot;</span><span class="p">,</span>
@@ -183,13 +172,10 @@
 <div class="viewcode-block" id="Property.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.Property.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_reverse</span> <span class="o">!=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFC&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_reverse</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name_reverse</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFC&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_reverse</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_reverse</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_reverse</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name_reverse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; [REVERSE]&quot;</span>
-
         <span class="c1"># TODO RDF: Temporary hack, remove this once better solution is found</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name_forward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-
         <span class="nb">super</span><span class="p">(</span><span class="n">Property</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div></div>
 
@@ -202,17 +188,13 @@
         <span class="n">subj_or_obj_field_function</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">def</span> <span class="nf">get_all_parents</span><span class="p">(</span><span class="n">contenttype_current</span><span class="p">):</span>
-
             <span class="n">parent_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">class_current</span> <span class="o">=</span> <span class="n">contenttype_current</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
-
             <span class="k">for</span> <span class="n">class_parent</span> <span class="ow">in</span> <span class="n">class_current</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">:</span>
-
                 <span class="c1"># TODO: Avoid ContentType DB fetch</span>
                 <span class="n">contenttype_parent</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
                     <span class="n">model</span><span class="o">=</span><span class="n">class_parent</span><span class="o">.</span><span class="vm">__name__</span>
                 <span class="p">)</span>
-
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contenttype_parent</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">contenttype_parent</span> <span class="o">=</span> <span class="n">contenttype_parent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">parent_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">contenttype_parent</span><span class="p">)</span>
@@ -221,10 +203,8 @@
             <span class="k">return</span> <span class="n">parent_list</span>
 
         <span class="k">def</span> <span class="nf">get_all_children</span><span class="p">(</span><span class="n">contenttype_current</span><span class="p">):</span>
-
             <span class="n">child_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">class_current</span> <span class="o">=</span> <span class="n">contenttype_current</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
-
             <span class="k">for</span> <span class="n">class_child</span> <span class="ow">in</span> <span class="n">class_current</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
                 <span class="c1"># TODO: Avoid ContentType DB fetch</span>
                 <span class="n">contenttype_child</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">class_child</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
@@ -234,9 +214,7 @@
             <span class="k">return</span> <span class="n">child_list</span>
 
         <span class="n">parent_contenttype_list</span> <span class="o">=</span> <span class="n">get_all_parents</span><span class="p">(</span><span class="n">contenttype_to_add_or_remove</span><span class="p">)</span>
-
         <span class="k">for</span> <span class="n">parent_contenttype</span> <span class="ow">in</span> <span class="n">parent_contenttype_list</span><span class="p">:</span>
-
             <span class="k">if</span> <span class="n">parent_contenttype</span> <span class="ow">in</span> <span class="n">contenttype_already_saved_list</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Pre-existing parent class found when trying to save or remove a property subject or object class.&quot;</span>
@@ -245,38 +223,23 @@
                     <span class="sa">f</span><span class="s2">&quot; Such a save could potentially be in conflict with an ontology.&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot; Better save or remove the respective top parent subject or object class from this property.&quot;</span>
                 <span class="p">)</span>
-
         <span class="n">children_contenttype_list</span> <span class="o">=</span> <span class="n">get_all_children</span><span class="p">(</span><span class="n">contenttype_to_add_or_remove</span><span class="p">)</span>
-
         <span class="k">for</span> <span class="n">child_contenttype</span> <span class="ow">in</span> <span class="n">children_contenttype_list</span><span class="p">:</span>
             <span class="n">subj_or_obj_field_function</span><span class="p">(</span><span class="n">child_contenttype</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk_set&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk_set&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-
         <span class="n">sending_property</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;instance&quot;</span><span class="p">]</span>
-
         <span class="k">if</span> <span class="n">sender</span> <span class="o">==</span> <span class="n">Property</span><span class="o">.</span><span class="n">subj_class</span><span class="o">.</span><span class="n">through</span><span class="p">:</span>
-
             <span class="n">subj_or_obj_field</span> <span class="o">=</span> <span class="n">sending_property</span><span class="o">.</span><span class="n">subj_class</span>
-
         <span class="k">elif</span> <span class="n">sender</span> <span class="o">==</span> <span class="n">Property</span><span class="o">.</span><span class="n">obj_class</span><span class="o">.</span><span class="n">through</span><span class="p">:</span>
-
             <span class="n">subj_or_obj_field</span> <span class="o">=</span> <span class="n">sending_property</span><span class="o">.</span><span class="n">obj_class</span>
-
         <span class="k">else</span><span class="p">:</span>
-
             <span class="k">raise</span> <span class="ne">Exception</span>
-
         <span class="n">subj_or_obj_field_function</span> <span class="o">=</span> <span class="kc">None</span>
-
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pre_add&quot;</span><span class="p">:</span>
-
             <span class="n">subj_or_obj_field_function</span> <span class="o">=</span> <span class="n">subj_or_obj_field</span><span class="o">.</span><span class="n">add</span>
-
         <span class="k">elif</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;post_remove&quot;</span><span class="p">:</span>
-
             <span class="n">subj_or_obj_field_function</span> <span class="o">=</span> <span class="n">subj_or_obj_field</span><span class="o">.</span><span class="n">remove</span>
-
         <span class="k">if</span> <span class="n">subj_or_obj_field_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">cascade_subj_obj_class_to_children</span><span class="p">(</span>
                 <span class="n">contenttype_to_add_or_remove</span><span class="o">=</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -335,335 +298,6 @@
         <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div></div>
 
 
-<span class="c1"># __before_rdf_refactoring__</span>
-<span class="c1">#</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1"># #</span>
-<span class="c1"># # AbstractRelation</span>
-<span class="c1"># #</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># class AbstractRelation(TempEntityClass):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Abstract super class which encapsulates common logic between the different relations and provides various methods</span>
-<span class="c1">#     relating to either all or specific relations.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     objects = BaseRelationManager()</span>
-<span class="c1">#</span>
-<span class="c1">#     #annotation_links = AnnotationRelationLinkManager()</span>
-<span class="c1">#</span>
-<span class="c1">#     class Meta:</span>
-<span class="c1">#         abstract = True</span>
-<span class="c1">#         default_manager_name = &#39;objects&#39;</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     # Methods dealing with individual data retrievals of instances</span>
-<span class="c1">#     ####################################################################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#     def __str__(self):</span>
-<span class="c1">#         return &quot;{} ({}) {}&quot;.format(self.get_related_entity_instanceA(), self.relation_type, self.get_related_entity_instanceB())</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     def get_web_object(self):</span>
-<span class="c1">#</span>
-<span class="c1">#         nameA = self.get_related_entity_instanceA().name</span>
-<span class="c1">#         nameB = self.get_related_entity_instanceB().name</span>
-<span class="c1">#</span>
-<span class="c1">#         if self.get_related_entity_classA() == Person:</span>
-<span class="c1">#             nameA += &quot;, &quot;</span>
-<span class="c1">#             if self.get_related_entity_instanceA().first_name is None:</span>
-<span class="c1">#                 nameA += &quot;-&quot;</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 nameA += self.get_related_entity_instanceA().first_name</span>
-<span class="c1">#</span>
-<span class="c1">#         if self.get_related_entity_classB() == Person:</span>
-<span class="c1">#             nameB += &quot;, &quot;</span>
-<span class="c1">#             if self.get_related_entity_instanceB().first_name is None:</span>
-<span class="c1">#                 nameB += &quot;-&quot;</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 nameB += self.get_related_entity_instanceB().first_name</span>
-<span class="c1">#</span>
-<span class="c1">#         result = {</span>
-<span class="c1">#             &#39;relation_pk&#39;: self.pk,</span>
-<span class="c1">#             &#39;relation_type&#39;: self.relation_type.name,</span>
-<span class="c1">#             self.get_related_entity_field_nameA(): nameA,</span>
-<span class="c1">#             self.get_related_entity_field_nameB(): nameB,</span>
-<span class="c1">#             &#39;start_date&#39;: self.start_date_written,</span>
-<span class="c1">#             &#39;end_date&#39;: self.end_date_written}</span>
-<span class="c1">#         return result</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     def get_table_dict(self, entity):</span>
-<span class="c1">#         &quot;&quot;&quot;Dict for the tabels in the html view</span>
-<span class="c1">#</span>
-<span class="c1">#         :param entity: Object of type :class:`entities.models.Place`; Used to determine which Place is the main antity</span>
-<span class="c1">#             and which one the related.</span>
-<span class="c1">#         :return:</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         if self.get_related_entity_instanceA() == entity:</span>
-<span class="c1">#             rel_other_key = self.get_related_entity_field_nameB()[:-1]</span>
-<span class="c1">#             rel_other_value = self.get_related_entity_instanceB()</span>
-<span class="c1">#             rel_type = self.relation_type.label</span>
-<span class="c1">#         elif self.get_related_entity_instanceB() == entity:</span>
-<span class="c1">#             rel_other_key = self.get_related_entity_field_nameA()[:-1]</span>
-<span class="c1">#             rel_other_value = self.get_related_entity_instanceA()</span>
-<span class="c1">#             rel_type = self.relation_type.label_reverse</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             raise Exception(&quot;Did not find corresponding entity. Wiring of current relation to current entity is faulty.&quot;)</span>
-<span class="c1">#</span>
-<span class="c1">#         result = {</span>
-<span class="c1">#             &#39;relation_pk&#39;: self.pk,</span>
-<span class="c1">#             &#39;relation_type&#39;: rel_type,</span>
-<span class="c1">#             rel_other_key: rel_other_value,</span>
-<span class="c1">#             &#39;start_date_written&#39;: self.start_date_written,</span>
-<span class="c1">#             &#39;end_date_written&#39;: self.end_date_written,</span>
-<span class="c1">#             &#39;start_date&#39;: self.start_date,</span>
-<span class="c1">#             &#39;end_date&#39;: self.end_date}</span>
-<span class="c1">#         return result</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     # Various Methods enabling convenient shortcuts between entities, relations, fields, etc</span>
-<span class="c1">#     ####################################################################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     # Methods dealing with all relations</span>
-<span class="c1">#     ####################################################################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     _all_relation_classes = None</span>
-<span class="c1">#     _all_relation_names = None</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_all_relation_classes(cls):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Instantiates both lists: &#39;_all_relation_classes&#39; and &#39;_all_relation_names&#39;</span>
-<span class="c1">#</span>
-<span class="c1">#         :return: list of all python classes of the relations defined within this models&#39; module</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1">#         # check if not yet instantiated</span>
-<span class="c1">#         if cls._all_relation_classes == None:</span>
-<span class="c1">#             # if not, then instantiate the private lists</span>
-<span class="c1">#</span>
-<span class="c1">#             relation_classes = []</span>
-<span class="c1">#             relation_names = []</span>
-<span class="c1">#</span>
-<span class="c1">#             # using python&#39;s reflective logic, the following loop iterates over all classes of this current module.</span>
-<span class="c1">#             for relation_name, relation_class in inspect.getmembers(</span>
-<span class="c1">#                     sys.modules[__name__], inspect.isclass):</span>
-<span class="c1">#                 print(&#39;inspecting classes&#39;)</span>
-<span class="c1">#                 # check for python classes not to be used.</span>
-<span class="c1">#                 if \</span>
-<span class="c1">#                         relation_class.__module__ == &quot;apis_core.apis_relations.models&quot; and \</span>
-<span class="c1">#                         relation_class.__name__ != &quot;AnnotationRelationLinkManager&quot; and \</span>
-<span class="c1">#                         relation_class.__name__ != &quot;BaseRelationManager&quot; and \</span>
-<span class="c1">#                         relation_class.__name__ != &quot;RelationPublishedQueryset&quot; and \</span>
-<span class="c1">#                         relation_class.__name__ != &quot;AbstractRelation&quot; and \</span>
-<span class="c1">#                         relation_name != &quot;ent_class&quot;:</span>
-<span class="c1">#</span>
-<span class="c1">#                     relation_classes.append(relation_class)</span>
-<span class="c1">#                     relation_names.append(relation_name.lower())</span>
-<span class="c1">#</span>
-<span class="c1">#             cls._all_relation_classes = relation_classes</span>
-<span class="c1">#             cls._all_relation_names = relation_names</span>
-<span class="c1">#</span>
-<span class="c1">#         return cls._all_relation_classes</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_relation_class_of_name(cls, relation_name):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         :param entity_name: str : The name of an relation</span>
-<span class="c1">#         :return: The model class of the relation respective to the given name</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1">#         for relation_class in cls.get_all_relation_classes():</span>
-<span class="c1">#             if relation_class.__name__.lower() == relation_name.lower():</span>
-<span class="c1">#                 return relation_class</span>
-<span class="c1">#</span>
-<span class="c1">#         raise Exception(&quot;Could not find relation class of name:&quot;, relation_name)</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_all_relation_names(cls):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         :return: list of all class names in lower case of the relations defined within this models&#39; module</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1">#         if cls._all_relation_classes == None:</span>
-<span class="c1">#</span>
-<span class="c1">#             # The instantion logic of relation_names list is coupled to the instantiation logic of the relation_classes</span>
-<span class="c1">#             # list done in the method &#39;get_all_relation_classes&#39;; hence just calling that is sufficient.</span>
-<span class="c1">#             cls.get_all_relation_classes()</span>
-<span class="c1">#</span>
-<span class="c1">#         return cls._all_relation_names</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     # Methods dealing with related relations and entities</span>
-<span class="c1">#     ####################################################################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     _relation_classes_of_entity_class = {}</span>
-<span class="c1">#     _relation_classes_of_entity_name = {}</span>
-<span class="c1">#     _relation_field_names_of_entity_class = {}</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_relation_classes_of_entity_class(cls, entity_class):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         :param entity_class : class of an entity for which the related relations should be returned</span>
-<span class="c1">#         :return: a list of relation classes that are related to the entity class</span>
-<span class="c1">#</span>
-<span class="c1">#         E.g. AbstractRelation.get_relation_classes_of_entity_class( Person )</span>
-<span class="c1">#         -&gt; [ PersonEvent, PersonInstitution, PersonPerson, PersonPlace, PersonWork ]</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1">#         return cls._relation_classes_of_entity_class[entity_class]</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_relation_classes_of_entity_name(cls, entity_name):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         :param entity_name : class name of an entity for which the related relations should be returned</span>
-<span class="c1">#         :return: a list of relation classes that are related to the entity class</span>
-<span class="c1">#</span>
-<span class="c1">#         E.g. AbstractRelation.get_relation_classes_of_entity_class( &#39;person&#39; )</span>
-<span class="c1">#         -&gt; [ PersonEvent, PersonInstitution, PersonPerson, PersonPlace, PersonWork ]</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1">#         return cls._relation_classes_of_entity_name[entity_name.lower()]</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def add_relation_class_of_entity_class(cls, entity_class):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Adds the given entity class to a list which is later retrieved via a dictionary, where the entity class and entity class name</span>
-<span class="c1">#         define the key and the list of related relation classes as their values.</span>
-<span class="c1">#</span>
-<span class="c1">#         :param entity_class: the class for which the related relation (the current cls) will be saved into a respective list.</span>
-<span class="c1">#         :return: None</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1">#         # get the list of the class dictionary, create if not yet exists.</span>
-<span class="c1">#         relation_class_list = cls._relation_classes_of_entity_class.get(entity_class, [])</span>
-<span class="c1">#</span>
-<span class="c1">#         # append the current relation class to the list.</span>
-<span class="c1">#         relation_class_list.append(cls)</span>
-<span class="c1">#</span>
-<span class="c1">#         # save into the dictionary, which uses the entity class as key and the extended list above as value.</span>
-<span class="c1">#         cls._relation_classes_of_entity_class[entity_class] = relation_class_list</span>
-<span class="c1">#         cls._relation_classes_of_entity_name[entity_class.__name__.lower()] = relation_class_list</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_relation_field_names_of_entity_class(cls, entity_class):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         :param entity_class : class of an entity for which the related relation class field names should be returned</span>
-<span class="c1">#         :return: a list of relation class field names that are related to the entity class</span>
-<span class="c1">#</span>
-<span class="c1">#         E.g. AbstractRelation.get_relation_names_of_entity_class( Person )</span>
-<span class="c1">#         -&gt; [ personevent_set, personinstitution_set, related_personA, related_personB, personplace_set, personwork_set ]</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1">#         return cls._relation_field_names_of_entity_class[entity_class]</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def add_relation_field_name_of_entity_class(cls, relation_name, entity_class):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Adds the given entity class to a list which is later retrieved via a dictionary, where the entity class</span>
-<span class="c1">#         defines the key and the list of related relation classes as its values.</span>
-<span class="c1">#</span>
-<span class="c1">#         :param entity_class: the class for which the related relation (the current cls) will be saved into a respective list.</span>
-<span class="c1">#         :return: None</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#</span>
-<span class="c1">#         # get the list of the class dictionary, create if not yet exists.</span>
-<span class="c1">#         relation_names_list = cls._relation_field_names_of_entity_class.get(entity_class, [])</span>
-<span class="c1">#         # append the current relation field name to the list.</span>
-<span class="c1">#         if relation_name not in relation_names_list:</span>
-<span class="c1">#             relation_names_list.append(relation_name) #TODO: this is a workaround, find out why it is called several times</span>
-<span class="c1">#         # save into the dictionary, which uses the entity class as key and the extended list above as value.</span>
-<span class="c1">#         cls._relation_field_names_of_entity_class[entity_class] = relation_names_list</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     def get_related_entity_instanceA(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         This method only works on the relation instance of a given relation class.</span>
-<span class="c1">#         There it returns the instance of an entity on the &#39;A&#39; side of the given relation instance.</span>
-<span class="c1">#</span>
-<span class="c1">#         Note that if your IDE complains about expecting a &#39;str&#39; instead of &#39;None&#39; this happens because</span>
-<span class="c1">#         the method &#39;get_related_entity_field_nameA()&#39; is only implemented and overridden at runtime in the</span>
-<span class="c1">#         function &#39;generate_all_fields&#39; in the class &#39;EntityRelationFieldGenerator&#39;.</span>
-<span class="c1">#</span>
-<span class="c1">#         :return: An entity instance related to the current relation instance</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         return getattr( self, self.get_related_entity_field_nameA() )</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     def get_related_entity_instanceB(self):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         This method only works on the relation instance of a given relation class.</span>
-<span class="c1">#         There it returns the instance of an entity on the &#39;B&#39; side of the given relation instance.</span>
-<span class="c1">#</span>
-<span class="c1">#         Note that if your IDE complains about expecting a &#39;str&#39; instead of &#39;None&#39; this happens because</span>
-<span class="c1">#         the method &#39;get_related_entity_field_nameB()&#39; is only implemented and overridden at runtime in the</span>
-<span class="c1">#         function &#39;generate_all_fields&#39; in the class &#39;EntityRelationFieldGenerator&#39;.</span>
-<span class="c1">#</span>
-<span class="c1">#         :return: An entity instance related to the current relation instance</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         return getattr( self, self.get_related_entity_field_nameB() )</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     # method stumps</span>
-<span class="c1">#     ####################################################################################################################</span>
-<span class="c1">#     # These stumps merely serve as placeholders so that both IDE and developers know that these methods exist.</span>
-<span class="c1">#     # They are implemented programmatically in the function &#39;generate_all_fields&#39; in the class &#39;EntityRelationFieldGenerator&#39;.</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_related_entity_classA(cls):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         :return: the python class of the A side of the current relation class or instance</span>
-<span class="c1">#         E.g. PersonWork -&gt; Person</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         return None</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_related_entity_classB(cls):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         :return: the python class of the B side of the current relation class or instance</span>
-<span class="c1">#         E.g. PersonWork -&gt; Work</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         return None</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_related_entity_field_nameA(cls):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         :return: the name of the field of the A side of the current relation class or instance</span>
-<span class="c1">#         E.g. PersonWork -&gt; &quot;related_person&quot;</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         return None</span>
-<span class="c1">#</span>
-<span class="c1">#     @classmethod</span>
-<span class="c1">#     def get_related_entity_field_nameB(cls):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         :return: the name of the field of the B side of the current relation class or instance</span>
-<span class="c1">#         E.g. PersonWork -&gt; &quot;related_work&quot;</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         return None</span>
-
-
-<span class="c1"># TODO: Move this somewhere else so that it can be imported at several places (right now it&#39;s redundant with copies)</span>
-<span class="kn">from</span> <span class="nn">django.db.models.fields.related_descriptors</span> <span class="kn">import</span> <span class="n">ForwardManyToOneDescriptor</span>
-
-
 <div class="viewcode-block" id="InheritanceForwardManyToOneDescriptor"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.InheritanceForwardManyToOneDescriptor">[docs]</a><span class="k">class</span> <span class="nc">InheritanceForwardManyToOneDescriptor</span><span class="p">(</span><span class="n">ForwardManyToOneDescriptor</span><span class="p">):</span>
 <div class="viewcode-block" id="InheritanceForwardManyToOneDescriptor.get_queryset"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.InheritanceForwardManyToOneDescriptor.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">hints</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">remote_field</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">db_manager</span><span class="p">(</span>
@@ -673,11 +307,6 @@
 
 <div class="viewcode-block" id="InheritanceForeignKey"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.InheritanceForeignKey">[docs]</a><span class="k">class</span> <span class="nc">InheritanceForeignKey</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">):</span>
     <span class="n">forward_related_accessor_class</span> <span class="o">=</span> <span class="n">InheritanceForwardManyToOneDescriptor</span></div>
-
-
-<span class="c1"># class SubjClass(RootObject):</span>
-<span class="c1">#</span>
-<span class="c1">#     subj_name = models.CharField(max_length=255, verbose_name=&#39;Name&#39;)</span>
 
 
 <div class="viewcode-block" id="Triple"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.Triple">[docs]</a><span class="k">class</span> <span class="nc">Triple</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -710,50 +339,13 @@
     <span class="n">objects_inheritance</span> <span class="o">=</span> <span class="n">InheritanceManager</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: subj: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">subj</span><span class="si">}</span><span class="s2">, prop: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="si">}</span><span class="s2">, obj: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
-
         <span class="k">else</span><span class="p">:</span>
-
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: None&gt;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
-
-        <span class="c1"># __before_rdf_refactoring__</span>
-        <span class="c1"># def get_web_object(self):</span>
-        <span class="c1"># Method from RelationBaseClass</span>
-        <span class="c1">#</span>
-        <span class="c1"># nameA = self.get_related_entity_instanceA().name</span>
-        <span class="c1"># nameB = self.get_related_entity_instanceB().name</span>
-        <span class="c1">#</span>
-        <span class="c1"># if self.get_related_entity_classA() == Person:</span>
-        <span class="c1">#     nameA += &quot;, &quot;</span>
-        <span class="c1">#     if self.get_related_entity_instanceA().first_name is None:</span>
-        <span class="c1">#         nameA += &quot;-&quot;</span>
-        <span class="c1">#     else:</span>
-        <span class="c1">#         nameA += self.get_related_entity_instanceA().first_name</span>
-        <span class="c1">#</span>
-        <span class="c1"># if self.get_related_entity_classB() == Person:</span>
-        <span class="c1">#     nameB += &quot;, &quot;</span>
-        <span class="c1">#     if self.get_related_entity_instanceB().first_name is None:</span>
-        <span class="c1">#         nameB += &quot;-&quot;</span>
-        <span class="c1">#     else:</span>
-        <span class="c1">#         nameB += self.get_related_entity_instanceB().first_name</span>
-        <span class="c1">#</span>
-        <span class="c1"># result = {</span>
-        <span class="c1">#     &#39;relation_pk&#39;: self.pk,</span>
-        <span class="c1">#     &#39;relation_type&#39;: self.relation_type.name,</span>
-        <span class="c1">#     self.get_related_entity_field_nameA(): nameA,</span>
-        <span class="c1">#     self.get_related_entity_field_nameB(): nameB,</span>
-        <span class="c1">#     &#39;start_date&#39;: self.start_date_written,</span>
-        <span class="c1">#     &#39;end_date&#39;: self.end_date_written}</span>
-        <span class="c1"># return result</span>
-        <span class="c1">#</span>
-        <span class="c1"># __after_rdf_refactoring__</span>
 
 <div class="viewcode-block" id="Triple.get_web_object"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.Triple.get_web_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_web_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -764,9 +356,7 @@
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="Triple.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.Triple.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
         <span class="c1"># TODO RDF: Integrate more proper check if subj and obj instances are of valid class as defined in prop.subj_class and prop.obj_class</span>
-
         <span class="c1"># def get_all_parents(cls_current):</span>
         <span class="c1">#     parent_list = []</span>
         <span class="c1">#     for p in cls_current.__bases__:</span>
@@ -779,11 +369,11 @@
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">cls_current</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
                 <span class="n">child_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
                 <span class="n">child_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">get_all_childs</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
             <span class="k">return</span> <span class="n">child_list</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;subj, obj, or prop is None&quot;</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">subj_class_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -793,7 +383,6 @@
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Subject class &#39;</span><span class="si">{</span><span class="n">subj_class_name</span><span class="si">}</span><span class="s2">&#39; is not in valid subject class list of property &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
                 <span class="p">)</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">obj_class_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -878,136 +467,8 @@
         <span class="k">return</span> <span class="bp">self</span></div></div>
 
 
-<span class="c1"># __before_rdf_refactoring__</span>
-<span class="c1">#</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1"># #</span>
-<span class="c1"># # Person - ... - Relation</span>
-<span class="c1"># #</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class PersonPerson(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class PersonPlace(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class PersonInstitution(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class PersonEvent(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class PersonWork(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1"># #</span>
-<span class="c1"># #   Institution - ... - Relation</span>
-<span class="c1"># #</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class InstitutionInstitution(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class InstitutionPlace(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class InstitutionEvent(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class InstitutionWork(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1"># #</span>
-<span class="c1"># #   Place - ... - Relation</span>
-<span class="c1"># #</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class PlacePlace(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class PlaceEvent(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class PlaceWork(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1"># #</span>
-<span class="c1"># #   Event - ... - Relation</span>
-<span class="c1"># #</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class EventEvent(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class EventWork(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1"># #</span>
-<span class="c1"># #   Work - ... - Relation</span>
-<span class="c1"># #</span>
-<span class="c1"># #######################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># @reversion.register(follow=[&#39;tempentityclass_ptr&#39;])</span>
-<span class="c1"># class WorkWork(AbstractRelation):</span>
-<span class="c1">#</span>
-<span class="c1">#     pass</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
 <span class="c1"># a_ents = getattr(settings, &#39;APIS_ADDITIONAL_ENTITIES&#39;, False)</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
 <span class="c1"># if a_ents:</span>
 <span class="c1">#     with open(a_ents, &#39;r&#39;) as ents_file:</span>
 <span class="c1">#         ents = yaml.load(ents_file, Loader=yaml.CLoader)</span>

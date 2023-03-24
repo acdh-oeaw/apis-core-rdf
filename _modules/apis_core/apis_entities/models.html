@@ -103,20 +103,11 @@
 <span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">DateParser</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span><span class="p">,</span> <span class="n">Collection</span>
 
-<span class="c1"># __before_rdf_refactoring__</span>
-<span class="c1"># from apis_core.apis_vocabularies.models import (</span>
-<span class="c1">#     EventType,</span>
-<span class="c1">#     InstitutionType,</span>
-<span class="c1">#     PlaceType,</span>
-<span class="c1">#     ProfessionType,</span>
-<span class="c1">#     Title,</span>
-<span class="c1">#     WorkType,</span>
-<span class="c1"># )</span>
 
 <span class="n">BASE_URI</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_BASE_URI&quot;</span><span class="p">,</span> <span class="s2">&quot;http://apis.info/&quot;</span><span class="p">)</span>
 <span class="n">NEXT_PREV</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_NEXT_PREV&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># __after_rdf_refactoring__</span>
+
 <div class="viewcode-block" id="AbstractEntity"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity">[docs]</a><span class="k">class</span> <span class="nc">AbstractEntity</span><span class="p">(</span><span class="n">RootObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract super class which encapsulates common logic between the</span>
@@ -137,14 +128,9 @@
         <span class="n">abstract</span> <span class="o">=</span> <span class="kc">True</span></div>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="c1"># Methods dealing with individual data retrievals of instances</span>
-    <span class="c1">###########################################################################</span>
-
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
         <span class="k">else</span><span class="p">:</span>
@@ -163,422 +149,10 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found no object corresponding to given uri.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
+    <span class="c1"># TODO</span>
 <div class="viewcode-block" id="AbstractEntity.get_entity_list_filter"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_entity_list_filter">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_entity_list_filter</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-
-        <span class="k">return</span> <span class="kc">None</span></div>
-
-    <span class="c1"># Various Methods enabling convenient shortcuts between entities,</span>
-    <span class="c1"># relations, fields, etc</span>
-    <span class="c1"># ########################################################################</span>
-
-<div class="viewcode-block" id="AbstractEntity.create_relation_methods_from_manytomany_fields"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.create_relation_methods_from_manytomany_fields">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create_relation_methods_from_manytomany_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Creates methods on an entity class with which other related entities</span>
-<span class="sd">        can be called without the need to consider potential self-references</span>
-<span class="sd">        (the A and B sides therein).</span>
-
-<span class="sd">        The resulting methods follow the syntax:</span>
-<span class="sd">        &lt;entity&gt;.get_related_&lt;entity&gt;_instances()</span>
-
-<span class="sd">        e.g. for Person:</span>
-<span class="sd">        person.get_related_work_instances()</span>
-<span class="sd">        or</span>
-<span class="sd">        person.get_related_person_instances()</span>
-
-<span class="sd">        Note that with these methods it is not necessary to differentiate</span>
-<span class="sd">        between A and B entities when self-relations exist.</span>
-
-<span class="sd">        The result of any such method call is the queryset of the related</span>
-<span class="sd">        entities. (And not a ManyToManyManager as is the case when calling</span>
-<span class="sd">        &lt;entity&gt;.&lt;entity&gt;_set where in the case of self-relation</span>
-<span class="sd">        it must be differentiated between A and B entities,</span>
-<span class="sd">        e.g. person.personA_set.)</span>
-
-<span class="sd">        It was not possible to my understanding to change managers in such a</span>
-<span class="sd">        way that two (A and the B) could be combined into one manager.</span>
-<span class="sd">        Hence, these additional shortcut methods.</span>
-
-<span class="sd">        :return: None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">def</span> <span class="nf">create_function_from_manytomany_field_to_other_entity</span><span class="p">(</span>
-            <span class="n">entity_manytomany_field</span><span class="p">,</span>
-        <span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Creates the individual method from a ManyToMany field by calling</span>
-<span class="sd">            the manager&#39;s objects.all().</span>
-
-<span class="sd">            This method creation has to be done here in a separate method,</span>
-<span class="sd">            so that it can be called once before assignment, as otherwise,</span>
-<span class="sd">            the variable &quot;entity_name&quot; in the loop below changes with each</span>
-<span class="sd">            iteration and with that also the method references (due to</span>
-<span class="sd">            Python&#39;s &quot;late binding&quot;).</span>
-
-<span class="sd">            A method call in-between thus forces the content of &quot;entity_name&quot;</span>
-<span class="sd">            to be assigned for good to the respective class (= forced early</span>
-<span class="sd">            binding).</span>
-
-<span class="sd">            For more details on this, see:</span>
-<span class="sd">            https://stackoverflow.com/questions/3431676/creating-functions-in-a-loop</span>
-
-<span class="sd">            :param entity_manytomany_field: the ManyToManyManager to another model</span>
-<span class="sd">            :return: method which will call the manager&#39;s objects.all() method</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_manytomany_field</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
-
-        <span class="k">def</span> <span class="nf">create_function_from_manytomany_field_to_self_entity</span><span class="p">(</span>
-            <span class="n">entityA_manytomany_field</span><span class="p">,</span> <span class="n">entityB_manytomany_field</span>
-        <span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Same method as above, but with two managers instead of one for</span>
-<span class="sd">            the case of self-relations.</span>
-
-<span class="sd">            Both managers&#39; objects.all() methods are called and their</span>
-<span class="sd">            queryset results are unionised for the shortcut method of an</span>
-<span class="sd">            entity to its own related entities.</span>
-
-<span class="sd">            :param entityA_manytomany_field: ManyToManyManager to entity A</span>
-<span class="sd">                                             in a self-relation</span>
-<span class="sd">            :param entityB_manytomany_field: ManyToManyManager to entity A</span>
-<span class="sd">                                             in a self-relation</span>
-<span class="sd">            :return: method to call both and return the distinct union of them</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">(</span>
-                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entityA_manytomany_field</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">all</span><span class="p">()</span>
-                <span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entityB_manytomany_field</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
-
-        <span class="k">for</span> <span class="n">entity_name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_all_entity_names</span><span class="p">():</span>
-            <span class="c1"># Iterate over each entity defined within this models&#39; module</span>
-
-            <span class="n">related_entity_function_name</span> <span class="o">=</span> <span class="s2">&quot;get_related_&quot;</span> <span class="o">+</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;_instances&quot;</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">related_entity_function_name</span><span class="p">):</span>
-
-                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">entity_name</span><span class="p">:</span>
-                    <span class="c1"># If the related entity is the same as this current one,</span>
-                    <span class="c1"># set the names of the related functions to A and B</span>
-                    <span class="c1"># and also combine them into one function where</span>
-                    <span class="c1"># both A and B are returned.</span>
-
-                    <span class="n">related_entityA_function_name</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="s2">&quot;get_related_&quot;</span> <span class="o">+</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;A_instances&quot;</span>
-                    <span class="p">)</span>
-                    <span class="n">related_entityB_function_name</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="s2">&quot;get_related_&quot;</span> <span class="o">+</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;B_instances&quot;</span>
-                    <span class="p">)</span>
-                    <span class="n">entityA_manytomany_field</span> <span class="o">=</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;A_set&quot;</span>
-                    <span class="n">entityB_manytomany_field</span> <span class="o">=</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;B_set&quot;</span>
-
-                    <span class="nb">setattr</span><span class="p">(</span>
-                        <span class="bp">cls</span><span class="p">,</span>
-                        <span class="n">related_entityA_function_name</span><span class="p">,</span>
-                        <span class="n">create_function_from_manytomany_field_to_other_entity</span><span class="p">(</span>
-                            <span class="n">entityA_manytomany_field</span>
-                        <span class="p">),</span>
-                    <span class="p">)</span>
-
-                    <span class="nb">setattr</span><span class="p">(</span>
-                        <span class="bp">cls</span><span class="p">,</span>
-                        <span class="n">related_entityB_function_name</span><span class="p">,</span>
-                        <span class="n">create_function_from_manytomany_field_to_other_entity</span><span class="p">(</span>
-                            <span class="n">entityB_manytomany_field</span>
-                        <span class="p">),</span>
-                    <span class="p">)</span>
-
-                    <span class="nb">setattr</span><span class="p">(</span>
-                        <span class="bp">cls</span><span class="p">,</span>
-                        <span class="n">related_entity_function_name</span><span class="p">,</span>
-                        <span class="n">create_function_from_manytomany_field_to_self_entity</span><span class="p">(</span>
-                            <span class="n">entityA_manytomany_field</span><span class="p">,</span> <span class="n">entityB_manytomany_field</span>
-                        <span class="p">),</span>
-                    <span class="p">)</span>
-
-                <span class="c1"># if the related entity is a different one, build on the usual names</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">entity_manytomany_field</span> <span class="o">=</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;_set&quot;</span>
-
-                    <span class="nb">setattr</span><span class="p">(</span>
-                        <span class="bp">cls</span><span class="p">,</span>
-                        <span class="n">related_entity_function_name</span><span class="p">,</span>
-                        <span class="n">create_function_from_manytomany_field_to_other_entity</span><span class="p">(</span>
-                            <span class="n">entity_manytomany_field</span>
-                        <span class="p">),</span>
-                    <span class="p">)</span></div>
-
-    <span class="c1"># Methods dealing with related entities</span>
-    <span class="c1">###########################################################################</span>
-
-    <span class="n">_related_entity_field_names</span> <span class="o">=</span> <span class="kc">None</span>
-
-<div class="viewcode-block" id="AbstractEntity.get_related_entity_field_names"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_related_entity_field_names">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_related_entity_field_names</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: a list of names of all ManyToMany field names relating to</span>
-<span class="sd">        entities from the respective entity class.</span>
-
-<span class="sd">        E.g. for</span>
-<span class="sd">        Person.get_related_entity_field_names()</span>
-<span class="sd">        or</span>
-<span class="sd">        person_instance.get_related_entity_field_names()</span>
-<span class="sd">        -&gt; [&quot;event_set&quot;, &quot;institution_set&quot;, &quot;personB_set&quot;, &quot;personA_set&quot;,</span>
-<span class="sd">        &quot;place_set&quot;, &quot;work_set&quot;]</span>
-
-<span class="sd">        Note: this method depends on the &quot;generate_all_fields&quot; function of</span>
-<span class="sd">        the EntityRelationFieldGenerator class which wires the ManyToMany</span>
-<span class="sd">        Fields into the entities and respective relation types.</span>
-
-<span class="sd">        This method is nevertheless defined here within AbstractEntity for</span>
-<span class="sd">        documentation purposes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_entity_field_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;_related_entity_field_names was not initialized yet.&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_entity_field_names</span></div>
-
-<div class="viewcode-block" id="AbstractEntity.add_related_entity_field_name"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.add_related_entity_field_name">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">add_related_entity_field_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entity_field_name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :param entity_field_name: the name of one of several ManyToMany fields</span>
-<span class="sd">                                  created automatically</span>
-<span class="sd">        :return: None</span>
-
-<span class="sd">        Note: this method depends on the &quot;generate_all_fields&quot; function of</span>
-<span class="sd">        the EntityRelationFieldGenerator class which wires the ManyToMany</span>
-<span class="sd">        Fields into the entities and respective relation types.</span>
-
-<span class="sd">        This method is nevertheless defined here within AbstractEntity for</span>
-<span class="sd">        documentation purposes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_entity_field_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_related_entity_field_names</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_related_entity_field_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entity_field_name</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="AbstractEntity.get_related_entity_instances"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_related_entity_instances">[docs]</a>    <span class="k">def</span> <span class="nf">get_related_entity_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list of queryset of all entity instances which are somehow</span>
-<span class="sd">        related to the calling entity instance</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">queryset_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">entity_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_entity_names</span><span class="p">():</span>
-
-            <span class="n">queryset</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;get_related_&quot;</span> <span class="o">+</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;_instances&quot;</span><span class="p">)()</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">queryset_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">queryset_list</span></div>
-
-    <span class="c1"># Methods dealing with related relations</span>
-    <span class="c1">###########################################################################</span>
-
-<div class="viewcode-block" id="AbstractEntity.get_related_relation_classes"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_related_relation_classes">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_related_relation_classes</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list of python classes of the relations which are related to</span>
-<span class="sd">        the respective entity class</span>
-
-<span class="sd">        E.g. for</span>
-<span class="sd">        Place.get_related_relation_classes()</span>
-<span class="sd">        or</span>
-<span class="sd">        place_instance.get_related_relation_classes()</span>
-<span class="sd">        -&gt; [ InstitutionPlace, PersonPlace, PlaceEvent, PlacePlace, PlaceWork ]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">AbstractRelation</span>
-
-        <span class="k">return</span> <span class="n">AbstractRelation</span><span class="o">.</span><span class="n">get_relation_classes_of_entity_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="AbstractEntity.get_related_relation_field_names"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_related_relation_field_names">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_related_relation_field_names</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list of class names in lower case of the relations which are</span>
-<span class="sd">        related to the respective entity class</span>
-
-<span class="sd">        E.g. for</span>
-<span class="sd">        Place.get_related_relation_names()</span>
-<span class="sd">        or</span>
-<span class="sd">        place_instance.get_related_relation_names()</span>
-<span class="sd">        -&gt; [&quot;institutionplace_set&quot;, &quot;personplace_set&quot;, &quot;placeevent_set&quot;,</span>
-<span class="sd">        &quot;placeplace_set&quot;, &quot;placework_set&quot;]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">AbstractRelation</span>
-
-        <span class="k">return</span> <span class="n">AbstractRelation</span><span class="o">.</span><span class="n">get_relation_field_names_of_entity_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="AbstractEntity.get_related_relation_instances"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_related_relation_instances">[docs]</a>    <span class="k">def</span> <span class="nf">get_related_relation_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list of queryset of all relation instances which are somehow</span>
-<span class="sd">        related to the calling entity instance</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">queryset_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">relation_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_related_relation_classes</span><span class="p">():</span>
-
-            <span class="n">q_args</span> <span class="o">=</span> <span class="n">Q</span><span class="p">()</span>
-
-            <span class="k">if</span> <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_classA</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
-                <span class="n">q_args</span> <span class="o">|=</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_field_nameA</span><span class="p">():</span> <span class="bp">self</span><span class="p">})</span>
-
-            <span class="k">if</span> <span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_classB</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
-                <span class="n">q_args</span> <span class="o">|=</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">relation_class</span><span class="o">.</span><span class="n">get_related_entity_field_nameB</span><span class="p">():</span> <span class="bp">self</span><span class="p">})</span>
-
-            <span class="n">queryset</span> <span class="o">=</span> <span class="n">relation_class</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">q_args</span><span class="p">)</span>
-            <span class="n">queryset_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">queryset</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">queryset_list</span></div>
-
-    <span class="c1"># Methods dealing with related relation types</span>
-    <span class="c1">###########################################################################</span>
-
-    <span class="n">_related_relationtype_classes</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">_related_relationtype_field_names</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">_related_relationtype_names</span> <span class="o">=</span> <span class="kc">None</span>
-
-<div class="viewcode-block" id="AbstractEntity.get_related_relationtype_classes"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_related_relationtype_classes">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_related_relationtype_classes</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list of python classes of the relation types which are</span>
-<span class="sd">        related to the respective entity class</span>
-
-<span class="sd">        E.g. for</span>
-<span class="sd">        Place.get_related_relation_classes()</span>
-<span class="sd">        or</span>
-<span class="sd">        place_instance.get_related_relation_classes()</span>
-<span class="sd">        -&gt; [ InstitutionPlaceRelation, PersonPlaceRelation, PlaceEventRelation,</span>
-<span class="sd">        PlacePlaceRelation, PlaceWorkRelation ]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_classes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-
-            <span class="n">relationtype_classes</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">relationtype_names</span> <span class="o">=</span> <span class="p">[]</span>
-
-            <span class="c1"># TODO: check for best practice on local imports vs.</span>
-            <span class="c1">#  circularity problems.</span>
-            <span class="kn">from</span> <span class="nn">apis_core.apis_vocabularies.models</span> <span class="kn">import</span> <span class="n">AbstractRelationType</span>
-
-            <span class="k">for</span> <span class="p">(</span>
-                <span class="n">relationtype_class</span>
-            <span class="p">)</span> <span class="ow">in</span> <span class="n">AbstractRelationType</span><span class="o">.</span><span class="n">get_all_relationtype_classes</span><span class="p">():</span>
-
-                <span class="n">relationtype_name</span> <span class="o">=</span> <span class="n">relationtype_class</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-
-                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">relationtype_name</span><span class="p">:</span>
-                    <span class="n">relationtype_classes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">relationtype_class</span><span class="p">)</span>
-                    <span class="n">relationtype_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">relationtype_name</span><span class="p">)</span>
-
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_classes</span> <span class="o">=</span> <span class="n">relationtype_classes</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_names</span> <span class="o">=</span> <span class="n">relationtype_names</span>
-
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_classes</span></div>
-
-<div class="viewcode-block" id="AbstractEntity.get_related_relationtype_names"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_related_relationtype_names">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_related_relationtype_names</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list of class names in lower case of the relation types</span>
-<span class="sd">        which are related to the respective entity class</span>
-
-<span class="sd">        E.g. for</span>
-<span class="sd">        Place.get_related_relation_classes()</span>
-<span class="sd">        or</span>
-<span class="sd">        place_instance.get_related_relation_classes()</span>
-<span class="sd">        -&gt; [ &quot;institutionplacerelation&quot;, &quot;personplacerelation&quot;,</span>
-<span class="sd">        &quot;placeeventrelation&quot;, &quot;placeplacerelation&quot;, &quot;placeworkrelation&quot; ]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">get_related_relationtype_classes</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_names</span></div>
-
-<div class="viewcode-block" id="AbstractEntity.get_related_relationtype_field_names"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_related_relationtype_field_names">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_related_relationtype_field_names</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: a list of names of all ManyToMany field names relating to</span>
-<span class="sd">        relation types from the respective entity class</span>
-
-<span class="sd">        E.g. for</span>
-<span class="sd">        PersonPerson.get_related_relationtype_field_names()</span>
-<span class="sd">        or</span>
-<span class="sd">        person_instance.get_related_relationtype_field_names()</span>
-<span class="sd">        -&gt; [&quot;event_relationtype_set&quot;, &quot;institution_relationtype_set&quot;,</span>
-<span class="sd">        &quot;personB_relationtype_set&quot;, &quot;personA_relationtype_set&quot;,</span>
-<span class="sd">        &quot;place_relationtype_set&quot;, &quot;work_relationtype_set&quot;]</span>
-
-<span class="sd">        Note: this method depends on the &quot;generate_all_fields&quot; function of</span>
-<span class="sd">        the EntityRelationFieldGenerator class which wires the ManyToMany</span>
-<span class="sd">        Fields into the entities and respective relation types.</span>
-
-<span class="sd">        This method is nevertheless defined here within AbstractEntity for</span>
-<span class="sd">        documentation purposes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_field_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="s2">&quot;_related_relationtype_field_names was not initialized yet.&quot;</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_field_names</span></div>
-
-<div class="viewcode-block" id="AbstractEntity.add_related_relationtype_field_name"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.add_related_relationtype_field_name">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">add_related_relationtype_field_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">relationtype_field_name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :param entity_field_name: the name of one of several ManyToMany</span>
-<span class="sd">                                  fields created automatically</span>
-<span class="sd">        :return: None</span>
-
-<span class="sd">        Note: this method depends on the &quot;generate_all_fields&quot; function of</span>
-<span class="sd">        the EntityRelationFieldGenerator class which wires the ManyToMany</span>
-<span class="sd">        Fields into the entities and respective relation types.</span>
-
-<span class="sd">        This method is nevertheless defined here within AbstractEntity for</span>
-<span class="sd">        documentation purposes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_field_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_field_names</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_related_relationtype_field_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">relationtype_field_name</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="AbstractEntity.get_related_relationtype_instances"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_related_relationtype_instances">[docs]</a>    <span class="k">def</span> <span class="nf">get_related_relationtype_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: list of queryset of all relation type instances which are</span>
-<span class="sd">        somehow related to the calling entity instance</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">queryset_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">entity_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_entity_names</span><span class="p">():</span>
-            <span class="n">queryset</span> <span class="o">=</span> <span class="kc">None</span>
-
-            <span class="k">if</span> <span class="n">entity_name</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-
-                <span class="n">queryset</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;_relationtype_set&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
-                <span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-
-                <span class="n">querysetA</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;A_relationtype_set&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
-                <span class="p">)</span>
-                <span class="n">querysetB</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_name</span> <span class="o">+</span> <span class="s2">&quot;B_relationtype_set&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
-                <span class="p">)</span>
-                <span class="n">queryset</span> <span class="o">=</span> <span class="n">querysetA</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">querysetB</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">queryset</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">queryset_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">queryset</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">queryset_list</span></div></div>
+        <span class="k">return</span> <span class="kc">None</span></div></div>
 
 
 <div class="viewcode-block" id="TempEntityClass"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
@@ -698,19 +272,6 @@
 <div class="viewcode-block" id="TempEntityClass.get_listview_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_listview_url">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_listview_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="c1"># __before_rdf_refactoring__</span>
-        <span class="c1">#</span>
-        <span class="c1"># if entity == &quot;institution&quot; or len(entity) &lt; 10:</span>
-        <span class="c1">#     return reverse(</span>
-        <span class="c1">#         &quot;apis_core:apis_entities:generic_entities_list&quot;,</span>
-        <span class="c1">#         kwargs={&quot;entity&quot;: entity},</span>
-        <span class="c1">#     )</span>
-        <span class="c1"># else:</span>
-        <span class="c1">#     return reverse(</span>
-        <span class="c1">#         &quot;apis_core:apis_relations:generic_relations_list&quot;,</span>
-        <span class="c1">#         kwargs={&quot;entity&quot;: entity},</span>
-        <span class="c1">#     )</span>
-        <span class="c1"># __after_rdf_refactoring__</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
             <span class="s2">&quot;apis_core:apis_entities:generic_entities_list&quot;</span><span class="p">,</span>
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">},</span>
@@ -719,16 +280,6 @@
 <div class="viewcode-block" id="TempEntityClass.get_createview_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_createview_url">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_createview_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="c1"># __before_rdf_refactoring__</span>
-        <span class="c1">#</span>
-        <span class="c1"># if entity == &quot;institution&quot; or len(entity) &lt; 10:</span>
-        <span class="c1">#     return reverse(</span>
-        <span class="c1">#         &quot;apis_core:apis_entities:generic_entities_create_view&quot;,</span>
-        <span class="c1">#         kwargs={&quot;entity&quot;: entity},</span>
-        <span class="c1">#     )</span>
-        <span class="c1"># else:</span>
-        <span class="c1">#     return None</span>
-        <span class="c1"># __after_rdf_refactoring__</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
             <span class="s2">&quot;apis_core:apis_entities:generic_entities_create_view&quot;</span><span class="p">,</span>
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">},</span>
@@ -736,16 +287,6 @@
 
 <div class="viewcode-block" id="TempEntityClass.get_edit_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_edit_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_edit_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="c1"># __before_rdf_refactoring__</span>
-        <span class="c1">#</span>
-        <span class="c1"># if entity == &quot;institution&quot; or len(entity) &lt; 10:</span>
-        <span class="c1">#     return reverse(</span>
-        <span class="c1">#         &quot;apis_core:apis_entities:generic_entities_edit_view&quot;,</span>
-        <span class="c1">#         kwargs={&quot;entity&quot;: entity, &quot;pk&quot;: self.id},</span>
-        <span class="c1">#     )</span>
-        <span class="c1"># else:</span>
-        <span class="c1">#     return None</span>
-        <span class="c1"># __after_rdf_refactoring__</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
             <span class="s2">&quot;apis_core:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
@@ -760,7 +301,7 @@
 
 <div class="viewcode-block" id="TempEntityClass.get_absolute_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="c1"># __before_rdf_refactoring__</span>
+        <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
         <span class="c1">#</span>
         <span class="c1"># if entity == &quot;institution&quot; or len(entity) &lt; 10:</span>
         <span class="c1">#     return reverse(</span>
@@ -787,19 +328,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">prev</span><span class="p">:</span>
-            <span class="c1"># __before_rdf_refactoring__</span>
-            <span class="c1">#</span>
-            <span class="c1"># if entity == &quot;institution&quot; or len(entity) &lt; 10:</span>
-            <span class="c1">#     return reverse(</span>
-            <span class="c1">#         &quot;apis_core:apis_entities:generic_entities_detail_view&quot;,</span>
-            <span class="c1">#         kwargs={&quot;entity&quot;: entity, &quot;pk&quot;: prev.first().id},</span>
-            <span class="c1">#     )</span>
-            <span class="c1"># else:</span>
-            <span class="c1">#     return reverse(</span>
-            <span class="c1">#         &quot;apis_core:apis_relations:generic_relations_detail_view&quot;,</span>
-            <span class="c1">#         kwargs={&quot;entity&quot;: entity, &quot;pk&quot;: prev.first().id},</span>
-            <span class="c1">#     )</span>
-            <span class="c1"># __after_rdf_refactoring__</span>
             <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
                 <span class="s2">&quot;apis_core:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
                 <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">prev</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
@@ -814,19 +342,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="nb">next</span><span class="p">:</span>
-            <span class="c1"># __before_rdf_refactoring__</span>
-            <span class="c1">#</span>
-            <span class="c1"># if entity == &quot;institution&quot; or len(entity) &lt; 10:</span>
-            <span class="c1">#     return reverse(</span>
-            <span class="c1">#         &quot;apis_core:apis_entities:generic_entities_detail_view&quot;,</span>
-            <span class="c1">#         kwargs={&quot;entity&quot;: entity, &quot;pk&quot;: next.first().id},</span>
-            <span class="c1">#     )</span>
-            <span class="c1"># else:</span>
-            <span class="c1">#     return reverse(</span>
-            <span class="c1">#         &quot;apis_core:apis_relations:generic_relations_detail_view&quot;,</span>
-            <span class="c1">#         kwargs={&quot;entity&quot;: entity, &quot;pk&quot;: next.first().id},</span>
-            <span class="c1">#     )</span>
-            <span class="c1"># __after_rdf_refactoring__</span>
             <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
                 <span class="s2">&quot;apis_core:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
                 <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="nb">next</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
@@ -836,16 +351,6 @@
 
 <div class="viewcode-block" id="TempEntityClass.get_delete_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_delete_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_delete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="c1"># __before_rdf_refactoring__</span>
-        <span class="c1">#</span>
-        <span class="c1"># if entity == &quot;institution&quot; or len(entity) &lt; 10:</span>
-        <span class="c1">#     return reverse(</span>
-        <span class="c1">#         &quot;apis_core:apis_entities:generic_entities_delete_view&quot;,</span>
-        <span class="c1">#         kwargs={&quot;entity&quot;: entity, &quot;pk&quot;: self.id},</span>
-        <span class="c1">#     )</span>
-        <span class="c1"># else:</span>
-        <span class="c1">#     return None</span>
-        <span class="c1"># __after_rdf_refactoring__</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
             <span class="s2">&quot;apis_core:apis_entities:generic_entities_delete_view&quot;</span><span class="p">,</span>
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
@@ -1044,8 +549,7 @@
             <span class="n">user</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Group</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">user_group</span><span class="p">))</span>
 
 
-<span class="c1"># __after_rdf_refactoring__</span>
-<span class="c1"># TODO RDF: remove this workaround here once the settings issue is resolved</span>
+<span class="c1"># TODO remove this workaround here once the settings issue is resolved</span>
 <div class="viewcode-block" id="fill_settings_with_entity_attributes"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.fill_settings_with_entity_attributes">[docs]</a><span class="k">def</span> <span class="nf">fill_settings_with_entity_attributes</span><span class="p">():</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">entity_class</span> <span class="ow">in</span> <span class="p">(</span>

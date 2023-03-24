@@ -333,9 +333,6 @@
                 <span class="n">exclude_lst_fin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">entity_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
             <span class="n">exclude_lst_fin</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">])</span>
-        <span class="c1"># __before_rdf_refactoring__</span>
-        <span class="c1"># if app_label == &quot;apis_relations&quot;:</span>
-        <span class="c1">#     exclude_lst_fin.extend([&quot;text&quot;, &quot;collection&quot;])</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;ManyToManyField&quot;</span><span class="p">:</span>
                 <span class="n">prefetch_rel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -510,25 +507,6 @@
                             <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelSerializer</span><span class="p">(</span>
                                 <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
                             <span class="p">)</span>
-                    <span class="c1"># __before_rdf_refactoring__</span>
-                    <span class="c1">#</span>
-                    <span class="c1"># # include = list(ContentType.objects.filter(app_label=&quot;apis_relations&quot;, model__icontains=entity_str).values_list(&#39;model&#39;, flat=True))</span>
-                    <span class="c1"># include = [</span>
-                    <span class="c1">#     x</span>
-                    <span class="c1">#     for x in lst_cont</span>
-                    <span class="c1">#     if x.__module__ == &quot;apis_core.apis_relations.models&quot;</span>
-                    <span class="c1">#        and entity_str.lower() in x.__name__.lower()</span>
-                    <span class="c1"># ]</span>
-                    <span class="c1"># if len(include) &gt; 0 and len(args) &gt; 0:</span>
-                    <span class="c1">#     inst_pk2 = args[0].pk</span>
-                    <span class="c1">#     self.fields[&quot;relations&quot;] = RelationObjectSerializer2(</span>
-                    <span class="c1">#         read_only=True,</span>
-                    <span class="c1">#         source=&quot;get_related_relation_instances&quot;,</span>
-                    <span class="c1">#         many=True,</span>
-                    <span class="c1">#         pk_instance=inst_pk2,</span>
-                    <span class="c1">#     )</span>
-                    <span class="c1">#</span>
-                    <span class="c1"># __after_rdf_refactoring__</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="n">entity</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;triple_set_from_subj&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span>
@@ -789,7 +767,6 @@
                         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                             <span class="sa">f</span><span class="s2">&quot;Unhandled case. Report to Stefan. type of field is: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="p">)</span>
-
                     <span class="n">sub_serializers</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_additional_serializer</span><span class="p">(</span><span class="n">field</span><span class="p">)(</span>
                         <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="n">is_many</span>
                     <span class="p">)</span>

@@ -541,10 +541,6 @@
         <span class="n">render_end_date_written</span> <span class="o">=</span> <span class="n">generic_render_end_date_written</span>
 
         <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-
-            <span class="c1"># TODO __sresch__ : investigate if it&#39;s feasible to have different subclasses of triples and have them</span>
-            <span class="c1">#  fill in these fields of this Table class automatically</span>
-
             <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
 
             <span class="n">model</span> <span class="o">=</span> <span class="n">TempTriple</span>
@@ -583,61 +579,6 @@
                 <span class="p">)</span>
 
         <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
-            <span class="c1"># __before_rdf_refactoring__</span>
-            <span class="c1">#</span>
-            <span class="c1"># # annotations for displaying data about the &#39;other side&#39; of the relation.</span>
-            <span class="c1"># # Both of them (&#39;other_related_entity&#39; and &#39;other_relation_type&#39;) are necessary for displaying relations</span>
-            <span class="c1"># # in context to what entity we are calling this from.</span>
-            <span class="c1"># data = data.annotate(</span>
-            <span class="c1">#     # In order to provide the &#39;other instance&#39; for each instance of a table where this whole logic is called from,</span>
-            <span class="c1">#     # the queryset must be annotated accordingly. The following Case searches which of the two related instances</span>
-            <span class="c1">#     # of a relation queryset entry is the one corresponding to the current entity instance. When found, take the</span>
-            <span class="c1">#     # other related entity (since this is the one we are interested in displaying).</span>
-            <span class="c1">#     #</span>
-            <span class="c1">#     # The approach of using queryset&#39;s annotate method allows for per-instance case decision and thus</span>
-            <span class="c1">#     # guarantees that the other related entity is always correctly picked,</span>
-            <span class="c1">#     # even in case two entities are of the same class.</span>
-            <span class="c1">#     other_related_entity=Case(</span>
-            <span class="c1">#         # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.</span>
-            <span class="c1">#         When(**{</span>
-            <span class="c1">#             related_entity_field_name_a + &quot;__pk&quot;: entity_instance.pk,</span>
-            <span class="c1">#             &quot;then&quot;: related_entity_field_name_b</span>
-            <span class="c1">#         }),</span>
-            <span class="c1">#         When(**{</span>
-            <span class="c1">#             related_entity_field_name_b + &quot;__pk&quot;: entity_instance.pk,</span>
-            <span class="c1">#             &quot;then&quot;: related_entity_field_name_a</span>
-            <span class="c1">#         }),</span>
-            <span class="c1">#     )</span>
-            <span class="c1"># ).annotate(</span>
-            <span class="c1">#     # Get the correct side of the relation type given the current entity instance.</span>
-            <span class="c1">#     #</span>
-            <span class="c1">#     # The approach of using queryset&#39;s annotate method allows for per-instance case decision and thus</span>
-            <span class="c1">#     # guarantees that the other related entity is always correctly picked,</span>
-            <span class="c1">#     # even in case two entities are of the same class.</span>
-            <span class="c1">#     other_relation_type=Case(</span>
-            <span class="c1">#         When(**{</span>
-            <span class="c1">#             # A-&gt;B relation and current entity instance is A, hence take forward name</span>
-            <span class="c1">#             related_entity_field_name_a + &quot;__pk&quot;: entity_instance.pk,</span>
-            <span class="c1">#             &quot;then&quot;: &quot;relation_type__name&quot;</span>
-            <span class="c1">#         }),</span>
-            <span class="c1">#         When(**{</span>
-            <span class="c1">#             # A-&gt;B relation and current entity instance is B, hence take reverse name.</span>
-            <span class="c1">#             related_entity_field_name_b + &quot;__pk&quot;: entity_instance.pk,</span>
-            <span class="c1">#             &quot;then&quot;: &quot;relation_type__name_reverse&quot;</span>
-            <span class="c1">#         }),</span>
-            <span class="c1">#     )</span>
-            <span class="c1"># )</span>
-            <span class="c1"># for an in data:</span>
-            <span class="c1">#     if getattr(an, f&quot;{related_entity_field_name_a}_id&quot;) == entity_instance.pk:</span>
-            <span class="c1">#         an.other_relation_type = getattr(an.relation_type, &quot;label&quot;)</span>
-            <span class="c1">#     else:</span>
-            <span class="c1">#         an.other_relation_type = getattr(an.relation_type, &quot;label_reverse&quot;)</span>
-            <span class="c1">#</span>
-            <span class="c1">#</span>
-            <span class="c1"># super().__init__(data, *args, **kwargs)</span>
-            <span class="c1">#</span>
-            <span class="c1"># __after_rdf_refactoring__</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
                 <span class="n">other_entity</span><span class="o">=</span><span class="n">Case</span><span class="p">(</span>
                     <span class="c1"># **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.</span>
@@ -666,23 +607,6 @@
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
-                <span class="c1"># __before_rdf_refactoring__</span>
-                <span class="c1">#</span>
-                <span class="c1"># # Only addition with respect to parent class is which main url is to be used when clicking on a</span>
-                <span class="c1"># # related entity column.</span>
-                <span class="c1"># self.base_columns[&quot;other_related_entity&quot;] = tables.LinkColumn(</span>
-                <span class="c1">#     &#39;apis:apis_entities:generic_entities_detail_view&#39;,</span>
-                <span class="c1">#     args=[</span>
-                <span class="c1">#         other_related_entity_class_name,</span>
-                <span class="c1">#         A(&quot;other_related_entity&quot;)</span>
-                <span class="c1">#     ],</span>
-                <span class="c1">#     verbose_name=&quot;Related &quot; + other_related_entity_class_name.title()</span>
-                <span class="c1"># )</span>
-                <span class="c1">#</span>
-                <span class="c1"># super().__init__(data=data, *args, **kwargs)</span>
-                <span class="c1">#</span>
-                <span class="c1"># __after_rdf_refactoring__</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
                     <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
                     <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">other_entity_class_name</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)],</span>
@@ -714,38 +638,6 @@
                 <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
 
             <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
-                <span class="c1"># __before_rdf_refactoring__ TODO RDF:</span>
-                <span class="c1">#</span>
-                <span class="c1"># # Clicking on a related entity will lead also the edit view of the related entity instance</span>
-                <span class="c1"># self.base_columns[&quot;other_related_entity&quot;] = tables.LinkColumn(</span>
-                <span class="c1">#     &#39;apis:apis_entities:generic_entities_edit_view&#39;,</span>
-                <span class="c1">#     args=[</span>
-                <span class="c1">#         other_related_entity_class_name, A(&quot;other_related_entity&quot;)</span>
-                <span class="c1">#     ],</span>
-                <span class="c1">#     verbose_name=&quot;Related &quot; + other_related_entity_class_name.title()</span>
-                <span class="c1"># )</span>
-                <span class="c1">#</span>
-                <span class="c1"># # delete button</span>
-                <span class="c1"># self.base_columns[&#39;delete&#39;] = tables.TemplateColumn(</span>
-                <span class="c1">#     template_name=&#39;apis_relations/delete_button_generic_ajax_form.html&#39;</span>
-                <span class="c1"># )</span>
-                <span class="c1">#</span>
-                <span class="c1"># # edit button</span>
-                <span class="c1"># self.base_columns[&#39;edit&#39;] = tables.TemplateColumn(</span>
-                <span class="c1">#     template_name=&#39;apis_relations/edit_button_generic_ajax_form.html&#39;</span>
-                <span class="c1"># )</span>
-                <span class="c1">#</span>
-                <span class="c1"># # bibsonomy button</span>
-                <span class="c1"># if &#39;apis_bibsonomy&#39; in settings.INSTALLED_APPS:</span>
-                <span class="c1">#     self.base_columns[&#39;ref&#39;] = tables.TemplateColumn(</span>
-                <span class="c1">#         template_name=&#39;apis_relations/references_button_generic_ajax_form.html&#39;</span>
-                <span class="c1">#     )</span>
-                <span class="c1">#</span>
-                <span class="c1"># super().__init__(*args, **kwargs)</span>
-                <span class="c1">#</span>
-                <span class="c1"># __after_rdf_refactoring__</span>
-                <span class="c1"># linking entity</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
                     <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
                     <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">other_entity_class_name</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)],</span>

@@ -135,12 +135,10 @@
 
         <span class="k">for</span> <span class="n">entity_class</span> <span class="ow">in</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_all_entity_classes</span><span class="p">():</span>
 
-            <span class="c1"># TODO __sresch__ : change this db fetch with the cached one from master</span>
             <span class="n">entity_content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">entity_class</span><span class="p">)</span>
 
             <span class="n">other_entity_class_name</span> <span class="o">=</span> <span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
-            <span class="c1"># TODO __sresch__ : Check if this filter call results in additional db hits</span>
             <span class="n">triples_related_by_entity</span> <span class="o">=</span> <span class="n">triples_related_all</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
                 <span class="p">(</span>
                     <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;subj__self_contenttype&quot;</span><span class="p">:</span> <span class="n">entity_content_type</span><span class="p">})</span>
@@ -172,44 +170,6 @@
                     <span class="n">tb_object_open</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
-
-        <span class="c1"># __before_rdf_refactoring__</span>
-        <span class="c1">#</span>
-        <span class="c1"># relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)</span>
-        <span class="c1"># side_bar = []</span>
-        <span class="c1"># for rel in relations:</span>
-        <span class="c1">#     match = [</span>
-        <span class="c1">#         rel.get_related_entity_classA().__name__.lower(),</span>
-        <span class="c1">#         rel.get_related_entity_classB().__name__.lower()</span>
-        <span class="c1">#     ]</span>
-        <span class="c1">#     prefix = &quot;{}{}-&quot;.format(match[0].title()[:2], match[1].title()[:2])</span>
-        <span class="c1">#     table = get_generic_relations_table(relation_class=rel, entity_instance=instance, detail=False)</span>
-        <span class="c1">#     title_card = &#39;&#39;</span>
-        <span class="c1">#     if match[0] == match[1]:</span>
-        <span class="c1">#         title_card = entity.title()</span>
-        <span class="c1">#         dict_1 = {&#39;related_&#39; + entity.lower() + &#39;A&#39;: instance}</span>
-        <span class="c1">#         dict_2 = {&#39;related_&#39; + entity.lower() + &#39;B&#39;: instance}</span>
-        <span class="c1">#         if &#39;apis_highlighter&#39; in settings.INSTALLED_APPS:</span>
-        <span class="c1">#             objects = rel.objects.filter_ann_proj(request=request).filter(</span>
-        <span class="c1">#                 Q(**dict_1) | Q(**dict_2))</span>
-        <span class="c1">#         else:</span>
-        <span class="c1">#             objects = rel.objects.filter(</span>
-        <span class="c1">#                 Q(**dict_1) | Q(**dict_2))</span>
-        <span class="c1">#     else:</span>
-        <span class="c1">#         if match[0].lower() == entity.lower():</span>
-        <span class="c1">#             title_card = match[1].title()</span>
-        <span class="c1">#         else:</span>
-        <span class="c1">#             title_card = match[0].title()</span>
-        <span class="c1">#         dict_1 = {&#39;related_&#39; + entity.lower(): instance}</span>
-        <span class="c1">#         if &#39;apis_highlighter&#39; in settings.INSTALLED_APPS:</span>
-        <span class="c1">#             objects = rel.objects.filter_ann_proj(request=request).filter(**dict_1)</span>
-        <span class="c1">#         else:</span>
-        <span class="c1">#             objects = rel.objects.filter(**dict_1)</span>
-        <span class="c1">#     tb_object = table(data=objects, prefix=prefix)</span>
-        <span class="c1">#     tb_object_open = request.GET.get(prefix + &#39;page&#39;, None)</span>
-        <span class="c1">#     RequestConfig(request, paginate={&quot;per_page&quot;: 10}).configure(tb_object)</span>
-        <span class="c1">#     side_bar.append((title_card, tb_object, &#39;&#39;.join([x.title() for x in match]), tb_object_open))</span>
-
         <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
         <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>

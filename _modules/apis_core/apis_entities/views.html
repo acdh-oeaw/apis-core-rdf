@@ -96,14 +96,7 @@
 <span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">RequestConfig</span>
 <span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">SingleTableView</span>
 <span class="kn">from</span> <span class="nn">django_tables2.export.views</span> <span class="kn">import</span> <span class="n">ExportMixin</span>
-
-<span class="c1"># from reversion_compare.views import HistoryCompareDetailView</span>
-
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span><span class="p">,</span> <span class="n">UriCandidate</span><span class="p">,</span> <span class="n">Text</span>
-
-<span class="c1"># __before_rdf_refactoring__</span>
-<span class="c1"># from apis_core.apis_relations.models import AbstractRelation</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions.RDFParser</span> <span class="kn">import</span> <span class="n">RDFParser</span>
 <span class="kn">from</span> <span class="nn">apis_core.helper_functions.stanbolQueries</span> <span class="kn">import</span> <span class="n">retrieve_obj</span>
 <span class="kn">from</span> <span class="nn">apis_core.helper_functions.utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">access_for_all</span><span class="p">,</span>
@@ -509,11 +502,12 @@
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lst_json</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">)</span></div>
 
 
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
 <div class="viewcode-block" id="getGeoJsonList"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.getGeoJsonList">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">getGeoJsonList</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to retrieve a list of GeoJsons. To generate the list the kind of connection</span>
 <span class="sd">    and the connected entity is needed&quot;&quot;&quot;</span>
-    <span class="n">relation</span> <span class="o">=</span> <span class="n">AbstractRelation</span><span class="o">.</span><span class="n">get_relation_class_of_name</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relation&quot;</span><span class="p">))</span>
+    <span class="c1"># relation = AbstractRelation.get_relation_class_of_name(request.GET.get(&quot;relation&quot;))</span>
     <span class="c1"># relation_type = request.GET.get(&quot;relation_type&quot;)</span>
     <span class="n">objects</span> <span class="o">=</span> <span class="n">relation</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">related_place__status</span><span class="o">=</span><span class="s2">&quot;distinct&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span>
         <span class="s2">&quot;related_person&quot;</span><span class="p">,</span> <span class="s2">&quot;related_place&quot;</span><span class="p">,</span> <span class="s2">&quot;relation_type&quot;</span>
@@ -545,8 +539,7 @@
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lst_json</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">)</span></div>
 
 
-<span class="c1"># __before_rdf_refactoring__</span>
-<span class="c1">#</span>
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
 <span class="c1"># @user_passes_test(access_for_all_function)</span>
 <span class="c1"># def getNetJsonList(request):</span>
 <span class="c1">#     &quot;&quot;&quot;Used to retrieve a Json to draw a network&quot;&quot;&quot;</span>
