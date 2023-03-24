@@ -421,9 +421,7 @@ def get_list_filter_of_entity(entity):
     """
 
     entity_class = caching.get_entity_class_of_name(entity)
-
     entity_list_filter_class = entity_class.get_entity_list_filter()
-
     if entity_list_filter_class is None:
 
         class AdHocEntityListFilter(GenericEntityListFilter):
