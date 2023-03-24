@@ -46,14 +46,12 @@ class AbstractEntity(RootObject):
         abstract = True
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
     # Methods dealing with individual data retrievals of instances
     ###########################################################################
 
     def __str__(self):
-
         if self.name != "":
             return self.name
         else:
@@ -74,7 +72,6 @@ class AbstractEntity(RootObject):
 
     @classmethod
     def get_entity_list_filter(cls):
-
         return None
 
     # Various Methods enabling convenient shortcuts between entities,

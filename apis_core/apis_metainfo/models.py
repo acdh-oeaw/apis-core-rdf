@@ -66,11 +66,9 @@ class RootObject(models.Model):
     def save(self, *args, **kwargs):
         if self.self_contenttype is None:
             self.self_contenttype = caching.get_contenttype_of_class(self.__class__)
-
         super().save(*args, **kwargs)
 
     def __str__(self):
-
         if self.name != "":
             return self.name
         else:

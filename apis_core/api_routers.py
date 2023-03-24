@@ -685,7 +685,6 @@ def load_additional_serializers():
                         raise Exception(
                             f"Unhandled case. Report to Stefan. type of field is: {type(field)}"
                         )
-
                     sub_serializers[target_name] = create_additional_serializer(field)(
                         read_only=True, many=is_many
                     )

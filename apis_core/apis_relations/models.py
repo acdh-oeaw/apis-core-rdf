@@ -56,11 +56,9 @@ class Property(RootObject):
         verbose_name_plural = "Properties"
 
     objects = BaseRelationManager()
-
     property_class_uri = models.CharField(
         max_length=255, verbose_name="Property Class URI", blank=True
     )
-
     # TODO RDF: Redundancy between name_forward and name, solve this.
     name_forward = models.CharField(
         max_length=255,
@@ -68,7 +66,6 @@ class Property(RootObject):
         help_text='Inverse relation like: "is sub-class of" vs. "is super-class of".',
         blank=True,
     )
-
     # TODO RDF: Maybe rename name to name_subj_to_obj and name_reverse to name_obj_to_subj
     name_reverse = models.CharField(
         max_length=255,
@@ -76,13 +73,11 @@ class Property(RootObject):
         help_text='Inverse relation like: "is sub-class of" vs. "is super-class of".',
         blank=True,
     )
-
     subj_class = models.ManyToManyField(
         ContentType,
         related_name="property_set_subj",
         limit_choices_to=Q(app_label="apis_entities"),  # TODO RDF: Add vocab
     )
-
     obj_class = models.ManyToManyField(
         ContentType,
         related_name="property_set_obj",
@@ -95,13 +90,10 @@ class Property(RootObject):
     def save(self, *args, **kwargs):
         if self.name_reverse != unicodedata.normalize("NFC", self.name_reverse):
             self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
-
         if self.name_reverse == "" or self.name_reverse == None:
             self.name_reverse = self.name + " [REVERSE]"
-
         # TODO RDF: Temporary hack, remove this once better solution is found
         self.name_forward = self.name
-
         super(Property, self).save(*args, **kwargs)
         return self
 
@@ -114,17 +106,13 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
         subj_or_obj_field_function,
     ):
         def get_all_parents(contenttype_current):
-
             parent_list = []
             class_current = contenttype_current.model_class()
-
             for class_parent in class_current.__bases__:
-
                 # TODO: Avoid ContentType DB fetch
                 contenttype_parent = ContentType.objects.filter(
                     model=class_parent.__name__
                 )
-
                 if len(contenttype_parent) == 1:
                     contenttype_parent = contenttype_parent[0]
                     parent_list.append(contenttype_parent)
@@ -133,10 +121,8 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
             return parent_list
 
         def get_all_children(contenttype_current):
-
             child_list = []
             class_current = contenttype_current.model_class()
-
             for class_child in class_current.__subclasses__():
                 # TODO: Avoid ContentType DB fetch
                 contenttype_child = ContentType.objects.get(model=class_child.__name__)
@@ -146,9 +132,7 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
             return child_list
 
         parent_contenttype_list = get_all_parents(contenttype_to_add_or_remove)
-
         for parent_contenttype in parent_contenttype_list:
-
             if parent_contenttype in contenttype_already_saved_list:
                 raise Exception(
                     f"Pre-existing parent class found when trying to save or remove a property subject or object class."
@@ -157,38 +141,23 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
                     f" Such a save could potentially be in conflict with an ontology."
                     f" Better save or remove the respective top parent subject or object class from this property."
                 )
-
         children_contenttype_list = get_all_children(contenttype_to_add_or_remove)
-
         for child_contenttype in children_contenttype_list:
             subj_or_obj_field_function(child_contenttype)
 
     if kwargs["pk_set"] is not None and len(kwargs["pk_set"]) == 1:
-
         sending_property = kwargs["instance"]
-
         if sender == Property.subj_class.through:
-
             subj_or_obj_field = sending_property.subj_class
-
         elif sender == Property.obj_class.through:
-
             subj_or_obj_field = sending_property.obj_class
-
         else:
-
             raise Exception
-
         subj_or_obj_field_function = None
-
         if kwargs["action"] == "pre_add":
-
             subj_or_obj_field_function = subj_or_obj_field.add
-
         elif kwargs["action"] == "post_remove":
-
             subj_or_obj_field_function = subj_or_obj_field.remove
-
         if subj_or_obj_field_function is not None:
             cascade_subj_obj_class_to_children(
                 contenttype_to_add_or_remove=ContentType.objects.get(
@@ -258,11 +227,6 @@ class InheritanceForeignKey(models.ForeignKey):
     forward_related_accessor_class = InheritanceForwardManyToOneDescriptor
 
 
-# class SubjClass(RootObject):
-#
-#     subj_name = models.CharField(max_length=255, verbose_name='Name')
-
-
 class Triple(models.Model):
     subj = InheritanceForeignKey(
         RootObject,
@@ -293,13 +257,9 @@ class Triple(models.Model):
     objects_inheritance = InheritanceManager()
 
     def __repr__(self):
-
         if self.subj is not None or self.obj is not None or self.prop is not None:
-
             return f"<{self.__class__.__name__}: subj: {self.subj}, prop: {self.prop}, obj: {self.obj}>"
-
         else:
-
             return f"<{self.__class__.__name__}: None>"
 
     def __str__(self):
@@ -314,9 +274,7 @@ class Triple(models.Model):
         }
 
     def save(self, *args, **kwargs):
-
         # TODO RDF: Integrate more proper check if subj and obj instances are of valid class as defined in prop.subj_class and prop.obj_class
-
         # def get_all_parents(cls_current):
         #     parent_list = []
         #     for p in cls_current.__bases__:
@@ -329,11 +287,11 @@ class Triple(models.Model):
             for p in cls_current.__subclasses__():
                 child_list.append(p)
                 child_list.extend(get_all_childs(p))
+
             return child_list
 
         if self.subj is None or self.obj is None or self.prop is None:
             raise Exception("subj, obj, or prop is None")
-
         if self.subj is not None:
             subj_class_name = self.subj.__class__.__name__
             if (
@@ -343,7 +301,6 @@ class Triple(models.Model):
                 raise Exception(
                     f"Subject class '{subj_class_name}' is not in valid subject class list of property '{self.prop}'"
                 )
-
         if self.obj is not None:
             obj_class_name = self.obj.__class__.__name__
             if (
