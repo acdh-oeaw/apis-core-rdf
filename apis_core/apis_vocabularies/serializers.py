@@ -6,14 +6,7 @@ from .models import (
     TextType,
     CollectionType,
     VocabsBaseClass,
-    # __before_rdf_refactoring__
-    # InstitutionType,
-    # ProfessionType,
-    # PlaceType,
     VocabNames,
-    # __before_rdf_refactoring__
-    # EventType,
-    # WorkType,
     LabelType,
 )
 
@@ -134,7 +127,7 @@ class TextTypeSerializer(VocabsBaseSerializer):
         model = TextType
 
 
-# __before_rdf_refactoring__
+# TODO RDF: Check if this should be removed or adapted
 #
 # class InstitutionTypeSerializer(VocabsBaseSerializer):
 #     url = serializers.HyperlinkedIdentityField(
@@ -195,122 +188,3 @@ class LabelTypeSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ("id", "name")
         model = LabelType
-
-
-#
-#
-# #####################################################################
-# #
-# # Relations
-# #
-# ####################################################################
-#
-#
-# class InstitutionInstitutionRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = InstitutionInstitutionRelation
-#
-#
-# class PersonPersonRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = PersonPersonRelation
-#
-#
-# class PersonInstitutionRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = PersonInstitutionRelation
-#
-#
-# class PersonPlaceRelationSerializer(VocabsBaseSerializer):
-#
-#     url = serializers.HyperlinkedIdentityField(
-#         view_name="apis:apis_api:personplacerelation-detail",
-#         lookup_field="pk"
-#     )
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = PersonPlaceRelation
-#
-#
-# class PersonEventRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = PersonEventRelation
-#
-#
-# class PersonWorkRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = PersonWorkRelation
-#
-#
-# class InstitutionPlaceRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = InstitutionPlaceRelation
-#
-#
-# class InstitutionEventRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = InstitutionEventRelation
-#
-#
-# class InstitutionWorkRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = InstitutionWorkRelation
-#
-#
-# class PlaceEventRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = PlaceEventRelation
-#
-#
-# class PlaceWorkRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = PlaceWorkRelation
-#
-#
-# class PlacePlaceRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = PlacePlaceRelation
-#
-#
-# class EventWorkRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = EventWorkRelation
-#
-#
-# class EventEventRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = EventEventRelation
-#
-#
-# class WorkWorkRelationSerializer(VocabsBaseSerializer):
-#
-#     class Meta:
-#         fields = '__all__'
-#         model = WorkWorkRelation

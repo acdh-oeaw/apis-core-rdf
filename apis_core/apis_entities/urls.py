@@ -85,7 +85,7 @@ urlpatterns = [
     # url(r"^detail/work/(?P<pk>[0-9]+)$",
     #     detail_generic.WorkDetailView.as_view(), name="work_detail"),
     path("place/geojson/", views.getGeoJson, name="getGeoJson"),
-    # __before_rdf_refactoring__
+    # TODO RDF: Check if this should be removed or adapted
     # url(r"^place/geojson/list/$", views.getGeoJsonList, name="getGeoJsonList"),
     # url(r"^place/network/list/$", views.getNetJsonList, name="getNetJsonList"),
     # url(
@@ -97,6 +97,7 @@ urlpatterns = [
     path("networks/relation_place/", views.pers_place_netw, name="pers_place_netw"),
     path("networks/relation_institution/", views.pers_inst_netw, name="pers_inst_netw"),
     path("networks/generic/", views.generic_network_viz, name="generic_network_viz"),
+    # TODO RDF: Check if this should be removed or adapted
     #    url(
     #        r'^compare/(?P<app>[a-z_]+)/(?P<kind>[a-z]+)/(?P<pk>\d+)$', ReversionCompareView.as_view()
     #    ),

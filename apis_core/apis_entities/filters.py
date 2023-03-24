@@ -143,8 +143,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
         return field_filters
 
-        # __before_rdf_refactoring__
-        # temporary hack replacement old
+        # TODO RDF: Check if this should be removed or adapted
         #
         # enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__]["list_filters"]
         #
@@ -183,8 +182,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
         #          )
         #
         # return filter_dict_tmp
-
-        # temporary hack replacement end
 
     def construct_lookup(self, value):
         """
@@ -225,93 +222,8 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
         return (queryset_related_label | queryset_self_name).distinct().all()
 
+    # TODO RDF: Check if this should be removed or adapted
     def related_entity_name_method(self, queryset, name, value):
-        # __before_rdf_refactoring__
-        #
-        # """
-        # Searches through the all name fields of all related entities of a given queryset
-        #
-        # For performance reasons it was not sensible to use django's usual lookup foreign key fields
-        # (e.g. Person.objects.filter(personwork__related_work__name__icontains=value))
-        # Because such naive (but convenient) django ORM approach starts from a given model, goes to the related relation,
-        # goes to the related entity and searches therein. But such lookups create a lot of joins in the underlying sql,
-        # which get expensive very fast.
-        #
-        # So the following algorithms reverses this order and always selects primary keys which are then used further to look
-        # for related models.
-        # Basically what the following does is:
-        # step 1: looks up the search value in tempentity class (since all entities inherit from there) and selects their primary keys
-        # step 2: uses the keys from step 1 to filter for related relations and selects their primary keys
-        # step 3: uses the keys from step 2 to filter for related entities
-        # step 4: merge the results from step 3 into one queryset and returns this.
-        #
-        # :param queryset: the queryset currently to be filtered on
-        # :param name: Here not used, because this method filters on names of related entities
-        # :param value: The value to be filtered for, input by the user or a programmatic call
-        # :return: filtered queryset
-        # """
-        #
-        # # step 1
-        # # first find all tempentities where the lookup and value applies, select only their primary keys.
-        # lookup, value = self.construct_lookup(value)
-        # tempentity_hit = TempEntityClass.objects.filter(**{"name" + lookup: value}).values_list("pk", flat=True)
-        #
-        # # list for querysets where relations will be saved which are related to the primary keys of the tempentity list above
-        # related_relations_to_hit_list = []
-        #
-        # # step 2
-        # # iterate over every relation related to the current queryset model (e.g for Person: PersonWork, PersonPerson, etc)
-        # for relation_class in queryset.model.get_related_relation_classes():
-        #
-        #     # get the related classes and lookup names of the current relation
-        #     # (e.g. for PersonWork: class Person, class Work, "related_person", "related_work")
-        #     related_entity_classA = relation_class.get_related_entity_classA()
-        #     related_entity_classB = relation_class.get_related_entity_classB()
-        #     related_entity_field_nameA = relation_class.get_related_entity_field_nameA()
-        #     related_entity_field_nameB = relation_class.get_related_entity_field_nameB()
-        #
-        #     # Within a relation class, there is two fields which relate to entities, check now which of the two
-        #     # is the same as the current one.
-        #     if queryset.model == related_entity_classA:
-        #
-        #         # append filtered relation queryset to list for use later
-        #         related_relations_to_hit_list.append(
-        #             # filter the current relation for if the other related entity's pk is in the hit list of tempentity class
-        #             # from before (e.g. if a tempentity's name contains "seu", then its primary key will be used here, to check
-        #             # if there is a related entity which has the same primary key.
-        #             relation_class.objects.filter(
-        #                 **{related_entity_field_nameB + "_id__in": tempentity_hit}
-        #             ).values_list(related_entity_field_nameA + "_id", flat=True)
-        #         )
-        #
-        #     # also check the related entity field B (because it can be that both A and B are of the same entity class, e.g. PersonPerson,
-        #     # or that only A is the other one, e.g. when filtering for Work within PersonWork, then the other related class is Person)
-        #     if queryset.model == related_entity_classB:
-        #
-        #         # same procedure as above, just with related class and related name being reversed.
-        #         related_relations_to_hit_list.append(
-        #             relation_class.objects.filter(
-        #                 **{related_entity_field_nameA + "_id__in": tempentity_hit}
-        #             ).values_list(related_entity_field_nameB + "_id", flat=True)
-        #         )
-        #
-        #     # A safety check which should never arise. But if it does, we know there is something wrong with the automated wiring of
-        #     # entities and their respective relation classes (e.g. for Person, there should never be EventWork arising here)
-        #     if queryset.model != related_entity_classA and queryset.model != related_entity_classB:
-        #
-        #         raise ValueError("queryset model class has a wrong relation class associated!")
-        #
-        # # step 3
-        # # Filter the entity queryset for each of the resulting relation querysets produced in the loop before
-        # queryset_filtered_list = [ queryset.filter(pk__in=related_relation) for related_relation in related_relations_to_hit_list ]
-        #
-        # # step 4
-        # # merge them all
-        # result = reduce( lambda a,b : a | b, queryset_filtered_list).distinct()
-        #
-        # return result
-        #
-        # __after_rdf_refactoring__
         lookup, value = self.construct_lookup(value)
 
         queryset = queryset.filter(
@@ -322,7 +234,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
         return queryset
 
     def related_property_name_method(self, queryset, name, value):
-        # __before_rdf_refactoring__
+        # TODO RDF: Check if this should be removed or adapted_
         #
         # """
         # Searches through the all name fields of all related relationtypes of a given queryset
@@ -419,7 +331,7 @@ class GenericEntityListFilter(django_filters.FilterSet):
 #
 #######################################################################
 
-# __before_rdf_refactoring__
+# TODO RDF: Check if this should be removed or adapted
 #
 # class PersonListFilter(GenericListFilter):
 #
@@ -498,8 +410,8 @@ class GenericEntityListFilter(django_filters.FilterSet):
 #         # order to load all filters of all model fields by default so that they are available in the first place.
 #         # Later those which are not referenced in the settings file will be removed again
 #         exclude = GenericListFilter.fields_to_exclude
-#
-# __after_rdf_refactoring__
+
+
 def get_list_filter_of_entity(entity):
     """
     Main method to be called somewhere else in the codebase in order to get the FilterClass respective to the entity string input

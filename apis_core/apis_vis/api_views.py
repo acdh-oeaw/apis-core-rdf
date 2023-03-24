@@ -2,8 +2,6 @@ from rest_framework.generics import ListAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.generics import ListAPIView
-
-# from apis_core.apis_relations.models import AbstractRelation
 from .serializers import *
 
 
@@ -24,7 +22,6 @@ class GetVisJson(ListAPIView):
 
     def get_queryset(self, **kwargs):
         relation = self.kwargs["relation"].lower()
-        # relation_model = AbstractRelation.get_relation_class_of_name(relation)
         relation_model = None
         print("from get_queryset {}".format(relation))
         queryset = relation_model.objects.all()

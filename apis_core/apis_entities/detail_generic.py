@@ -7,16 +7,13 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import select_template
 from django.views import View
 from django_tables2 import RequestConfig
-
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
-
-# from apis_core.apis_relations.models import AbstractRelation
 from apis_core.apis_relations.tables import (
     get_generic_relations_table,
     get_generic_triple_table,
     LabelTableBase,
-)  # , EntityDetailViewLabelTable
+)
 from apis_core.helper_functions.utils import access_for_all
 from apis_core.apis_entities.models import AbstractEntity
 from .views import get_highlighted_texts
@@ -40,42 +37,6 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         instance = get_object_or_404(entity_model, pk=pk)
         side_bar = []
 
-        # __before_rdf_refactoring__
-        #
-        # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
-        # for rel in relations:
-        #     match = [
-        #         rel.get_related_entity_classA().__name__.lower(),
-        #         rel.get_related_entity_classB().__name__.lower()
-        #     ]
-        #     prefix = "{}{}-".format(match[0].title()[:2], match[1].title()[:2])
-        #     table = get_generic_relations_table(relation_class=rel, entity_instance=instance, detail=True)
-        #     if match[0] == match[1]:
-        #         title_card = entity.title()
-        #         dict_1 = {'related_' + entity.lower() + 'A': instance}
-        #         dict_2 = {'related_' + entity.lower() + 'B': instance}
-        #         if 'apis_highlighter' in settings.INSTALLED_APPS:
-        #             objects = rel.objects.filter_ann_proj(request=request).filter_for_user().filter(
-        #                 Q(**dict_1) | Q(**dict_2))
-        #         else:
-        #             objects = rel.objects.filter(
-        #                 Q(**dict_1) | Q(**dict_2))
-        #             if callable(getattr(objects, 'filter_for_user', None)):
-        #                 objects = objects.filter_for_user()
-        #     else:
-        #         if match[0].lower() == entity.lower():
-        #             title_card = match[1].title()
-        #         else:
-        #             title_card = match[0].title()
-        #         dict_1 = {'related_' + entity.lower(): instance}
-        #         if 'apis_highlighter' in settings.INSTALLED_APPS:
-        #             objects = rel.objects.filter_ann_proj(request=request).filter_for_user().filter(**dict_1)
-        #         else:
-        #             objects = rel.objects.filter(**dict_1)
-        #             if callable(getattr(objects, 'filter_for_user', None)):
-        #                 objects = objects.filter_for_user()
-        #
-        # __after_rdf_refactoring__
         triples_related_all = (
             TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk))
             .all()
@@ -84,15 +45,12 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
 
         for entity_class in caching.get_all_entity_classes():
 
-            # TODO __sresch__ : change this db fetch with the cached one from master
             entity_content_type = ContentType.objects.get_for_model(entity_class)
 
             other_entity_class_name = entity_class.__name__.lower()
 
-            # TODO __sresch__ : Check if this filter call results in additional db hits
             triples_related_by_entity = triples_related_all.filter(
                 (
-                    # TODO RDF is filtering for pk necessary if it's already done above?
                     Q(subj__self_contenttype=entity_content_type)
                     & Q(obj__pk=pk)
                 )
@@ -121,7 +79,6 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             )
 
         # TODO RDF : Check / Adapt the following code to rdf architecture
-
         object_lod = Uri.objects.filter(root_object=instance)
         object_texts, ann_proj_form = get_highlighted_texts(request, instance)
         object_labels = Label.objects.filter(temp_entity=instance)

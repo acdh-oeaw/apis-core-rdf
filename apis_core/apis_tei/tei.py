@@ -1,21 +1,12 @@
 from xml.sax.saxutils import escape, unescape
-
 import lxml.etree as ET
-
 from django.conf import settings
 from django.utils.text import slugify
-
 from .partials import TEI_NSMAP, tei_gen_header
-
 from apis_core.apis_metainfo.models import Text
-
-# __before_rdf_refactoring__
-# from apis_core.apis_entities.models import Person, Place, Event, Work, Institution
-
-
 from collections import defaultdict
-
 import pprint
+
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -25,7 +16,7 @@ def custom_escape(somestring):
     return escape(un_escaped)
 
 
-# __before_rdf_refactoring__
+# TODO RDF: Check if this should be removed or adapted
 # When serializing texts, we need to be able to look up
 # the entity in DB to check we have all the texts (not just the
 # annotated ones) — so need to map string values to classes.

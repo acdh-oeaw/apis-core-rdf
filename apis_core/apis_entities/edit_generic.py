@@ -53,12 +53,10 @@ class GenericEntitiesEditView(View):
 
         for entity_class in caching.get_all_entity_classes():
 
-            # TODO __sresch__ : change this db fetch with the cached one from master
             entity_content_type = ContentType.objects.get_for_model(entity_class)
 
             other_entity_class_name = entity_class.__name__.lower()
 
-            # TODO __sresch__ : Check if this filter call results in additional db hits
             triples_related_by_entity = triples_related_all.filter(
                 (
                     Q(**{f"subj__self_contenttype": entity_content_type})
@@ -90,44 +88,6 @@ class GenericEntitiesEditView(View):
                     tb_object_open,
                 )
             )
-
-        # __before_rdf_refactoring__
-        #
-        # relations = AbstractRelation.get_relation_classes_of_entity_name(entity_name=entity)
-        # side_bar = []
-        # for rel in relations:
-        #     match = [
-        #         rel.get_related_entity_classA().__name__.lower(),
-        #         rel.get_related_entity_classB().__name__.lower()
-        #     ]
-        #     prefix = "{}{}-".format(match[0].title()[:2], match[1].title()[:2])
-        #     table = get_generic_relations_table(relation_class=rel, entity_instance=instance, detail=False)
-        #     title_card = ''
-        #     if match[0] == match[1]:
-        #         title_card = entity.title()
-        #         dict_1 = {'related_' + entity.lower() + 'A': instance}
-        #         dict_2 = {'related_' + entity.lower() + 'B': instance}
-        #         if 'apis_highlighter' in settings.INSTALLED_APPS:
-        #             objects = rel.objects.filter_ann_proj(request=request).filter(
-        #                 Q(**dict_1) | Q(**dict_2))
-        #         else:
-        #             objects = rel.objects.filter(
-        #                 Q(**dict_1) | Q(**dict_2))
-        #     else:
-        #         if match[0].lower() == entity.lower():
-        #             title_card = match[1].title()
-        #         else:
-        #             title_card = match[0].title()
-        #         dict_1 = {'related_' + entity.lower(): instance}
-        #         if 'apis_highlighter' in settings.INSTALLED_APPS:
-        #             objects = rel.objects.filter_ann_proj(request=request).filter(**dict_1)
-        #         else:
-        #             objects = rel.objects.filter(**dict_1)
-        #     tb_object = table(data=objects, prefix=prefix)
-        #     tb_object_open = request.GET.get(prefix + 'page', None)
-        #     RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
-        #     side_bar.append((title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open))
-
         form = get_entities_form(entity.title())
         form = form(instance=instance)
         form_text = FullTextForm(entity=entity.title(), instance=instance)

@@ -1,9 +1,7 @@
 import fnmatch
 import os
 import re
-from datetime import datetime
 from io import TextIOWrapper
-
 import requests
 from django.conf import settings
 from django.db.models import Q, Prefetch
@@ -21,13 +19,9 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
-
 from apis_core.apis_metainfo.api_renderers import PaginatedCSVRenderer
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_metainfo.models import Uri
-
-# from apis_core.apis_relations.models import PersonPlace, InstitutionPlace, AbstractRelation, PersonInstitution
-from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.helper_functions.stanbolQueries import find_loc
 from .api_renderers import (
@@ -38,26 +32,7 @@ from .api_renderers import (
     EntityToCIDOCNQUADS,
     EntityToCIDOCTURTLE,
 )
-
-# from .models import Event, Institution, Person, Place, Work,
-from apis_core.apis_entities.models import AbstractEntity
-
-# __before_rdf_refactoring__
-# from .serializers import (
-#     EventSerializer,
-#     GeoJsonSerializer,
-#     InstitutionSerializer,
-#     NetJsonEdgeSerializer,
-#     NetJsonNodeSerializer,
-#     PersonSerializer,
-#     PlaceSerializer,
-#     WorkSerializer,
-#     # GeoJsonSerializerTheme, LifePathSerializer
-# )
 from .serializers_generic import EntitySerializer
-
-
-# from metainfo.models import TempEntityClass
 from apis_core.helper_functions import caching
 
 
@@ -126,7 +101,6 @@ def uri_resolver(request):
         return redirect(url)
 
 
-# __before_rdf_refactoring__
 # TODO RDF: Check if this should be removed or adapted
 #
 # class InstitutionViewSet(viewsets.ModelViewSet):
@@ -454,7 +428,6 @@ class GetOrCreateEntity(APIView):
         return Response(res)
 
 
-# __before_rdf_refactoring__
 # TODO RDF: Check if this should be removed or adapted
 #
 # class GetRelatedPlaces(APIView):

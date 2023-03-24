@@ -21,20 +21,11 @@ from django.db.models.query import QuerySet
 from apis_core.helper_functions import DateParser
 from apis_core.apis_metainfo.models import RootObject, Collection
 
-# __before_rdf_refactoring__
-# from apis_core.apis_vocabularies.models import (
-#     EventType,
-#     InstitutionType,
-#     PlaceType,
-#     ProfessionType,
-#     Title,
-#     WorkType,
-# )
 
 BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
-# __after_rdf_refactoring__
+
 class AbstractEntity(RootObject):
     """
     Abstract super class which encapsulates common logic between the
@@ -616,19 +607,6 @@ class TempEntityClass(AbstractEntity):
     @classmethod
     def get_listview_url(self):
         entity = self.__name__.lower()
-        # __before_rdf_refactoring__
-        #
-        # if entity == "institution" or len(entity) < 10:
-        #     return reverse(
-        #         "apis_core:apis_entities:generic_entities_list",
-        #         kwargs={"entity": entity},
-        #     )
-        # else:
-        #     return reverse(
-        #         "apis_core:apis_relations:generic_relations_list",
-        #         kwargs={"entity": entity},
-        #     )
-        # __after_rdf_refactoring__
         return reverse(
             "apis_core:apis_entities:generic_entities_list",
             kwargs={"entity": entity},
@@ -637,16 +615,6 @@ class TempEntityClass(AbstractEntity):
     @classmethod
     def get_createview_url(self):
         entity = self.__name__.lower()
-        # __before_rdf_refactoring__
-        #
-        # if entity == "institution" or len(entity) < 10:
-        #     return reverse(
-        #         "apis_core:apis_entities:generic_entities_create_view",
-        #         kwargs={"entity": entity},
-        #     )
-        # else:
-        #     return None
-        # __after_rdf_refactoring__
         return reverse(
             "apis_core:apis_entities:generic_entities_create_view",
             kwargs={"entity": entity},
@@ -654,16 +622,6 @@ class TempEntityClass(AbstractEntity):
 
     def get_edit_url(self):
         entity = self.__class__.__name__.lower()
-        # __before_rdf_refactoring__
-        #
-        # if entity == "institution" or len(entity) < 10:
-        #     return reverse(
-        #         "apis_core:apis_entities:generic_entities_edit_view",
-        #         kwargs={"entity": entity, "pk": self.id},
-        #     )
-        # else:
-        #     return None
-        # __after_rdf_refactoring__
         return reverse(
             "apis_core:apis_entities:generic_entities_edit_view",
             kwargs={"entity": entity, "pk": self.id},
@@ -678,7 +636,7 @@ class TempEntityClass(AbstractEntity):
 
     def get_absolute_url(self):
         entity = self.__class__.__name__.lower()
-        # __before_rdf_refactoring__
+        # TODO RDF: Check if this should be removed or adapted
         #
         # if entity == "institution" or len(entity) < 10:
         #     return reverse(
@@ -705,19 +663,6 @@ class TempEntityClass(AbstractEntity):
         else:
             return False
         if prev:
-            # __before_rdf_refactoring__
-            #
-            # if entity == "institution" or len(entity) < 10:
-            #     return reverse(
-            #         "apis_core:apis_entities:generic_entities_detail_view",
-            #         kwargs={"entity": entity, "pk": prev.first().id},
-            #     )
-            # else:
-            #     return reverse(
-            #         "apis_core:apis_relations:generic_relations_detail_view",
-            #         kwargs={"entity": entity, "pk": prev.first().id},
-            #     )
-            # __after_rdf_refactoring__
             return reverse(
                 "apis_core:apis_entities:generic_entities_detail_view",
                 kwargs={"entity": entity, "pk": prev.first().id},
@@ -732,19 +677,6 @@ class TempEntityClass(AbstractEntity):
         else:
             return False
         if next:
-            # __before_rdf_refactoring__
-            #
-            # if entity == "institution" or len(entity) < 10:
-            #     return reverse(
-            #         "apis_core:apis_entities:generic_entities_detail_view",
-            #         kwargs={"entity": entity, "pk": next.first().id},
-            #     )
-            # else:
-            #     return reverse(
-            #         "apis_core:apis_relations:generic_relations_detail_view",
-            #         kwargs={"entity": entity, "pk": next.first().id},
-            #     )
-            # __after_rdf_refactoring__
             return reverse(
                 "apis_core:apis_entities:generic_entities_detail_view",
                 kwargs={"entity": entity, "pk": next.first().id},
@@ -754,16 +686,6 @@ class TempEntityClass(AbstractEntity):
 
     def get_delete_url(self):
         entity = self.__class__.__name__.lower()
-        # __before_rdf_refactoring__
-        #
-        # if entity == "institution" or len(entity) < 10:
-        #     return reverse(
-        #         "apis_core:apis_entities:generic_entities_delete_view",
-        #         kwargs={"entity": entity, "pk": self.id},
-        #     )
-        # else:
-        #     return None
-        # __after_rdf_refactoring__
         return reverse(
             "apis_core:apis_entities:generic_entities_delete_view",
             kwargs={"entity": entity, "pk": self.id},
@@ -962,8 +884,7 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
             user.groups.add(Group.objects.get(name=user_group))
 
 
-# __after_rdf_refactoring__
-# TODO RDF: remove this workaround here once the settings issue is resolved
+# TODO remove this workaround here once the settings issue is resolved
 def fill_settings_with_entity_attributes():
     if not settings.APIS_ENTITIES:
         for entity_class in (

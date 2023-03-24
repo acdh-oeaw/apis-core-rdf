@@ -1,12 +1,7 @@
 import re
-
 from django.conf import settings
 from django.urls import reverse_lazy
 from rest_framework import serializers
-
-# from .models import Institution, Person, Place, Event, Work
-# from ..apis_relations.models import PersonInstitution, InstitutionPlace, PersonPlace
-# from ..apis_vocabularies.models import Property, InstitutionPlaceRelation
 
 
 class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
@@ -28,104 +23,6 @@ class BaseEntitySerializer(serializers.HyperlinkedModelSerializer):
         many=True,
         read_only=True,
     )
-
-
-# __before_rdf_refactoring__
-#
-# class InstitutionSerializer(BaseEntitySerializer):
-#     url = serializers.HyperlinkedIdentityField(
-#         view_name="apis:apis_api:institution-detail",
-#         lookup_field="pk"
-#     )
-#
-#     kind = serializers.HyperlinkedRelatedField(
-#         view_name="apis:apis_api:institutiontype-detail",
-#         read_only=True
-#     )
-#
-#     class Meta:
-#         model = Institution
-#         fields = ('url', 'id', 'name', 'uri_set', 'kind', 'collection', 'text')
-#
-#
-# class PersonSerializer(BaseEntitySerializer):
-#
-#     url = serializers.HyperlinkedIdentityField(
-#         view_name="apis:apis_api:person-detail",
-#         lookup_field="pk"
-#     )
-#     profession = serializers.HyperlinkedRelatedField(
-#         view_name="apis:apis_api:professiontype-detail",
-#         lookup_field="pk",
-#         many=True,
-#         read_only=True
-#     )
-#
-#     class Meta:
-#         model = Person
-#         fields = (
-#             'url', 'id', 'name', 'first_name', 'uri_set', 'profession', 'collection', 'text'
-#         )
-#
-#
-# class PlaceSerializer(BaseEntitySerializer):
-#
-#     url = serializers.HyperlinkedIdentityField(
-#         view_name="apis:apis_api:place-detail",
-#         lookup_field="pk"
-#     )
-#
-#     kind = serializers.HyperlinkedRelatedField(
-#         view_name="apis:apis_api:placetype-detail",
-#         lookup_field="pk",
-#         read_only=True
-#     )
-#
-#     class Meta:
-#         model = Place
-#         fields = (
-#             'url', 'id', 'name', 'uri_set', 'collection', 'text', 'kind', 'lng', 'lat'
-#         )
-#
-#
-# class EventSerializer(BaseEntitySerializer):
-#
-#     url = serializers.HyperlinkedIdentityField(
-#         view_name="apis:apis_api:event-detail",
-#         lookup_field="pk"
-#     )
-#
-#     kind = serializers.HyperlinkedRelatedField(
-#         view_name="apis:apis_api:eventtype-detail",
-#         lookup_field="pk",
-#         read_only=True
-#     )
-#
-#     class Meta:
-#         model = Event
-#         fields = (
-#             'url', 'id', 'name', 'uri_set', 'collection', 'text', 'kind'
-#         )
-#
-#
-# class WorkSerializer(BaseEntitySerializer):
-#
-#     url = serializers.HyperlinkedIdentityField(
-#         view_name="apis:apis_api:work-detail",
-#         lookup_field="pk"
-#     )
-#
-#     kind = serializers.HyperlinkedRelatedField(
-#         view_name="apis:apis_api:worktype-detail",
-#         lookup_field="pk",
-#         read_only=True
-#     )
-#
-#     class Meta:
-#         model = Work
-#         fields = (
-#             'url', 'id', 'name', 'uri_set', 'collection', 'text', 'kind'
-#         )
 
 
 class GeoJsonSerializer(serializers.BaseSerializer):
@@ -291,7 +188,7 @@ class NetJsonNodeSerializer(serializers.BaseSerializer):
         return r
 
 
-# __before_rdf_refactoring__
+# TODO RDF: Check if this should be removed or adapted
 #
 # class LifePathPlaceSerializer(serializers.ModelSerializer):
 #     id = serializers.ReadOnlyField()

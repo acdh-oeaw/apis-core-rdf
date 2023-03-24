@@ -55,58 +55,7 @@ def turn_form_modules_into_dict(form_module_list):
 form_class_dict = turn_form_modules_into_dict(form_module_list)
 
 
-############################################################################
-############################################################################
-#
-#   Generic views for AjaxForms
-#
-############################################################################
-############################################################################
-
-######################################################
-# test for class-ignoring _ajax_form-functions
-######################################################
-
-
-# __before_rdf_refactoring__
-#
-# Model-classes must be registered together with their ModelForm-classes
-# registered_forms = {'WorkWorkForm': [WorkWork, Work, Work],
-#                     'PersonPlaceForm': [PersonPlace, Person, Place],
-#                     'PersonPlaceHighlighterForm': [PersonPlace, Person, Place],
-#                     'PersonPersonForm': [PersonPerson, Person, Person],
-#                     'PersonPersonHighlighterForm': [PersonPerson, Person, Person],
-#                     'PersonInstitutionForm': [PersonInstitution, Person, Institution],
-#                     'PersonEventForm': [PersonEvent, Person, Event],
-#                     'PersonWorkForm': [PersonWork, Person, Work],
-#                     'PersonInstitutionHighlighterForm': [PersonInstitution, Person, Institution],
-#                     'PersonWorkHighlighterForm': [PersonWork, Person, Work],
-#                     'PlaceWorkHighlighterForm': [PlaceWork, Place, Work],
-#                     'InstitutionWorkHighlighterForm': [InstitutionWork, Institution, Work],
-#                     'InstitutionPlaceForm': [InstitutionPlace, Institution, Place],
-#                     'InstitutionInstitutionForm': [
-#                         InstitutionInstitution,
-#                         Institution,
-#                         Institution],
-#                     'InstitutionPersonForm': [PersonInstitution, Institution, Person],
-#                     'InstitutionEventForm': [InstitutionEvent, Institution, Event],
-#                     'InstitutionWorkForm': [InstitutionWork, Institution, Work],
-#                     'PlaceEventForm': [PlaceEvent, Place, Event],
-#                     'PlaceWorkForm': [PlaceWork, Place, Work],
-#                     'PlacePlaceForm': [PlacePlace, Place, Place],
-#                     'EventWorkForm': [EventWork, Event, Work],
-#                     'InstitutionLabelForm': [Label, Institution, Label],
-#                     'PersonLabelForm': [Label, Person, Label],
-#                     'EventLabelForm': [Label, Event, Label],
-#                     'PersonResolveUriForm': [Uri, Person, Uri],
-#                     'SundayHighlighterForm': [ ],
-#                     'AddRelationHighlighterPersonForm': [],
-#                     #'PlaceHighlighterForm': [Annotation, ],
-#                     #'PersonHighlighterForm': [Annotation, ]
-#                     }
-
-
-# TODO RDF : Check if rdf refactoring covers all use cases
+# TODO RDF: After full conversion to ne ajax logic, remove this function
 @login_required
 def get_form_ajax(request):
     """Returns forms rendered in html"""

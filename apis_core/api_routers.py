@@ -251,9 +251,6 @@ def generic_serializer_creation_factory():
                 exclude_lst_fin.append(x)
         if entity_str.lower() == "text":
             exclude_lst_fin.extend(["kind", "source"])
-        # __before_rdf_refactoring__
-        # if app_label == "apis_relations":
-        #     exclude_lst_fin.extend(["text", "collection"])
         for f in entity._meta.get_fields():
             if f.__class__.__name__ == "ManyToManyField":
                 prefetch_rel.append(f.name)
@@ -428,25 +425,6 @@ def generic_serializer_creation_factory():
                             self.fields[f.name] = LabelSerializer(
                                 many=ck_many, read_only=True
                             )
-                    # __before_rdf_refactoring__
-                    #
-                    # # include = list(ContentType.objects.filter(app_label="apis_relations", model__icontains=entity_str).values_list('model', flat=True))
-                    # include = [
-                    #     x
-                    #     for x in lst_cont
-                    #     if x.__module__ == "apis_core.apis_relations.models"
-                    #        and entity_str.lower() in x.__name__.lower()
-                    # ]
-                    # if len(include) > 0 and len(args) > 0:
-                    #     inst_pk2 = args[0].pk
-                    #     self.fields["relations"] = RelationObjectSerializer2(
-                    #         read_only=True,
-                    #         source="get_related_relation_instances",
-                    #         many=True,
-                    #         pk_instance=inst_pk2,
-                    #     )
-                    #
-                    # __after_rdf_refactoring__
                     if len(args) > 0:
                         entity = args[0]
                         if hasattr(entity, "triple_set_from_subj") or hasattr(

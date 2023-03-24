@@ -7,7 +7,7 @@ from apis_core.apis_tei import views
 app_name = "apis_tei"
 
 urlpatterns = [
-    # __before_rdf_refactoring__
+    # TODO RDF: Check if this should be removed or adapted
     # url(
     #     r'^autocomplete/(?P<entity>[a-zA-Z0-9-]+)/$',
     #     TeiEntAc.as_view(),

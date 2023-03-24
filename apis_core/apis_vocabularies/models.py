@@ -78,55 +78,6 @@ class VocabsBaseClass(RootObject):
         return res
 
 
-# __before_rdf_refactoring__
-#
-# @reversion.register(follow=['vocabsbaseclass_ptr'])
-# class RelationBaseClass(VocabsBaseClass):
-#     """ An abstract base class for other classes which contain so called
-#     'controlled vocabulary' to describe the relations between main temporalized
-#     entities ('db_')"""
-#
-#     name_reverse = models.CharField(
-#         max_length=255,
-#         verbose_name='Name reverse',
-#         help_text='Inverse relation like: "is sub-class of" vs. "is super-class of".',
-#         blank=True)
-#
-#     def __str__(self):
-#         return self.name
-#
-#     @cached_property
-#     def label_reverse(self):
-#         d = self
-#         if len(self.name_reverse) < 1:
-#             res = '(' + self.name + ')'
-#         else:
-#             res = self.name_reverse
-#         while d.parent_class:
-#             try:
-#                 t = RelationBaseClass.objects.get(pk=d.parent_class.pk).name_reverse
-#                 if len(t) < 1:
-#                     t = '(' + d.parent_class.name + ')'
-#             except Exception as e:
-#                 t = '(' + d.parent_class.name + ')'
-#             res = t + ' >> ' + res
-#             d = d.parent_class
-#         return res
-#
-#     def save(self, *args, **kwargs):
-#         if self.name_reverse != unicodedata.normalize('NFC', self.name_reverse):
-#             self.name_reverse = unicodedata.normalize('NFC', self.name_reverse)
-#
-#         if self.name_reverse == "" or self.name_reverse == None:
-#             self.name_reverse = self.name + " [REVERSE]"
-#
-#         super(RelationBaseClass, self).save(*args, **kwargs)
-#         return self
-#
-# __after_rdf_refactoring__
-# refactored to property and moved to apis_relations.models
-
-
 @reversion.register()
 class VocabsUri(models.Model):
     """Class to store URIs for imported types. URI class from metainfo is not
@@ -148,7 +99,7 @@ class VocabsUri(models.Model):
         return self.uri
 
 
-# __before_rdf_refactoring__
+# TODO RDF: Check if this should be removed or adapted
 #
 # @reversion.register(follow=['vocabsbaseclass_ptr'])
 # class WorkType(VocabsBaseClass):

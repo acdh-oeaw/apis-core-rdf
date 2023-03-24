@@ -100,23 +100,6 @@ def get_entities_form(entity):
                     else:
                         widget1 = ListSelect2
 
-                    # __before_rdf_refactoring__
-                    #
-                    # if (
-                    #     ContentType.objects.get(
-                    #         app_label__in=[
-                    #             "apis_entities",
-                    #             "apis_metainfo",
-                    #             "apis_relations",
-                    #             "apis_vocabularies",
-                    #             "apis_labels",
-                    #         ],
-                    #         model=v_name_p.lower(),
-                    #     ).app_label.lower()
-                    #     == "apis_vocabularies"
-                    # ):
-                    #
-                    # __after_rdf_refactoring__
                     matching_content_type = ContentType.objects.filter(
                         app_label__in=[
                             "apis_entities",

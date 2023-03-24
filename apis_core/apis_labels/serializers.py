@@ -1,13 +1,10 @@
 from rest_framework import serializers
-
-# __before_rdf_refactoring__
-# from apis_core.apis_vocabularies.serializers import LabelTypeMinimalSerializer
 from .models import Label
 
 
 class LabelSerializerLegacy(serializers.ModelSerializer):
-
-    # __before_rdf_refactoring__
+    # TODO RDF: Check if this should be removed or adapted
+    # from apis_core.apis_vocabularies.serializers import LabelTypeMinimalSerializer
     # label_type = LabelTypeMinimalSerializer()
 
     class Meta:

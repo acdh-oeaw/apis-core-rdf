@@ -466,7 +466,6 @@ class GenericNetworkEntitiesAutocomplete(autocomplete.Select2ListView):
         )
 
 
-# __after_rdf_refactoring__
 class PropertyAutocomplete(autocomplete.Select2ListView):
     # These constants are set so that they are defined in one place only and reused by fetching them elsewhere.
     SELF_SUBJ_OTHER_OBJ_STR = "self_subj_other_obj"

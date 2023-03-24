@@ -459,10 +459,6 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
         render_end_date_written = generic_render_end_date_written
 
         class Meta:
-
-            # TODO __sresch__ : investigate if it's feasible to have different subclasses of triples and have them
-            #  fill in these fields of this Table class automatically
-
             from apis_core.apis_relations.models import TempTriple
 
             model = TempTriple
@@ -501,61 +497,6 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                 )
 
         def __init__(self, data, *args, **kwargs):
-
-            # __before_rdf_refactoring__
-            #
-            # # annotations for displaying data about the 'other side' of the relation.
-            # # Both of them ('other_related_entity' and 'other_relation_type') are necessary for displaying relations
-            # # in context to what entity we are calling this from.
-            # data = data.annotate(
-            #     # In order to provide the 'other instance' for each instance of a table where this whole logic is called from,
-            #     # the queryset must be annotated accordingly. The following Case searches which of the two related instances
-            #     # of a relation queryset entry is the one corresponding to the current entity instance. When found, take the
-            #     # other related entity (since this is the one we are interested in displaying).
-            #     #
-            #     # The approach of using queryset's annotate method allows for per-instance case decision and thus
-            #     # guarantees that the other related entity is always correctly picked,
-            #     # even in case two entities are of the same class.
-            #     other_related_entity=Case(
-            #         # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
-            #         When(**{
-            #             related_entity_field_name_a + "__pk": entity_instance.pk,
-            #             "then": related_entity_field_name_b
-            #         }),
-            #         When(**{
-            #             related_entity_field_name_b + "__pk": entity_instance.pk,
-            #             "then": related_entity_field_name_a
-            #         }),
-            #     )
-            # ).annotate(
-            #     # Get the correct side of the relation type given the current entity instance.
-            #     #
-            #     # The approach of using queryset's annotate method allows for per-instance case decision and thus
-            #     # guarantees that the other related entity is always correctly picked,
-            #     # even in case two entities are of the same class.
-            #     other_relation_type=Case(
-            #         When(**{
-            #             # A->B relation and current entity instance is A, hence take forward name
-            #             related_entity_field_name_a + "__pk": entity_instance.pk,
-            #             "then": "relation_type__name"
-            #         }),
-            #         When(**{
-            #             # A->B relation and current entity instance is B, hence take reverse name.
-            #             related_entity_field_name_b + "__pk": entity_instance.pk,
-            #             "then": "relation_type__name_reverse"
-            #         }),
-            #     )
-            # )
-            # for an in data:
-            #     if getattr(an, f"{related_entity_field_name_a}_id") == entity_instance.pk:
-            #         an.other_relation_type = getattr(an.relation_type, "label")
-            #     else:
-            #         an.other_relation_type = getattr(an.relation_type, "label_reverse")
-            #
-            #
-            # super().__init__(data, *args, **kwargs)
-            #
-            # __after_rdf_refactoring__
             data = data.annotate(
                 other_entity=Case(
                     # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
@@ -584,23 +525,6 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
             """
 
             def __init__(self, data, *args, **kwargs):
-
-                # __before_rdf_refactoring__
-                #
-                # # Only addition with respect to parent class is which main url is to be used when clicking on a
-                # # related entity column.
-                # self.base_columns["other_related_entity"] = tables.LinkColumn(
-                #     'apis:apis_entities:generic_entities_detail_view',
-                #     args=[
-                #         other_related_entity_class_name,
-                #         A("other_related_entity")
-                #     ],
-                #     verbose_name="Related " + other_related_entity_class_name.title()
-                # )
-                #
-                # super().__init__(data=data, *args, **kwargs)
-                #
-                # __after_rdf_refactoring__
                 self.base_columns["other_entity"] = tables.LinkColumn(
                     "apis:apis_entities:generic_entities_detail_view",
                     args=[other_entity_class_name, A("other_entity")],
@@ -632,38 +556,6 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                 sequence = tuple(fields)
 
             def __init__(self, *args, **kwargs):
-
-                # __before_rdf_refactoring__ TODO RDF:
-                #
-                # # Clicking on a related entity will lead also the edit view of the related entity instance
-                # self.base_columns["other_related_entity"] = tables.LinkColumn(
-                #     'apis:apis_entities:generic_entities_edit_view',
-                #     args=[
-                #         other_related_entity_class_name, A("other_related_entity")
-                #     ],
-                #     verbose_name="Related " + other_related_entity_class_name.title()
-                # )
-                #
-                # # delete button
-                # self.base_columns['delete'] = tables.TemplateColumn(
-                #     template_name='apis_relations/delete_button_generic_ajax_form.html'
-                # )
-                #
-                # # edit button
-                # self.base_columns['edit'] = tables.TemplateColumn(
-                #     template_name='apis_relations/edit_button_generic_ajax_form.html'
-                # )
-                #
-                # # bibsonomy button
-                # if 'apis_bibsonomy' in settings.INSTALLED_APPS:
-                #     self.base_columns['ref'] = tables.TemplateColumn(
-                #         template_name='apis_relations/references_button_generic_ajax_form.html'
-                #     )
-                #
-                # super().__init__(*args, **kwargs)
-                #
-                # __after_rdf_refactoring__
-                # linking entity
                 self.base_columns["other_entity"] = tables.LinkColumn(
                     "apis:apis_entities:generic_entities_edit_view",
                     args=[other_entity_class_name, A("other_entity")],

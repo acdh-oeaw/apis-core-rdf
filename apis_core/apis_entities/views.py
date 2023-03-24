@@ -14,14 +14,7 @@ from django.urls import reverse_lazy
 from django_tables2 import RequestConfig
 from django_tables2 import SingleTableView
 from django_tables2.export.views import ExportMixin
-
-# from reversion_compare.views import HistoryCompareDetailView
-
 from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
-
-# __before_rdf_refactoring__
-# from apis_core.apis_relations.models import AbstractRelation
-from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.helper_functions.stanbolQueries import retrieve_obj
 from apis_core.helper_functions.utils import (
     access_for_all,
@@ -427,11 +420,12 @@ def getGeoJson(request):
     return HttpResponse(json.dumps(lst_json), content_type="application/json")
 
 
+# TODO RDF: Check if this should be removed or adapted
 @user_passes_test(access_for_all_function)
 def getGeoJsonList(request):
     """Used to retrieve a list of GeoJsons. To generate the list the kind of connection
     and the connected entity is needed"""
-    relation = AbstractRelation.get_relation_class_of_name(request.GET.get("relation"))
+    # relation = AbstractRelation.get_relation_class_of_name(request.GET.get("relation"))
     # relation_type = request.GET.get("relation_type")
     objects = relation.objects.filter(related_place__status="distinct").select_related(
         "related_person", "related_place", "relation_type"
@@ -463,8 +457,7 @@ def getGeoJsonList(request):
     return HttpResponse(json.dumps(lst_json), content_type="application/json")
 
 
-# __before_rdf_refactoring__
-#
+# TODO RDF: Check if this should be removed or adapted
 # @user_passes_test(access_for_all_function)
 # def getNetJsonList(request):
 #     """Used to retrieve a Json to draw a network"""
