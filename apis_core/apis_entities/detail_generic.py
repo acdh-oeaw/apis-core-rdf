@@ -50,10 +50,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             other_entity_class_name = entity_class.__name__.lower()
 
             triples_related_by_entity = triples_related_all.filter(
-                (
-                    Q(subj__self_contenttype=entity_content_type)
-                    & Q(obj__pk=pk)
-                )
+                (Q(subj__self_contenttype=entity_content_type) & Q(obj__pk=pk))
                 | (Q(obj__self_contenttype=entity_content_type) & Q(subj__pk=pk))
             )
 
