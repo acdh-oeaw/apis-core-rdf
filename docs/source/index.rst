@@ -30,6 +30,7 @@ Welcome to APIS's documentation!
 
    genindex
    modindex
+   Coverage <https://acdh-oeaw.github.io/apis-core-rdf/htmlcov/>
 
 
 Indices and tables
