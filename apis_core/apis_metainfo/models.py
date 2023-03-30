@@ -88,6 +88,8 @@ class Source(models.Model):
     def __str__(self):
         if self.author != "" and self.orig_filename != "":
             return "{}, stored by {}".format(self.orig_filename, self.author)
+        elif self.orig_filename != "":
+            return "{}".format(self.orig_filename)
         else:
             return "(ID: {})".format(self.id)
 
