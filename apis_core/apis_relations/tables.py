@@ -327,6 +327,118 @@ def render_reification_table(
     )
 
 
+# TODO RDF: combine this or re-use this class here in get_generic_triple_table
+# TODO RDF: Also consider implementing proper form search fields for this (instead of default drop-downs)
+class TripleTable(tables.Table):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Triple
+        fields = [
+            "id",
+            "subj",
+            "prop",
+            "obj",
+        ]
+        sequence = tuple(fields)
+        attrs = {"class": "table table-hover table-striped table-condensed"}
+
+
+class PropertyTable(tables.Table):
+    """Construct table for properties.
+
+    The table shows how entities connect with one another via properties (relations).
+    It uses the format of an RDF triple – Subject-Predicate-Object – plus
+    "Reverse Predicate" for the inverse relationship and is displayed on the frontend
+     on the Relations > Property page.
+    """
+
+    # Note on constructing table columns / usage of variables:
+    # The variables used to declare table columns need to have the same names
+    # as the model field names from which the columns should be created,
+    # or tables.Column needs to contain an attribute "accessor" which references
+    # the original field name.
+    # For columns which allow sorting, the variable names are used as sort strings
+    # in the user's browser address bar, so for UX reasons, it may make sense to
+    # use different variable names than the original field names.
+
+    predicate = tables.Column(
+        accessor="name_forward",  # original field name in model class
+        verbose_name="Predicate",
+    )
+    predicate_reverse = tables.Column(
+        accessor="name_reverse",  # original field name in model class
+        verbose_name="Reverse predicate",
+    )
+
+    subject = tables.ManyToManyColumn(
+        accessor="subj_class",  # original field name in model class
+        verbose_name="Subject",
+        separator=format_html(",<br>"),
+        orderable=True,
+        filter=lambda qs: qs.order_by(
+            "model"
+        ),  # order retrieved objects within table cell
+        # use .name for model verbose name, .model for model class name
+        transform=lambda ent: f"{ent.model.title()}",
+        linkify_item={
+            "viewname": "apis_core:apis_entities:generic_entities_list",
+            "args": [tables.A("model")],
+        },
+    )
+
+    object = tables.ManyToManyColumn(
+        accessor="obj_class",  # original field name in model class
+        verbose_name="Object",
+        separator=format_html(",<br>"),
+        orderable=True,
+        filter=lambda qs: qs.order_by(
+            "model"
+        ),  # order retrieved objects within table cell
+        # use .name for model verbose name, .model for model class name
+        transform=lambda ent: f"{ent.model.title()}",
+        linkify_item={
+            "viewname": "apis_core:apis_entities:generic_entities_list",
+            "args": [tables.A("model")],
+        },
+    )
+
+    class Meta:
+        model = Property
+        fields = []
+        sequence = [
+            "subject",
+            "predicate",
+            "object",
+            "predicate_reverse",
+        ]
+        order_by = "predicate"
+        attrs = {"class": "table table-hover table-striped table-condensed"}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    # Use order_ methods to define how individual columns should be sorted.
+    # Method names are column names prefixed with "order_".
+    # By default, columns for regular fields are sorted alphabetically; for
+    # ManyToMany fields, however, the row IDs of the originating table are
+    # used as basis for sorting.
+    # When column names and field names differ (see earlier note), the original
+    # field names need to be referenced when constructing queryset.
+    def order_subject(self, queryset, is_descending):
+        queryset = queryset.annotate(entity=F("subj_class__model")).order_by(
+            ("-" if is_descending else "") + "entity"
+        )
+        return (queryset, True)
+
+    def order_object(self, queryset, is_descending):
+        queryset = queryset.annotate(entity=F("obj_class__model")).order_by(
+            ("-" if is_descending else "") + "entity"
+        )
+        return (queryset, True)
+
+
 # TODO RDF: Check if this should be removed or adapted
 class EntityUriTable(tables.Table):
 
