@@ -96,7 +96,6 @@ INSTALLED_APPS = [
     "django_tables2",
     "rest_framework",
     "webpage",
-    "browsing",
     "apis_core.apis_entities",
     "apis_core.apis_metainfo",
     "apis_core.apis_relations",
