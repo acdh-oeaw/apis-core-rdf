@@ -6,7 +6,7 @@ import unicodedata
 import reversion
 
 # from apis_core.apis_entities.models import Person
-from apis_core.apis_entities.models import RootObject, TempEntityClass
+from apis_core.apis_metainfo.models import RootObject
 from apis_core.helper_functions import DateParser
 from crum import get_current_request
 from django.conf import settings
