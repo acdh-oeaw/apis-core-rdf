@@ -37,6 +37,11 @@ entity_patterns = [
         edit_generic.GenericEntitiesDeleteView.as_view(),
         name="generic_entities_delete_view",
     ),
+    path(
+        "<int:pk>/duplicate/",
+        edit_generic.GenericEntitiesDuplicateView.as_view(),
+        name="generic_entities_duplicate_view",
+    ),
 ]
 
 autocomplete_patterns = [

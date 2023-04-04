@@ -286,3 +286,19 @@ class GenericEntitiesDeleteView(DeleteView):
             "apis_core:apis_entities:generic_entities_list", kwargs={"entity": entity}
         )
         return super(GenericEntitiesDeleteView, self).dispatch(request, *args, **kwargs)
+
+
+@method_decorator(login_required, name="dispatch")
+class GenericEntitiesDuplicateView(View):
+    def get(self, request, *args, **kwargs):
+        entity_model = caching.get_entity_class_of_name(kwargs["entity"])
+        source_obj = get_object_or_404(entity_model, pk=kwargs["pk"])
+
+        newobj = source_obj.duplicate()
+
+        return redirect(
+            reverse(
+                "apis:apis_entities:generic_entities_edit_view",
+                kwargs={"pk": newobj.id, "entity": kwargs["entity"]},
+            )
+        )

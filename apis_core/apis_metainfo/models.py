@@ -12,6 +12,9 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.fields.reverse_related import ManyToOneRel
+from django.db.models.fields.related import OneToOneField, ForeignKey, ManyToManyField
+from django.forms import model_to_dict
 from django.urls import reverse
 from django.utils.functional import cached_property
 from model_utils.managers import InheritanceManager
@@ -68,6 +71,64 @@ class RootObject(models.Model):
             return self.name
         else:
             return "no name provided"
+
+    def duplicate(self):
+        # usually, copying instances would work like
+        # https://docs.djangoproject.com/en/4.2/topics/db/queries/#copying-model-instances
+        # but we are working with abstract classes,
+        # so we have to do it by hand  using model_to_dict:(
+        objdict = model_to_dict(self)
+        objdict.pop("id")
+
+        # remove related fields from dict representation
+        related_fields = [
+            field for field in self._meta.get_fields() if field.is_relation
+        ]
+        for field in related_fields:
+            objdict.pop(field.name, None)
+
+        entity_model = caching.get_entity_class_of_name(self._meta.model_name)
+        newobj = entity_model.objects.create(**objdict)
+
+        for field in related_fields:
+            # we are not using `isinstance` because we want to
+            # differentiate between different levels of inheritance
+            if type(field) is ManyToOneRel:
+                # Get a list of fields of the related model that are unique
+                # because `related_field`s do not have a unique attribute
+                # we are using getattr
+                # Either use the related_name or contruct ith from the fields name
+                relname = field.related_name or f"{field.name}_set"
+                # Iterate through the objects in the queryset, get the subclass of the
+                # entry, remove the unique attributes and create a copy of the object.
+                # Then save the copied object
+                # This is limited to models with the objects_inheritance attribute, so
+                # basically it is tailored to TempTriples
+                if getattr(field.related_model, "objects_inheritance", False):
+                    for entry in getattr(self, relname).all():
+                        relmodel = field.related_model
+                        # create a copy based on the subclass
+                        entry_copy = relmodel.objects_inheritance.get_subclass(
+                            id=entry.id
+                        )
+                        model_fields = relmodel._meta.get_fields()
+                        unique_fields = [
+                            f.name for f in model_fields if getattr(f, "unique", False)
+                        ]
+                        for key in unique_fields:
+                            setattr(entry_copy, key, None)
+                        entry_copy.pk = None
+                        entry_copy._state.adding = True
+                        setattr(entry_copy, field.field.name, newobj)
+                        entry_copy.save()
+            if type(field) is ForeignKey:
+                setattr(newobj, field.name, getattr(self, field.name))
+            if type(field) is ManyToManyField:
+                objfield = getattr(newobj, field.name)
+                values = getattr(self, field.name).all()
+                objfield.set(values)
+
+        return newobj.save()
 
 
 @reversion.register()
