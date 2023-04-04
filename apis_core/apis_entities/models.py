@@ -20,6 +20,7 @@ from model_utils.managers import InheritanceManager
 from django.db.models.query import QuerySet
 from apis_core.helper_functions import DateParser
 from apis_core.apis_metainfo.models import RootObject, Collection
+from apis_core.apis_relations.models import TempTriple
 
 
 BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
@@ -292,9 +293,6 @@ class TempEntityClass(AbstractEntity):
                 self_model_class.objects.get(pk=ent) if type(ent) == int else ent
                 for ent in entities
             ]
-        rels = ContentType.objects.filter(
-            app_label="apis_relations", model__icontains=e_a
-        )
         for ent in entities:
             e_b = type(ent).__name__
             if e_a != e_b:
@@ -317,25 +315,8 @@ class TempEntityClass(AbstractEntity):
             for l in Label.objects.filter(temp_entity=ent):
                 l.temp_entity = self
                 l.save()
-            for r in rels.filter(model__icontains=e_b):
-                lst_ents_rel = str(r).split()
-                if lst_ents_rel[0] == lst_ents_rel[1]:
-                    q_d = {"related_{}A".format(e_b.lower()): ent}
-                    k = r.model_class().objects.filter(**q_d)
-                    for t in k:
-                        setattr(t, "related_{}A".format(e_a.lower()), self)
-                        t.save()
-                    q_d = {"related_{}B".format(e_b.lower()): ent}
-                    k = r.model_class().objects.filter(**q_d)
-                    for t in k:
-                        setattr(t, "related_{}B".format(e_a.lower()), self)
-                        t.save()
-                else:
-                    q_d = {"related_{}".format(e_b.lower()): ent}
-                    k = r.model_class().objects.filter(**q_d)
-                    for t in k:
-                        setattr(t, "related_{}".format(e_a.lower()), self)
-                        t.save()
+            TempTriple.objects.filter(obj__id=ent.id).update(obj=self)
+            TempTriple.objects.filter(subj__id=ent.id).update(subj=self)
             ent.delete()
 
     def get_serialization(self):
