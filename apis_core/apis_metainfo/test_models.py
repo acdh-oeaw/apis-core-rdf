@@ -18,10 +18,17 @@ class ModelTestCase(TestCase):
         self.assertEquals(str(rnone), "no name provided")
 
     def test_source(self):
-        sfoo = Source.objects.create(author="foo", orig_filename="bar")
-        snone = Source.objects.create()
-        self.assertEquals(str(sfoo), "bar, stored by foo")
-        self.assertEquals(str(snone), f"(ID: {snone.id})")
+        s = Source.objects.create()
+        s_fname = Source.objects.create(orig_filename="file_name_of_source")
+        s_fname_aut = Source.objects.create(
+            orig_filename="file_name_of_source", author="Alice"
+        )
+        self.assertEquals(str(s), f"(ID: {s.id})")
+        self.assertEquals(str(s_fname), "file_name_of_source")
+        self.assertEquals(
+            str(s_fname_aut),
+            "file_name_of_source, stored by Alice",
+        )
 
     def test_uri(self):
         ufoo = Uri.objects.create()
