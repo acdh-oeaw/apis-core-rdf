@@ -272,8 +272,14 @@ class TempEntityClass(AbstractEntity):
             kwargs={"entity": entity, "pk": self.id},
         )
 
-    def merge_with(self, entities):
+    def get_duplicate_url(self):
+        entity = self.__class__.__name__.lower()
+        return reverse(
+            "apis_core:apis_entities:generic_entities_duplicate_view",
+            kwargs={"entity": entity, "pk": self.id},
+        )
 
+    def merge_with(self, entities):
         # TODO: check if these imports can be put to top of module without
         #  causing circular import issues.
         from apis_core.apis_labels.models import Label
