@@ -80,7 +80,8 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.api_routers</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
@@ -693,6 +694,18 @@
 <span class="n">generic_serializer_creation_factory</span><span class="p">()</span>
 
 
+<div class="viewcode-block" id="AdditionalSerializerConfig"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.AdditionalSerializerConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AdditionalSerializerConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    use this class in a list named &#39;additional_serializers_list&#39; to load custom</span>
+<span class="sd">    serializers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># For now, it is recommended to prefix the url with &#39;additional&#39;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># unique name for django</span>
+    <span class="n">path_structure</span><span class="p">:</span> <span class="nb">dict</span>  <span class="c1"># see example structure</span></div>
+
+
 <div class="viewcode-block" id="load_additional_serializers"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.load_additional_serializers">[docs]</a><span class="k">def</span> <span class="nf">load_additional_serializers</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">additional_serializers_list</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
@@ -822,11 +835,11 @@
 
                 <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
                     <span class="c1"># TODO: Improve this param handling by extending the parsing logic</span>
-                    <span class="c1"># or by  forwarding the params untouched The original</span>
-                    <span class="c1"># &#39;self.request.query_params&#39; could not be forwarded directly to django&#39;s ORM</span>
-                    <span class="c1"># filter So as a work-around, a dictionary is created and its values are</span>
-                    <span class="c1"># casted. Maybe there a possibility can be found to forward the params</span>
-                    <span class="c1"># directly?</span>
+                    <span class="c1">#  or by forwarding the params untouched</span>
+                    <span class="c1"># The original &#39;self.request.query_params&#39; could not be forwarded</span>
+                    <span class="c1"># directly to django&#39;s ORM filter So as a work-around, a dictionary</span>
+                    <span class="c1"># is created and its values are casted. Maybe there a possibility</span>
+                    <span class="c1"># can be found to forward the params directly?</span>
                     <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
                     <span class="n">was_parsed</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
