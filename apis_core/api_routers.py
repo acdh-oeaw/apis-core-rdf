@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from functools import reduce
 import copy
 import importlib
@@ -611,6 +612,18 @@ views = dict()
 generic_serializer_creation_factory()
 
 
+@dataclass
+class AdditionalSerializerConfig:
+    """
+    use this class in a list named 'additional_serializers_list' to load custom
+    serializers
+    """
+
+    url: str  # For now, it is recommended to prefix the url with 'additional'
+    name: str  # unique name for django
+    path_structure: dict  # see example structure
+
+
 def load_additional_serializers():
     try:
         additional_serializers_list = getattr(
@@ -740,11 +753,11 @@ def load_additional_serializers():
 
                 def get_queryset(self):
                     # TODO: Improve this param handling by extending the parsing logic
-                    # or by  forwarding the params untouched The original
-                    # 'self.request.query_params' could not be forwarded directly to django's ORM
-                    # filter So as a work-around, a dictionary is created and its values are
-                    # casted. Maybe there a possibility can be found to forward the params
-                    # directly?
+                    #  or by forwarding the params untouched
+                    # The original 'self.request.query_params' could not be forwarded
+                    # directly to django's ORM filter So as a work-around, a dictionary
+                    # is created and its values are casted. Maybe there a possibility
+                    # can be found to forward the params directly?
                     params = {}
                     was_parsed = False
                     for k, v in self.request.query_params.items():
