@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.urls import reverse
 
 # import autocomplete_light.shortcuts as al
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from apis_core.apis_relations.models import TempTriple
 from apis_core.apis_entities.fields import ListSelect2
