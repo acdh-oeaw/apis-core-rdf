@@ -2,28 +2,23 @@ import fnmatch
 import os
 import re
 from io import TextIOWrapper
-import requests
+
 from django.conf import settings
-from django.db.models import Q, Prefetch
 from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FileUploadParser
-from rest_framework.permissions import DjangoObjectPermissions
 from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
-from apis_core.apis_metainfo.api_renderers import PaginatedCSVRenderer
+
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_metainfo.models import Uri
 from apis_core.helper_functions.RDFParser import RDFParser
-from apis_core.helper_functions.stanbolQueries import find_loc
 from .api_renderers import (
     EntityToTEI,
     EntityToCIDOCXML,

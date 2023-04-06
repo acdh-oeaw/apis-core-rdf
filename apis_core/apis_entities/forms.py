@@ -17,7 +17,6 @@ from apis_core.apis_vocabularies.models import TextType
 from apis_core.helper_functions import DateParser, caching
 from apis_core.helper_functions.RDFParser import RDFParser
 from .fields import ListSelect2, Select2Multiple
-from apis_core.apis_entities.models import AbstractEntity
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import AnnotationProject

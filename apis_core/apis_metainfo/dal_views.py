@@ -1,4 +1,5 @@
 from dal import autocomplete
+
 from apis_core.apis_entities.models import TempEntityClass
 
 

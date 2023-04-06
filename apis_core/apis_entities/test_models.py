@@ -1,14 +1,10 @@
 from django.test import TestCase
 from django.contrib.auth.models import User, Group
-from django.urls import reverse
-
-from apis_core.apis_metainfo.models import Text, Collection
-from reversion import revisions as reversion
-
-from datetime import datetime
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 from django.contrib.auth.models import Permission
+
+from apis_core.apis_metainfo.models import Text, Collection
 
 
 class PermissionsModelTestCase(TestCase):

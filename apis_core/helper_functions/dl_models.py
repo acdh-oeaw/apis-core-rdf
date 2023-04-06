@@ -1,15 +1,11 @@
+import pickle
+import os
+
 import numpy as np
 from keras.models import load_model
 from keras.preprocessing.text import Tokenizer
-import pickle
 from keras import backend as K
-import os
-
-import spacy
-from spacy.matcher import Matcher
-
 import de_core_news_sm
-
 from apis_core.vocabularies.models import VocabsBaseClass
 
 nlp = de_core_news_sm.load()

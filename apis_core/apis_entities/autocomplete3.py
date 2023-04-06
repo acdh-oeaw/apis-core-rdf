@@ -17,7 +17,6 @@ from django.db.models import Q
 
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
-from apis_core.apis_entities.models import AbstractEntity
 from apis_core.helper_functions import caching
 from apis_core.helper_functions.caching import get_autocomplete_property_choices
 
