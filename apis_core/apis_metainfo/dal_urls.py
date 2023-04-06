@@ -1,12 +1,12 @@
-from django.conf.urls import url
+from django.urls import path
 
 from . import dal_views
 
 app_name = "apis_metainfo"
 
 urlpatterns = [
-    url(
-        r"^tempentity-autocomplete/$",
+    path(
+        "tempentity-autocomplete/",
         dal_views.TempEntityClassAC.as_view(),
         name="apis_tempentity-autocomplete",
     )
