@@ -5,6 +5,7 @@ from .autocomplete3 import (
     GenericEntitiesAutocomplete,
     GenericNetworkEntitiesAutocomplete,
 )
+
 # from .views import ReversionCompareView TODO: add again when import is fixec
 from .views2 import GenericEntitiesCreateStanbolView
 

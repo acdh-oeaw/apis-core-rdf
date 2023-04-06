@@ -7,7 +7,7 @@ from apis_core.apis_metainfo.tables import (
     generic_order_start_date_written,
     generic_order_end_date_written,
     generic_render_start_date_written,
-    generic_render_end_date_written,
+    generic_render_end_date_written
 )
 
 input_form = """

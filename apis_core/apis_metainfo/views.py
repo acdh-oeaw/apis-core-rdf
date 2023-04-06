@@ -3,8 +3,8 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
-from browsing.browsing_utils import GenericListView, BaseCreateView, BaseUpdateView
 
+from browsing.browsing_utils import GenericListView, BaseCreateView, BaseUpdateView
 from .filters import UriListFilter
 from .forms import UriFilterFormHelper, UriForm
 from .models import Uri

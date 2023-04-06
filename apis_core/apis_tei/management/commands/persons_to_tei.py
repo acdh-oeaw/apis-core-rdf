@@ -5,7 +5,6 @@ from tqdm import tqdm
 from apis_core.apis_entities.models import Person
 from apis_core.apis_tei.tei_utils import get_node_from_template, tei_header
 
-
 class Command(BaseCommand):
     help = 'Command to serialize APIS Persons to XML/TEI persons.xml'
 

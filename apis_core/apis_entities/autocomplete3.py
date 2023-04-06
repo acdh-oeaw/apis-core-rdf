@@ -18,7 +18,6 @@ from django.db.models import Q
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.apis_entities.models import AbstractEntity
-
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
     ac_settings = importlib.import_module(path_ac_settings)

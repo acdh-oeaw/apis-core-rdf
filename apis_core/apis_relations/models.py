@@ -1,17 +1,13 @@
+import inspect
+import sys
 import unicodedata
 
 # from reversion import revisions as reversion
 import reversion
-from crum import get_current_request
-from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-from django.db import models
-from django.db.models import Q
-from django.db.models.signals import m2m_changed
-from model_utils.managers import InheritanceManager
 
 # from apis_core.apis_entities.models import Person
-from apis_core.apis_entities.models import RootObject
+from apis_core.apis_entities.models import RootObject, TempEntityClass
+
 #######################################################################
 #
 # Custom Managers
@@ -19,6 +15,14 @@ from apis_core.apis_entities.models import RootObject
 #######################################################################
 # from apis_core.apis_vocabularies.models import Property
 from apis_core.helper_functions import DateParser
+from crum import get_current_request
+from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from django.db.models import Q
+from django.db.models.signals import m2m_changed
+from django.utils.functional import cached_property
+from model_utils.managers import InheritanceManager
 
 
 def find_if_user_accepted():

@@ -1,8 +1,9 @@
 import json
 import importlib
-
 from django.conf import settings
+
 import requests
+
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:

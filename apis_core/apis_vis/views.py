@@ -3,6 +3,7 @@ from django.db.models import Avg
 from django.http import JsonResponse
 from django.views.generic import TemplateView
 
+from apis_core.apis_relations.models import *
 from .utils import calculate_age
 
 

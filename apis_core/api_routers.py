@@ -1,6 +1,11 @@
 from functools import reduce
+import copy
+import importlib
+import inspect
 from ast import literal_eval
-
+from django.conf import settings
+from apis_ontology.models import *
+from apis_core.apis_metainfo.models import *
 # from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from rest_framework import pagination, serializers, viewsets
@@ -13,11 +18,11 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_field,
     OpenApiParameter,
+    extend_schema_serializer,
 )
 from drf_spectacular.types import OpenApiTypes
+from django import forms
 from django_filters import rest_framework as filters
-
-from apis_core.apis_metainfo.models import *
 from apis_core.apis_entities.models import TempEntityClass
 from .api_renderers import NetJsonRenderer
 from apis_core.helper_functions.ContentType import GetContentTypes
@@ -25,6 +30,7 @@ from .apis_relations.models import Triple, Property
 
 if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
     from apis_highlighter.highlighter import highlight_text_new
+    from apis_highlighter.serializer import annotationSerializer
     from apis_highlighter.models import Annotation
 
 
