@@ -14,7 +14,7 @@ from .models import (
     # __before_rdf_refactoring__
     # EventType,
     # WorkType,
-    LabelType
+    LabelType,
 )
 
 

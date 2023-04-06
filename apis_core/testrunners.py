@@ -1,8 +1,9 @@
+import random
+import string
+
 from django.test.runner import DiscoverRunner
 from django.contrib.contenttypes.models import ContentType as ct
 from django.db.models import fields as ft_dj
-import random
-import string
 
 
 def create_data(ft, ln=5):

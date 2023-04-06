@@ -13,7 +13,8 @@ from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Collection, Uri
 from apis_core.apis_metainfo.models import Uri as genUri
 from apis_core.apis_vocabularies.models import (
-    LabelType)
+    LabelType
+)
 from apis_core.default_settings.RDF_settings import sett_RDF_generic
 
 

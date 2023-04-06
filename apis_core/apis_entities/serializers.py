@@ -1,8 +1,8 @@
 import re
 
-from django.conf import settings
 from django.urls import reverse_lazy
 from rest_framework import serializers
+
 
 # from .models import Institution, Person, Place, Event, Work
 # from ..apis_relations.models import PersonInstitution, InstitutionPlace, PersonPlace

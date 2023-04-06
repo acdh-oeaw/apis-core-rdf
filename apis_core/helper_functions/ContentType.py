@@ -1,5 +1,6 @@
 import importlib
 import inspect
+
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.base import ModelBase
 

@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
+
 from .models import Collection, Source, Text, Uri
 from apis_core.apis_entities.models import TempEntityClass
 

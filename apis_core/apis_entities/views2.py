@@ -1,3 +1,5 @@
+import importlib
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -13,13 +15,12 @@ from django.views.generic import DeleteView
 from django_tables2 import RequestConfig
 from guardian.core import ObjectPermissionChecker
 from reversion.models import Version
-import importlib
 
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
-from apis_core.apis_relations.models import Triple, TempTriple
-from apis_core.apis_relations.tables import get_generic_relations_table, get_generic_triple_table, LabelTableEdit
+from apis_core.apis_relations.models import TempTriple
+from apis_core.apis_relations.tables import get_generic_triple_table, LabelTableEdit
 from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm
 from .views import get_highlighted_texts
 from .views import set_session_variables

@@ -14,6 +14,7 @@ from django.conf import settings
 from apis_core.apis_entities.models import Place, Person, Institution, Event, Work
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import PersonPerson, PersonPlace, PersonInstitution
+
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
     ac_settings = importlib.import_module(path_ac_settings)

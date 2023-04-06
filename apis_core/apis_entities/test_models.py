@@ -1,16 +1,15 @@
+from datetime import datetime
+
 from django.test import TestCase
 from django.contrib.auth.models import User, Group
 from django.urls import reverse
-
-from .models import Person, Event
-from apis_core.apis_metainfo.models import Text, Collection
-from apis_core.apis_vocabularies.models import ProfessionType
-from reversion import revisions as reversion
-
-from datetime import datetime
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 from django.contrib.auth.models import Permission
+
+from .models import Person
+from apis_core.apis_metainfo.models import Text, Collection
+from apis_core.apis_vocabularies.models import ProfessionType
 
 
 class PersonModelTestCase(TestCase):

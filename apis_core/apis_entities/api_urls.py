@@ -1,5 +1,4 @@
 from django.conf import settings
-
 from django.urls import path
 
 from . import api_views

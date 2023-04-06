@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
 
-import reversion
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.urls import reverse_lazy
@@ -15,13 +13,9 @@ from django_tables2 import RequestConfig
 from django_tables2 import SingleTableView
 from django_tables2.export.views import ExportMixin
 
-# from reversion_compare.views import HistoryCompareDetailView
-
 from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
-
 # __before_rdf_refactoring__
 # from apis_core.apis_relations.models import AbstractRelation
-from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.helper_functions.stanbolQueries import retrieve_obj
 from apis_core.helper_functions.utils import (
     access_for_all,
@@ -36,6 +30,8 @@ from .forms import (
     GenericEntitiesStanbolForm,
 )
 from .tables import get_entities_table
+
+# from reversion_compare.views import HistoryCompareDetailView
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.forms import SelectAnnotationProject

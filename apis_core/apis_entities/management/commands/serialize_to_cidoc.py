@@ -1,7 +1,7 @@
 import json
 import pickle
-from rdflib.term import URIRef
 
+from rdflib.term import URIRef
 import requests
 from SPARQLWrapper import SPARQLWrapper, POST, BASIC, JSON
 from django.conf import settings

@@ -3,11 +3,10 @@ from django.views.generic.detail import DetailView
 from django_tables2 import RequestConfig
 
 from apis_core.apis_entities.views import GenericListViewNew
-
 # from apis_core.apis_relations.models import AbstractRelation
 from apis_core.apis_relations.models import Triple, Property
-from .rel_filters import get_generic_relation_filter, TripleFilter, PropertyFilter
-from .tables import get_generic_relation_listview_table, TripleTable, PropertyTable
+from .rel_filters import TripleFilter, PropertyFilter
+from .tables import TripleTable, PropertyTable
 
 
 class GenericRelationView(GenericListViewNew):

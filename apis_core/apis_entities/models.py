@@ -1,11 +1,8 @@
 import inspect
 import re
-import sys
 import unicodedata
-import yaml
-from django.contrib.contenttypes.models import ContentType
 
-from reversion import revisions as reversion
+from django.contrib.contenttypes.models import ContentType
 from django.apps import apps
 import reversion
 from django.conf import settings
@@ -18,6 +15,7 @@ from django.urls import reverse
 from guardian.shortcuts import assign_perm, remove_perm
 from model_utils.managers import InheritanceManager
 from django.db.models.query import QuerySet
+
 from apis_core.helper_functions import DateParser
 from apis_core.apis_metainfo.models import RootObject, Collection
 
