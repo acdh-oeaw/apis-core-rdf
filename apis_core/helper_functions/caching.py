@@ -1,7 +1,7 @@
 import importlib
 import inspect
-from django.contrib.contenttypes.models import ContentType
 
+from django.contrib.contenttypes.models import ContentType
 
 # global variables used in this module which acts as a singleton
 _ontology_classes = None

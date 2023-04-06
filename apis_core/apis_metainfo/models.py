@@ -1,33 +1,28 @@
 import re
-import django
-import unicodedata
 from difflib import SequenceMatcher
+from math import inf
+import copy
+import importlib
+
 import requests
 
 # from reversion import revisions as reversion
 import reversion
-from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Q
-from django.db.models.query import QuerySet
 from django.urls import reverse
 from django.utils.functional import cached_property
-from math import inf
 from model_utils.managers import InheritanceManager
-import copy
-import importlib
-
-# from apis_core.apis_entities.serializers_generic import EntitySerializer
-# from apis_core.apis_labels.models import Label
-# from apis_core.apis_vocabularies.models import CollectionType, LabelType, TextType
 
 # from django.contrib.contenttypes.fields import GenericRelation
 # from helper_functions.highlighter import highlight_text
 from apis_core.helper_functions import caching
+
+# from apis_core.apis_entities.serializers_generic import EntitySerializer
+# from apis_core.apis_labels.models import Label
+# from apis_core.apis_vocabularies.models import CollectionType, LabelType, TextType
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:

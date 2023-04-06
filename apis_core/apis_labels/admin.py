@@ -1,7 +1,6 @@
 from django.contrib import admin
 from csvexport.actions import csvexport
 
-
 from .models import Label
 
 

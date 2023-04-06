@@ -1,16 +1,14 @@
-import inspect
 import re
-import sys
 import unicodedata
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.functional import cached_property
 from reversion import revisions as reversion
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
+
 from apis_core.apis_metainfo.models import RootObject
-from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
 
 
 @reversion.register()

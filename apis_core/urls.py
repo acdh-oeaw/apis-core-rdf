@@ -2,14 +2,10 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from django.contrib.contenttypes.models import ContentType
 from django.urls import path
 from django.views.static import serve
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import response, schemas
 from rest_framework import routers
-from rest_framework.decorators import api_view, renderer_classes
-from rest_framework.schemas import get_schema_view
+
 from apis_core.api_routers import load_additional_serializers
 from apis_core.api_routers import views
 
@@ -49,8 +45,6 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
         HighlighterProjectViewSet,
         HighlighterTextHighViewSet,
         HighlighterMenuEntryViewSet,
-        HighlighterHighlightTextViewSet,
-        HighlighterVocabularyAPIViewSet,
         HighlighterAnnotationViewSet,
     )
 
@@ -67,8 +61,6 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
 # router.register(r"GeoJsonPlace", PlaceGeoJsonViewSet, "PlaceGeoJson")
 # router.register(r"NetJson", NetJsonViewSet, "NetJson")
 
-
-from rest_framework import permissions
 
 # from drf_yasg.views import get_schema_view as get_schema_view2
 # from drf_yasg import openapi

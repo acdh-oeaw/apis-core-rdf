@@ -1,7 +1,7 @@
-from rest_framework.generics import ListAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.generics import ListAPIView
+
 from .serializers import *
 
 

@@ -1,4 +1,5 @@
 from django.urls import include, path
+
 from . import views, edit_generic, detail_generic, merge_views
 from .autocomplete3 import (
     GenericEntitiesAutocomplete,
@@ -7,7 +8,6 @@ from .autocomplete3 import (
 
 # from .views import ReversionCompareView TODO: add again when import is fixed
 from .edit_generic import GenericEntitiesCreateStanbolView
-
 
 app_name = "apis_entities"
 

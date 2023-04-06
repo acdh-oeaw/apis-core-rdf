@@ -1,22 +1,19 @@
-import inspect
-import sys
 import unicodedata
 
 # from reversion import revisions as reversion
 import reversion
-
-# from apis_core.apis_entities.models import Person
-from apis_core.apis_metainfo.models import RootObject
-from apis_core.helper_functions import DateParser
 from crum import get_current_request
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import m2m_changed
-from django.utils.functional import cached_property
 from model_utils.managers import InheritanceManager
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
+
+# from apis_core.apis_entities.models import Person
+from apis_core.apis_metainfo.models import RootObject
+from apis_core.helper_functions import DateParser
 
 
 def find_if_user_accepted():

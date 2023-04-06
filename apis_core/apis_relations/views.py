@@ -1,22 +1,17 @@
 import json
-import re
 import inspect
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 
-from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_relations import forms as relation_form_module
 from apis_core.apis_relations.forms2 import GenericTripleForm
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 
 # from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
 # from apis_core.apis_entities.models import AbstractEntity
-from apis_core.apis_labels.models import Label
-from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.models import Property, TempTriple
 
 # from .models import (
@@ -25,13 +20,11 @@ from apis_core.apis_relations.models import Property, TempTriple
 #     InstitutionWork, PlaceWork, EventWork, WorkWork
 # )
 # from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
-from .tables import LabelTableEdit
 from ..helper_functions import caching
 
 form_module_list = [relation_form_module]
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
-    from apis_highlighter.highlighter import highlight_text_new
     from apis_highlighter import forms as highlighter_form_module
 
     form_module_list.append(highlighter_form_module)

@@ -1,10 +1,6 @@
 from dataclasses import dataclass
 from functools import reduce
-import copy
-import importlib
-import inspect
 from ast import literal_eval
-from django.conf import settings
 
 try:
     from apis_ontology.models import *
@@ -25,10 +21,8 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_field,
     OpenApiParameter,
-    extend_schema_serializer,
 )
 from drf_spectacular.types import OpenApiTypes
-from django import forms
 from django_filters import rest_framework as filters
 from apis_core.apis_entities.models import TempEntityClass
 from .api_renderers import NetJsonRenderer
@@ -37,7 +31,6 @@ from apis_core.helper_functions import caching
 
 if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
     from apis_highlighter.highlighter import highlight_text_new
-    from apis_highlighter.serializer import annotationSerializer
     from apis_highlighter.models import Annotation
 
 

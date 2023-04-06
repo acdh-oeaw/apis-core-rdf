@@ -1,9 +1,3 @@
-from django.conf.urls import url
-
-from .tei_ac import TeiEntAc, TeiCompleterAc
-
-from apis_core.apis_tei import views
-
 app_name = "apis_tei"
 
 urlpatterns = [

@@ -1,7 +1,7 @@
 import json
 import pickle
-from rdflib.term import URIRef
 
+from rdflib.term import URIRef
 import requests
 from SPARQLWrapper import SPARQLWrapper, POST, BASIC, JSON
 from django.conf import settings
@@ -11,7 +11,6 @@ from rdflib import Graph
 from rdflib.plugins.memory import IOMemory
 
 from apis_core.apis_entities.api_renderers import EntityToCIDOC
-from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.serializers_generic import EntitySerializer
 from apis_core.apis_vocabularies.api_renderers import VocabToSkos
 from apis_core.apis_vocabularies.serializers import GenericVocabsSerializer

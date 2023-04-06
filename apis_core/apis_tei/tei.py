@@ -1,12 +1,13 @@
 from xml.sax.saxutils import escape, unescape
-import lxml.etree as ET
-from django.conf import settings
-from django.utils.text import slugify
-from .partials import TEI_NSMAP, tei_gen_header
-from apis_core.apis_metainfo.models import Text
 from collections import defaultdict
 import pprint
 
+import lxml.etree as ET
+from django.conf import settings
+from django.utils.text import slugify
+
+from .partials import TEI_NSMAP, tei_gen_header
+from apis_core.apis_metainfo.models import Text
 
 pp = pprint.PrettyPrinter(indent=4)
 

@@ -5,7 +5,6 @@ import pickle
 from django.core.management.base import BaseCommand
 from django.core.serializers.json import DjangoJSONEncoder
 
-from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.serializers_generic import EntitySerializer
 from apis_core.helper_functions import caching
 

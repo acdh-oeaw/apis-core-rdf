@@ -1,5 +1,5 @@
 import re
-from django.conf import settings
+
 from django.urls import reverse_lazy
 from rest_framework import serializers
 
