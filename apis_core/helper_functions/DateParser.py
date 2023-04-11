@@ -3,6 +3,18 @@ import re
 from datetime import datetime, timedelta
 
 
+def get_last_day_of_month(month, year):
+    """
+    Helper function to return the last day of a given month and year (respecting leap years)
+
+    :param month : int
+    :param year : int
+    :return day : int
+    """
+    next_month = datetime(year=year, month=month, day=28) + timedelta(days=4)
+    return (next_month - timedelta(next_month.day)).day
+
+
 def parse_date(date_string: str) -> (datetime, datetime, datetime):
     """
     function to parse a string date field of an entity
@@ -37,44 +49,6 @@ def parse_date(date_string: str) -> (datetime, datetime, datetime):
             One datetime object representing the date.
             if a single date was given.
         """
-
-        def get_last_day_of_month(month, year):
-            """
-            Helper function to return the last day of a given month and year (respecting leap years)
-
-            :param month : int
-            :param year : int
-            :return day : int
-            """
-
-            if month in [1, 3, 5, 7, 8, 10, 12]:
-                # 31 day months
-                return 31
-            elif month in [4, 6, 9, 11]:
-                # 30 day months
-                return 30
-            elif month == 2:
-                # special case february, differentiate leap years with respect to gregorian leap rules
-                if year % 4 == 0:
-                    if year % 100 == 0:
-                        if year % 400 == 0:
-                            # divisible by 4, by 100, by 400
-                            # thus is leap year
-                            return 29
-                        else:
-                            # divisible by 4, by 100, not by 400
-                            # thus is not leap yar
-                            return 28
-                    else:
-                        # divisible by 4, not by 100, if by 400 doesn't matter
-                        # thus is leap year
-                        return 29
-                else:
-                    # not divisible by 4, if by 100 or by 400 doesn't matter
-                    return 28
-            else:
-                # no valid month
-                raise ValueError("Month " + str(month) + " does not exist.")
 
         # replace all kinds of delimiters
         date = (
