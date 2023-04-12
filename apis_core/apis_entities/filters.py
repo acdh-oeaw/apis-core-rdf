@@ -1,3 +1,5 @@
+import logging
+
 from collections import OrderedDict
 
 import django_filters
@@ -126,12 +128,10 @@ class GenericEntityListFilter(django_filters.FilterSet):
                         default_filters[field_name].label = filter_settings["label"]
 
                     field_filters[field_name] = default_filters[field_name]
-
             else:
-                raise ValueError(
-                    f"Filters for individual entities need to be of type "
-                    f"string or dictionary.\n"
-                    f"Got instead: {type(f)}"
+                logging.error(
+                    "Unusable filter - should be name of a default filter or a dict, got %s",
+                    f,
                 )
 
         for f_name, f_filter in default_filters.items():
