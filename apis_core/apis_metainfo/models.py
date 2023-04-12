@@ -47,10 +47,6 @@ class RootObject(models.Model):
     By having one overarching super class we gain the advantage of unique identifiers.
     """
 
-    entity_settings = {
-        "list_filters": ["name", "related_entity_name", "related_property_name"],
-        "search": ["name"],
-    }
     name = models.CharField(max_length=255, verbose_name="Name")
     # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
     # triples where the subject's or object's contenttype must be respected (e.g. get all triples
