@@ -111,7 +111,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
     context_filter_name = "filter"
     paginate_by = 25
     template_name = getattr(
-        settings, "APIS_LIST_VIEW_TEMPLATE", "apis:apis_entities/generic_list.html"
+        settings, "APIS_LIST_VIEW_TEMPLATE", "apis_entities/generic_list.html"
     )
     login_url = "/accounts/login/"
 
