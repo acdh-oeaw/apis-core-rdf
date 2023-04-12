@@ -35,11 +35,6 @@ class AbstractEntity(RootObject):
     So they are to be understood in that dynamic context.
     """
 
-    entity_settings = {
-        "list_filters": ["name", "related_entity_name", "related_property_name"],
-        "search": ["name"],
-    }
-
     class Meta:
         abstract = True
 
@@ -447,16 +442,3 @@ if "registration" in getattr(settings, "INSTALLED_APPS", []):
         user_group = getattr(settings, "APIS_AUTO_USERGROUP", None)
         if user_group is not None:
             user.groups.add(Group.objects.get(name=user_group))
-
-
-# TODO remove this workaround here once the settings issue is resolved
-def fill_settings_with_entity_attributes():
-    if not settings.APIS_ENTITIES:
-        for entity_class in (
-            caching.get_all_entity_classes() + caching.get_all_ontology_classes()
-        ):
-            entity_settings = entity_class.entity_settings
-            settings.APIS_ENTITIES[entity_class.__name__] = entity_settings
-
-
-fill_settings_with_entity_attributes()

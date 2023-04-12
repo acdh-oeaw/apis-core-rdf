@@ -119,7 +119,6 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         super(GenericListViewNew, self).__init__(*args, **kwargs)
         self.entity = None
         self.filter = None
-        self.entity_settings = None
 
     def get_model(self):
         """
@@ -128,11 +127,6 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         model = ContentType.objects.get(
             app_label__startswith="apis_", model=self.entity
         ).model_class()
-
-        try:
-            self.entity_settings = model.entity_settings
-        except AttributeError as e:
-            self.entity_settings = {}
 
         return model
 
@@ -267,15 +261,13 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
                 )
                 context = dict(context, **chartdata)
 
-        try:
-            context["enable_merge"] = self.entity_settings["merge"]
-        except KeyError:
-            context["enable_merge"] = False
+        context["enable_merge"] = False
+        toggleable_cols = []
+        if hasattr(settings, "APIS_ENTITIES"):
+            entity_settings = settings.APIS_ENTITIES.get(class_name, {})
+            context["enable_merge"] = entity_settings.get("merge", False)
+            toggleable_cols = entity_settings.get("additional_cols", [])
 
-        try:
-            toggleable_cols = self.entity_settings["additional_cols"]
-        except KeyError:
-            toggleable_cols = []
         if context["enable_merge"] and self.request.user.is_authenticated:
             toggleable_cols = toggleable_cols + ["merge"]
         # TODO kk spelling of this dict key should get fixed throughout
