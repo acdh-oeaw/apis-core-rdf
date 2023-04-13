@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.db import IntegrityError
 
 from apis_core.apis_metainfo.models import Uri
-from apis_core.helper_functions.RDFParser import clean_uri
+from apis_core.utils.RDFParser import clean_uri
 
 uri_settings_file = os.path.join(
     settings.BASE_DIR, "apis_core", "default_settings", "URI_replace_settings.yml"

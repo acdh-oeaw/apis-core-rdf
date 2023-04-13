@@ -15,8 +15,8 @@ from guardian.shortcuts import assign_perm, remove_perm
 from model_utils.managers import InheritanceManager
 from django.db.models.query import QuerySet
 
-from apis_core.helper_functions import caching
-from apis_core.helper_functions import DateParser
+from apis_core.utils import caching
+from apis_core.utils import DateParser
 from apis_core.apis_metainfo.models import RootObject, Collection
 from apis_core.apis_relations.models import TempTriple
 

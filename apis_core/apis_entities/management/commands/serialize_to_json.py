@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.core.serializers.json import DjangoJSONEncoder
 
 from apis_core.apis_entities.serializers_generic import EntitySerializer
-from apis_core.helper_functions import caching
+from apis_core.utils import caching
 
 
 class Command(BaseCommand):

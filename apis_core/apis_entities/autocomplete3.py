@@ -17,8 +17,8 @@ from django.db.models import Q
 
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
-from apis_core.helper_functions import caching
-from apis_core.helper_functions.caching import get_autocomplete_property_choices
+from apis_core.utils import caching
+from apis_core.utils.caching import get_autocomplete_property_choices
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:

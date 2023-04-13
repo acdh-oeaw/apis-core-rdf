@@ -8,7 +8,7 @@ from django.db.models import Q
 
 from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import TempEntityClass
-from apis_core.helper_functions import caching
+from apis_core.utils import caching
 
 # The following classes define the filter sets respective to their models.
 # Also by what was enabled in the global settings file (or disabled by not explicitley enabling it).

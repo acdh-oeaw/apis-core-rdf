@@ -5,7 +5,7 @@ import reversion
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 from entities.models import Person
-from helper_functions.abbreviation_solver import ResolveAbbreviations
+from apis_core.utils.abbreviation_solver import ResolveAbbreviations
 from metainfo.models import Text
 from vocabularies.models import TextType
 

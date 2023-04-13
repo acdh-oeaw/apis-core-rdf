@@ -6,7 +6,7 @@ import reversion
 from django.db import models
 
 from apis_core.apis_vocabularies.models import LabelType
-from apis_core.helper_functions import DateParser
+from apis_core.utils import DateParser
 
 
 @reversion.register()

@@ -20,7 +20,7 @@ from apis_core.apis_relations.models import Property, TempTriple
 #     InstitutionWork, PlaceWork, EventWork, WorkWork
 # )
 # from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm
-from ..helper_functions import caching
+from apis_core.utils import caching
 
 form_module_list = [relation_form_module]
 

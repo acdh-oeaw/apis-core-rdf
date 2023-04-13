@@ -8,7 +8,7 @@ from apis_core.apis_metainfo.tables import (
     generic_render_start_date_written,
     generic_render_end_date_written,
 )
-from apis_core.helper_functions import caching
+from apis_core.utils import caching
 
 input_form = """
   <input type="checkbox" name="keep" value="{}" title="keep this"/> |

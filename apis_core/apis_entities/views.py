@@ -14,8 +14,8 @@ from django_tables2 import SingleTableView
 from django_tables2.export.views import ExportMixin
 
 from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
-from apis_core.helper_functions.stanbolQueries import retrieve_obj
-from apis_core.helper_functions.utils import (
+from apis_core.utils.stanbolQueries import retrieve_obj
+from apis_core.utils.utils import (
     access_for_all,
     access_for_all_function,
     ENTITIES_DEFAULT_COLS,

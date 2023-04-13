@@ -5,7 +5,7 @@ from django.template.loader import get_template
 from apis_core.apis_entities.models import Work, Place, Person, Institution
 from apis_core.apis_relations.models import PlacePlace, PersonWork
 from apis_core.apis_vocabularies.models import PersonWorkRelation
-from apis_core.helper_functions.utils import get_child_classes
+from apis_core.utils.utils import get_child_classes
 
 try:
     birth_rel = settings.BIRTH_REL
