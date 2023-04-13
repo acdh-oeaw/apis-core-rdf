@@ -1,13 +1,7 @@
 from django.conf import settings
 from rdflib import RDF, RDFS, XSD, BNode, Literal, URIRef, OWL
 
-try:
-    from webpage.metadata import PROJECT_METADATA
-except ImportError:
-    try:
-        from webpage.utils import PROJECT_METADATA
-    except ImportError:
-        PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD")
+PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD")
 
 base_uri = getattr(settings, "APIS_BASE_URI", "http://apis.info")
 if base_uri.endswith("/"):

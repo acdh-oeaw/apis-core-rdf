@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.views.static import serve
+from django.views.generic import TemplateView
 from rest_framework import routers
 
 from apis_core.api_routers import load_additional_serializers
@@ -122,6 +123,7 @@ def build_apis_mock_request(method, path, view, original_request, **kwargs):
 
 
 urlpatterns = [
+    path("", TemplateView.as_view(template_name="base.html"), name="apis_index"),
     path("admin/", admin.site.urls),
     # url(r'^swagger(?P<format>\.json|\.yaml)$', SchemaViewSwagger.without_ui(cache_timeout=-1), name='schema-json'),
     # url(r'^swagger/$', SchemaViewSwagger.with_ui('swagger', cache_timeout=-1), name='schema-swagger-ui'),

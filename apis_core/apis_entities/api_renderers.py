@@ -15,13 +15,7 @@ from rest_framework import renderers
 from apis_core.apis_tei.tei import TeiEntCreator
 from .api_mappings.cidoc_mapping import m_person, m_place, m_work, m_institution
 
-try:
-    from webpage.metadata import PROJECT_METADATA
-except ImportError:
-    try:
-        from webpage.utils import PROJECT_METADATA
-    except ImportError:
-        PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD")
+PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD", {})
 
 
 base_uri = getattr(settings, "APIS_BASE_URI", "http://apis.info")
