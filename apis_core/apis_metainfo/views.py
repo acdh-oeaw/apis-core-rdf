@@ -40,5 +40,5 @@ class UriUpdate(LoginRequiredMixin, BaseUpdateView):
 
 class UriDelete(LoginRequiredMixin, DeleteView):
     model = Uri
-    template_name = "webpage/confirm_delete.html"
+    template_name = "confirm_delete.html"
     success_url = reverse_lazy("apis_core:apis_metainfo:uri_browse")

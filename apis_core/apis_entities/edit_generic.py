@@ -277,7 +277,7 @@ class GenericEntitiesDeleteView(DeleteView):
     #     app_label='apis_entities', model='tempentityclass').model_class()
     model = importlib.import_module("apis_core.apis_entities.models").TempEntityClass
     template_name = getattr(
-        settings, "APIS_DELETE_VIEW_TEMPLATE", "apis_entities/confirm_delete.html"
+        settings, "APIS_DELETE_VIEW_TEMPLATE", "confirm_delete.html"
     )
 
     def dispatch(self, request, *args, **kwargs):
