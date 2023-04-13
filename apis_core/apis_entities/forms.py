@@ -14,8 +14,8 @@ from django.urls import reverse
 
 from apis_core.apis_metainfo.models import Text, Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
-from apis_core.helper_functions import DateParser, caching
-from apis_core.helper_functions.RDFParser import RDFParser
+from apis_core.utils import DateParser, caching
+from apis_core.utils.RDFParser import RDFParser
 from .fields import ListSelect2, Select2Multiple
 
 if "apis_highlighter" in settings.INSTALLED_APPS:

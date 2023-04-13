@@ -18,7 +18,7 @@ from rest_framework.views import APIView
 
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_metainfo.models import Uri
-from apis_core.helper_functions.RDFParser import RDFParser
+from apis_core.utils.RDFParser import RDFParser
 from .api_renderers import (
     EntityToTEI,
     EntityToCIDOCXML,
@@ -28,7 +28,7 @@ from .api_renderers import (
     EntityToCIDOCTURTLE,
 )
 from .serializers_generic import EntitySerializer
-from apis_core.helper_functions import caching
+from apis_core.utils import caching
 
 
 class StandardResultsSetPagination(PageNumberPagination):

@@ -13,7 +13,7 @@ from django.db.models.fields.related_descriptors import ForwardManyToOneDescript
 
 # from apis_core.apis_entities.models import Person
 from apis_core.apis_metainfo.models import RootObject
-from apis_core.helper_functions import DateParser
+from apis_core.utils import DateParser
 
 
 def find_if_user_accepted():

@@ -27,7 +27,7 @@ from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm
 from .views import get_highlighted_texts
 from .views import set_session_variables
 from ..apis_vocabularies.models import TextType
-from ..helper_functions import caching
+from apis_core.utils import caching
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.forms import SelectAnnotatorAgreement

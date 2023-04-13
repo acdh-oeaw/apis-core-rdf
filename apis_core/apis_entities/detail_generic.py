@@ -14,10 +14,10 @@ from apis_core.apis_relations.tables import (
     get_generic_triple_table,
     LabelTableBase,
 )
-from apis_core.helper_functions.utils import access_for_all
+from apis_core.utils.utils import access_for_all
 from .views import get_highlighted_texts
 from apis_core.apis_relations.models import TempTriple
-from ..helper_functions import caching
+from apis_core.utils import caching
 
 
 class GenericEntitiesDetailView(UserPassesTestMixin, View):

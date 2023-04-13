@@ -21,7 +21,7 @@ from apis_core.apis_entities.fields import ListSelect2
 from apis_core.apis_metainfo.models import Uri
 
 # from apis_core.apis_relations.models import AbstractRelation
-from apis_core.helper_functions.RDFParser import APIS_RDF_URI_SETTINGS
+from apis_core.utils.RDFParser import APIS_RDF_URI_SETTINGS
 from .tables import get_generic_triple_table
 from apis_core.apis_entities.autocomplete3 import (
     PropertyAutocomplete,

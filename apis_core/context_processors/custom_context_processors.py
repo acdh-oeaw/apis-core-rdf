@@ -2,7 +2,7 @@ from operator import itemgetter
 
 from django.conf import settings
 
-from apis_core.helper_functions import caching
+from apis_core.utils import caching
 
 
 def list_entities(request):

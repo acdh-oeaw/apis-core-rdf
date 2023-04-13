@@ -14,7 +14,7 @@ from apis_core.apis_entities.api_renderers import EntityToCIDOC
 from apis_core.apis_entities.serializers_generic import EntitySerializer
 from apis_core.apis_vocabularies.api_renderers import VocabToSkos
 from apis_core.apis_vocabularies.serializers import GenericVocabsSerializer
-from apis_core.helper_functions import caching
+from apis_core.utils import caching
 
 map_ct = {
     "trig": ("application/x-trig", "trig"),
