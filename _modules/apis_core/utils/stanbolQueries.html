@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.helper_functions.stanbolQueries &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.utils.stanbolQueries &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -70,7 +70,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.helper_functions.stanbolQueries</li>
+      <li class="breadcrumb-item active">apis_core.utils.stanbolQueries</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -79,13 +79,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.helper_functions.stanbolQueries</h1><div class="highlight"><pre>
+  <h1>Source code for apis_core.utils.stanbolQueries</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
+
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-
 <span class="kn">import</span> <span class="nn">requests</span>
-
 
 <span class="n">path_ac_settings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_AUTOCOMPLETE_SETTINGS&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">path_ac_settings</span><span class="p">:</span>
@@ -99,7 +98,7 @@
     <span class="p">)</span>
 
 
-<div class="viewcode-block" id="decide_score_stanbol"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.stanbolQueries.decide_score_stanbol">[docs]</a><span class="k">def</span> <span class="nf">decide_score_stanbol</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">dec_diff</span><span class="p">):</span>
+<div class="viewcode-block" id="decide_score_stanbol"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.stanbolQueries.decide_score_stanbol">[docs]</a><span class="k">def</span> <span class="nf">decide_score_stanbol</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">dec_diff</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">results</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -115,7 +114,7 @@
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="find_geonames2"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.stanbolQueries.find_geonames2">[docs]</a><span class="k">def</span> <span class="nf">find_geonames2</span><span class="p">(</span><span class="n">ca</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">adm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="find_geonames2"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.stanbolQueries.find_geonames2">[docs]</a><span class="k">def</span> <span class="nf">find_geonames2</span><span class="p">(</span><span class="n">ca</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">adm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">}</span>
     <span class="n">ca_feature</span> <span class="o">=</span> <span class="n">ca</span><span class="o">.</span><span class="n">stored_feature</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ca_feature</span><span class="p">:</span>
@@ -142,7 +141,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="find_loc"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.stanbolQueries.find_loc">[docs]</a><span class="k">def</span> <span class="nf">find_loc</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">geonames_chains</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dec_diff</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<div class="viewcode-block" id="find_loc"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.stanbolQueries.find_loc">[docs]</a><span class="k">def</span> <span class="nf">find_loc</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">geonames_chains</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dec_diff</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="n">prev_elem</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">t</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">geonames_chains</span><span class="p">:</span>
@@ -226,7 +225,7 @@
                 <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="retrieve_obj"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.stanbolQueries.retrieve_obj">[docs]</a><span class="k">def</span> <span class="nf">retrieve_obj</span><span class="p">(</span><span class="n">uri</span><span class="p">):</span>
+<div class="viewcode-block" id="retrieve_obj"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.stanbolQueries.retrieve_obj">[docs]</a><span class="k">def</span> <span class="nf">retrieve_obj</span><span class="p">(</span><span class="n">uri</span><span class="p">):</span>
     <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">}</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
         <span class="s2">&quot;http://enrich.acdh.oeaw.ac.at/entityhub/site/geoNames_S_P_A/entity&quot;</span><span class="p">,</span>
@@ -239,7 +238,7 @@
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="query_geonames_chains"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.stanbolQueries.query_geonames_chains">[docs]</a><span class="k">def</span> <span class="nf">query_geonames_chains</span><span class="p">(</span>
+<div class="viewcode-block" id="query_geonames_chains"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.stanbolQueries.query_geonames_chains">[docs]</a><span class="k">def</span> <span class="nf">query_geonames_chains</span><span class="p">(</span>
     <span class="n">q</span><span class="p">,</span>
     <span class="n">chains</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;http://enrich.acdh.oeaw.ac.at/entityhub/site/geoNames_S_P_A/find&quot;</span><span class="p">],</span>
     <span class="n">rest_feature</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">],</span>

@@ -82,11 +82,7 @@
   <h1>Source code for apis_core.api_routers</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">literal_eval</span>
-<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">apis_ontology.models</span> <span class="kn">import</span> <span class="o">*</span>
@@ -107,19 +103,16 @@
     <span class="n">extend_schema</span><span class="p">,</span>
     <span class="n">extend_schema_field</span><span class="p">,</span>
     <span class="n">OpenApiParameter</span><span class="p">,</span>
-    <span class="n">extend_schema_serializer</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">drf_spectacular.types</span> <span class="kn">import</span> <span class="n">OpenApiTypes</span>
-<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
 <span class="kn">from</span> <span class="nn">django_filters</span> <span class="kn">import</span> <span class="n">rest_framework</span> <span class="k">as</span> <span class="n">filters</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
 <span class="kn">from</span> <span class="nn">.api_renderers</span> <span class="kn">import</span> <span class="n">NetJsonRenderer</span>
 <span class="kn">from</span> <span class="nn">.apis_relations.models</span> <span class="kn">import</span> <span class="n">Triple</span><span class="p">,</span> <span class="n">Property</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 
 <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;INSTALLED_APPS&quot;</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">apis_highlighter.highlighter</span> <span class="kn">import</span> <span class="n">highlight_text_new</span>
-    <span class="kn">from</span> <span class="nn">apis_highlighter.serializer</span> <span class="kn">import</span> <span class="n">annotationSerializer</span>
     <span class="kn">from</span> <span class="nn">apis_highlighter.models</span> <span class="kn">import</span> <span class="n">Annotation</span>
 
 

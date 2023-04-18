@@ -84,14 +84,13 @@
 <span class="kn">from</span> <span class="nn">django.utils.safestring</span> <span class="kn">import</span> <span class="n">mark_safe</span>
 <span class="kn">from</span> <span class="nn">django_tables2.utils</span> <span class="kn">import</span> <span class="n">A</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.tables</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">generic_order_start_date_written</span><span class="p">,</span>
     <span class="n">generic_order_end_date_written</span><span class="p">,</span>
     <span class="n">generic_render_start_date_written</span><span class="p">,</span>
     <span class="n">generic_render_end_date_written</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 
 <span class="n">input_form</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">  &lt;input type=&quot;checkbox&quot; name=&quot;keep&quot; value=&quot;</span><span class="si">{}</span><span class="s2">&quot; title=&quot;keep this&quot;/&gt; |</span>

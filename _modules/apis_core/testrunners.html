@@ -80,11 +80,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.testrunners</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.test.runner</span> <span class="kn">import</span> <span class="n">DiscoverRunner</span>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">string</span>
+
+<span class="kn">from</span> <span class="nn">django.test.runner</span> <span class="kn">import</span> <span class="n">DiscoverRunner</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span> <span class="k">as</span> <span class="n">ct</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">fields</span> <span class="k">as</span> <span class="n">ft_dj</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">string</span>
 
 
 <div class="viewcode-block" id="create_data"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.testrunners.create_data">[docs]</a><span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span><span class="n">ft</span><span class="p">,</span> <span class="n">ln</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>

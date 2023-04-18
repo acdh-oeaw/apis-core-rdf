@@ -84,28 +84,23 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">TextIOWrapper</span>
-<span class="kn">import</span> <span class="nn">requests</span>
+
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Prefetch</span>
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
-<span class="kn">from</span> <span class="nn">django_filters.rest_framework</span> <span class="kn">import</span> <span class="n">DjangoFilterBackend</span>
-<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">filters</span><span class="p">,</span> <span class="n">viewsets</span>
 <span class="kn">from</span> <span class="nn">rest_framework.decorators</span> <span class="kn">import</span> <span class="n">api_view</span>
 <span class="kn">from</span> <span class="nn">rest_framework.generics</span> <span class="kn">import</span> <span class="n">GenericAPIView</span>
 <span class="kn">from</span> <span class="nn">rest_framework.pagination</span> <span class="kn">import</span> <span class="n">PageNumberPagination</span>
 <span class="kn">from</span> <span class="nn">rest_framework.parsers</span> <span class="kn">import</span> <span class="n">FileUploadParser</span>
-<span class="kn">from</span> <span class="nn">rest_framework.permissions</span> <span class="kn">import</span> <span class="n">DjangoObjectPermissions</span>
 <span class="kn">from</span> <span class="nn">rest_framework.response</span> <span class="kn">import</span> <span class="n">Response</span>
 <span class="kn">from</span> <span class="nn">rest_framework.reverse</span> <span class="kn">import</span> <span class="n">reverse_lazy</span>
 <span class="kn">from</span> <span class="nn">rest_framework.settings</span> <span class="kn">import</span> <span class="n">api_settings</span>
 <span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.api_renderers</span> <span class="kn">import</span> <span class="n">PaginatedCSVRenderer</span>
+
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions.RDFParser</span> <span class="kn">import</span> <span class="n">RDFParser</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions.stanbolQueries</span> <span class="kn">import</span> <span class="n">find_loc</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.RDFParser</span> <span class="kn">import</span> <span class="n">RDFParser</span>
 <span class="kn">from</span> <span class="nn">.api_renderers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EntityToTEI</span><span class="p">,</span>
     <span class="n">EntityToCIDOCXML</span><span class="p">,</span>
@@ -115,7 +110,7 @@
     <span class="n">EntityToCIDOCTURTLE</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.serializers_generic</span> <span class="kn">import</span> <span class="n">EntitySerializer</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 
 
 <div class="viewcode-block" id="StandardResultsSetPagination"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.StandardResultsSetPagination">[docs]</a><span class="k">class</span> <span class="nc">StandardResultsSetPagination</span><span class="p">(</span><span class="n">PageNumberPagination</span><span class="p">):</span>

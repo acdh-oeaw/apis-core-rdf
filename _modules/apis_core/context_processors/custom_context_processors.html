@@ -80,12 +80,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.context_processors.custom_context_processors</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span>
+<span></span><span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
+
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">caching</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 
 
 <div class="viewcode-block" id="list_entities"><a class="viewcode-back" href="../../../modules/apis_core.context_processors.html#apis_core.context_processors.custom_context_processors.list_entities">[docs]</a><span class="k">def</span> <span class="nf">list_entities</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>

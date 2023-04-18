@@ -144,11 +144,167 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.apps.</span></span><span class="sig-name descname"><span class="pre">MetainfoConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/apps.html#MetainfoConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.apps.MetainfoConfig" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.apps.MetainfoConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.AutoField'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.apps.MetainfoConfig.default_auto_field" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.apps.MetainfoConfig.name">
 <span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'apis_core.apis_metainfo'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.apps.MetainfoConfig.name" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
+
+</section>
+<section id="module-apis_core.apis_metainfo.browsingviews">
+<span id="apis-core-apis-metainfo-browsingviews-module"></span><h2>apis_core.apis_metainfo.browsingviews module<a class="headerlink" href="#module-apis_core.apis_metainfo.browsingviews" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseCreateView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.browsingviews.</span></span><span class="sig-name descname"><span class="pre">BaseCreateView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#BaseCreateView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseCreateView" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CreateView</span></code></p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseCreateView.form_class">
+<span class="sig-name descname"><span class="pre">form_class</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseCreateView.form_class" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseCreateView.get_context_data">
+<span class="sig-name descname"><span class="pre">get_context_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#BaseCreateView.get_context_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseCreateView.get_context_data" title="Permalink to this definition"></a></dt>
+<dd><p>Insert the form into the context dict.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseCreateView.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseCreateView.model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseCreateView.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'browsing/generic_create.html'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseCreateView.template_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseUpdateView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.browsingviews.</span></span><span class="sig-name descname"><span class="pre">BaseUpdateView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#BaseUpdateView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseUpdateView" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UpdateView</span></code></p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseUpdateView.form_class">
+<span class="sig-name descname"><span class="pre">form_class</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseUpdateView.form_class" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseUpdateView.get_context_data">
+<span class="sig-name descname"><span class="pre">get_context_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#BaseUpdateView.get_context_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseUpdateView.get_context_data" title="Permalink to this definition"></a></dt>
+<dd><p>Insert the form into the context dict.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseUpdateView.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseUpdateView.model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.BaseUpdateView.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'browsing/generic_create.html'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.BaseUpdateView.template_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericFilterFormHelper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.browsingviews.</span></span><span class="sig-name descname"><span class="pre">GenericFilterFormHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#GenericFilterFormHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericFilterFormHelper" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">FormHelper</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.browsingviews.</span></span><span class="sig-name descname"><span class="pre">GenericListView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#GenericListView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SingleTableView</span></code></p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.context_filter_name">
+<span class="sig-name descname"><span class="pre">context_filter_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'filter'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.context_filter_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.filter_class">
+<span class="sig-name descname"><span class="pre">filter_class</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.filter_class" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.formhelper_class">
+<span class="sig-name descname"><span class="pre">formhelper_class</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.formhelper_class" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.get_all_cols">
+<span class="sig-name descname"><span class="pre">get_all_cols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#GenericListView.get_all_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.get_all_cols" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.get_context_data">
+<span class="sig-name descname"><span class="pre">get_context_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#GenericListView.get_context_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.get_context_data" title="Permalink to this definition"></a></dt>
+<dd><p>Overridden version of <cite>.TemplateResponseMixin</cite> to inject the table into
+the template’s context.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#GenericListView.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.get_queryset" title="Permalink to this definition"></a></dt>
+<dd><p>Return the list of items for this view.</p>
+<p>The return value must be an iterable and may be an instance of
+<cite>QuerySet</cite> in which case <cite>QuerySet</cite> specific behavior will be enabled.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.get_table">
+<span class="sig-name descname"><span class="pre">get_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#GenericListView.get_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.get_table" title="Permalink to this definition"></a></dt>
+<dd><p>Return a table object to use. The table has automatic support for
+sorting and pagination.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.get_table_class">
+<span class="sig-name descname"><span class="pre">get_table_class</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#GenericListView.get_table_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.get_table_class" title="Permalink to this definition"></a></dt>
+<dd><p>Return the class to use for the table.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.init_columns">
+<span class="sig-name descname"><span class="pre">init_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.init_columns" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.paginate_by">
+<span class="sig-name descname"><span class="pre">paginate_by</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.paginate_by" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.render_to_response">
+<span class="sig-name descname"><span class="pre">render_to_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#GenericListView.render_to_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.render_to_response" title="Permalink to this definition"></a></dt>
+<dd><p>Return a response, using the <cite>response_class</cite> for this view, with a
+template rendered with the given context.</p>
+<p>Pass response_kwargs to the constructor of the response class.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.GenericListView.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'browsing/generic_list.html'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.GenericListView.template_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.browsingviews.get_entities_table">
+<span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.browsingviews.</span></span><span class="sig-name descname"><span class="pre">get_entities_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_class</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/browsingviews.html#get_entities_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.browsingviews.get_entities_table" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-apis_core.apis_metainfo.dal_urls">
@@ -519,6 +675,11 @@ By having one overarching super class we gain the advantage of unique identifier
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.MultipleObjectsReturned" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.duplicate">
+<span class="sig-name descname"><span class="pre">duplicate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/models.html#RootObject.duplicate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.duplicate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.entity_settings">
@@ -1422,7 +1583,7 @@ not have a method with the specified name.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.views.UriCreate">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.views.</span></span><span class="sig-name descname"><span class="pre">UriCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/views.html#UriCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.views.UriCreate" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCreateView</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_metainfo.browsingviews.BaseCreateView" title="apis_core.apis_metainfo.browsingviews.BaseCreateView"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCreateView</span></code></a></p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
 <dl class="py method">
@@ -1446,10 +1607,8 @@ keyword arguments, and other things.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.views.UriDelete">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.views.</span></span><span class="sig-name descname"><span class="pre">UriDelete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/views.html#UriDelete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.views.UriDelete" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.views.</span></span><span class="sig-name descname"><span class="pre">UriDelete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/views.html#UriDelete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.views.UriDelete" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DeleteView</span></code></p>
-<p>Constructor. Called in the URLconf; can contain helpful extra
-keyword arguments, and other things.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.views.UriDelete.dispatch">
 <span class="sig-name descname"><span class="pre">dispatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/views.html#UriDelete.dispatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.views.UriDelete.dispatch" title="Permalink to this definition"></a></dt>
@@ -1495,7 +1654,7 @@ keyword arguments, and other things.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.views.UriListView">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.views.</span></span><span class="sig-name descname"><span class="pre">UriListView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/views.html#UriListView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.views.UriListView" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericListView</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_metainfo.browsingviews.GenericListView" title="apis_core.apis_metainfo.browsingviews.GenericListView"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericListView</span></code></a></p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
 <dl class="py attribute">
@@ -1537,7 +1696,7 @@ keyword arguments, and other things.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.views.UriUpdate">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.views.</span></span><span class="sig-name descname"><span class="pre">UriUpdate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/views.html#UriUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.views.UriUpdate" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseUpdateView</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_metainfo.browsingviews.BaseUpdateView" title="apis_core.apis_metainfo.browsingviews.BaseUpdateView"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseUpdateView</span></code></a></p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
 <dl class="py method">

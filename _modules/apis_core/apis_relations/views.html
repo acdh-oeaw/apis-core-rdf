@@ -81,24 +81,19 @@
              
   <h1>Source code for apis_core.apis_relations.views</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
-<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">Http404</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
 <span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">render_to_string</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations</span> <span class="kn">import</span> <span class="n">forms</span> <span class="k">as</span> <span class="n">relation_form_module</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.forms2</span> <span class="kn">import</span> <span class="n">GenericTripleForm</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.autocomplete3</span> <span class="kn">import</span> <span class="n">PropertyAutocomplete</span>
 
 <span class="c1"># from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,</span>
 <span class="c1"># from apis_core.apis_entities.models import AbstractEntity</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_labels.models</span> <span class="kn">import</span> <span class="n">Label</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">TempTriple</span>
 
 <span class="c1"># from .models import (</span>
@@ -107,13 +102,11 @@
 <span class="c1">#     InstitutionWork, PlaceWork, EventWork, WorkWork</span>
 <span class="c1"># )</span>
 <span class="c1"># from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm</span>
-<span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">LabelTableEdit</span>
-<span class="kn">from</span> <span class="nn">..helper_functions</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 
 <span class="n">form_module_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">relation_form_module</span><span class="p">]</span>
 
 <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">apis_highlighter.highlighter</span> <span class="kn">import</span> <span class="n">highlight_text_new</span>
     <span class="kn">from</span> <span class="nn">apis_highlighter</span> <span class="kn">import</span> <span class="n">forms</span> <span class="k">as</span> <span class="n">highlighter_form_module</span>
 
     <span class="n">form_module_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">highlighter_form_module</span><span class="p">)</span>

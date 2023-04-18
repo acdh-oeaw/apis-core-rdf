@@ -80,16 +80,17 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.apis_entities.filters</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+
 <span class="kn">import</span> <span class="nn">django_filters</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Collection</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span><span class="p">,</span> <span class="n">TempEntityClass</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">caching</span>
 
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Collection</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 
 <span class="c1"># The following classes define the filter sets respective to their models.</span>
 <span class="c1"># Also by what was enabled in the global settings file (or disabled by not explicitley enabling it).</span>
@@ -167,16 +168,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">field_filters</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_class</span><span class="o">.</span><span class="n">entity_settings</span><span class="p">[</span><span class="s2">&quot;list_filters&quot;</span><span class="p">]</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="p">:</span>
+            <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list_filters&quot;</span><span class="p">,</span> <span class="p">[])</span>
             <span class="k">if</span> <span class="n">fields</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;related_entity_name&quot;</span><span class="p">,</span> <span class="s2">&quot;related_property_name&quot;</span><span class="p">]:</span>
                 <span class="c1"># for AbstractEntity, certain fields are defined to be filterable by default;</span>
                 <span class="c1"># ignore these for the purpose of sorting field names for filtering</span>
                 <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">e</span>
 
         <span class="c1"># fields by which entity lists should not be filterable</span>
         <span class="n">ignore_fields</span> <span class="o">=</span> <span class="p">[</span>
@@ -211,12 +210,10 @@
                         <span class="n">default_filters</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">filter_settings</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
 
                     <span class="n">field_filters</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_filters</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
-
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Filters for individual entities need to be of type &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;string or dictionary.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Got instead: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                    <span class="s2">&quot;Unusable filter - should be name of a default filter or a dict, got </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">f</span><span class="p">,</span>
                 <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">f_name</span><span class="p">,</span> <span class="n">f_filter</span> <span class="ow">in</span> <span class="n">default_filters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>

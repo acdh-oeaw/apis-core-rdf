@@ -81,17 +81,13 @@
              
   <h1>Source code for apis_core.urls</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">re_path</span>
 <span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
-<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="kn">from</span> <span class="nn">django.views.static</span> <span class="kn">import</span> <span class="n">serve</span>
-<span class="kn">from</span> <span class="nn">django_filters.rest_framework</span> <span class="kn">import</span> <span class="n">DjangoFilterBackend</span>
-<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">response</span><span class="p">,</span> <span class="n">schemas</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">routers</span>
-<span class="kn">from</span> <span class="nn">rest_framework.decorators</span> <span class="kn">import</span> <span class="n">api_view</span><span class="p">,</span> <span class="n">renderer_classes</span>
-<span class="kn">from</span> <span class="nn">rest_framework.schemas</span> <span class="kn">import</span> <span class="n">get_schema_view</span>
+
 <span class="kn">from</span> <span class="nn">apis_core.api_routers</span> <span class="kn">import</span> <span class="n">load_additional_serializers</span>
 <span class="kn">from</span> <span class="nn">apis_core.api_routers</span> <span class="kn">import</span> <span class="n">views</span>
 
@@ -100,7 +96,7 @@
 <span class="c1">#     PlaceGeoJsonViewSet,</span>
 <span class="c1"># )</span>
 <span class="c1"># from apis_core.apis_vocabularies.api_views import UserViewSet</span>
-<span class="kn">from</span> <span class="nn">apis_core.helper_functions</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 
 <span class="n">app_name</span> <span class="o">=</span> <span class="s2">&quot;apis_core&quot;</span>
 
@@ -131,8 +127,6 @@
         <span class="n">HighlighterProjectViewSet</span><span class="p">,</span>
         <span class="n">HighlighterTextHighViewSet</span><span class="p">,</span>
         <span class="n">HighlighterMenuEntryViewSet</span><span class="p">,</span>
-        <span class="n">HighlighterHighlightTextViewSet</span><span class="p">,</span>
-        <span class="n">HighlighterVocabularyAPIViewSet</span><span class="p">,</span>
         <span class="n">HighlighterAnnotationViewSet</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -149,8 +143,6 @@
 <span class="c1"># router.register(r&quot;GeoJsonPlace&quot;, PlaceGeoJsonViewSet, &quot;PlaceGeoJson&quot;)</span>
 <span class="c1"># router.register(r&quot;NetJson&quot;, NetJsonViewSet, &quot;NetJson&quot;)</span>
 
-
-<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">permissions</span>
 
 <span class="c1"># from drf_yasg.views import get_schema_view as get_schema_view2</span>
 <span class="c1"># from drf_yasg import openapi</span>
@@ -212,7 +204,7 @@
 
 
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^admin/&quot;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;admin/&quot;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
     <span class="c1"># url(r&#39;^swagger(?P&lt;format&gt;\.json|\.yaml)$&#39;, SchemaViewSwagger.without_ui(cache_timeout=-1), name=&#39;schema-json&#39;),</span>
     <span class="c1"># url(r&#39;^swagger/$&#39;, SchemaViewSwagger.with_ui(&#39;swagger&#39;, cache_timeout=-1), name=&#39;schema-swagger-ui&#39;),</span>
     <span class="c1"># url(r&#39;^redoc/$&#39;, SchemaViewSwagger.with_ui(&#39;redoc&#39;, cache_timeout=-1), name=&#39;schema-redoc&#39;),</span>
@@ -228,31 +220,31 @@
         <span class="n">SpectacularRedocView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span><span class="n">url_name</span><span class="o">=</span><span class="s2">&quot;apis_core:schema&quot;</span><span class="p">),</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;redoc&quot;</span><span class="p">,</span>
     <span class="p">),</span>
-    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;labels/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_labels.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_labels&quot;</span><span class="p">)),</span>
-    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;tei/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_tei.tei_urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_tei&quot;</span><span class="p">)),</span>
-    <span class="n">url</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s2">&quot;entities/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_entities.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_entities&quot;</span><span class="p">)</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;labels/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_labels.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_labels&quot;</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;tei/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_tei.tei_urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_tei&quot;</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span>
+        <span class="s2">&quot;entities/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_entities.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_entities&quot;</span><span class="p">)</span>
     <span class="p">),</span>
-    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;visuals/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_vis.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_visuals&quot;</span><span class="p">)),</span>
-    <span class="n">url</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s2">&quot;relations/&quot;</span><span class="p">,</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;visuals/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_vis.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_visuals&quot;</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span>
+        <span class="s2">&quot;relations/&quot;</span><span class="p">,</span>
         <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_relations.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_relations&quot;</span><span class="p">),</span>
     <span class="p">),</span>
-    <span class="n">url</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s2">&quot;vocabularies/&quot;</span><span class="p">,</span>
+    <span class="n">path</span><span class="p">(</span>
+        <span class="s2">&quot;vocabularies/&quot;</span><span class="p">,</span>
         <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_vocabularies.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_vocabularies&quot;</span><span class="p">),</span>
     <span class="p">),</span>
-    <span class="n">url</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s2">&quot;metainfo/&quot;</span><span class="p">,</span>
+    <span class="n">path</span><span class="p">(</span>
+        <span class="s2">&quot;metainfo/&quot;</span><span class="p">,</span>
         <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_metainfo.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_metainfo&quot;</span><span class="p">),</span>
     <span class="p">),</span>
-    <span class="n">url</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s2">&quot;metainfo-ac/&quot;</span><span class="p">,</span>
+    <span class="n">path</span><span class="p">(</span>
+        <span class="s2">&quot;metainfo-ac/&quot;</span><span class="p">,</span>
         <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_metainfo.dal_urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_metainfo-ac&quot;</span><span class="p">),</span>
     <span class="p">),</span>
     <span class="c1"># url(r&#39;^autocomplete/&#39;, include(&#39;autocomplete_light.urls&#39;)),</span>
-    <span class="n">url</span><span class="p">(</span>
-        <span class="sa">r</span><span class="s2">&quot;^api/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">((</span><span class="n">router</span><span class="o">.</span><span class="n">urls</span><span class="p">,</span> <span class="s2">&quot;apis_core&quot;</span><span class="p">),</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_api&quot;</span><span class="p">)</span>
+    <span class="n">path</span><span class="p">(</span>
+        <span class="s2">&quot;api/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">((</span><span class="n">router</span><span class="o">.</span><span class="n">urls</span><span class="p">,</span> <span class="s2">&quot;apis_core&quot;</span><span class="p">),</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_api&quot;</span><span class="p">)</span>
     <span class="p">),</span>  <span class="c1"># routers do not support namespaces out of the box</span>
     <span class="c1"># path(&#39;openapi-2&#39;, schema_view),</span>
     <span class="c1"># path(&#39;openapi-api&#39;, get_schema_view(</span>
@@ -260,11 +252,11 @@
     <span class="c1">#    description=&quot;APIS API schema definition&quot;,</span>
     <span class="c1">#    urlconf=&#39;apis_core.apis_entities.api_urls&#39;,</span>
     <span class="c1"># ), name=&#39;openapi-schema-api&#39;),</span>
-    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^api2/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_entities.api_urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_api2&quot;</span><span class="p">)),</span>
-    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^api-auth/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;rest_framework.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;rest_framework&quot;</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;api2/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_entities.api_urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_api2&quot;</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;api-auth/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;rest_framework.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;rest_framework&quot;</span><span class="p">)),</span>
     <span class="c1"># url(r&#39;^api-schema/&#39;, schema_view),</span>
-    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^apis-vis/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_vis.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_vis&quot;</span><span class="p">)),</span>
-    <span class="n">url</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;apis-vis/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_vis.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_vis&quot;</span><span class="p">)),</span>
+    <span class="n">re_path</span><span class="p">(</span>
         <span class="sa">r</span><span class="s2">&quot;^docs/(?P&lt;path&gt;.*)$&quot;</span><span class="p">,</span>
         <span class="n">login_required</span><span class="p">(</span><span class="n">serve</span><span class="p">),</span>
         <span class="p">{</span><span class="s2">&quot;document_root&quot;</span><span class="p">:</span> <span class="s2">&quot;apis-core/docs/_build/html&quot;</span><span class="p">},</span>
@@ -276,14 +268,13 @@
 
 <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
     <span class="n">urlpatterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-        <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;highlighter/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_highlighter.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;highlighter&quot;</span><span class="p">))</span>
+        <span class="n">path</span><span class="p">(</span><span class="s2">&quot;highlighter/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_highlighter.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;highlighter&quot;</span><span class="p">))</span>
     <span class="p">)</span>
 
 <span class="k">if</span> <span class="s2">&quot;apis_fulltext_download&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-
     <span class="n">urlpatterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-        <span class="n">url</span><span class="p">(</span>
-            <span class="sa">r</span><span class="s2">&quot;fulltext_download/&quot;</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">(</span>
+            <span class="s2">&quot;fulltext_download/&quot;</span><span class="p">,</span>
             <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_fulltext_download.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_fulltext_download&quot;</span><span class="p">),</span>
         <span class="p">)</span>
     <span class="p">)</span>
@@ -292,7 +283,9 @@
     <span class="k">if</span> <span class="s2">&quot;debug_toolbar&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">debug_toolbar</span>
 
-        <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span><span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^__debug__/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">debug_toolbar</span><span class="o">.</span><span class="n">urls</span><span class="p">))]</span> <span class="o">+</span> <span class="n">urlpatterns</span>
+        <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">re_path</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^__debug__/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">debug_toolbar</span><span class="o">.</span><span class="n">urls</span><span class="p">))</span>
+        <span class="p">]</span> <span class="o">+</span> <span class="n">urlpatterns</span>
 </pre></div>
 
            </div>

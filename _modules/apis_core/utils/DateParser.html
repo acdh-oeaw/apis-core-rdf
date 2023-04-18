@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.helper_functions.DateParser &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.utils.DateParser &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -70,7 +70,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.helper_functions.DateParser</li>
+      <li class="breadcrumb-item active">apis_core.utils.DateParser</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -79,13 +79,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.helper_functions.DateParser</h1><div class="highlight"><pre>
+  <h1>Source code for apis_core.utils.DateParser</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
 
-<div class="viewcode-block" id="parse_date"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.DateParser.parse_date">[docs]</a><span class="k">def</span> <span class="nf">parse_date</span><span class="p">(</span><span class="n">date_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_date"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.DateParser.parse_date">[docs]</a><span class="k">def</span> <span class="nf">parse_date</span><span class="p">(</span><span class="n">date_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    function to parse a string date field of an entity</span>
 
@@ -357,7 +357,7 @@
     <span class="k">return</span> <span class="n">date_single</span><span class="p">,</span> <span class="n">date_ab</span><span class="p">,</span> <span class="n">date_bis</span></div>
 
 
-<div class="viewcode-block" id="get_date_help_text_from_dates"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.DateParser.get_date_help_text_from_dates">[docs]</a><span class="k">def</span> <span class="nf">get_date_help_text_from_dates</span><span class="p">(</span>
+<div class="viewcode-block" id="get_date_help_text_from_dates"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.DateParser.get_date_help_text_from_dates">[docs]</a><span class="k">def</span> <span class="nf">get_date_help_text_from_dates</span><span class="p">(</span>
     <span class="n">single_date</span><span class="p">,</span> <span class="n">single_start_date</span><span class="p">,</span> <span class="n">single_end_date</span><span class="p">,</span> <span class="n">single_date_written</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -429,7 +429,7 @@
     <span class="k">return</span> <span class="n">help_text</span></div>
 
 
-<div class="viewcode-block" id="get_date_help_text_default"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.DateParser.get_date_help_text_default">[docs]</a><span class="k">def</span> <span class="nf">get_date_help_text_default</span><span class="p">():</span>
+<div class="viewcode-block" id="get_date_help_text_default"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.DateParser.get_date_help_text_default">[docs]</a><span class="k">def</span> <span class="nf">get_date_help_text_default</span><span class="p">():</span>
 
     <span class="k">return</span> <span class="s2">&quot;Dates are interpreted by defined rules. If this fails, an iso-date can be explicitly set with &#39;&amp;lt;YYYY-MM-DD&amp;gt;&#39;.&quot;</span></div>
 </pre></div>

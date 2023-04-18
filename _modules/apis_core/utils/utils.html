@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.helper_functions.utils &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.utils.utils &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -70,7 +70,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.helper_functions.utils</li>
+      <li class="breadcrumb-item active">apis_core.utils.utils</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -79,11 +79,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.helper_functions.utils</h1><div class="highlight"><pre>
+  <h1>Source code for apis_core.utils.utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 
 
-<div class="viewcode-block" id="access_for_all"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.utils.access_for_all">[docs]</a><span class="k">def</span> <span class="nf">access_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">viewtype</span><span class="o">=</span><span class="s2">&quot;list&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="access_for_all"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.utils.access_for_all">[docs]</a><span class="k">def</span> <span class="nf">access_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">viewtype</span><span class="o">=</span><span class="s2">&quot;list&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span>
     <span class="k">elif</span> <span class="n">viewtype</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
@@ -102,7 +102,7 @@
         <span class="k">return</span> <span class="n">access</span></div>
 
 
-<div class="viewcode-block" id="access_for_all_function"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.utils.access_for_all_function">[docs]</a><span class="k">def</span> <span class="nf">access_for_all_function</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<div class="viewcode-block" id="access_for_all_function"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.utils.access_for_all_function">[docs]</a><span class="k">def</span> <span class="nf">access_for_all_function</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_anonymous</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_DETAIL_VIEWS_ALLOWED&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_DETAIL_VIEWS_ALLOWED&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
@@ -124,7 +124,7 @@
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="get_child_classes"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.utils.get_child_classes">[docs]</a><span class="k">def</span> <span class="nf">get_child_classes</span><span class="p">(</span><span class="n">objids</span><span class="p">,</span> <span class="n">obclass</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="get_child_classes"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.utils.get_child_classes">[docs]</a><span class="k">def</span> <span class="nf">get_child_classes</span><span class="p">(</span><span class="n">objids</span><span class="p">,</span> <span class="n">obclass</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;used to retrieve a list of primary keys of sub classes&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">labels</span><span class="p">:</span>
         <span class="n">labels_lst</span> <span class="o">=</span> <span class="p">[]</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.helper_functions.caching &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.utils.caching &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -70,7 +70,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.helper_functions.caching</li>
+      <li class="breadcrumb-item active">apis_core.utils.caching</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -79,11 +79,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.helper_functions.caching</h1><div class="highlight"><pre>
+  <h1>Source code for apis_core.utils.caching</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 
 <span class="c1"># global variables used in this module which acts as a singleton</span>
 <span class="n">_ontology_classes</span> <span class="o">=</span> <span class="kc">None</span>
@@ -182,21 +182,21 @@
         <span class="p">)</span>
 
 
-<div class="viewcode-block" id="get_all_ontology_classes"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_all_ontology_classes">[docs]</a><span class="k">def</span> <span class="nf">get_all_ontology_classes</span><span class="p">():</span>
+<div class="viewcode-block" id="get_all_ontology_classes"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_all_ontology_classes">[docs]</a><span class="k">def</span> <span class="nf">get_all_ontology_classes</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">_ontology_classes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_init_all_ontology_classes</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">_ontology_classes</span></div>
 
 
-<div class="viewcode-block" id="get_all_ontology_class_names"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_all_ontology_class_names">[docs]</a><span class="k">def</span> <span class="nf">get_all_ontology_class_names</span><span class="p">():</span>
+<div class="viewcode-block" id="get_all_ontology_class_names"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_all_ontology_class_names">[docs]</a><span class="k">def</span> <span class="nf">get_all_ontology_class_names</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">_ontology_class_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_init_all_ontology_classes</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">_ontology_class_names</span></div>
 
 
-<div class="viewcode-block" id="get_ontology_class_of_name"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_ontology_class_of_name">[docs]</a><span class="k">def</span> <span class="nf">get_ontology_class_of_name</span><span class="p">(</span><span class="n">ontology_name_str</span><span class="p">):</span>
+<div class="viewcode-block" id="get_ontology_class_of_name"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_ontology_class_of_name">[docs]</a><span class="k">def</span> <span class="nf">get_ontology_class_of_name</span><span class="p">(</span><span class="n">ontology_name_str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Look up an ontology class based on a given name.</span>
 
@@ -212,21 +212,21 @@
     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not find ontology class of name:&quot;</span><span class="p">,</span> <span class="n">ontology_name_str</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_all_entity_classes"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_all_entity_classes">[docs]</a><span class="k">def</span> <span class="nf">get_all_entity_classes</span><span class="p">():</span>
+<div class="viewcode-block" id="get_all_entity_classes"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_all_entity_classes">[docs]</a><span class="k">def</span> <span class="nf">get_all_entity_classes</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">_entity_classes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_init_all_ontology_classes</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">_entity_classes</span></div>
 
 
-<div class="viewcode-block" id="get_all_entity_class_names"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_all_entity_class_names">[docs]</a><span class="k">def</span> <span class="nf">get_all_entity_class_names</span><span class="p">():</span>
+<div class="viewcode-block" id="get_all_entity_class_names"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_all_entity_class_names">[docs]</a><span class="k">def</span> <span class="nf">get_all_entity_class_names</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">_entity_class_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_init_all_ontology_classes</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">_entity_class_names</span></div>
 
 
-<div class="viewcode-block" id="get_entity_class_of_name"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_entity_class_of_name">[docs]</a><span class="k">def</span> <span class="nf">get_entity_class_of_name</span><span class="p">(</span><span class="n">entity_name_str</span><span class="p">):</span>
+<div class="viewcode-block" id="get_entity_class_of_name"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_entity_class_of_name">[docs]</a><span class="k">def</span> <span class="nf">get_entity_class_of_name</span><span class="p">(</span><span class="n">entity_name_str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Look up an entity class based on a given name.</span>
 
@@ -272,7 +272,7 @@
 <span class="c1">#     raise Exception(&quot;Could not find reification class of name:&quot;, reification_name_str)</span>
 
 
-<div class="viewcode-block" id="get_autocomplete_property_choices"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_autocomplete_property_choices">[docs]</a><span class="k">def</span> <span class="nf">get_autocomplete_property_choices</span><span class="p">(</span>
+<div class="viewcode-block" id="get_autocomplete_property_choices"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_autocomplete_property_choices">[docs]</a><span class="k">def</span> <span class="nf">get_autocomplete_property_choices</span><span class="p">(</span>
     <span class="n">model_self_class_str</span><span class="p">,</span> <span class="n">model_other_class_str</span><span class="p">,</span> <span class="n">search_name_str</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -349,7 +349,7 @@
         <span class="k">return</span> <span class="n">choices</span></div>
 
 
-<div class="viewcode-block" id="get_all_contenttype_classes"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_all_contenttype_classes">[docs]</a><span class="k">def</span> <span class="nf">get_all_contenttype_classes</span><span class="p">():</span>
+<div class="viewcode-block" id="get_all_contenttype_classes"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_all_contenttype_classes">[docs]</a><span class="k">def</span> <span class="nf">get_all_contenttype_classes</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a list of all Django Contenttype classes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -415,7 +415,7 @@
     <span class="k">return</span> <span class="n">_contenttype_classes</span></div>
 
 
-<div class="viewcode-block" id="get_all_class_modules_and_names"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_all_class_modules_and_names">[docs]</a><span class="k">def</span> <span class="nf">get_all_class_modules_and_names</span><span class="p">():</span>
+<div class="viewcode-block" id="get_all_class_modules_and_names"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_all_class_modules_and_names">[docs]</a><span class="k">def</span> <span class="nf">get_all_class_modules_and_names</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    :return: a list of tuples where each contains a str for the app label and a str for the class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -431,7 +431,7 @@
     <span class="k">return</span> <span class="n">_contenttype_class_names</span></div>
 
 
-<div class="viewcode-block" id="get_contenttype_of_class"><a class="viewcode-back" href="../../../modules/apis_core.helper_functions.html#apis_core.helper_functions.caching.get_contenttype_of_class">[docs]</a><span class="k">def</span> <span class="nf">get_contenttype_of_class</span><span class="p">(</span><span class="n">model_class</span><span class="p">):</span>
+<div class="viewcode-block" id="get_contenttype_of_class"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.caching.get_contenttype_of_class">[docs]</a><span class="k">def</span> <span class="nf">get_contenttype_of_class</span><span class="p">(</span><span class="n">model_class</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper method which caches ContentType of a given model class. When first called on a model, it</span>
 <span class="sd">    fetches its respective ContentType from the DB and caches it in a class dictionary. Later, this</span>
