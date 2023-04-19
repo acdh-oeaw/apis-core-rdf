@@ -312,9 +312,7 @@ class TempEntityClass(AbstractEntity):
                         if s not in sl:
                             getattr(self, f.name).add(s)
             Label.objects.create(label=str(ent), label_type=lt, temp_entity=self)
-            for u in Uri.objects.filter(root_object=ent):
-                u.entity = self
-                u.save()
+            Uri.objects.filter(root_object=ent).update(root_object=self)
             for l in Label.objects.filter(temp_entity=ent):
                 l.temp_entity = self
                 l.save()
