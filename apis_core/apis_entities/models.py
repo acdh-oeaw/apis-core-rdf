@@ -189,7 +189,6 @@ class AbstractEntity(RootObject):
 
         # TODO: check if these imports can be put to top of module without
         #  causing circular import issues.
-        from apis_core.apis_labels.models import Label
         from apis_core.apis_vocabularies.models import LabelType
         from apis_core.apis_metainfo.models import Uri
 
@@ -219,11 +218,6 @@ class AbstractEntity(RootObject):
                     for s in getattr(ent, f.name).all():
                         if s not in sl:
                             getattr(self, f.name).add(s)
-            if isinstance(ent, TempEntityClass):
-                Label.objects.create(label=str(ent), label_type=lt, temp_entity=self)
-                for l in Label.objects.filter(temp_entity=ent):
-                    l.temp_entity = self
-                    l.save()
             Uri.objects.filter(root_object=ent).update(root_object=self)
             TempTriple.objects.filter(obj__id=ent.id).update(obj=self)
             TempTriple.objects.filter(subj__id=ent.id).update(subj=self)

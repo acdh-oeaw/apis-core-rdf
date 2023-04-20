@@ -7,7 +7,6 @@ from django.urls import reverse
 from rest_framework import serializers
 from reversion.models import Version
 
-from apis_core.apis_labels.serializers import LabelSerializerLegacy as LabelSerializer
 
 base_uri = getattr(settings, "APIS_BASE_URI", "http://apis.info")
 if base_uri.endswith("/"):

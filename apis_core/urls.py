@@ -122,7 +122,6 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="apis_core:schema"),
         name="redoc",
     ),
-    path("labels/", include("apis_core.apis_labels.urls", namespace="apis_labels")),
     path(
         "entities/", include("apis_core.apis_entities.urls", namespace="apis_entities")
     ),

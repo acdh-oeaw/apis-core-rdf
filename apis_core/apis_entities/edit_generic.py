@@ -13,9 +13,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DeleteView
 from django_tables2 import RequestConfig
-from apis_core.apis_labels.models import Label
 from apis_core.apis_relations.models import TempTriple
-from apis_core.apis_relations.tables import get_generic_triple_table, LabelTableEdit
+from apis_core.apis_relations.tables import get_generic_triple_table
 from .forms import get_entities_form, GenericEntitiesStanbolForm
 from .views import set_session_variables
 from ..apis_vocabularies.models import TextType
@@ -100,11 +99,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
                 apis_bibsonomy = "|".join([x.strip() for x in apis_bibsonomy])
         else:
             apis_bibsonomy = False
-        object_labels = Label.objects.filter(temp_entity__id=self.instance.id)
-        tb_label = LabelTableEdit(
-            data=object_labels, prefix=self.entity.title()[:2] + "L-"
-        )
-        RequestConfig(request, paginate={"per_page": 10}).configure(tb_label)
         template = get_template("apis_entities/edit_generic.html")
         context = {
             "entity_type": self.entity,

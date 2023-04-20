@@ -28,7 +28,6 @@ from apis_core.utils import caching, rdf
 from apis_core.apis_metainfo import signals
 
 # from apis_core.apis_entities.serializers_generic import EntitySerializer
-# from apis_core.apis_labels.models import Label
 # from apis_core.apis_vocabularies.models import CollectionType, LabelType, TextType
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)

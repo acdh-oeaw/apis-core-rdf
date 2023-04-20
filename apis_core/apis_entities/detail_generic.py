@@ -9,11 +9,9 @@ from django.views import View
 from django_tables2 import RequestConfig
 from django.forms.models import model_to_dict
 
-from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_relations.tables import (
     get_generic_triple_table,
-    LabelTableBase,
 )
 from apis_core.utils.utils import access_for_all
 from apis_core.apis_relations.models import TempTriple
@@ -73,11 +71,6 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
 
         # TODO RDF : Check / Adapt the following code to rdf architecture
         object_lod = Uri.objects.filter(root_object=self.instance)
-        object_labels = Label.objects.filter(temp_entity__id=self.instance.id)
-        tb_label = LabelTableBase(data=object_labels, prefix=entity.title()[:2] + "L-")
-        tb_label_open = request.GET.get("PL-page", None)
-        side_bar.append(("Label", tb_label, "PersonLabel", tb_label_open))
-        RequestConfig(request, paginate={"per_page": 10}).configure(tb_label)
         template = select_template(
             [
                 "apis_entities/detail_views/{}_detail_generic.html".format(entity),
@@ -104,12 +97,6 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
             iiif = False
         iiif_server = getattr(settings, "APIS_IIIF_SERVER", None)
         iiif_info_json = self.instance.name
-        try:
-            no_merge_labels = [
-                x for x in object_labels if not x.label_type.name.startswith("Legacy")
-            ]
-        except AttributeError:
-            no_merge_labels = []
 
         relevant_fields = []
         # those are fields from TempEntityClass, this exclude list can be removed once TempEntityClass is dropped
@@ -138,8 +125,6 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
                     "object": self.instance,
                     "relevant_fields": relevant_fields,
                     "right_card": side_bar,
-                    "no_merge_labels": no_merge_labels,
-                    "object_lables": object_labels,
                     "object_lod": object_lod,
                     "tei": tei,
                     "ceteicean_css": ceteicean_css,
