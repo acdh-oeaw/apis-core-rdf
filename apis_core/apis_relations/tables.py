@@ -4,7 +4,6 @@ from django.db.models import Case, When, F
 from django.utils.html import format_html
 from django_tables2.utils import A
 
-from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
 from apis_core.apis_metainfo.tables import (
     generic_order_start_date_written,
@@ -605,52 +604,3 @@ class EntityUriTable(tables.Table):
             "class": "table table-hover table-striped table-condensed",
             "id": "PURI_conn",
         }
-
-
-# TODO RDF: Check if this should be removed or adapted
-class LabelTableBase(tables.Table):
-
-    label2 = tables.TemplateColumn(template_name="apis_relations/labels_label.html")
-
-    # reuse the logic for ordering and rendering *_date_written
-    # Important: The names of these class variables must correspond to the column field name,
-    # e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written
-    order_start_date_written = generic_order_start_date_written
-    order_end_date_written = generic_order_end_date_written
-    render_start_date_written = generic_render_start_date_written
-    render_end_date_written = generic_render_end_date_written
-
-    class Meta:
-
-        empty_text = empty_text_default
-        model = Label
-
-        # Note that as the next attribute 'sequence' builds on this list 'fields', the order defined within this list
-        # will be reused for the tuple 'sequence'. So if the order needs to be changed, better do it here in the list 'fields'.
-        fields = [
-            "start_date_written",
-            "end_date_written",
-            "label_type",
-            "isoCode_639_3",
-        ]
-        sequence = ("label2",) + tuple(fields)
-
-        # add class="paleblue" to <table> tag
-        attrs = {
-            "class": "table table-hover table-striped table-condensed",
-            "id": "PL_conn",
-        }
-
-
-# TODO RDF: Check if this should be removed or adapted
-class LabelTableEdit(LabelTableBase):
-    """
-    Reuse most of the base table class for labels. Only addition is editing functionality.
-    """
-
-    edit = tables.TemplateColumn(
-        template_name="apis_relations/edit_button_persLabel_ajax_form.html"
-    )
-
-    class Meta(LabelTableBase.Meta):
-        sequence = LabelTableBase.Meta.sequence + ("edit",)

@@ -119,19 +119,6 @@
                       </tr>
                     {% endfor %}
 
-                    {% if no_merge_labels %}
-                      <tr>
-                        <th>Labels</th>
-                        <td>
-                          {% for x in no_merge_labels %}
-                            <li>
-                              <small>{{ x.label_type }}:</small>{{ x.label }}
-                            </li>
-                          {% endfor %}
-                        </td>
-                      </tr>
-                    {% endif %}
-
                     {% if object.kind %}
                       <tr>
                         <th>Type</th>

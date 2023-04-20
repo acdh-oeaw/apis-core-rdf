@@ -97,7 +97,6 @@ def get_entities_form(entity):
                             "apis_metainfo",
                             "apis_relations",
                             "apis_vocabularies",
-                            "apis_labels",
                         ],
                         model=model_uri,
                     )
