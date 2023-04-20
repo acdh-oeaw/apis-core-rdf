@@ -1,4 +1,5 @@
 import logging
+import copy
 
 from collections import OrderedDict
 
@@ -67,11 +68,11 @@ class GenericEntityListFilter(django_filters.FilterSet):
         # call super init foremost to create dictionary of filters which will be processed further below
         super().__init__(*args, **kwargs)
         self.entity_class = self.Meta.model
-        self.filters = self.set_sort_filters(self.filters)
+        self.filters = self.set_and_sort_filters(self.filters)
 
-    def set_sort_filters(self, default_filters):
+    def set_and_sort_filters(self, filters):
         """
-        Check for existence of "list_filters" setting for an entity class
+        Check for existence of "list_filters" setting for an entity
         and return an ordered dictionary containing filters for
         applicable fields plus pre-set filters defined for all entities
         (in GenericEntityListFilter's Meta class).
@@ -84,19 +85,10 @@ class GenericEntityListFilter(django_filters.FilterSet):
         :return: ordered dictionary with tuples of field names
                  and filters defined for them
         """
-        field_filters = OrderedDict()
-
-        fields = []
-        if settings.APIS_ENTITIES:
-            entity_settings = settings.APIS_ENTITIES.get(self.entity_class.__name__, {})
-            fields = entity_settings.get("list_filters", [])
-            if fields == ["name", "related_entity_name", "related_property_name"]:
-                # for AbstractEntity, certain fields are defined to be filterable by default;
-                # ignore these for the purpose of sorting field names for filtering
-                fields = []
+        sorted_filters = OrderedDict()
 
         # fields by which entity lists should not be filterable
-        ignore_fields = [
+        list_filters_exclude = [
             "self_contenttype",
             "review",
             "start_date",
@@ -111,74 +103,49 @@ class GenericEntityListFilter(django_filters.FilterSet):
             "status",
             "references",
         ]
+        list_filters = []
+        if settings.APIS_ENTITIES:
+            entity_settings = settings.APIS_ENTITIES.get(self.entity_class.__name__, {})
+            list_filters = entity_settings.get("list_filters", {})
+            list_filters_exclude.extend(entity_settings.get("list_filters_exclude", []))
 
-        for f in fields:
-            if type(f) == str and f in default_filters:
-                field_filters[f] = default_filters[f]
-            elif type(f) == dict:
-                field_name = list(f)[0]
+        # The `list_filters` setting of an entity defines both the order of filters and it allows to define additional filters
+        # A filter is defined by a name and a dict describing its attributes
+        # If the name refers to an existing filter, the attributes are used to update that filter
+        # If the name does *not* refer to an existing field, then a new filter is created based on the `filter` key
+        # The attributes and filters are the ones listed in https://django-filter.readthedocs.io/en/stable/ref/filters.html
+        for filter_name in list_filters:
+            filter_definition = list_filters[filter_name]
+            if filter_name in filters:
+                sorted_filters[filter_name] = filters.pop(filter_name)
+                if isinstance(filter_definition, dict):
+                    for key, value in filter_definition.items():
+                        setattr(sorted_filters[filter_name], key, value)
+            elif (
+                isinstance(filter_definition, dict)
+                and "filter" in filter_definition.keys()
+            ):
+                attrs = {
+                    x: filter_definition[x] for x in filter_definition if x != "filter"
+                }
+                f = getattr(django_filters, filter_definition["filter"])(**attrs)
+                sorted_filters[filter_name] = f
 
-                if field_name in default_filters:
-                    filter_settings = f[field_name]
+        unused_filters = set(list_filters.keys()) ^ set(sorted_filters.keys())
+        for unused_filter in unused_filters:
+            logging.error(
+                "Unusable filter in setting for %s.%s: %s",
+                self.entity_class.__module__,
+                self.entity_class.__name__,
+                unused_filter,
+            )
 
-                    if "method" in filter_settings:
-                        default_filters[field_name].method = filter_settings["method"]
+        if "__defaults__" not in list_filters_exclude:
+            for f_name, f_filter in filters.items():
+                if f_name not in list_filters_exclude:
+                    sorted_filters[f_name] = f_filter
 
-                    if "label" in filter_settings:
-                        default_filters[field_name].label = filter_settings["label"]
-
-                    field_filters[field_name] = default_filters[field_name]
-            else:
-                logging.error(
-                    "Unusable filter - should be name of a default filter or a dict, got %s",
-                    f,
-                )
-
-        for f_name, f_filter in default_filters.items():
-            if f_name not in ignore_fields and f_name not in field_filters:
-                field_filters[f_name] = f_filter
-
-        return field_filters
-
-        # TODO RDF: Check if this should be removed or adapted
-        #
-        # enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__]["list_filters"]
-        #
-        # filter_dict_tmp = {}
-        #
-        # for enabled_filter in enabled_filters:
-        #
-        #     if type(enabled_filter) == str and enabled_filter in default_filter_dict:
-        #         # If string then just use it, if a filter with such a name is already defined
-        #
-        #         filter_dict_tmp[enabled_filter] = default_filter_dict[enabled_filter]
-        #
-        #
-        #     elif type(enabled_filter) == dict:
-        #         # if a dictionary, then look further into if there is a method or label which overrides the defaults
-        #
-        #         enabled_filter_key = list(enabled_filter.keys())[0]
-        #
-        #         if enabled_filter_key in default_filter_dict:
-        #
-        #             # get the dictionary which contains potential method or label overrides
-        #             enabled_filter_settings_dict = enabled_filter[enabled_filter_key]
-        #
-        #             if "method" in enabled_filter_settings_dict:
-        #                 default_filter_dict[enabled_filter_key].method = enabled_filter_settings_dict["method"]
-        #
-        #             if "label" in enabled_filter_settings_dict:
-        #                 default_filter_dict[enabled_filter_key].label = enabled_filter_settings_dict["label"]
-        #
-        #             filter_dict_tmp[enabled_filter_key] = default_filter_dict[enabled_filter_key]
-        #
-        #     else:
-        #         raise ValueError(
-        #             "Expected either str or dict as type for an individual filter in the settings file."
-        #             f"\nGot instead: {type(enabled_filter)}"
-        #          )
-        #
-        # return filter_dict_tmp
+        return sorted_filters
 
     def construct_lookup(self, value):
         """
