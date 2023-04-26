@@ -36,8 +36,11 @@ jobs:
          poetry config virtualenvs.create false
          poetry lock
          poetry install --with docs
+         sudo apt install graphviz pylint
      - name: Build docs
-       run: make -C "$GITHUB_WORKSPACE/apis-core-rdf/docs" html
+       run: |
+         pyreverse -o svg --colorized -d "$GITHUB_WORKSPACE/apis-core-rdf/docs/source/img/" "$GITHUB_WORKSPACE/apis-core-rdf/apis_core/"
+         make -C "$GITHUB_WORKSPACE/apis-core-rdf/docs" html
      - uses: actions/checkout@v3
        with:
          path: apis-core-rdf-pages
