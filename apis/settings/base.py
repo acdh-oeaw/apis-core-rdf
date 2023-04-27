@@ -617,3 +617,4 @@ APIS_OSD_JS = (
 APIS_OSD_IMG_PREFIX = (
     "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.0/images/"
 )
+BASE_TEMPLATE = "webpage/base.html"
