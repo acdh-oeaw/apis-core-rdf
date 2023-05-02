@@ -116,7 +116,8 @@
                                 </div>
                             {% endif %}
                         {% endwith %}
-                        {% block table %}
+                        <div class="table-responsive">
+                          {% block table %}
     {% if enable_merge and user.is_authenticated %}
         <form action="{% url 'apis_core:apis_entities:merge_objects' %}" method="POST">
             {% csrf_token %}
@@ -179,7 +180,8 @@
             <input type="submit" value="merge" />
         {% endif %}
     </form>
-                        {% endblock table %}
+                          {% endblock table %}
+                        </div>
                         {% block pagination.allpages %}
                             <div>
                                 {% with table.page.object_list|length as count %}
