@@ -178,15 +178,18 @@ APIS_ENTITIES
             "form_order": ["name", "kind", "lat", "lng", "status", "collection"],
             "table_fields": ["name"],
             "additional_cols": ["id", "lat", "lng", "part_of"],
-            "list_filters": [
-                {"name": {"method": "name_label_filter"}},
-                {"collection": {"label": "Collection"}},
-                {"kind": {"label": "Kind of Place"}},
-                "related_entity_name",
-                "related_relationtype_name",
-                "lat",
-                "lng",
-            ],
+            "list_filters": {
+                "name": {"method": "name_label_filter"},
+                "collection": {"label": "Collection"},
+                "kind": {"label": "Kind of Place"},
+                "age": {}, # don't change the filter, but put it after `kind` in the final output
+                "custom_filter": {
+                    "filter": "CharFilter",
+                    "lookup_expr": "contains",
+                    "field_name": "name"
+                },
+            },
+            "list_filters_exclude": ["lat", "lng", "status"],
         },}
 
 ``APIS_ENTITIES`` is the setting to define the behavior of the entities list views. Every entity has its own setting.
@@ -197,16 +200,22 @@ allows to merge several entities in one target entity at once.
 ``form_order`` defines the order of the fields in the metadata form of the respective entity.
 ``table_fields`` sets the default columns to show in the list views.
 ``additional_cols`` allows to set the columns that user can add to the result view.
-``list_filters`` is an array of dictionaries/strings that sets the filters for the list view of the entity. If only the name 
-of the filter is added, reasonable defaults will be used. If you want to configure the filter a bit more you can add a dictionary:
 
-.. code-block:: python
+``list_filters``
+^^^^^^^^^^^^^^^^
 
-    {'NAME_OF_THE_ATTRIBUTE': {'method': 'FILTER_METHOD_TO_BE_USED', 'label': 'LABEL'}}
+``list_filters`` is a dictionary of configured filters for the list view. The default filters are generated based on the fields of an entity.
+But you can override a generated filter or add additional filters. Overriding a filter is done by adding an entry to the dict
+with the key being the name of a generated filter (usually that's identical to the name of the field it refers to).
+If the entry does **not** refer to the name of a generated filter, you are creating a new filter and you have
+to define the filter type using the ``filter`` keyword being one of `the ones defined in the django-filters documentation <https://django-filter.readthedocs.io/en/stable/ref/filters.html#filters>`_.
 
-One of the possible methods is for example the ``name_label_filter``. This filter not only searches in the attribute specified, but 
-also in ``apis_labels``. The type of labels to be search can be specified in another setting: :ref:`APIS_ALTERNATE_NAMES`. The ``label`` 
-setting can be used to set the label of the filter form.
+The attributes of the ``list_filter`` dict items can be `attributes listed in the django-filters documentation <https://django-filter.readthedocs.io/en/stable/ref/filters.html>`_.
+
+The view shows all the filters, first the ones changed or created in the ``list_filters`` dict, then the rest of the automatically generated ones.
+Using the ``list_filters_exclude`` setting it is possible to list the names of the fields that should **not** be part of the list views filter form.
+This does *not* override filters that are defined in the ``list_filters`` settings. If they should not be displayed, they should be removed from ``list_filters``.
+Using the keyword ``__defaults__`` excludes all the filters that are not explicitly defined in the ``list_filters`` setting.
 
 
 APIS_API_EXCLUDE_SETS
