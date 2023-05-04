@@ -213,6 +213,7 @@ If the entry does **not** refer to the name of a generated filter, you are creat
 to define the filter type using the ``filter`` keyword being one of `the ones defined in the django-filters documentation <https://django-filter.readthedocs.io/en/stable/ref/filters.html#filters>`_.
 
 The attributes of the ``list_filter`` dict items can be `attributes listed in the django-filters documentation <https://django-filter.readthedocs.io/en/stable/ref/filters.html>`_.
+The :py:mod:`apis_core.utils.filtermethods` module contains some functions that can be used as ``method`` for the filters.
 
 The view shows all the filters, first the ones changed or created in the ``list_filters`` dict, then the rest of the automatically generated ones.
 Using the ``list_filters_exclude`` setting it is possible to list the names of the fields that should **not** be part of the list views filter form.
