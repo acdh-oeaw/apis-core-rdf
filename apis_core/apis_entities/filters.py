@@ -11,6 +11,11 @@ from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.utils import caching
 from apis_core.utils.settings import get_entity_settings_by_modelname
+from apis_core.utils.filtermethods import (
+    related_entity_name,
+    related_property_name,
+    name_label_filter,
+)
 
 # The following classes define the filter sets respective to their models.
 # Also by what was enabled in the global settings file (or disabled by not explicitley enabling it).
@@ -41,13 +46,11 @@ class GenericEntityListFilter(django_filters.FilterSet):
 
     fields_to_exclude = getattr(settings, "APIS_RELATIONS_FILTER_EXCLUDE", [])
 
-    # add default labels to form fields on frontend
-    name = django_filters.CharFilter(method="name_label_filter", label="Name or label")
     related_entity_name = django_filters.CharFilter(
-        method="related_entity_name_method", label="Related entity"
+        method=related_entity_name, label="Related entity"
     )
     related_property_name = django_filters.CharFilter(
-        method="related_property_name_method", label="Related property"
+        method=related_property_name, label="Related property"
     )
 
     collection = django_filters.ModelMultipleChoiceFilter(
@@ -145,147 +148,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
                     sorted_filters[f_name] = f_filter
 
         return sorted_filters
-
-    def construct_lookup(self, value):
-        """
-        Parses user input for wildcards and returns a tuple containing the interpreted django lookup string and the trimmed value
-        E.g.
-            'example' -> ('__icontains', 'example')
-            '*example' -> ('__iendswith', 'example')
-            'example*' -> ('__istartswith', 'example')
-            '"example"' -> ('__iexact', 'example')
-
-        :param value : str : text to be parsed for *
-        :return: (lookup : str, value : str)
-        """
-
-        if value.startswith("*") and not value.endswith("*"):
-            value = value[1:]
-            return "__iendswith", value
-
-        elif not value.startswith("*") and value.endswith("*"):
-            value = value[:-1]
-            return "__istartswith", value
-
-        elif value.startswith('"') and value.endswith('"'):
-            value = value[1:-1]
-            return "__iexact", value
-
-        else:
-            if value.startswith("*") and value.endswith("*"):
-                value = value[1:-1]
-            return "__icontains", value
-
-    def name_label_filter(self, queryset, name, value):
-        # TODO: include alternative names queries
-        lookup, value = self.construct_lookup(value)
-
-        queryset_related_label = queryset.filter(**{"label__label" + lookup: value})
-        queryset_self_name = queryset.filter(**{name + lookup: value})
-
-        return (queryset_related_label | queryset_self_name).distinct().all()
-
-    # TODO RDF: Check if this should be removed or adapted
-    def related_entity_name_method(self, queryset, name, value):
-        lookup, value = self.construct_lookup(value)
-
-        queryset = queryset.filter(
-            Q(**{f"triple_set_from_obj__subj__name{lookup}": value})
-            | Q(**{f"triple_set_from_subj__obj__name{lookup}": value})
-        ).distinct()
-
-        return queryset
-
-    def related_property_name_method(self, queryset, name, value):
-        # TODO RDF: Check if this should be removed or adapted_
-        #
-        # """
-        # Searches through the all name fields of all related relationtypes of a given queryset
-        #
-        # The following logic is almost identical to the one in method 'related_entity_name_method', so please look up its
-        # comments for documentational purpose therein.
-        #
-        # Differences are commented however.
-        #
-        # :param queryset: the queryset currently to be filtered on
-        # :param name: Here not used, because this method filters on names of related relationtypes
-        # :param value: The value to be filtered for, input by the user or a programmatic call
-        # :return: filtered queryset
-        # """
-        #
-        # lookup, value = self.construct_lookup(value)
-        #
-        # # look up through name and name_reverse of Property
-        # property_hit = (
-        #     Property.objects.filter(**{"name" + lookup: value}).values_list("pk", flat=True) |
-        #     Property.objects.filter(**{"name_reverse" + lookup: value}).values_list("pk", flat=True)
-        # ).distinct()
-        #
-        # related_relations_to_hit_list = []
-        #
-        # for relation_class in queryset.model.get_related_relation_classes():
-        #
-        #     related_entity_classA = relation_class.get_related_entity_classA()
-        #     related_entity_classB = relation_class.get_related_entity_classB()
-        #     related_entity_field_nameA = relation_class.get_related_entity_field_nameA()
-        #     related_entity_field_nameB = relation_class.get_related_entity_field_nameB()
-        #
-        #     if queryset.model == related_entity_classA:
-        #
-        #         # Only difference to method 'related_entity_name_method' is that the lookup is done on 'relation_type_id'
-        #         related_relations_to_hit_list.append(
-        #             relation_class.objects.filter(
-        #                 **{"relation_type_id__in": property_hit}
-        #             ).values_list(related_entity_field_nameA + "_id", flat=True)
-        #         )
-        #
-        #     if queryset.model == related_entity_classB:
-        #
-        #         # Only difference to method 'related_entity_name_method' is that the lookup is done on 'relation_type_id'
-        #         related_relations_to_hit_list.append(
-        #             relation_class.objects.filter(
-        #                 **{"relation_type_id__in": property_hit}
-        #             ).values_list(related_entity_field_nameB + "_id", flat=True)
-        #         )
-        #
-        #     if queryset.model != related_entity_classA and queryset.model != related_entity_classB:
-        #
-        #         raise ValueError("queryset model class has a wrong relation class associated!")
-        #
-        # queryset_filtered_list = [ queryset.filter(pk__in=related_relation) for related_relation in related_relations_to_hit_list ]
-        #
-        # result = reduce( lambda a,b : a | b, queryset_filtered_list).distinct()
-        #
-        # return result
-        #
-        # __after_rdf_refactoring__
-        lookup, value = self.construct_lookup(value)
-
-        queryset = queryset.filter(
-            Q(**{f"triple_set_from_obj__prop__name{lookup}": value})
-            | Q(**{f"triple_set_from_obj__prop__name_reverse{lookup}": value})
-            | Q(**{f"triple_set_from_subj__prop__name{lookup}": value})
-            | Q(**{f"triple_set_from_subj__prop__name_reverse{lookup}": value})
-        ).distinct()
-
-        return queryset
-
-    def related_arbitrary_model_name(self, queryset, name, value):
-        """
-        Searches through an arbitrarily related model on its name field.
-
-        Note that this works only if
-            * the related model has a field 'name'
-            * the filter using this method has the same name as the field of the model on which the filter is applied.
-                (E.g. the field 'profession' on a person relates to another model: the professiontype. Here the filter on a person
-                must also be called 'profession' as the field 'profession' exists within the person model and is then used to search in.
-                Using this example of professions, such a lookup would be generated: Person.objects.filter(profession__name__... ) )
-        """
-
-        lookup, value = self.construct_lookup(value)
-
-        # name variable is the name of the filter and needs the corresponding field within the model
-        return queryset.filter(**{name + "__name" + lookup: value})
 
 
 #######################################################################
