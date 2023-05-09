@@ -18,9 +18,10 @@ from apis_core.utils.utils import access_for_all
 from .views import get_highlighted_texts
 from apis_core.apis_relations.models import TempTriple
 from apis_core.utils import caching
+from apis_core.apis_entities.mixins import EntityInstanceMixin
 
 
-class GenericEntitiesDetailView(UserPassesTestMixin, View):
+class GenericEntitiesDetailView(UserPassesTestMixin, EntityInstanceMixin, View):
 
     login_url = "/accounts/login/"
 
@@ -30,14 +31,13 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        entity = kwargs["entity"].lower()
-        pk = kwargs["pk"]
-        entity_model = caching.get_entity_class_of_name(entity)
-        instance = get_object_or_404(entity_model, pk=pk)
+        entity = self.entity.lower()
         side_bar = []
 
         triples_related_all = (
-            TempTriple.objects_inheritance.filter(Q(subj__pk=pk) | Q(obj__pk=pk))
+            TempTriple.objects_inheritance.filter(
+                Q(subj__pk=self.pk) | Q(obj__pk=self.pk)
+            )
             .all()
             .select_subclasses()
         )
@@ -49,13 +49,13 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             other_entity_class_name = entity_class.__name__.lower()
 
             triples_related_by_entity = triples_related_all.filter(
-                (Q(subj__self_contenttype=entity_content_type) & Q(obj__pk=pk))
-                | (Q(obj__self_contenttype=entity_content_type) & Q(subj__pk=pk))
+                (Q(subj__self_contenttype=entity_content_type) & Q(obj__pk=self.pk))
+                | (Q(obj__self_contenttype=entity_content_type) & Q(subj__pk=self.pk))
             )
 
             table = get_generic_triple_table(
                 other_entity_class_name=other_entity_class_name,
-                entity_pk_self=pk,
+                entity_pk_self=self.pk,
                 detail=True,
             )
 
@@ -75,9 +75,9 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             )
 
         # TODO RDF : Check / Adapt the following code to rdf architecture
-        object_lod = Uri.objects.filter(root_object=instance)
-        object_texts, ann_proj_form = get_highlighted_texts(request, instance)
-        object_labels = Label.objects.filter(temp_entity=instance)
+        object_lod = Uri.objects.filter(root_object=self.instance)
+        object_texts, ann_proj_form = get_highlighted_texts(request, self.instance)
+        object_labels = Label.objects.filter(temp_entity=self.instance)
         tb_label = LabelTableBase(data=object_labels, prefix=entity.title()[:2] + "L-")
         tb_label_open = request.GET.get("PL-page", None)
         side_bar.append(("Label", tb_label, "PersonLabel", tb_label_open))
@@ -90,7 +90,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         )
         tei = getattr(settings, "APIS_TEI_TEXTS", [])
         if tei:
-            tei = set(tei) & set([x.kind.name for x in instance.text.all()])
+            tei = set(tei) & set([x.kind.name for x in self.instance.text.all()])
         ceteicean_css = getattr(settings, "APIS_CETEICEAN_CSS", None)
         ceteicean_js = getattr(settings, "APIS_CETEICEAN_JS", None)
         openseadragon_js = getattr(settings, "APIS_OSD_JS", None)
@@ -98,7 +98,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         iiif_field = getattr(settings, "APIS_IIIF_WORK_KIND", None)
         if iiif_field:
             try:
-                if "{}".format(instance.kind) == "{}".format(iiif_field):
+                if "{}".format(self.instance.kind) == "{}".format(iiif_field):
                     iiif = True
                 else:
                     iiif = False
@@ -107,7 +107,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
         else:
             iiif = False
         iiif_server = getattr(settings, "APIS_IIIF_SERVER", None)
-        iiif_info_json = instance.name
+        iiif_info_json = self.instance.name
         try:
             no_merge_labels = [
                 x for x in object_labels if not x.label_type.name.startswith("Legacy")
@@ -151,14 +151,14 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
 
             return list_key_val_pairs
 
-        relvant_fields = get_relevant_fields(instance)
+        relvant_fields = get_relevant_fields(self.instance)
 
         return HttpResponse(
             template.render(
                 request=request,
                 context={
                     "entity_type": entity,
-                    "object": instance,
+                    "object": self.instance,
                     "relvant_fields": relvant_fields,
                     "right_card": side_bar,
                     "no_merge_labels": no_merge_labels,
