@@ -1,0 +1,16 @@
+{% extends basetemplate %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            {% block objectType %} {% endblock %}
+	    {% include "gnd_autocomplete_form.html" %}
+	</div>
+        <div class="card-body">
+             {% crispy form %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
