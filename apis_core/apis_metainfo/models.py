@@ -18,10 +18,12 @@ from django.forms import model_to_dict
 from django.urls import reverse
 from django.utils.functional import cached_property
 from model_utils.managers import InheritanceManager
+from apis_core.utils.normalize import clean_uri
+from django.core.exceptions import ValidationError, ImproperlyConfigured
 
 # from django.contrib.contenttypes.fields import GenericRelation
 # from utils.highlighter import highlight_text
-from apis_core.utils import caching
+from apis_core.utils import caching, rdf
 
 from apis_core.apis_metainfo import signals
 
@@ -378,6 +380,23 @@ class InheritanceForeignKey(models.ForeignKey):
     forward_related_accessor_class = InheritanceForwardManyToOneDescriptor
 
 
+# Uri model
+# We use a custom UriManager, so we can override the queryset `get_or_create`
+# method. This is useful because we normalize the uri field before saving.
+
+
+class UriQuerySet(models.query.QuerySet):
+    def get_or_create(self, defaults=None, **kwargs):
+        if "uri" in kwargs:
+            kwargs["uri"] = clean_uri(kwargs["uri"])
+        return super().get_or_create(defaults, **kwargs)
+
+
+class UriManager(models.Manager):
+    def get_queryset(self):
+        return UriQuerySet(self.model)
+
+
 @reversion.register()
 class Uri(models.Model):
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
@@ -390,6 +409,8 @@ class Uri(models.Model):
     loaded = models.BooleanField(default=False)
     # Timestamp when file was loaded and parsed
     loaded_time = models.DateTimeField(blank=True, null=True)
+
+    objects = UriManager()
 
     def __str__(self):
         return str(self.uri)
@@ -421,6 +442,28 @@ class Uri(models.Model):
 
     def get_edit_url(self):
         return reverse("apis_core:apis_metainfo:uri_edit", kwargs={"pk": self.id})
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self):
+        self.uri = clean_uri(self.uri)
+        if self.uri and not hasattr(self, "root_object"):
+            try:
+                model, attributes = rdf.get_modelname_and_dict_from_uri(self.uri)
+                if model and attributes:
+                    app_label, model = model.split(".", 1)
+                    ct = ContentType.objects.get_by_natural_key(app_label, model)
+                    obj = ct.model_class()(**attributes)
+                    obj.save()
+                    self.root_object = obj
+                else:
+                    raise ImproperlyConfigured(
+                        f"{uri}: found model <{model}> and attributes <{attributes}>"
+                    )
+            except Exception as e:
+                raise ValidationError(f"{e}: {self.uri}")
 
 
 @reversion.register()
