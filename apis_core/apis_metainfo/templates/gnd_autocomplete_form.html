@@ -1,0 +1,47 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<style>
+.ui-autocomplete {
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	float: left;
+	display: none;
+	min-width: 160px;
+	padding: 4px 0;
+	margin: 2px 0 0 0;
+	list-style: none;
+	background-color: #ffffff;
+	border-color: #ccc;
+	border-style: solid;
+	border-width: 1px;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	z-index: 100 !important;
+}
+</style>
+Search in GND:
+<input class="search-gnd ui-autocomplete-input" type="text" style="width:350px" autocomplete="off" placeholder="Search...">
+<script>
+// This is copied from https://lobid.org/gnd/api
+$('input.search-gnd').autocomplete({
+  source : function(request, response) {
+    $.ajax({
+      //  use full URL in your code, i.e. http://lobid.org/gnd/search
+      url : "https://lobid.org/gnd/search",
+      dataType : "jsonp",
+      data : {
+        q : request.term,
+        format : "json:preferredName,professionOrOccupation"
+      },
+      success : function(data) {
+        response(data);
+      }
+    });
+  },
+  select: function(event, ui) {
+    $('#{{ selectdestination|default:"id_uri" }}').val(ui.item.id);
+  }
+});
+</script>

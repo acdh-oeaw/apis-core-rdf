@@ -10,4 +10,5 @@ urlpatterns = [
     path("uri/create/", views.UriCreate.as_view(), name="uri_create"),
     path("uri/edit/<int:pk>", views.UriUpdate.as_view(), name="uri_edit"),
     path("uri/delete/<int:pk>", views.UriDelete.as_view(), name="uri_delete"),
+    path("uri/getorcreate/", views.UriGetOrCreate.as_view(), name="uri_get_or_create"),
 ]
