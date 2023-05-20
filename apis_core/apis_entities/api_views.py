@@ -18,7 +18,6 @@ from rest_framework.views import APIView
 
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_metainfo.models import Uri
-from apis_core.utils.RDFParser import RDFParser
 from .api_renderers import (
     EntityToTEI,
     EntityToCIDOCXML,
@@ -395,8 +394,9 @@ class GetOrCreateEntity(APIView):
     def get(self, request):
         entity = request.query_params.get("entity2", None)
         uri = request.query_params.get("uri", None)
-        if uri.startswith("http:"):
-            ent = RDFParser(uri, entity.title()).get_or_create()
+        if uri and uri.startswith(("http:", "https:")):
+            u, _ = Uri.objects.get_or_create(uri=uri)
+            ent = u.root_object
         else:
             r1 = re.search(r"^[^<]+", uri)
             r2 = re.search(r"<([^>]+)>", uri)
