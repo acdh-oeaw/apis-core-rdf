@@ -15,7 +15,6 @@ from django.urls import reverse
 from apis_core.apis_metainfo.models import Text, Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
 from apis_core.utils import DateParser, caching
-from apis_core.utils.RDFParser import RDFParser
 from .fields import ListSelect2, Select2Multiple
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
@@ -230,10 +229,8 @@ def get_entities_form(entity):
 
 class GenericEntitiesStanbolForm(forms.Form):
     def save(self, *args, **kwargs):
-        cd = self.cleaned_data
-        entity = RDFParser(
-            cd["entity"], self.entity.title(), app_label_entities="apis_ontology"
-        ).get_or_create()
+        uri = self.cleaned_data["entity"]
+        entity, _ = Uri.objects.get_or_create(uri=uri)
         return entity
 
     def __init__(self, entity, *args, **kwargs):
