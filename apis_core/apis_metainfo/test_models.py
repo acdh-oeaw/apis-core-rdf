@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 
-from .models import RootObject, Source, Uri, UriCandidate
+from .models import RootObject, Source, Uri
 
 
 class ModelTestCase(TestCase):
@@ -33,7 +33,3 @@ class ModelTestCase(TestCase):
     def test_uri(self):
         ufoo = Uri.objects.create()
         self.assertEquals(str(ufoo), "None")
-
-    def test_uri_candidate(self):
-        ufoo = UriCandidate.objects.create()
-        self.assertEquals(str(ufoo), "UriCandidate object (1)")

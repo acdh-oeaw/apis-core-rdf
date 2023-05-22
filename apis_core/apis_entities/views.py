@@ -15,7 +15,7 @@ from django_tables2.export.views import ExportMixin
 
 from apis_core.core.mixins import ListViewObjectFilterMixin
 
-from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
+from apis_core.apis_metainfo.models import Uri, Text
 from apis_core.utils.stanbolQueries import retrieve_obj
 from apis_core.utils.utils import (
     access_for_all,
@@ -341,10 +341,7 @@ def getGeoJson(request):
     pk_obj = request.GET.get("object_id")
     instance = get_object_or_404(Place, pk=pk_obj)
     uria = Uri.objects.filter(root_object=instance)
-    urib = UriCandidate.objects.filter(entity=instance)
-    if urib.count() > 0:
-        uric = urib
-    elif uria.count() > 0:
+    if uria.count() > 0:
         uric = uria
         add_info = ""
     lst_json = []
