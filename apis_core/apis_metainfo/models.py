@@ -23,6 +23,8 @@ from model_utils.managers import InheritanceManager
 # from utils.highlighter import highlight_text
 from apis_core.utils import caching
 
+from apis_core.apis_metainfo import signals
+
 # from apis_core.apis_entities.serializers_generic import EntitySerializer
 # from apis_core.apis_labels.models import Label
 # from apis_core.apis_vocabularies.models import CollectionType, LabelType, TextType
@@ -69,6 +71,8 @@ class RootObject(models.Model):
             return "no name provided"
 
     def duplicate(self):
+        origin = self.__class__
+        signals.pre_duplicate.send(sender=origin, instance=self)
         # usually, copying instances would work like
         # https://docs.djangoproject.com/en/4.2/topics/db/queries/#copying-model-instances
         # but we are working with abstract classes,
@@ -124,7 +128,9 @@ class RootObject(models.Model):
                 values = getattr(self, field.name).all()
                 objfield.set(values)
 
-        return newobj.save()
+        duplicate = newobj.save()
+        signals.post_duplicate.send(sender=origin, instance=self, duplicate=duplicate)
+        return duplicate
 
 
 @reversion.register()
