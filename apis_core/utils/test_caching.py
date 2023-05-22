@@ -9,7 +9,6 @@ all_class_modules_and_names = {
         "Source",
         "Text",
         "Uri",
-        "UriCandidate",
     ],
     "apis_vocabularies": [
         "CollectionType",

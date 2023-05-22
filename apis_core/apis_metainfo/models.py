@@ -438,40 +438,6 @@ class Uri(models.Model):
                 raise ValidationError(f"{e}: {self.uri}")
 
 
-@reversion.register()
-class UriCandidate(models.Model):
-    """Used to store the URI candidates for automatically generated entities."""
-
-    uri = models.URLField()
-    confidence = models.FloatField(blank=True, null=True)
-    responsible = models.CharField(max_length=255)
-    root_object = models.ForeignKey(
-        RootObject, blank=True, null=True, on_delete=models.CASCADE
-    )
-
-    @cached_property
-    def description(self):
-        headers = {"accept": "application/json"}
-        cn = self.TempEntityClass.objects_inheritance.get_subclass(
-            id=self.entity_id
-        ).__class__.__name__
-        for endp in autocomp_settings[cn.title()]:
-            url = re.sub(r"/[a-z]+$", "/entity", endp["url"])
-            params = {"id": self.uri}
-            res = requests.get(url, params=params, headers=headers)
-            if res.status_code == 200:
-                if endp["fields"]["descr"][0] in res.json()["representation"].keys():
-                    desc = res.json()["representation"][endp["fields"]["descr"][0]][0][
-                        "value"
-                    ]
-                else:
-                    desc = "undefined"
-                label = res.json()["representation"][endp["fields"]["name"][0]][0][
-                    "value"
-                ]
-                return (label, desc)
-
-
 # @receiver(post_save, sender=Uri, dispatch_uid="remove_default_uri")
 # def remove_default_uri(sender, instance, **kwargs):
 #    if Uri.objects.filter(root_object=instance.entity).count() > 1:
