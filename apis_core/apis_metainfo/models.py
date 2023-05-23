@@ -45,6 +45,7 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.models import Annotation
 
 
+@reversion.register()
 class RootObject(models.Model):
     """
     The very root thing that can exist in a given ontology. Several classes inherit from it.
