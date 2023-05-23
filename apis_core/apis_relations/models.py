@@ -49,7 +49,7 @@ class BaseRelationManager(models.Manager):
             return self.get_queryset()
 
 
-@reversion.register(follow=["vocabsbaseclass_ptr"])
+@reversion.register(follow=["rootobject_ptr"])
 class Property(RootObject):
     class Meta:
         verbose_name_plural = "Properties"
