@@ -38,6 +38,7 @@
               <small>{{ entity_type }}s</small>
             {% endif %}
             {{ object }}
+            {% block object-actions %}
             {% if user.is_authenticated %}
               {% if object.get_edit_url %}
                   <a href="{{ object.get_edit_url }}">
@@ -66,6 +67,8 @@
                   </a>
               {% endif %}
             {% endif %}
+            {% endblock object-actions %}
+            {% block object-actions-extra %}{% endblock object-actions-extra %}
           </h2>
         </div>
       <div class="col-md-2">
