@@ -66,7 +66,7 @@ class AbstractEntity(RootObject):
         return None
 
 
-@reversion.register()
+@reversion.register(follow=["rootobject_ptr"])
 class TempEntityClass(AbstractEntity):
     """
     Base class to bind common attributes to many classes.
@@ -131,7 +131,6 @@ class TempEntityClass(AbstractEntity):
         """
 
         if parse_dates:
-
             # overwrite every field with None as default
             start_date = None
             start_start_date = None
@@ -406,20 +405,25 @@ def prepare_fields_dict(fields_list, vocabs, vocabs_m2m):
 
 
 @receiver(post_save, dispatch_uid="create_default_uri")
-def create_default_uri(sender, instance, **kwargs):
-    from apis_core.apis_metainfo.models import Uri
+def create_default_uri(sender, instance, raw, **kwargs):
+    # with django reversion, browsing deleted entries in the admin interface
+    # leads to firing the `post_save` signal
+    # (https://github.com/etianen/django-reversion/issues/936) - a workaround
+    # is to check for the raw argument
+    if not raw:
+        from apis_core.apis_metainfo.models import Uri
 
-    if kwargs["created"] and sender in caching.get_all_ontology_classes():
-        if BASE_URI.endswith("/"):
-            base1 = BASE_URI[:-1]
-        else:
-            base1 = BASE_URI
-        uri_c = "{}{}".format(
-            base1,
-            reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
-        )
-        uri2 = Uri(uri=uri_c, domain="apis default", root_object=instance)
-        uri2.save()
+        if kwargs["created"] and sender in caching.get_all_ontology_classes():
+            if BASE_URI.endswith("/"):
+                base1 = BASE_URI[:-1]
+            else:
+                base1 = BASE_URI
+            uri_c = "{}{}".format(
+                base1,
+                reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
+            )
+            uri2 = Uri(uri=uri_c, domain="apis default", root_object=instance)
+            uri2.save()
 
 
 if "registration" in getattr(settings, "INSTALLED_APPS", []):
