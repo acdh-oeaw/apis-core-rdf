@@ -316,12 +316,13 @@ def get_all_contenttype_classes():
                 if not cls_n.startswith("__") and "__module__" in list(
                     dir(getattr(m, cls_n))
                 ):
+                    mod = getattr(m, cls_n)
                     if (
-                        getattr(m, cls_n).__module__ in apis_modules
-                        and getattr(m, cls_n) not in lst_cont
+                        mod.__module__ in apis_modules
+                        and mod not in lst_cont
                         and cls_n.lower() not in models_exclude
-                        and inspect.isclass(getattr(m, cls_n))
-                        and getattr(m, cls_n)._meta.abstract is False
+                        and inspect.isclass(mod)
+                        and (hasattr(mod, "_meta") and mod._meta.abstract is False)
                     ):
                         lst_cont.append(getattr(m, cls_n))
         lst_cont.append(ContentType)
