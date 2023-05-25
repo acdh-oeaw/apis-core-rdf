@@ -10,6 +10,8 @@ from rest_framework import routers
 from apis_core.api_routers import load_additional_serializers
 from apis_core.api_routers import views
 
+from apis_core.apis_metainfo.views import Index
+
 # from apis_core.apis_entities.api_views import (
 #     NetJsonViewSet,
 #     PlaceGeoJsonViewSet,
@@ -127,7 +129,7 @@ def build_apis_mock_request(method, path, view, original_request, **kwargs):
 
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="base.html"), name="apis_index"),
+    path("", Index.as_view(), name="apis_index"),
     path("admin/", admin.site.urls),
     # url(r'^swagger(?P<format>\.json|\.yaml)$', SchemaViewSwagger.without_ui(cache_timeout=-1), name='schema-json'),
     # url(r'^swagger/$', SchemaViewSwagger.with_ui('swagger', cache_timeout=-1), name='schema-swagger-ui'),

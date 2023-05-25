@@ -1,0 +1,27 @@
+{% extends basetemplate %}
+
+{% block content %}
+<div class="container">
+	<div>
+	{% for ontology, entities in all_entities.items %}
+	<h1>Ontology: <i>{{ ontology }}</i></h1>
+	{% for entity, count in entities.items %}
+	<div class="card mt-3" style="width: 18rem; display: inline-block">
+		<div class="card-header">{{ entity }}</div>
+		<div class="card-body">{{ count }}</div>
+	</div>
+	{% endfor %}
+	{% endfor %}
+	</div>
+	<div id="logs" class="mt-4">
+		{% if logentries %}
+		<h1>What happened the last two weeks:</h1>
+		<ul>
+		{% for logentry in logentries %}
+		<li>{{ logentry.action_time }}: <b>{{ logentry.user }}</b> {{ logentry.get_change_message }} <i>{{ logentry.object_repr }}</i></li>
+		{% endfor %}
+		</ul>
+		{% endif %}
+	</div>
+</div>
+{% endblock content %}
