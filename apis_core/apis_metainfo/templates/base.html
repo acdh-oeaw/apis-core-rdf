@@ -86,25 +86,8 @@
             <div class="collapse navbar-collapse justify-content-end"
                  id="navbarNavDropdown">
               <ul id="main-menu" class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                  <a href="#"
-                     class="nav-link dropdown-toggle"
-                     data-toggle="dropdown"
-                     role="button"
-                     aria-haspopup="true"
-                     aria-expanded="false">About
-                    <span class="caret" />
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                    {% block about-dropdown-menu-items %}
-                    {% endblock about-dropdown-menu-items %}
-
-                  </div>
-                </li>
-                <!-- Wrap dropdown menus in custom blocks to allow override in Ontology -->
-
-                {% block custom_dropdown_menus %}
+                {% block main-menu %}
                   <li class="nav-item dropdown">
                     <a href="#"
                        class="nav-link dropdown-toggle"
@@ -140,7 +123,10 @@
                       {% endfor %}
                     </div>
                   </li>
-                {% endblock %}
+                {% endblock main-menu %}
+
+                {% block main-menu-extra %}
+                {% endblock main-menu-extra %}
 
               </ul>
               <!-- Start user login submenu -->
