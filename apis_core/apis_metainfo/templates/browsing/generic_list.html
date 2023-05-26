@@ -46,11 +46,6 @@
                         <!--Search mask-->
                         {% load django_tables2 crispy_forms_tags %}
                         <form action="." class="uniForm" method="get">
-                            {% if togglable_colums %}
-                                <legend>Select additional columns</legend>
-                                {% column_selector  %}
-                            {% endif %}
-                            <br/>
                             {% crispy filter.form filter.form.helper %}
                         </form>
                         {% block reset_button %}
@@ -99,23 +94,16 @@
             <div class="col-md-8" id="results">
                 <div class="card">
                     <div class="card-body">
-                        {% with table.paginator.count as total %}
-                        <legend>Result: {{ total }} items</legend>
-                            {% if conf_items %}
-                                <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle dropdown-custom" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        <i class="fas fa-download"></i>
-                                        Download
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a class="dropdown-item" href="{% querystring %}&sep=comma">"," separated</a></li>
-                                        <li><a class="dropdown-item" href="{% querystring %}&sep=semicolon">";" separated</a></li>
-                                        <li><a class="dropdown-item" href="{% querystring %}&sep=tab">"tab" separated</a></li>
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        {% endwith %}
+			<div class="row justify-content-center align-items-center">
+				<div class="col"><h4>Result: {{ table.paginator.count }} items</h4></div> 
+				<div class="col">
+                            	{% if togglable_colums %}
+				{% block column-selector %}
+				<form class="float-right" method="get">{% column_selector  %}<input type="submit" value="OK"></form>
+				{% endblock %}
+				{% endif %}
+				</div>
+			</div>
                         <div class="table-responsive">
                           {% block table %}
     {% if enable_merge and user.is_authenticated %}
