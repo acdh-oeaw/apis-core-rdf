@@ -114,7 +114,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         settings, "APIS_LIST_VIEW_TEMPLATE", "apis:apis_entities/generic_list.html"
     )
     login_url = "/accounts/login/"
-
+    print("class GenericListView New called")
     def __init__(self, *args, **kwargs):
         super(GenericListViewNew, self).__init__(*args, **kwargs)
         self.entity = None

@@ -71,7 +71,7 @@ def get_entities_table(entity, edit_v, default_cols):
 
         class Meta:
             model = caching.get_ontology_class_of_name(entity)
-            fields = default_cols
+            fields = ["detail"]+[default_cols]
             attrs = {"class": "table table-hover table-striped table-condensed"}
             # quick ensurance if column is indeed a field of this entity
             for col in default_cols:
@@ -83,6 +83,11 @@ def get_entities_table(entity, edit_v, default_cols):
                     )
 
         def __init__(self, *args, **kwargs):
+
+            self.base_columns["detail"] = tables.TemplateColumn(
+                template_name='apis_entities/tables_detail_button_tempalte.html'
+            )
+
             super().__init__(*args, **kwargs)
 
     return GenericEntitiesTable
