@@ -273,7 +273,7 @@ APIS_LIST_VIEW_TEMPLATE
 
 .. code-block:: python
     
-    APIS_LIST_VIEW_TEMPLATE = "browsing/generic_list.html"
+    APIS_LIST_VIEW_TEMPLATE = "generic_list.html"
 
 
 Sets the path of the list view template. This is only needed if you want to customize the appearance of the list views.

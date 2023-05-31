@@ -114,9 +114,7 @@ class GenericListViewNew(
     formhelper_class = GenericFilterFormHelper
     context_filter_name = "filter"
     paginate_by = 25
-    template_name = getattr(
-        settings, "APIS_LIST_VIEW_TEMPLATE", "apis_entities/generic_list.html"
-    )
+    template_name = getattr(settings, "APIS_LIST_VIEW_TEMPLATE", "generic_list.html")
 
     def __init__(self, *args, **kwargs):
         super(GenericListViewNew, self).__init__(*args, **kwargs)

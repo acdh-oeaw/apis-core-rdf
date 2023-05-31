@@ -14,9 +14,7 @@ class GenericRelationView(GenericListViewNew):
 
     context_filter_name = "filter"
     paginate_by = 25
-    template_name = getattr(
-        settings, "APIS_LIST_VIEW_TEMPLATE", "apis_entities/generic_list.html"
-    )
+    template_name = getattr(settings, "APIS_LIST_VIEW_TEMPLATE", "generic_list.html")
 
     def get_queryset(self, **kwargs):
         self.entity = self.kwargs.get("entity")
