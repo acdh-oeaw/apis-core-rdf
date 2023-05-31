@@ -261,15 +261,11 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
                 )
                 context = dict(context, **chartdata)
 
-        context["enable_merge"] = False
         toggleable_cols = []
         if hasattr(settings, "APIS_ENTITIES"):
             entity_settings = settings.APIS_ENTITIES.get(class_name, {})
-            context["enable_merge"] = entity_settings.get("merge", False)
             toggleable_cols = entity_settings.get("additional_cols", [])
 
-        if context["enable_merge"] and self.request.user.is_authenticated:
-            toggleable_cols = toggleable_cols + ["merge"]
         # TODO kk spelling of this dict key should get fixed throughout
         #  (togglable_colums -> toggleable_columns)
         context["togglable_colums"] = toggleable_cols + ENTITIES_DEFAULT_COLS

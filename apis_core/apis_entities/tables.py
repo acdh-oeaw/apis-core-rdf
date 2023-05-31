@@ -10,21 +10,6 @@ from apis_core.apis_metainfo.tables import (
 )
 from apis_core.utils import caching
 
-input_form = """
-  <input type="checkbox" name="keep" value="{}" title="keep this"/> |
-  <input type="checkbox" name="remove" value="{}" title="remove this"/>
-"""
-
-
-class MergeColumn(tables.Column):
-    """renders a column with to checkbox - used to select objects for merging"""
-
-    def __init__(self, *args, **kwargs):
-        super(MergeColumn, self).__init__(*args, **kwargs)
-
-    def render(self, value):
-        return mark_safe(input_form.format(value, value))
-
 
 def get_entities_table(entity, edit_v, default_cols):
     if default_cols is None:
@@ -64,8 +49,6 @@ def get_entities_table(entity, edit_v, default_cols):
             "xls",
             "xlsx",
         ]
-        if "merge" in default_cols:
-            merge = MergeColumn(verbose_name="keep | remove", accessor="pk")
         if "id" in default_cols:
             id = tables.LinkColumn()
 
