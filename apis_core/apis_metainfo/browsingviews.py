@@ -56,7 +56,7 @@ class GenericListView(django_tables2.SingleTableView):
     formhelper_class = None
     context_filter_name = "filter"
     paginate_by = 25
-    template_name = "browsing/generic_list.html"
+    template_name = getattr(settings, "APIS_LIST_VIEW_TEMPLATE", "generic_list.html")
     init_columns = []
 
     def get_table_class(self):

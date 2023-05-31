@@ -173,7 +173,7 @@ APIS_DETAILKJL_VIEWS_ALLOWED = True
 
 Change the template name in the project's settings file by adding the following variable
 
-`APIS_LIST_VIEW_TEMPLATE = "browsing/generic_list.html"`
+`APIS_LIST_VIEW_TEMPLATE = "generic_list.html"`
 `APIS_DELETE_VIEW_TEMPLATE = "webpage/confirm_delete.html"`
 
 ## TEI
