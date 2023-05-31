@@ -18,8 +18,6 @@ class GenericRelationView(GenericListViewNew):
         settings, "APIS_LIST_VIEW_TEMPLATE", "apis_entities/generic_list.html"
     )
     login_url = "/accounts/login/"
-    print("reached class")
-
     def get_queryset(self, **kwargs):
         self.entity = self.kwargs.get("entity")
         # qs = AbstractRelation.get_relation_class_of_name(self.entity).objects.all()
@@ -50,11 +48,9 @@ class GenericRelationView(GenericListViewNew):
         # self.table_class = get_generic_relation_listview_table(relation_name=relation_name)
         if self.entity == "property":
             self.table_class = PropertyTable
-            print("called Property table")
 
         else:
             self.table_class = TripleTable
-            print("called Triple table")
 
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(
