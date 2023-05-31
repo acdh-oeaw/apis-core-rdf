@@ -114,7 +114,6 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         settings, "APIS_LIST_VIEW_TEMPLATE", "apis:apis_entities/generic_list.html"
     )
     login_url = "/accounts/login/"
-    print("class GenericListView New called")
     def __init__(self, *args, **kwargs):
         super(GenericListViewNew, self).__init__(*args, **kwargs)
         self.entity = None
@@ -171,6 +170,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         else:
             edit_v = False
 
+        user_is_authenticated = self.request.user.is_authenticated
         selected_cols = self.request.GET.getlist(
             "columns"
         )  # populates "Select additional columns" dropdown
@@ -181,7 +181,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         default_cols = default_cols + selected_cols
 
         self.table_class = get_entities_table(
-            class_name, edit_v, default_cols=default_cols
+            class_name, edit_v, default_cols=default_cols, is_authenticated=user_is_authenticated
         )
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(

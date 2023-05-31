@@ -26,7 +26,7 @@ class MergeColumn(tables.Column):
         return mark_safe(input_form.format(value, value))
 
 
-def get_entities_table(entity, edit_v, default_cols):
+def get_entities_table(entity, edit_v, default_cols, is_authenticated=False):
     if default_cols is None:
         default_cols = [
             "name",
@@ -34,6 +34,7 @@ def get_entities_table(entity, edit_v, default_cols):
 
     class GenericEntitiesTable(tables.Table):
         def render_name(self, record, value):
+         
             if value == "":
                 return "(No name provided)"
             else:
@@ -71,7 +72,7 @@ def get_entities_table(entity, edit_v, default_cols):
 
         class Meta:
             model = caching.get_ontology_class_of_name(entity)
-            fields = ["detail"]+[default_cols]
+            fields = ["detail", "edit"] + default_cols if is_authenticated else ["detail"] + default_cols
             attrs = {"class": "table table-hover table-striped table-condensed"}
             # quick ensurance if column is indeed a field of this entity
             for col in default_cols:
@@ -85,8 +86,15 @@ def get_entities_table(entity, edit_v, default_cols):
         def __init__(self, *args, **kwargs):
 
             self.base_columns["detail"] = tables.TemplateColumn(
-                template_name='apis_entities/tables_detail_button_tempalte.html'
+                template_name='apis_entities/tables_detail_button_template.html',
+                extra_context={'entity_class':entity}
             )
+
+            if is_authenticated:
+                self.base_columns["edit"] = tables.TemplateColumn(
+                    template_name='apis_entities/tables_edit_button_template.html',
+                    extra_context={'entity_class':entity}
+                )
 
             super().__init__(*args, **kwargs)
 
