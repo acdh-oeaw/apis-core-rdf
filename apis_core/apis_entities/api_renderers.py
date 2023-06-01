@@ -12,7 +12,7 @@ from rdflib import plugin
 from rdflib.void import generateVoID
 from rest_framework import renderers
 
-from apis_core.apis_tei.tei import TeiEntCreator
+from apis_core.utils.renderers.tei import TeiRenderer
 from .api_mappings.cidoc_mapping import m_person, m_place, m_work, m_institution
 
 PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD", {})
@@ -24,14 +24,10 @@ if base_uri.endswith("/"):
 lang = getattr(settings, "LANGUAGE_CODE", "de")
 
 
-class EntityToTEI(renderers.BaseRenderer):
-
-    media_type = "text/xml"
-    format = "tei"
-
+class EntityToTEI(TeiRenderer):
     def render(self, data, media_type=None, renderer_context=None):
-        tei_doc = TeiEntCreator(data)
-        return tei_doc.serialize_full_doc()
+        self.template_name = f"apis_entities/tei/{data['entity_type']}.xml"
+        return super().render(data, media_type, renderer_context)
 
 
 class EntityToCIDOC(renderers.BaseRenderer):
