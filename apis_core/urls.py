@@ -141,7 +141,6 @@ urlpatterns = [
         name="redoc",
     ),
     path("labels/", include("apis_core.apis_labels.urls", namespace="apis_labels")),
-    path("tei/", include("apis_core.apis_tei.tei_urls", namespace="apis_tei")),
     path(
         "entities/", include("apis_core.apis_entities.urls", namespace="apis_entities")
     ),
