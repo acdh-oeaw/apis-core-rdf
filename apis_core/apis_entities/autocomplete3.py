@@ -19,6 +19,7 @@ from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.utils import caching
 from apis_core.utils.caching import get_autocomplete_property_choices
+from apis_core.utils.entities import get_entity_class_by_shortname
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
@@ -127,7 +128,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         ent_merge_pk = self.kwargs.get("ent_merge_pk", False)
         choices = []
         headers = {"Content-Type": "application/json"}
-        ent_model = caching.get_ontology_class_of_name(ac_type)
+        ent_model = get_entity_class_by_shortname(ac_type)
         ent_model_name = ent_model.__name__
 
         # inspect user search query

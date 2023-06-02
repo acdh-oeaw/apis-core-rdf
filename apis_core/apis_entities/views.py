@@ -28,6 +28,7 @@ from .forms import (
     GenericEntitiesStanbolForm,
 )
 from .tables import get_entities_table
+from apis_core.utils.entities import get_entity_class_by_shortname
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.forms import SelectAnnotationProject
@@ -124,9 +125,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         """
         Look up the model class for the given entity
         """
-        model = ContentType.objects.get(
-            app_label__startswith="apis_", model=self.entity
-        ).model_class()
+        model = ContentType.objects.get(model=self.entity).model_class()
 
         return model
 

@@ -14,7 +14,8 @@ from django.urls import reverse
 
 from apis_core.apis_metainfo.models import Text, Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
-from apis_core.utils import DateParser, caching
+from apis_core.utils import DateParser
+from apis_core.utils.entities import get_entity_class_by_shortname
 from .fields import ListSelect2, Select2Multiple
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
@@ -44,7 +45,7 @@ def get_entities_form(entity):
 
     class GenericEntitiesForm(forms.ModelForm):
         class Meta:
-            model = caching.get_entity_class_of_name(entity)
+            model = get_entity_class_by_shortname(entity)
 
             exclude = [
                 "start_date",

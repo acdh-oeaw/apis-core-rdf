@@ -10,6 +10,7 @@ from django.db.models import Q
 from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.utils import caching
+from apis_core.utils.entities import get_entity_class_by_shortname
 
 # The following classes define the filter sets respective to their models.
 # Also by what was enabled in the global settings file (or disabled by not explicitley enabling it).
@@ -384,7 +385,7 @@ def get_list_filter_of_entity(entity):
     :return: Entity specific FilterClass
     """
 
-    entity_class = caching.get_entity_class_of_name(entity)
+    entity_class = get_entity_class_by_shortname(entity)
     entity_list_filter_class = entity_class.get_entity_list_filter()
     if entity_list_filter_class is None:
 

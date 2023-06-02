@@ -9,6 +9,7 @@ from apis_core.apis_metainfo.tables import (
     generic_render_end_date_written,
 )
 from apis_core.utils import caching
+from apis_core.utils.entities import get_entity_class_by_shortname
 
 input_form = """
   <input type="checkbox" name="keep" value="{}" title="keep this"/> |
@@ -70,7 +71,7 @@ def get_entities_table(entity, edit_v, default_cols):
             id = tables.LinkColumn()
 
         class Meta:
-            model = caching.get_ontology_class_of_name(entity)
+            model = get_entity_class_by_shortname(entity)
             fields = default_cols
             attrs = {"class": "table table-hover table-striped table-condensed"}
             # quick ensurance if column is indeed a field of this entity

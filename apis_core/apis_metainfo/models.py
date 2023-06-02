@@ -31,12 +31,7 @@ from apis_core.apis_metainfo import signals
 # from apis_core.apis_labels.models import Label
 # from apis_core.apis_vocabularies.models import CollectionType, LabelType, TextType
 
-path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
-if path_ac_settings:
-    ac_settings = importlib.import_module(path_ac_settings)
-    autocomp_settings = getattr(ac_settings, "autocomp_settings")
-else:
-    from apis_core.default_settings.NER_settings import autocomp_settings
+from apis_core.default_settings.NER_settings import autocomp_settings
 # from apis_core.utils import DateParser
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)

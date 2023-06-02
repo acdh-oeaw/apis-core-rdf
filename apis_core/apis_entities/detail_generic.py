@@ -18,6 +18,7 @@ from apis_core.utils.utils import access_for_all
 from .views import get_highlighted_texts
 from apis_core.apis_relations.models import TempTriple
 from apis_core.utils import caching
+from apis_core.utils.entities import get_entity_class_by_shortname, get_all_entity_classes
 
 
 class GenericEntitiesDetailView(UserPassesTestMixin, View):
@@ -32,7 +33,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
 
         entity = kwargs["entity"].lower()
         pk = kwargs["pk"]
-        entity_model = caching.get_entity_class_of_name(entity)
+        entity_model = get_entity_class_by_shortname(entity)
         instance = get_object_or_404(entity_model, pk=pk)
         side_bar = []
 
@@ -42,7 +43,7 @@ class GenericEntitiesDetailView(UserPassesTestMixin, View):
             .select_subclasses()
         )
 
-        for entity_class in caching.get_all_entity_classes():
+        for entity_class in get_all_entity_classes():
 
             entity_content_type = ContentType.objects.get_for_model(entity_class)
 

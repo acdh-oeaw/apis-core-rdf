@@ -3,6 +3,7 @@ from operator import itemgetter
 from django.conf import settings
 
 from apis_core.utils import caching
+from apis_core.utils.entities import get_all_entity_classes
 
 
 def list_entities(request):
@@ -12,7 +13,7 @@ def list_entities(request):
 
     :return a dictionary of context items
     """
-    entities_classes = caching.get_all_entity_classes() or []
+    entities_classes = get_all_entity_classes()
     # create (uri, label) tuples for entities for use in templates
     entities_links = [
         (e.__name__.lower(), e._meta.verbose_name.title()) for e in entities_classes

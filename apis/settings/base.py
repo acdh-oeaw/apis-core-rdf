@@ -109,7 +109,7 @@ INSTALLED_APPS = [
     "guardian",
     "charts",
     "csvexport",
-    "apis_ontology",
+    #"apis_ontology",
 ]
 
 USE_X_FORWARDED_HOST = True
