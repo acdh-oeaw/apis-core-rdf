@@ -1,5 +1,4 @@
 import django_tables2 as tables
-from django.utils.safestring import mark_safe
 from apis_core.apis_metainfo.tables import (
     generic_order_start_date_written,
     generic_order_end_date_written,
@@ -7,24 +6,7 @@ from apis_core.apis_metainfo.tables import (
     generic_render_end_date_written,
 )
 from apis_core.utils import caching
-from collections import OrderedDict
-
-input_form = """
-  <input type="checkbox" name="keep" value="{}" title="keep this"/> |
-  <input type="checkbox" name="remove" value="{}" title="remove this"/>
-"""
-
-
-class MergeColumn(tables.Column):
-    """renders a column with to checkbox - used to select objects for merging"""
-
-    def __init__(self, *args, **kwargs):
-        super(MergeColumn, self).__init__(*args, **kwargs)
-
-    def render(self, value):
-        return mark_safe(input_form.format(value, value))
-
-
+from . import MergeColumn
 
 class EntitiesTableFactory:
     """
@@ -48,6 +30,12 @@ class EntitiesTableFactory:
     """
     table_classes = {}
 
+    def render_name(self, record, value):
+        if value == "":
+            return "(No name provided)"
+        else:
+            return value
+
     @classmethod
     def get_table_class(cls, entity_name:str):
         table_class = cls.table_classes.get(entity_name, None)
@@ -68,11 +56,7 @@ class EntitiesTableFactory:
             ]
 
         class GenericEntitiesTable(tables.Table):
-            def render_name(self, record, value):
-                if value == "":
-                    return "(No name provided)"
-                else:
-                    return value
+           
 
             # reuse the logic for ordering and rendering *_date_written
             # Important: The names of these class variables must correspond to the column field name,
@@ -109,21 +93,17 @@ class EntitiesTableFactory:
                 exclude = ['pk'] # GP: intended use: only add fields here to exclude that should NEVER be used, in any foreseeable case, by any instance of the table class!
                 attrs = {"class": "table table-hover table-striped table-condensed"}
         
-            def __init__(self, *args, **kwargs):
+            def __init__(self, include_detail_and_edit:bool=True, *args, **kwargs):
+
+                if include_detail_and_edit:
+                    self.
                 super().__init__(*args, **kwargs)
 
         return GenericEntitiesTable
 
 
 
-def get_entities_table(entity_name:str):
-    """
-    Calls the new EntitiesTableFactory to retrieve the requested table-class. 
-    Only implemented to not break the existing interface, but the logic is redirected to the new
-    EntitiesTableFactory, which stores already created classes or creates a not yet stored class and then stores it.
-    """
-    table_class = EntitiesTableFactory.get_table_class(entity_name)
-    return table_class
+
 
 # def get_entities_table(entity, edit_v, default_cols):
 #     if default_cols is None:
