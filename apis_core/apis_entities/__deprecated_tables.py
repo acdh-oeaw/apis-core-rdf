@@ -26,7 +26,7 @@ class MergeColumn(tables.Column):
         return mark_safe(input_form.format(value, value))
 
 
-def get_entities_table(entity, edit_v, default_cols, is_authenticated=False):
+def get_entities_table(entity, edit_v, default_cols=None, is_authenticated=False):
     if default_cols is None:
         default_cols = [
             "name",
@@ -94,6 +94,7 @@ def get_entities_table(entity, edit_v, default_cols, is_authenticated=False):
                 self.base_columns["edit"] = tables.TemplateColumn(
                     template_name='apis_entities/tables_edit_button_template.html',
                     extra_context={'entity_class':entity}
+                    verbose_name="Test"
                 )
 
             super().__init__(*args, **kwargs)

@@ -181,8 +181,8 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         default_cols = default_cols + selected_cols
 
         self.table_class = get_entities_table(
-            class_name, edit_v, default_cols=default_cols
-        )
+            class_name) #, edit_v, default_cols=default_cols)
+        
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(
             self.request, paginate={"page": 1, "per_page": self.paginate_by}
