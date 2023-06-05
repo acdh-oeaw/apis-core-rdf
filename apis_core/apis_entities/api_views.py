@@ -28,6 +28,7 @@ from .api_renderers import (
 )
 from .serializers_generic import EntitySerializer
 from apis_core.utils import caching
+from apis_core.utils.utils import get_python_safe_module_path
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -69,7 +70,15 @@ class GetEntityGeneric(GenericAPIView):
 
     def get(self, request, pk):
         ent = self.get_object(pk, request)
-        res = EntitySerializer(ent, context={"request": request})
+        # we let users override the default serializer based on the chosen renderer
+        # the name of the method has to be the full path of the renderer, dots
+        # replaced with underscores
+        # i.e.: apis_core_apis_entities_api_renderers_EntityToTEI
+        renderer_full_path = get_python_safe_module_path(self.request.accepted_renderer)
+        if hasattr(ent, renderer_full_path):
+            res = getattr(ent, renderer_full_path)(ent, context={"request": request})
+        else:
+            res = EntitySerializer(ent, context={"request": request})
         return Response(res.data)
 
 
