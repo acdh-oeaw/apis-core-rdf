@@ -61,3 +61,22 @@ def get_child_classes(objids, obclass, labels=False):
         return (objids, labels_lst)
     else:
         return objids
+
+
+def get_python_safe_module_path(instance: object):
+    """
+    return a python safe version of the full path of an object
+    this can for example be used as a method name
+    """
+    modulepath = get_module_path(instance)
+    return modulepath.replace(".", "_")
+
+
+def get_module_path(instance: object):
+    """
+    return the full path to the class of an object
+    """
+    instance_type = type(instance)
+    module = instance_type.__module__
+    name = instance_type.__name__
+    return f"{module}.{name}"
