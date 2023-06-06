@@ -1,16 +1,14 @@
 import warnings
-from collections import OrderedDict
 
 import django_tables2 as tables
 from apis_core.apis_metainfo.tables import (generic_order_end_date_written,
                                             generic_order_start_date_written,
                                             generic_render_end_date_written,
                                             generic_render_start_date_written)
-from apis_core.utils import caching
 from django.conf import settings
 from django.db.models import Model
 
-from . import MergeColumn
+#from . import MergeColumn
 
 
 class EntitiesTableFactory:
@@ -72,10 +70,10 @@ class EntitiesTableFactory:
                 model_name
             ) or cls.create_new_entities_table_class(model_class, model_name)
             cls.table_classes[model_name] = table_class
-            return table_class
+        
+        return table_class
 
-        else:
-            return table_class
+      
 
     @classmethod
     def create_new_entities_table_class(
@@ -116,10 +114,10 @@ class EntitiesTableFactory:
                 "xlsx",
             ]
 
-            merge = MergeColumn(verbose_name="keep | remove", accessor="pk")
+            #merge = MergeColumn(verbose_name="keep | remove", accessor="pk")
             _detail = tables.TemplateColumn(
                 template_name="apis_entities/tables/detail_button_template.html",
-                extra_context={"entity_class": model_name},
+                extra_context={"model_name": model_name},
                 verbose_name="",  # __gp__: this ensures the column will have no header
                 orderable=False,
                 attrs={
@@ -129,7 +127,7 @@ class EntitiesTableFactory:
             )
             _edit = tables.TemplateColumn(
                 template_name="apis_entities/tables/edit_button_template.html",
-                extra_context={"entity_class": model_name},
+                extra_context={"model_name": model_name},
                 verbose_name="",  # __gp__: this ensures the column will have no header
                 orderable=False,
                 attrs={

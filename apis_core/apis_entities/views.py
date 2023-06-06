@@ -16,7 +16,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django_tables2 import SingleTableView
+from django.views.generic import ListView
+from django_tables2 import SingleTableMixin
 from django_tables2.export.views import ExportMixin
 
 from .filters import get_list_filter_of_entity
@@ -26,7 +27,7 @@ from .forms import (
     NetworkVizFilterForm,
     PersonResolveUriForm,
 )
-from .tables import EntitiesTableFactory, get_entities_table
+from .tables import EntitiesTableFactory
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.forms import SelectAnnotationProject
@@ -118,7 +119,7 @@ def get_highlighted_texts(request, instance):
 ############################################################################
 
 
-class GenericTableViewMixin(ExportMixin, SingleTableView):
+class GenericTableMixin(ExportMixin, SingleTableMixin):
     """
     Yeah, not really a pure Mixin if it has a view in it... So 'needs' refactor.
     But there was no point in making it completely standalone and reusable yet, before
@@ -131,18 +132,6 @@ class GenericTableViewMixin(ExportMixin, SingleTableView):
     table_pagination = {"page": 1, "per_page": 25}
     table_factory_class = EntitiesTableFactory
 
-    def get(self, request, *args, **kwargs):
-        self.model_name = kwargs.get("entity", None)
-
-        # 'inherited' attr! Has logic attached to it, i.e. is potentially used by internal methods of parent-classes!
-        self.model_class = ContentType.objects.get(
-            app_label__startswith="apis_", model=self.model_name
-        ).model_class()
-
-        # TODO: __gp__: this naming prevents real generic use of this "mixin". Rename with refactor.
-        self.entity_settings = self.get_entity_settings()
-
-        return super().get(request, *args, **kwargs)
 
     def get_table_class(self):
         """
@@ -234,19 +223,19 @@ class GenericTableViewMixin(ExportMixin, SingleTableView):
         Contributes table-specific keys to the inheriting get_context_data - method.
         """
 
-        enable_merge = (
-            self.entity_settings.get("merge", False)
-            if self.request.user.is_authenticated
-            else False
-        )
+        # enable_merge = (
+        #     self.entity_settings.get("merge", False)
+        #     if self.request.user.is_authenticated
+        #     else False
+        # )
 
         def get_toggleable_columns():
             cols = ENTITIES_DEFAULT_COLS + self.entity_settings.get(
                 "additional_cols", []
             )
 
-            if enable_merge:
-                cols.append("merge")
+            # if enable_merge:
+            #     cols.append("merge")
 
             return cols
 
@@ -254,19 +243,32 @@ class GenericTableViewMixin(ExportMixin, SingleTableView):
         context.update(
             {
                 "togglable_columns": get_toggleable_columns(),
-                "enable_merge": enable_merge,
+                # "enable_merge": enable_merge,
             }
         )
 
         return context
 
 
-class GenericListViewNew(UserPassesTestMixin, GenericTableViewMixin):
+class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
     formhelper_class = GenericFilterFormHelper
     template_name = getattr(
         settings, "APIS_LIST_VIEW_TEMPLATE", "browsing/generic_list.html"
     )
     login_url = "/accounts/login/"
+
+    def setup(self, request, *args, **kwargs):
+        self.model_name = kwargs.get("entity", None)
+
+        # 'inherited' attr! Has logic attached to it, i.e. is potentially used by internal methods of parent-classes!
+        self.model_class = ContentType.objects.get(
+            app_label__startswith="apis_", model=self.model_name
+        ).model_class()
+
+        # TODO: __gp__: this naming prevents real generic use of this "mixin". Rename with refactor.
+        self.entity_settings = self.get_entity_settings()
+
+        return super().setup(request, *args, **kwargs)
 
     def test_func(self):
         """
