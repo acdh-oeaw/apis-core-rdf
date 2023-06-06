@@ -16,7 +16,7 @@ class EntitiesTableFactory:
     """
     Factory class.
     Responsible for creating or retrieving an entity-specific variant of 
-    the inner TableClass --> a variant of that class (a class!), 
+    the inner GenericEntitiesTable class --> a variant of that class (a class!), 
     not an instance of a class.
 
     The calling code (the calling view) is responsible for creating an 
@@ -77,10 +77,14 @@ class EntitiesTableFactory:
     def create_new_entities_table_class(cls, model_class: Model, model_name:str):
         class GenericEntitiesTable(tables.Table):
             """
-            The Generic Table from which all variants will be cconstructed. Add all possible fields/columns as class attributes. 
-            Ideally, implement any custom columns ase seperate classes and re-use them here. 
+            The Generic Table from which all variants will be cconstructed. Add all possible fields/columns
+            as class attributes, if you don't want to use the default fields that django_tables2 chooses 
+            based on the model's field's field-type.
+            Ideally, implement any custom columns as separate classes and re-use them here. 
 
-            TODO: __gp__: I would suggest a general refactor, that moves all columns, utily functions for tables and columns, their respective Template-snippets and all Factories and Specific tables into a seperate App.
+            TODO: __gp__: I would suggest a general refactor, that moves all columns, \
+            utily functions for tables and columns, their respective Template-snippets \
+            and all Factories and Specific tables into a seperate App.
             We duplicated a lot of code across our Apps that could/should be shared / re-used.
             """
 
@@ -115,11 +119,11 @@ class EntitiesTableFactory:
                 attrs={"td": {"class": "px-0 pl-4 text-center"}, "th": {"class": "p-0"}}
             )
             _edit = tables.TemplateColumn(
-                    template_name='apis_entities/tables/edit_button_template.html',
-                    extra_context={'entity_class':model_name},
-                    verbose_name="", # __gp__: this ensures the column will have no header
-                    orderable=False,
-                    attrs={"td": {"class": "pl-4 pr-10 text-center"}, "th": {"class": "p-0"}}
+                template_name='apis_entities/tables/edit_button_template.html',
+                extra_context={'entity_class':model_name},
+                verbose_name="", # __gp__: this ensures the column will have no header
+                orderable=False,
+                attrs={"td": {"class": "pl-4 pr-10 text-center"}, "th": {"class": "p-0"}}
 
             )
     
@@ -132,7 +136,11 @@ class EntitiesTableFactory:
                 
                 F.e. only set exclude here, if you are 100% sure that the fields / columns you 
                 exclude might NEVER be needed in the future in any case (also for our internal purposes!) 
-                OR should NEVER be used in a ANY table.
+                OR should NEVER be used in ANY table created from this factory.
+                
+                This implementation makes use of the default values for the attributes not set in Meta:
+                Not setting fields defaults to exposing all fields of the model. No need to add columns
+                for those fields, as django_tables2 chooses appropriate columns based on the field-type.
                 
                 For further information, see: 
                 - docs: 
@@ -147,7 +155,8 @@ class EntitiesTableFactory:
             def __init__(self, visible_columns:tuple[str]=None, *args, **kwargs):
                 """
                 Extends how table instances are instanciated. 
-                Adds the visible_columns param, must be an iterable of column names.
+                Adds the visible_columns param (not provided by django_tables2),
+                which must be an iterable of column-names.
                 Only the columns given in visible_columns will be added to the table.
                 If visible_columns is not set, a warning will be raised (not an error).
 
