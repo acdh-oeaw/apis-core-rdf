@@ -123,7 +123,7 @@
             <input type="hidden" name="model_name" value="{{ entity }}"/>
             <input type="hidden" name="app_name" value="{{ app_name }}"/>
     {% endif %}
-                <table class="table" {% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
+                <table  {% if table.attrs %} {{ table.attrs.as_html }} {% else %} class="table" {% endif %}>
               {% block table.thead %}
               {% if table.show_header %}
               <thead>
