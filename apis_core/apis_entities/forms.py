@@ -229,9 +229,9 @@ def get_entities_form(entity):
 
 class GenericEntitiesStanbolForm(forms.Form):
     def save(self, *args, **kwargs):
-        uri = self.cleaned_data["entity"]
-        entity, _ = Uri.objects.get_or_create(uri=uri)
-        return entity
+        form_uri = self.cleaned_data["entity"]
+        uri, _ = Uri.objects.get_or_create(uri=form_uri)
+        return uri.root_object
 
     def __init__(self, entity, *args, **kwargs):
 
