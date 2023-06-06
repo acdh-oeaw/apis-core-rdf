@@ -15,27 +15,24 @@ from django.conf import settings
 class EntitiesTableFactory:
     """
     Factory class.
-    Responsible for creating or retrieving an entity-specific variant of the inner TableClass -->
-    a variant of that class (a class!), not an instance of a class.
+    Responsible for creating or retrieving an entity-specific variant of 
+    the inner TableClass --> a variant of that class (a class!), 
+    not an instance of a class.
 
-    The calling code (the calling view) is responsible for creating an instance of the returned class and customizing it.
+    The calling code (the calling view) is responsible for creating an 
+    instance of the returned class and customizing it.
 
     classmethods: 
 
     get_table_class: 
-        get already created class or call create_entites_table OR if implemented, get a custom class for the specific entity.
+        get already created class or call create_entites_table OR 
+        if implemented, get a custom class for the specific entity.
     get_custom_table_class: 
         hook to retrieve a custom table class listed in settings.
     create_entities_table:
         factory-method responsible for creating a variant of the generic table class
     """
     table_classes = {}
-
-    def render_name(self, record, value):
-        if value == "":
-            return "(No name provided)"
-        else:
-            return value
 
     @classmethod
     def get_custom_table_class(cls, model_name):
@@ -95,7 +92,13 @@ class EntitiesTableFactory:
             order_end_date_written = generic_order_end_date_written
             render_start_date_written = generic_render_start_date_written
             render_end_date_written = generic_render_end_date_written
-   
+            
+            def render_name(self, record, value):
+                if value == "":
+                    return "(No name provided)"
+                else:
+                    return value
+                
             export_formats = [
                 "csv",
                 "json",
@@ -124,12 +127,18 @@ class EntitiesTableFactory:
                 """
                 __gp__: Please don't use this to customize on a per-entity-basis. 
                 customization should happen in get_table_kwargs in apis_entities.views.GenericListViewNew.
-                Or, if you need access to attributes not available in get_table_kwargs, use the __init__ method below.
+                Or, if you need access to attributes not available in get_table_kwargs, 
+                use the __init__ method below.
                 
-                F.e. only set exclude here, if you are 100% sure that the fields / columns you exclude might NEVER be needed in the future in any case (also for our internal purposes!) OR should NEVER be used in a ANY table.
+                F.e. only set exclude here, if you are 100% sure that the fields / columns you 
+                exclude might NEVER be needed in the future in any case (also for our internal purposes!) 
+                OR should NEVER be used in a ANY table.
+                
                 For further information, see: 
-                - docs: https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#table
-                - source-code: https://django-tables2.readthedocs.io/en/latest/_modules/django_tables2/tables.html#Table
+                - docs: 
+                    https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#table
+                - source-code: 
+                    https://django-tables2.readthedocs.io/en/latest/_modules/django_tables2/tables.html#Table
                 """
                 
                 model = model_class
@@ -142,7 +151,8 @@ class EntitiesTableFactory:
                 Only the columns given in visible_columns will be added to the table.
                 If visible_columns is not set, a warning will be raised (not an error).
 
-                TODO: currently, exporting table data as csv, etc. is disabled. If re-implemented, ensure that visible_columns also applies to the exported table data.
+                TODO: Currently, exporting table data as csv, etc. is disabled. 
+                TODO: If re-implemented, ensure that visible_columns also applies to the exported table data.
                 """
                 super().__init__(*args, **kwargs)
 
