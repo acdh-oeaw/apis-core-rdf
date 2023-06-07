@@ -16,6 +16,7 @@ from apis_core.api_routers import views
 # )
 # from apis_core.apis_vocabularies.api_views import UserViewSet
 from apis_core.utils import caching
+from apis_core.apis_metainfo.viewsets import UriToObjectViewSet
 
 app_name = "apis_core"
 
@@ -33,6 +34,9 @@ for app_label, model_str in caching.get_all_class_modules_and_names():
         )
     except Exception as e:
         print("{} not found, skipping".format(model_str.lower()))
+
+# inject the manually created UriToObjectViewSet into the api router
+router.register(r"metainfo/uritoobject", UriToObjectViewSet, basename="uritoobject")
 
 for additional_serializer in load_additional_serializers():
     router.register(
