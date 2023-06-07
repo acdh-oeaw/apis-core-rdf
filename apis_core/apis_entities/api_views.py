@@ -82,28 +82,6 @@ class GetEntityGeneric(GenericAPIView):
         return Response(res.data)
 
 
-@api_view(["GET"])
-def uri_resolver(request):
-    uri = request.query_params.get("uri", None)
-    f = request.query_params.get("target_format", "gui")
-    if uri is None:
-        raise Http404
-    else:
-        uri = Uri.objects.get(uri=uri)
-        if f == "gui":
-            ent = TempEntityClass.objects_inheritance.get_subclass(pk=uri.entity_id)
-            c_name = ent.__class__.__name__
-            url = reverse(
-                "apis_core:apis_entities:generic_entities_detail_view",
-                kwargs={"pk": uri.entity_id, "entity": c_name.lower()},
-            )
-        else:
-            url = reverse(
-                "apis_core:apis_api2:GetEntityGeneric", kwargs={"pk": uri.entity_id}
-            ) + "?format={}".format(f)
-        return redirect(url)
-
-
 # TODO RDF: Check if this should be removed or adapted
 #
 # class InstitutionViewSet(viewsets.ModelViewSet):

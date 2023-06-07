@@ -17,7 +17,6 @@ urlpatterns = [
         api_views.GetEntityGeneric.as_view(),
         name="GetEntityGeneric",
     ),
-    path("uri/", api_views.uri_resolver, name="UriResolver"),
     # path(r'getrelatedplaces/', api_views.GetRelatedPlaces.as_view(), name="GetRelatedPlaces"),
     # path(r'lifepath/<int:pk>/', api_views.LifePathViewset.as_view(), name="Lifepathviewset")
 ]
