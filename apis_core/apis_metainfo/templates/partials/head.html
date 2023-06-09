@@ -1,0 +1,29 @@
+{% block meta %}
+<meta charset="utf-8">
+<meta name="description" content="{% block meta_description %}Description{% endblock meta_description %}">
+<meta name="author" content="{% block meta_author %}Author{% endblock meta_author %}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff"/>
+{% endblock meta %}
+
+<title>{% block title %}Title Placeholder{% endblock %}</title>
+
+{% block favicons %}
+<link rel="apple-touch-icon" sizes="180x180" href="{{ SHARED_URL }}favicon/apple-touch-icon.png"/>
+<link rel="mask-icon" href="{{ SHARED_URL }}favicon/safari-pinned-tab.svg" color="#00aba9"/>
+<link rel="icon" type="image/png" sizes="32x32" href="{{ SHARED_URL }}favicon/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="{{ SHARED_URL }}favicon/favicon-16x16.png"/>
+{% endblock favicons %}
+
+{% block stylesheets %}
+{% include "partials/css/bootstrap-datepicker_css.html" %}
+{% include "partials/css/bootstrap-multiselect_css.html" %}
+{% include "partials/css/bootstrap-select_css.html" %}
+{% include "partials/css/google-font_css.html" %}
+{% include "partials/css/leaflet-markercluster_css.html" %}
+{% include "partials/css/leaflet_css.html" %}
+{% include "partials/css/scroll-to-top_css.html" %}
+{% include "partials/css/select2_css.html" %}
+{% include "partials/css/tooltipster_css.html" %}
+<link rel="stylesheet" id="fundament-styles" href="{{ SHARED_URL }}fundament/dist/fundament/css/fundament.min.css" type="text/css"/>
+{% endblock stylesheets %}

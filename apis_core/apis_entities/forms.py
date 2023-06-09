@@ -269,6 +269,7 @@ class GenericEntitiesStanbolForm(forms.Form):
             widget=ListSelect2(url=url, attrs=attrs),
             validators=[URLValidator],
         )
+        self.helper.include_media = False
 
 
 class FullTextForm(forms.Form):

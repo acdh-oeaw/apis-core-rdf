@@ -12,16 +12,6 @@
 {% endblock %}
 {% block content %}
 
-    <script type="text/javascript">
-    $(document).ready(function() {
-    var fetchedParameter = "{{ table.page.number }}";
-    $("#goto option").each(function() {
-        if($(this).text() == fetchedParameter) {
-            $(this).attr('selected', 'selected');
-        }
-    });
-    });
-    </script>
     <style>
 
     </style>
@@ -266,3 +256,18 @@
     {% load_highcharts_js %}
     {% config_highcharts %}
 {% endblock scripts2 %}
+
+{% block scripts %}
+{{ block.super }}
+{{ entity_create_stanbol.media }}
+<script type="text/javascript">
+$(document).ready(function() {
+var fetchedParameter = "{{ table.page.number }}";
+$("#goto option").each(function() {
+    if($(this).text() == fetchedParameter) {
+        $(this).attr('selected', 'selected');
+    }
+});
+});
+</script>
+{% endblock %}

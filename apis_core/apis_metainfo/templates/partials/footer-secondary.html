@@ -1,0 +1,8 @@
+<a href="/imprint.html">Imprint | Impressum</a>
+{% if user.is_authenticated %}
+  {% if DB_NAME %}
+    <div class="footer-imprint-bar">
+      <div>{{ DB_NAME }}</div>
+    </div>
+  {% endif %}
+{% endif %}
