@@ -469,6 +469,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                 "end_date_written",
                 "other_prop",
                 "other_entity",
+                "notes",
             ]
             # reuse the list for ordering
             sequence = tuple(fields)

@@ -134,6 +134,7 @@ def save_ajax_form(
         start_date_written,
         end_date_written,
     )
+    form.fields["notes"].initial = request.POST["notes"]
     form.save()
 
     data = {
