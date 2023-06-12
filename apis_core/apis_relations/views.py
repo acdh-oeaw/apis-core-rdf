@@ -2,7 +2,9 @@ import json
 import inspect
 
 from django.conf import settings
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
@@ -126,7 +128,6 @@ def save_ajax_form(
     )
 
     if ObjectID is not False:
-
         triple = TempTriple.objects.get(pk=ObjectID)
         form.load_remaining_data_from_triple(triple)
 
@@ -135,6 +136,14 @@ def save_ajax_form(
         end_date_written,
     )
     form.save()
+
+    LogEntry.objects.log_action(
+        user_id=request.user.id,
+        content_type_id=ContentType.objects.get_for_model(form.instance).pk,
+        object_id=form.instance.id,
+        object_repr=repr(form.instance),
+        action_flag=CHANGE if ObjectID else ADDITION,
+    )
 
     data = {
         "test": True,

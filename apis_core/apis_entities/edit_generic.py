@@ -1,6 +1,7 @@
 import importlib
 
 from django.conf import settings
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
@@ -143,6 +144,13 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
         form_text = FullTextForm(request.POST, entity=self.entity.title())
         if form.is_valid() and form_text.is_valid():
             entity_2 = form.save()
+            LogEntry.objects.log_action(
+                user_id=request.user.id,
+                content_type_id=entity_2.self_contenttype.pk,
+                object_id=entity_2.id,
+                object_repr=repr(entity_2),
+                action_flag=CHANGE,
+            )
             form_text.save(entity_2)
             return redirect(
                 reverse(
@@ -195,6 +203,13 @@ class GenericEntitiesCreateView(EntityMixin, View):
         form_text = FullTextForm(request.POST, entity=self.entity.title())
         if form.is_valid() and form_text.is_valid():
             entity_2 = form.save()
+            LogEntry.objects.log_action(
+                user_id=request.user.id,
+                content_type_id=entity_2.self_contenttype.pk,
+                object_id=entity_2.id,
+                object_repr=repr(entity_2),
+                action_flag=ADDITION,
+            )
             form_text.save(entity_2)
             return redirect(
                 reverse(
@@ -272,6 +287,17 @@ class GenericEntitiesDeleteView(EntityInstanceMixin, DeleteView):
         )
         return super(GenericEntitiesDeleteView, self).dispatch(request, *args, **kwargs)
 
+    def form_valid(self, form):
+        entity = self.get_object()
+        LogEntry.objects.log_action(
+            user_id=self.request.user.id,
+            content_type_id=entity.self_contenttype.pk,
+            object_id=entity.id,
+            object_repr=repr(entity),
+            action_flag=DELETION,
+        )
+        return super().form_valid(form)
+
 
 @method_decorator(login_required, name="dispatch")
 class GenericEntitiesDuplicateView(EntityInstanceMixin, View):
@@ -279,6 +305,16 @@ class GenericEntitiesDuplicateView(EntityInstanceMixin, View):
         source_obj = get_object_or_404(self.entity_model, pk=self.pk)
 
         newobj = source_obj.duplicate()
+
+        message = [{"duplicated_from": source_obj.pk}]
+        LogEntry.objects.log_action(
+            user_id=self.request.user.id,
+            content_type_id=newobj.self_contenttype.pk,
+            object_id=newobj.id,
+            object_repr=repr(newobj),
+            action_flag=ADDITION,
+            change_message=message,
+        )
 
         return redirect(
             reverse(
