@@ -18,6 +18,7 @@ from apis_core.utils.utils import access_for_all
 from .views import get_highlighted_texts
 from apis_core.apis_relations.models import TempTriple
 from apis_core.utils import caching
+from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityInstanceMixin
 from apis_core.core.mixins import ViewPassesTestMixin
 
@@ -58,7 +59,9 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
             match = [prefix]
             tb_object = table(data=triples_related_by_entity, prefix=prefix)
             tb_object_open = request.GET.get(prefix + "page", None)
-            RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
+            entity_settings = get_entity_settings_by_modelname(entity_class.__name__)
+            per_page = entity_settings.get("relations_per_page", 10)
+            RequestConfig(request, paginate={"per_page": per_page}).configure(tb_object)
             side_bar.append(
                 (
                     title_card,
