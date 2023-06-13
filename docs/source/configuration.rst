@@ -200,6 +200,7 @@ allows to merge several entities in one target entity at once.
 ``form_order`` defines the order of the fields in the metadata form of the respective entity.
 ``table_fields`` sets the default columns to show in the list views.
 ``additional_cols`` allows to set the columns that user can add to the result view.
+``relations_per_page`` allows to set the number of relations listed before pagination begins
 
 ``list_filters``
 ^^^^^^^^^^^^^^^^
