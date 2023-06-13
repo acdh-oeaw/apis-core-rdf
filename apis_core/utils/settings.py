@@ -20,3 +20,15 @@ def rdf_object_mapping_file() -> Path:
     default = default_settings() / "RDF_default_settings.yml"
     mapping_file = getattr(settings, "APIS_RDF_YAML_SETTINGS", default)
     return Path(mapping_file)
+
+
+def get_entity_settings_by_modelname(entity: str = None) -> dict:
+    """
+    return the settings for a specific entity or the dict for all entities
+    if no entity is given
+    """
+    apis_entities = getattr(settings, "APIS_ENTITIES", {})
+    if entity:
+        # lookup entity settings by name and by capitalized name
+        return apis_entities.get(entity, apis_entities.get(entity.capitalize(), {}))
+    return apis_entities
