@@ -28,6 +28,7 @@ from .views import set_session_variables
 from ..apis_vocabularies.models import TextType
 from apis_core.utils import caching
 from apis_core.utils import helpers
+from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityMixin, EntityInstanceMixin
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
@@ -75,7 +76,9 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             title_card = prefix
             tb_object = table_class(data=triples_related_by_entity, prefix=prefix)
             tb_object_open = request.GET.get(prefix + "page", None)
-            RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
+            entity_settings = get_entity_settings_by_modelname(entity_class.__name__)
+            per_page = entity_settings.get("relations_per_page", 10)
+            RequestConfig(request, paginate={"per_page": per_page}).configure(tb_object)
             side_bar.append(
                 # (title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open)
                 (
