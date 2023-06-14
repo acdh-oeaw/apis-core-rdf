@@ -103,12 +103,12 @@ def generic_render_end_date_written(self, record, value):
 class UriTable(tables.Table):
     id = tables.LinkColumn()
     entity = tables.TemplateColumn(
-        "<a href='{{ record.entity.get_absolute_url }}'>{{ record.entity }}</a>",
+        "<a href='{{ record.root_object.get_absolute_url }}'>{{ record.root_object }}</a>",
         orderable=True,
         verbose_name="related Entity",
     )
     ent_type = tables.TemplateColumn(
-        "{{ record.entity.get_child_class }}",
+        "{{ record.root_object.self_contenttype.model }}",
         orderable=False,
         verbose_name="Entity Type",
     )
@@ -116,4 +116,5 @@ class UriTable(tables.Table):
     class Meta:
         model = Uri
         sequence = ("id", "uri")
+        fields = ("id", "uri", "entity", "ent_type")
         attrs = {"class": "table table-responsive table-hover"}

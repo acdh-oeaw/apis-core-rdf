@@ -1,11 +1,13 @@
+from django.conf import settings
 from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import DeleteView, FormView
+from django.views.generic.edit import DeleteView, FormView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.views import View
+from django_tables2 import SingleTableMixin
+from django_filters.views import FilterView
 
-from .browsingviews import GenericListView, BaseCreateView, BaseUpdateView
 from .filters import UriListFilter
 from .forms import UriFilterFormHelper, UriForm, UriGetOrCreateForm
 from .models import Uri
@@ -14,17 +16,18 @@ from apis_core.utils.rdf import get_modelname_and_dict_from_uri
 from apis_core.utils.normalize import clean_uri
 
 
-class UriListView(GenericListView):
+class UriListView(SingleTableMixin, FilterView):
     model = Uri
-    filter_class = UriListFilter
+    filterset_class = UriListFilter
     formhelper_class = UriFilterFormHelper
     table_class = UriTable
-    init_columns = [
-        "id",
-        "uri",
-        "entity",
-    ]
-    enable_merge = True
+    template_name = getattr(settings, "APIS_LIST_VIEW_TEMPLATE", "generic_list.html")
+
+    def get_filterset(self, filterset_class):
+        kwargs = self.get_filterset_kwargs(filterset_class)
+        filterset = filterset_class(**kwargs)
+        filterset.form.helper = self.formhelper_class()
+        return filterset
 
 
 class UriDetailView(DetailView):
@@ -32,12 +35,12 @@ class UriDetailView(DetailView):
     template_name = "apis_metainfo/uri_detail.html"
 
 
-class UriCreate(LoginRequiredMixin, BaseCreateView):
+class UriCreate(LoginRequiredMixin, CreateView):
     model = Uri
     form_class = UriForm
 
 
-class UriUpdate(LoginRequiredMixin, BaseUpdateView):
+class UriUpdate(LoginRequiredMixin, UpdateView):
     model = Uri
     form_class = UriForm
 

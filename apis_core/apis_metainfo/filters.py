@@ -4,23 +4,8 @@ from .models import *
 
 
 class UriListFilter(django_filters.FilterSet):
-
-    uri = django_filters.CharFilter(
-        lookup_expr="icontains",
-        help_text=Uri._meta.get_field("uri").help_text,
-        label=Uri._meta.get_field("uri").verbose_name,
-    )
-    domain = django_filters.CharFilter(
-        lookup_expr="icontains",
-        help_text=Uri._meta.get_field("domain").help_text,
-        label=Uri._meta.get_field("domain").verbose_name,
-    )
-    entity__name = django_filters.CharFilter(
-        lookup_expr="icontains",
-        help_text=Uri._meta.get_field("root_object").help_text,
-        label=Uri._meta.get_field("root_object").verbose_name,
-    )
+    uri = django_filters.CharFilter(lookup_expr="icontains")
 
     class Meta:
         model = Uri
-        fields = "__all__"
+        fields = ("uri",)
