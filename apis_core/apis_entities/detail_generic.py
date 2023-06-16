@@ -23,9 +23,6 @@ from apis_core.core.mixins import ViewPassesTestMixin
 
 
 class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
-
-    login_url = "/accounts/login/"
-
     def get(self, request, *args, **kwargs):
 
         entity = self.entity.lower()
