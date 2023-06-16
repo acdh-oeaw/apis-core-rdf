@@ -117,7 +117,6 @@ class GenericListViewNew(
     template_name = getattr(
         settings, "APIS_LIST_VIEW_TEMPLATE", "apis_entities/generic_list.html"
     )
-    login_url = "/accounts/login/"
 
     def __init__(self, *args, **kwargs):
         super(GenericListViewNew, self).__init__(*args, **kwargs)
