@@ -2,6 +2,7 @@ import copy
 import re
 
 import yaml
+from crispy_forms.layout import Submit, Layout, Field
 from crispy_forms.helper import FormHelper
 from dal import autocomplete
 from django import forms
@@ -26,6 +27,13 @@ from apis_core.apis_entities.autocomplete3 import (
     PropertyAutocomplete,
     GenericEntitiesAutocomplete,
 )
+
+from django.http import Http404
+from django.contrib.contenttypes.models import ContentType
+#from django.db.models.loading import get_model
+from apis_core.apis_relations.models import Property
+from apis_core.apis_entities.models import RootObject
+from django.db.models import Q
 
 # from dal.autocomplete import ListSelect2
 
@@ -223,3 +231,30 @@ class GenericTripleForm(forms.ModelForm):
         )
 
         return table_object
+
+class NewGenericTripleForm(forms.ModelForm):
+    class Meta:
+        model = TempTriple
+        fields = "__all__"
+
+    helper = FormHelper()
+    helper.add_input(Submit('submit', 'Submit', css_class='btn-primary'))
+    helper.form_method = 'POST'
+
+    def __init__(self, subject = None, objecttype = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        propertyfilter = Q()
+        if subject:
+            self.fields["subj"].initial = subject
+            self.fields["subj"].disabled = True
+            s = RootObject.objects.get(pk=subject)
+            propertyfilter &= Q(subj_class=s.self_contenttype)
+        if objecttype:
+            try:
+                contenttype = ContentType.objects.get_for_id(objecttype)
+                model = contenttype.model_class()
+            except ContentType.DoesNotExist:
+                raise Http404
+            self.fields["obj"].queryset = model.objects.all()
+            propertyfilter &= Q(obj_class=contenttype)
+        self.fields["prop"].queryset = Property.objects.filter(propertyfilter)

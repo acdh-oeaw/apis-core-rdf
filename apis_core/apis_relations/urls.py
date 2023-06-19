@@ -34,4 +34,7 @@ urlpatterns = [
         PropertyAutocomplete.as_view(),
         name="generic_property_autocomplete",
     ),
+    path("create/", views.TripleCreateView.as_view(), name="create"),
+    path("create/<subject>", views.TripleCreateView.as_view(), name="createfromsubject"),
+    path("create/<subject>/<objecttype>", views.TripleCreateView.as_view(), name="createfromsubjecttoobjecttype"),
 ]

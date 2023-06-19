@@ -6,8 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
+from django.views.generic.edit import CreateView
+
 from apis_core.apis_relations import forms as relation_form_module
-from apis_core.apis_relations.forms2 import GenericTripleForm
+from apis_core.apis_relations.forms2 import GenericTripleForm, NewGenericTripleForm
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 
 # from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,
@@ -371,3 +373,17 @@ def save_ajax_form(
     #                 'button_text': button_text, 'ObjectID': ObjectID, 'SiteID': SiteID},
     #                 request=request)}
     #
+
+class TripleCreateView(CreateView):
+    model = TempTriple
+    form_class = NewGenericTripleForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["subject"] = self.kwargs.get("subject")
+        kwargs["objecttype"] = self.kwargs.get("objecttype")
+        return kwargs
+
+    def form_valid(self, form):
+        print(form)
+        return super().form_valid(form)
