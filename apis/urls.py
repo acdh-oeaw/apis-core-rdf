@@ -2,6 +2,7 @@ from django.conf import settings
 from django.urls import include, re_path
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
 
 from apis_core.apis_entities.api_views import GetEntityGeneric
 
@@ -44,6 +45,7 @@ else:
     ]
     if "webpage" in settings.INSTALLED_APPS:
         urlpatterns.append(path("", include("webpage.urls", namespace="webpage")))
+    urlpatterns.append(path("", TemplateView.as_view(template_name="base.html")))
 
 
 if "viecpro_vis" in settings.INSTALLED_APPS:
