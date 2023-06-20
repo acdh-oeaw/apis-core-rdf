@@ -21,12 +21,14 @@ from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
 
 # __before_rdf_refactoring__
 # from apis_core.apis_relations.models import AbstractRelation
+from apis_core.helper_functions.caching import get_ontology_class_of_name
 from apis_core.helper_functions.RDFParser import RDFParser
 from apis_core.helper_functions.stanbolQueries import retrieve_obj
 from apis_core.helper_functions.utils import (
     access_for_all,
     access_for_all_function,
     ENTITIES_DEFAULT_COLS,
+    
 )
 from .filters import get_list_filter_of_entity
 from .forms import (
@@ -133,9 +135,12 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         """
         Look up the model class for the given entity
         """
-        model = ContentType.objects.get(
-            app_label__startswith="apis_", model=self.entity
-        ).model_class()
+        model = get_ontology_class_of_name(self.entity)
+        
+        
+        #ContentType.objects.get(
+        #    app_label__startswith="apis_", model=self.entity
+        #).model_class()
 
         try:
             self.entity_settings = model.entity_settings
@@ -218,14 +223,14 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
 
         context["entity_create_stanbol"] = GenericEntitiesStanbolForm(self.entity)
 
-        if "browsing" in settings.INSTALLED_APPS:
-            from browsing.models import BrowsConf
-
-            context["conf_items"] = list(
-                BrowsConf.objects.filter(model_name=class_name).values_list(
-                    "field_path", "label"
-                )
-            )
+        #if "browsing" in settings.INSTALLED_APPS:
+        #    from browsing.models import BrowsConf
+        #
+        #    context["conf_items"] = list(
+        #        BrowsConf.objects.filter(model_name=class_name).values_list(
+        #            "field_path", "label"
+        #        )
+        #    )
 
         # TODO kk
         #  suggestion: rename context['class_name'] to context['entity_name']
