@@ -148,7 +148,6 @@ urlpatterns = [
     path(
         "entities/", include("apis_core.apis_entities.urls", namespace="apis_entities")
     ),
-    path("visuals/", include("apis_core.apis_vis.urls", namespace="apis_visuals")),
     path(
         "relations/",
         include("apis_core.apis_relations.urls", namespace="apis_relations"),
@@ -178,7 +177,6 @@ urlpatterns = [
     path("api2/", include("apis_core.apis_entities.api_urls", namespace="apis_api2")),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # url(r'^api-schema/', schema_view),
-    path("apis-vis/", include("apis_core.apis_vis.urls", namespace="apis_vis")),
     re_path(
         r"^docs/(?P<path>.*)$",
         login_required(serve),
