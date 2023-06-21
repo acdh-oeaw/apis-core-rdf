@@ -1,4 +1,7 @@
+import functools
 import importlib
+import itertools
+
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -18,7 +21,7 @@ from reversion.models import Version
 
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
-from apis_core.apis_relations.models import TempTriple
+from apis_core.apis_relations.models import TempTriple, Property
 from apis_core.apis_relations.tables import (
     get_generic_triple_table,
     LabelTableEdit,
@@ -32,6 +35,34 @@ from apis_core.apis_entities.mixins import EntityMixin, EntityInstanceMixin
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.forms import SelectAnnotatorAgreement
+
+
+@functools.lru_cache
+def get_classes_with_allowed_relation_from(entity_name: str):
+    # Find all the properties where the entity is either subject or object
+    properties_with_entity_as_subject = Property.objects.filter(
+        subj_class__model=entity_name
+    ).prefetch_related("obj_class")
+    properties_with_entity_as_object = Property.objects.filter(
+        obj_class__model=entity_name
+    ).prefetch_related("subj_class")
+
+    content_type_querysets = []
+
+    # Where entity is subject, get all the object content_types
+    for p in properties_with_entity_as_subject:
+        objs = p.obj_class.all()
+        content_type_querysets.append(objs)
+    # Where entity is object, get all the subject content_types
+    for p in properties_with_entity_as_object:
+        subjs = p.subj_class.all()
+        content_type_querysets.append(subjs)
+
+    # Join querysets with itertools.chain, call set to make unique, and extract the model class
+    return [
+        content_type.model_class()
+        for content_type in set(itertools.chain(*content_type_querysets))
+    ]
 
 
 @method_decorator(login_required, name="dispatch")
@@ -49,8 +80,7 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             .select_subclasses()
         )
 
-        for entity_class in caching.get_all_entity_classes():
-
+        for entity_class in get_classes_with_allowed_relation_from(kwargs["entity"]):
             entity_content_type = ContentType.objects.get_for_model(entity_class)
 
             other_entity_class_name = entity_class.__name__.lower()
