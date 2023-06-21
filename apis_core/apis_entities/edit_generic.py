@@ -27,6 +27,7 @@ from .views import get_highlighted_texts
 from .views import set_session_variables
 from ..apis_vocabularies.models import TextType
 from apis_core.utils import caching
+from apis_core.utils import helpers
 from apis_core.apis_entities.mixins import EntityMixin, EntityInstanceMixin
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
@@ -48,8 +49,7 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             .select_subclasses()
         )
 
-        for entity_class in caching.get_all_entity_classes():
-
+        for entity_class in helpers.get_classes_with_allowed_relation_from(self.entity):
             entity_content_type = ContentType.objects.get_for_model(entity_class)
 
             other_entity_class_name = entity_class.__name__.lower()
