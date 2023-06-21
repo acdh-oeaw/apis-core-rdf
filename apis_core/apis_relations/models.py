@@ -122,7 +122,7 @@ def subj_or_obj_class_changed(sender, is_subj, **kwargs):
             class_current = contenttype_current.model_class()
             for class_child in class_current.__subclasses__():
                 # TODO: Avoid ContentType DB fetch
-                contenttype_child = ContentType.objects.get(model=class_child.__name__)
+                contenttype_child = ContentType.objects.get_for_model(class_child)
                 child_list.append(contenttype_child)
                 child_list.extend(get_all_children(contenttype_child))
 
@@ -292,7 +292,7 @@ class Triple(models.Model):
         if self.subj is not None:
             subj_class_name = self.subj.__class__.__name__
             if (
-                ContentType.objects.get(model=subj_class_name)
+                ContentType.objects.get_for_model(self.subj.__class__)
                 not in self.prop.subj_class.all()
             ):
                 raise Exception(
@@ -301,7 +301,7 @@ class Triple(models.Model):
         if self.obj is not None:
             obj_class_name = self.obj.__class__.__name__
             if (
-                ContentType.objects.get(model=obj_class_name)
+                ContentType.objects.get_for_model(model=self.obj.__class__)
                 not in self.prop.obj_class.all()
             ):
                 raise Exception(
@@ -347,7 +347,6 @@ class TempTriple(Triple):
         """Adaption of the save() method of the class to automatically parse string-dates into date objects"""
 
         if parse_dates:
-
             # overwrite every field with None as default
             start_date = None
             start_start_date = None

@@ -364,8 +364,8 @@ def get_contenttype_of_class(model_class):
     if _class_contenttype_dict is None:
         _class_contenttype_dict = {}
     if model_class not in _class_contenttype_dict:
-        _class_contenttype_dict[model_class] = ContentType.objects.get(
-            model=model_class.__name__
+        _class_contenttype_dict[model_class] = ContentType.objects.get_for_model(
+            model_class
         )
 
     return _class_contenttype_dict[model_class]
