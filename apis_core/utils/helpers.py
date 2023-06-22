@@ -2,13 +2,17 @@ import functools
 import itertools
 from typing import Type
 
+
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_relations.models import Property
 
+
 @functools.lru_cache
-def get_classes_with_allowed_relation_from(entity_name: str) -> list[Type[TempEntityClass]]:
+def get_classes_with_allowed_relation_from(
+    entity_name: str,
+) -> list[Type[TempEntityClass]]:
     """Returns a list of classes to which the given class may be related by a Property"""
-    
+
     # Find all the properties where the entity is either subject or object
     properties_with_entity_as_subject = Property.objects.filter(
         subj_class__model=entity_name
