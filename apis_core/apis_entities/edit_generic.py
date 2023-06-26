@@ -54,7 +54,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             entity_content_type = ContentType.objects.get_for_model(entity_class)
 
             other_entity_class_name = entity_class.__name__.lower()
-
             triples_related_by_entity = triples_related_all.filter(
                 (
                     Q(**{f"subj__self_contenttype": entity_content_type})
@@ -80,7 +79,7 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             side_bar.append(
                 # (title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open)
                 (
-                    title_card,
+                    entity_class._meta.verbose_name_plural.title(),
                     tb_object,
                     f"triple_form_{self.entity}_to_{other_entity_class_name}",
                     tb_object_open,
