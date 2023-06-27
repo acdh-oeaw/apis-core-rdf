@@ -52,7 +52,16 @@ sphinx-rtd-theme = "*"
 optional = true
 [tool.poetry.group.dev.dependencies]
 black = "22.12"
+djlint = "^1.31.1"
 
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
+
+[tool.djlint]
+indent=2
+profile="django"
+extension="html"
+blank_line_before_tag="block,if"
+blank_line_after_tag="endif,endblock"
+format_js=false
