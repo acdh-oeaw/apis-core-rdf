@@ -1,18 +1,11 @@
 #SPDX-FileCopyrightText: 2023 Birger Schacht
 #SPDX-License-Identifier: MIT
-name: Run Linter
+name: Run black Linter
 
 on: [push, pull_request]
 
 jobs:
   black:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Run black
-        uses: psf/black@stable
-        with:
-          options: "--check --diff"
-          version: "22.12"
-          src: "./apis_core ./apis"
+    uses: acdh-oeaw/prosnet-workflows/.github/workflows/poetry-black.yml@dev
+    with:
+      src: "."
