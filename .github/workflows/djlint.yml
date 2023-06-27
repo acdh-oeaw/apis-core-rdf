@@ -1,0 +1,11 @@
+#SPDX-FileCopyrightText: 2023 Birger Schacht
+#SPDX-License-Identifier: MIT
+name: Run djLint Linter
+
+on: [push, pull_request]
+
+jobs:
+  dlint:
+    uses: acdh-oeaw/prosnet-workflows/.github/workflows/poetry-djlint.yml@dev
+    with:
+      src: "."
