@@ -50,6 +50,7 @@ class GenericTripleForm(forms.ModelForm):
             "subj": forms.HiddenInput(),
             "obj": forms.HiddenInput(),
             "prop": forms.HiddenInput(),
+            "notes": forms.Textarea(attrs={"rows": 3}),
         }
 
     def __init__(self, entity_type_self_str, entity_type_other_str):
