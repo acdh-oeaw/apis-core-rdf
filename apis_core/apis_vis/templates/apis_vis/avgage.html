@@ -1,29 +1,31 @@
 {% extends basetemplate %}
 {% load charts_extras %}
+
 {% block scriptHeader %}
-{{ block.super }}
-    {% load_highcharts_js %}
-    <style>
+  {{ block.super }}
+  {% load_highcharts_js %}
+  <style>
         #container {
         	min-width: 310px;
         	max-width: 800px;
         	height: 400px;
         	margin: 0 auto
         }
-    </style>
+  </style>
 {% endblock %}
-{% block content %}
-<div class="card card-default">
-<div class="card-heading"></div>
-<div class="card-body">
-<div id="container"></div>
-</div>
-</div>
-{% endblock %}
-{% block scripts %}
-{{block.super}}
-<script type="text/javascript">
 
+{% block content %}
+  <div class="card card-default">
+    <div class="card-heading"></div>
+    <div class="card-body">
+      <div id="container"></div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
 
         var options = {
@@ -54,5 +56,5 @@
         });
 
     });
-</script>
+  </script>
 {% endblock %}

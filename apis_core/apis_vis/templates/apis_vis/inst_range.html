@@ -1,32 +1,34 @@
 {% extends basetemplate %}
 {% load charts_extras %}
+
 {% block scriptHeader %}
-{{ block.super }}
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/highcharts-more.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <style>
+  {{ block.super }}
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <style>
         #container {
         	min-width: 310px;
         	max-width: 800px;
         	height: 800px;
         	margin: 0 auto
         }
-    </style>
+  </style>
 {% endblock %}
-{% block content %}
-<div class="card card-default">
-<div class="card-heading"></div>
-<div class="card-body">
-<div id="container"></div>
-</div>
-</div>
-{% endblock %}
-{% block scripts %}
-{{block.super}}
-<script type="text/javascript">
 
+{% block content %}
+  <div class="card card-default">
+    <div class="card-heading"></div>
+    <div class="card-body">
+      <div id="container"></div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
 
         var options = {
@@ -59,5 +61,5 @@
         });
 
     });
-</script>
+  </script>
 {% endblock %}
