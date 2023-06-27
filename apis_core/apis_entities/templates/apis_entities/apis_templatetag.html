@@ -1,17 +1,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
-<script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.6/dist/js/tooltipster.bundle.min.js" integrity="sha256-glChvCaC6IJq49dkfulAWd7xlkPwA0FEydjhjPBintA=" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.6/dist/css/tooltipster.bundle.min.css" integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.6/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css" integrity="sha256-Wa1I4jhSXeWd3N6RhfPlkqr1WlT+zS3Vh2YGCg0129E=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
+<script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.6/dist/js/tooltipster.bundle.min.js"
+        integrity="sha256-glChvCaC6IJq49dkfulAWd7xlkPwA0FEydjhjPBintA="
+        crossorigin="anonymous"></script>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.6/dist/css/tooltipster.bundle.min.css"
+      integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ="
+      crossorigin="anonymous">
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.6/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css"
+      integrity="sha256-Wa1I4jhSXeWd3N6RhfPlkqr1WlT+zS3Vh2YGCg0129E="
+      crossorigin="anonymous">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.css" />
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" /> -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
 <script type="text/javascript">
             // Setup plugin with default settings
@@ -23,8 +35,8 @@
                 });
 	$(document).on('submit', 'form.form.ajax_form', unbind_ajax_forms);
             });
-    </script>
-    <script type="text/javascript">
+</script>
+<script type="text/javascript">
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie != '') {
@@ -45,8 +57,8 @@
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
 
-    </script>
-    <script type="text/javascript">
+</script>
+<script type="text/javascript">
       function unbind_ajax_forms(event){
 	   $(this).find('button').attr('disabled', true);
             event.preventDefault();
@@ -67,7 +79,7 @@
               window[response.call_function](response)}
       )}
 </script>
-        <script type="text/javascript">
+<script type="text/javascript">
     //script that converts the multi select element of the annotation project menu
     $(document).ready(function() {
         $('select.selectmultiple').multiselect({
@@ -76,8 +88,8 @@
         });
         initiate_compare_tooltip();
     })
-    </script>
-        <script type="application/javascript">
+</script>
+<script type="application/javascript">
         $('body').on('mouseenter', '.apis-autocomplete-span:not(.tooltipstered)', function() {
                     $(this).tooltipster({
                       theme: 'tooltipster-light',
@@ -134,8 +146,8 @@
         unbind_compare_forms();
     }
 });};
-        </script>
-        <script type="text/javascript">
+</script>
+<script type="text/javascript">
       function unbind_compare_forms(){
       $("#change-history").parents('form').submit(function(event) {
             event.preventDefault();

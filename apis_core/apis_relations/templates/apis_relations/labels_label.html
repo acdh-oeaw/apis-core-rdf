@@ -1,1 +1,5 @@
-{% if record.label|slice:":3" in "http" %}<a href="{{ record.label }}">{{ record.label }}</a>{% else %}{{ record.label }}{% endif %}
+{% if record.label|slice:":3" in "http" %}
+  <a href="{{ record.label }}">{{ record.label }}</a>
+{% else %}
+  {{ record.label }}
+{% endif %}

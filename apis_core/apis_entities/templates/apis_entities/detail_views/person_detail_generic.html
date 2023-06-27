@@ -1,87 +1,69 @@
 {% extends "apis_entities/detail_views/detail_generic.html" %}
-{% block Titel %} {{ object.id }} {% endblock %}
 
+{% block Titel %}{{ object.id }}{% endblock %}
 
-    {% block info-table %}
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>
-                Name
-            </th>
-            <td>
-                {{ object.name }}, {{ object.first_name }}
-            </td>
-        </tr>
-        <tr>
-            <th>
-                Alternative Names
-            </th>
-            <td>
-                {% for x in no_merge_labels %}
-                    <li>
-                        <small>{{ x.label_type }}: </small>{{ x.label }}
-                    </li>
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>
-                ID
-            </th>
-            <td>
-                {{ object.id }}
-            </td>
-        </tr>
-        <tr>
-          <th>
-            Gender
-          </th>
-          <td>
-            {{ object.gender }}
-          </td>
-        </tr>
-        <tr>
-          <th>
-            Notes
-          </th>
-          <td>
-            {{ object.notes }}
-          </td>
-        </tr>
-        <tr>
-          <th>
-            References
-          </th>
-          <td>
-            {{ object.references }}
-          </td>
-        </tr>
-        {% if object.start_date or object.end_date %}
-        <tr>
-            <th>
-                Lifespan
-            </th>
-            <td>
-                {% if object.start_date %}
-                    <abbr title="{{ object.start_date }}">{{ object.start_date_written }}</abbr>
-                {% endif %}
-                {% if object.end_date %}
-                    - <abbr title="{{ object.end_date }}">{{ object.end_date_written }}</abbr>
-                {% endif %}
-            </td>
-        </tr>
-        {% endif %}
-        {% if object.profession.all %}
-        <tr>
-            <th>
-                Professions
-            </th>
-            <td>
-              {% for prof in object.profession.all %}
-                {{ prof.name }}{% if forloop.last %}{% else %},{% endif %}
-              {% endfor %}
-            </td>
-        </tr>
-        {% endif %}
-    </table>
-    {% endblock info-table %}
+{% block info-table %}
+  <table class="table table-bordered table-hover">
+    <tr>
+      <th>Name</th>
+      <td>{{ object.name }}, {{ object.first_name }}</td>
+    </tr>
+    <tr>
+      <th>Alternative Names</th>
+      <td>
+        {% for x in no_merge_labels %}
+          <li>
+            <small>{{ x.label_type }}:</small>{{ x.label }}
+          </li>
+        {% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <th>ID</th>
+      <td>{{ object.id }}</td>
+    </tr>
+    <tr>
+      <th>Gender</th>
+      <td>{{ object.gender }}</td>
+    </tr>
+    <tr>
+      <th>Notes</th>
+      <td>{{ object.notes }}</td>
+    </tr>
+    <tr>
+      <th>References</th>
+      <td>{{ object.references }}</td>
+    </tr>
+
+    {% if object.start_date or object.end_date %}
+      <tr>
+        <th>Lifespan</th>
+        <td>
+
+          {% if object.start_date %}<abbr title="{{ object.start_date }}">{{ object.start_date_written }}</abbr>{% endif %}
+
+          {% if object.end_date %}- <abbr title="{{ object.end_date }}">{{ object.end_date_written }}</abbr>{% endif %}
+
+        </td>
+      </tr>
+    {% endif %}
+
+    {% if object.profession.all %}
+      <tr>
+        <th>Professions</th>
+        <td>
+          {% for prof in object.profession.all %}
+            {{ prof.name }}
+
+            {% if forloop.last %}
+            {% else %}
+              ,
+            {% endif %}
+
+          {% endfor %}
+        </td>
+      </tr>
+    {% endif %}
+
+  </table>
+{% endblock info-table %}

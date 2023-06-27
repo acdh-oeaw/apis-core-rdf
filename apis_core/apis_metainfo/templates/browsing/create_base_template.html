@@ -1,15 +1,18 @@
 {% extends basetemplate %}
+
 {% block title %}{% endblock %}
+
 {% load crispy_forms_tags %}
+
 {% block content %}
-<div class="container">
+  <div class="container">
     <div class="card">
-        <div class="card-header">
-            {% block objectType %} {% endblock %}
-        </div>
-        <div class="card-body">
-             {% crispy form %}
-        </div>
+      <div class="card-header">
+
+        {% block objectType %}{% endblock %}
+
+      </div>
+      <div class="card-body">{% crispy form %}</div>
     </div>
-</div>
+  </div>
 {% endblock content %}

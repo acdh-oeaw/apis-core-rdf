@@ -1,9 +1,9 @@
 {% extends basetemplate %}
-{% block scriptHeader %}
-{{ block.super }}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
-<style type="text/css">
 
+{% block scriptHeader %}
+  {{ block.super }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+  <style type="text/css">
       body  {margin: 0; padding: 0;}
       html,body,#map { height: 100%; }
       #wrapper {height: 100%;
@@ -16,23 +16,26 @@
       z-index: 2000;
     }
 
-    </style>
+  </style>
 {% endblock %}
+
 {% block content %}
-<div class="card card-default">
-<div class="card-heading"><h2>Map</h2></div>
-<div class="card-body">
-<div id="wrapper">
-<div id="map"></div>
-<div id="filter-menu">
-</div>
-</div>
-</div>
-</div>
+  <div class="card card-default">
+    <div class="card-heading">
+      <h2>Map</h2>
+    </div>
+    <div class="card-body">
+      <div id="wrapper">
+        <div id="map"></div>
+        <div id="filter-menu"></div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
+
 {% block scripts %}
-{{block.super}}
-<script type="text/javascript">
+  {{ block.super }}
+  <script type="text/javascript">
     function filterSet(e, filter) {
         if (e.className === 'btn btn-success') {
         e.className = 'btn btn-default';
@@ -101,5 +104,5 @@
                 }
             });
 
-</script>
+  </script>
 {% endblock %}
