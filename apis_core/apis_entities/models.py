@@ -105,9 +105,6 @@ class TempEntityClass(AbstractEntity):
     # TODO RDF: Make Text also a Subclass of RootObject
     collection = models.ManyToManyField("apis_metainfo.Collection")
     status = models.CharField(max_length=100)
-    source = models.ForeignKey(
-        "apis_metainfo.Source", blank=True, null=True, on_delete=models.SET_NULL
-    )
     references = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     published = models.BooleanField(default=False)

@@ -109,25 +109,6 @@ class RootObject(models.Model):
 
 
 @reversion.register()
-class Source(models.Model):
-    """Holds information about entities and their relations"""
-
-    orig_filename = models.CharField(max_length=255, blank=True)
-    indexed = models.BooleanField(default=False)
-    pubinfo = models.CharField(max_length=400, blank=True)
-    author = models.CharField(max_length=255, blank=True)
-    orig_id = models.PositiveIntegerField(blank=True, null=True)
-
-    def __str__(self):
-        if self.author != "" and self.orig_filename != "":
-            return "{}, stored by {}".format(self.orig_filename, self.author)
-        elif self.orig_filename != "":
-            return "{}".format(self.orig_filename)
-        else:
-            return "(ID: {})".format(self.id)
-
-
-@reversion.register()
 class Collection(models.Model):
     """Allows to group entities and relation."""
 
