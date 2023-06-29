@@ -1,13 +1,30 @@
 <div class="autocomplete-ort">
-{% for choice in choices %}
+  {% for choice in choices %}
     <script>console.log({{ choice|safe }})</script>
-<span id="auto_{{ choice.ac_type }}_{{ forloop.counter }}" class="block autocomp_span {{ choice.source }}" replace-text="{{ choice.name }}" data-value="{{ choice.uri }}" style="white-space: normal">
-    <b>{{ choice.name }}</b>&nbsp;<small>{{ choice.source }}</small>{% if choice.score %}&nbsp;[{{choice.score}}]{% endif %}{% if choice.dateOfBirth %}&nbsp;
-    ({{ choice.dateOfBirth|date:'d. F Y' }}{% if choice.dateOfDeath %}-{{ choice.dateOfDeath|date:'d. F Y' }}{% endif %}){% endif %}{% if choice.descr %}:&nbsp;{{choice.descr|safe}}{% endif %}
-</span>
-{% if choice.lat %}
-<script>
+    <span id="auto_{{ choice.ac_type }}_{{ forloop.counter }}"
+          class="block autocomp_span {{ choice.source }}"
+          replace-text="{{ choice.name }}"
+          data-value="{{ choice.uri }}"
+          style="white-space: normal">
+      <b>{{ choice.name }}</b>&nbsp;<small>{{ choice.source }}</small>
 
+      {% if choice.score %}&nbsp;[{{ choice.score }}]{% endif %}
+
+      {% if choice.dateOfBirth %}
+        &nbsp;
+        ({{ choice.dateOfBirth|date:'d. F Y' }}
+
+        {% if choice.dateOfDeath %}-{{ choice.dateOfDeath|date:'d. F Y' }}{% endif %}
+
+        )
+      {% endif %}
+
+      {% if choice.descr %}:&nbsp;{{ choice.descr|safe }}{% endif %}
+
+    </span>
+
+    {% if choice.lat %}
+      <script>
             $('#auto_{{ choice.ac_type }}_{{ forloop.counter }}').tooltipster({
                 functionReady: function(origin, content) {
                     if ($('#tooltip_map_{{ choice.ac_type }}_{{ forloop.counter }}').children().length == 0){
@@ -28,8 +45,8 @@
 
             });
 
-    </script>
-{% endif %}
+      </script>
+    {% endif %}
 
-{% endfor %}
+  {% endfor %}
 </div>

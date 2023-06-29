@@ -1,9 +1,7 @@
 {% load django_tables2 crispy_forms_tags %}
 <div class="card">
-    <div class="card-header">
-        <h4>Import new {{ entity|title }} from GND</h4>
-    </div>
-    <div class="card-body">
-        {% crispy entity_create_stanbol  entity_create_stanbol.helper %}
-    </div>
+  <div class="card-header">
+    <h4>Import new {{ entity|title }} from GND</h4>
+  </div>
+  <div class="card-body">{% crispy entity_create_stanbol  entity_create_stanbol.helper %}</div>
 </div>
