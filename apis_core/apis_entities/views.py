@@ -13,6 +13,8 @@ from django_tables2 import RequestConfig
 from django_tables2 import SingleTableView
 from django_tables2.export.views import ExportMixin
 
+from apis_core.core.mixins import ListViewObjectFilterMixin
+
 from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
 from apis_core.utils.stanbolQueries import retrieve_obj
 from apis_core.utils.utils import (
@@ -106,7 +108,9 @@ def get_highlighted_texts(request, instance):
 ############################################################################
 
 
-class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
+class GenericListViewNew(
+    UserPassesTestMixin, ListViewObjectFilterMixin, ExportMixin, SingleTableView
+):
     formhelper_class = GenericFilterFormHelper
     context_filter_name = "filter"
     paginate_by = 25
@@ -145,7 +149,7 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
         )
         self.filter.form.helper = self.formhelper_class()
 
-        return self.filter.qs
+        return self.filter_queryset(self.filter.qs)
 
     def get_table(self, **kwargs):
         """
