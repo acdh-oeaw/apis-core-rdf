@@ -49,7 +49,7 @@ def class_definition(context):
 @register.inclusion_tag("browsing/tags/column_selector.html", takes_context=True)
 def column_selector(context):
     try:
-        return {"columns": context["togglable_colums"]}
+        return {"columns": context["toggleable_columns"]}
     except Exception as e:
         print(e)
         return {"columns": None}

@@ -94,10 +94,10 @@ class GenericListView(django_tables2.SingleTableView):
 
     def get_context_data(self, **kwargs):
         context = super(GenericListView, self).get_context_data()
-        togglable_colums = [
+        toggleable_columns = [
             x for x in self.get_all_cols() if x not in self.init_columns
         ]
-        context["togglable_colums"] = togglable_colums
+        context["toggleable_columns"] = toggleable_columns
         context[self.context_filter_name] = self.filter
         context["docstring"] = "{}".format(self.model.__doc__)
         if self.model._meta.verbose_name_plural:

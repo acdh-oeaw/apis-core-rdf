@@ -1,33 +1,33 @@
 # -*- coding: utf-8 -*-
 import json
 
+from apis_core.apis_metainfo.models import Text, Uri, UriCandidate
+from apis_core.utils.stanbolQueries import retrieve_obj
+from apis_core.utils.utils import (
+    ENTITIES_DEFAULT_COLS,
+    access_for_all,
+    access_for_all_function,
+)
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
-from django.urls import reverse_lazy
-from django_tables2 import RequestConfig
-from django_tables2 import SingleTableView
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView
+from django_tables2 import SingleTableMixin
 from django_tables2.export.views import ExportMixin
 
-from apis_core.apis_metainfo.models import Uri, UriCandidate, Text
-from apis_core.utils.stanbolQueries import retrieve_obj
-from apis_core.utils.utils import (
-    access_for_all,
-    access_for_all_function,
-    ENTITIES_DEFAULT_COLS,
-)
 from .filters import get_list_filter_of_entity
 from .forms import (
+    GenericEntitiesStanbolForm,
     GenericFilterFormHelper,
     NetworkVizFilterForm,
     PersonResolveUriForm,
-    GenericEntitiesStanbolForm,
 )
-from .tables import get_entities_table
+from .tables import EntitiesTableFactory
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.forms import SelectAnnotationProject
@@ -36,6 +36,17 @@ if "apis_highlighter" in settings.INSTALLED_APPS:
 if "charts" in settings.INSTALLED_APPS:
     from charts.models import ChartConfig
     from charts.views import create_payload
+
+if "browsing" in settings.INSTALLED_APPS:
+    import datetime
+    import time
+
+    import pandas as pd
+    from browsing.models import BrowsConf
+
+    browsing_is_installed = True
+else:
+    browsing_is_installed = False
 
 ###########################################################################
 ############################################################################
@@ -106,146 +117,212 @@ def get_highlighted_texts(request, instance):
 ############################################################################
 
 
-class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
+class GenericTableMixin(ExportMixin, SingleTableMixin):
+    """
+    Table specific methods and attributes are provided via this mixin.
+    """
+
+    # 'inherited' class-attribute. will be passed to instance as self.table_pagination and used by methods of SingleTableView! Don't rename!
+    table_pagination = {"page": 1, "per_page": 25}
+    table_factory_class = EntitiesTableFactory
+
+    def get_table_class(self):
+        """
+        Inherited method from SingleTableMixin via SingleTableView.
+        """
+        if self.table_class:
+            return self.table_class
+        elif hasattr(self, "table_factory_class"):
+            return self.table_factory_class.get_table_class(self.model_class)
+
+        raise ImproperlyConfigured(
+            f"""You must either specify '{type(self).__name__}.table_class' 
+            or provide a factory-class as '{type(self).__name__}.table_factory_class'"""
+        )
+
+    def get_entity_settings(self):
+        """
+        Custom method, not inherited.
+        """
+        if hasattr(self.model_class, "entity_settings"):
+            return self.model_class.entity_settings
+        else:
+            return {}
+
+    def get_columns_selected_by_user(self):
+        """
+        Custom method, not inherited. Implemented for extensibility and readability.
+        Context-Info: User can select additional columns from a dropdown in frontend.
+        """
+        selected_cols = self.request.GET.getlist("columns")
+        return selected_cols
+
+    def get_default_columns_for_model(self):
+        """
+        Custom method, not inherited.
+        Reads the default column(s) for the model from your projects-file.
+        If not defined or left empty, defaults to ['name'].
+        """
+
+        if hasattr(settings, "APIS_ENTITIES"):
+            class_settings = settings.APIS_ENTITIES.get(self.model_name, {})
+            return class_settings.get("table_fields", ["name"])
+        else:
+            return [
+                "name",
+            ]
+
+    def get_table_kwargs(self):
+        """
+        Overwrites method from SingleTableMixin via SingleTableView.
+        Sourcecode with docstring: https://django-tables2.readthedocs.io/en/latest/_modules/django_tables2/views.html#SingleTableMixin
+
+        >>>>>>>> IMPORTANT: Customization of a table instance in a concrete use-context should happen in this method! <<<<<<<
+
+        Returns a dict of kwargs used to instanciate the table from the given table_class (implicitly, via methods of the super-classes!).
+        If you need entity specific configurations, apply them here - see dummy if branch!.
+        """
+
+        columns = (
+            self.get_default_columns_for_model() + self.get_columns_selected_by_user()
+        )
+
+        # TODO: __gp__: adjust the permission check once we decided on more suitable permissions
+        if self.request.user.is_authenticated:
+            # apply configurations that need authentication; visible_columns is a custom param passed to the Tables __init__!
+            visible_cols = ("_detail", "_edit", *columns)
+            sequence = ("_detail", "_edit", "...")
+        else:
+            visible_cols = ("_detail", *columns)
+            sequence = ("_detail", "...")
+
+        kwargs = {
+            "visible_columns": visible_cols,
+            "sequence": sequence,
+        }
+
+        return kwargs
+
+    def get_toggleable_columns(self):
+        cols = ENTITIES_DEFAULT_COLS + self.entity_settings.get("additional_cols", [])
+        return cols
+
+    def get_context_data(self):
+        """
+        Contributes table-specific keys to the inheriting get_context_data - method.
+        """
+        context = super().get_context_data()
+        context.update(
+            {
+                "toggleable_columns": self.get_toggleable_columns(),
+            }
+        )
+        return context
+
+
+class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
     formhelper_class = GenericFilterFormHelper
-    context_filter_name = "filter"
-    paginate_by = 25
     template_name = getattr(
-        settings, "APIS_LIST_VIEW_TEMPLATE", "apis_entities/generic_list.html"
+        settings, "APIS_LIST_VIEW_TEMPLATE", "browsing/generic_list.html"
     )
     login_url = "/accounts/login/"
 
-    def __init__(self, *args, **kwargs):
-        super(GenericListViewNew, self).__init__(*args, **kwargs)
-        self.entity = None
-        self.filter = None
+    def setup(self, request, *args, **kwargs):
+        self.model_name = kwargs.get("entity", None)
 
-    def get_model(self):
-        """
-        Look up the model class for the given entity
-        """
-        model = ContentType.objects.get(
-            app_label__startswith="apis_", model=self.entity
+        # 'inherited' attr! Has logic attached to it, i.e. is potentially used by internal methods of parent-classes!
+        self.model_class = ContentType.objects.get(
+            app_label__startswith="apis_", model=self.model_name
         ).model_class()
 
-        return model
+        self.entity_settings = self.get_entity_settings()
+
+        return super().setup(request, *args, **kwargs)
 
     def test_func(self):
+        """
+        Test function expected by the UserPassesTestMixin.
+        """
         access = access_for_all(self, viewtype="list")
         if access:
             self.request = set_session_variables(self.request)
         return access
 
     def get_queryset(self, **kwargs):
-        self.entity = self.kwargs.get("entity")
-
-        qs = (self.get_model().objects.all()).order_by("name")
-        self.filter = get_list_filter_of_entity(self.entity)(
+        qs = (self.model_class.objects.all()).order_by("name")
+        self.filter = get_list_filter_of_entity(self.model_name)(
             self.request.GET, queryset=qs
         )
         self.filter.form.helper = self.formhelper_class()
 
         return self.filter.qs
 
-    def get_table(self, **kwargs):
-        """
-        Create entity-specific table object for use on the frontend.
-
-        Holds information on e.g. which fields to use for table columns.
-        Incorporates variables provided in Models, Settings where available.
-
-        :return: a dictionary
-        """
-        model = self.get_model()
-        class_name = model.__name__
-
-        session = getattr(self.request, "session", False)
-        if session:
-            edit_v = self.request.session.get("edit_views", False)
-        else:
-            edit_v = False
-
-        selected_cols = self.request.GET.getlist(
-            "columns"
-        )  # populates "Select additional columns" dropdown
-        default_cols = []  # get set to "name" in get_entities_table when empty
-        if hasattr(settings, "APIS_ENTITIES"):
-            class_settings = settings.APIS_ENTITIES.get(class_name, {})
-            default_cols = class_settings.get("table_fields", [])
-        default_cols = default_cols + selected_cols
-
-        self.table_class = get_entities_table(
-            class_name, edit_v, default_cols=default_cols
-        )
-        table = super(GenericListViewNew, self).get_table()
-        RequestConfig(
-            self.request, paginate={"page": 1, "per_page": self.paginate_by}
-        ).configure(table)
-
-        return table
-
     def get_context_data(self, **kwargs):
         """
-        Create entity-specific context object for use on the frontend.
+        Overwrites inherited method. Prepares the context dict which makes additional data available in templates.
 
-        Holds display values and information on functionality based on
-        model data as well as variables provided in Settings (where available).
-
-        :return: a dictionary
+        Important: in the context of tables, the actual calls to the inherited method get_table and get_table_data from SingleTableMixin and our own Mixin
+        (see https://django-tables2.readthedocs.io/en/latest/_modules/django_tables2/views.html#SingleTableMixin) are hidden behind the
+        call to super().get_context_data(). This call contributes f.e. the 'table' key to the context dict, which is then rendered in the template. Just a general
+        note that you can't really reason about what the code does without looking into the superclasses.
         """
-        context = super(GenericListViewNew, self).get_context_data()
-        model = self.get_model()
-        class_name = model.__name__
 
-        context[self.context_filter_name] = self.filter
-        context["entity"] = self.entity  # model slug
-        context["app_name"] = "apis_entities"
-        context["docstring"] = f"{model.__doc__}"
+        model_class = self.model_class
+        model_name = self.model_name
+        name_verbose = model_class._meta.verbose_name
 
-        context["entity_create_stanbol"] = GenericEntitiesStanbolForm(self.entity)
+        def get_model_name_plural():
+            """
+            Refactored into an inner function for readability.
+            TODO: __gpirgie__: pls make this an external util function that can be re-used in different contexts.\
+                  Or implement this logic on our Base-Models
+            """
+            if model_class._meta.verbose_name_plural:
+                return model_class._meta.verbose_name_plural.title()
+            # rudimentary way of pluralising the name of a model class
+            else:
+                if model_name.endswith("s"):
+                    return f"{model_name}es"
+                elif model_name.endswith("y"):
+                    return f"{model_name[:-1]}ies"
+                else:
+                    return f"{model_name}s"
 
-        if "browsing" in settings.INSTALLED_APPS:
-            from browsing.models import BrowsConf
+        context = super().get_context_data()
+        context.update(
+            {
+                "filter": self.filter,
+                "app_name": "apis_entities",
+                "docstring": str(model_class.__doc__),
+                "entitiy_create_stanbol": GenericEntitiesStanbolForm(model_name),
+                "class_name": model_name
+                if not name_verbose
+                else name_verbose.title(),  # TODO: __gp__: as already noted by kk, class_name should be renamed also in templates.
+                "class_name_plural": get_model_name_plural(),
+                "get_arche_dump": None
+                if not hasattr(model_class, "get_arche_dump")
+                else model_class.get_arche_dump(),
+                "create_view_link": None
+                if not hasattr(model_class, "get_createview_url")
+                else model_class.get_createview_url(),
+            }
+        )
 
+        if browsing_is_installed:
             context["conf_items"] = list(
-                BrowsConf.objects.filter(model_name=class_name).values_list(
+                BrowsConf.objects.filter(model_name=model_name).values_list(
                     "field_path", "label"
                 )
             )
 
-        # TODO kk
-        #  suggestion: rename context['class_name'] to context['entity_name']
-        #  throughout (+ same for plural versions) to avoid confusion with
-        #  actual model class name
-        if model._meta.verbose_name:
-            context["class_name"] = f"{model._meta.verbose_name.title()}"
-        else:
-            context["class_name"] = f"{class_name}"
-        if model._meta.verbose_name_plural:
-            context["class_name_plural"] = f"{model._meta.verbose_name_plural.title()}"
-        # rudimentary way of pluralising the name of a model class
-        else:
-            if class_name.endswith("s"):
-                context["class_name_plural"] = f"{class_name}es"
-            elif class_name.endswith("y"):
-                context["class_name_plural"] = f"{class_name[:-1]}ies"
-            else:
-                context["class_name_plural"] = f"{class_name}s"
-
-        try:
-            context["get_arche_dump"] = model.get_arche_dump()
-        except AttributeError:
-            context["get_arche_dump"] = None
-
-        try:
-            context["create_view_link"] = model.get_createview_url()
-        except AttributeError:
-            context["create_view_link"] = None
-
         if "charts" in settings.INSTALLED_APPS:
-            app_label = model._meta.app_label
+            app_label = (
+                model_class._meta.app_label
+                # NOTE: __gp__ unused atm, but not sure if app_label will work as expected in the future.
+                # In the context of ontologies, will resolve to apis_ontologies and not apis_entities (be aware!)
+            )
             filtered_objs = ChartConfig.objects.filter(
-                model_name=model.__name__.lower(), app_name=app_label
+                model_name=model_class.__name__.lower(), app_name=app_label
             )
             context["vis_list"] = filtered_objs
             context["property_name"] = self.request.GET.get("property")
@@ -261,24 +338,15 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
                 )
                 context = dict(context, **chartdata)
 
-        toggleable_cols = []
-        if hasattr(settings, "APIS_ENTITIES"):
-            entity_settings = settings.APIS_ENTITIES.get(class_name, {})
-            toggleable_cols = entity_settings.get("additional_cols", [])
-
-        # TODO kk spelling of this dict key should get fixed throughout
-        #  (togglable_colums -> toggleable_columns)
-        context["togglable_colums"] = toggleable_cols + ENTITIES_DEFAULT_COLS
-
         return context
 
     def render_to_response(self, context, **kwargs):
         download = self.request.GET.get("sep", None)
-        if download and "browsing" in settings.INSTALLED_APPS:
-            import datetime
-            import time
-            import pandas as pd
 
+        def http_response_with_attachment():
+            """
+            Moved into inner function to improve readability of control-flow.
+            """
             sep = self.request.GET.get("sep", ",")
             timestamp = datetime.datetime.fromtimestamp(time.time()).strftime(
                 "%Y-%m-%d-%H-%M-%S"
@@ -304,21 +372,20 @@ class GenericListViewNew(UserPassesTestMixin, ExportMixin, SingleTableView):
                     "Content-Disposition"
                 ] = 'attachment; filename="{}.csv"'.format(filename)
                 return response
-            if sep == "comma":
-                df.to_csv(response, sep=",", index=False)
-            elif sep == "semicolon":
-                df.to_csv(response, sep=";", index=False)
-            elif sep == "tab":
-                df.to_csv(response, sep="\t", index=False)
-            else:
-                df.to_csv(response, sep=",", index=False)
+
+            sep_mapp = {"comma": ",", "semicolon": ";", "tab": "\t"}
+
+            df.to_csv(response, sep=sep_mapp.get(sep, ","), index=False)
+
             response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(
                 filename
             )
             return response
+
+        if download and browsing_is_installed:
+            return http_response_with_attachment()
         else:
-            response = super(GenericListViewNew, self).render_to_response(context)
-            return response
+            return super(GenericListViewNew, self).render_to_response(context)
 
 
 ############################################################################
@@ -357,12 +424,14 @@ def getGeoJson(request):
                 )
                 select_text = "<a href='{}'>Select this URI</a>".format(url_r)
                 try:
-                    add_info = "<b>Confidence:</b> {}<br/><b>Feature:</b> <a href='{}'>{}</a>".format(
-                        x.confidence, x.uri, x.uri
+                    add_info = (
+                        "<b>Confidence:</b> {}<br/><b>Feature:</b> <a"
+                        " href='{}'>{}</a>".format(x.confidence, x.uri, x.uri)
                     )
                 except:
-                    add_info = "<b>Confidence:</b>no value provided <br/><b>Feature:</b> <a href='{}'>{}</a>".format(
-                        x.uri, x.uri
+                    add_info = (
+                        "<b>Confidence:</b>no value provided"
+                        " <br/><b>Feature:</b> <a href='{}'>{}</a>".format(x.uri, x.uri)
                     )
                 r = {
                     "geometry": {
@@ -382,7 +451,10 @@ def getGeoJson(request):
                     },
                     "type": "Feature",
                     "properties": {
-                        "popupContent": "<b>ÖBL name:</b> %s<br/><b>Geonames:</b> %s<br/>%s<br/>%s"
+                        "popupContent": (
+                            "<b>ÖBL name:</b> %s<br/><b>Geonames:</b>"
+                            " %s<br/>%s<br/>%s"
+                        )
                         % (
                             instance.name,
                             o["representation"][
@@ -397,7 +469,10 @@ def getGeoJson(request):
                 lst_json.append(r)
     elif instance.lat is not None and instance.lng is not None:
         r = {
-            "geometry": {"type": "Point", "coordinates": [instance.lng, instance.lat]},
+            "geometry": {
+                "type": "Point",
+                "coordinates": [instance.lng, instance.lat],
+            },
             "type": "Feature",
             "properties": {"popupContent": "<b>Name:</b> %s<br/>" % (instance.name)},
             "id": instance.pk,
@@ -429,7 +504,10 @@ def getGeoJsonList(request):
             "type": "Feature",
             "relation_type": x.relation_type.name,
             "properties": {
-                "popupContent": "<b>Person:</b> <a href='%s'>%s</a><br/><b>Connection:</b> %s<br/><b>Place:</b> <a href='%s'>%s</a>"
+                "popupContent": (
+                    "<b>Person:</b> <a href='%s'>%s</a><br/><b>Connection:</b>"
+                    " %s<br/><b>Place:</b> <a href='%s'>%s</a>"
+                )
                 % (
                     pers_url,
                     x.related_person,
