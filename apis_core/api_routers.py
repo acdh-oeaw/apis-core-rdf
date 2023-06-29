@@ -246,7 +246,7 @@ def generic_serializer_creation_factory():
             if x in entity_field_name_list:
                 exclude_lst_fin.append(x)
         if entity_str.lower() == "text":
-            exclude_lst_fin.extend(["kind", "source"])
+            exclude_lst_fin.extend(["kind"])
         for f in entity._meta.get_fields():
             if f.__class__.__name__ == "ManyToManyField":
                 prefetch_rel.append(f.name)

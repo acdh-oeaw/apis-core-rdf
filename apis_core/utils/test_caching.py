@@ -6,7 +6,6 @@ all_class_modules_and_names = {
     "apis_metainfo": [
         "Collection",
         "RootObject",
-        "Source",
         "Uri",
     ],
     "apis_vocabularies": [
