@@ -1,14 +1,15 @@
 import warnings
-
 import django_tables2 as tables
-from apis_core.apis_metainfo.tables import (generic_order_end_date_written,
-                                            generic_order_start_date_written,
-                                            generic_render_end_date_written,
-                                            generic_render_start_date_written)
+from apis_core.apis_metainfo.tables import (
+    generic_order_end_date_written,
+    generic_order_start_date_written,
+    generic_render_end_date_written,
+    generic_render_start_date_written,
+)
 from django.conf import settings
 from django.db.models import Model
 
-#from . import MergeColumn
+# from . import MergeColumn
 
 
 class EntitiesTableFactory:
@@ -16,7 +17,7 @@ class EntitiesTableFactory:
     Factory class.
     Responsible for creating or retrieving an entity-specific variant of
     the inner GenericEntitiesTable class --> a variant of that class (a class!),
-    not an instance of a class.
+    not an instance of the class.
 
     The calling code (the calling view) is responsible for creating an
     instance of the returned class and customizing it.
@@ -45,9 +46,9 @@ class EntitiesTableFactory:
         """
 
         if hasattr(settings, "CUSTOM_ENTITY_TABLES"):
-            return settings.CUSTOM_ENTITY_TABLES.get(model_name, None)
-        else:
-            return None
+            return settings.CUSTOM_ENTITY_TABLES.get(model_name, False)
+
+        return False
 
     @classmethod
     def get_table_class(cls, model_class: Model):
@@ -70,15 +71,11 @@ class EntitiesTableFactory:
                 model_name
             ) or cls.create_new_entities_table_class(model_class, model_name)
             cls.table_classes[model_name] = table_class
-        
+
         return table_class
 
-      
-
     @classmethod
-    def create_new_entities_table_class(
-        cls, model_class: Model, model_name: str
-    ):
+    def create_new_entities_table_class(cls, model_class: Model, model_name: str):
         class GenericEntitiesTable(tables.Table):
             """
             The Generic Table from which all variants will be cconstructed. Add all possible fields/columns
@@ -114,7 +111,7 @@ class EntitiesTableFactory:
                 "xlsx",
             ]
 
-            #merge = MergeColumn(verbose_name="keep | remove", accessor="pk")
+            # merge = MergeColumn(verbose_name="keep | remove", accessor="pk")
             _detail = tables.TemplateColumn(
                 template_name="apis_entities/tables/detail_button_template.html",
                 extra_context={"model_name": model_name},
@@ -159,22 +156,19 @@ class EntitiesTableFactory:
                 """
 
                 model = model_class
-                attrs = {
-                    "class": "table table-hover table-striped table-condensed"
-                }
+                attrs = {"class": "table table-hover table-striped table-condensed"}
 
-            def __init__(
-                self, visible_columns: tuple[str] = None, *args, **kwargs
-            ):
+            def __init__(self, visible_columns: tuple[str] = None, *args, **kwargs):
                 """
                 Extends how table instances are instanciated.
                 Adds the visible_columns param (not provided by django_tables2),
                 which must be an iterable of column-names.
                 Only the columns given in visible_columns will be added to the table.
-                If visible_columns is not set, a warning will be raised (not an error).
+                If visible_columns is not set, a warning will be raised (not an error) –
+                and all available columns will be shown (all model fields).
 
-                TODO: Currently, exporting table data as csv, etc. is disabled.
-                TODO: If re-implemented, ensure that visible_columns also applies to the exported table data.
+                NOTE: __gp__ Currently, exporting table data as csv, etc. is disabled.
+                TODO: __gp__ If re-implemented, ensure that visible_columns also applies to the exported table data.
                 """
                 super().__init__(*args, **kwargs)
 

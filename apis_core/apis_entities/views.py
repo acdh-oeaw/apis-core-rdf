@@ -79,9 +79,7 @@ def set_session_variables(request):
 def get_highlighted_texts(request, instance):
     if "apis_highlighter" in settings.INSTALLED_APPS:
         set_ann_proj = request.session.get("annotation_project", 1)
-        entity_types_highlighter = request.session.get(
-            "entity_types_highlighter", None
-        )
+        entity_types_highlighter = request.session.get("entity_types_highlighter", None)
         users_show = request.session.get("users_show_highlighter", None)
         object_texts = [
             {
@@ -121,17 +119,12 @@ def get_highlighted_texts(request, instance):
 
 class GenericTableMixin(ExportMixin, SingleTableMixin):
     """
-    Yeah, not really a pure Mixin if it has a view in it... So 'needs' refactor.
-    But there was no point in making it completely standalone and reusable yet, before
-    refactor of all the table classes and app-structure of apis-rdf is decided. So:
-    NOTE: __gp__: consider renaming it, if it will not become a standalone mixin. ATM it is, as the name says, a hybrid between a Mixin and a View.
-    I still think that it makes very much sense to extract the table specific logic into it's own class to improve readability.
+    Table specific methods and attributes are provided via this mixin.
     """
 
     # 'inherited' class-attribute. will be passed to instance as self.table_pagination and used by methods of SingleTableView! Don't rename!
     table_pagination = {"page": 1, "per_page": 25}
     table_factory_class = EntitiesTableFactory
-
 
     def get_table_class(self):
         """
@@ -143,17 +136,14 @@ class GenericTableMixin(ExportMixin, SingleTableMixin):
             return self.table_factory_class.get_table_class(self.model_class)
 
         raise ImproperlyConfigured(
-            f"You must either specify {type(self).__name__}.table_class or"
-            " provide a factory-class as"
-            f" {type(self).__name__}.table_factory_class"
+            f"""You must either specify '{type(self).__name__}.table_class' 
+            or provide a factory-class as '{type(self).__name__}.table_factory_class'"""
         )
 
     def get_entity_settings(self):
         """
         Custom method, not inherited.
-        TODO: __gp__: this naming prevents real generic use of this "mixin". Should be refactored for reusability and moved outside of apis_entities.
         """
-
         if hasattr(self.model_class, "entity_settings"):
             return self.model_class.entity_settings
         else:
@@ -164,7 +154,6 @@ class GenericTableMixin(ExportMixin, SingleTableMixin):
         Custom method, not inherited. Implemented for extensibility and readability.
         Context-Info: User can select additional columns from a dropdown in frontend.
         """
-
         selected_cols = self.request.GET.getlist("columns")
         return selected_cols
 
@@ -193,67 +182,48 @@ class GenericTableMixin(ExportMixin, SingleTableMixin):
         Returns a dict of kwargs used to instanciate the table from the given table_class (implicitly, via methods of the super-classes!).
         If you need entity specific configurations, apply them here - see dummy if branch!.
         """
-        kwargs = {}
 
         columns = (
-            self.get_default_columns_for_model()
-            + self.get_columns_selected_by_user()
+            self.get_default_columns_for_model() + self.get_columns_selected_by_user()
         )
 
+        # TODO: __gp__: adjust the permission check once we decided on more suitable permissions
         if self.request.user.is_authenticated:
             # apply configurations that need authentication; visible_columns is a custom param passed to the Tables __init__!
-            kwargs["visible_columns"] = ("_detail", "_edit", *columns)
-            kwargs["sequence"] = ("_detail", "_edit", "...")
+            visible_cols = ("_detail", "_edit", *columns)
+            sequence = ("_detail", "_edit", "...")
         else:
-            kwargs["visible_columns"] = ("_detail", *columns)
-            kwargs["sequence"] = ("_detail", "...")
+            visible_cols = ("_detail", *columns)
+            sequence = ("_detail", "...")
 
-        # __gp__: Apply entity specific configurations here:
-        if self.model_name == "ExampleDummyName":
-            # __gp__: overwrite all or specific kwargs here.
-            # for example: you can add more Columns, even ones that are not defined on the table-class here.
-            # or you can change styling by changing the attrs - keyword.
-            # etc.
-            pass
+        kwargs = {
+            "visible_columns": visible_cols,
+            "sequence": sequence,
+        }
 
         return kwargs
+
+    def get_toggleable_columns(self):
+        cols = ENTITIES_DEFAULT_COLS + self.entity_settings.get("additional_cols", [])
+        return cols
 
     def get_context_data(self):
         """
         Contributes table-specific keys to the inheriting get_context_data - method.
         """
-
-        # enable_merge = (
-        #     self.entity_settings.get("merge", False)
-        #     if self.request.user.is_authenticated
-        #     else False
-        # )
-
-        def get_toggleable_columns():
-            cols = ENTITIES_DEFAULT_COLS + self.entity_settings.get(
-                "additional_cols", []
-            )
-
-            # if enable_merge:
-            #     cols.append("merge")
-
-            return cols
-
         context = super().get_context_data()
         context.update(
             {
-                "togglable_columns": get_toggleable_columns(),
-                # "enable_merge": enable_merge,
+                "toggleable_columns": self.get_toggleable_columns(),
             }
         )
-
         return context
 
 
 class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
     formhelper_class = GenericFilterFormHelper
     template_name = getattr(
-        settings, "APIS_LIST_VIEW_TEMPLATE", "apis_entities/generic_list.html"
+        settings, "APIS_LIST_VIEW_TEMPLATE", "browsing/generic_list.html"
     )
     login_url = "/accounts/login/"
 
@@ -265,7 +235,6 @@ class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
             app_label__startswith="apis_", model=self.model_name
         ).model_class()
 
-        # TODO: __gp__: this naming prevents real generic use of this "mixin". Rename with refactor.
         self.entity_settings = self.get_entity_settings()
 
         return super().setup(request, *args, **kwargs)
@@ -273,7 +242,6 @@ class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
     def test_func(self):
         """
         Test function expected by the UserPassesTestMixin.
-        Tests if user passes condition.
         """
         access = access_for_all(self, viewtype="list")
         if access:
@@ -296,18 +264,18 @@ class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
         Important: in the context of tables, the actual calls to the inherited method get_table and get_table_data from SingleTableMixin and our own Mixin
         (see https://django-tables2.readthedocs.io/en/latest/_modules/django_tables2/views.html#SingleTableMixin) are hidden behind the
         call to super().get_context_data(). This call contributes f.e. the 'table' key to the context dict, which is then rendered in the template. Just a general
-        note that you can't really reason about what the code does.
-
-        :return: dict
+        note that you can't really reason about what the code does without looking into the superclasses.
         """
+
         model_class = self.model_class
         model_name = self.model_name
+        name_verbose = model_class._meta.verbose_name
 
         def get_model_name_plural():
             """
             Refactored into an inner function for readability.
             TODO: __gpirgie__: pls make this an external util function that can be re-used in different contexts.\
-                  Or implement this logic on our Base-Models (another case for a mixin, maybe).
+                  Or implement this logic on our Base-Models
             """
             if model_class._meta.verbose_name_plural:
                 return model_class._meta.verbose_name_plural.title()
@@ -324,26 +292,22 @@ class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
         context.update(
             {
                 "filter": self.filter,
-                "app_name": "apis_entities",  # TODO: __gp__: this should also not be hardcoded. See if branch in 'charts' below: should app_label not be the same value/variable?
+                "app_name": "apis_entities",
                 "docstring": str(model_class.__doc__),
-                "entitiy_create_stanbol": GenericEntitiesStanbolForm(
-                    model_name
-                ),
-                "class_name": model_name \
-                    if not model_class._meta.verbose_name \
-                    else model_class._meta.verbose_name.title(),  # TODO: __gp__: as already noted by kk, class_name should be renamed also in templates.
+                "entitiy_create_stanbol": GenericEntitiesStanbolForm(model_name),
+                "class_name": model_name
+                if not name_verbose
+                else name_verbose.title(),  # TODO: __gp__: as already noted by kk, class_name should be renamed also in templates.
                 "class_name_plural": get_model_name_plural(),
-                "get_arche_dump": None 
-                    if not hasattr(model_class, "get_arche_dump")
-                    else model_class.get_arche_dump(),
-                    # alternative is: getattr(model_class, "get_arche_dump")
-                "create_view_link": None \
-                    if not hasattr(model_class, "get_createview_url")
-                    else model_class.get_createview_url(),
+                "get_arche_dump": None
+                if not hasattr(model_class, "get_arche_dump")
+                else model_class.get_arche_dump(),
+                "create_view_link": None
+                if not hasattr(model_class, "get_createview_url")
+                else model_class.get_createview_url(),
             }
         )
 
-        # TODO: __gp__: once the download functionality from the browsing/charts module is re-implemented, consider moving this logic (and the render logic) to a separate mixin.
         if browsing_is_installed:
             context["conf_items"] = list(
                 BrowsConf.objects.filter(model_name=model_name).values_list(
@@ -354,7 +318,9 @@ class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
         if "charts" in settings.INSTALLED_APPS:
             app_label = (
                 model_class._meta.app_label
-            )  # see comment on context.update({... "app_name": "apis_entities" above.
+                # NOTE: __gp__ unused atm, but not sure if app_label will work as expected in the future.
+                # In the context of ontologies, will resolve to apis_ontologies and not apis_entities (be aware!)
+            )
             filtered_objs = ChartConfig.objects.filter(
                 model_name=model_class.__name__.lower(), app_name=app_label
             )
@@ -377,10 +343,9 @@ class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
     def render_to_response(self, context, **kwargs):
         download = self.request.GET.get("sep", None)
 
-        # TODO: __gp__: once the download functionality from the browsing/charts module is re-implemented, consider moving this logic to a separate mixin/class and improve readability.
         def http_response_with_attachment():
             """
-            Moved into inner function for readability.
+            Moved into inner function to improve readability of control-flow.
             """
             sep = self.request.GET.get("sep", ",")
             timestamp = datetime.datetime.fromtimestamp(time.time()).strftime(
@@ -393,9 +358,7 @@ class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
                 try:
                     df = pd.DataFrame(
                         list(
-                            self.get_queryset().values_list(
-                                *[x[0] for x in conf_items]
-                            )
+                            self.get_queryset().values_list(*[x[0] for x in conf_items])
                         ),
                         columns=[x[1] for x in conf_items],
                     )
@@ -414,9 +377,9 @@ class GenericListViewNew(UserPassesTestMixin, GenericTableMixin, ListView):
 
             df.to_csv(response, sep=sep_mapp.get(sep, ","), index=False)
 
-            response[
-                "Content-Disposition"
-            ] = 'attachment; filename="{}.csv"'.format(filename)
+            response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(
+                filename
+            )
             return response
 
         if download and browsing_is_installed:
@@ -468,9 +431,7 @@ def getGeoJson(request):
                 except:
                     add_info = (
                         "<b>Confidence:</b>no value provided"
-                        " <br/><b>Feature:</b> <a href='{}'>{}</a>".format(
-                            x.uri, x.uri
-                        )
+                        " <br/><b>Feature:</b> <a href='{}'>{}</a>".format(x.uri, x.uri)
                     )
                 r = {
                     "geometry": {
@@ -513,9 +474,7 @@ def getGeoJson(request):
                 "coordinates": [instance.lng, instance.lat],
             },
             "type": "Feature",
-            "properties": {
-                "popupContent": "<b>Name:</b> %s<br/>" % (instance.name)
-            },
+            "properties": {"popupContent": "<b>Name:</b> %s<br/>" % (instance.name)},
             "id": instance.pk,
         }
         lst_json.append(r)
@@ -530,9 +489,9 @@ def getGeoJsonList(request):
     and the connected entity is needed"""
     # relation = AbstractRelation.get_relation_class_of_name(request.GET.get("relation"))
     # relation_type = request.GET.get("relation_type")
-    objects = relation.objects.filter(
-        related_place__status="distinct"
-    ).select_related("related_person", "related_place", "relation_type")
+    objects = relation.objects.filter(related_place__status="distinct").select_related(
+        "related_person", "related_place", "relation_type"
+    )
     lst_json = []
     for x in objects:
         pers_url = x.related_person.get_absolute_url()
