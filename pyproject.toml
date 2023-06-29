@@ -65,3 +65,11 @@ extension="html"
 blank_line_before_tag="block,if"
 blank_line_after_tag="endif,endblock"
 format_js=false
+
+[tool.black]
+exclude = '''
+/(
+  | migrations
+)/
+
+'''
