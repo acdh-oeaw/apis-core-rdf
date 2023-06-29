@@ -41,5 +41,5 @@ class ListViewObjectFilterMixin:
 
     def filter_queryset(self, queryset):
         if hasattr(settings, "APIS_LIST_VIEW_OBJECT_FILTER"):
-            return settings.APIS_LIST_VIEW_OBJECT_FILTER(queryset)
+            return settings.APIS_LIST_VIEW_OBJECT_FILTER(self, queryset)
         return queryset

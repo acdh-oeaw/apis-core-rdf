@@ -28,6 +28,7 @@ from apis_core.apis_entities.models import TempEntityClass
 from .api_renderers import NetJsonRenderer
 from .apis_relations.models import Triple, Property
 from apis_core.utils import caching
+from apis_core.core.mixins import ListViewObjectFilterMixin
 
 if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
     from apis_highlighter.highlighter import highlight_text_new
@@ -490,7 +491,7 @@ def generic_serializer_creation_factory():
 
         filterset_dict["Meta"] = MetaFilter
 
-        class TemplateViewSet(viewsets.ModelViewSet):
+        class TemplateViewSet(ListViewObjectFilterMixin, viewsets.ModelViewSet):
 
             _select_related = select_related
             _prefetch_rel = prefetch_rel
@@ -541,7 +542,7 @@ def generic_serializer_creation_factory():
                     qs = qs.prefetch_related(*self._prefetch_rel)
                 if len(self._select_related) > 0:
                     qs = qs.select_related(*self._select_related)
-                return qs
+                return self.filter_queryset(qs)
 
             @extend_schema(responses=TemplateSerializer(many=True))
             def list_viewset(self, request):

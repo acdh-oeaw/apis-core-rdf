@@ -19,15 +19,12 @@ from .views import get_highlighted_texts
 from apis_core.apis_relations.models import TempTriple
 from apis_core.utils import caching
 from apis_core.apis_entities.mixins import EntityInstanceMixin
+from apis_core.core.mixins import ViewPassesTestMixin
 
 
-class GenericEntitiesDetailView(UserPassesTestMixin, EntityInstanceMixin, View):
+class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
 
     login_url = "/accounts/login/"
-
-    def test_func(self):
-        access = access_for_all(self, viewtype="detail")
-        return access
 
     def get(self, request, *args, **kwargs):
 
