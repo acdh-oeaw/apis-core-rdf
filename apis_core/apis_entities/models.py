@@ -11,7 +11,6 @@ from django.db import models
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 from django.urls import reverse
-from guardian.shortcuts import assign_perm, remove_perm
 from model_utils.managers import InheritanceManager
 from django.db.models.query import QuerySet
 
@@ -422,66 +421,6 @@ def create_default_uri(sender, instance, **kwargs):
         )
         uri2 = Uri(uri=uri_c, domain="apis default", root_object=instance)
         uri2.save()
-
-
-lst_entities_complete = [
-    globals()[x]
-    for x in globals()
-    if isinstance(globals()[x], models.base.ModelBase)
-    and globals()[x].__module__ == "apis_core.apis_entities.models"
-    and x != "AbstractEntity"
-    and globals()[x]
-]
-lst_entities_complete = list(dict.fromkeys(lst_entities_complete))
-
-# TODO: inspect.
-#  This list here will contain only duplicates if
-#  `lst_entities_complete` contains all entities
-perm_change_senders = [
-    getattr(getattr(x, "collection"), "through") for x in lst_entities_complete
-]
-
-
-@receiver(
-    m2m_changed,
-    dispatch_uid="create_object_permissions",
-)
-def create_object_permissions(sender, instance, **kwargs):
-    if kwargs["action"] == "pre_add" and sender in perm_change_senders:
-        perms = []
-        for j in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
-            perms.extend(j.groups_allowed.all())
-        for x in perms:
-            assign_perm("change_" + instance.__class__.__name__.lower(), x, instance)
-            assign_perm("delete_" + instance.__class__.__name__.lower(), x, instance)
-    elif kwargs["action"] == "post_remove" and sender in perm_change_senders:
-        perms = []
-        perms_keep = []
-        for j in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
-            perms.extend(j.groups_allowed.all())
-        for u in instance.collection.all():
-            perms_keep.extend(u.groups_allowed.all())
-        rm_perms = set(perms) - set(perms_keep)
-        for x in rm_perms:
-            remove_perm("change_" + instance.__class__.__name__.lower(), x, instance)
-            remove_perm("delete_" + instance.__class__.__name__.lower(), x, instance)
-
-
-@receiver(
-    m2m_changed,
-    sender=Collection.groups_allowed.through,
-    dispatch_uid="add_usergroup_collection",
-)
-def add_usergroup_collection(sender, instance, **kwargs):
-    if kwargs["action"] == "pre_add":
-        for x in kwargs["model"].objects.filter(pk__in=kwargs["pk_set"]):
-            for z in ["change", "delete"]:
-                for y in [Person, Institution, Place, Event, Work]:
-                    assign_perm(
-                        z + "_" + y.__name__.lower(),
-                        x,
-                        y.objects.filter(collection=instance),
-                    )
 
 
 if "registration" in getattr(settings, "INSTALLED_APPS", []):
