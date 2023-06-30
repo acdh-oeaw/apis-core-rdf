@@ -105,7 +105,6 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     # "drf_yasg",
     "drf_spectacular",
-    "guardian",
     "charts",
     "csvexport",
     "apis_ontology",
@@ -167,11 +166,6 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
-
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",  # this is default
-    "guardian.backends.ObjectPermissionBackend",
-)
 
 MIDDLEWARE = [
     "allow_cidr.middleware.AllowCIDRMiddleware",

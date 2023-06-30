@@ -13,7 +13,6 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DeleteView
 from django_tables2 import RequestConfig
-from guardian.core import ObjectPermissionChecker
 from reversion.models import Version
 
 from apis_core.apis_labels.models import Label
@@ -119,12 +118,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
         tb_label_open = request.GET.get("PL-page", None)
         # side_bar.append(('Label', tb_label, 'PersonLabel', tb_label_open))
         RequestConfig(request, paginate={"per_page": 10}).configure(tb_label)
-        perm = ObjectPermissionChecker(request.user)
-        permissions = {
-            "change": perm.has_perm("change_{}".format(self.entity), self.instance),
-            "delete": perm.has_perm("delete_{}".format(self.entity), self.instance),
-            "create": request.user.has_perm("entities.add_{}".format(self.entity)),
-        }
         template = get_template("apis_entities/edit_generic.html")
         context = {
             "entity_type": self.entity,
@@ -138,7 +131,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             "ann_proj_form": ann_proj_form,
             "form_ann_agreement": form_ann_agreement,
             "apis_bibsonomy": apis_bibsonomy,
-            "permissions": permissions,
         }
         form_merge_with = GenericEntitiesStanbolForm(self.entity, ent_merge_pk=self.pk)
         context["form_merge_with"] = form_merge_with
@@ -159,18 +151,11 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             )
         else:
             template = get_template("apis_entities/edit_generic.html")
-            perm = ObjectPermissionChecker(request.user)
-            permissions = {
-                "change": perm.has_perm("change_{}".format(self.entity), self.instance),
-                "delete": perm.has_perm("delete_{}".format(self.entity), self.instance),
-                "create": request.user.has_perm("entities.add_{}".format(self.entity)),
-            }
             context = {
                 "form": form,
                 "entity_type": self.entity,
                 "form_text": form_text,
                 "instance": self.instance,
-                "permissions": permissions,
             }
             if self.entity.lower() != "place":
                 form_merge_with = GenericEntitiesStanbolForm(

@@ -19,7 +19,6 @@
 
 {% block Titel %}Create a {{ entity_type|title }}{% endblock %}
 
-{% load guardian_tags %}
 {% load static %}
 
 {% block content %}
@@ -136,22 +135,16 @@
                     {% block editbuttons %}
 
                       {% if instance %}
-                        {% if "change" in permissions %}<input class="btn btn-primary" type="submit" value="modify" />{% endif %}
-
-                        {% if instance %}
-                          <button class="compare_tooltip btn btn-default"
-                                  data-tooltip='{"app":"apis_entities","kind":"{{ entity_type|lower }}","pk":"{{ instance.pk }}"}'>
-                            Revisions
-                          </button>
-                        {% endif %}
-
-                        {% if "delete" in permissions %}<a class ="btn btn-danger btn-primary" href="delete">Delete</a>{% endif %}
-
+                        <input class="btn btn-primary" type="submit" value="modify" />
+                        <button class="compare_tooltip btn btn-default"
+                                data-tooltip='{"app":"apis_entities","kind":"{{ entity_type|lower }}","pk":"{{ instance.pk }}"}'>
+                          Revisions
+                        </button>
+                        <a class ="btn btn-danger btn-primary" href="delete">Delete</a>
                         <a class="btn btn-success"
                            href="{% url 'apis:apis_entities:generic_entities_create_view' entity_type %}">Create new {{ entity_type|title }}</a>
                       {% else %}
-
-                        {% if "create" in permissions %}<input class="btn btn-primary" type="submit" value="create" />{% endif %}
+                        <input class="btn btn-primary" type="submit" value="create" />
                       {% endif %}
 
                     {% endblock editbuttons %}
@@ -371,7 +364,6 @@
              $('#tab_'+response.tab).append(response.table_html);
              initiate_compare_tooltip();
              {% if instance %}
-             if (check_perms_relation()){
              if (response.right_card) {
                  console.log('fetching form');
                  console.log(response.tab);
@@ -382,7 +374,7 @@
              } else {
 
              $('.reldelete').addClass('disabled')
-           }}}
+           }}
              {% endif %}
         };
         unbind_compare_forms();
@@ -452,17 +444,6 @@
     };
         </script>
         <script type="text/javascript">
-    function check_perms_relation(){
-        {% if instance %}
-        {% if "change" in permissions %}
-        return true
-        {% else %}
-        return false
-        {% endif %}
-        {% endif %}
-    }
-        </script>
-        <script type="text/javascript">
  function activate_editing(){
         {% for obj in right_card %}
         GetFormAjax("{{obj.2}}");
@@ -490,11 +471,7 @@ function deactivate_editing(){
  };
 {% endif %}
 {% if instance %}
-{% if permissions.change %}
 activate_editing();
-{% else %}
-deactivate_editing();
-{% endif %}
 {% endif %}
         </script>
       {% endblock %}
