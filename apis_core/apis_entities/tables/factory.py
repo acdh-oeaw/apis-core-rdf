@@ -111,7 +111,6 @@ class EntitiesTableFactory:
                 "xlsx",
             ]
 
-            # merge = MergeColumn(verbose_name="keep | remove", accessor="pk")
             _detail = tables.TemplateColumn(
                 template_name="apis_entities/tables/detail_button_template.html",
                 extra_context={"model_name": model_name},
