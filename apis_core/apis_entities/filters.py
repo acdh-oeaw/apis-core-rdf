@@ -9,7 +9,7 @@ from django.db.models import Q, JSONField
 
 from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import TempEntityClass
-from apis_core.utils import caching
+from apis_core.utils import helpers
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.utils.filtermethods import (
     related_entity_name,
@@ -249,7 +249,7 @@ def get_list_filter_of_entity(entity):
     :return: Entity specific FilterClass
     """
 
-    entity_class = caching.get_entity_class_of_name(entity)
+    entity_class = helpers.get_entity_class_by_name(entity)
     entity_list_filter_class = entity_class.get_entity_list_filter()
     if entity_list_filter_class is None:
 

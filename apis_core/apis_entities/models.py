@@ -14,7 +14,7 @@ from django.urls import reverse
 from model_utils.managers import InheritanceManager
 from django.db.models.query import QuerySet
 
-from apis_core.utils import caching
+from apis_core.utils import helpers
 from apis_core.utils import DateParser
 from apis_core.apis_metainfo.models import RootObject, Collection
 from apis_core.apis_relations.models import TempTriple
@@ -377,7 +377,7 @@ def create_default_uri(sender, instance, raw, **kwargs):
     if not raw:
         from apis_core.apis_metainfo.models import Uri
 
-        if kwargs["created"] and sender in caching.get_all_ontology_classes():
+        if kwargs["created"] and sender in helpers.get_entities_model_classes():
             if BASE_URI.endswith("/"):
                 base1 = BASE_URI[:-1]
             else:

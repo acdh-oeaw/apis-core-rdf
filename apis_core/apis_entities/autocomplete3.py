@@ -17,8 +17,7 @@ from django.db.models import Q
 
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
-from apis_core.utils import caching
-from apis_core.utils.caching import get_autocomplete_property_choices
+from apis_core.utils import helpers
 from apis_core.utils.settings import get_entity_settings_by_modelname
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
@@ -128,7 +127,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         ent_merge_pk = self.kwargs.get("ent_merge_pk", False)
         choices = []
         headers = {"Content-Type": "application/json"}
-        ent_model = caching.get_ontology_class_of_name(ac_type)
+        ent_model = helpers.get_entity_class_by_name(ac_type)
         ent_model_name = ent_model.__name__
 
         model_fields = ent_model._meta.get_fields()
@@ -482,7 +481,7 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
 
     def get(self, request, *args, **kwargs):
         more = False
-        choices = get_autocomplete_property_choices(
+        choices = helpers.property_autocomplete_choices(
             kwargs["entity_self"], kwargs["entity_other"], self.q
         )
         return http.HttpResponse(

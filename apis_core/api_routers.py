@@ -26,7 +26,7 @@ from django_filters import rest_framework as filters
 from apis_core.apis_entities.models import TempEntityClass
 from .api_renderers import NetJsonRenderer
 from .apis_relations.models import Triple, Property
-from apis_core.utils import caching
+from apis_core.utils import helpers
 from apis_core.core.mixins import ListViewObjectFilterMixin
 
 try:
@@ -196,7 +196,7 @@ class RelatedTripleSerializer(ApisBaseSerializer):
 
 
 def generic_serializer_creation_factory():
-    lst_cont = caching.get_all_contenttype_classes()
+    lst_cont = helpers.get_apis_model_classes() + helpers.get_entities_model_classes()
     not_allowed_filter_fields = [
         "useradded",
         "vocab_name",

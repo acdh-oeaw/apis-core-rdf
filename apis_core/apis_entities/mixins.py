@@ -2,7 +2,7 @@ from django.http import Http404
 from django.utils.translation import gettext as _
 from django.shortcuts import get_object_or_404
 
-from apis_core.utils import caching
+from apis_core.utils import helpers
 
 
 class EntityMixin:
@@ -10,7 +10,7 @@ class EntityMixin:
         super().setup(request, *args, **kwargs)
         if "entity" in kwargs:
             self.entity = kwargs.get("entity")
-            self.entity_model = caching.get_entity_class_of_name(self.entity)
+            self.entity_model = helpers.get_entity_class_by_name(self.entity)
         else:
             raise Http404(_("No `entity` found in the path"))
 
