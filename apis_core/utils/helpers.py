@@ -33,4 +33,13 @@ def get_classes_with_allowed_relation_from(
         content_type_querysets.append(subjs)
 
     # Join querysets with itertools.chain, call set to make unique, and extract the model class
-    return sorted((content_type.model_class() for content_type in set(itertools.chain(*content_type_querysets))), key=lambda ct: str(ct) )
+    return sorted(
+        [
+
+            content_type.model_class()
+            for content_type in set(itertools.chain(*content_type_querysets))
+        ],
+        key=lambda cls: cls.__name__,
+
+
+    )
