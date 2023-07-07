@@ -6,12 +6,25 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
+from django.urls import reverse_lazy, reverse
 from apis_core.apis_relations.forms2 import GenericTripleForm
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 
 from apis_core.apis_relations.models import Property, TempTriple
 
 from apis_core.utils import caching
+import django_tables2 as tables
+from django_tables2 import SingleTableView
+
+from apis_core.apis_metainfo.models import RootObject
+from apis_core.apis_entities.models import AbstractEntity
+from django.contrib.contenttypes.models import ContentType
+from apis_core.apis_relations.models import Property, Triple
+from apis_core.utils.helpers import get_entity_or_404
+from django.db.models import Q
+from django.views.generic.edit import FormMixin, ProcessFormView, DeleteView
+from apis_core.apis_relations.forms import TripleForm
+from apis_core.apis_relations.tables import TripleTable
 
 
 # TODO RDF: After full conversion to ne ajax logic, remove this function
@@ -148,3 +161,86 @@ def save_ajax_form(
         "right_card": True,
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class TripleFromInstance(SingleTableView):
+    template_name = "apis_relations/triple_from_instance.html"
+    table_class = TripleTable
+
+    def dispatch(self, *args, **kwargs):
+        instanceid = self.kwargs.get("instanceid")
+        self.instance = get_entity_or_404(instanceid)
+        return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        return Triple.objects.filter(Q(subj=self.instance) | Q(obj=self.instance))
+
+    def get_context_data(self):
+        ctx = super().get_context_data()
+        ctx["instance"] = self.instance
+        return ctx
+
+
+class TripleFromInstanceToEntityPartial(TripleFromInstance, FormMixin, ProcessFormView):
+    template_name = "apis_relations/partials/triple_from_instance_to_entity.html"
+    form_class = TripleForm
+
+    def dispatch(self, *args, **kwargs):
+        print("TripleFromInstanceToEntityPartial")
+        entity_contenttypeid = self.kwargs.get("entity_contenttypeid")
+        self.entity_contenttype = ContentType.objects.get_for_id(entity_contenttypeid)
+        return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(
+            (Q(subj=self.instance) & Q(obj__self_contenttype=self.entity_contenttype))
+            | (Q(obj=self.instance) & Q(subj__self_contenttype=self.entity_contenttype))
+        )
+
+    def get_context_data(self):
+        ctx = super().get_context_data()
+        ctx["entity_contenttype"] = self.entity_contenttype
+        return ctx
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs["entity_contenttype"] = self.entity_contenttype
+        form_kwargs["instance"] = self.instance
+        return form_kwargs
+
+    def get_success_url(self):
+        return reverse(
+            "apis:apis_relations:triplefrominstancetoentitypartial",
+            kwargs=self.request.resolver_match.kwargs,
+        )
+
+    def form_valid(self, form):
+        form.instance.subj = self.instance
+        form.save()
+        return super().form_valid(form)
+
+    def get_template_names(self):
+        print(super().get_template_names())
+        return super().get_template_names()
+
+
+class TripleFromInstanceToEntity(TripleFromInstanceToEntityPartial):
+    template_name = "apis_relations/triple_from_instance_to_entity.html"
+
+    def get_success_url(self):
+        return reverse(
+            "apis:apis_relations:triplefrominstancetoentity",
+            kwargs=self.request.resolver_match.kwargs,
+        )
+
+
+class TripleDelete(DeleteView):
+    model = Triple
+    template_name = "confirm_delete.html"
+
+    def get_success_url(self):
+        red = self.request.GET.get(
+            "redirect", reverse_lazy("apis_core:apis_relations:referencelist")
+        )
+        return red

@@ -1,6 +1,8 @@
 import functools
 import itertools
 from typing import Type
+from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 
 from apis_core.apis_entities.models import TempEntityClass
@@ -37,3 +39,14 @@ def get_classes_with_allowed_relation_from(
         content_type.model_class()
         for content_type in set(itertools.chain(*content_type_querysets))
     ]
+
+
+@functools.cache
+def get_entity_or_404(id: int):
+    from apis_core.apis_metainfo.models import RootObject
+    from apis_core.apis_entities.models import AbstractEntity
+
+    ro = RootObject.objects_inheritance.get_subclass(id=id)
+    if isinstance(ro, AbstractEntity):
+        return ro
+    raise Http404(f"Entity with id {id} not found.")

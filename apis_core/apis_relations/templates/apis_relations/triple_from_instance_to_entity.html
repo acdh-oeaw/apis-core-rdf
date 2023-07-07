@@ -1,0 +1,6 @@
+{% extends basetemplate %}
+{% load apis_relations %}
+
+{% block content %}
+  {% triple_from_instance_to_entity_contenttype request instance entity_contenttype %}
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% load render_table from django_tables2 %}
+Relations from {{ instance }}
+
+{% if entity_contenttype %}to {{ entity_contenttype.model }}{% endif %}
+
+{% render_table table %}
+
+{% if form %}
+  {% load crispy_forms_tags %}
+  {% crispy form %}
+{% endif %}

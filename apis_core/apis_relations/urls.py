@@ -34,4 +34,16 @@ urlpatterns = [
         PropertyAutocomplete.as_view(),
         name="generic_property_autocomplete",
     ),
+    path("<int:instanceid>", views.TripleFromInstance.as_view()),
+    path(
+        "<int:instanceid>/<int:entity_contenttypeid>",
+        views.TripleFromInstanceToEntity.as_view(),
+        name="triplefrominstancetoentity",
+    ),
+    path(
+        "<int:instanceid>/<int:entity_contenttypeid>/partial",
+        views.TripleFromInstanceToEntityPartial.as_view(),
+        name="triplefrominstancetoentitypartial",
+    ),
+    path("<int:pk>/delete", views.TripleDelete.as_view(), name="tripledelete"),
 ]

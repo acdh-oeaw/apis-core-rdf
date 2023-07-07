@@ -23,8 +23,9 @@ from apis_core.apis_relations.models import Triple, Property
 # TODO RDF : combine this or re-use this class here in get_generic_triple_table
 # TODO RDF : Also consider implementing proper form search fields for this (instead of default drop-downs)
 class TripleTable(tables.Table):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    delete = tables.TemplateColumn(
+        template_name="apis_relations/partials/table_delete.html"
+    )
 
     class Meta:
         model = Triple

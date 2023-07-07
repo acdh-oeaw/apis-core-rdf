@@ -1,0 +1,10 @@
+{% extends basetemplate %}
+
+{% block content %}
+  {% load render_table from django_tables2 %}
+  Relations from {{ instance }}
+
+  {% if entity_contenttype %}to {{ entity_contenttype.model }}{% endif %}
+
+  {% render_table table %}
+{% endblock content %}

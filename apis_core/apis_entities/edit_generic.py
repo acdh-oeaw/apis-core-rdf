@@ -29,6 +29,7 @@ from ..apis_vocabularies.models import TextType
 from apis_core.utils import caching
 from apis_core.utils import helpers
 from apis_core.apis_entities.mixins import EntityMixin, EntityInstanceMixin
+from apis_core.apis_relations.forms import TripleForm
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
     from apis_highlighter.forms import SelectAnnotatorAgreement
@@ -49,8 +50,10 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             .select_subclasses()
         )
 
+        possible_relations = []
         for entity_class in helpers.get_classes_with_allowed_relation_from(self.entity):
             entity_content_type = ContentType.objects.get_for_model(entity_class)
+            possible_relations.append(entity_content_type)
 
             other_entity_class_name = entity_class.__name__.lower()
 
@@ -132,39 +135,31 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             "ann_proj_form": ann_proj_form,
             "form_ann_agreement": form_ann_agreement,
             "apis_bibsonomy": apis_bibsonomy,
+            "possible_relations": possible_relations,
         }
         form_merge_with = GenericEntitiesStanbolForm(self.entity, ent_merge_pk=self.pk)
         context["form_merge_with"] = form_merge_with
         return HttpResponse(template.render(request=request, context=context))
 
     def post(self, request, *args, **kwargs):
-        form = get_entities_form(self.entity.title())
-        form = form(request.POST, instance=self.instance)
-        form_text = FullTextForm(request.POST, entity=self.entity.title())
-        if form.is_valid() and form_text.is_valid():
-            entity_2 = form.save()
-            form_text.save(entity_2)
-            return redirect(
-                reverse(
-                    "apis:apis_entities:generic_entities_edit_view",
-                    kwargs={"pk": self.pk, "entity": self.entity},
-                )
+        for entity_class in helpers.get_classes_with_allowed_relation_from(self.entity):
+            entity_content_type = ContentType.objects.get_for_model(entity_class)
+            formprefix = f"{entity_content_type.app_label}.{entity_content_type.model}"
+            form = TripleForm(
+                instance=self.instance,
+                entity_contenttype=entity_content_type,
+                prefix=formprefix,
+                data=request.POST,
             )
-        else:
-            template = get_template("apis_entities/edit_generic.html")
-            context = {
-                "form": form,
-                "entity_type": self.entity,
-                "form_text": form_text,
-                "instance": self.instance,
-            }
-            if self.entity.lower() != "place":
-                form_merge_with = GenericEntitiesStanbolForm(
-                    self.entity, ent_merge_pk=self.pk
-                )
-                context["form_merge_with"] = form_merge_with
-                return TemplateResponse(request, template, context=context)
-            return HttpResponse(template.render(request=request, context=context))
+            form.instance.subj = self.instance
+            if form.is_valid() and form.instance.subj and form.instance.prop:
+                form.save()
+        return redirect(
+            reverse(
+                "apis:apis_entities:generic_entities_edit_view",
+                kwargs=self.request.resolver_match.kwargs,
+            )
+        )
 
 
 @method_decorator(login_required, name="dispatch")
