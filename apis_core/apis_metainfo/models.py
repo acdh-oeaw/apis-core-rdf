@@ -51,7 +51,7 @@ class RootObject(models.Model):
     By having one overarching super class we gain the advantage of unique identifiers.
     """
 
-    name = models.CharField(max_length=255, verbose_name="Name")
+    name = models.CharField(max_length=1000, verbose_name="Label")
     # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
     # triples where the subject's or object's contenttype must be respected (e.g. get all triples
     # where the subject is a Person)
@@ -208,7 +208,6 @@ class Text(models.Model):
             return "ID: {}".format(self.id)
 
     def check_for_deleted_annotations(self):
-
         from apis_highlighter.models import Annotation
 
         if self.pk is not None:
@@ -243,7 +242,6 @@ class Text(models.Model):
         return deleted
 
     def save(self, *args, **kwargs):
-
         if self.pk is not None:
             orig = Text.objects.get(pk=self.pk)
             if orig.text != self.text and "apis_highlighter" in settings.INSTALLED_APPS:
