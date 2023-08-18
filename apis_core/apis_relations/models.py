@@ -1,4 +1,5 @@
 import unicodedata
+import copy
 
 # from reversion import revisions as reversion
 import reversion
@@ -14,6 +15,7 @@ from django.db.models.fields.related_descriptors import ForwardManyToOneDescript
 # from apis_core.apis_entities.models import Person
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.utils import DateParser
+from apis_core.apis_metainfo import signals
 
 
 def find_if_user_accepted():
@@ -309,6 +311,22 @@ class Triple(models.Model):
                 )
 
         super().save(*args, **kwargs)
+
+    def duplicate(self):
+        origin = self.__class__
+        signals.pre_duplicate.send(sender=origin, instance=self)
+
+        instance = copy.copy(self)
+
+        self.pk = None
+        self.id = None
+        self._state.adding = True
+        duplicate = self.save()
+
+        signals.post_duplicate.send(
+            sender=origin, instance=instance, duplicate=duplicate
+        )
+        return duplicate
 
 
 class TempTriple(Triple):

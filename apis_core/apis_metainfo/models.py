@@ -95,34 +95,6 @@ class RootObject(models.Model):
         for field in related_fields:
             # we are not using `isinstance` because we want to
             # differentiate between different levels of inheritance
-            if type(field) is ManyToOneRel:
-                # Get a list of fields of the related model that are unique
-                # because `related_field`s do not have a unique attribute
-                # we are using getattr
-                # Either use the related_name or contruct ith from the fields name
-                relname = field.related_name or f"{field.name}_set"
-                # Iterate through the objects in the queryset, get the subclass of the
-                # entry, remove the unique attributes and create a copy of the object.
-                # Then save the copied object
-                # This is limited to models with the objects_inheritance attribute, so
-                # basically it is tailored to TempTriples
-                if getattr(field.related_model, "objects_inheritance", False):
-                    for entry in getattr(self, relname).all():
-                        relmodel = field.related_model
-                        # create a copy based on the subclass
-                        entry_copy = relmodel.objects_inheritance.get_subclass(
-                            id=entry.id
-                        )
-                        model_fields = relmodel._meta.get_fields()
-                        unique_fields = [
-                            f.name for f in model_fields if getattr(f, "unique", False)
-                        ]
-                        for key in unique_fields:
-                            setattr(entry_copy, key, None)
-                        entry_copy.pk = None
-                        entry_copy._state.adding = True
-                        setattr(entry_copy, field.field.name, newobj)
-                        entry_copy.save()
             if type(field) is ForeignKey:
                 setattr(newobj, field.name, getattr(self, field.name))
             if type(field) is ManyToManyField:
