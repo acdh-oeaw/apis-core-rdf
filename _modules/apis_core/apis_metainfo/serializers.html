@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -89,7 +89,9 @@
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
 
 
-<div class="viewcode-block" id="CollectionSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.CollectionSerializer">[docs]</a><span class="k">class</span> <span class="nc">CollectionSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
+<div class="viewcode-block" id="CollectionSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.CollectionSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">CollectionSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
 
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:text-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
@@ -103,12 +105,18 @@
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:collection-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="CollectionSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.CollectionSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="CollectionSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.CollectionSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;collection_type&quot;</span><span class="p">,</span> <span class="s2">&quot;parent_class&quot;</span><span class="p">]</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">Collection</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Collection</span></div>
+</div>
 
 
-<div class="viewcode-block" id="TextSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TextSerializer">[docs]</a><span class="k">class</span> <span class="nc">TextSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TextSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TextSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">TextSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:text-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
     <span class="p">)</span>
@@ -120,22 +128,34 @@
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:source-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="TextSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TextSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="TextSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TextSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">]</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">Text</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Text</span></div>
+</div>
 
 
-<div class="viewcode-block" id="SourceSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.SourceSerializer">[docs]</a><span class="k">class</span> <span class="nc">SourceSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SourceSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.SourceSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">SourceSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:source-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="SourceSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.SourceSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="SourceSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.SourceSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">Source</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Source</span></div>
+</div>
 
 
-<div class="viewcode-block" id="UriSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer">[docs]</a><span class="k">class</span> <span class="nc">UriSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="UriSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">UriSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:uri-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
     <span class="p">)</span>
@@ -145,12 +165,18 @@
         <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="UriSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="UriSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span></div>
+</div>
 
 
-<div class="viewcode-block" id="TempEntityClassSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TempEntityClassSerializer">[docs]</a><span class="k">class</span> <span class="nc">TempEntityClassSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClassSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TempEntityClassSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">TempEntityClassSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:tempentityclass-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
     <span class="p">)</span>
@@ -164,12 +190,18 @@
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:source-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="TempEntityClassSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TempEntityClassSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="TempEntityClassSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TempEntityClassSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">TempEntityClass</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">TempEntityClass</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ContentTypeSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.ContentTypeSerializer">[docs]</a><span class="k">class</span> <span class="nc">ContentTypeSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ContentTypeSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.ContentTypeSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">ContentTypeSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:contenttype-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
     <span class="p">)</span>
@@ -183,9 +215,13 @@
     <span class="c1">#     view_name=&quot;apis:apis_api:source-detail&quot;, lookup_field=&quot;pk&quot;, read_only=True</span>
     <span class="c1"># )</span>
 
-<div class="viewcode-block" id="ContentTypeSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.ContentTypeSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="ContentTypeSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.ContentTypeSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">ContentType</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">ContentType</span></div>
+</div>
+
 </pre></div>
 
            </div>

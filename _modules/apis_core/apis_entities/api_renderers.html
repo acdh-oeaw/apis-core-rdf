@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -96,16 +96,10 @@
 <span class="kn">from</span> <span class="nn">rdflib.void</span> <span class="kn">import</span> <span class="n">generateVoID</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">renderers</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_tei.tei</span> <span class="kn">import</span> <span class="n">TeiEntCreator</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.renderers.tei</span> <span class="kn">import</span> <span class="n">TeiRenderer</span>
 <span class="kn">from</span> <span class="nn">.api_mappings.cidoc_mapping</span> <span class="kn">import</span> <span class="n">m_person</span><span class="p">,</span> <span class="n">m_place</span><span class="p">,</span> <span class="n">m_work</span><span class="p">,</span> <span class="n">m_institution</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">webpage.metadata</span> <span class="kn">import</span> <span class="n">PROJECT_METADATA</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">webpage.utils</span> <span class="kn">import</span> <span class="n">PROJECT_METADATA</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="n">PROJECT_METADATA</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;PROJECT_DEFAULT_MD&quot;</span><span class="p">)</span>
+<span class="n">PROJECT_METADATA</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;PROJECT_DEFAULT_MD&quot;</span><span class="p">,</span> <span class="p">{})</span>
 
 
 <span class="n">base_uri</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_BASE_URI&quot;</span><span class="p">,</span> <span class="s2">&quot;http://apis.info&quot;</span><span class="p">)</span>
@@ -114,17 +108,21 @@
 <span class="n">lang</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;LANGUAGE_CODE&quot;</span><span class="p">,</span> <span class="s2">&quot;de&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="EntityToTEI"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToTEI">[docs]</a><span class="k">class</span> <span class="nc">EntityToTEI</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
+<div class="viewcode-block" id="EntityToTEI">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToTEI">[docs]</a>
+<span class="k">class</span> <span class="nc">EntityToTEI</span><span class="p">(</span><span class="n">TeiRenderer</span><span class="p">):</span>
+<div class="viewcode-block" id="EntityToTEI.render">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToTEI.render">[docs]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;apis_entities/tei/</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;entity_type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.xml&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">media_type</span><span class="p">,</span> <span class="n">renderer_context</span><span class="p">)</span></div>
+</div>
 
-    <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;text/xml&quot;</span>
-    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;tei&quot;</span>
-
-<div class="viewcode-block" id="EntityToTEI.render"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToTEI.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">tei_doc</span> <span class="o">=</span> <span class="n">TeiEntCreator</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tei_doc</span><span class="o">.</span><span class="n">serialize_full_doc</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="EntityToCIDOC"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOC">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOC</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
+<div class="viewcode-block" id="EntityToCIDOC">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOC">[docs]</a>
+<span class="k">class</span> <span class="nc">EntityToCIDOC</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
 
     <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;text/rdf&quot;</span>
 
@@ -135,7 +133,9 @@
         <span class="s2">&quot;Institution&quot;</span><span class="p">:</span> <span class="n">m_institution</span><span class="p">,</span>
     <span class="p">}</span>
 
-<div class="viewcode-block" id="EntityToCIDOC.render"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOC.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span>
+<div class="viewcode-block" id="EntityToCIDOC.render">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOC.render">[docs]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data1</span><span class="p">,</span>
         <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -221,35 +221,53 @@
         <span class="n">g_all</span> <span class="o">=</span> <span class="n">ConjunctiveGraph</span><span class="p">(</span><span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">binary</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">g_all</span><span class="p">,</span> <span class="n">store</span>
-        <span class="k">return</span> <span class="n">g_all</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div></div>
+        <span class="k">return</span> <span class="n">g_all</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
+</div>
 
 
-<div class="viewcode-block" id="EntityToCIDOCXML"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCXML">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOCXML</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EntityToCIDOCXML">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCXML">[docs]</a>
+<span class="k">class</span> <span class="nc">EntityToCIDOCXML</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
 
     <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+xml&quot;</span></div>
 
 
-<div class="viewcode-block" id="EntityToCIDOCN3"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCN3">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOCN3</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EntityToCIDOCN3">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCN3">[docs]</a>
+<span class="k">class</span> <span class="nc">EntityToCIDOCN3</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
 
     <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+n3&quot;</span></div>
 
 
-<div class="viewcode-block" id="EntityToCIDOCNQUADS"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCNQUADS">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOCNQUADS</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EntityToCIDOCNQUADS">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCNQUADS">[docs]</a>
+<span class="k">class</span> <span class="nc">EntityToCIDOCNQUADS</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
 
     <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+nquads&quot;</span></div>
 
 
-<div class="viewcode-block" id="EntityToCIDOCTURTLE"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCTURTLE">[docs]</a><span class="k">class</span> <span class="nc">EntityToCIDOCTURTLE</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EntityToCIDOCTURTLE">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOCTURTLE">[docs]</a>
+<span class="k">class</span> <span class="nc">EntityToCIDOCTURTLE</span><span class="p">(</span><span class="n">EntityToCIDOC</span><span class="p">):</span>
 
     <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+turtle&quot;</span></div>
 
 
-<div class="viewcode-block" id="EntityToProsopogrAPhI"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToProsopogrAPhI">[docs]</a><span class="k">class</span> <span class="nc">EntityToProsopogrAPhI</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EntityToProsopogrAPhI">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToProsopogrAPhI">[docs]</a>
+<span class="k">class</span> <span class="nc">EntityToProsopogrAPhI</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
 
     <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;text/json+prosop&quot;</span>
     <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;json+prosop&quot;</span>
 
-<div class="viewcode-block" id="EntityToProsopogrAPhI.render"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToProsopogrAPhI.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="EntityToProsopogrAPhI.render">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToProsopogrAPhI.render">[docs]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">factoids</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">fact_settings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;PROSOPOGRAPHI_API&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">stmt_temp</span> <span class="o">=</span> <span class="s2">&quot;Stmt</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span>
@@ -410,7 +428,9 @@
                         <span class="n">factoids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;statements&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
             <span class="p">{</span><span class="s2">&quot;factoids&quot;</span><span class="p">:</span> <span class="n">factoids</span><span class="p">},</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">DjangoJSONEncoder</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>

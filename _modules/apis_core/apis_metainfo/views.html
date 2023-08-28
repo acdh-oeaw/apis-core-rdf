@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -82,20 +82,25 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.apis_metainfo.views</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse_lazy</span>
-<span class="kn">from</span> <span class="nn">django.utils.decorators</span> <span class="kn">import</span> <span class="n">method_decorator</span>
+<span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse_lazy</span>
 <span class="kn">from</span> <span class="nn">django.views.generic.detail</span> <span class="kn">import</span> <span class="n">DetailView</span>
-<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="kn">import</span> <span class="n">DeleteView</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="kn">import</span> <span class="n">DeleteView</span><span class="p">,</span> <span class="n">FormView</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">LoginRequiredMixin</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">JsonResponse</span>
+<span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
 
 <span class="kn">from</span> <span class="nn">.browsingviews</span> <span class="kn">import</span> <span class="n">GenericListView</span><span class="p">,</span> <span class="n">BaseCreateView</span><span class="p">,</span> <span class="n">BaseUpdateView</span>
 <span class="kn">from</span> <span class="nn">.filters</span> <span class="kn">import</span> <span class="n">UriListFilter</span>
-<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">UriFilterFormHelper</span><span class="p">,</span> <span class="n">UriForm</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">UriFilterFormHelper</span><span class="p">,</span> <span class="n">UriForm</span><span class="p">,</span> <span class="n">UriGetOrCreateForm</span>
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 <span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">UriTable</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.rdf</span> <span class="kn">import</span> <span class="n">get_modelname_and_dict_from_uri</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.normalize</span> <span class="kn">import</span> <span class="n">clean_uri</span>
 
 
-<div class="viewcode-block" id="UriListView"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriListView">[docs]</a><span class="k">class</span> <span class="nc">UriListView</span><span class="p">(</span><span class="n">GenericListView</span><span class="p">):</span>
+<div class="viewcode-block" id="UriListView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriListView">[docs]</a>
+<span class="k">class</span> <span class="nc">UriListView</span><span class="p">(</span><span class="n">GenericListView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
     <span class="n">filter_class</span> <span class="o">=</span> <span class="n">UriListFilter</span>
     <span class="n">formhelper_class</span> <span class="o">=</span> <span class="n">UriFilterFormHelper</span>
@@ -108,39 +113,54 @@
     <span class="n">enable_merge</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 
-<div class="viewcode-block" id="UriDetailView"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriDetailView">[docs]</a><span class="k">class</span> <span class="nc">UriDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="UriDetailView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriDetailView">[docs]</a>
+<span class="k">class</span> <span class="nc">UriDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;apis_metainfo/uri_detail.html&quot;</span></div>
 
 
-<div class="viewcode-block" id="UriCreate"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriCreate">[docs]</a><span class="k">class</span> <span class="nc">UriCreate</span><span class="p">(</span><span class="n">BaseCreateView</span><span class="p">):</span>
 
+<div class="viewcode-block" id="UriCreate">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriCreate">[docs]</a>
+<span class="k">class</span> <span class="nc">UriCreate</span><span class="p">(</span><span class="n">LoginRequiredMixin</span><span class="p">,</span> <span class="n">BaseCreateView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
-    <span class="n">form_class</span> <span class="o">=</span> <span class="n">UriForm</span>
-
-<div class="viewcode-block" id="UriCreate.dispatch"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriCreate.dispatch">[docs]</a>    <span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">UriCreate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">UriForm</span></div>
 
 
-<div class="viewcode-block" id="UriUpdate"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriUpdate">[docs]</a><span class="k">class</span> <span class="nc">UriUpdate</span><span class="p">(</span><span class="n">BaseUpdateView</span><span class="p">):</span>
 
+<div class="viewcode-block" id="UriUpdate">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriUpdate">[docs]</a>
+<span class="k">class</span> <span class="nc">UriUpdate</span><span class="p">(</span><span class="n">LoginRequiredMixin</span><span class="p">,</span> <span class="n">BaseUpdateView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
-    <span class="n">form_class</span> <span class="o">=</span> <span class="n">UriForm</span>
-
-<div class="viewcode-block" id="UriUpdate.dispatch"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriUpdate.dispatch">[docs]</a>    <span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">UriUpdate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">UriForm</span></div>
 
 
-<div class="viewcode-block" id="UriDelete"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriDelete">[docs]</a><span class="k">class</span> <span class="nc">UriDelete</span><span class="p">(</span><span class="n">DeleteView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="UriDelete">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriDelete">[docs]</a>
+<span class="k">class</span> <span class="nc">UriDelete</span><span class="p">(</span><span class="n">LoginRequiredMixin</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
-    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;webpage/confirm_delete.html&quot;</span>
-    <span class="n">success_url</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span><span class="s2">&quot;apis_core:apis_metainfo:uri_browse&quot;</span><span class="p">)</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;confirm_delete.html&quot;</span>
+    <span class="n">success_url</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span><span class="s2">&quot;apis_core:apis_metainfo:uri_browse&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="UriDelete.dispatch"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriDelete.dispatch">[docs]</a>    <span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">UriDelete</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="UriGetOrCreate">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriGetOrCreate">[docs]</a>
+<span class="k">class</span> <span class="nc">UriGetOrCreate</span><span class="p">(</span><span class="n">FormView</span><span class="p">):</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;uri_create.html&quot;</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">UriGetOrCreateForm</span>
+
+<div class="viewcode-block" id="UriGetOrCreate.form_valid">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriGetOrCreate.form_valid">[docs]</a>
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">success_url</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">uriobj</span><span class="o">.</span><span class="n">root_object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>

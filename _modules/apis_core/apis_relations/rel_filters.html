@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -96,7 +96,9 @@
 <span class="c1"># TODO: Change this whole module according to the same logic as in apis_core/apis_entities/filters.py</span>
 
 
-<div class="viewcode-block" id="get_excluded_fields"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_excluded_fields">[docs]</a><span class="k">def</span> <span class="nf">get_excluded_fields</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<div class="viewcode-block" id="get_excluded_fields">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_excluded_fields">[docs]</a>
+<span class="k">def</span> <span class="nf">get_excluded_fields</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
     <span class="n">modelname</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
     <span class="n">base_list</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS_FILTER_EXCLUDE&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">rel_model_conf</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS&quot;</span><span class="p">,</span> <span class="p">{})</span>
@@ -110,13 +112,17 @@
     <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">base_list</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_included_fields"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_included_fields">[docs]</a><span class="k">def</span> <span class="nf">get_included_fields</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_included_fields">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_included_fields">[docs]</a>
+<span class="k">def</span> <span class="nf">get_included_fields</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
     <span class="n">modelname</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
     <span class="n">rel_model_conf</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS&quot;</span><span class="p">,</span> <span class="p">{})</span>
     <span class="k">if</span> <span class="n">modelname</span> <span class="ow">in</span> <span class="n">rel_model_conf</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">rel_model_conf</span><span class="p">[</span><span class="n">modelname</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;include&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span></div>
+
 
 
 <span class="n">FIELD_TO_FILTER</span> <span class="o">=</span> <span class="p">{</span>
@@ -129,7 +135,9 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="get_field_dicts"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_field_dicts">[docs]</a><span class="k">def</span> <span class="nf">get_field_dicts</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">include_parents</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="get_field_dicts">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_field_dicts">[docs]</a>
+<span class="k">def</span> <span class="nf">get_field_dicts</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">include_parents</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span>
             <span class="s2">&quot;f_name&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
@@ -143,7 +151,10 @@
     <span class="k">return</span> <span class="n">fields</span></div>
 
 
-<div class="viewcode-block" id="get_filters"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_filters">[docs]</a><span class="k">def</span> <span class="nf">get_filters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_parents</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_filters">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_filters">[docs]</a>
+<span class="k">def</span> <span class="nf">get_filters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_parents</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">filters</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">field_dicts</span> <span class="o">=</span> <span class="n">get_field_dicts</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">include_parents</span><span class="o">=</span><span class="n">include_parents</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">field_dicts</span><span class="p">:</span>
@@ -173,7 +184,10 @@
     <span class="k">return</span> <span class="n">filters</span></div>
 
 
-<div class="viewcode-block" id="get_generic_relation_filter"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_generic_relation_filter">[docs]</a><span class="k">def</span> <span class="nf">get_generic_relation_filter</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_generic_relation_filter">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_generic_relation_filter">[docs]</a>
+<span class="k">def</span> <span class="nf">get_generic_relation_filter</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
     <span class="k">class</span> <span class="nc">GenericListFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
         <span class="c1"># search = django_filters.CharFilter(method=&#39;search_filter_method&#39;)</span>
 
@@ -328,25 +342,38 @@
     <span class="k">return</span> <span class="n">GenericListFilter</span></div>
 
 
+
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Triple</span><span class="p">,</span> <span class="n">Property</span>
 
 
-<div class="viewcode-block" id="TripleFilter"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.TripleFilter">[docs]</a><span class="k">class</span> <span class="nc">TripleFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
+<div class="viewcode-block" id="TripleFilter">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.TripleFilter">[docs]</a>
+<span class="k">class</span> <span class="nc">TripleFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TripleFilter.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.TripleFilter.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="TripleFilter.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.TripleFilter.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Triple</span>
-        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[]</span></div>
+</div>
 
 
-<div class="viewcode-block" id="PropertyFilter"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.PropertyFilter">[docs]</a><span class="k">class</span> <span class="nc">PropertyFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PropertyFilter">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.PropertyFilter">[docs]</a>
+<span class="k">class</span> <span class="nc">PropertyFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PropertyFilter.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.PropertyFilter.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="PropertyFilter.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.PropertyFilter.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Property</span>
-        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[]</span></div>
+</div>
+
 </pre></div>
 
            </div>

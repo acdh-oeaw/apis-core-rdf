@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.apis_vis.apps &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.utils.test_caching &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -72,7 +72,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.apis_vis.apps</li>
+      <li class="breadcrumb-item active">apis_core.utils.test_caching</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -81,14 +81,47 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.apis_vis.apps</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">AppConfig</span>
+  <h1>Source code for apis_core.utils.test_caching</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
+
+<span class="n">all_class_modules_and_names</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;apis_metainfo&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;Collection&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;RootObject&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Source&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Uri&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;UriCandidate&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;apis_vocabularies&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;CollectionType&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;LabelType&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TextType&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;VocabNames&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;VocabsBaseClass&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;VocabsUri&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;apis_entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;TempEntityClass&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;apis_relations&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;TempTriple&quot;</span><span class="p">,</span> <span class="s2">&quot;Property&quot;</span><span class="p">,</span> <span class="s2">&quot;Triple&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;contenttypes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ContentType&quot;</span><span class="p">],</span>
+<span class="p">}</span>
 
 
-<div class="viewcode-block" id="EntitiesConfig">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.apps.EntitiesConfig">[docs]</a>
-<span class="k">class</span> <span class="nc">EntitiesConfig</span><span class="p">(</span><span class="n">AppConfig</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;apis_core.apis_vis&quot;</span></div>
+<div class="viewcode-block" id="CachingTest">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_caching.CachingTest">[docs]</a>
+<span class="k">class</span> <span class="nc">CachingTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="CachingTest.test_get_all_class_modules_and_names">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_caching.CachingTest.test_get_all_class_modules_and_names">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_get_all_class_modules_and_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">all_class_modules_and_names</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_class_modules_and_names</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">expected</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_all_class_modules_and_names</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">expected</span><span class="p">)</span></div>
+</div>
 
 </pre></div>
 

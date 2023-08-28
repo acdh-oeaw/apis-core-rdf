@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -83,6 +83,7 @@
              
   <h1>Source code for apis_core.apis_entities.filters</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 
@@ -112,7 +113,9 @@
 <span class="n">fields_to_exclude</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS_FILTER_EXCLUDE&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
 
-<div class="viewcode-block" id="GenericEntityListFilter"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter">[docs]</a><span class="k">class</span> <span class="nc">GenericEntityListFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntityListFilter">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericEntityListFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Entity fields by which a given entity&#39;s list view can be</span>
 <span class="sd">    filtered on the frontend.</span>
@@ -140,22 +143,27 @@
     <span class="n">start_date</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">DateFromToRangeFilter</span><span class="p">()</span>
     <span class="n">end_date</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">DateFromToRangeFilter</span><span class="p">()</span>
 
-<div class="viewcode-block" id="GenericEntityListFilter.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="GenericEntityListFilter.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">TempEntityClass</span>
         <span class="c1"># exclude all hardcoded fields or nothing, however this exclude is only defined here as a temporary measure in</span>
         <span class="c1"># order to load all filters of all model fields by default so that they are available in the first place.</span>
         <span class="c1"># Later those which are not referenced in the settings file will be removed again</span>
         <span class="n">exclude</span> <span class="o">=</span> <span class="n">fields_to_exclude</span></div>
 
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># call super init foremost to create dictionary of filters which will be processed further below</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_sort_filters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_and_sort_filters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GenericEntityListFilter.set_sort_filters"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.set_sort_filters">[docs]</a>    <span class="k">def</span> <span class="nf">set_sort_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_filters</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntityListFilter.set_and_sort_filters">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.set_and_sort_filters">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_and_sort_filters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filters</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Check for existence of &quot;list_filters&quot; setting for an entity class</span>
+<span class="sd">        Check for existence of &quot;list_filters&quot; setting for an entity</span>
 <span class="sd">        and return an ordered dictionary containing filters for</span>
 <span class="sd">        applicable fields plus pre-set filters defined for all entities</span>
 <span class="sd">        (in GenericEntityListFilter&#39;s Meta class).</span>
@@ -168,19 +176,10 @@
 <span class="sd">        :return: ordered dictionary with tuples of field names</span>
 <span class="sd">                 and filters defined for them</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">field_filters</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="p">:</span>
-            <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">fields</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list_filters&quot;</span><span class="p">,</span> <span class="p">[])</span>
-            <span class="k">if</span> <span class="n">fields</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;related_entity_name&quot;</span><span class="p">,</span> <span class="s2">&quot;related_property_name&quot;</span><span class="p">]:</span>
-                <span class="c1"># for AbstractEntity, certain fields are defined to be filterable by default;</span>
-                <span class="c1"># ignore these for the purpose of sorting field names for filtering</span>
-                <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">sorted_filters</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
 
         <span class="c1"># fields by which entity lists should not be filterable</span>
-        <span class="n">ignore_fields</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">list_filters_exclude</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;self_contenttype&quot;</span><span class="p">,</span>
             <span class="s2">&quot;review&quot;</span><span class="p">,</span>
             <span class="s2">&quot;start_date&quot;</span><span class="p">,</span>
@@ -195,76 +194,54 @@
             <span class="s2">&quot;status&quot;</span><span class="p">,</span>
             <span class="s2">&quot;references&quot;</span><span class="p">,</span>
         <span class="p">]</span>
+        <span class="n">list_filters</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="p">:</span>
+            <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">list_filters</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list_filters&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">list_filters_exclude</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list_filters_exclude&quot;</span><span class="p">,</span> <span class="p">[]))</span>
 
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="ow">and</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">default_filters</span><span class="p">:</span>
-                <span class="n">field_filters</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_filters</span><span class="p">[</span><span class="n">f</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
-                <span class="n">field_name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># The `list_filters` setting of an entity defines both the order of filters and it allows to define additional filters</span>
+        <span class="c1"># A filter is defined by a name and a dict describing its attributes</span>
+        <span class="c1"># If the name refers to an existing filter, the attributes are used to update that filter</span>
+        <span class="c1"># If the name does *not* refer to an existing field, then a new filter is created based on the `filter` key</span>
+        <span class="c1"># The attributes and filters are the ones listed in https://django-filter.readthedocs.io/en/stable/ref/filters.html</span>
+        <span class="k">for</span> <span class="n">filter_name</span> <span class="ow">in</span> <span class="n">list_filters</span><span class="p">:</span>
+            <span class="n">filter_definition</span> <span class="o">=</span> <span class="n">list_filters</span><span class="p">[</span><span class="n">filter_name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">filter_name</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+                <span class="n">sorted_filters</span><span class="p">[</span><span class="n">filter_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">filter_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filter_definition</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">filter_definition</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">sorted_filters</span><span class="p">[</span><span class="n">filter_name</span><span class="p">],</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">filter_definition</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="s2">&quot;filter&quot;</span> <span class="ow">in</span> <span class="n">filter_definition</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="p">):</span>
+                <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">x</span><span class="p">:</span> <span class="n">filter_definition</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">filter_definition</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="s2">&quot;filter&quot;</span>
+                <span class="p">}</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">django_filters</span><span class="p">,</span> <span class="n">filter_definition</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">])(</span><span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
+                <span class="n">sorted_filters</span><span class="p">[</span><span class="n">filter_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
 
-                <span class="k">if</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">default_filters</span><span class="p">:</span>
-                    <span class="n">filter_settings</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="n">unused_filters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">list_filters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">^</span> <span class="nb">set</span><span class="p">(</span><span class="n">sorted_filters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">unused_filter</span> <span class="ow">in</span> <span class="n">unused_filters</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;Unusable filter in setting for </span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                <span class="n">unused_filter</span><span class="p">,</span>
+            <span class="p">)</span>
 
-                    <span class="k">if</span> <span class="s2">&quot;method&quot;</span> <span class="ow">in</span> <span class="n">filter_settings</span><span class="p">:</span>
-                        <span class="n">default_filters</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">filter_settings</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;__defaults__&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">list_filters_exclude</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">f_name</span><span class="p">,</span> <span class="n">f_filter</span> <span class="ow">in</span> <span class="n">filters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">f_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">list_filters_exclude</span><span class="p">:</span>
+                    <span class="n">sorted_filters</span><span class="p">[</span><span class="n">f_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_filter</span>
 
-                    <span class="k">if</span> <span class="s2">&quot;label&quot;</span> <span class="ow">in</span> <span class="n">filter_settings</span><span class="p">:</span>
-                        <span class="n">default_filters</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">filter_settings</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">sorted_filters</span></div>
 
-                    <span class="n">field_filters</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_filters</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                    <span class="s2">&quot;Unusable filter - should be name of a default filter or a dict, got </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="n">f</span><span class="p">,</span>
-                <span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">f_name</span><span class="p">,</span> <span class="n">f_filter</span> <span class="ow">in</span> <span class="n">default_filters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">f_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore_fields</span> <span class="ow">and</span> <span class="n">f_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">field_filters</span><span class="p">:</span>
-                <span class="n">field_filters</span><span class="p">[</span><span class="n">f_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_filter</span>
-
-        <span class="k">return</span> <span class="n">field_filters</span></div>
-
-        <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
-        <span class="c1">#</span>
-        <span class="c1"># enabled_filters = settings.APIS_ENTITIES[self.Meta.model.__name__][&quot;list_filters&quot;]</span>
-        <span class="c1">#</span>
-        <span class="c1"># filter_dict_tmp = {}</span>
-        <span class="c1">#</span>
-        <span class="c1"># for enabled_filter in enabled_filters:</span>
-        <span class="c1">#</span>
-        <span class="c1">#     if type(enabled_filter) == str and enabled_filter in default_filter_dict:</span>
-        <span class="c1">#         # If string then just use it, if a filter with such a name is already defined</span>
-        <span class="c1">#</span>
-        <span class="c1">#         filter_dict_tmp[enabled_filter] = default_filter_dict[enabled_filter]</span>
-        <span class="c1">#</span>
-        <span class="c1">#</span>
-        <span class="c1">#     elif type(enabled_filter) == dict:</span>
-        <span class="c1">#         # if a dictionary, then look further into if there is a method or label which overrides the defaults</span>
-        <span class="c1">#</span>
-        <span class="c1">#         enabled_filter_key = list(enabled_filter.keys())[0]</span>
-        <span class="c1">#</span>
-        <span class="c1">#         if enabled_filter_key in default_filter_dict:</span>
-        <span class="c1">#</span>
-        <span class="c1">#             # get the dictionary which contains potential method or label overrides</span>
-        <span class="c1">#             enabled_filter_settings_dict = enabled_filter[enabled_filter_key]</span>
-        <span class="c1">#</span>
-        <span class="c1">#             if &quot;method&quot; in enabled_filter_settings_dict:</span>
-        <span class="c1">#                 default_filter_dict[enabled_filter_key].method = enabled_filter_settings_dict[&quot;method&quot;]</span>
-        <span class="c1">#</span>
-        <span class="c1">#             if &quot;label&quot; in enabled_filter_settings_dict:</span>
-        <span class="c1">#                 default_filter_dict[enabled_filter_key].label = enabled_filter_settings_dict[&quot;label&quot;]</span>
-        <span class="c1">#</span>
-        <span class="c1">#             filter_dict_tmp[enabled_filter_key] = default_filter_dict[enabled_filter_key]</span>
-        <span class="c1">#</span>
-        <span class="c1">#     else:</span>
-        <span class="c1">#         raise ValueError(</span>
-        <span class="c1">#             &quot;Expected either str or dict as type for an individual filter in the settings file.&quot;</span>
-        <span class="c1">#             f&quot;\nGot instead: {type(enabled_filter)}&quot;</span>
-        <span class="c1">#          )</span>
-        <span class="c1">#</span>
-        <span class="c1"># return filter_dict_tmp</span>
-
-<div class="viewcode-block" id="GenericEntityListFilter.construct_lookup"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.construct_lookup">[docs]</a>    <span class="k">def</span> <span class="nf">construct_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntityListFilter.construct_lookup">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.construct_lookup">[docs]</a>
+    <span class="k">def</span> <span class="nf">construct_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parses user input for wildcards and returns a tuple containing the interpreted django lookup string and the trimmed value</span>
 <span class="sd">        E.g.</span>
@@ -294,7 +271,10 @@
                 <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">return</span> <span class="s2">&quot;__icontains&quot;</span><span class="p">,</span> <span class="n">value</span></div>
 
-<div class="viewcode-block" id="GenericEntityListFilter.name_label_filter"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.name_label_filter">[docs]</a>    <span class="k">def</span> <span class="nf">name_label_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericEntityListFilter.name_label_filter">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.name_label_filter">[docs]</a>
+    <span class="k">def</span> <span class="nf">name_label_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="c1"># TODO: include alternative names queries</span>
         <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
@@ -303,8 +283,11 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="n">queryset_related_label</span> <span class="o">|</span> <span class="n">queryset_self_name</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
 
+
     <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
-<div class="viewcode-block" id="GenericEntityListFilter.related_entity_name_method"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_entity_name_method">[docs]</a>    <span class="k">def</span> <span class="nf">related_entity_name_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntityListFilter.related_entity_name_method">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_entity_name_method">[docs]</a>
+    <span class="k">def</span> <span class="nf">related_entity_name_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
         <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
@@ -314,7 +297,10 @@
 
         <span class="k">return</span> <span class="n">queryset</span></div>
 
-<div class="viewcode-block" id="GenericEntityListFilter.related_property_name_method"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_property_name_method">[docs]</a>    <span class="k">def</span> <span class="nf">related_property_name_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericEntityListFilter.related_property_name_method">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_property_name_method">[docs]</a>
+    <span class="k">def</span> <span class="nf">related_property_name_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="c1"># TODO RDF: Check if this should be removed or adapted_</span>
         <span class="c1">#</span>
         <span class="c1"># &quot;&quot;&quot;</span>
@@ -388,7 +374,10 @@
 
         <span class="k">return</span> <span class="n">queryset</span></div>
 
-<div class="viewcode-block" id="GenericEntityListFilter.related_arbitrary_model_name"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_arbitrary_model_name">[docs]</a>    <span class="k">def</span> <span class="nf">related_arbitrary_model_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericEntityListFilter.related_arbitrary_model_name">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_arbitrary_model_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">related_arbitrary_model_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Searches through an arbitrarily related model on its name field.</span>
 
@@ -403,7 +392,9 @@
         <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
         <span class="c1"># name variable is the name of the filter and needs the corresponding field within the model</span>
-        <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;__name&quot;</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span></div></div>
+        <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;__name&quot;</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span></div>
+</div>
+
 
 
 <span class="c1">#######################################################################</span>
@@ -493,7 +484,9 @@
 <span class="c1">#         exclude = GenericListFilter.fields_to_exclude</span>
 
 
-<div class="viewcode-block" id="get_list_filter_of_entity"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.get_list_filter_of_entity">[docs]</a><span class="k">def</span> <span class="nf">get_list_filter_of_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+<div class="viewcode-block" id="get_list_filter_of_entity">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.get_list_filter_of_entity">[docs]</a>
+<span class="k">def</span> <span class="nf">get_list_filter_of_entity</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Main method to be called somewhere else in the codebase in order to get the FilterClass respective to the entity string input</span>
 
@@ -512,6 +505,7 @@
         <span class="n">entity_list_filter_class</span> <span class="o">=</span> <span class="n">AdHocEntityListFilter</span>
 
     <span class="k">return</span> <span class="n">entity_list_filter_class</span></div>
+
 </pre></div>
 
            </div>

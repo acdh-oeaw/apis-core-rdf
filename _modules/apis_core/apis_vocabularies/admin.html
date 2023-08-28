@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -90,31 +90,44 @@
 <span class="kn">from</span> <span class="nn">csvexport.actions</span> <span class="kn">import</span> <span class="n">csvexport</span>
 
 
-<div class="viewcode-block" id="BaseAdminVocabularies"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies">[docs]</a><span class="k">class</span> <span class="nc">BaseAdminVocabularies</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseAdminVocabularies">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseAdminVocabularies</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class used to store the User foreign key in the background when someone adds a vocab.&quot;&quot;&quot;</span>
 
     <span class="n">search_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;parent_class__name&quot;</span><span class="p">)</span>
     <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;userAdded&quot;</span><span class="p">,)</span>
     <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">csvexport</span><span class="p">]</span>
 
-<div class="viewcode-block" id="BaseAdminVocabularies.get_fields"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseAdminVocabularies.get_fields">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.get_fields">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BaseAdminVocabularies</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_fields</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">:</span>
             <span class="n">lst</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">lst</span></div>
 
-<div class="viewcode-block" id="BaseAdminVocabularies.get_queryset"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+
+<div class="viewcode-block" id="BaseAdminVocabularies.get_queryset">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.get_queryset">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="n">qs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BaseAdminVocabularies</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">userAdded__groups__in</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">all</span><span class="p">())</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseAdminVocabularies.save_model"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.save_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+
+<div class="viewcode-block" id="BaseAdminVocabularies.save_model">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.save_model">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">change</span><span class="p">:</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">userAdded</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BaseAdminVocabularies.formfield_for_foreignkey"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.formfield_for_foreignkey">[docs]</a>    <span class="k">def</span> <span class="nf">formfield_for_foreignkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_field</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="BaseAdminVocabularies.formfield_for_foreignkey">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.formfield_for_foreignkey">[docs]</a>
+    <span class="k">def</span> <span class="nf">formfield_for_foreignkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_field</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;data-placeholder&quot;</span><span class="p">:</span> <span class="s2">&quot;Type to get suggestions&quot;</span><span class="p">,</span>
             <span class="s2">&quot;data-minimum-input-length&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_MIN_CHAR&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
@@ -140,12 +153,17 @@
 
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">BaseAdminVocabularies</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">formfield_for_foreignkey</span><span class="p">(</span>
             <span class="n">db_field</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="VocabsRelationAdmin"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.VocabsRelationAdmin">[docs]</a><span class="k">class</span> <span class="nc">VocabsRelationAdmin</span><span class="p">(</span><span class="n">BaseAdminVocabularies</span><span class="p">):</span>
+
+<div class="viewcode-block" id="VocabsRelationAdmin">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.VocabsRelationAdmin">[docs]</a>
+<span class="k">class</span> <span class="nc">VocabsRelationAdmin</span><span class="p">(</span><span class="n">BaseAdminVocabularies</span><span class="p">):</span>
     <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span>
     <span class="n">search_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;parent_class__name&quot;</span><span class="p">)</span></div>
+
 
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">apps</span><span class="o">.</span><span class="n">get_app_config</span><span class="p">(</span><span class="s2">&quot;apis_vocabularies&quot;</span><span class="p">)</span>

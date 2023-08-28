@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -95,7 +95,6 @@
 <span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">m2m_changed</span><span class="p">,</span> <span class="n">post_save</span>
 <span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
-<span class="kn">from</span> <span class="nn">guardian.shortcuts</span> <span class="kn">import</span> <span class="n">assign_perm</span><span class="p">,</span> <span class="n">remove_perm</span>
 <span class="kn">from</span> <span class="nn">model_utils.managers</span> <span class="kn">import</span> <span class="n">InheritanceManager</span>
 <span class="kn">from</span> <span class="nn">django.db.models.query</span> <span class="kn">import</span> <span class="n">QuerySet</span>
 
@@ -103,12 +102,15 @@
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">DateParser</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span><span class="p">,</span> <span class="n">Collection</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities</span> <span class="kn">import</span> <span class="n">signals</span>
 
 <span class="n">BASE_URI</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_BASE_URI&quot;</span><span class="p">,</span> <span class="s2">&quot;http://apis.info/&quot;</span><span class="p">)</span>
 <span class="n">NEXT_PREV</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_NEXT_PREV&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="AbstractEntity"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity">[docs]</a><span class="k">class</span> <span class="nc">AbstractEntity</span><span class="p">(</span><span class="n">RootObject</span><span class="p">):</span>
+<div class="viewcode-block" id="AbstractEntity">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity">[docs]</a>
+<span class="k">class</span> <span class="nc">AbstractEntity</span><span class="p">(</span><span class="n">RootObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract super class which encapsulates common logic between the</span>
 <span class="sd">    different entity kinds and provides various methods relating to either</span>
@@ -119,13 +121,11 @@
 <span class="sd">    So they are to be understood in that dynamic context.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">entity_settings</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;list_filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;related_entity_name&quot;</span><span class="p">,</span> <span class="s2">&quot;related_property_name&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;search&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-    <span class="p">}</span>
-
-<div class="viewcode-block" id="AbstractEntity.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="AbstractEntity.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">abstract</span> <span class="o">=</span> <span class="kc">True</span></div>
+
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -136,7 +136,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;no name provided&quot;</span>
 
-<div class="viewcode-block" id="AbstractEntity.get_or_create_uri"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_or_create_uri">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="AbstractEntity.get_or_create_uri">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_or_create_uri">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_or_create_uri</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uri</span><span class="p">):</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -149,13 +151,20 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found no object corresponding to given uri.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
+
     <span class="c1"># TODO</span>
-<div class="viewcode-block" id="AbstractEntity.get_entity_list_filter"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_entity_list_filter">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="AbstractEntity.get_entity_list_filter">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_entity_list_filter">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_entity_list_filter</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">None</span></div></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
 
 
-<div class="viewcode-block" id="TempEntityClass"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TempEntityClass">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">TempEntityClass</span><span class="p">(</span><span class="n">AbstractEntity</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class to bind common attributes to many classes.</span>
@@ -214,7 +223,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;(ID: </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TempEntityClass.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="TempEntityClass.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adaption of the save() method of the class to automatically parse</span>
 <span class="sd">        string-dates into date objects.</span>
@@ -256,9 +267,12 @@
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
+
     <span class="c1"># TODO RDF: I don&#39;t remember what this function was used for.</span>
     <span class="c1">#  Investigate or delete it.</span>
-<div class="viewcode-block" id="TempEntityClass.get_child_entity"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_child_entity">[docs]</a>    <span class="k">def</span> <span class="nf">get_child_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TempEntityClass.get_child_entity">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_child_entity">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_child_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">apps</span><span class="o">.</span><span class="n">all_models</span><span class="p">[</span><span class="s2">&quot;apis_entities&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]:</span>
             <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -269,7 +283,10 @@
                     <span class="k">pass</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_listview_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_listview_url">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_listview_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_listview_url">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_listview_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
@@ -277,7 +294,10 @@
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">},</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_createview_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_createview_url">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_createview_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_createview_url">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_createview_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
@@ -285,21 +305,30 @@
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">},</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_edit_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_edit_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_edit_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_edit_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_edit_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_edit_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
             <span class="s2">&quot;apis_core:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_child_class"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_child_class">[docs]</a>    <span class="k">def</span> <span class="nf">get_child_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_child_class">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_child_class">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_child_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_child_entity</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">child</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_absolute_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_absolute_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_absolute_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
         <span class="c1">#</span>
@@ -321,7 +350,10 @@
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_prev_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_prev_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_prev_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_prev_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_prev_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_prev_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">NEXT_PREV</span><span class="p">:</span>
             <span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__lt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-id&quot;</span><span class="p">)</span>
@@ -335,7 +367,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_next_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_next_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_next_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_next_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_next_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">NEXT_PREV</span><span class="p">:</span>
             <span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__gt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
@@ -349,21 +384,97 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_delete_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_delete_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_delete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_delete_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_delete_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_delete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
             <span class="s2">&quot;apis_core:apis_entities:generic_entities_delete_view&quot;</span><span class="p">,</span>
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_duplicate_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_duplicate_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_duplicate_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_duplicate_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_duplicate_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_duplicate_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
             <span class="s2">&quot;apis_core:apis_entities:generic_entities_duplicate_view&quot;</span><span class="p">,</span>
             <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.merge_with"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.merge_with">[docs]</a>    <span class="k">def</span> <span class="nf">merge_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClass.merge_charfield">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.merge_charfield">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_charfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">choices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                <span class="n">res</span> <span class="o">+=</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TempEntityClass.merge_textfield">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.merge_textfield">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_textfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;Merged from </span><span class="si">{other}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TempEntityClass.merge_booleanfield">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.merge_booleanfield">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_booleanfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="nb">setattr</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TempEntityClass.merge_start_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.merge_start_date_written">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_date_written</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_date_written</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">start_date_written</span></div>
+
+
+<div class="viewcode-block" id="TempEntityClass.merge_end_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.merge_end_date_written">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_date_written</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_date_written</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">end_date_written</span></div>
+
+
+<div class="viewcode-block" id="TempEntityClass.merge_fields">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.merge_fields">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method iterates through the model fields and copies</span>
+<span class="sd">        data from other to self. It first tries to find a merge method</span>
+<span class="sd">        that is specific to that field (merge_{fieldname}) and then tries</span>
+<span class="sd">        to find a method that is specific to the type of the field (merge_{fieldtype})</span>
+<span class="sd">        It is called by the `merge_with` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="n">fieldtype</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get_internal_type</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="c1"># if there is a `merge_{fieldname}` method in this model, use that one</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;merge_</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;merge_</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">other</span><span class="p">)</span>
+            <span class="c1"># otherwise we check if there is a method for the field type and use that one</span>
+            <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;merge_</span><span class="si">{</span><span class="n">fieldtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;merge_</span><span class="si">{</span><span class="n">fieldtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TempEntityClass.merge_with">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.merge_with">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">signals</span><span class="o">.</span><span class="n">pre_merge_with</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="n">entities</span><span class="p">)</span>
+
         <span class="c1"># TODO: check if these imports can be put to top of module without</span>
         <span class="c1">#  causing circular import issues.</span>
         <span class="kn">from</span> <span class="nn">apis_core.apis_labels.models</span> <span class="kn">import</span> <span class="n">Label</span>
@@ -396,23 +507,35 @@
                         <span class="k">if</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">:</span>
                             <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
             <span class="n">Label</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">ent</span><span class="p">),</span> <span class="n">label_type</span><span class="o">=</span><span class="n">lt</span><span class="p">,</span> <span class="n">temp_entity</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="n">ent</span><span class="p">):</span>
-                <span class="n">u</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span>
-                <span class="n">u</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="n">ent</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">Label</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">temp_entity</span><span class="o">=</span><span class="n">ent</span><span class="p">):</span>
                 <span class="n">l</span><span class="o">.</span><span class="n">temp_entity</span> <span class="o">=</span> <span class="bp">self</span>
                 <span class="n">l</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">obj__id</span><span class="o">=</span><span class="n">ent</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
             <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">subj__id</span><span class="o">=</span><span class="n">ent</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">subj</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">merge_fields</span><span class="p">(</span><span class="n">ent</span><span class="p">)</span>
+
+        <span class="n">signals</span><span class="o">.</span><span class="n">post_merge_with</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="n">entities</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
             <span class="n">ent</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TempEntityClass.get_serialization"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_serialization">[docs]</a>    <span class="k">def</span> <span class="nf">get_serialization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TempEntityClass.get_serialization">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.get_serialization">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_serialization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">apis_core.apis_entities.serializers_generic</span> <span class="kn">import</span> <span class="n">EntitySerializer</span>
 
-        <span class="k">return</span> <span class="n">EntitySerializer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">data</span></div></div>
+        <span class="k">return</span> <span class="n">EntitySerializer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">data</span></div>
+</div>
 
 
-<div class="viewcode-block" id="prepare_fields_dict"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.prepare_fields_dict">[docs]</a><span class="k">def</span> <span class="nf">prepare_fields_dict</span><span class="p">(</span><span class="n">fields_list</span><span class="p">,</span> <span class="n">vocabs</span><span class="p">,</span> <span class="n">vocabs_m2m</span><span class="p">):</span>
+
+<div class="viewcode-block" id="prepare_fields_dict">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.prepare_fields_dict">[docs]</a>
+<span class="k">def</span> <span class="nf">prepare_fields_dict</span><span class="p">(</span><span class="n">fields_list</span><span class="p">,</span> <span class="n">vocabs</span><span class="p">,</span> <span class="n">vocabs_m2m</span><span class="p">):</span>
     <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields_list</span><span class="p">:</span>
         <span class="n">res</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">])(</span><span class="o">**</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;attributes&quot;</span><span class="p">])</span>
@@ -423,6 +546,7 @@
     <span class="k">for</span> <span class="n">v2</span> <span class="ow">in</span> <span class="n">vocabs_m2m</span><span class="p">:</span>
         <span class="n">res</span><span class="p">[</span><span class="n">v2</span><span class="p">]</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;apis_vocabularies.</span><span class="si">{</span><span class="n">v2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span></div>
+
 
 
 <span class="c1"># ents_cls_list = []</span>
@@ -441,7 +565,9 @@
 <span class="c1">#             reversion.register(ent_class, follow=[&quot;tempentityclass_ptr&quot;])</span>
 
 
-<div class="viewcode-block" id="create_default_uri"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.create_default_uri">[docs]</a><span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">dispatch_uid</span><span class="o">=</span><span class="s2">&quot;create_default_uri&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="create_default_uri">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.create_default_uri">[docs]</a>
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">dispatch_uid</span><span class="o">=</span><span class="s2">&quot;create_default_uri&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">create_default_uri</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 
@@ -458,65 +584,6 @@
         <span class="n">uri2</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
 
 
-<span class="n">lst_entities_complete</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="nb">globals</span><span class="p">()[</span><span class="n">x</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">globals</span><span class="p">()[</span><span class="n">x</span><span class="p">],</span> <span class="n">models</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">ModelBase</span><span class="p">)</span>
-    <span class="ow">and</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">==</span> <span class="s2">&quot;apis_core.apis_entities.models&quot;</span>
-    <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s2">&quot;AbstractEntity&quot;</span>
-    <span class="ow">and</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">x</span><span class="p">]</span>
-<span class="p">]</span>
-<span class="n">lst_entities_complete</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">lst_entities_complete</span><span class="p">))</span>
-
-<span class="c1"># TODO: inspect.</span>
-<span class="c1">#  This list here will contain only duplicates if</span>
-<span class="c1">#  `lst_entities_complete` contains all entities</span>
-<span class="n">perm_change_senders</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;collection&quot;</span><span class="p">),</span> <span class="s2">&quot;through&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lst_entities_complete</span>
-<span class="p">]</span>
-
-
-<div class="viewcode-block" id="create_object_permissions"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.create_object_permissions">[docs]</a><span class="nd">@receiver</span><span class="p">(</span>
-    <span class="n">m2m_changed</span><span class="p">,</span>
-    <span class="n">dispatch_uid</span><span class="o">=</span><span class="s2">&quot;create_object_permissions&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_object_permissions</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pre_add&quot;</span> <span class="ow">and</span> <span class="n">sender</span> <span class="ow">in</span> <span class="n">perm_change_senders</span><span class="p">:</span>
-        <span class="n">perms</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk__in</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk_set&quot;</span><span class="p">]):</span>
-            <span class="n">perms</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">groups_allowed</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">perms</span><span class="p">:</span>
-            <span class="n">assign_perm</span><span class="p">(</span><span class="s2">&quot;change_&quot;</span> <span class="o">+</span> <span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">x</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
-            <span class="n">assign_perm</span><span class="p">(</span><span class="s2">&quot;delete_&quot;</span> <span class="o">+</span> <span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">x</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;post_remove&quot;</span> <span class="ow">and</span> <span class="n">sender</span> <span class="ow">in</span> <span class="n">perm_change_senders</span><span class="p">:</span>
-        <span class="n">perms</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">perms_keep</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk__in</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk_set&quot;</span><span class="p">]):</span>
-            <span class="n">perms</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">groups_allowed</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
-        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-            <span class="n">perms_keep</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">groups_allowed</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
-        <span class="n">rm_perms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">perms</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">perms_keep</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rm_perms</span><span class="p">:</span>
-            <span class="n">remove_perm</span><span class="p">(</span><span class="s2">&quot;change_&quot;</span> <span class="o">+</span> <span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">x</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
-            <span class="n">remove_perm</span><span class="p">(</span><span class="s2">&quot;delete_&quot;</span> <span class="o">+</span> <span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">x</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="add_usergroup_collection"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.add_usergroup_collection">[docs]</a><span class="nd">@receiver</span><span class="p">(</span>
-    <span class="n">m2m_changed</span><span class="p">,</span>
-    <span class="n">sender</span><span class="o">=</span><span class="n">Collection</span><span class="o">.</span><span class="n">groups_allowed</span><span class="o">.</span><span class="n">through</span><span class="p">,</span>
-    <span class="n">dispatch_uid</span><span class="o">=</span><span class="s2">&quot;add_usergroup_collection&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="k">def</span> <span class="nf">add_usergroup_collection</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pre_add&quot;</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk__in</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk_set&quot;</span><span class="p">]):</span>
-            <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">]:</span>
-                <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Person</span><span class="p">,</span> <span class="n">Institution</span><span class="p">,</span> <span class="n">Place</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Work</span><span class="p">]:</span>
-                    <span class="n">assign_perm</span><span class="p">(</span>
-                        <span class="n">z</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">y</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
-                        <span class="n">x</span><span class="p">,</span>
-                        <span class="n">y</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="n">instance</span><span class="p">),</span>
-                    <span class="p">)</span></div>
-
 
 <span class="k">if</span> <span class="s2">&quot;registration&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;INSTALLED_APPS&quot;</span><span class="p">,</span> <span class="p">[]):</span>
     <span class="kn">from</span> <span class="nn">registration.backends.simple.views</span> <span class="kn">import</span> <span class="n">RegistrationView</span>
@@ -531,19 +598,6 @@
         <span class="n">user_group</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_AUTO_USERGROUP&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">user_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">user</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Group</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">user_group</span><span class="p">))</span>
-
-
-<span class="c1"># TODO remove this workaround here once the settings issue is resolved</span>
-<div class="viewcode-block" id="fill_settings_with_entity_attributes"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.fill_settings_with_entity_attributes">[docs]</a><span class="k">def</span> <span class="nf">fill_settings_with_entity_attributes</span><span class="p">():</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">entity_class</span> <span class="ow">in</span> <span class="p">(</span>
-            <span class="n">caching</span><span class="o">.</span><span class="n">get_all_entity_classes</span><span class="p">()</span> <span class="o">+</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_all_ontology_classes</span><span class="p">()</span>
-        <span class="p">):</span>
-            <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">entity_class</span><span class="o">.</span><span class="n">entity_settings</span>
-            <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="p">[</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity_settings</span></div>
-
-
-<span class="n">fill_settings_with_entity_attributes</span><span class="p">()</span>
 </pre></div>
 
            </div>

@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -89,7 +89,9 @@
 
 
 <span class="c1"># Register your models here.</span>
-<div class="viewcode-block" id="BaseAdmin"><a class="viewcode-back" href="../../../modules/apis_core.apis_labels.html#apis_core.apis_labels.admin.BaseAdmin">[docs]</a><span class="k">class</span> <span class="nc">BaseAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseAdmin">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_labels.html#apis_core.apis_labels.admin.BaseAdmin">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
 
     <span class="n">search_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">,)</span>
     <span class="n">list_filter</span> <span class="o">=</span> <span class="p">(</span>
@@ -102,6 +104,7 @@
     <span class="p">)</span>
     <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;temp_entity&quot;</span><span class="p">,)</span>
     <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">csvexport</span><span class="p">]</span></div>
+
 
 
 <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Label</span><span class="p">,</span> <span class="n">BaseAdmin</span><span class="p">)</span>

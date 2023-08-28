@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -102,26 +102,27 @@
 <span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">get_highlighted_texts</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.mixins</span> <span class="kn">import</span> <span class="n">EntityInstanceMixin</span>
+<span class="kn">from</span> <span class="nn">apis_core.core.mixins</span> <span class="kn">import</span> <span class="n">ViewPassesTestMixin</span>
 
 
-<div class="viewcode-block" id="GenericEntitiesDetailView"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.detail_generic.GenericEntitiesDetailView">[docs]</a><span class="k">class</span> <span class="nc">GenericEntitiesDetailView</span><span class="p">(</span><span class="n">UserPassesTestMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntitiesDetailView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.detail_generic.GenericEntitiesDetailView">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericEntitiesDetailView</span><span class="p">(</span><span class="n">ViewPassesTestMixin</span><span class="p">,</span> <span class="n">EntityInstanceMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
 
     <span class="n">login_url</span> <span class="o">=</span> <span class="s2">&quot;/accounts/login/&quot;</span>
 
-<div class="viewcode-block" id="GenericEntitiesDetailView.test_func"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.detail_generic.GenericEntitiesDetailView.test_func">[docs]</a>    <span class="k">def</span> <span class="nf">test_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">access</span> <span class="o">=</span> <span class="n">access_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">viewtype</span><span class="o">=</span><span class="s2">&quot;detail&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">access</span></div>
+<div class="viewcode-block" id="GenericEntitiesDetailView.get">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.detail_generic.GenericEntitiesDetailView.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
-<div class="viewcode-block" id="GenericEntitiesDetailView.get"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.detail_generic.GenericEntitiesDetailView.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="n">pk</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">]</span>
-        <span class="n">entity_model</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_entity_class_of_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">entity_model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">side_bar</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="n">triples_related_all</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">))</span>
+            <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="o">.</span><span class="n">all</span><span class="p">()</span>
             <span class="o">.</span><span class="n">select_subclasses</span><span class="p">()</span>
         <span class="p">)</span>
@@ -133,13 +134,13 @@
             <span class="n">other_entity_class_name</span> <span class="o">=</span> <span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
             <span class="n">triples_related_by_entity</span> <span class="o">=</span> <span class="n">triples_related_all</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj__self_contenttype</span><span class="o">=</span><span class="n">entity_content_type</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">))</span>
-                <span class="o">|</span> <span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">obj__self_contenttype</span><span class="o">=</span><span class="n">entity_content_type</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">))</span>
+                <span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj__self_contenttype</span><span class="o">=</span><span class="n">entity_content_type</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+                <span class="o">|</span> <span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">obj__self_contenttype</span><span class="o">=</span><span class="n">entity_content_type</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
             <span class="p">)</span>
 
             <span class="n">table</span> <span class="o">=</span> <span class="n">get_generic_triple_table</span><span class="p">(</span>
                 <span class="n">other_entity_class_name</span><span class="o">=</span><span class="n">other_entity_class_name</span><span class="p">,</span>
-                <span class="n">entity_pk_self</span><span class="o">=</span><span class="n">pk</span><span class="p">,</span>
+                <span class="n">entity_pk_self</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
                 <span class="n">detail</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -159,9 +160,9 @@
             <span class="p">)</span>
 
         <span class="c1"># TODO RDF : Check / Adapt the following code to rdf architecture</span>
-        <span class="n">object_lod</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">object_texts</span><span class="p">,</span> <span class="n">ann_proj_form</span> <span class="o">=</span> <span class="n">get_highlighted_texts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
-        <span class="n">object_labels</span> <span class="o">=</span> <span class="n">Label</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">temp_entity</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">object_lod</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">object_texts</span><span class="p">,</span> <span class="n">ann_proj_form</span> <span class="o">=</span> <span class="n">get_highlighted_texts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">object_labels</span> <span class="o">=</span> <span class="n">Label</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">temp_entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
         <span class="n">tb_label</span> <span class="o">=</span> <span class="n">LabelTableBase</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">object_labels</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;L-&quot;</span><span class="p">)</span>
         <span class="n">tb_label_open</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PL-page&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">side_bar</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;Label&quot;</span><span class="p">,</span> <span class="n">tb_label</span><span class="p">,</span> <span class="s2">&quot;PersonLabel&quot;</span><span class="p">,</span> <span class="n">tb_label_open</span><span class="p">))</span>
@@ -174,7 +175,7 @@
         <span class="p">)</span>
         <span class="n">tei</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_TEI_TEXTS&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">if</span> <span class="n">tei</span><span class="p">:</span>
-            <span class="n">tei</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tei</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">kind</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">all</span><span class="p">()])</span>
+            <span class="n">tei</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tei</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">kind</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">all</span><span class="p">()])</span>
         <span class="n">ceteicean_css</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_CETEICEAN_CSS&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">ceteicean_js</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_CETEICEAN_JS&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">openseadragon_js</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_OSD_JS&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -182,7 +183,7 @@
         <span class="n">iiif_field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_IIIF_WORK_KIND&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">iiif_field</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iiif_field</span><span class="p">):</span>
+                <span class="k">if</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iiif_field</span><span class="p">):</span>
                     <span class="n">iiif</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">iiif</span> <span class="o">=</span> <span class="kc">False</span>
@@ -191,7 +192,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">iiif</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">iiif_server</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_IIIF_SERVER&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">iiif_info_json</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">iiif_info_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">name</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">no_merge_labels</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">object_labels</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">label_type</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Legacy&quot;</span><span class="p">)</span>
@@ -235,14 +236,14 @@
 
             <span class="k">return</span> <span class="n">list_key_val_pairs</span>
 
-        <span class="n">relvant_fields</span> <span class="o">=</span> <span class="n">get_relevant_fields</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">relvant_fields</span> <span class="o">=</span> <span class="n">get_relevant_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
             <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
                 <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
                 <span class="n">context</span><span class="o">=</span><span class="p">{</span>
                     <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
-                    <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="n">instance</span><span class="p">,</span>
+                    <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span>
                     <span class="s2">&quot;relvant_fields&quot;</span><span class="p">:</span> <span class="n">relvant_fields</span><span class="p">,</span>
                     <span class="s2">&quot;right_card&quot;</span><span class="p">:</span> <span class="n">side_bar</span><span class="p">,</span>
                     <span class="s2">&quot;no_merge_labels&quot;</span><span class="p">:</span> <span class="n">no_merge_labels</span><span class="p">,</span>
@@ -260,7 +261,9 @@
                     <span class="s2">&quot;iiif_server&quot;</span><span class="p">:</span> <span class="n">iiif_server</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">)</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>

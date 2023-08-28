@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -102,7 +102,9 @@
 <span class="c1">###########################################################</span>
 
 
-<div class="viewcode-block" id="GenericVocabsSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.GenericVocabsSerializer">[docs]</a><span class="k">class</span> <span class="nc">GenericVocabsSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericVocabsSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.GenericVocabsSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericVocabsSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">userAdded</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_user&quot;</span><span class="p">)</span>
     <span class="n">parent_class</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">PrimaryKeyRelatedField</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -110,7 +112,9 @@
     <span class="n">name</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">CharField</span><span class="p">()</span>
     <span class="n">label</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">CharField</span><span class="p">()</span>
 
-<div class="viewcode-block" id="GenericVocabsSerializer.add_user"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.GenericVocabsSerializer.add_user">[docs]</a>    <span class="k">def</span> <span class="nf">add_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericVocabsSerializer.add_user">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.GenericVocabsSerializer.add_user">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;user pk: </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">userAdded_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">userAdded_id</span><span class="p">)</span>
@@ -121,8 +125,12 @@
         <span class="k">except</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="GenericVocabsSerializer.add_vocabname"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.GenericVocabsSerializer.add_vocabname">[docs]</a>    <span class="k">def</span> <span class="nf">add_vocabname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericVocabsSerializer.add_vocabname">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.GenericVocabsSerializer.add_vocabname">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_vocabname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GenericVocabsSerializer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -135,6 +143,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;label_reverse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">CharField</span><span class="p">()</span></div>
 
 
+
 <span class="c1">###########################################################</span>
 <span class="c1">#</span>
 <span class="c1"># Meta- Serializers</span>
@@ -142,13 +151,21 @@
 <span class="c1">##########################################################</span>
 
 
-<div class="viewcode-block" id="UserAccSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.UserAccSerializer">[docs]</a><span class="k">class</span> <span class="nc">UserAccSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
-<div class="viewcode-block" id="UserAccSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.UserAccSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="UserAccSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.UserAccSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">UserAccSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+<div class="viewcode-block" id="UserAccSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.UserAccSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">]</span></div></div>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">]</span></div>
+</div>
 
 
-<div class="viewcode-block" id="VocabsBaseSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabsBaseSerializer">[docs]</a><span class="k">class</span> <span class="nc">VocabsBaseSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="VocabsBaseSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabsBaseSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">VocabsBaseSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
     <span class="n">userAdded</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedRelatedField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:user-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
@@ -162,30 +179,49 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CollectionTypeSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.CollectionTypeSerializer">[docs]</a><span class="k">class</span> <span class="nc">CollectionTypeSerializer</span><span class="p">(</span><span class="n">VocabsBaseSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="CollectionTypeSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.CollectionTypeSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">CollectionTypeSerializer</span><span class="p">(</span><span class="n">VocabsBaseSerializer</span><span class="p">):</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:collectiontype-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="CollectionTypeSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.CollectionTypeSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="CollectionTypeSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.CollectionTypeSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">CollectionType</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">CollectionType</span></div>
+</div>
 
 
-<div class="viewcode-block" id="VocabsBaseClassSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabsBaseClassSerializer">[docs]</a><span class="k">class</span> <span class="nc">VocabsBaseClassSerializer</span><span class="p">(</span><span class="n">VocabsBaseSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="VocabsBaseClassSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabsBaseClassSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">VocabsBaseClassSerializer</span><span class="p">(</span><span class="n">VocabsBaseSerializer</span><span class="p">):</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:vocabsbaseclass-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="VocabsBaseClassSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabsBaseClassSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="VocabsBaseClassSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabsBaseClassSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">VocabsBaseClass</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">VocabsBaseClass</span></div>
+</div>
 
 
-<div class="viewcode-block" id="VocabNamesSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabNamesSerializer">[docs]</a><span class="k">class</span> <span class="nc">VocabNamesSerializer</span><span class="p">(</span><span class="n">VocabsBaseSerializer</span><span class="p">):</span>
-<div class="viewcode-block" id="VocabNamesSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabNamesSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+
+<div class="viewcode-block" id="VocabNamesSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabNamesSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">VocabNamesSerializer</span><span class="p">(</span><span class="n">VocabsBaseSerializer</span><span class="p">):</span>
+<div class="viewcode-block" id="VocabNamesSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.VocabNamesSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">VocabNames</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">VocabNames</span></div>
+</div>
+
 
 
 <span class="c1">############################################################</span>
@@ -195,7 +231,9 @@
 <span class="c1">###########################################################</span>
 
 
-<div class="viewcode-block" id="TextTypeSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.TextTypeSerializer">[docs]</a><span class="k">class</span> <span class="nc">TextTypeSerializer</span><span class="p">(</span><span class="n">VocabsBaseSerializer</span><span class="p">):</span>
+<div class="viewcode-block" id="TextTypeSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.TextTypeSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">TextTypeSerializer</span><span class="p">(</span><span class="n">VocabsBaseSerializer</span><span class="p">):</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
         <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:texttype-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
     <span class="p">)</span>
@@ -206,9 +244,13 @@
         <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="TextTypeSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.TextTypeSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="TextTypeSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.TextTypeSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">TextType</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">TextType</span></div>
+</div>
+
 
 
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
@@ -268,10 +310,16 @@
 <span class="c1">#         model = WorkType</span>
 <span class="c1">#</span>
 <span class="c1">#</span>
-<div class="viewcode-block" id="LabelTypeSerializer"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.LabelTypeSerializer">[docs]</a><span class="k">class</span> <span class="nc">LabelTypeSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
-<div class="viewcode-block" id="LabelTypeSerializer.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.LabelTypeSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="LabelTypeSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.LabelTypeSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">LabelTypeSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+<div class="viewcode-block" id="LabelTypeSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.LabelTypeSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">LabelType</span></div></div>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">LabelType</span></div>
+</div>
+
 </pre></div>
 
            </div>

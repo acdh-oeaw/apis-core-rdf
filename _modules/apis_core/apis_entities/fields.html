@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -94,7 +94,9 @@
 <span class="c1"># &quot;Rewrite&quot; select2 widgets from Django Autocomplete Light so</span>
 <span class="c1"># that they don&#39;t use Django&#39;s admin-provided jQuery, which</span>
 <span class="c1"># causes errors with jQuery provided by us.</span>
-<div class="viewcode-block" id="Select2WidgetMixin"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.Select2WidgetMixin">[docs]</a><span class="k">class</span> <span class="nc">Select2WidgetMixin</span><span class="p">(</span><span class="n">DALSelect2WidgetMixin</span><span class="p">):</span>
+<div class="viewcode-block" id="Select2WidgetMixin">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.Select2WidgetMixin">[docs]</a>
+<span class="k">class</span> <span class="nc">Select2WidgetMixin</span><span class="p">(</span><span class="n">DALSelect2WidgetMixin</span><span class="p">):</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">media</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">media</span>
@@ -134,32 +136,51 @@
         <span class="k">return</span> <span class="n">forms</span><span class="o">.</span><span class="n">Media</span><span class="p">(</span><span class="n">css</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;screen&quot;</span><span class="p">:</span> <span class="n">css</span><span class="p">},</span> <span class="n">js</span><span class="o">=</span><span class="n">js</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Select2"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.Select2">[docs]</a><span class="k">class</span> <span class="nc">Select2</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALSelect2</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Select2">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.Select2">[docs]</a>
+<span class="k">class</span> <span class="nc">Select2</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALSelect2</span><span class="p">):</span>
     <span class="k">pass</span></div>
+
 
 
 <span class="k">class</span> <span class="nc">TagSelect2</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALTagSelect2</span><span class="p">):</span>
     <span class="k">pass</span>
 
 
-<div class="viewcode-block" id="Select2Multiple"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.Select2Multiple">[docs]</a><span class="k">class</span> <span class="nc">Select2Multiple</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALSelect2Multiple</span><span class="p">):</span>
+<div class="viewcode-block" id="Select2Multiple">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.Select2Multiple">[docs]</a>
+<span class="k">class</span> <span class="nc">Select2Multiple</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALSelect2Multiple</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="ListSelect2"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.ListSelect2">[docs]</a><span class="k">class</span> <span class="nc">ListSelect2</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALListSelect2</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ListSelect2">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.ListSelect2">[docs]</a>
+<span class="k">class</span> <span class="nc">ListSelect2</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALListSelect2</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="ModelSelect2"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.ModelSelect2">[docs]</a><span class="k">class</span> <span class="nc">ModelSelect2</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALModelSelect2</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ModelSelect2">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.ModelSelect2">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelSelect2</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALModelSelect2</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="ModelSelect2Multiple"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.ModelSelect2Multiple">[docs]</a><span class="k">class</span> <span class="nc">ModelSelect2Multiple</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALModelSelect2Multiple</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ModelSelect2Multiple">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.ModelSelect2Multiple">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelSelect2Multiple</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALModelSelect2Multiple</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="TagSelect2"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.TagSelect2">[docs]</a><span class="k">class</span> <span class="nc">TagSelect2</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALTagSelect2</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TagSelect2">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.TagSelect2">[docs]</a>
+<span class="k">class</span> <span class="nc">TagSelect2</span><span class="p">(</span><span class="n">Select2WidgetMixin</span><span class="p">,</span> <span class="n">DALTagSelect2</span><span class="p">):</span>
     <span class="k">pass</span></div>
+
 </pre></div>
 
            </div>

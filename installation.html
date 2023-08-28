@@ -11,11 +11,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -95,16 +95,16 @@
            <div itemprop="articleBody">
              
   <section id="installation-with-docker">
-<h1>Installation with Docker<a class="headerlink" href="#installation-with-docker" title="Permalink to this heading"></a></h1>
+<h1>Installation with Docker<a class="headerlink" href="#installation-with-docker" title="Link to this heading"></a></h1>
 <p>This is the recommended way to install APIS on local machines as well as on server infrastructure.</p>
 <section id="docker-image">
-<h2>Docker Image<a class="headerlink" href="#docker-image" title="Permalink to this heading"></a></h2>
+<h2>Docker Image<a class="headerlink" href="#docker-image" title="Link to this heading"></a></h2>
 <p>APIS docker images can be pulled from <a class="reference external" href="https://hub.docker.com/repository/docker/sennierer/apis">docker hub</a>. Images are tagged
 from v0.9.1 onwards. Latest image is tagged with :latest.
 The images are automatically built and tagged and should be up-to-date with altest versions of code.</p>
 </section>
 <section id="docker-compose">
-<h2>Docker Compose<a class="headerlink" href="#docker-compose" title="Permalink to this heading"></a></h2>
+<h2>Docker Compose<a class="headerlink" href="#docker-compose" title="Link to this heading"></a></h2>
 <p>The following docker-compose file can be used as a starting point for deploying an APIS instance:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;2&#39;</span>
 
@@ -176,9 +176,9 @@ The images are automatically built and tagged and should be up-to-date with alte
 </section>
 </section>
 <section id="installation-without-docker">
-<h1>Installation without Docker<a class="headerlink" href="#installation-without-docker" title="Permalink to this heading"></a></h1>
+<h1>Installation without Docker<a class="headerlink" href="#installation-without-docker" title="Link to this heading"></a></h1>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
 <p>APIS webapp needs Python 3.6+ and several python packages that can be easily installed by using <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a>,
 <a class="reference external" href="https://github.com/pypa/pipenv">pipenv</a>, or <a class="reference external" href="https://python-poetry.org/">poetry</a>.</p>
 <p>Create a new virtualenv and activate it:</p>
@@ -189,7 +189,7 @@ The images are automatically built and tagged and should be up-to-date with alte
 <p>To activate the virtualenv on Windows, go to the directory your_virtualenv_name/Scripts and run activate.bat from the command line.</p>
 </section>
 <section id="installation-on-a-linux-box">
-<h2>Installation on a linux box<a class="headerlink" href="#installation-on-a-linux-box" title="Permalink to this heading"></a></h2>
+<h2>Installation on a linux box<a class="headerlink" href="#installation-on-a-linux-box" title="Link to this heading"></a></h2>
 <p>Change to the directory you have downloaded APIS to and install the needed Python packages:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd apis-core</span>
 <span class="go">pip install -r requirements.txt</span>
@@ -251,7 +251,7 @@ Now you can already proceed running the development server:</p>
 <p>should bring up a development server window with your new apis instance.</p>
 </section>
 <section id="installation-on-windows">
-<h2>Installation on Windows<a class="headerlink" href="#installation-on-windows" title="Permalink to this heading"></a></h2>
+<h2>Installation on Windows<a class="headerlink" href="#installation-on-windows" title="Link to this heading"></a></h2>
 <p>Change to the directory you have downloaded APIS to and install the needed Python packages
 In the command prompt that pops up after the activation of the virtualenv, change directory to where you have downloaded apis (eg. to apis-core) and install the modules in requirements.txt</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install -r requirements.txt</span>
@@ -346,7 +346,7 @@ Open the Git Bash or Command Prompt and install bower with the following command
 </div>
 </section>
 <section id="serving-apis-via-apache-wsgi">
-<h2>Serving APIS via Apache WSGI<a class="headerlink" href="#serving-apis-via-apache-wsgi" title="Permalink to this heading"></a></h2>
+<h2>Serving APIS via Apache WSGI<a class="headerlink" href="#serving-apis-via-apache-wsgi" title="Link to this heading"></a></h2>
 <p>If you plan to use APIS in production you should deploy it via a proper webserver. We use <a class="reference external" href="https://httpd.apache.org/">Apache</a> and <code class="docutils literal notranslate"><span class="pre">mod_wsgi</span></code> to
 do so. Our apche virtualhost config looks something like:</p>
 <div class="highlight-aconf notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;VirtualHost</span><span class="w"> </span><span class="s">*:80</span><span class="nt">&gt;</span>

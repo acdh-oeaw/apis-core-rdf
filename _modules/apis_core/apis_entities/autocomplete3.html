@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -112,7 +112,9 @@
     <span class="kn">from</span> <span class="nn">apis_core.default_settings.NER_settings</span> <span class="kn">import</span> <span class="n">autocomp_settings</span> <span class="k">as</span> <span class="n">ac_settings</span>
 
 
-<div class="viewcode-block" id="CustomEntityAutocompletes"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.CustomEntityAutocompletes">[docs]</a><span class="k">class</span> <span class="nc">CustomEntityAutocompletes</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomEntityAutocompletes">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.CustomEntityAutocompletes">[docs]</a>
+<span class="k">class</span> <span class="nc">CustomEntityAutocompletes</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for collecting all the custom autocomplete functions for one entity.</span>
 
 <span class="sd">    Attributes:</span>
@@ -151,7 +153,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
 
-<div class="viewcode-block" id="CustomEntityAutocompletes.get_more"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.CustomEntityAutocompletes.get_more">[docs]</a>    <span class="k">def</span> <span class="nf">get_more</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomEntityAutocompletes.get_more">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.CustomEntityAutocompletes.get_more">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_more</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function to retrieve more results.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -165,11 +169,17 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_more_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">res3</span><span class="p">)</span>
                 <span class="n">res4</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">res3</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res4</span></div></div>
+        <span class="k">return</span> <span class="n">res4</span></div>
+</div>
 
 
-<div class="viewcode-block" id="GenericEntitiesAutocomplete"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericEntitiesAutocomplete">[docs]</a><span class="k">class</span> <span class="nc">GenericEntitiesAutocomplete</span><span class="p">(</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListView</span><span class="p">):</span>
-<div class="viewcode-block" id="GenericEntitiesAutocomplete.parse_stanbol_object"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericEntitiesAutocomplete.parse_stanbol_object">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="GenericEntitiesAutocomplete">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericEntitiesAutocomplete">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericEntitiesAutocomplete</span><span class="p">(</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListView</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntitiesAutocomplete.parse_stanbol_object">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericEntitiesAutocomplete.parse_stanbol_object">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">parse_stanbol_object</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">lst1</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -200,7 +210,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no match&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GenericEntitiesAutocomplete.get"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericEntitiesAutocomplete.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericEntitiesAutocomplete.get">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericEntitiesAutocomplete.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Look up entity objects from which to create relationships.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -450,12 +463,18 @@
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">HttpResponse</span><span class="p">(</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">choices</span> <span class="o">+</span> <span class="p">[],</span> <span class="s2">&quot;pagination&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;more&quot;</span><span class="p">:</span> <span class="n">more</span><span class="p">}}),</span>
             <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 
 
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
-<div class="viewcode-block" id="GenericVocabulariesAutocomplete"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericVocabulariesAutocomplete">[docs]</a><span class="k">class</span> <span class="nc">GenericVocabulariesAutocomplete</span><span class="p">(</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListView</span><span class="p">):</span>
-<div class="viewcode-block" id="GenericVocabulariesAutocomplete.get"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericVocabulariesAutocomplete.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericVocabulariesAutocomplete">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericVocabulariesAutocomplete">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericVocabulariesAutocomplete</span><span class="p">(</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListView</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericVocabulariesAutocomplete.get">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericVocabulariesAutocomplete.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">page_size</span> <span class="o">=</span> <span class="mi">20</span>
         <span class="n">offset</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;page&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">page_size</span>
         <span class="n">more</span> <span class="o">=</span> <span class="kc">False</span>
@@ -494,12 +513,18 @@
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">HttpResponse</span><span class="p">(</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">choices</span> <span class="o">+</span> <span class="p">[],</span> <span class="s2">&quot;pagination&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;more&quot;</span><span class="p">:</span> <span class="n">more</span><span class="p">}}),</span>
             <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 
 
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
-<div class="viewcode-block" id="GenericNetworkEntitiesAutocomplete"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericNetworkEntitiesAutocomplete">[docs]</a><span class="k">class</span> <span class="nc">GenericNetworkEntitiesAutocomplete</span><span class="p">(</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListView</span><span class="p">):</span>
-<div class="viewcode-block" id="GenericNetworkEntitiesAutocomplete.get"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericNetworkEntitiesAutocomplete.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericNetworkEntitiesAutocomplete">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericNetworkEntitiesAutocomplete">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericNetworkEntitiesAutocomplete</span><span class="p">(</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListView</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericNetworkEntitiesAutocomplete.get">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericNetworkEntitiesAutocomplete.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
         <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
         <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cl:&quot;</span><span class="p">):</span>
@@ -546,15 +571,21 @@
             <span class="n">results</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">HttpResponse</span><span class="p">(</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">results</span><span class="p">}),</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="PropertyAutocomplete"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.PropertyAutocomplete">[docs]</a><span class="k">class</span> <span class="nc">PropertyAutocomplete</span><span class="p">(</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PropertyAutocomplete">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.PropertyAutocomplete">[docs]</a>
+<span class="k">class</span> <span class="nc">PropertyAutocomplete</span><span class="p">(</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListView</span><span class="p">):</span>
     <span class="c1"># These constants are set so that they are defined in one place only and reused by fetching them elsewhere.</span>
     <span class="n">SELF_SUBJ_OTHER_OBJ_STR</span> <span class="o">=</span> <span class="s2">&quot;self_subj_other_obj&quot;</span>
     <span class="n">SELF_OBJ_OTHER_SUBJ_STR</span> <span class="o">=</span> <span class="s2">&quot;self_obj_other_subj&quot;</span>
 
-<div class="viewcode-block" id="PropertyAutocomplete.get"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.PropertyAutocomplete.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="PropertyAutocomplete.get">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.PropertyAutocomplete.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">more</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">choices</span> <span class="o">=</span> <span class="n">get_autocomplete_property_choices</span><span class="p">(</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity_self&quot;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity_other&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
@@ -564,7 +595,9 @@
                 <span class="p">{</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">choices</span><span class="p">,</span> <span class="s2">&quot;pagination&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;more&quot;</span><span class="p">:</span> <span class="n">more</span><span class="p">},</span> <span class="s2">&quot;abcde&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">}</span>
             <span class="p">),</span>
             <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>

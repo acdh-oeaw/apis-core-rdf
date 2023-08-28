@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -97,7 +97,9 @@
 <span class="kn">from</span> <span class="nn">crispy_forms.layout</span> <span class="kn">import</span> <span class="n">Submit</span><span class="p">,</span> <span class="n">Layout</span><span class="p">,</span> <span class="n">Fieldset</span><span class="p">,</span> <span class="n">Div</span><span class="p">,</span> <span class="n">MultiField</span><span class="p">,</span> <span class="n">HTML</span>
 
 
-<div class="viewcode-block" id="get_entities_table"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.get_entities_table">[docs]</a><span class="k">def</span> <span class="nf">get_entities_table</span><span class="p">(</span><span class="n">model_class</span><span class="p">):</span>
+<div class="viewcode-block" id="get_entities_table">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.get_entities_table">[docs]</a>
+<span class="k">def</span> <span class="nf">get_entities_table</span><span class="p">(</span><span class="n">model_class</span><span class="p">):</span>
     <span class="k">class</span> <span class="nc">GenericEntitiesTable</span><span class="p">(</span><span class="n">django_tables2</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
         <span class="nb">id</span> <span class="o">=</span> <span class="n">django_tables2</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">()</span>
 
@@ -108,7 +110,10 @@
     <span class="k">return</span> <span class="n">GenericEntitiesTable</span></div>
 
 
-<div class="viewcode-block" id="GenericFilterFormHelper"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericFilterFormHelper">[docs]</a><span class="k">class</span> <span class="nc">GenericFilterFormHelper</span><span class="p">(</span><span class="n">FormHelper</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericFilterFormHelper">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericFilterFormHelper">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericFilterFormHelper</span><span class="p">(</span><span class="n">FormHelper</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GenericFilterFormHelper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
@@ -116,6 +121,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">form_method</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_tag</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;Filter&quot;</span><span class="p">,</span> <span class="s2">&quot;Search&quot;</span><span class="p">))</span></div>
+
 
 
 <span class="n">django_filters</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">LOOKUP_TYPES</span> <span class="o">=</span> <span class="p">[</span>
@@ -135,7 +141,9 @@
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="GenericListView"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView">[docs]</a><span class="k">class</span> <span class="nc">GenericListView</span><span class="p">(</span><span class="n">django_tables2</span><span class="o">.</span><span class="n">SingleTableView</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericListView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericListView</span><span class="p">(</span><span class="n">django_tables2</span><span class="o">.</span><span class="n">SingleTableView</span><span class="p">):</span>
     <span class="n">filter_class</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">formhelper_class</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">context_filter_name</span> <span class="o">=</span> <span class="s2">&quot;filter&quot;</span>
@@ -143,7 +151,9 @@
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;browsing/generic_list.html&quot;</span>
     <span class="n">init_columns</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="GenericListView.get_table_class"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_table_class">[docs]</a>    <span class="k">def</span> <span class="nf">get_table_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericListView.get_table_class">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_table_class">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_table_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span>
         <span class="k">else</span><span class="p">:</span>
@@ -155,19 +165,28 @@
             <span class="p">)</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="GenericListView.get_all_cols"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_all_cols">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_cols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListView.get_all_cols">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_all_cols">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_all_cols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;get_table&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span><span class="o">.</span><span class="n">base_columns</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">all_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span><span class="o">.</span><span class="n">base_columns</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">all_cols</span></div>
 
-<div class="viewcode-block" id="GenericListView.get_queryset"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListView.get_queryset">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_queryset">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">qs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericListView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">,</span> <span class="n">queryset</span><span class="o">=</span><span class="n">qs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formhelper_class</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">qs</span></div>
 
-<div class="viewcode-block" id="GenericListView.get_table"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListView.get_table">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_table">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">table</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericListView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span>
         <span class="n">default_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_columns</span>
         <span class="n">all_cols</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">base_columns</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -176,7 +195,10 @@
         <span class="n">table</span><span class="o">.</span><span class="n">exclude</span> <span class="o">=</span> <span class="n">exclude_vals</span>
         <span class="k">return</span> <span class="n">table</span></div>
 
-<div class="viewcode-block" id="GenericListView.get_context_data"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListView.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericListView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">()</span>
         <span class="n">togglable_colums</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_cols</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_columns</span>
@@ -207,7 +229,10 @@
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_name</span>
         <span class="k">return</span> <span class="n">context</span></div>
 
-<div class="viewcode-block" id="GenericListView.render_to_response"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.render_to_response">[docs]</a>    <span class="k">def</span> <span class="nf">render_to_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListView.render_to_response">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.render_to_response">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_to_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">download</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sep&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">download</span><span class="p">:</span>
             <span class="n">sep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sep&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span>
@@ -249,27 +274,39 @@
             <span class="k">return</span> <span class="n">response</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericListView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render_to_response</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">response</span></div></div>
+            <span class="k">return</span> <span class="n">response</span></div>
+</div>
 
 
-<div class="viewcode-block" id="BaseCreateView"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseCreateView">[docs]</a><span class="k">class</span> <span class="nc">BaseCreateView</span><span class="p">(</span><span class="n">CreateView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="BaseCreateView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseCreateView">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseCreateView</span><span class="p">(</span><span class="n">CreateView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">form_class</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;browsing/generic_create.html&quot;</span>
 
-<div class="viewcode-block" id="BaseCreateView.get_context_data"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseCreateView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseCreateView.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseCreateView.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BaseCreateView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">()</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;docstring&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;class_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">context</span></div></div>
+        <span class="k">return</span> <span class="n">context</span></div>
+</div>
 
 
-<div class="viewcode-block" id="BaseUpdateView"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseUpdateView">[docs]</a><span class="k">class</span> <span class="nc">BaseUpdateView</span><span class="p">(</span><span class="n">UpdateView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="BaseUpdateView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseUpdateView">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseUpdateView</span><span class="p">(</span><span class="n">UpdateView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">form_class</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;browsing/generic_create.html&quot;</span>
 
-<div class="viewcode-block" id="BaseUpdateView.get_context_data"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseUpdateView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseUpdateView.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseUpdateView.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BaseUpdateView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">()</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;docstring&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;class_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
@@ -277,7 +314,9 @@
         <span class="c1">#     context[&#39;class_name&#39;] = &quot;{}&quot;.format(self.model.__name__)</span>
         <span class="c1"># else:</span>
         <span class="c1">#     context[&#39;class_name&#39;] = &quot;{}s&quot;.format(self.model.__name__)</span>
-        <span class="k">return</span> <span class="n">context</span></div></div>
+        <span class="k">return</span> <span class="n">context</span></div>
+</div>
+
 </pre></div>
 
            </div>

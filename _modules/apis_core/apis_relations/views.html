@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -90,100 +90,21 @@
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
 <span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">render_to_string</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_relations</span> <span class="kn">import</span> <span class="n">forms</span> <span class="k">as</span> <span class="n">relation_form_module</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.forms2</span> <span class="kn">import</span> <span class="n">GenericTripleForm</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.autocomplete3</span> <span class="kn">import</span> <span class="n">PropertyAutocomplete</span>
 
-<span class="c1"># from apis_core.apis_entities.models import Person, Institution, Place, Event, Work,</span>
-<span class="c1"># from apis_core.apis_entities.models import AbstractEntity</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">TempTriple</span>
 
-<span class="c1"># from .models import (</span>
-<span class="c1">#     PersonPlace, PersonPerson, PersonInstitution, InstitutionPlace,</span>
-<span class="c1">#     InstitutionInstitution, PlacePlace, PersonEvent, InstitutionEvent, PlaceEvent, PersonWork,</span>
-<span class="c1">#     InstitutionWork, PlaceWork, EventWork, WorkWork</span>
-<span class="c1"># )</span>
-<span class="c1"># from .forms import PersonLabelForm, InstitutionLabelForm, PlaceLabelForm, EventLabelForm</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
-
-<span class="n">form_module_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">relation_form_module</span><span class="p">]</span>
-
-<span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">apis_highlighter</span> <span class="kn">import</span> <span class="n">forms</span> <span class="k">as</span> <span class="n">highlighter_form_module</span>
-
-    <span class="n">form_module_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">highlighter_form_module</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="turn_form_modules_into_dict"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.views.turn_form_modules_into_dict">[docs]</a><span class="k">def</span> <span class="nf">turn_form_modules_into_dict</span><span class="p">(</span><span class="n">form_module_list</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Since form classes are loaded dynamically from the respective modules and it&#39;s settings-dependent which modules</span>
-<span class="sd">    are imported and which not, it&#39;s better to differentiate here which modules are imported close to their imports</span>
-<span class="sd">    and then providing a dict for later extraction of the required form class.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">form_class_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">form_module_list</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">):</span>
-            <span class="n">form_class_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
-
-    <span class="k">return</span> <span class="n">form_class_dict</span></div>
-
-
-<span class="n">form_class_dict</span> <span class="o">=</span> <span class="n">turn_form_modules_into_dict</span><span class="p">(</span><span class="n">form_module_list</span><span class="p">)</span>
 
 
 <span class="c1"># TODO RDF: After full conversion to ne ajax logic, remove this function</span>
-<div class="viewcode-block" id="get_form_ajax"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.views.get_form_ajax">[docs]</a><span class="nd">@login_required</span>
+<div class="viewcode-block" id="get_form_ajax">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.views.get_form_ajax">[docs]</a>
+<span class="nd">@login_required</span>
 <span class="k">def</span> <span class="nf">get_form_ajax</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns forms rendered in html&quot;&quot;&quot;</span>
 
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># FormName = request.POST.get(&#39;FormName&#39;)</span>
-    <span class="c1"># SiteID = request.POST.get(&#39;SiteID&#39;)</span>
-    <span class="c1"># ButtonText = request.POST.get(&#39;ButtonText&#39;)</span>
-    <span class="c1"># ObjectID = request.POST.get(&#39;ObjectID&#39;)</span>
-    <span class="c1"># entity_type_str = request.POST.get(&#39;entity_type&#39;)</span>
-    <span class="c1"># form_match = re.match(r&#39;([A-Z][a-z]+)([A-Z][a-z]+)(Highlighter)?Form&#39;, FormName)</span>
-    <span class="c1"># form_match2 = re.match(r&#39;([A-Z][a-z]+)(Highlighter)?Form&#39;, FormName)</span>
-    <span class="c1"># if FormName and form_match:</span>
-    <span class="c1">#     entity_type_v1 = ContentType.objects.filter(</span>
-    <span class="c1">#         model=&#39;{}{}&#39;.format(form_match.group(1).lower(), form_match.group(2)).lower(),</span>
-    <span class="c1">#         app_label=&#39;apis_relations&#39;)</span>
-    <span class="c1">#     entity_type_v2 = ContentType.objects.none()</span>
-    <span class="c1"># elif FormName and form_match2:</span>
-    <span class="c1">#     entity_type_v2 = ContentType.objects.filter(</span>
-    <span class="c1">#         model=&#39;{}&#39;.format(</span>
-    <span class="c1">#             form_match.group(1).lower(),</span>
-    <span class="c1">#             app_label=&#39;apis_entities&#39;))</span>
-    <span class="c1">#     entity_type_v1 = ContentType.objects.none()</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     entity_type_v1 = ContentType.objects.none()</span>
-    <span class="c1">#     entity_type_v2 = ContentType.objects.none()</span>
-    <span class="c1"># if ObjectID == &#39;false&#39; or ObjectID is None or ObjectID == &#39;None&#39;:</span>
-    <span class="c1">#     ObjectID = False</span>
-    <span class="c1">#     form_dict = {&#39;entity_type&#39;: entity_type_str}</span>
-    <span class="c1"># elif entity_type_v1.count() &gt; 0:</span>
-    <span class="c1">#     d = entity_type_v1[0].model_class().objects.get(pk=ObjectID)</span>
-    <span class="c1">#     form_dict = {&#39;instance&#39;: d, &#39;siteID&#39;: SiteID, &#39;entity_type&#39;: entity_type_str}</span>
-    <span class="c1"># elif entity_type_v2.count() &gt; 0:</span>
-    <span class="c1">#     d = entity_type_v2[0].model_class().objects.get(pk=ObjectID)</span>
-    <span class="c1">#     form_dict = {&#39;instance&#39;: d, &#39;siteID&#39;: SiteID, &#39;entity_type&#39;: entity_type_str}</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     if FormName not in registered_forms.keys():</span>
-    <span class="c1">#         raise Http404</span>
-    <span class="c1">#     d = registered_forms[FormName][0].objects.get(pk=ObjectID)</span>
-    <span class="c1">#     form_dict = {&#39;instance&#39;: d, &#39;siteID&#39;: SiteID, &#39;entity_type&#39;: entity_type_str}</span>
-    <span class="c1"># if entity_type_v1.count() &gt; 0:</span>
-    <span class="c1">#     form_dict[&#39;relation_form&#39;] = &#39;{}{}&#39;.format(form_match.group(1), form_match.group(2))</span>
-    <span class="c1">#     if form_match.group(3) == &#39;Highlighter&#39;:</span>
-    <span class="c1">#         form_dict[&#39;highlighter&#39;] = True</span>
-    <span class="c1">#     form = GenericRelationForm(**form_dict)</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     form_class = form_class_dict[FormName]</span>
-    <span class="c1">#     form = form_class(**form_dict)</span>
-    <span class="c1">#</span>
-    <span class="c1"># __after_rdf_refactoring__</span>
     <span class="n">form_name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FormName&quot;</span><span class="p">)</span>
     <span class="n">SiteID</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SiteID&quot;</span><span class="p">))</span>
     <span class="n">ButtonText</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ButtonText&quot;</span><span class="p">)</span>
@@ -237,21 +158,6 @@
 
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Missing necessary form data&quot;</span><span class="p">)</span>
 
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># tab = FormName[:-4]</span>
-    <span class="c1"># data = {&#39;tab&#39;: tab, &#39;form&#39;: render_to_string(&quot;apis_relations/_ajax_form.html&quot;, {</span>
-    <span class="c1">#             &quot;entity_type&quot;: entity_type_str,</span>
-    <span class="c1">#             &quot;form&quot;: form,</span>
-    <span class="c1">#             &#39;type1&#39;: FormName,</span>
-    <span class="c1">#             &#39;url2&#39;: &#39;save_ajax_&#39;+FormName,</span>
-    <span class="c1">#             &#39;button_text&#39;: ButtonText,</span>
-    <span class="c1">#             &#39;ObjectID&#39;: ObjectID,</span>
-    <span class="c1">#             &#39;SiteID&#39;: SiteID})}</span>
-    <span class="c1">#</span>
-    <span class="c1"># return HttpResponse(json.dumps(data), content_type=&#39;application/json&#39;)</span>
-    <span class="c1">#</span>
-    <span class="c1"># __after_rdf_refactoring__</span>
     <span class="n">param_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="n">entity_type_self_str</span><span class="p">,</span>
         <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
@@ -272,51 +178,16 @@
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">)</span></div>
 
 
+
 <span class="c1"># TODO RDF: Re-implement highlighter and label form</span>
-<div class="viewcode-block" id="save_ajax_form"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.views.save_ajax_form">[docs]</a><span class="nd">@login_required</span>
+<div class="viewcode-block" id="save_ajax_form">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.views.save_ajax_form">[docs]</a>
+<span class="nd">@login_required</span>
 <span class="k">def</span> <span class="nf">save_ajax_form</span><span class="p">(</span>
     <span class="n">request</span><span class="p">,</span> <span class="n">entity_type</span><span class="p">,</span> <span class="n">kind_form</span><span class="p">,</span> <span class="n">SiteID</span><span class="p">,</span> <span class="n">ObjectID</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>  <span class="c1"># rel_form_logic_breadcrumb (for refinding the implicit connections)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests validity and saves AjaxForms, returns them when validity test fails&quot;&quot;&quot;</span>
 
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># if kind_form not in registered_forms.keys():</span>
-    <span class="c1">#     raise Http404</span>
-    <span class="c1">#</span>
-    <span class="c1"># button_text = &quot;create/modify&quot;</span>
-    <span class="c1">#</span>
-    <span class="c1"># if not ObjectID:</span>
-    <span class="c1">#     instance_id = &#39;&#39;</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     instance_id = ObjectID</span>
-    <span class="c1"># entity_type_str = entity_type</span>
-    <span class="c1"># entity_type = caching.get_entity_class_of_name(entity_type)</span>
-    <span class="c1">#</span>
-    <span class="c1"># form_match = re.match(r&#39;([A-Z][a-z]+)([A-Z][a-z]+)?(Highlighter)?Form&#39;, kind_form)</span>
-    <span class="c1"># form_dict = {&#39;data&#39;: request.POST,</span>
-    <span class="c1">#              &#39;entity_type&#39;: entity_type,</span>
-    <span class="c1">#              &#39;request&#39;: request}</span>
-    <span class="c1">#</span>
-    <span class="c1">#</span>
-    <span class="c1"># test_form_relations = ContentType.objects.filter(</span>
-    <span class="c1">#     model=&#39;{}{}&#39;.format(form_match.group(1).lower(), form_match.group(2)).lower(),</span>
-    <span class="c1">#     app_label=&#39;apis_relations&#39;)</span>
-    <span class="c1"># tab = re.match(r&#39;(.*)Form&#39;, kind_form).group(1)</span>
-    <span class="c1"># call_function = &#39;EntityRelationForm_response&#39;</span>
-    <span class="c1"># if test_form_relations.count() &gt; 0:</span>
-    <span class="c1">#     relation_form = test_form_relations[0].model_class()</span>
-    <span class="c1">#     form_dict[&#39;relation_form&#39;] = relation_form</span>
-    <span class="c1">#     if form_match.group(3) == &#39;Highlighter&#39;:</span>
-    <span class="c1">#         form_dict[&#39;highlighter&#39;] = True</span>
-    <span class="c1">#         tab = form_match.group(1)+form_match.group(2)</span>
-    <span class="c1">#         call_function = &#39;HighlForm_response&#39;</span>
-    <span class="c1">#     form = GenericRelationForm(**form_dict)</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     form_class = form_class_dict[kind_form]</span>
-    <span class="c1">#     form = form_class(**form_dict)</span>
-    <span class="c1">#</span>
-    <span class="c1"># __after_rdf_refactoring__</span>
     <span class="n">self_other</span> <span class="o">=</span> <span class="n">kind_form</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;triple_form_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_to_&quot;</span><span class="p">)</span>
     <span class="n">entity_type_self_str</span> <span class="o">=</span> <span class="n">self_other</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">entity_type_other_str</span> <span class="o">=</span> <span class="n">self_other</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -354,27 +225,6 @@
     <span class="p">)</span>
     <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># data = {</span>
-    <span class="c1">#     &#39;test&#39;: False,</span>
-    <span class="c1">#     &#39;call_function&#39;: call_function,</span>
-    <span class="c1">#         &#39;DivID&#39;: &#39;div_&#39; + kind_form + instance_id,</span>
-    <span class="c1">#         &#39;form&#39;: render_to_string(</span>
-    <span class="c1">#             &quot;apis_relations/_ajax_form.html&quot;, context={</span>
-    <span class="c1">#                 &quot;entity_type&quot;: entity_type_str,</span>
-    <span class="c1">#                 &quot;form&quot;: form,</span>
-    <span class="c1">#                 &#39;type1&#39;: kind_form,</span>
-    <span class="c1">#                 &#39;url2&#39;: &#39;save_ajax_&#39; + kind_form,</span>
-    <span class="c1">#                 &#39;button_text&#39;: button_text,</span>
-    <span class="c1">#                 &#39;ObjectID&#39;: ObjectID,</span>
-    <span class="c1">#                 &#39;SiteID&#39;: SiteID</span>
-    <span class="c1">#             },</span>
-    <span class="c1">#             request=request</span>
-    <span class="c1">#         )</span>
-    <span class="c1"># }</span>
-    <span class="c1">#</span>
-    <span class="c1"># __after_rdf_refactoring__</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="s2">&quot;tab&quot;</span><span class="p">:</span> <span class="n">kind_form</span><span class="p">,</span>
@@ -388,73 +238,6 @@
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">)</span></div>
 
-    <span class="c1"># __before_rdf_refactoring__</span>
-    <span class="c1">#</span>
-    <span class="c1"># if form.is_valid():</span>
-    <span class="c1">#     site_instance = entity_type.objects.get(pk=SiteID)</span>
-    <span class="c1">#     set_ann_proj = request.session.get(&#39;annotation_project&#39;, 1)</span>
-    <span class="c1">#     entity_types_highlighter = request.session.get(&#39;entity_types_highlighter&#39;)</span>
-    <span class="c1">#     users_show = request.session.get(&#39;users_show_highlighter&#39;, None)</span>
-    <span class="c1">#     hl_text = None</span>
-    <span class="c1">#     if ObjectID:</span>
-    <span class="c1">#         # kommt hier rein, wenn form vorgefertigte Daten hat</span>
-    <span class="c1">#         instance = form.save(instance=ObjectID, site_instance=site_instance)</span>
-    <span class="c1">#     else:</span>
-    <span class="c1">#         # kommt hier rein, wenn form neuen Daten hat</span>
-    <span class="c1">#         instance = form.save(site_instance=site_instance)</span>
-    <span class="c1">#     right_card = True</span>
-    <span class="c1">#     if test_form_relations.count() &gt; 0:</span>
-    <span class="c1">#         table_html = form.get_html_table(entity_type_str, request, site_instance, form_match)</span>
-    <span class="c1">#     if &#39;Highlighter&#39; in tab or form_match.group(3) == &#39;Highlighter&#39;:</span>
-    <span class="c1">#         hl_text = {</span>
-    <span class="c1">#             &#39;text&#39;: highlight_text_new(form.get_text_id(),</span>
-    <span class="c1">#                                    users_show=users_show,</span>
-    <span class="c1">#                                    set_ann_proj=set_ann_proj,</span>
-    <span class="c1">#                                    types=entity_types_highlighter)[0].strip(),</span>
-    <span class="c1">#             &#39;id&#39;: form.get_text_id()}</span>
-    <span class="c1">#     if tab == &#39;PersonLabel&#39;:</span>
-    <span class="c1">#         table_html = LabelTableEdit(</span>
-    <span class="c1">#                 data=site_instance.label_set.all(),</span>
-    <span class="c1">#                 prefix=&#39;PL-&#39;)</span>
-    <span class="c1">#     elif tab == &#39;InstitutionLabel&#39;:</span>
-    <span class="c1">#         table_html = LabelTableEdit(</span>
-    <span class="c1">#                 data=site_instance.label_set.all(),</span>
-    <span class="c1">#                 prefix=&#39;IL-&#39;)</span>
-    <span class="c1">#     elif tab == &#39;PersonResolveUri&#39;:</span>
-    <span class="c1">#         table_html = EntityUriTable(</span>
-    <span class="c1">#             Uri.objects.filter(entity=site_instance),</span>
-    <span class="c1">#             prefix=&#39;PURI-&#39;</span>
-    <span class="c1">#         )</span>
-    <span class="c1">#</span>
-    <span class="c1">#     elif tab == &#39;AddRelationHighlighterPerson&#39; or tab == &#39;PlaceHighlighter&#39; or tab == &#39;PersonHighlighter&#39; or tab == &#39;SundayHighlighter&#39;:</span>
-    <span class="c1">#         table_html = None</span>
-    <span class="c1">#         right_card = False</span>
-    <span class="c1">#         call_function = &#39;PAddRelation_response&#39;</span>
-    <span class="c1">#         instance = None</span>
-    <span class="c1">#     if instance:</span>
-    <span class="c1">#         instance2 = instance.get_web_object()</span>
-    <span class="c1">#     else:</span>
-    <span class="c1">#         instance2 = None</span>
-    <span class="c1">#     if table_html:</span>
-    <span class="c1">#         table_html2 = table_html.as_html(request)</span>
-    <span class="c1">#     else:</span>
-    <span class="c1">#         table_html2 = None</span>
-    <span class="c1">#     data = {&#39;test&#39;: True, &#39;tab&#39;: tab, &#39;call_function&#39;: call_function,</span>
-    <span class="c1">#             &#39;instance&#39;: instance2,</span>
-    <span class="c1">#             &#39;table_html&#39;: table_html2,</span>
-    <span class="c1">#             &#39;text&#39;: hl_text,</span>
-    <span class="c1">#             &#39;right_card&#39;: right_card}</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#     if &#39;Highlighter&#39; in tab:</span>
-    <span class="c1">#         call_function = &#39;HighlForm_response&#39;</span>
-    <span class="c1">#     data = {&#39;test&#39;: False, &#39;call_function&#39;: call_function,</span>
-    <span class="c1">#             &#39;DivID&#39;: &#39;div_&#39;+kind_form+instance_id,</span>
-    <span class="c1">#             &#39;form&#39;: render_to_string(&quot;apis_relations/_ajax_form.html&quot;, context={</span>
-    <span class="c1">#                 &quot;entity_type&quot;: entity_type_str,</span>
-    <span class="c1">#                 &quot;form&quot;: form, &#39;type1&#39;: kind_form, &#39;url2&#39;: &#39;save_ajax_&#39;+kind_form,</span>
-    <span class="c1">#                 &#39;button_text&#39;: button_text, &#39;ObjectID&#39;: ObjectID, &#39;SiteID&#39;: SiteID},</span>
-    <span class="c1">#                 request=request)}</span>
-    <span class="c1">#</span>
 </pre></div>
 
            </div>

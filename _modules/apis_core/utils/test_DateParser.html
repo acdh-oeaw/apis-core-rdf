@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -95,8 +95,11 @@
 
 
 <span class="c1"># helper function so we don&#39;t have to write as much</span>
-<div class="viewcode-block" id="fi"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.fi">[docs]</a><span class="k">def</span> <span class="nf">fi</span><span class="p">(</span><span class="n">datestring</span><span class="p">):</span>
+<div class="viewcode-block" id="fi">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.fi">[docs]</a>
+<span class="k">def</span> <span class="nf">fi</span><span class="p">(</span><span class="n">datestring</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">datestring</span><span class="p">)</span></div>
+
 
 
 <span class="c1"># a dict of dates with the written date as key</span>
@@ -124,18 +127,27 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="DateParserTest"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest">[docs]</a><span class="k">class</span> <span class="nc">DateParserTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
-<div class="viewcode-block" id="DateParserTest.test_dates"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest.test_dates">[docs]</a>    <span class="k">def</span> <span class="nf">test_dates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DateParserTest">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest">[docs]</a>
+<span class="k">class</span> <span class="nc">DateParserTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="DateParserTest.test_dates">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest.test_dates">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_dates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">datestring</span><span class="p">,</span> <span class="p">(</span><span class="n">expsingle</span><span class="p">,</span> <span class="n">expstart</span><span class="p">,</span> <span class="n">expend</span><span class="p">,</span> <span class="n">help_text</span><span class="p">)</span> <span class="ow">in</span> <span class="n">dates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">single</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">parse_date</span><span class="p">(</span><span class="n">datestring</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expsingle</span><span class="p">,</span> <span class="n">single</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expstart</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expend</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DateParserTest.test_help_text"><a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest.test_help_text">[docs]</a>    <span class="k">def</span> <span class="nf">test_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DateParserTest.test_help_text">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest.test_help_text">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">datestring</span><span class="p">,</span> <span class="p">(</span><span class="n">single</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">exp_help_text</span><span class="p">)</span> <span class="ow">in</span> <span class="n">dates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">help_text</span> <span class="o">=</span> <span class="n">get_date_help_text_from_dates</span><span class="p">(</span><span class="n">single</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">datestring</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">exp_help_text</span><span class="p">,</span> <span class="n">help_text</span><span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">exp_help_text</span><span class="p">,</span> <span class="n">help_text</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>

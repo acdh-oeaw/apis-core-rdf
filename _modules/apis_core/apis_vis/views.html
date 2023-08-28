@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -90,7 +90,9 @@
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">calculate_age</span>
 
 
-<div class="viewcode-block" id="get_inst_range_data"><a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_inst_range_data">[docs]</a><span class="k">def</span> <span class="nf">get_inst_range_data</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="get_inst_range_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_inst_range_data">[docs]</a>
+<span class="k">def</span> <span class="nf">get_inst_range_data</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="nb">list</span><span class="p">(</span>
             <span class="n">InstitutionInstitution</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">relation_type__name</span><span class="o">=</span><span class="s2">&quot;ist Teil von&quot;</span><span class="p">)</span>
@@ -127,7 +129,10 @@
     <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_average_members_data"><a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_average_members_data">[docs]</a><span class="k">def</span> <span class="nf">get_average_members_data</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_average_members_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_average_members_data">[docs]</a>
+<span class="k">def</span> <span class="nf">get_average_members_data</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">rel_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rel-type&quot;</span><span class="p">)</span>
     <span class="n">rel_inst</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rel-inst&quot;</span><span class="p">)</span>
     <span class="n">start_year</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start-year&quot;</span><span class="p">)</span>
@@ -174,7 +179,10 @@
     <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_average_age_data"><a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_average_age_data">[docs]</a><span class="k">def</span> <span class="nf">get_average_age_data</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_average_age_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_average_age_data">[docs]</a>
+<span class="k">def</span> <span class="nf">get_average_age_data</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">rel_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rel-type&quot;</span><span class="p">)</span>
     <span class="n">rel_inst</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rel-inst&quot;</span><span class="p">)</span>
     <span class="n">start_year</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start-year&quot;</span><span class="p">)</span>
@@ -235,7 +243,10 @@
     <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_heatmap_data"><a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_heatmap_data">[docs]</a><span class="k">def</span> <span class="nf">get_heatmap_data</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_heatmap_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_heatmap_data">[docs]</a>
+<span class="k">def</span> <span class="nf">get_heatmap_data</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 
     <span class="n">rel_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rel-type&quot;</span><span class="p">)</span>
     <span class="n">places</span> <span class="o">=</span> <span class="p">[</span>
@@ -250,20 +261,33 @@
     <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">(</span><span class="n">places</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="HeatMapView"><a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.HeatMapView">[docs]</a><span class="k">class</span> <span class="nc">HeatMapView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="HeatMapView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.HeatMapView">[docs]</a>
+<span class="k">class</span> <span class="nc">HeatMapView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;apis_vis/heatmap.html&quot;</span></div>
 
 
-<div class="viewcode-block" id="AvgAge"><a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.AvgAge">[docs]</a><span class="k">class</span> <span class="nc">AvgAge</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="AvgAge">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.AvgAge">[docs]</a>
+<span class="k">class</span> <span class="nc">AvgAge</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;apis_vis/avgage.html&quot;</span></div>
 
 
-<div class="viewcode-block" id="MembersAmountPerYear"><a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.MembersAmountPerYear">[docs]</a><span class="k">class</span> <span class="nc">MembersAmountPerYear</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MembersAmountPerYear">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.MembersAmountPerYear">[docs]</a>
+<span class="k">class</span> <span class="nc">MembersAmountPerYear</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;apis_vis/avgmemperyear.html&quot;</span></div>
 
 
-<div class="viewcode-block" id="InstRange"><a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.InstRange">[docs]</a><span class="k">class</span> <span class="nc">InstRange</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="InstRange">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vis.html#apis_core.apis_vis.views.InstRange">[docs]</a>
+<span class="k">class</span> <span class="nc">InstRange</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;apis_vis/inst_range.html&quot;</span></div>
+
 </pre></div>
 
            </div>

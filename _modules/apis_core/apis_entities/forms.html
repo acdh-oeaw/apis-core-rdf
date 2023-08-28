@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -99,14 +99,15 @@
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Uri</span><span class="p">,</span> <span class="n">Collection</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_vocabularies.models</span> <span class="kn">import</span> <span class="n">TextType</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">DateParser</span><span class="p">,</span> <span class="n">caching</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.RDFParser</span> <span class="kn">import</span> <span class="n">RDFParser</span>
 <span class="kn">from</span> <span class="nn">.fields</span> <span class="kn">import</span> <span class="n">ListSelect2</span><span class="p">,</span> <span class="n">Select2Multiple</span>
 
 <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">apis_highlighter.models</span> <span class="kn">import</span> <span class="n">AnnotationProject</span>
 
 
-<div class="viewcode-block" id="SearchForm"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.SearchForm">[docs]</a><span class="k">class</span> <span class="nc">SearchForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+<div class="viewcode-block" id="SearchForm">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.SearchForm">[docs]</a>
+<span class="k">class</span> <span class="nc">SearchForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
     <span class="n">search</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Search&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -119,7 +120,10 @@
         <span class="k">return</span> <span class="n">helper</span></div>
 
 
-<div class="viewcode-block" id="get_entities_form"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.get_entities_form">[docs]</a><span class="k">def</span> <span class="nf">get_entities_form</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_entities_form">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.get_entities_form">[docs]</a>
+<span class="k">def</span> <span class="nf">get_entities_form</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Form for edit view for an entity object.</span>
 
@@ -312,13 +316,17 @@
     <span class="k">return</span> <span class="n">GenericEntitiesForm</span></div>
 
 
-<div class="viewcode-block" id="GenericEntitiesStanbolForm"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm">[docs]</a><span class="k">class</span> <span class="nc">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-<div class="viewcode-block" id="GenericEntitiesStanbolForm.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">cd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">RDFParser</span><span class="p">(</span>
-            <span class="n">cd</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="n">app_label_entities</span><span class="o">=</span><span class="s2">&quot;apis_ontology&quot;</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">entity</span></div>
+
+<div class="viewcode-block" id="GenericEntitiesStanbolForm">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntitiesStanbolForm.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">form_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
+        <span class="n">uri</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">form_uri</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">uri</span><span class="o">.</span><span class="n">root_object</span></div>
+
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
@@ -358,8 +366,13 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="FullTextForm"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm">[docs]</a><span class="k">class</span> <span class="nc">FullTextForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-<div class="viewcode-block" id="FullTextForm.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
+
+<div class="viewcode-block" id="FullTextForm">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm">[docs]</a>
+<span class="k">class</span> <span class="nc">FullTextForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+<div class="viewcode-block" id="FullTextForm.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
         <span class="n">cd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span>
         <span class="n">text</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">cd</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -374,6 +387,7 @@
                 <span class="n">text</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
                 <span class="n">entity</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">text</span></div>
+
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;entity&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -419,18 +433,24 @@
             <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="PersonResolveUriForm"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm">[docs]</a><span class="k">class</span> <span class="nc">PersonResolveUriForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PersonResolveUriForm">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm">[docs]</a>
+<span class="k">class</span> <span class="nc">PersonResolveUriForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
     <span class="c1"># person = forms.CharField(label=False, widget=al.TextWidget(&#39;PersonAutocomplete&#39;))</span>
     <span class="n">person</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">person_uri</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">HiddenInput</span><span class="p">())</span>
 
-<div class="viewcode-block" id="PersonResolveUriForm.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">site_instance</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PersonResolveUriForm.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">site_instance</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">cd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span>
         <span class="k">if</span> <span class="n">cd</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
             <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">cd</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">],</span> <span class="n">entity</span><span class="o">=</span><span class="n">site_instance</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">cd</span><span class="p">[</span><span class="s2">&quot;person_uri&quot;</span><span class="p">],</span> <span class="n">entity</span><span class="o">=</span><span class="n">site_instance</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">uri</span></div>
+
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">entity_type</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;entity_type&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
@@ -439,16 +459,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_tag</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="PersonResolveUriForm.clean"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PersonResolveUriForm.clean">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.clean">[docs]</a>
+    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">cleaned_data</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">PersonResolveUriForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;person_uri&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_error</span><span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;This Person has already been added to the DB.&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_error</span><span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;This URI has already been added to the DB.&quot;</span><span class="p">)</span></div></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_error</span><span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;This URI has already been added to the DB.&quot;</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="NetworkVizFilterForm"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.NetworkVizFilterForm">[docs]</a><span class="k">class</span> <span class="nc">NetworkVizFilterForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+
+<div class="viewcode-block" id="NetworkVizFilterForm">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.NetworkVizFilterForm">[docs]</a>
+<span class="k">class</span> <span class="nc">NetworkVizFilterForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
     <span class="n">ann_include_all</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Include general relations&quot;</span><span class="p">,</span>
@@ -548,13 +574,17 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GenericFilterFormHelper"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericFilterFormHelper">[docs]</a><span class="k">class</span> <span class="nc">GenericFilterFormHelper</span><span class="p">(</span><span class="n">FormHelper</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericFilterFormHelper">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericFilterFormHelper">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericFilterFormHelper</span><span class="p">(</span><span class="n">FormHelper</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GenericFilterFormHelper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">form_class</span> <span class="o">=</span> <span class="s2">&quot;genericFilterForm&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">form_method</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;Filter&quot;</span><span class="p">,</span> <span class="s2">&quot;Filter&quot;</span><span class="p">))</span></div>
+
 </pre></div>
 
            </div>

@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -101,8 +101,11 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="date_conversion"><a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.date_conversion">[docs]</a><span class="k">def</span> <span class="nf">date_conversion</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+<div class="viewcode-block" id="date_conversion">
+<a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.date_conversion">[docs]</a>
+<span class="k">def</span> <span class="nf">date_conversion</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
     <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">T00:00:00.000Z&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="p">)</span></div>
+
 
 
 <span class="n">autocomp_settings</span> <span class="o">=</span> <span class="p">{</span>
@@ -448,7 +451,9 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="StbGeoQuerySettings"><a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings">[docs]</a><span class="k">class</span> <span class="nc">StbGeoQuerySettings</span><span class="p">:</span>
+<div class="viewcode-block" id="StbGeoQuerySettings">
+<a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings">[docs]</a>
+<span class="k">class</span> <span class="nc">StbGeoQuerySettings</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;place&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="s2">&quot;http://stanbol.apache.org/ontology/entityhub/query#score&quot;</span>
@@ -494,7 +499,9 @@
                 <span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">gn</span> <span class="o">+</span> <span class="s2">&quot;ADM3&quot;</span><span class="p">,</span> <span class="s2">&quot;URL&quot;</span><span class="p">:</span> <span class="n">URL_geonames</span> <span class="o">%</span> <span class="s2">&quot;ADM3&quot;</span><span class="p">},</span>
             <span class="p">]</span>
 
-<div class="viewcode-block" id="StbGeoQuerySettings.get_next_feature"><a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings.get_next_feature">[docs]</a>    <span class="k">def</span> <span class="nf">get_next_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ft</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="StbGeoQuerySettings.get_next_feature">
+<a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings.get_next_feature">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_next_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ft</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_selected</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stored_feature</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -510,7 +517,10 @@
                     <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="StbGeoQuerySettings.get_data"><a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">adm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="StbGeoQuerySettings.get_data">
+<a class="viewcode-back" href="../../../modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings.get_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">adm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;place&quot;</span> <span class="ow">and</span> <span class="n">adm</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
@@ -537,7 +547,9 @@
                 <span class="s2">&quot;selected&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">selected</span><span class="p">,</span>
             <span class="p">}</span>
 
-        <span class="k">return</span> <span class="n">data</span></div></div>
+        <span class="k">return</span> <span class="n">data</span></div>
+</div>
+
 </pre></div>
 
            </div>

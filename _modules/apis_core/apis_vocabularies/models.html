@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -95,19 +95,27 @@
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 
 
-<div class="viewcode-block" id="VocabNames"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabNames">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+<div class="viewcode-block" id="VocabNames">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabNames">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">VocabNames</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;List of Vocabulary names to allow the easy retrieval\</span>
 <span class="sd">    of Vovcabulary names and classes from the VocabsBaseClass&quot;&quot;&quot;</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
 
-<div class="viewcode-block" id="VocabNames.get_vocab_label"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabNames.get_vocab_label">[docs]</a>    <span class="k">def</span> <span class="nf">get_vocab_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;([A-Z])&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot; \1&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div></div>
+<div class="viewcode-block" id="VocabNames.get_vocab_label">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabNames.get_vocab_label">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_vocab_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;([A-Z])&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot; \1&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+</div>
+
 
 
 <span class="c1"># TODO RDF: Remove VocabsBaseClass entirely</span>
-<div class="viewcode-block" id="VocabsBaseClass"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsBaseClass">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+<div class="viewcode-block" id="VocabsBaseClass">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsBaseClass">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">VocabsBaseClass</span><span class="p">(</span><span class="n">RootObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An abstract base class for other classes which contain so called</span>
 <span class="sd">    &#39;controlled vocabulary&#39; to describe subtypes of main temporalized</span>
@@ -140,7 +148,9 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
 
-<div class="viewcode-block" id="VocabsBaseClass.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsBaseClass.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="VocabsBaseClass.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsBaseClass.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">d</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">VocabNames</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vocab_name</span> <span class="o">=</span> <span class="n">d</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span>
@@ -149,6 +159,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">&quot;NFC&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">VocabsBaseClass</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
+
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -160,7 +171,10 @@
         <span class="k">return</span> <span class="n">res</span></div>
 
 
-<div class="viewcode-block" id="VocabsUri"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsUri">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+
+<div class="viewcode-block" id="VocabsUri">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsUri">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">VocabsUri</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to store URIs for imported types. URI class from metainfo is not</span>
 <span class="sd">    used in order to keep the vocabularies module/app seperated from the rest of the application.</span>
@@ -179,6 +193,7 @@
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span></div>
+
 
 
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
@@ -219,23 +234,31 @@
 <span class="c1">#     pass</span>
 
 <span class="c1"># TODO RDF: Remove this</span>
-<div class="viewcode-block" id="LabelType"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.LabelType">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;vocabsbaseclass_ptr&quot;</span><span class="p">])</span>
+<div class="viewcode-block" id="LabelType">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.LabelType">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;vocabsbaseclass_ptr&quot;</span><span class="p">])</span>
 <span class="k">class</span> <span class="nc">LabelType</span><span class="p">(</span><span class="n">VocabsBaseClass</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds controlled vocabularies about label-types&quot;&quot;&quot;</span>
 
     <span class="k">pass</span></div>
 
 
+
 <span class="c1"># TODO RDF: Remove this</span>
-<div class="viewcode-block" id="CollectionType"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.CollectionType">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;vocabsbaseclass_ptr&quot;</span><span class="p">])</span>
+<div class="viewcode-block" id="CollectionType">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.CollectionType">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;vocabsbaseclass_ptr&quot;</span><span class="p">])</span>
 <span class="k">class</span> <span class="nc">CollectionType</span><span class="p">(</span><span class="n">VocabsBaseClass</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;e.g. reseachCollection, importCollection&quot;&quot;&quot;</span>
 
     <span class="k">pass</span></div>
 
 
+
 <span class="c1"># TODO RDF: Remove this</span>
-<div class="viewcode-block" id="TextType"><a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.TextType">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;vocabsbaseclass_ptr&quot;</span><span class="p">])</span>
+<div class="viewcode-block" id="TextType">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.TextType">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;vocabsbaseclass_ptr&quot;</span><span class="p">])</span>
 <span class="k">class</span> <span class="nc">TextType</span><span class="p">(</span><span class="n">VocabsBaseClass</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;used to store the Text types for the forms&quot;&quot;&quot;</span>
 
@@ -249,6 +272,7 @@
         <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;ISO Code&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="s2">&quot;deu&quot;</span><span class="p">,</span>
     <span class="p">)</span></div>
+
 </pre></div>
 
            </div>

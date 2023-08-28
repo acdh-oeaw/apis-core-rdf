@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -102,10 +102,14 @@
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 <span class="kn">from</span> <span class="nn">django.utils.functional</span> <span class="kn">import</span> <span class="n">cached_property</span>
 <span class="kn">from</span> <span class="nn">model_utils.managers</span> <span class="kn">import</span> <span class="n">InheritanceManager</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.normalize</span> <span class="kn">import</span> <span class="n">clean_uri</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span><span class="p">,</span> <span class="n">ImproperlyConfigured</span>
 
 <span class="c1"># from django.contrib.contenttypes.fields import GenericRelation</span>
 <span class="c1"># from utils.highlighter import highlight_text</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span><span class="p">,</span> <span class="n">rdf</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo</span> <span class="kn">import</span> <span class="n">signals</span>
 
 <span class="c1"># from apis_core.apis_entities.serializers_generic import EntitySerializer</span>
 <span class="c1"># from apis_core.apis_labels.models import Label</span>
@@ -125,16 +129,14 @@
     <span class="kn">from</span> <span class="nn">apis_highlighter.models</span> <span class="kn">import</span> <span class="n">Annotation</span>
 
 
-<div class="viewcode-block" id="RootObject"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.RootObject">[docs]</a><span class="k">class</span> <span class="nc">RootObject</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="RootObject">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.RootObject">[docs]</a>
+<span class="k">class</span> <span class="nc">RootObject</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The very root thing that can exist in a given ontology. Several classes inherit from it.</span>
 <span class="sd">    By having one overarching super class we gain the advantage of unique identifiers.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">entity_settings</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;list_filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;related_entity_name&quot;</span><span class="p">,</span> <span class="s2">&quot;related_property_name&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;search&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-    <span class="p">}</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Name&quot;</span><span class="p">)</span>
     <span class="c1"># self_contenttype: a foreign key to the respective contenttype comes in handy when querying for</span>
     <span class="c1"># triples where the subject&#39;s or object&#39;s contenttype must be respected (e.g. get all triples</span>
@@ -145,10 +147,13 @@
     <span class="n">objects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">()</span>
     <span class="n">objects_inheritance</span> <span class="o">=</span> <span class="n">InheritanceManager</span><span class="p">()</span>
 
-<div class="viewcode-block" id="RootObject.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.RootObject.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="RootObject.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.RootObject.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_contenttype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">self_contenttype</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_contenttype_of_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
@@ -156,7 +161,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;no name provided&quot;</span>
 
-<div class="viewcode-block" id="RootObject.duplicate"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.RootObject.duplicate">[docs]</a>    <span class="k">def</span> <span class="nf">duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RootObject.duplicate">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.RootObject.duplicate">[docs]</a>
+    <span class="k">def</span> <span class="nf">duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">signals</span><span class="o">.</span><span class="n">pre_duplicate</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1"># usually, copying instances would work like</span>
         <span class="c1"># https://docs.djangoproject.com/en/4.2/topics/db/queries/#copying-model-instances</span>
         <span class="c1"># but we are working with abstract classes,</span>
@@ -212,10 +221,16 @@
                 <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
                 <span class="n">objfield</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">newobj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div></div>
+        <span class="n">duplicate</span> <span class="o">=</span> <span class="n">newobj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">signals</span><span class="o">.</span><span class="n">post_duplicate</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">duplicate</span><span class="o">=</span><span class="n">duplicate</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">duplicate</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Source"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Source">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Source">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Source">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">Source</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds information about entities and their relations&quot;&quot;&quot;</span>
 
@@ -234,7 +249,10 @@
             <span class="k">return</span> <span class="s2">&quot;(ID: </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Collection"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Collection">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Collection">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Collection">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">Collection</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Allows to group entities and relation.&quot;&quot;&quot;</span>
 
@@ -251,26 +269,35 @@
     <span class="p">)</span>
     <span class="n">published</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Collection.from_db"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Collection.from_db">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Collection.from_db">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Collection.from_db">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_db</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="n">instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">from_db</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">_loaded_values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">field_names</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">instance</span></div>
 
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
-<div class="viewcode-block" id="Collection.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Collection.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Collection.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Collection.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_loaded_values&quot;</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">published</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_values</span><span class="p">[</span><span class="s2">&quot;published&quot;</span><span class="p">]:</span>
                 <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tempentityclass_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
                     <span class="n">ent</span><span class="o">.</span><span class="n">published</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">published</span>
                     <span class="n">ent</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
 
 
 <span class="c1"># TODO RDF: Remove text entirely</span>
-<div class="viewcode-block" id="Text"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Text">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+<div class="viewcode-block" id="Text">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Text">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">Text</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds unstructured text associeted with</span>
 <span class="sd">    one ore many entities/relations.&quot;&quot;&quot;</span>
@@ -287,7 +314,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;ID: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Text.check_for_deleted_annotations"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Text.check_for_deleted_annotations">[docs]</a>    <span class="k">def</span> <span class="nf">check_for_deleted_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Text.check_for_deleted_annotations">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Text.check_for_deleted_annotations">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_for_deleted_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="kn">from</span> <span class="nn">apis_highlighter.models</span> <span class="kn">import</span> <span class="n">Annotation</span>
 
@@ -322,7 +351,10 @@
             <span class="n">deleted</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">deleted</span></div>
 
-<div class="viewcode-block" id="Text.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Text.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Text.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Text.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">orig</span> <span class="o">=</span> <span class="n">Text</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
@@ -442,25 +474,67 @@
                     <span class="p">),</span>
                 <span class="p">)</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
 
 
 <span class="c1"># TODO: Move this somewhere else so that it can be imported at several places (right now it&#39;s redundant with copies)</span>
 <span class="kn">from</span> <span class="nn">django.db.models.fields.related_descriptors</span> <span class="kn">import</span> <span class="n">ForwardManyToOneDescriptor</span>
 
 
-<div class="viewcode-block" id="InheritanceForwardManyToOneDescriptor"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.InheritanceForwardManyToOneDescriptor">[docs]</a><span class="k">class</span> <span class="nc">InheritanceForwardManyToOneDescriptor</span><span class="p">(</span><span class="n">ForwardManyToOneDescriptor</span><span class="p">):</span>
-<div class="viewcode-block" id="InheritanceForwardManyToOneDescriptor.get_queryset"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.InheritanceForwardManyToOneDescriptor.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">hints</span><span class="p">):</span>
+<div class="viewcode-block" id="InheritanceForwardManyToOneDescriptor">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.InheritanceForwardManyToOneDescriptor">[docs]</a>
+<span class="k">class</span> <span class="nc">InheritanceForwardManyToOneDescriptor</span><span class="p">(</span><span class="n">ForwardManyToOneDescriptor</span><span class="p">):</span>
+<div class="viewcode-block" id="InheritanceForwardManyToOneDescriptor.get_queryset">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.InheritanceForwardManyToOneDescriptor.get_queryset">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">hints</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">remote_field</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">db_manager</span><span class="p">(</span>
             <span class="n">hints</span><span class="o">=</span><span class="n">hints</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">select_subclasses</span><span class="p">()</span></div></div>
+        <span class="p">)</span><span class="o">.</span><span class="n">select_subclasses</span><span class="p">()</span></div>
+</div>
 
 
-<div class="viewcode-block" id="InheritanceForeignKey"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.InheritanceForeignKey">[docs]</a><span class="k">class</span> <span class="nc">InheritanceForeignKey</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">):</span>
+
+<div class="viewcode-block" id="InheritanceForeignKey">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.InheritanceForeignKey">[docs]</a>
+<span class="k">class</span> <span class="nc">InheritanceForeignKey</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">):</span>
     <span class="n">forward_related_accessor_class</span> <span class="o">=</span> <span class="n">InheritanceForwardManyToOneDescriptor</span></div>
 
 
-<div class="viewcode-block" id="Uri"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+
+<span class="c1"># Uri model</span>
+<span class="c1"># We use a custom UriManager, so we can override the queryset `get_or_create`</span>
+<span class="c1"># method. This is useful because we normalize the uri field before saving.</span>
+
+
+<div class="viewcode-block" id="UriQuerySet">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.UriQuerySet">[docs]</a>
+<span class="k">class</span> <span class="nc">UriQuerySet</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">QuerySet</span><span class="p">):</span>
+<div class="viewcode-block" id="UriQuerySet.get_or_create">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.UriQuerySet.get_or_create">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_or_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;uri&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">clean_uri</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">defaults</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="UriManager">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.UriManager">[docs]</a>
+<span class="k">class</span> <span class="nc">UriManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
+<div class="viewcode-block" id="UriManager.get_queryset">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.UriManager.get_queryset">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">UriQuerySet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Uri">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">Uri</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">uri</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
     <span class="n">domain</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -473,10 +547,14 @@
     <span class="c1"># Timestamp when file was loaded and parsed</span>
     <span class="n">loaded_time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">UriManager</span><span class="p">()</span>
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Uri.get_web_object"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_web_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_web_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Uri.get_web_object">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_web_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_web_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;relation_pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
             <span class="s2">&quot;relation_type&quot;</span><span class="p">:</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
@@ -487,25 +565,72 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="Uri.get_listview_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_listview_url">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Uri.get_listview_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_listview_url">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_listview_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:apis_metainfo:uri_browse&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Uri.get_createview_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_createview_url">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Uri.get_createview_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_createview_url">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_createview_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:apis_metainfo:uri_create&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Uri.get_absolute_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Uri.get_absolute_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_absolute_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:apis_metainfo:uri_detail&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">})</span></div>
 
-<div class="viewcode-block" id="Uri.get_delete_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_delete_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_delete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Uri.get_delete_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_delete_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_delete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:apis_metainfo:uri_delete&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">})</span></div>
 
-<div class="viewcode-block" id="Uri.get_edit_url"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_edit_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_edit_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:apis_metainfo:uri_edit&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">})</span></div></div>
+
+<div class="viewcode-block" id="Uri.get_edit_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.get_edit_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_edit_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:apis_metainfo:uri_edit&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">})</span></div>
 
 
-<div class="viewcode-block" id="UriCandidate"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.UriCandidate">[docs]</a><span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
+<div class="viewcode-block" id="Uri.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Uri.clean">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.Uri.clean">[docs]</a>
+    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">clean_uri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;root_object&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">model</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_modelname_and_dict_from_uri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">model</span> <span class="ow">and</span> <span class="n">attributes</span><span class="p">:</span>
+                    <span class="n">app_label</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_by_natural_key</span><span class="p">(</span><span class="n">app_label</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="n">obj</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">model_class</span><span class="p">()(</span><span class="o">**</span><span class="n">attributes</span><span class="p">)</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">root_object</span> <span class="o">=</span> <span class="n">obj</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">: found model &lt;</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">&gt; and attributes &lt;</span><span class="si">{</span><span class="n">attributes</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="UriCandidate">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.UriCandidate">[docs]</a>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 <span class="k">class</span> <span class="nc">UriCandidate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to store the URI candidates for automatically generated entities.&quot;&quot;&quot;</span>
 
@@ -537,6 +662,7 @@
                     <span class="s2">&quot;value&quot;</span>
                 <span class="p">]</span>
                 <span class="k">return</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span></div>
+
 
 
 <span class="c1"># @receiver(post_save, sender=Uri, dispatch_uid=&quot;remove_default_uri&quot;)</span>

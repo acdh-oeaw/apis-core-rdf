@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -105,7 +105,6 @@
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 
 <span class="c1"># from apis_core.apis_relations.models import AbstractRelation</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.RDFParser</span> <span class="kn">import</span> <span class="n">APIS_RDF_URI_SETTINGS</span>
 <span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">get_generic_triple_table</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.autocomplete3</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">PropertyAutocomplete</span><span class="p">,</span>
@@ -117,42 +116,15 @@
 <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
     <span class="k">pass</span>
 
-<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
-<div class="viewcode-block" id="validate_target_autocomplete"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.validate_target_autocomplete">[docs]</a><span class="k">def</span> <span class="nf">validate_target_autocomplete</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
-            <span class="n">test</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">sett</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">APIS_RDF_URI_SETTINGS</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">))</span>
-            <span class="n">regx</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;regex&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sett</span><span class="p">[</span><span class="s2">&quot;mappings&quot;</span><span class="p">]]</span>
-            <span class="n">regx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;http.*oeaw\.ac\.at&quot;</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_AC_INSTANCES&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">regx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;\.&quot;</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regx</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-                    <span class="n">test</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">test</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
-                        <span class="n">_</span><span class="p">(</span>
-                            <span class="s2">&quot;Invalid value: </span><span class="si">%(value)s</span><span class="s2">, the url you are using is not configured&quot;</span>
-                        <span class="p">),</span>
-                        <span class="n">code</span><span class="o">=</span><span class="s2">&quot;invalid&quot;</span><span class="p">,</span>
-                        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">},</span>
-                    <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span>
-                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Invalid value: </span><span class="si">%(value)s</span><span class="s2">, use either URLs or select a value&quot;</span><span class="p">),</span>
-                <span class="n">code</span><span class="o">=</span><span class="s2">&quot;invalid&quot;</span><span class="p">,</span>
-                <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">},</span>
-            <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="GenericTripleForm"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm">[docs]</a><span class="k">class</span> <span class="nc">GenericTripleForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericTripleForm">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericTripleForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
     <span class="c1"># TODO RDF : Add Notes and references</span>
 
-<div class="viewcode-block" id="GenericTripleForm.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="GenericTripleForm.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">TempTriple</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;subj&quot;</span><span class="p">,</span>
@@ -166,6 +138,7 @@
             <span class="s2">&quot;obj&quot;</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">HiddenInput</span><span class="p">(),</span>
             <span class="s2">&quot;prop&quot;</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">HiddenInput</span><span class="p">(),</span>
         <span class="p">}</span></div>
+
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_type_self_str</span><span class="p">,</span> <span class="n">entity_type_other_str</span><span class="p">):</span>
 
@@ -221,7 +194,9 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">include_media</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="GenericTripleForm.load_subj_obj_prop"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_subj_obj_prop">[docs]</a>    <span class="k">def</span> <span class="nf">load_subj_obj_prop</span><span class="p">(</span>
+<div class="viewcode-block" id="GenericTripleForm.load_subj_obj_prop">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_subj_obj_prop">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_subj_obj_prop</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">entity_instance_self</span><span class="p">,</span>
         <span class="n">entity_instance_other</span><span class="p">,</span>
@@ -266,7 +241,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">other_entity_initial_value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span><span class="n">other_entity_initial_value</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="GenericTripleForm.load_remaining_data_from_triple"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_triple">[docs]</a>    <span class="k">def</span> <span class="nf">load_remaining_data_from_triple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triple</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericTripleForm.load_remaining_data_from_triple">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_triple">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_remaining_data_from_triple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triple</span><span class="p">):</span>
         <span class="c1"># Most data is loaded via the set_subj_obj function.</span>
         <span class="c1"># Here, load the rest from a pre-existing triple.</span>
         <span class="c1">#</span>
@@ -278,7 +256,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">triple</span><span class="o">.</span><span class="n">end_date_written</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">triple</span></div>
 
-<div class="viewcode-block" id="GenericTripleForm.load_remaining_data_from_input"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_input">[docs]</a>    <span class="k">def</span> <span class="nf">load_remaining_data_from_input</span><span class="p">(</span>
+
+<div class="viewcode-block" id="GenericTripleForm.load_remaining_data_from_input">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_input">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_remaining_data_from_input</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">start_date_written</span><span class="p">,</span>
         <span class="n">end_date_written</span><span class="p">,</span>
@@ -289,7 +270,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">start_date_written</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">end_date_written</span></div>
 
-<div class="viewcode-block" id="GenericTripleForm.save"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericTripleForm.save">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">pk</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
@@ -310,14 +294,20 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span></div>
 
-<div class="viewcode-block" id="GenericTripleForm.get_text_id"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.get_text_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_text_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericTripleForm.get_text_id">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.get_text_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_text_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function to retrieve the highlighted text.</span>
 <span class="sd">        :return: ID of text that was highlighted</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;HL_text_id&quot;</span><span class="p">][</span><span class="mi">5</span><span class="p">:]</span></div>
 
-<div class="viewcode-block" id="GenericTripleForm.get_html_table"><a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.get_html_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_html_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_instance_self</span><span class="p">,</span> <span class="n">entity_instance_other</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericTripleForm.get_html_table">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.get_html_table">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_html_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_instance_self</span><span class="p">,</span> <span class="n">entity_instance_other</span><span class="p">):</span>
         <span class="n">table_class</span> <span class="o">=</span> <span class="n">get_generic_triple_table</span><span class="p">(</span>
             <span class="n">other_entity_class_name</span><span class="o">=</span><span class="n">entity_instance_other</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
             <span class="n">entity_pk_self</span><span class="o">=</span><span class="n">entity_instance_self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
@@ -338,7 +328,9 @@
             <span class="n">prefix</span><span class="o">=</span><span class="n">entity_instance_other</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">table_object</span></div></div>
+        <span class="k">return</span> <span class="n">table_object</span></div>
+</div>
+
 </pre></div>
 
            </div>

@@ -10,11 +10,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -112,6 +112,7 @@
 <span class="kn">from</span> <span class="nn">.api_renderers</span> <span class="kn">import</span> <span class="n">NetJsonRenderer</span>
 <span class="kn">from</span> <span class="nn">.apis_relations.models</span> <span class="kn">import</span> <span class="n">Triple</span><span class="p">,</span> <span class="n">Property</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.core.mixins</span> <span class="kn">import</span> <span class="n">ListViewObjectFilterMixin</span>
 
 <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;INSTALLED_APPS&quot;</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">apis_highlighter.highlighter</span> <span class="kn">import</span> <span class="n">highlight_text_new</span>
@@ -124,7 +125,9 @@
     <span class="n">MAX_AGE</span> <span class="o">=</span> <span class="mi">0</span>
 
 
-<div class="viewcode-block" id="deep_get"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.deep_get">[docs]</a><span class="k">def</span> <span class="nf">deep_get</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="deep_get">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.deep_get">[docs]</a>
+<span class="k">def</span> <span class="nf">deep_get</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span>
         <span class="k">lambda</span> <span class="n">d</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">default</span><span class="p">,</span>
         <span class="n">keys</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
@@ -132,14 +135,22 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create_query_parameters"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.create_query_parameters">[docs]</a><span class="k">def</span> <span class="nf">create_query_parameters</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+
+<div class="viewcode-block" id="create_query_parameters">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.create_query_parameters">[docs]</a>
+<span class="k">def</span> <span class="nf">create_query_parameters</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CustomPagination"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.CustomPagination">[docs]</a><span class="k">class</span> <span class="nc">CustomPagination</span><span class="p">(</span><span class="n">pagination</span><span class="o">.</span><span class="n">LimitOffsetPagination</span><span class="p">):</span>
-<div class="viewcode-block" id="CustomPagination.get_paginated_response"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.CustomPagination.get_paginated_response">[docs]</a>    <span class="k">def</span> <span class="nf">get_paginated_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+
+<div class="viewcode-block" id="CustomPagination">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.CustomPagination">[docs]</a>
+<span class="k">class</span> <span class="nc">CustomPagination</span><span class="p">(</span><span class="n">pagination</span><span class="o">.</span><span class="n">LimitOffsetPagination</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomPagination.get_paginated_response">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.CustomPagination.get_paginated_response">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_paginated_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
             <span class="p">{</span>
                 <span class="s2">&quot;next&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_next_link</span><span class="p">(),</span>
@@ -149,23 +160,35 @@
                 <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span>
                 <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
             <span class="p">}</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ApisBaseSerializer"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer">[docs]</a><span class="k">class</span> <span class="nc">ApisBaseSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ApisBaseSerializer">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">ApisBaseSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ReadOnlyField</span><span class="p">()</span>
     <span class="n">label</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_label&quot;</span><span class="p">)</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_uri&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ApisBaseSerializer.add_id"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_id">[docs]</a>    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">INT</span><span class="p">)</span>
+<div class="viewcode-block" id="ApisBaseSerializer.add_id">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_id">[docs]</a>
+    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">INT</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">add_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">pk</span></div>
 
-<div class="viewcode-block" id="ApisBaseSerializer.add_label"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_label">[docs]</a>    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">STR</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ApisBaseSerializer.add_label">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_label">[docs]</a>
+    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">STR</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">add_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ApisBaseSerializer.add_uri"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_uri">[docs]</a>    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">URI</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ApisBaseSerializer.add_uri">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_uri">[docs]</a>
+    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">URI</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">add_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_absolute_uri</span><span class="p">(</span>
             <span class="n">reverse</span><span class="p">(</span>
@@ -174,7 +197,10 @@
             <span class="p">)</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ApisBaseSerializer.add_type"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_type">[docs]</a>    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">OBJECT</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ApisBaseSerializer.add_type">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_type">[docs]</a>
+    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">OBJECT</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">add_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="n">lst_type</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;collection_type&quot;</span><span class="p">,</span> <span class="s2">&quot;relation_type&quot;</span><span class="p">]</span>
         <span class="n">lst_kind</span> <span class="o">=</span> <span class="p">[</span>
@@ -200,55 +226,88 @@
                 <span class="p">}</span>
                 <span class="k">return</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="ApisBaseSerializer.Meta"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+
+<div class="viewcode-block" id="ApisBaseSerializer.Meta">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">TempEntityClass</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">]</span></div></div>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">]</span></div>
+</div>
 
 
-<div class="viewcode-block" id="EntitySerializer"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.EntitySerializer">[docs]</a><span class="k">class</span> <span class="nc">EntitySerializer</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EntitySerializer">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.EntitySerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">EntitySerializer</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="p">):</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_type&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EntitySerializer.add_type"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.EntitySerializer.add_type">[docs]</a>    <span class="k">def</span> <span class="nf">add_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+<div class="viewcode-block" id="EntitySerializer.add_type">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.EntitySerializer.add_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span></div>
 
-<div class="viewcode-block" id="EntitySerializer.Meta"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.EntitySerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="n">ApisBaseSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span></div></div>
+
+<div class="viewcode-block" id="EntitySerializer.Meta">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.EntitySerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">ApisBaseSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span></div>
+</div>
 
 
-<div class="viewcode-block" id="LabelSerializer"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.LabelSerializer">[docs]</a><span class="k">class</span> <span class="nc">LabelSerializer</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="LabelSerializer">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.LabelSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">LabelSerializer</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="p">):</span>
     <span class="n">parent_id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">PrimaryKeyRelatedField</span><span class="p">(</span>
         <span class="n">many</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;parent_class_id&quot;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="LabelSerializer.add_parent_id"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.LabelSerializer.add_parent_id">[docs]</a>    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">INT</span><span class="p">)</span>
+<div class="viewcode-block" id="LabelSerializer.add_parent_id">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.LabelSerializer.add_parent_id">[docs]</a>
+    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">INT</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">add_parent_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">parent_class_id</span></div>
 
-<div class="viewcode-block" id="LabelSerializer.Meta"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.LabelSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+
+<div class="viewcode-block" id="LabelSerializer.Meta">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.LabelSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="n">ApisBaseSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">[</span>
             <span class="s2">&quot;parent_id&quot;</span><span class="p">,</span>
-        <span class="p">]</span></div></div>
+        <span class="p">]</span></div>
+</div>
 
 
-<div class="viewcode-block" id="VocabsBaseSerializer"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.VocabsBaseSerializer">[docs]</a><span class="k">class</span> <span class="nc">VocabsBaseSerializer</span><span class="p">(</span><span class="n">LabelSerializer</span><span class="p">,</span> <span class="n">EntitySerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="VocabsBaseSerializer">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.VocabsBaseSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">VocabsBaseSerializer</span><span class="p">(</span><span class="n">LabelSerializer</span><span class="p">,</span> <span class="n">EntitySerializer</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="RelatedTripleSerializer"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.RelatedTripleSerializer">[docs]</a><span class="k">class</span> <span class="nc">RelatedTripleSerializer</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RelatedTripleSerializer">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.RelatedTripleSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">RelatedTripleSerializer</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="p">):</span>
     <span class="n">relation_type</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span>
         <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_related_property&quot;</span>
     <span class="p">)</span>
     <span class="n">related_entity</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_related_entity&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RelatedTripleSerializer.Meta"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.RelatedTripleSerializer.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="RelatedTripleSerializer.Meta">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.RelatedTripleSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Triple</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;relation_type&quot;</span><span class="p">,</span> <span class="s2">&quot;related_entity&quot;</span><span class="p">]</span></div>
+
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pk_instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;pk_instance&quot;</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RelatedTripleSerializer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RelatedTripleSerializer.add_related_property"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.RelatedTripleSerializer.add_related_property">[docs]</a>    <span class="k">def</span> <span class="nf">add_related_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triple</span><span class="p">):</span>
+<div class="viewcode-block" id="RelatedTripleSerializer.add_related_property">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.RelatedTripleSerializer.add_related_property">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_related_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triple</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">triple</span><span class="o">.</span><span class="n">subj</span><span class="o">.</span><span class="n">pk</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pk_instance</span><span class="p">:</span>
 
             <span class="k">class</span> <span class="nc">RelatedPropertySerializer</span><span class="p">(</span><span class="n">ApisBaseSerializer</span><span class="p">):</span>
@@ -273,7 +332,10 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">RelatedPropertySerializer</span><span class="p">(</span><span class="n">triple</span><span class="o">.</span><span class="n">prop</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span><span class="o">.</span><span class="n">data</span></div>
 
-<div class="viewcode-block" id="RelatedTripleSerializer.add_related_entity"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.RelatedTripleSerializer.add_related_entity">[docs]</a>    <span class="k">def</span> <span class="nf">add_related_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triple</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RelatedTripleSerializer.add_related_entity">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.RelatedTripleSerializer.add_related_entity">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_related_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">triple</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">triple</span><span class="o">.</span><span class="n">subj</span><span class="o">.</span><span class="n">pk</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pk_instance</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">EntitySerializer</span><span class="p">(</span><span class="n">triple</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
         <span class="k">elif</span> <span class="n">triple</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pk_instance</span><span class="p">:</span>
@@ -281,7 +343,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s2">&quot;Did not find entity in triple where it is supposed to be. Something must be wrong with the code.&quot;</span>
-            <span class="p">)</span></div></div>
+            <span class="p">)</span></div>
+</div>
+
 
 
 <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;INSTALLED_APPS&quot;</span><span class="p">):</span>
@@ -296,7 +360,9 @@
             <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="s2">&quot;related_object&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="generic_serializer_creation_factory"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.generic_serializer_creation_factory">[docs]</a><span class="k">def</span> <span class="nf">generic_serializer_creation_factory</span><span class="p">():</span>
+<div class="viewcode-block" id="generic_serializer_creation_factory">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.generic_serializer_creation_factory">[docs]</a>
+<span class="k">def</span> <span class="nf">generic_serializer_creation_factory</span><span class="p">():</span>
     <span class="n">lst_cont</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_all_contenttype_classes</span><span class="p">()</span>
     <span class="n">not_allowed_filter_fields</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;useradded&quot;</span><span class="p">,</span>
@@ -574,7 +640,7 @@
 
         <span class="n">filterset_dict</span><span class="p">[</span><span class="s2">&quot;Meta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MetaFilter</span>
 
-        <span class="k">class</span> <span class="nc">TemplateViewSet</span><span class="p">(</span><span class="n">viewsets</span><span class="o">.</span><span class="n">ModelViewSet</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">TemplateViewSet</span><span class="p">(</span><span class="n">ListViewObjectFilterMixin</span><span class="p">,</span> <span class="n">viewsets</span><span class="o">.</span><span class="n">ModelViewSet</span><span class="p">):</span>
 
             <span class="n">_select_related</span> <span class="o">=</span> <span class="n">select_related</span>
             <span class="n">_prefetch_rel</span> <span class="o">=</span> <span class="n">prefetch_rel</span>
@@ -625,7 +691,7 @@
                     <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefetch_rel</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_select_related</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_select_related</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">qs</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_queryset</span><span class="p">(</span><span class="n">qs</span><span class="p">)</span>
 
             <span class="nd">@extend_schema</span><span class="p">(</span><span class="n">responses</span><span class="o">=</span><span class="n">TemplateSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
             <span class="k">def</span> <span class="nf">list_viewset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
@@ -679,6 +745,7 @@
         <span class="n">views</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entity_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TemplateViewSet</span></div>
 
 
+
 <span class="c1"># TODO: What is this dict &#39;serializers_dict&#39; used for?</span>
 <span class="c1"># I don&#39;t find any usage anywhere else and above it gets filled with classes where they are key and value at the same time,</span>
 <span class="c1"># which doesn&#39;t make sense</span>
@@ -689,7 +756,9 @@
 <span class="n">generic_serializer_creation_factory</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="AdditionalSerializerConfig"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.AdditionalSerializerConfig">[docs]</a><span class="nd">@dataclass</span>
+<div class="viewcode-block" id="AdditionalSerializerConfig">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.AdditionalSerializerConfig">[docs]</a>
+<span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">AdditionalSerializerConfig</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    use this class in a list named &#39;additional_serializers_list&#39; to load custom</span>
@@ -701,7 +770,10 @@
     <span class="n">path_structure</span><span class="p">:</span> <span class="nb">dict</span>  <span class="c1"># see example structure</span></div>
 
 
-<div class="viewcode-block" id="load_additional_serializers"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.load_additional_serializers">[docs]</a><span class="k">def</span> <span class="nf">load_additional_serializers</span><span class="p">():</span>
+
+<div class="viewcode-block" id="load_additional_serializers">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.load_additional_serializers">[docs]</a>
+<span class="k">def</span> <span class="nf">load_additional_serializers</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">additional_serializers_list</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
             <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;apis_ontology.additional_serializers&quot;</span><span class="p">),</span>
@@ -883,6 +955,7 @@
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">additional_serializers_list</span></div>
+
 </pre></div>
 
            </div>

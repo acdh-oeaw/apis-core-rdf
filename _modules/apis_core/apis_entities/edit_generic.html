@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -97,7 +97,6 @@
 <span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
 <span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">DeleteView</span>
 <span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">RequestConfig</span>
-<span class="kn">from</span> <span class="nn">guardian.core</span> <span class="kn">import</span> <span class="n">ObjectPermissionChecker</span>
 <span class="kn">from</span> <span class="nn">reversion.models</span> <span class="kn">import</span> <span class="n">Version</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_labels.models</span> <span class="kn">import</span> <span class="n">Label</span>
@@ -112,30 +111,33 @@
 <span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">set_session_variables</span>
 <span class="kn">from</span> <span class="nn">..apis_vocabularies.models</span> <span class="kn">import</span> <span class="n">TextType</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.mixins</span> <span class="kn">import</span> <span class="n">EntityMixin</span><span class="p">,</span> <span class="n">EntityInstanceMixin</span>
 
 <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">apis_highlighter.forms</span> <span class="kn">import</span> <span class="n">SelectAnnotatorAgreement</span>
 
 
-<div class="viewcode-block" id="GenericEntitiesEditView"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesEditView">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">GenericEntitiesEditView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
-<div class="viewcode-block" id="GenericEntitiesEditView.get"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesEditView.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
-        <span class="n">pk</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">]</span>
-        <span class="n">entity_model</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_entity_class_of_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">entity_model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+<div class="viewcode-block" id="GenericEntitiesEditView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesEditView">[docs]</a>
+<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">GenericEntitiesEditView</span><span class="p">(</span><span class="n">EntityInstanceMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntitiesEditView.get">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesEditView.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">request</span> <span class="o">=</span> <span class="n">set_session_variables</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
 
         <span class="n">side_bar</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="n">triples_related_all</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">))</span>
+            <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="o">.</span><span class="n">all</span><span class="p">()</span>
             <span class="o">.</span><span class="n">select_subclasses</span><span class="p">()</span>
         <span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">entity_class</span> <span class="ow">in</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_all_entity_classes</span><span class="p">():</span>
-
+        <span class="k">for</span> <span class="n">entity_class</span> <span class="ow">in</span> <span class="n">helpers</span><span class="o">.</span><span class="n">get_classes_with_allowed_relation_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">):</span>
             <span class="n">entity_content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">entity_class</span><span class="p">)</span>
 
             <span class="n">other_entity_class_name</span> <span class="o">=</span> <span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -143,17 +145,17 @@
             <span class="n">triples_related_by_entity</span> <span class="o">=</span> <span class="n">triples_related_all</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
                 <span class="p">(</span>
                     <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;subj__self_contenttype&quot;</span><span class="p">:</span> <span class="n">entity_content_type</span><span class="p">})</span>
-                    <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;obj__pk&quot;</span><span class="p">:</span> <span class="n">pk</span><span class="p">})</span>
+                    <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;obj__pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span>
                 <span class="p">)</span>
                 <span class="o">|</span> <span class="p">(</span>
                     <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;obj__self_contenttype&quot;</span><span class="p">:</span> <span class="n">entity_content_type</span><span class="p">})</span>
-                    <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;subj__pk&quot;</span><span class="p">:</span> <span class="n">pk</span><span class="p">})</span>
+                    <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;subj__pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
             <span class="n">table_class</span> <span class="o">=</span> <span class="n">get_generic_triple_table</span><span class="p">(</span>
                 <span class="n">other_entity_class_name</span><span class="o">=</span><span class="n">other_entity_class_name</span><span class="p">,</span>
-                <span class="n">entity_pk_self</span><span class="o">=</span><span class="n">pk</span><span class="p">,</span>
+                <span class="n">entity_pk_self</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
                 <span class="n">detail</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -167,13 +169,13 @@
                 <span class="p">(</span>
                     <span class="n">title_card</span><span class="p">,</span>
                     <span class="n">tb_object</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;triple_form_</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">_to_</span><span class="si">{</span><span class="n">other_entity_class_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;triple_form_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="si">}</span><span class="s2">_to_</span><span class="si">{</span><span class="n">other_entity_class_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="n">tb_object_open</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
             <span class="n">form_ann_agreement</span> <span class="o">=</span> <span class="n">SelectAnnotatorAgreement</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -184,37 +186,33 @@
             <span class="k">if</span> <span class="n">apis_bibsonomy_texts</span><span class="p">:</span>
                 <span class="n">apis_bibsonomy</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
                     <span class="p">[</span>
-                        <span class="sa">f</span><span class="s2">&quot;text_</span><span class="si">{</span><span class="n">pk</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;text_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">TextType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
                             <span class="n">name__in</span><span class="o">=</span><span class="n">apis_bibsonomy_texts</span>
                         <span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s2">&quot;pk&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;text_</span><span class="si">{</span><span class="n">pk</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">apis_bibsonomy</span>
+                        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;text_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">apis_bibsonomy</span>
                     <span class="p">]</span>
                 <span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">apis_bibsonomy</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="n">apis_bibsonomy</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">apis_bibsonomy</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">apis_bibsonomy</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">object_revisions</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_object</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">object_lod</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">object_texts</span><span class="p">,</span> <span class="n">ann_proj_form</span> <span class="o">=</span> <span class="n">get_highlighted_texts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
-        <span class="n">object_labels</span> <span class="o">=</span> <span class="n">Label</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">temp_entity</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">tb_label</span> <span class="o">=</span> <span class="n">LabelTableEdit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">object_labels</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;L-&quot;</span><span class="p">)</span>
+        <span class="n">object_revisions</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">object_lod</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">object_texts</span><span class="p">,</span> <span class="n">ann_proj_form</span> <span class="o">=</span> <span class="n">get_highlighted_texts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">object_labels</span> <span class="o">=</span> <span class="n">Label</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">temp_entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">tb_label</span> <span class="o">=</span> <span class="n">LabelTableEdit</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">object_labels</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;L-&quot;</span>
+        <span class="p">)</span>
         <span class="n">tb_label_open</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PL-page&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="c1"># side_bar.append((&#39;Label&#39;, tb_label, &#39;PersonLabel&#39;, tb_label_open))</span>
         <span class="n">RequestConfig</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">})</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">tb_label</span><span class="p">)</span>
-        <span class="n">perm</span> <span class="o">=</span> <span class="n">ObjectPermissionChecker</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
-        <span class="n">permissions</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;change&quot;</span><span class="p">:</span> <span class="n">perm</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;change_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="p">),</span> <span class="n">instance</span><span class="p">),</span>
-            <span class="s2">&quot;delete&quot;</span><span class="p">:</span> <span class="n">perm</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;delete_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="p">),</span> <span class="n">instance</span><span class="p">),</span>
-            <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="p">)),</span>
-        <span class="p">}</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/edit_generic.html&quot;</span><span class="p">)</span>
         <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+            <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span>
             <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
             <span class="s2">&quot;form_text&quot;</span><span class="p">:</span> <span class="n">form_text</span><span class="p">,</span>
-            <span class="s2">&quot;instance&quot;</span><span class="p">:</span> <span class="n">instance</span><span class="p">,</span>
+            <span class="s2">&quot;instance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span>
             <span class="s2">&quot;right_card&quot;</span><span class="p">:</span> <span class="n">side_bar</span><span class="p">,</span>
             <span class="s2">&quot;object_revisions&quot;</span><span class="p">:</span> <span class="n">object_revisions</span><span class="p">,</span>
             <span class="s2">&quot;object_texts&quot;</span><span class="p">:</span> <span class="n">object_texts</span><span class="p">,</span>
@@ -222,67 +220,65 @@
             <span class="s2">&quot;ann_proj_form&quot;</span><span class="p">:</span> <span class="n">ann_proj_form</span><span class="p">,</span>
             <span class="s2">&quot;form_ann_agreement&quot;</span><span class="p">:</span> <span class="n">form_ann_agreement</span><span class="p">,</span>
             <span class="s2">&quot;apis_bibsonomy&quot;</span><span class="p">:</span> <span class="n">apis_bibsonomy</span><span class="p">,</span>
-            <span class="s2">&quot;permissions&quot;</span><span class="p">:</span> <span class="n">permissions</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="n">form_merge_with</span> <span class="o">=</span> <span class="n">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">ent_merge_pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+        <span class="n">form_merge_with</span> <span class="o">=</span> <span class="n">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">ent_merge_pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;form_merge_with&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">form_merge_with</span>
         <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="GenericEntitiesEditView.post"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesEditView.post">[docs]</a>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
-        <span class="n">pk</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">]</span>
-        <span class="n">entity_model</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_entity_class_of_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">entity_model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+
+<div class="viewcode-block" id="GenericEntitiesEditView.post">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesEditView.post">[docs]</a>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="ow">and</span> <span class="n">form_text</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
             <span class="n">entity_2</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="n">form_text</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">entity_2</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
                 <span class="n">reverse</span><span class="p">(</span>
                     <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
-                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">},</span>
+                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">},</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/edit_generic.html&quot;</span><span class="p">)</span>
-            <span class="n">perm</span> <span class="o">=</span> <span class="n">ObjectPermissionChecker</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
-            <span class="n">permissions</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;change&quot;</span><span class="p">:</span> <span class="n">perm</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;change_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="p">),</span> <span class="n">instance</span><span class="p">),</span>
-                <span class="s2">&quot;delete&quot;</span><span class="p">:</span> <span class="n">perm</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;delete_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="p">),</span> <span class="n">instance</span><span class="p">),</span>
-                <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="p">)),</span>
-            <span class="p">}</span>
             <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
-                <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+                <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span>
                 <span class="s2">&quot;form_text&quot;</span><span class="p">:</span> <span class="n">form_text</span><span class="p">,</span>
-                <span class="s2">&quot;instance&quot;</span><span class="p">:</span> <span class="n">instance</span><span class="p">,</span>
-                <span class="s2">&quot;permissions&quot;</span><span class="p">:</span> <span class="n">permissions</span><span class="p">,</span>
+                <span class="s2">&quot;instance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span>
             <span class="p">}</span>
-            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;place&quot;</span><span class="p">:</span>
-                <span class="n">form_merge_with</span> <span class="o">=</span> <span class="n">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">ent_merge_pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;place&quot;</span><span class="p">:</span>
+                <span class="n">form_merge_with</span> <span class="o">=</span> <span class="n">GenericEntitiesStanbolForm</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">ent_merge_pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span>
+                <span class="p">)</span>
                 <span class="n">context</span><span class="p">[</span><span class="s2">&quot;form_merge_with&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">form_merge_with</span>
                 <span class="k">return</span> <span class="n">TemplateResponse</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">))</span></div></div>
+            <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">))</span></div>
+</div>
 
 
-<div class="viewcode-block" id="GenericEntitiesCreateView"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateView">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">GenericEntitiesCreateView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
-<div class="viewcode-block" id="GenericEntitiesCreateView.get"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateView.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+
+<div class="viewcode-block" id="GenericEntitiesCreateView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateView">[docs]</a>
+<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">GenericEntitiesCreateView</span><span class="p">(</span><span class="n">EntityMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntitiesCreateView.get">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateView.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">()</span>
-        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">permissions</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
+            <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">))</span>
         <span class="p">}</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/edit_generic.html&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
             <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
                 <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
                 <span class="n">context</span><span class="o">=</span><span class="p">{</span>
-                    <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+                    <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span>
                     <span class="s2">&quot;permissions&quot;</span><span class="p">:</span> <span class="n">permissions</span><span class="p">,</span>
                     <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
                     <span class="s2">&quot;form_text&quot;</span><span class="p">:</span> <span class="n">form_text</span><span class="p">,</span>
@@ -290,23 +286,27 @@
             <span class="p">)</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="GenericEntitiesCreateView.post"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateView.post">[docs]</a>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+
+<div class="viewcode-block" id="GenericEntitiesCreateView.post">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateView.post">[docs]</a>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
-        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="ow">and</span> <span class="n">form_text</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
             <span class="n">entity_2</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="n">form_text</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">entity_2</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
                 <span class="n">reverse</span><span class="p">(</span>
                     <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
-                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">entity_2</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">},</span>
+                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">entity_2</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">},</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">permissions</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;apis_entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
+                <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span>
+                    <span class="s2">&quot;apis_entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
+                <span class="p">)</span>
             <span class="p">}</span>
             <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/edit_generic.html&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
@@ -318,20 +318,25 @@
                         <span class="s2">&quot;form_text&quot;</span><span class="p">:</span> <span class="n">form_text</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">)</span>
-            <span class="p">)</span></div></div>
+            <span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="GenericEntitiesCreateStanbolView"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateStanbolView">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">GenericEntitiesCreateStanbolView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
-<div class="viewcode-block" id="GenericEntitiesCreateStanbolView.post"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateStanbolView.post">[docs]</a>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="GenericEntitiesCreateStanbolView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateStanbolView">[docs]</a>
+<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">GenericEntitiesCreateStanbolView</span><span class="p">(</span><span class="n">EntityMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntitiesCreateStanbolView.post">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateStanbolView.post">[docs]</a>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">ent_merge_pk</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ent_merge_pk&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ent_merge_pk</span><span class="p">:</span>
             <span class="n">form</span> <span class="o">=</span> <span class="n">GenericEntitiesStanbolForm</span><span class="p">(</span>
-                <span class="n">entity</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">ent_merge_pk</span><span class="o">=</span><span class="n">ent_merge_pk</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">ent_merge_pk</span><span class="o">=</span><span class="n">ent_merge_pk</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">form</span> <span class="o">=</span> <span class="n">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
         <span class="c1"># form = form(request.POST)</span>
         <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
             <span class="n">entity_2</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
@@ -340,52 +345,67 @@
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
                 <span class="n">reverse</span><span class="p">(</span>
                     <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
-                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">entity_2</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">},</span>
+                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">entity_2</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">},</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">permissions</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;apis_entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="p">))</span>
+                <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span>
+                    <span class="s2">&quot;apis_entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
+                <span class="p">)</span>
             <span class="p">}</span>
             <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/edit_generic.html&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
                 <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
                     <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;permissions&quot;</span><span class="p">:</span> <span class="n">permissions</span><span class="p">,</span> <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
                 <span class="p">)</span>
-            <span class="p">)</span></div></div>
+            <span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="GenericEntitiesDeleteView"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDeleteView">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">GenericEntitiesDeleteView</span><span class="p">(</span><span class="n">DeleteView</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericEntitiesDeleteView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDeleteView">[docs]</a>
+<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">GenericEntitiesDeleteView</span><span class="p">(</span><span class="n">EntityInstanceMixin</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">):</span>
     <span class="c1"># model = ContentType.objects.get(</span>
     <span class="c1">#     app_label=&#39;apis_entities&#39;, model=&#39;tempentityclass&#39;).model_class()</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_entities.models&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">TempEntityClass</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
-        <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_DELETE_VIEW_TEMPLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;apis_entities/confirm_delete.html&quot;</span>
+        <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_DELETE_VIEW_TEMPLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;confirm_delete.html&quot;</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="GenericEntitiesDeleteView.dispatch"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDeleteView.dispatch">[docs]</a>    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
+<div class="viewcode-block" id="GenericEntitiesDeleteView.dispatch">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDeleteView.dispatch">[docs]</a>
+    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">success_url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span>
-            <span class="s2">&quot;apis_core:apis_entities:generic_entities_list&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">}</span>
+            <span class="s2">&quot;apis_core:apis_entities:generic_entities_list&quot;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">},</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericEntitiesDeleteView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericEntitiesDeleteView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="GenericEntitiesDuplicateView"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDuplicateView">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">GenericEntitiesDuplicateView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
-<div class="viewcode-block" id="GenericEntitiesDuplicateView.get"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDuplicateView.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">entity_model</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_entity_class_of_name</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">])</span>
-        <span class="n">source_obj</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">entity_model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="GenericEntitiesDuplicateView">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDuplicateView">[docs]</a>
+<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">GenericEntitiesDuplicateView</span><span class="p">(</span><span class="n">EntityInstanceMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericEntitiesDuplicateView.get">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDuplicateView.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">source_obj</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
 
         <span class="n">newobj</span> <span class="o">=</span> <span class="n">source_obj</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
             <span class="n">reverse</span><span class="p">(</span>
                 <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
-                <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">newobj</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]},</span>
+                <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">newobj</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">},</span>
             <span class="p">)</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>

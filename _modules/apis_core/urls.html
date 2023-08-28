@@ -10,11 +10,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -88,6 +88,7 @@
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="kn">from</span> <span class="nn">django.views.static</span> <span class="kn">import</span> <span class="n">serve</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">routers</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.api_routers</span> <span class="kn">import</span> <span class="n">load_additional_serializers</span>
@@ -99,6 +100,7 @@
 <span class="c1"># )</span>
 <span class="c1"># from apis_core.apis_vocabularies.api_views import UserViewSet</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.viewsets</span> <span class="kn">import</span> <span class="n">UriToObjectViewSet</span>
 
 <span class="n">app_name</span> <span class="o">=</span> <span class="s2">&quot;apis_core&quot;</span>
 
@@ -116,6 +118,9 @@
         <span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> not found, skipping&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+
+<span class="c1"># inject the manually created UriToObjectViewSet into the api router</span>
+<span class="n">router</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;metainfo/uritoobject&quot;</span><span class="p">,</span> <span class="n">UriToObjectViewSet</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="s2">&quot;uritoobject&quot;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">additional_serializer</span> <span class="ow">in</span> <span class="n">load_additional_serializers</span><span class="p">():</span>
     <span class="n">router</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
@@ -197,7 +202,9 @@
 <span class="c1">#        super(SchemaViewSwagger, self).__init__(*args, **kwargs)</span>
 
 
-<div class="viewcode-block" id="build_apis_mock_request"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.urls.build_apis_mock_request">[docs]</a><span class="k">def</span> <span class="nf">build_apis_mock_request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">original_request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="build_apis_mock_request">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.urls.build_apis_mock_request">[docs]</a>
+<span class="k">def</span> <span class="nf">build_apis_mock_request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">original_request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="c1"># default mock request</span>
     <span class="n">request</span> <span class="o">=</span> <span class="n">build_mock_request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">original_request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="c1"># the added wagtail magic</span>
@@ -205,7 +212,9 @@
     <span class="k">return</span> <span class="n">request</span></div>
 
 
+
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">TemplateView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span><span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;base.html&quot;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;apis_index&quot;</span><span class="p">),</span>
     <span class="n">path</span><span class="p">(</span><span class="s2">&quot;admin/&quot;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
     <span class="c1"># url(r&#39;^swagger(?P&lt;format&gt;\.json|\.yaml)$&#39;, SchemaViewSwagger.without_ui(cache_timeout=-1), name=&#39;schema-json&#39;),</span>
     <span class="c1"># url(r&#39;^swagger/$&#39;, SchemaViewSwagger.with_ui(&#39;swagger&#39;, cache_timeout=-1), name=&#39;schema-swagger-ui&#39;),</span>
@@ -223,7 +232,6 @@
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;redoc&quot;</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="n">path</span><span class="p">(</span><span class="s2">&quot;labels/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_labels.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_labels&quot;</span><span class="p">)),</span>
-    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;tei/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_tei.tei_urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_tei&quot;</span><span class="p">)),</span>
     <span class="n">path</span><span class="p">(</span>
         <span class="s2">&quot;entities/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_entities.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_entities&quot;</span><span class="p">)</span>
     <span class="p">),</span>

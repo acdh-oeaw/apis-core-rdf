@@ -10,11 +10,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -90,7 +90,9 @@
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">fields</span> <span class="k">as</span> <span class="n">ft_dj</span>
 
 
-<div class="viewcode-block" id="create_data"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.testrunners.create_data">[docs]</a><span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span><span class="n">ft</span><span class="p">,</span> <span class="n">ln</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<div class="viewcode-block" id="create_data">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.testrunners.create_data">[docs]</a>
+<span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span><span class="n">ft</span><span class="p">,</span> <span class="n">ln</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">ft</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ft</span> <span class="o">==</span> <span class="n">ft_dj</span><span class="o">.</span><span class="n">CharField</span> <span class="ow">or</span> <span class="n">ft</span> <span class="o">==</span> <span class="n">ft_dj</span><span class="o">.</span><span class="n">TextField</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">ln</span><span class="p">))</span>
@@ -106,8 +108,13 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;didnt find any matching dt&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="APISTestRunner"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.testrunners.APISTestRunner">[docs]</a><span class="k">class</span> <span class="nc">APISTestRunner</span><span class="p">(</span><span class="n">DiscoverRunner</span><span class="p">):</span>
-<div class="viewcode-block" id="APISTestRunner.setup_databases"><a class="viewcode-back" href="../../modules/apis_core.html#apis_core.testrunners.APISTestRunner.setup_databases">[docs]</a>    <span class="k">def</span> <span class="nf">setup_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="APISTestRunner">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.testrunners.APISTestRunner">[docs]</a>
+<span class="k">class</span> <span class="nc">APISTestRunner</span><span class="p">(</span><span class="n">DiscoverRunner</span><span class="p">):</span>
+<div class="viewcode-block" id="APISTestRunner.setup_databases">
+<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.testrunners.APISTestRunner.setup_databases">[docs]</a>
+    <span class="k">def</span> <span class="nf">setup_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">old_names</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup_databases</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">lst_cont</span> <span class="o">=</span> <span class="p">[</span>
@@ -230,7 +237,9 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">dict_ents</span><span class="p">[</span><span class="n">ent</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c_1_obj</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;created </span><span class="si">{</span><span class="n">c_1_obj</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">old_names</span></div></div>
+        <span class="k">return</span> <span class="n">old_names</span></div>
+</div>
+
 </pre></div>
 
            </div>

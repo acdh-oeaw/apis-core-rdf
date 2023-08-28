@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -110,7 +110,9 @@
 <span class="c1"># the table class thus must have a method / class variable &#39;order_start_date_written = generic_order_start_date_written&#39;</span>
 
 
-<div class="viewcode-block" id="generic_order_start_date_written"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_start_date_written">[docs]</a><span class="k">def</span> <span class="nf">generic_order_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
+<div class="viewcode-block" id="generic_order_start_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_start_date_written">[docs]</a>
+<span class="k">def</span> <span class="nf">generic_order_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">is_descending</span><span class="p">:</span>
         <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
             <span class="n">F</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -121,7 +123,10 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="generic_order_end_date_written"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_end_date_written">[docs]</a><span class="k">def</span> <span class="nf">generic_order_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
+
+<div class="viewcode-block" id="generic_order_end_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_end_date_written">[docs]</a>
+<span class="k">def</span> <span class="nf">generic_order_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">is_descending</span><span class="p">:</span>
         <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
@@ -130,7 +135,10 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="helper_render_date"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.helper_render_date">[docs]</a><span class="k">def</span> <span class="nf">helper_render_date</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">var_date</span><span class="p">,</span> <span class="n">var_start_date</span><span class="p">,</span> <span class="n">var_end_date</span><span class="p">):</span>
+
+<div class="viewcode-block" id="helper_render_date">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.helper_render_date">[docs]</a>
+<span class="k">def</span> <span class="nf">helper_render_date</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">var_date</span><span class="p">,</span> <span class="n">var_start_date</span><span class="p">,</span> <span class="n">var_end_date</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    helper function to avoid duplicated code. It checks the various sub-dates of a model&#39;s date field for them being None</span>
 <span class="sd">    or having values. If a field is None then check for the next, and if all are None, return &#39;—&#39; inditcating no value.</span>
@@ -162,9 +170,12 @@
     <span class="k">return</span> <span class="n">format_html</span><span class="p">(</span><span class="s2">&quot;&lt;abbr title=&#39;&quot;</span> <span class="o">+</span> <span class="n">overlay_help_text</span> <span class="o">+</span> <span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt;&quot;</span><span class="p">)</span></div>
 
 
+
 <span class="c1"># Again this function serves a generic purpose and must be assigned as class method to django-tables2 tables.Table class</span>
 <span class="c1"># The whole logic is very similare to the generic_order_* functions above, so see their comments for more details.</span>
-<div class="viewcode-block" id="generic_render_start_date_written"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_render_start_date_written">[docs]</a><span class="k">def</span> <span class="nf">generic_render_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="generic_render_start_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_render_start_date_written">[docs]</a>
+<span class="k">def</span> <span class="nf">generic_render_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 
     <span class="k">return</span> <span class="n">helper_render_date</span><span class="p">(</span>
         <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
@@ -174,7 +185,10 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="generic_render_end_date_written"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_render_end_date_written">[docs]</a><span class="k">def</span> <span class="nf">generic_render_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+
+<div class="viewcode-block" id="generic_render_end_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_render_end_date_written">[docs]</a>
+<span class="k">def</span> <span class="nf">generic_render_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 
     <span class="k">return</span> <span class="n">helper_render_date</span><span class="p">(</span>
         <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
@@ -184,7 +198,10 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="UriTable"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable">[docs]</a><span class="k">class</span> <span class="nc">UriTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+
+<div class="viewcode-block" id="UriTable">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable">[docs]</a>
+<span class="k">class</span> <span class="nc">UriTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">()</span>
     <span class="n">entity</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
         <span class="s2">&quot;&lt;a href=&#39;{{ record.entity.get_absolute_url }}&#39;&gt;{{ record.entity }}&lt;/a&gt;&quot;</span><span class="p">,</span>
@@ -197,10 +214,14 @@
         <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Entity Type&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="UriTable.Meta"><a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="UriTable.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
         <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span>
-        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-responsive table-hover&quot;</span><span class="p">}</span></div></div>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-responsive table-hover&quot;</span><span class="p">}</span></div>
+</div>
+
 </pre></div>
 
            </div>

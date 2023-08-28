@@ -11,11 +11,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -91,18 +91,18 @@
            <div itemprop="articleBody">
              
   <section id="data-model">
-<h1>Data Model<a class="headerlink" href="#data-model" title="Permalink to this heading"></a></h1>
+<h1>Data Model<a class="headerlink" href="#data-model" title="Link to this heading"></a></h1>
 <p>Our internal data model consists of entities, relations, vocabularies and some meta-classes (e.g. annotations,
 revisions etc.)</p>
 <figure class="align-default" id="id1">
 <span id="fig-data-model"></span><img alt="Data model APIS" src="_images/data_model_apis.png" />
 <figcaption>
-<p><span class="caption-text">Simplified data-model of the APIS webapp</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Simplified data-model of the APIS webapp</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>Please note that in the data-model schema in order to make the figure not too complex some arrows have been removed.</p>
 <section id="entities">
-<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this heading"></a></h2>
+<h2>Entities<a class="headerlink" href="#entities" title="Link to this heading"></a></h2>
 <p>The entities build the core of the internal APIS data-model:</p>
 <ul class="simple">
 <li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">entities.models.Person</span></code>: Natural persons</p></li>
@@ -117,7 +117,7 @@ would need a lot of entities to relate to each other.</p></li>
 </ul>
 </section>
 <section id="relations">
-<h2>Relations<a class="headerlink" href="#relations" title="Permalink to this heading"></a></h2>
+<h2>Relations<a class="headerlink" href="#relations" title="Link to this heading"></a></h2>
 <p>Every entity in the APIS data model can be related to any other entity. Relations consist of:</p>
 <ul class="simple">
 <li><p>a start entity (e.g. a person for a PersonPlace relation)</p></li>
@@ -129,7 +129,7 @@ would need a lot of entities to relate to each other.</p></li>
 <p>There are</p>
 </section>
 <section id="vocabularies">
-<h2>Vocabularies<a class="headerlink" href="#vocabularies" title="Permalink to this heading"></a></h2>
+<h2>Vocabularies<a class="headerlink" href="#vocabularies" title="Link to this heading"></a></h2>
 <p>As we already mentioned we use <a class="reference external" href="https://en.wikipedia.org/wiki/Simple_Knowledge_Organization_System">SKOS</a> like vocabularies to define entities and relations. These vocabulary entries
 use following attributes:</p>
 <ul class="simple">
@@ -142,7 +142,7 @@ by setting the parent class.</p></li>
 </ul>
 </section>
 <section id="annotations">
-<h2>Annotations<a class="headerlink" href="#annotations" title="Permalink to this heading"></a></h2>
+<h2>Annotations<a class="headerlink" href="#annotations" title="Link to this heading"></a></h2>
 <p>The third important part of the data model are annotations. We store annotations as character offset with start and end
 character (please see <code class="xref py py-class docutils literal notranslate"><span class="pre">highlighter.models.Annotation</span></code> for details). Every <code class="xref py py-class docutils literal notranslate"><span class="pre">highlighter.models.Annotation</span></code>
 is associated with:</p>

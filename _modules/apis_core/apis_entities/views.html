@@ -10,11 +10,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -97,6 +97,8 @@
 <span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">SingleTableView</span>
 <span class="kn">from</span> <span class="nn">django_tables2.export.views</span> <span class="kn">import</span> <span class="n">ExportMixin</span>
 
+<span class="kn">from</span> <span class="nn">apis_core.core.mixins</span> <span class="kn">import</span> <span class="n">ListViewObjectFilterMixin</span>
+
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span><span class="p">,</span> <span class="n">UriCandidate</span><span class="p">,</span> <span class="n">Text</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.stanbolQueries</span> <span class="kn">import</span> <span class="n">retrieve_obj</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.utils</span> <span class="kn">import</span> <span class="p">(</span>
@@ -130,7 +132,9 @@
 <span class="c1">############################################################################</span>
 
 
-<div class="viewcode-block" id="set_session_variables"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.set_session_variables">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
+<div class="viewcode-block" id="set_session_variables">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.set_session_variables">[docs]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">set_session_variables</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">ann_proj_pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;project&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">types</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;types&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -148,7 +152,10 @@
     <span class="k">return</span> <span class="n">request</span></div>
 
 
-<div class="viewcode-block" id="get_highlighted_texts"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.get_highlighted_texts">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
+
+<div class="viewcode-block" id="get_highlighted_texts">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.get_highlighted_texts">[docs]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">get_highlighted_texts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
     <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
         <span class="n">set_ann_proj</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotation_project&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -181,6 +188,7 @@
         <span class="k">return</span> <span class="n">object_texts</span><span class="p">,</span> <span class="kc">False</span></div>
 
 
+
 <span class="c1">############################################################################</span>
 <span class="c1">############################################################################</span>
 <span class="c1">#</span>
@@ -190,12 +198,16 @@
 <span class="c1">############################################################################</span>
 
 
-<div class="viewcode-block" id="GenericListViewNew"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew">[docs]</a><span class="k">class</span> <span class="nc">GenericListViewNew</span><span class="p">(</span><span class="n">UserPassesTestMixin</span><span class="p">,</span> <span class="n">ExportMixin</span><span class="p">,</span> <span class="n">SingleTableView</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericListViewNew">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericListViewNew</span><span class="p">(</span>
+    <span class="n">UserPassesTestMixin</span><span class="p">,</span> <span class="n">ListViewObjectFilterMixin</span><span class="p">,</span> <span class="n">ExportMixin</span><span class="p">,</span> <span class="n">SingleTableView</span>
+<span class="p">):</span>
     <span class="n">formhelper_class</span> <span class="o">=</span> <span class="n">GenericFilterFormHelper</span>
     <span class="n">context_filter_name</span> <span class="o">=</span> <span class="s2">&quot;filter&quot;</span>
     <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">25</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
-        <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_VIEW_TEMPLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;apis:apis_entities/generic_list.html&quot;</span>
+        <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_VIEW_TEMPLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;apis_entities/generic_list.html&quot;</span>
     <span class="p">)</span>
     <span class="n">login_url</span> <span class="o">=</span> <span class="s2">&quot;/accounts/login/&quot;</span>
 
@@ -203,9 +215,10 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">GenericListViewNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entity_settings</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="GenericListViewNew.get_model"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GenericListViewNew.get_model">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_model">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Look up the model class for the given entity</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -213,20 +226,21 @@
             <span class="n">app_label__startswith</span><span class="o">=</span><span class="s2">&quot;apis_&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span>
         <span class="p">)</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">entity_settings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">entity_settings</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">entity_settings</span> <span class="o">=</span> <span class="p">{}</span>
-
         <span class="k">return</span> <span class="n">model</span></div>
 
-<div class="viewcode-block" id="GenericListViewNew.test_func"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.test_func">[docs]</a>    <span class="k">def</span> <span class="nf">test_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListViewNew.test_func">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.test_func">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">access</span> <span class="o">=</span> <span class="n">access_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">viewtype</span><span class="o">=</span><span class="s2">&quot;list&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">access</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">set_session_variables</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">access</span></div>
 
-<div class="viewcode-block" id="GenericListViewNew.get_queryset"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListViewNew.get_queryset">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_queryset">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity&quot;</span><span class="p">)</span>
 
         <span class="n">qs</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
@@ -235,9 +249,12 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formhelper_class</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">qs</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_queryset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">qs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GenericListViewNew.get_table"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListViewNew.get_table">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_table">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create entity-specific table object for use on the frontend.</span>
 
@@ -274,7 +291,10 @@
 
         <span class="k">return</span> <span class="n">table</span></div>
 
-<div class="viewcode-block" id="GenericListViewNew.get_context_data"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListViewNew.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create entity-specific context object for use on the frontend.</span>
 
@@ -351,24 +371,21 @@
                 <span class="p">)</span>
                 <span class="n">context</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">chartdata</span><span class="p">)</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;enable_merge&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_settings</span><span class="p">[</span><span class="s2">&quot;merge&quot;</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;enable_merge&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_ENTITIES&quot;</span><span class="p">):</span>
+            <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">class_name</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;additional_cols&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_settings</span><span class="p">[</span><span class="s2">&quot;additional_cols&quot;</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;enable_merge&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
-            <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="n">toggleable_cols</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;merge&quot;</span><span class="p">]</span>
         <span class="c1"># TODO kk spelling of this dict key should get fixed throughout</span>
         <span class="c1">#  (togglable_colums -&gt; toggleable_columns)</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;togglable_colums&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">toggleable_cols</span> <span class="o">+</span> <span class="n">ENTITIES_DEFAULT_COLS</span>
 
         <span class="k">return</span> <span class="n">context</span></div>
 
-<div class="viewcode-block" id="GenericListViewNew.render_to_response"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.render_to_response">[docs]</a>    <span class="k">def</span> <span class="nf">render_to_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GenericListViewNew.render_to_response">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.render_to_response">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_to_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">download</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sep&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">download</span> <span class="ow">and</span> <span class="s2">&quot;browsing&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">datetime</span>
@@ -414,7 +431,9 @@
             <span class="k">return</span> <span class="n">response</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericListViewNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render_to_response</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">response</span></div></div>
+            <span class="k">return</span> <span class="n">response</span></div>
+</div>
+
 
 
 <span class="c1">############################################################################</span>
@@ -426,7 +445,9 @@
 <span class="c1">############################################################################</span>
 
 
-<div class="viewcode-block" id="getGeoJson"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.getGeoJson">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
+<div class="viewcode-block" id="getGeoJson">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.getGeoJson">[docs]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">getGeoJson</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to retrieve GeoJsons for single objects&quot;&quot;&quot;</span>
     <span class="c1"># if request.is_ajax():</span>
@@ -503,8 +524,11 @@
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lst_json</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">)</span></div>
 
 
+
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
-<div class="viewcode-block" id="getGeoJsonList"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.getGeoJsonList">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
+<div class="viewcode-block" id="getGeoJsonList">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.getGeoJsonList">[docs]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">getGeoJsonList</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to retrieve a list of GeoJsons. To generate the list the kind of connection</span>
 <span class="sd">    and the connected entity is needed&quot;&quot;&quot;</span>
@@ -538,6 +562,7 @@
         <span class="p">}</span>
         <span class="n">lst_json</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lst_json</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/json&quot;</span><span class="p">)</span></div>
+
 
 
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
@@ -692,7 +717,9 @@
 <span class="c1">#     return HttpResponseRedirect(url)</span>
 
 
-<div class="viewcode-block" id="resolve_ambigue_person"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.resolve_ambigue_person">[docs]</a><span class="nd">@login_required</span>
+<div class="viewcode-block" id="resolve_ambigue_person">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.resolve_ambigue_person">[docs]</a>
+<span class="nd">@login_required</span>
 <span class="k">def</span> <span class="nf">resolve_ambigue_person</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">PersonResolveUriForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
@@ -701,6 +728,7 @@
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
             <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis:apis_entities:person_edit&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">pers</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span>
         <span class="p">)</span></div>
+
 
 
 <span class="c1">############################################################################</span>
@@ -712,22 +740,33 @@
 <span class="c1">############################################################################</span>
 
 
-<div class="viewcode-block" id="birth_death_map"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.birth_death_map">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
+<div class="viewcode-block" id="birth_death_map">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.birth_death_map">[docs]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">birth_death_map</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;apis:apis_entities/map_list.html&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="pers_place_netw"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.pers_place_netw">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
+
+<div class="viewcode-block" id="pers_place_netw">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.pers_place_netw">[docs]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">pers_place_netw</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;apis:apis_entities/network.html&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="pers_inst_netw"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.pers_inst_netw">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
+
+<div class="viewcode-block" id="pers_inst_netw">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.pers_inst_netw">[docs]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">pers_inst_netw</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;apis:apis_entities/network_institution.html&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="generic_network_viz"><a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.generic_network_viz">[docs]</a><span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
+
+<div class="viewcode-block" id="generic_network_viz">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.generic_network_viz">[docs]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">generic_network_viz</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">NetworkVizFilterForm</span><span class="p">()</span>
@@ -736,6 +775,7 @@
             <span class="s2">&quot;apis:apis_entities/generic_network_visualization.html&quot;</span><span class="p">,</span>
             <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">},</span>
         <span class="p">)</span></div>
+
 
 
 <span class="c1">############################################################################</span>
