@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.1.0...v0.1.1) (2023-08-30)
+
+
+### Bug Fixes
+
+* replace custom duplication logic with signal ([0b1c20d](https://github.com/acdh-oeaw/apis-core-rdf/commit/0b1c20d61aed9d53c6acce90e87e617560f10718))
+* use the filter method of the superclass, if it exists ([b96ec9e](https://github.com/acdh-oeaw/apis-core-rdf/commit/b96ec9eb489eaffbec804fa910bf7cb5c47c1fce)), closes [#263](https://github.com/acdh-oeaw/apis-core-rdf/issues/263)
+
 ## 0.1.0 (2023-08-28)
 
 
