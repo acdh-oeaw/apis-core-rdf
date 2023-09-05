@@ -531,6 +531,12 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                     args=[other_entity_class_name, A("other_entity")],
                 )
 
+                # bibsonomy button
+                if "apis_bibsonomy" in settings.INSTALLED_APPS:
+                    self.base_columns["ref"] = tables.TemplateColumn(
+                        template_name="apis_relations/references_button_generic_ajax_form.html"
+                    )
+
                 super().__init__(data=data, *args, **kwargs)
 
         return TripleTableDetail
