@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.2.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.1.1...v0.2.0) (2023-09-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_metainfo:** rename templatetags
+* **apis_vis:** drop apis_vis
+* **apis_metainfo:** drop UriCandidate
+
+### Features
+
+* **apis_vis:** drop apis_vis ([7e69eb1](https://github.com/acdh-oeaw/apis-core-rdf/commit/7e69eb16cf324fcd8530d0f326a47d1ffc15202c)), closes [#206](https://github.com/acdh-oeaw/apis-core-rdf/issues/206)
+* **core:** Introduce LegacyDateMixin ([fe3c205](https://github.com/acdh-oeaw/apis-core-rdf/commit/fe3c20554d5bee21ed44b9cdc43cde9a53d7cdce)), closes [#66](https://github.com/acdh-oeaw/apis-core-rdf/issues/66)
+* **utils:** introduce APIS_ENTITIES settings function ([14fa858](https://github.com/acdh-oeaw/apis-core-rdf/commit/14fa858792ef51af03c2229460fe1a4518a82a86))
+
+
+### Bug Fixes
+
+* **apis_entities,apis_relations:** drop login_url override ([2f3c6a4](https://github.com/acdh-oeaw/apis-core-rdf/commit/2f3c6a40518c43fb915e2a5e858216a59fa22378))
+* **apis_entities:** make relations pagination configurable ([164d9dc](https://github.com/acdh-oeaw/apis-core-rdf/commit/164d9dc02b499d35bda13d509e7050c16a8c713b))
+* **apis_metainfo:** rename templatetags ([22b8145](https://github.com/acdh-oeaw/apis-core-rdf/commit/22b814555a91b3a0526bc3a153e16c39352ac978)), closes [#163](https://github.com/acdh-oeaw/apis-core-rdf/issues/163)
+* show reference button in detail view ([9120ed2](https://github.com/acdh-oeaw/apis-core-rdf/commit/9120ed20a73b54052544c4effc3110b48172bc13))
+
+
+### Code Refactoring
+
+* **apis_metainfo:** drop UriCandidate ([8de5061](https://github.com/acdh-oeaw/apis-core-rdf/commit/8de5061bbab0bdcae1c1e735320ca6a9ecc37fa2)), closes [#183](https://github.com/acdh-oeaw/apis-core-rdf/issues/183)
+
 ## [0.1.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.1.0...v0.1.1) (2023-08-30)
 
 
