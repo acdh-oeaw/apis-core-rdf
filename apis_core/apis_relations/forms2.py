@@ -44,6 +44,7 @@ class GenericTripleForm(forms.ModelForm):
             "prop",
             "start_date_written",
             "end_date_written",
+            "notes",
         ]
         widgets = {
             "subj": forms.HiddenInput(),
@@ -160,6 +161,7 @@ class GenericTripleForm(forms.ModelForm):
 
         self.fields["start_date_written"].initial = triple.start_date_written
         self.fields["end_date_written"].initial = triple.end_date_written
+        self.fields["notes"].initial = triple.notes
         self.instance = triple
 
     def load_remaining_data_from_input(
@@ -190,6 +192,7 @@ class GenericTripleForm(forms.ModelForm):
 
         self.instance.start_date_written = self.fields["start_date_written"].initial
         self.instance.end_date_written = self.fields["end_date_written"].initial
+        self.instance.notes = self.fields["notes"].initial
         self.instance.save()
 
         return self.instance
