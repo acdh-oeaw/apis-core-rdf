@@ -7,7 +7,6 @@ all_class_modules_and_names = {
         "Collection",
         "RootObject",
         "Source",
-        "Text",
         "Uri",
     ],
     "apis_vocabularies": [

@@ -12,7 +12,7 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 from django.forms import ModelMultipleChoiceField, ModelChoiceField
 from django.urls import reverse
 
-from apis_core.apis_metainfo.models import Text, Uri, Collection
+from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
 from apis_core.utils import DateParser, caching
 from .fields import ListSelect2, Select2Multiple
@@ -269,67 +269,6 @@ class GenericEntitiesStanbolForm(forms.Form):
             widget=ListSelect2(url=url, attrs=attrs),
             validators=[URLValidator],
         )
-
-
-class FullTextForm(forms.Form):
-    def save(self, entity):
-        cd = self.cleaned_data
-        text = None
-        for f in cd.keys():
-            text_type = TextType.objects.get(pk=f.split("_")[1])
-            text = Text.objects.filter(tempentityclass=entity, kind=text_type)
-            if text.count() == 1:
-                text = text[0]
-                text.text = cd[f]
-                text.save()
-            elif text.count() == 0:
-                text = Text(text=cd[f], kind=text_type)
-                text.save()
-                entity.text.add(text)
-        return text
-
-    def __init__(self, *args, **kwargs):
-        if "entity" in kwargs.keys():
-            entity = kwargs.pop("entity", None)
-        else:
-            entity = None
-        if "instance" in kwargs.keys():
-            instance = kwargs.pop("instance", None)
-        else:
-            instance = None
-        super(FullTextForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_class = "FullTextForm"
-        self.helper.form_tag = False
-        self.helper.help_text_inline = True
-        collections = []
-        if instance:
-            for i in instance.collection.all():
-                collections.append(i)
-        try:
-            if len(collections) > 0:
-                # TODO : make this filter call respect entity class hierarchy
-                # Here texttypes are searched for a given entity. But since this is an exact search
-                # for the entity, it does not regard any subclasses of the class to which a texttype
-                # was assigned
-                q = TextType.objects.filter(
-                    entity__iexact=entity, collections__in=collections
-                )
-            else:
-                q = TextType.objects.filter(entity__iexact=entity)
-            for txt in q:
-                self.fields["text_" + str(txt.pk)] = forms.CharField(
-                    label=txt.name,
-                    help_text=txt.description,
-                    required=False,
-                    widget=forms.Textarea,
-                )
-            if instance:
-                for t in instance.text.all():
-                    if "text_" + str(t.kind.pk) in self.fields.keys():
-                        self.fields["text_" + str(t.kind.pk)].initial = t.text
-        except:
-            pass
 
 
 class PersonResolveUriForm(forms.Form):

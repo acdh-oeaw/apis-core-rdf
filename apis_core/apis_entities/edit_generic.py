@@ -22,8 +22,7 @@ from apis_core.apis_relations.tables import (
     get_generic_triple_table,
     LabelTableEdit,
 )
-from .forms import get_entities_form, FullTextForm, GenericEntitiesStanbolForm
-from .views import get_highlighted_texts
+from .forms import get_entities_form, GenericEntitiesStanbolForm
 from .views import set_session_variables
 from ..apis_vocabularies.models import TextType
 from apis_core.utils import caching
@@ -90,7 +89,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             )
         form = get_entities_form(self.entity.title())
         form = form(instance=self.instance)
-        form_text = FullTextForm(entity=self.entity.title(), instance=self.instance)
         if "apis_highlighter" in settings.INSTALLED_APPS:
             form_ann_agreement = SelectAnnotatorAgreement()
         else:
@@ -114,7 +112,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             apis_bibsonomy = False
         object_revisions = Version.objects.get_for_object(self.instance)
         object_lod = Uri.objects.filter(root_object=self.instance)
-        object_texts, ann_proj_form = get_highlighted_texts(request, self.instance)
         object_labels = Label.objects.filter(temp_entity=self.instance)
         tb_label = LabelTableEdit(
             data=object_labels, prefix=self.entity.title()[:2] + "L-"
@@ -126,13 +123,10 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
         context = {
             "entity_type": self.entity,
             "form": form,
-            "form_text": form_text,
             "instance": self.instance,
             "right_card": side_bar,
             "object_revisions": object_revisions,
-            "object_texts": object_texts,
             "object_lod": object_lod,
-            "ann_proj_form": ann_proj_form,
             "form_ann_agreement": form_ann_agreement,
             "apis_bibsonomy": apis_bibsonomy,
         }
@@ -143,10 +137,8 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
     def post(self, request, *args, **kwargs):
         form = get_entities_form(self.entity.title())
         form = form(request.POST, instance=self.instance)
-        form_text = FullTextForm(request.POST, entity=self.entity.title())
-        if form.is_valid() and form_text.is_valid():
+        if form.is_valid():
             entity_2 = form.save()
-            form_text.save(entity_2)
             return redirect(
                 reverse(
                     "apis:apis_entities:generic_entities_edit_view",
@@ -158,7 +150,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             context = {
                 "form": form,
                 "entity_type": self.entity,
-                "form_text": form_text,
                 "instance": self.instance,
             }
             if self.entity.lower() != "place":
@@ -175,7 +166,6 @@ class GenericEntitiesCreateView(EntityMixin, View):
     def get(self, request, *args, **kwargs):
         form = get_entities_form(self.entity.title())
         form = form()
-        form_text = FullTextForm(entity=self.entity.title())
         permissions = {
             "create": request.user.has_perm("entities.add_{}".format(self.entity))
         }
@@ -187,7 +177,6 @@ class GenericEntitiesCreateView(EntityMixin, View):
                     "entity_type": self.entity,
                     "permissions": permissions,
                     "form": form,
-                    "form_text": form_text,
                 },
             )
         )
@@ -195,10 +184,8 @@ class GenericEntitiesCreateView(EntityMixin, View):
     def post(self, request, *args, **kwargs):
         form = get_entities_form(self.entity.title())
         form = form(request.POST)
-        form_text = FullTextForm(request.POST, entity=self.entity.title())
-        if form.is_valid() and form_text.is_valid():
+        if form.is_valid():
             entity_2 = form.save()
-            form_text.save(entity_2)
             return redirect(
                 reverse(
                     "apis:apis_entities:generic_entities_detail_view",
@@ -218,7 +205,6 @@ class GenericEntitiesCreateView(EntityMixin, View):
                     context={
                         "permissions": permissions,
                         "form": form,
-                        "form_text": form_text,
                     },
                 )
             )
