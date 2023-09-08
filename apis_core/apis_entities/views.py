@@ -15,7 +15,7 @@ from django_tables2.export.views import ExportMixin
 
 from apis_core.core.mixins import ListViewObjectFilterMixin
 
-from apis_core.apis_metainfo.models import Uri, Text
+from apis_core.apis_metainfo.models import Uri
 from apis_core.utils.stanbolQueries import retrieve_obj
 from apis_core.utils.utils import (
     access_for_all,
@@ -64,39 +64,6 @@ def set_session_variables(request):
         if edit_views != "false":
             request.session["edit_views"] = True
     return request
-
-
-@user_passes_test(access_for_all_function)
-def get_highlighted_texts(request, instance):
-    if "apis_highlighter" in settings.INSTALLED_APPS:
-        set_ann_proj = request.session.get("annotation_project", 1)
-        entity_types_highlighter = request.session.get("entity_types_highlighter", None)
-        users_show = request.session.get("users_show_highlighter", None)
-        object_texts = [
-            {
-                "text": highlight_text_new(
-                    x,
-                    set_ann_proj=set_ann_proj,
-                    types=entity_types_highlighter,
-                    users_show=users_show,
-                )[0].strip(),
-                "id": x.pk,
-                "kind": x.kind,
-            }
-            for x in Text.objects.filter(tempentityclass=instance)
-        ]
-        ann_proj_form = SelectAnnotationProject(
-            set_ann_proj=set_ann_proj,
-            entity_types_highlighter=entity_types_highlighter,
-            users_show_highlighter=users_show,
-        )
-        return object_texts, ann_proj_form
-    else:
-        object_texts = [
-            {"text": x.text, "id": x.pk, "kind": x.kind}
-            for x in Text.objects.filter(tempentityclass=instance)
-        ]
-        return object_texts, False
 
 
 ############################################################################

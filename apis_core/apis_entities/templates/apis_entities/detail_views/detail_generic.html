@@ -320,48 +320,13 @@
         </div>
       </div>
       <div class="card">
-        <div class="card-header">
-          <h2>Texts</h2>
-        </div>
-        <div class="card-body">
 
-          {% if object.text.all %}
-            <div class="card-body">
-              <legend>Texts</legend>
-              {% for x in object.text.all %}
-                <div class="card card-default">
-                  <div class="card-heading">
+        {% if iiif %}
+          <div class="card-body">
+            <div id="iiif" style="width: 100%; height: 400px"></div>
+          </div>
+        {% endif %}
 
-                    {% if x.kind.name in tei %}
-                      <h4 class="card-title">TEI</h4>
-                    {% else %}
-                      <h4 class="card-title">{{ x.kind }}</h4>
-                    {% endif %}
-
-                  </div>
-
-                  {% if x.kind.name in tei %}
-                    <div class="card-body tei" id="teisource">{{ x.text }}</div>
-                    <div id="teiviewer"></div>
-                  {% else %}
-                    <div class="card-body tei-text">{{ x.text }}</div>
-                  {% endif %}
-
-                </div>
-              {% endfor %}
-            </div>
-          {% else %}
-            <div class="card-body">
-              <legend>No text provided for this {{ entity }}</legend>
-            </div>
-          {% endif %}
-
-          {% if iiif %}
-            <div class="card-body">
-              <div id="iiif" style="width: 100%; height: 400px" /></div>
-          {% endif %}
-
-        </div>
       </div>
     </div>
   {% endblock content %}

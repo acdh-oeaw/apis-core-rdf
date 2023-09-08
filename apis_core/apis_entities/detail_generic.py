@@ -15,7 +15,6 @@ from apis_core.apis_relations.tables import (
     LabelTableBase,
 )
 from apis_core.utils.utils import access_for_all
-from .views import get_highlighted_texts
 from apis_core.apis_relations.models import TempTriple
 from apis_core.utils import caching
 from apis_core.utils.settings import get_entity_settings_by_modelname
@@ -73,7 +72,6 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
 
         # TODO RDF : Check / Adapt the following code to rdf architecture
         object_lod = Uri.objects.filter(root_object=self.instance)
-        object_texts, ann_proj_form = get_highlighted_texts(request, self.instance)
         object_labels = Label.objects.filter(temp_entity=self.instance)
         tb_label = LabelTableBase(data=object_labels, prefix=entity.title()[:2] + "L-")
         tb_label_open = request.GET.get("PL-page", None)
@@ -87,7 +85,7 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
         )
         tei = getattr(settings, "APIS_TEI_TEXTS", [])
         if tei:
-            tei = set(tei) & set([x.kind.name for x in self.instance.text.all()])
+            tei = set(tei)
         ceteicean_css = getattr(settings, "APIS_CETEICEAN_CSS", None)
         ceteicean_js = getattr(settings, "APIS_CETEICEAN_JS", None)
         openseadragon_js = getattr(settings, "APIS_OSD_JS", None)
@@ -160,7 +158,6 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
                     "right_card": side_bar,
                     "no_merge_labels": no_merge_labels,
                     "object_lables": object_labels,
-                    "object_texts": object_texts,
                     "object_lod": object_lod,
                     "tei": tei,
                     "ceteicean_css": ceteicean_css,

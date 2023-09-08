@@ -103,7 +103,6 @@ class TempEntityClass(AbstractEntity):
         verbose_name="End",
     )
     # TODO RDF: Make Text also a Subclass of RootObject
-    text = models.ManyToManyField("apis_metainfo.Text", blank=True)
     collection = models.ManyToManyField("apis_metainfo.Collection")
     status = models.CharField(max_length=100)
     source = models.ForeignKey(

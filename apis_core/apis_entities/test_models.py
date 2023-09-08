@@ -4,13 +4,12 @@ from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 from django.contrib.auth.models import Permission
 
-from apis_core.apis_metainfo.models import Text, Collection
+from apis_core.apis_metainfo.models import Collection
 
 
 class PermissionsModelTestCase(TestCase):
     name = "test name"
     first_name = "test first name"
-    text = "kjhkjsdhaslkdhadh lasdjalsk alsjdhaksjdh"
     col_name = "Test collection"
     start_date = "1.3.1930"
     end_date = "4.6.1960"
@@ -18,7 +17,6 @@ class PermissionsModelTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Set up data for the whole TestCase
-        cls.txt = Text.objects.create(text=cls.text)
         cls.col = Collection.objects.create(name=cls.col_name)
         cls.user = User.objects.create_user("testuser", "apisdev16")
         pe = Permission.objects.get(name="Can change person")
