@@ -9,6 +9,7 @@ from rest_framework import routers
 
 from apis_core.api_routers import load_additional_serializers
 from apis_core.api_routers import views
+from apis_core.core.views import ApisVersion
 
 # from apis_core.apis_entities.api_views import (
 #     NetJsonViewSet,
@@ -185,6 +186,7 @@ urlpatterns = [
     ),
     # url(r'^docs/', include('sphinxdoc.urls')),
     # url(r'^accounts/', include('registration.backends.simple.urls')),
+    path("version/", ApisVersion.as_view())
 ]
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
