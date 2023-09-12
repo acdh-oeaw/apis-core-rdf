@@ -129,33 +129,25 @@
                 {% endblock main-menu-extra %}
 
               </ul>
-              <!-- Start user login submenu -->
-              <ul class="navbar-nav">
 
-                {% if user.is_authenticated %}
-                  <li class="nav-item dropdown ml-auto">
-                    <a href=""
-                       class="nav-link dropdown-toggle"
-                       data-toggle="dropdown"
-                       role="button"
-                       aria-haspopup="true"
-                       aria-expanded="false">User: {{ user.get_username }}</a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <div class="dropdown-item">
-                        <a class="nav-link p-0" href="{% url 'admin:logout' %}">
-                          <span class="feather-32" data-feather="log-out"></span>
-                          log out
-                        </a>
-                      </div>
-                      <div class="dropdown-item">
-                        <form class="form-inline">
-                          <div class="form-check">
-                            <input id="check_edit_views" type="checkbox" class="form-check-input" 
-                              {% if request.session.edit_views %}checked{% endif %}
-                              >
-                              <label class="form-check-label" for="check_edit_views">Use edit views</label>
-                            </div>
-                          </form>
+              {% block userlogin-menu %}
+                <!-- Start user login submenu -->
+                <ul class="navbar-nav">
+
+                  {% if user.is_authenticated %}
+                    <li class="nav-item dropdown ml-auto">
+                      <a href=""
+                         class="nav-link dropdown-toggle"
+                         data-toggle="dropdown"
+                         role="button"
+                         aria-haspopup="true"
+                         aria-expanded="false">User: {{ user.get_username }}</a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-item">
+                          <a class="nav-link p-0" href="{% url 'admin:logout' %}">
+                            <span class="feather-32" data-feather="log-out"></span>
+                            log out
+                          </a>
                         </div>
                       </div>
                     </li>
@@ -170,76 +162,78 @@
 
                 </ul>
                 <!-- End user login submenu -->
+              {% endblock userlogin-menu %}
+
+            </div>
+            <!-- End main menu -->
+          </div>
+        </nav>
+        <!-- End site navigation -->
+      </div>
+      <!-- Start main content block -->
+      <div id="content">
+
+        {% if DEV_VERSION %}
+          <div class="alert alert-danger" role="alert">
+            This is a DEVELOPMENT instance. Click <a href="https://{{ PROJECT_NAME }}.acdh.oeaw.ac.at">here</a> for the
+            Production version
+          </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+
+      </div>
+      <!-- End main content block -->
+      <div class="d-flex footer-separator justify-content-center p-2"></div>
+      <!-- Start site footer -->
+      <div id="wrapper-footer-full" class="fundament-default-footer">
+        <div class="d-flex flex-column container-fluid p-4"
+             id="footer-full-content"
+             tabindex="-1">
+          <div class="d-flex flex-column align-self-center justify-content-center">
+            <div class="d-flex flex-column">
+              <div class="align-self-center p-1">
+                <a href="https://www.oeaw.ac.at/acdh/">
+                  <img class="w-75"
+                       alt="ACDH website"
+                       src="https://fundament.acdh.oeaw.ac.at/common-assets/images/acdh_logo.svg" />
+                </a>
               </div>
-              <!-- End main menu -->
-            </div>
-          </nav>
-          <!-- End site navigation -->
-        </div>
-        <!-- Start main content block -->
-        <div id="content">
-
-          {% if DEV_VERSION %}
-            <div class="alert alert-danger" role="alert">
-              This is a DEVELOPMENT instance. Click <a href="https://{{ PROJECT_NAME }}.acdh.oeaw.ac.at">here</a> for the
-              Production version
-            </div>
-          {% endif %}
-
-          {% block content %}{% endblock %}
-
-        </div>
-        <!-- End main content block -->
-        <div class="d-flex footer-separator justify-content-center p-2"></div>
-        <!-- Start site footer -->
-        <div id="wrapper-footer-full" class="fundament-default-footer">
-          <div class="d-flex flex-column container-fluid p-4"
-               id="footer-full-content"
-               tabindex="-1">
-            <div class="d-flex flex-column align-self-center justify-content-center">
-              <div class="d-flex flex-column">
-                <div class="align-self-center p-1">
-                  <a href="https://www.oeaw.ac.at/acdh/">
-                    <img class="w-75"
-                         alt="ACDH website"
-                         src="https://fundament.acdh.oeaw.ac.at/common-assets/images/acdh_logo.svg" />
-                  </a>
-                </div>
-                <div class="align-self-center w-50 p-1 text-center">
-                  Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences
-                </div>
+              <div class="align-self-center w-50 p-1 text-center">
+                Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences
               </div>
             </div>
           </div>
         </div>
-        <!-- Start imprint, project partners -->
-        <div id="wrapper-footer-secondary"
-             class="footer-imprint-bar p-2 text-center">
-          <a href="/imprint.html">Imprint | Impressum</a>
-
-          {% if user.is_authenticated %}
-            {% if DB_NAME %}
-              <div class="footer-imprint-bar">
-                <div>{{ DB_NAME }}</div>
-              </div>
-            {% endif %}
-          {% endif %}
-
-        </div>
-        <!-- End imprint, project partners -->
-        <!-- End site footer -->
       </div>
+      <!-- Start imprint, project partners -->
+      <div id="wrapper-footer-secondary"
+           class="footer-imprint-bar p-2 text-center">
+        <a href="/imprint.html">Imprint | Impressum</a>
 
-      {% block scripts %}
-        {% include "partials/feather_js.html" %}
-        {% include "partials/bootstrap4_js.html" %}
-        <script type="text/javascript"
-                src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-        <script src="{{ SHARED_URL }}apis/libraries/scroll-to-top/js/ap-scroll-top.min.js"></script>
-      {% endblock %}
+        {% if user.is_authenticated %}
+          {% if DB_NAME %}
+            <div class="footer-imprint-bar">
+              <div>{{ DB_NAME }}</div>
+            </div>
+          {% endif %}
+        {% endif %}
 
-      {% block scripts2 %}
-      {% endblock scripts2 %}
+      </div>
+      <!-- End imprint, project partners -->
+      <!-- End site footer -->
+    </div>
 
-    </body>
-  </html>
+    {% block scripts %}
+      {% include "partials/feather_js.html" %}
+      {% include "partials/bootstrap4_js.html" %}
+      <script type="text/javascript"
+              src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+      <script src="{{ SHARED_URL }}apis/libraries/scroll-to-top/js/ap-scroll-top.min.js"></script>
+    {% endblock %}
+
+    {% block scripts2 %}
+    {% endblock scripts2 %}
+
+  </body>
+</html>
