@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.3.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.2.0...v0.3.0) (2023-09-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_entities, apis_metainfo:** drop texts
+* **apis_metainfo:** cleanup menu block in base template
+
+### Features
+
+* **apis_entities:** enclose the relations listing in a relations block ([f052035](https://github.com/acdh-oeaw/apis-core-rdf/commit/f052035c8b582cc5b9536b635cd8dc965c2b589d))
+* **apis_metainfo:** cleanup menu block in base template ([8f5943b](https://github.com/acdh-oeaw/apis-core-rdf/commit/8f5943b45248f10afcddc601cf2ec0f93a350344))
+* **core:** add userlogin-menu block to `base.html` ([7bc4a29](https://github.com/acdh-oeaw/apis-core-rdf/commit/7bc4a29b8f3953f30a9e3f678f6e938e4e39023e))
+* provide modal block in base template ([86f5d43](https://github.com/acdh-oeaw/apis-core-rdf/commit/86f5d4357908de6af240e523c1cf09db09421e99))
+
+
+### Bug Fixes
+
+* **apis_entities, apis_metainfo:** drop texts ([063412f](https://github.com/acdh-oeaw/apis-core-rdf/commit/063412fb28bb812325010bae333f19ea3cb7bd8d))
+* **apis_metainfo:** drop `browsing/generic_list.html` template ([b5a9f7a](https://github.com/acdh-oeaw/apis-core-rdf/commit/b5a9f7ab8f433e1c957e52c58e4d31f5e3722c03)), closes [#151](https://github.com/acdh-oeaw/apis-core-rdf/issues/151)
+* **deps:** loosen Python dependency ([0d37dcc](https://github.com/acdh-oeaw/apis-core-rdf/commit/0d37dcca921ca3ba8e6ce9b21ba2db4be7897e30)), closes [#255](https://github.com/acdh-oeaw/apis-core-rdf/issues/255)
+
 ## [0.2.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.1.1...v0.2.0) (2023-09-07)
 
 
