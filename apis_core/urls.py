@@ -89,3 +89,7 @@ urlpatterns = [
     path("api/dumpdata", Dumpdata.as_view()),
     path("", include("apis_core.generic.urls", namespace="generic")),
 ]
+
+from apis_core.relations.urls import urlpatterns as relurlpatterns
+
+urlpatterns = urlpatterns + relurlpatterns

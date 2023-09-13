@@ -1,0 +1,24 @@
+{% extends basetemplate %}
+{% load relations %}
+
+{% block content %}
+
+  {% if model or object %}
+    <h1 class="text-center">{{ model.name }}{{ object }}</h1>
+  {% else %}
+    {% relations_links %}
+  {% endif %}
+
+  {% if table %}
+    {% load render_table from django_tables2 %}
+    {% render_table table %}
+  {% endif %}
+
+  {% if form %}
+    {{ form.errors }}
+    {{ form.non_field_errors }}
+    {% load crispy_forms_tags %}
+    {% crispy form %}
+  {% endif %}
+
+{% endblock content %}

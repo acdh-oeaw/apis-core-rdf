@@ -1,0 +1,32 @@
+{% load relations %}
+{% load crispy_forms_tags %}
+{% for rel, model in relation_types %}
+
+  {% if instance %}
+    {% url 'relation' rel.pk instancect.pk instance.pk contenttype.pk as hrefurl %}
+
+    {% if rel in relation_types_reverse %}
+      {% url 'relationinverted' rel.pk instancect.pk instance.pk contenttype.pk as hrefurl %}
+    {% endif %}
+
+  {% else %}
+    {% url 'relation' rel.pk as hrefurl %}
+  {% endif %}
+
+  <a href="{{ hrefurl }}" 
+    {% if htmx %} data-toggle="collapse" data-target="#collapse-{{ rel.model }}-{{ contenttype.name }}" hx-get="{{ hrefurl }}?partial&formonly" hx-target="#collapse-{{ rel.model }}-{{ contenttype.name }}" {% endif %}
+    >
+    <button type="button" class="btn btn-sm">
+
+      {% if rel in relation_types_reverse %}
+        {{ model.name_reverse }}
+      {% else %}
+        {{ model.name }}
+      {% endif %}
+
+    </button>
+  </a>
+{% endfor %}
+{% for rel, model in relation_types %}
+  <div class="collapse" id="collapse-{{ rel.model }}-{{ contenttype.name }}"></div>
+{% endfor %}
