@@ -32,6 +32,8 @@
     <link rel="mask-icon"
           href="{{ SHARED_URL }}favicon/safari-pinned-tab.svg"
           color="#00aba9" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+          rel="stylesheet" />
 
     {% block styles %}
       {% include "partials/bootstrap4_css.html" %}
@@ -145,7 +147,7 @@
                       <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-item">
                           <a class="nav-link p-0" href="{% url 'admin:logout' %}">
-                            <span class="feather-32" data-feather="log-out"></span>
+                            <span class="material-symbols-outlined">logout</span>
                             log out
                           </a>
                         </div>
@@ -155,7 +157,7 @@
                     <li class="nav-item dropdown ml-auto">
                       <a class="nav-link p-0"
                          href="{% url 'admin:login' %}?next={{ request.path|urlencode }}">
-                        <span class="feather-32" data-feather="log-in"></span>
+                        <span class="material-symbols-outlined">login</span>
                       </a>
                     </li>
                   {% endif %}
@@ -225,7 +227,6 @@
     </div>
 
     {% block scripts %}
-      {% include "partials/feather_js.html" %}
       {% include "partials/bootstrap4_js.html" %}
       <script type="text/javascript"
               src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>

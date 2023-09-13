@@ -18,7 +18,7 @@
             {% if object.get_prev_url %}
               <h2>
                 <a href="{{ object.get_prev_url }}" style="float:right">
-                  <i data-feather="chevron-left" title="previous"></i>
+                  <span class="material-symbols-outlined">chevron_left</span>
                 </a>
               </h2>
             {% endif %}
@@ -40,14 +40,14 @@
               {% if user.is_authenticated %}
                 {% if object.get_edit_url %}
                   <a href="{{ object.get_edit_url }}">
-                    <i class="feather-32" data-feather="edit" title="edit"></i>
+                    <span class="material-symbols-outlined">edit</span>
                   </a>
                 {% endif %}
 
                 {% if object.get_delete_url %}
                   |
                   <a href="{{ object.get_delete_url }}">
-                    <i class="feather-32" data-feather="trash" title="delete"></i>
+                    <span class="material-symbols-outlined">delete_forever</span>
                   </a>
                 {% endif %}
               {% endif %}
@@ -59,7 +59,7 @@
             {% if object.get_next_url %}
               <h2>
                 <a href="{{ object.get_next_url }}" style="float:left">
-                  <i data-feather="chevron-right" title="next"></i>
+                  <span class="material-symbols-outlined">chevron_right</span>
                 </a>
               </h2>
             {% endif %}
