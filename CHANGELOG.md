@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.3.0...v0.3.1) (2023-09-13)
+
+
+### Bug Fixes
+
+* add migrations forgotten in 063412f ([7fd93f3](https://github.com/acdh-oeaw/apis-core-rdf/commit/7fd93f353df7c7852e02a8c6ee1ca697185de37a))
+
 ## [0.3.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.2.0...v0.3.0) (2023-09-13)
 
 
