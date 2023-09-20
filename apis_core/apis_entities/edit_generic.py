@@ -1,4 +1,5 @@
 import importlib
+import json
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -14,6 +15,7 @@ from django.views import View
 from django.views.generic import DeleteView
 from django_tables2 import RequestConfig
 from reversion.models import Version
+from reversion import set_comment as reversion_set_comment, create_revision
 
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
@@ -139,6 +141,16 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
         form = form(request.POST, instance=self.instance)
         if form.is_valid():
             entity_2 = form.save()
+            comment = [
+                {
+                    "changed": {
+                        "name": str(entity_2._meta.verbose_name),
+                        "object": str(entity_2),
+                        "fields": form.changed_data,
+                    }
+                }
+            ]
+            reversion_set_comment(json.dumps(comment))
             return redirect(
                 reverse(
                     "apis:apis_entities:generic_entities_edit_view",
@@ -186,6 +198,15 @@ class GenericEntitiesCreateView(EntityMixin, View):
         form = form(request.POST)
         if form.is_valid():
             entity_2 = form.save()
+            comment = [
+                {
+                    "added": {
+                        "name": str(entity_2._meta.verbose_name),
+                        "object": str(entity_2),
+                    }
+                }
+            ]
+            reversion_set_comment(json.dumps(comment))
             return redirect(
                 reverse(
                     "apis:apis_entities:generic_entities_detail_view",
@@ -255,6 +276,7 @@ class GenericEntitiesDeleteView(EntityInstanceMixin, DeleteView):
     )
 
     def dispatch(self, request, *args, **kwargs):
+
         self.success_url = reverse(
             "apis_core:apis_entities:generic_entities_list",
             kwargs={"entity": self.entity},
@@ -265,9 +287,21 @@ class GenericEntitiesDeleteView(EntityInstanceMixin, DeleteView):
 @method_decorator(login_required, name="dispatch")
 class GenericEntitiesDuplicateView(EntityInstanceMixin, View):
     def get(self, request, *args, **kwargs):
-        source_obj = get_object_or_404(self.entity_model, pk=self.pk)
+        with create_revision():
+            source_obj = get_object_or_404(self.entity_model, pk=self.pk)
 
-        newobj = source_obj.duplicate()
+            newobj = source_obj.duplicate()
+
+            comment = [
+                {
+                    "added": {
+                        "name": str(newobj._meta.verbose_name),
+                        "object": str(newobj),
+                        "duplicate_from": str(source_obj),
+                    }
+                }
+            ]
+            reversion_set_comment(json.dumps(comment))
 
         return redirect(
             reverse(

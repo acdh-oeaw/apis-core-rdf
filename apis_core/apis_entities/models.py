@@ -1,6 +1,7 @@
 import re
 import re
 import unicodedata
+import json
 
 from django.contrib.contenttypes.models import ContentType
 from django.apps import apps
@@ -13,6 +14,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from model_utils.managers import InheritanceManager
 from django.db.models.query import QuerySet
+from reversion import set_comment as reversion_set_comment
 
 from apis_core.utils import caching
 from apis_core.utils import DateParser
@@ -322,6 +324,8 @@ class TempEntityClass(AbstractEntity):
         origin = self.__class__
         signals.pre_merge_with.send(sender=origin, instance=self, entities=entities)
 
+        reversion_comments = []
+
         # TODO: check if these imports can be put to top of module without
         #  causing circular import issues.
         from apis_core.apis_labels.models import Label
@@ -360,6 +364,18 @@ class TempEntityClass(AbstractEntity):
                 l.save()
             TempTriple.objects.filter(obj__id=ent.id).update(obj=self)
             TempTriple.objects.filter(subj__id=ent.id).update(subj=self)
+
+            reversion_comments.append(
+                {
+                    "changed": {
+                        "name": str(self._meta.verbose_name),
+                        "object": str(self),
+                        "merged_from": str(ent),
+                    }
+                }
+            )
+
+        reversion_set_comment(json.dumps(reversion_comments))
 
         for ent in entities:
             self.merge_fields(ent)
