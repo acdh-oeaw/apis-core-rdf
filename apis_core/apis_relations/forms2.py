@@ -145,7 +145,14 @@ class GenericTripleForm(forms.ModelForm):
         self.fields["property"].choices = [property_initial_value]
 
         other_entity_initial_value = (
-            str(Uri.objects.get(root_object=entity_instance_other)),
+            str(
+                Uri.objects.filter(
+                    root_object=entity_instance_other,
+                    uri__startswith=getattr(
+                        settings, "APIS_BASE_URI", "http://apis.info/"
+                    ),
+                ).first()
+            ),
             f"<span ><small>db</small> {str(entity_instance_other)}</span>",
         )
         self.fields["other_entity"].initial = other_entity_initial_value
