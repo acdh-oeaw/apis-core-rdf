@@ -1,4 +1,5 @@
 import importlib
+import json
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -14,6 +15,7 @@ from django.views import View
 from django.views.generic import DeleteView
 from django_tables2 import RequestConfig
 from reversion.models import Version
+from reversion import set_comment as reversion_set_comment, create_revision, set_user as reversion_set_user
 
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
@@ -139,6 +141,8 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
         form = form(request.POST, instance=self.instance)
         if form.is_valid():
             entity_2 = form.save()
+            comment = [{"changed": {"name": str(entity_2._meta.verbose_name), "object": str(entity_2), "fields": form.changed_data }}]
+            reversion_set_comment(json.dumps(comment))
             return redirect(
                 reverse(
                     "apis:apis_entities:generic_entities_edit_view",
@@ -186,6 +190,8 @@ class GenericEntitiesCreateView(EntityMixin, View):
         form = form(request.POST)
         if form.is_valid():
             entity_2 = form.save()
+            comment = [{"added": {"name": str(entity_2._meta.verbose_name), "object": str(entity_2)}}]
+            reversion_set_comment(json.dumps(comment))
             return redirect(
                 reverse(
                     "apis:apis_entities:generic_entities_detail_view",
@@ -254,7 +260,18 @@ class GenericEntitiesDeleteView(EntityInstanceMixin, DeleteView):
         settings, "APIS_DELETE_VIEW_TEMPLATE", "confirm_delete.html"
     )
 
+    def form_valid(self, form):
+        with create_revision():
+            print("create_revision")
+            comment = [{"deleted": {"name": str(self.instance._meta.verbose_name), "object": str(self.instance)}}]
+            reversion_set_comment(json.dumps(comment))
+            reversion_set_user(self.request.user)
+            self.object.save()
+        return super().form_valid(form)
+
+
     def dispatch(self, request, *args, **kwargs):
+
         self.success_url = reverse(
             "apis_core:apis_entities:generic_entities_list",
             kwargs={"entity": self.entity},
