@@ -70,6 +70,12 @@
                       <span class="material-symbols-outlined">content_copy</span>
                     </a>
                   {% endif %}
+
+                  |
+                  <a href="{% url 'apis_core:versions' object.self_contenttype.id object.id %}"
+                     title="History">
+                    <span class="material-symbols-outlined">history</span>
+                  </a>
                 {% endif %}
 
               {% endblock object-actions %}

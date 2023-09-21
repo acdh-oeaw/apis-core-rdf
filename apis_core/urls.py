@@ -10,6 +10,8 @@ from rest_framework import routers
 from apis_core.api_routers import load_additional_serializers
 from apis_core.api_routers import views
 
+from apis_core.core.views import Versions
+
 # from apis_core.apis_entities.api_views import (
 #     NetJsonViewSet,
 #     PlaceGeoJsonViewSet,
@@ -185,6 +187,12 @@ urlpatterns = [
     ),
     # url(r'^docs/', include('sphinxdoc.urls')),
     # url(r'^accounts/', include('registration.backends.simple.urls')),
+    path("reversion/versions/", Versions.as_view(), name="versions"),
+    path(
+        "reversion/versions/<int:content_type>/<int:object_id>",
+        Versions.as_view(),
+        name="versions",
+    ),
 ]
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
