@@ -1,7 +1,7 @@
 from django.conf import settings
 from rdflib import RDF, RDFS, XSD, BNode, Literal, URIRef, OWL
 
-PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD")
+PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD", {})
 
 base_uri = getattr(settings, "APIS_BASE_URI", "http://apis.info")
 if base_uri.endswith("/"):
