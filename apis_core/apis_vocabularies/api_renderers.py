@@ -4,7 +4,7 @@ from rdflib.namespace import SKOS, RDF, DC, RDFS
 from rest_framework import renderers
 import skosify
 
-PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD")
+PROJECT_METADATA = getattr(settings, "PROJECT_DEFAULT_MD", {})
 
 base_uri_web = getattr(settings, "APIS_BASE_URI", "http://apis.info")
 if base_uri_web.endswith("/"):
