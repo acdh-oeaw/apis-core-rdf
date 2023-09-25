@@ -40,9 +40,23 @@ class LegacyDateMixin(models.Model):
             start, start_start, start_end = DateParser.parse_date(
                 self.start_date_written
             )
+            # DateParser returns datetime, but we want dates without time
+            if start:
+                start = start.date()
+            if start_start:
+                start_start = start_start.date()
+            if start_end:
+                start_end = start_end.date()
 
         if self.end_date_written:
             end, end_start, end_end = DateParser.parse_date(self.end_date_written)
+            # DateParser returns datetime, but we want dates without time
+            if end:
+                end = end.date()
+            if end_start:
+                end_start = end_start.date()
+            if end_end:
+                end_end = end_end.date()
 
         self.start_date = start
         self.start_start_date = start_start
