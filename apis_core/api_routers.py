@@ -10,6 +10,7 @@ from apis_core.apis_metainfo.models import *
 
 # from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
+from django.conf import settings
 from rest_framework import pagination, serializers, viewsets
 from rest_framework import renderers
 from rest_framework.response import Response
@@ -255,6 +256,8 @@ def generic_serializer_creation_factory():
         class TemplateSerializer(serializers.HyperlinkedModelSerializer):
 
             id = serializers.ReadOnlyField()
+            if getattr(settings, "APIS_API_ID_WRITABLE", False):
+                id = serializers.IntegerField()
             url = serializers.HyperlinkedIdentityField(
                 view_name=f"apis:apis_api:{entity_str.lower()}-detail"
             )
