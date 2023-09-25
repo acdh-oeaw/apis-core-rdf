@@ -230,6 +230,20 @@ APIS_API_EXCLUDE_SETS
 Boolean setting for excluding related objects from the API. Normally its not needed to touch this.
 
 
+
+APIS_API_ID_WRITABLE
+---------------------
+
+.. code-block:: python
+
+    APIS_API_ID_WRITABLE = False
+
+
+Boolean setting for defining if the `id` field of an entity is writable via the
+API. Defaults to false. You can set it to `True` if you want to import entities
+from another instance and want to keep the `id`.
+
+
 APIS_LIST_VIEWS_ALLOWED
 -----------------------
 
