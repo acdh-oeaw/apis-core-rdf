@@ -65,116 +65,6 @@ class AbstractEntity(RootObject):
     def get_entity_list_filter(cls):
         return None
 
-
-@reversion.register(follow=["rootobject_ptr"])
-class TempEntityClass(AbstractEntity):
-    """
-    Base class to bind common attributes to many classes.
-
-    The common attributes are:
-    - written start and enddates,
-    - recognized start and enddates which are derived from the written dates
-    using RegEx,
-    - a review boolean field to mark an object as reviewed.
-    """
-
-    review = models.BooleanField(
-        default=False,
-        help_text="Should be set to True, if the "
-        "data record holds up quality "
-        "standards.",
-    )
-    start_date = models.DateField(blank=True, null=True)
-    start_start_date = models.DateField(blank=True, null=True)
-    start_end_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-    end_start_date = models.DateField(blank=True, null=True)
-    end_end_date = models.DateField(blank=True, null=True)
-    start_date_written = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name="Start",
-    )
-    end_date_written = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name="End",
-    )
-    # TODO RDF: Make Text also a Subclass of RootObject
-    collection = models.ManyToManyField("apis_metainfo.Collection")
-    status = models.CharField(max_length=100)
-    references = models.TextField(blank=True, null=True)
-    notes = models.TextField(blank=True, null=True)
-    published = models.BooleanField(default=False)
-    objects = models.Manager()
-    objects_inheritance = InheritanceManager()
-
-    def __str__(self):
-        if self.name != "" and hasattr(
-            self, "first_name"  # TODO RDF: remove first_name here
-        ):  # relation usually don´t have names
-            return "{}, {} (ID: {})".format(self.name, self.first_name, self.id)
-        elif self.name != "":
-            return "{} (ID: {})".format(self.name, self.id)
-        else:
-            return "(ID: {})".format(self.id)
-
-    def save(self, parse_dates=True, *args, **kwargs):
-        """
-        Adaption of the save() method of the class to automatically parse
-        string-dates into date objects.
-        """
-
-        if parse_dates:
-            # overwrite every field with None as default
-            start_date = None
-            start_start_date = None
-            start_end_date = None
-            end_date = None
-            end_start_date = None
-            end_end_date = None
-
-            # if some textual user input of a start date is there, parse it
-            if self.start_date_written:
-                start_date, start_start_date, start_end_date = DateParser.parse_date(
-                    self.start_date_written
-                )
-
-            # if some textual user input of an end date is there, parse it
-            if self.end_date_written:
-                end_date, end_start_date, end_end_date = DateParser.parse_date(
-                    self.end_date_written
-                )
-
-            self.start_date = start_date
-            self.start_start_date = start_start_date
-            self.start_end_date = start_end_date
-            self.end_date = end_date
-            self.end_start_date = end_start_date
-            self.end_end_date = end_end_date
-
-        if self.name:
-            self.name = unicodedata.normalize("NFC", self.name)
-
-        super(TempEntityClass, self).save(*args, **kwargs)
-
-        return self
-
-    # TODO RDF: I don't remember what this function was used for.
-    #  Investigate or delete it.
-    def get_child_entity(self):
-        for x in [x for x in apps.all_models["apis_entities"].values()]:
-            if x.__name__ in list(settings.APIS_ENTITIES.keys()):
-                try:
-                    my_ent = x.objects.get(id=self.id)
-                    return my_ent
-                    break
-                except ObjectDoesNotExist:
-                    pass
-        return None
-
     @classmethod
     def get_listview_url(self):
         entity = self.__name__.lower()
@@ -207,21 +97,6 @@ class TempEntityClass(AbstractEntity):
 
     def get_absolute_url(self):
         entity = self.__class__.__name__.lower()
-        # TODO RDF: Check if this should be removed or adapted
-        #
-        # if entity == "institution" or len(entity) < 10:
-        #     return reverse(
-        #         "apis_core:apis_entities:generic_entities_detail_view",
-        #         kwargs={"entity": entity, "pk": self.id},
-        #     )
-        # elif entity == "tempentityclass":
-        #     return self.get_child_entity().get_absolute_url()
-        # else:
-        #     return reverse(
-        #         "apis_core:apis_relations:generic_relations_detail_view",
-        #         kwargs={"entity": entity, "pk": self.id},
-        #     )
-        # __after_rdf_refactoring__
         return reverse(
             "apis_core:apis_entities:generic_entities_detail_view",
             kwargs={"entity": entity, "pk": self.id},
@@ -370,6 +245,103 @@ class TempEntityClass(AbstractEntity):
         from apis_core.apis_entities.serializers_generic import EntitySerializer
 
         return EntitySerializer(self).data
+
+
+@reversion.register(follow=["rootobject_ptr"])
+class TempEntityClass(AbstractEntity):
+    """
+    Base class to bind common attributes to many classes.
+
+    The common attributes are:
+    - written start and enddates,
+    - recognized start and enddates which are derived from the written dates
+    using RegEx,
+    - a review boolean field to mark an object as reviewed.
+    """
+
+    review = models.BooleanField(
+        default=False,
+        help_text="Should be set to True, if the "
+        "data record holds up quality "
+        "standards.",
+    )
+    start_date = models.DateField(blank=True, null=True)
+    start_start_date = models.DateField(blank=True, null=True)
+    start_end_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    end_start_date = models.DateField(blank=True, null=True)
+    end_end_date = models.DateField(blank=True, null=True)
+    start_date_written = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="Start",
+    )
+    end_date_written = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="End",
+    )
+    # TODO RDF: Make Text also a Subclass of RootObject
+    collection = models.ManyToManyField("apis_metainfo.Collection")
+    status = models.CharField(max_length=100)
+    references = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    published = models.BooleanField(default=False)
+    objects = models.Manager()
+    objects_inheritance = InheritanceManager()
+
+    def __str__(self):
+        if self.name != "" and hasattr(
+            self, "first_name"  # TODO RDF: remove first_name here
+        ):  # relation usually don´t have names
+            return "{}, {} (ID: {})".format(self.name, self.first_name, self.id)
+        elif self.name != "":
+            return "{} (ID: {})".format(self.name, self.id)
+        else:
+            return "(ID: {})".format(self.id)
+
+    def save(self, parse_dates=True, *args, **kwargs):
+        """
+        Adaption of the save() method of the class to automatically parse
+        string-dates into date objects.
+        """
+
+        if parse_dates:
+            # overwrite every field with None as default
+            start_date = None
+            start_start_date = None
+            start_end_date = None
+            end_date = None
+            end_start_date = None
+            end_end_date = None
+
+            # if some textual user input of a start date is there, parse it
+            if self.start_date_written:
+                start_date, start_start_date, start_end_date = DateParser.parse_date(
+                    self.start_date_written
+                )
+
+            # if some textual user input of an end date is there, parse it
+            if self.end_date_written:
+                end_date, end_start_date, end_end_date = DateParser.parse_date(
+                    self.end_date_written
+                )
+
+            self.start_date = start_date
+            self.start_start_date = start_start_date
+            self.start_end_date = start_end_date
+            self.end_date = end_date
+            self.end_start_date = end_start_date
+            self.end_end_date = end_end_date
+
+        if self.name:
+            self.name = unicodedata.normalize("NFC", self.name)
+
+        super(TempEntityClass, self).save(*args, **kwargs)
+
+        return self
 
 
 def prepare_fields_dict(fields_list, vocabs, vocabs_m2m):
