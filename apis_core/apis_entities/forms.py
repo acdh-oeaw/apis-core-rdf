@@ -178,10 +178,19 @@ def get_entities_form(entity):
                     crispy_main_fields, crispy_meta_fields
                 )
             )
-            self.fields["status"].required = False
-            self.fields["collection"].required = False
-            self.fields["start_date_written"].required = False
-            self.fields["end_date_written"].required = False
+            # backwards compatibility:
+            # those fields are part of TempEntityClass - this
+            # block can probably be removed when TempEntityClass
+            # is gone from apis_entities
+            # for now we at least check if they exist
+            if "status" in self.fields:
+                self.fields["status"].required = False
+            if "collection" in self.fields:
+                self.fields["collection"].required = False
+            if "start_date_written" in self.fields:
+                self.fields["start_date_written"].required = False
+            if "end_date_written" in self.fields:
+                self.fields["end_date_written"].required = False
 
             instance = getattr(self, "instance", None)
             if instance != None:
