@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.4.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.3.1...v0.4.0) (2023-09-27)
+
+
+### Features
+
+* replaces feather icons with material-symbols ([1d85d57](https://github.com/acdh-oeaw/apis-core-rdf/commit/1d85d57898594e8bd18b8f30be641a7cd0f97d72))
+
+
+### Bug Fixes
+
+* **api_routers:** allow to let the `id` field be writable in API ([71f85e6](https://github.com/acdh-oeaw/apis-core-rdf/commit/71f85e66ae077cdd2f527a73e40195c230ea9a4f)), closes [#296](https://github.com/acdh-oeaw/apis-core-rdf/issues/296)
+* **apis_entities:** fix reversion for tempentity classes ([cfb1771](https://github.com/acdh-oeaw/apis-core-rdf/commit/cfb17712fc03d36ff2f77d402797d0957da046d3))
+* **apis_entities:** only set field attributes for existing fields ([100de8c](https://github.com/acdh-oeaw/apis-core-rdf/commit/100de8c2b62fec99d021e14da8cf58764a4d594c)), closes [#298](https://github.com/acdh-oeaw/apis-core-rdf/issues/298)
+* **apis_metainfo:** register the rootobject with reversion ([b7217b9](https://github.com/acdh-oeaw/apis-core-rdf/commit/b7217b9888516b7daa4a69d0191004c627a72207))
+* **apis_relations:** fix entity lookup for multi URI entities ([0febd2a](https://github.com/acdh-oeaw/apis-core-rdf/commit/0febd2ab97e8ae0d673d3a13b890d46ee40c01a4)), closes [#221](https://github.com/acdh-oeaw/apis-core-rdf/issues/221)
+* **apis_relations:** fix follow of property reveversion registration ([6e4df12](https://github.com/acdh-oeaw/apis-core-rdf/commit/6e4df122688fe4446ced9a52254c68fbfabdbfed))
+* LegacyDateMixin get dates from DateParser datetimes ([78215e4](https://github.com/acdh-oeaw/apis-core-rdf/commit/78215e4ba0e69b1ad4b8b9dce7c5899ac18e6a70)), closes [#295](https://github.com/acdh-oeaw/apis-core-rdf/issues/295)
+* use empty dict as fallback for PROJECT_DEFAULT_MD ([8aa5394](https://github.com/acdh-oeaw/apis-core-rdf/commit/8aa53943a3202194f15302bf42b14aae27d9d053))
+
 ## [0.3.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.3.0...v0.3.1) (2023-09-13)
 
 
