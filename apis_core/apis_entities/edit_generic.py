@@ -112,7 +112,7 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             apis_bibsonomy = False
         object_revisions = Version.objects.get_for_object(self.instance)
         object_lod = Uri.objects.filter(root_object=self.instance)
-        object_labels = Label.objects.filter(temp_entity=self.instance)
+        object_labels = Label.objects.filter(temp_entity__id=self.instance.id)
         tb_label = LabelTableEdit(
             data=object_labels, prefix=self.entity.title()[:2] + "L-"
         )

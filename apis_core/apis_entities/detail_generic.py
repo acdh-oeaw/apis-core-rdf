@@ -72,7 +72,7 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
 
         # TODO RDF : Check / Adapt the following code to rdf architecture
         object_lod = Uri.objects.filter(root_object=self.instance)
-        object_labels = Label.objects.filter(temp_entity=self.instance)
+        object_labels = Label.objects.filter(temp_entity__id=self.instance.id)
         tb_label = LabelTableBase(data=object_labels, prefix=entity.title()[:2] + "L-")
         tb_label_open = request.GET.get("PL-page", None)
         side_bar.append(("Label", tb_label, "PersonLabel", tb_label_open))
