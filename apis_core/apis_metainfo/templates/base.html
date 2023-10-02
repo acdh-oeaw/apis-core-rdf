@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
 {% load apis_metainfo_extras %}
+{% load apiscore %}
+{% load apis_templatetags %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -19,18 +21,18 @@
     <!-- Start favicons -->
     <link rel="apple-touch-icon"
           sizes="180x180"
-          href="{{ SHARED_URL }}favicon/apple-touch-icon.png" />
+          href="{% shared_url %}favicon/apple-touch-icon.png" />
     <link rel="icon"
           type="image/png"
           sizes="32x32"
-          href="{{ SHARED_URL }}favicon/favicon-32x32.png" />
+          href="{% shared_url %}favicon/favicon-32x32.png" />
     <link rel="icon"
           type="image/png"
           sizes="16x16"
-          href="{{ SHARED_URL }}favicon/favicon-16x16.png" />
-    <link rel="manifest" href="{{ SHARED_URL }}favicon/manifest.json" />
+          href="{% shared_url %}favicon/favicon-16x16.png" />
+    <link rel="manifest" href="{% shared_url %}favicon/manifest.json" />
     <link rel="mask-icon"
-          href="{{ SHARED_URL }}favicon/safari-pinned-tab.svg"
+          href="{% shared_url %}favicon/safari-pinned-tab.svg"
           color="#00aba9" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
           rel="stylesheet" />
@@ -49,7 +51,7 @@
           rel="stylesheet" />
     <link rel="stylesheet" href="{{ PROJECT_CSS }}?rnd=1" rel="stylesheet" />
     <link rel="stylesheet"
-          href="{{ SHARED_URL }}apis/libraries/scroll-to-top/css/ap-scroll-top.min.css" />
+          href="{% shared_url %}apis/libraries/scroll-to-top/css/ap-scroll-top.min.css" />
 
     {% block scriptHeader %}{% endblock %}
 
@@ -103,12 +105,11 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                       {% block entities-menu-items %}
+                        {% entities_list_links as entities_links %}
                         {% for ent in entities_links %}
                           <a class="dropdown-item"
                              href="{% url 'apis:apis_entities:generic_entities_list' ent.0 %}">{{ ent.1 }}</a>
                         {% endfor %}
-                        <a class="dropdown-item"
-                           href="{% url 'apis:apis_metainfo:uri_browse' %}">URIs</a>
                       {% endblock entities-menu-items %}
 
                     </div>
@@ -238,7 +239,7 @@
       {% include "partials/bootstrap4_js.html" %}
       <script type="text/javascript"
               src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-      <script src="{{ SHARED_URL }}apis/libraries/scroll-to-top/js/ap-scroll-top.min.js"></script>
+      <script src="{% shared_url %}apis/libraries/scroll-to-top/js/ap-scroll-top.min.js"></script>
     {% endblock %}
 
     {% block scripts2 %}
