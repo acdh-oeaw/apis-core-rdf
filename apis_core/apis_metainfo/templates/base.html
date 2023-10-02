@@ -101,12 +101,16 @@
                       <span class="caret" />
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      {% for ent in entities_links %}
+
+                      {% block entities-menu-items %}
+                        {% for ent in entities_links %}
+                          <a class="dropdown-item"
+                             href="{% url 'apis:apis_entities:generic_entities_list' ent.0 %}">{{ ent.1 }}</a>
+                        {% endfor %}
                         <a class="dropdown-item"
-                           href="{% url 'apis:apis_entities:generic_entities_list' ent.0 %}">{{ ent.1 }}</a>
-                      {% endfor %}
-                      <a class="dropdown-item"
-                         href="{% url 'apis:apis_metainfo:uri_browse' %}">URIs</a>
+                           href="{% url 'apis:apis_metainfo:uri_browse' %}">URIs</a>
+                      {% endblock entities-menu-items %}
+
                     </div>
                   </li>
                   <li class="nav-item dropdown">
@@ -119,10 +123,14 @@
                       <span class="caret" />
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      {% for ent in relations_list %}
-                        <a class="dropdown-item"
-                           href="{% url 'apis:apis_relations:generic_relations_list' ent %}">{{ ent|title }}</a>
-                      {% endfor %}
+
+                      {% block relations-menu-items %}
+                        {% for ent in relations_list %}
+                          <a class="dropdown-item"
+                             href="{% url 'apis:apis_relations:generic_relations_list' ent %}">{{ ent|title }}</a>
+                        {% endfor %}
+                      {% endblock relations-menu-items %}
+
                     </div>
                   </li>
                 {% endblock main-menu %}
