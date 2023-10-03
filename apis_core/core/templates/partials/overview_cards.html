@@ -1,0 +1,24 @@
+{% load apis_templatetags %}
+{% load apiscore %}
+{% entities as entities %}
+<div class="container">
+  <div class="row">
+    {% for entity in entities %}
+
+      {% if forloop.counter|divisibleby:"3" %}
+      </div>
+      <div class="row">
+      {% else %}
+        <div class="col">
+          <a href="{{ entity.get_listview_url }}" class="text-body">
+            <div class="card mb-2">
+              <div class="card-header">{{ entity | contenttype }}</div>
+              <div class="card-body">{{ entity | count }}</div>
+            </div>
+          </a>
+        </div>
+      {% endif %}
+
+    {% endfor %}
+  </div>
+</div>

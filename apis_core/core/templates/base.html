@@ -192,7 +192,9 @@
           </div>
         {% endif %}
 
-        {% block content %}{% endblock %}
+        {% block content %}
+          {% include "partials/overview_cards.html" %}
+        {% endblock %}
 
       </div>
       <!-- End main content block -->
