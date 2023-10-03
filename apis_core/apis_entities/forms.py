@@ -225,12 +225,18 @@ def get_entities_form(entity):
 
         def save(self, *args, **kwargs):
             obj = super(GenericEntitiesForm, self).save(*args, **kwargs)
-            if obj.collection.all().count() == 0:
-                col_name = getattr(
-                    settings, "APIS_DEFAULT_COLLECTION", "manually created entity"
-                )
-                col, created = Collection.objects.get_or_create(name=col_name)
-                obj.collection.add(col)
+
+            # backwards compatibility
+            # collection is a field of TempEntityClass - this block
+            # can be removed when TempEntityClass is gone from apis_entities
+            # for now we at least check if the attribute exist
+            if hasattr(obj, "collection"):
+                if obj.collection.all().count() == 0:
+                    col_name = getattr(
+                        settings, "APIS_DEFAULT_COLLECTION", "manually created entity"
+                    )
+                    col, created = Collection.objects.get_or_create(name=col_name)
+                    obj.collection.add(col)
             return obj
 
     return GenericEntitiesForm
