@@ -25,7 +25,6 @@ from apis_core.utils.utils import (
 from .filters import get_list_filter_of_entity
 from .forms import (
     GenericFilterFormHelper,
-    NetworkVizFilterForm,
     PersonResolveUriForm,
     GenericEntitiesStanbolForm,
 )
@@ -569,41 +568,6 @@ def resolve_ambigue_person(request):
         pers = form.save()
         return redirect(
             reverse("apis:apis_entities:person_edit", kwargs={"pk": pers.pk})
-        )
-
-
-############################################################################
-############################################################################
-#
-#   VisualizationViews
-#
-############################################################################
-############################################################################
-
-
-@user_passes_test(access_for_all_function)
-def birth_death_map(request):
-    return render(request, "apis:apis_entities/map_list.html")
-
-
-@user_passes_test(access_for_all_function)
-def pers_place_netw(request):
-    return render(request, "apis:apis_entities/network.html")
-
-
-@user_passes_test(access_for_all_function)
-def pers_inst_netw(request):
-    return render(request, "apis:apis_entities/network_institution.html")
-
-
-@user_passes_test(access_for_all_function)
-def generic_network_viz(request):
-    if request.method == "GET":
-        form = NetworkVizFilterForm()
-        return render(
-            request,
-            "apis:apis_entities/generic_network_visualization.html",
-            {"form": form},
         )
 
 
