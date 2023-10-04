@@ -98,10 +98,6 @@ urlpatterns = [
     #     views.resolve_ambigue_place,
     #     name="resolve_ambigue_place",
     # ),
-    path("maps/birthdeath/", views.birth_death_map, name="birth_death_map"),
-    path("networks/relation_place/", views.pers_place_netw, name="pers_place_netw"),
-    path("networks/relation_institution/", views.pers_inst_netw, name="pers_inst_netw"),
-    path("networks/generic/", views.generic_network_viz, name="generic_network_viz"),
     # TODO RDF: Check if this should be removed or adapted
     #    url(
     #        r'^compare/(?P<app>[a-z_]+)/(?P<kind>[a-z]+)/(?P<pk>\d+)$', ReversionCompareView.as_view()
