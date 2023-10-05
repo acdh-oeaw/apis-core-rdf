@@ -15,6 +15,7 @@ from django.urls import reverse
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
 from apis_core.utils import DateParser, caching, settings as apis_settings
+from apis_core.utils.settings import get_entity_settings_by_modelname
 from .fields import ListSelect2, Select2Multiple
 
 
@@ -156,17 +157,12 @@ def get_entities_form(entity):
                 :param entity_name: string representation of an entity name
                 :return: a list of strings
                 """
-                entity_settings = getattr(settings, "APIS_ENTITIES", None)
+                entity_settings = get_entity_settings_by_modelname(entity_name)
+                form_order = entity_settings.get("form_order", [])
 
-                if entity_settings is not None:
-                    try:
-                        form_order = entity_settings[entity_name].get("form_order", [])
-                    except KeyError as e:
-                        form_order = []
-
-                    if len(form_order) > 0:
-                        remaining = set(field_names) - set(form_order)
-                        field_names = form_order + list(remaining)
+                if len(form_order) > 0:
+                    remaining = set(field_names) - set(form_order)
+                    field_names = form_order + list(remaining)
 
                 return field_names
 
