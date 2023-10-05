@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.5.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.4.0...v0.5.0) (2023-10-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_metainfo:** drop `Source` model
+* drop apis module
+
+### Features
+
+* cleanup the default entity detail and edit view ([8011894](https://github.com/acdh-oeaw/apis-core-rdf/commit/80118942af1b6c3603561f3f0e10cd0837fb6df5))
+* introduce new templatetags ([0ce7df4](https://github.com/acdh-oeaw/apis-core-rdf/commit/0ce7df4e34efc31b5b3c80374b70889ffbe7938e)), closes [#293](https://github.com/acdh-oeaw/apis-core-rdf/issues/293)
+* put main-menu submenu items in separate blocks ([45e031e](https://github.com/acdh-oeaw/apis-core-rdf/commit/45e031e72efa34362c5bff01830c8f2bb6aed6b4)), closes [#306](https://github.com/acdh-oeaw/apis-core-rdf/issues/306)
+
+
+### Bug Fixes
+
+* allow overriding the entity form ([f56ef89](https://github.com/acdh-oeaw/apis-core-rdf/commit/f56ef89a571c1eafdbd5b7d09034735f8d30af2e)), closes [#238](https://github.com/acdh-oeaw/apis-core-rdf/issues/238)
+* **apis_entities:** only set collection if the attribute exists ([e7be0ec](https://github.com/acdh-oeaw/apis-core-rdf/commit/e7be0ecd3727ecc8db461e1e1636412bfef2ba48)), closes [#313](https://github.com/acdh-oeaw/apis-core-rdf/issues/313)
+* build docs without apis module ([b44a706](https://github.com/acdh-oeaw/apis-core-rdf/commit/b44a706e16129b19a463e308619c14a59a42bf7b))
+* get rid of text model remains ([8a90be2](https://github.com/acdh-oeaw/apis-core-rdf/commit/8a90be2bf2a6ffcd5ffd6c7af8530cfac9618eb0))
+* workaround for entities not inheriting from TempEntityClass ([9ba5778](https://github.com/acdh-oeaw/apis-core-rdf/commit/9ba5778dd3762d9da834cdad277e9f268ac4f17a))
+
+
+### Code Refactoring
+
+* **apis_metainfo:** drop `Source` model ([e877213](https://github.com/acdh-oeaw/apis-core-rdf/commit/e877213bb431666f9a0cf826433d5196abbfaeb7)), closes [#227](https://github.com/acdh-oeaw/apis-core-rdf/issues/227)
+* drop apis module ([cd16eb1](https://github.com/acdh-oeaw/apis-core-rdf/commit/cd16eb19006f1f6a0d2477e32da424026b0a8edb)), closes [#222](https://github.com/acdh-oeaw/apis-core-rdf/issues/222)
+
 ## [0.4.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.3.1...v0.4.0) (2023-09-27)
 
 
