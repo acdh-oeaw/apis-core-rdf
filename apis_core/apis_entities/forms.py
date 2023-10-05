@@ -14,7 +14,7 @@ from django.urls import reverse
 
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import TextType
-from apis_core.utils import DateParser, caching
+from apis_core.utils import DateParser, caching, settings as apis_settings
 from .fields import ListSelect2, Select2Multiple
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
@@ -41,6 +41,9 @@ def get_entities_form(entity):
     :param entity: entity name as String
     :return: GenericEntitiesForm class
     """
+
+    if form := apis_settings.get_entity_settings_by_modelname(entity).get("form"):
+        return form
 
     class GenericEntitiesForm(forms.ModelForm):
         class Meta:

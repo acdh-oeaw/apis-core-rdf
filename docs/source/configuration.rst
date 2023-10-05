@@ -198,6 +198,7 @@ The example above is the default setting of the Place entity.
 allows to merge several entities in one target entity at once.
 ``search`` is an array and sets the fields that the search field searches.
 ``form_order`` defines the order of the fields in the metadata form of the respective entity.
+``form`` allows you to set a custom form for the entity, instead of the default `apis_entities.forms.GenericEntityForm`
 ``table_fields`` sets the default columns to show in the list views.
 ``additional_cols`` allows to set the columns that user can add to the result view.
 ``relations_per_page`` allows to set the number of relations listed before pagination begins
