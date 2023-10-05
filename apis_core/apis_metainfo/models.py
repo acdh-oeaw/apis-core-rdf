@@ -54,7 +54,11 @@ class RootObject(models.Model):
     # triples where the subject's or object's contenttype must be respected (e.g. get all triples
     # where the subject is a Person)
     self_contenttype = models.ForeignKey(
-        ContentType, on_delete=models.deletion.CASCADE, null=True, blank=True
+        ContentType,
+        on_delete=models.deletion.CASCADE,
+        null=True,
+        blank=True,
+        editable=False,
     )
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
