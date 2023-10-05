@@ -19,6 +19,7 @@ from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.utils import caching
 from apis_core.utils.caching import get_autocomplete_property_choices
+from apis_core.utils.settings import get_entity_settings_by_modelname
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
@@ -130,6 +131,11 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         ent_model = caching.get_ontology_class_of_name(ac_type)
         ent_model_name = ent_model.__name__
 
+        model_fields = ent_model._meta.get_fields()
+        default_search_fields = [
+            field.name for field in model_fields if not field.is_relation
+        ]
+
         # inspect user search query
         q3 = None
         if self.q.startswith("http"):
@@ -160,7 +166,9 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                 q = q.strip()
             arg_list = [
                 Q(**{x + search_type: q})
-                for x in settings.APIS_ENTITIES[ent_model_name]["search"]
+                for x in get_entity_settings_by_modelname(ent_model_name).get(
+                    "search", default_search_fields
+                )
             ]
             res = ent_model.objects.filter(reduce(operator.or_, arg_list)).distinct()
             if q3:
@@ -446,7 +454,9 @@ class GenericNetworkEntitiesAutocomplete(autocomplete.Select2ListView):
             try:
                 arg_list = [
                     Q(**{x + "__icontains": q})
-                    for x in settings.APIS_ENTITIES[entity.title()]["search"]
+                    for x in get_entity_settings_by_modelname(entity.title()).get(
+                        "search", []
+                    )
                 ]
             except KeyError:
                 arg_list = [Q(**{x + "__icontains": q}) for x in ["name"]]

@@ -22,6 +22,7 @@ from apis_core.utils.utils import (
     access_for_all_function,
     ENTITIES_DEFAULT_COLS,
 )
+from apis_core.utils.settings import get_entity_settings_by_modelname
 from .filters import get_list_filter_of_entity
 from .forms import (
     GenericFilterFormHelper,
@@ -136,9 +137,8 @@ class GenericListViewNew(
             "columns"
         )  # populates "Select additional columns" dropdown
         default_cols = []  # get set to "name" in get_entities_table when empty
-        if hasattr(settings, "APIS_ENTITIES"):
-            class_settings = settings.APIS_ENTITIES.get(class_name, {})
-            default_cols = class_settings.get("table_fields", [])
+        entity_settings = get_entity_settings_by_modelname(class_name)
+        default_cols = entity_settings.get("table_fields", [])
         default_cols = default_cols + selected_cols
 
         self.table_class = get_entities_table(
@@ -229,9 +229,8 @@ class GenericListViewNew(
                 context = dict(context, **chartdata)
 
         toggleable_cols = []
-        if hasattr(settings, "APIS_ENTITIES"):
-            entity_settings = settings.APIS_ENTITIES.get(class_name, {})
-            toggleable_cols = entity_settings.get("additional_cols", [])
+        entity_settings = get_entity_settings_by_modelname(class_name)
+        toggleable_cols = entity_settings.get("additional_cols", [])
 
         # TODO kk spelling of this dict key should get fixed throughout
         #  (togglable_colums -> toggleable_columns)

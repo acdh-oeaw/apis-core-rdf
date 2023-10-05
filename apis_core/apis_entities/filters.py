@@ -10,6 +10,7 @@ from django.db.models import Q
 from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.utils import caching
+from apis_core.utils.settings import get_entity_settings_by_modelname
 
 # The following classes define the filter sets respective to their models.
 # Also by what was enabled in the global settings file (or disabled by not explicitley enabling it).
@@ -103,11 +104,9 @@ class GenericEntityListFilter(django_filters.FilterSet):
             "status",
             "references",
         ]
-        list_filters = []
-        if settings.APIS_ENTITIES:
-            entity_settings = settings.APIS_ENTITIES.get(self.entity_class.__name__, {})
-            list_filters = entity_settings.get("list_filters", {})
-            list_filters_exclude.extend(entity_settings.get("list_filters_exclude", []))
+        entity_settings = get_entity_settings_by_modelname(self.entity_class.__name__)
+        list_filters = entity_settings.get("list_filters", {})
+        list_filters_exclude.extend(entity_settings.get("list_filters_exclude", []))
 
         # The `list_filters` setting of an entity defines both the order of filters and it allows to define additional filters
         # A filter is defined by a name and a dict describing its attributes
