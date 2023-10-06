@@ -20,34 +20,3 @@ urlpatterns = [
     # path(r'getrelatedplaces/', api_views.GetRelatedPlaces.as_view(), name="GetRelatedPlaces"),
     # path(r'lifepath/<int:pk>/', api_views.LifePathViewset.as_view(), name="Lifepathviewset")
 ]
-
-if (
-    "deep learning" in getattr(settings, "APIS_COMPONENTS", [])
-    and "apis_highlighter" in settings.INSTALLED_APPS
-):
-    from apis_highlighter.api_views import TestDLModel
-
-    urlpatterns.append(
-        path("nlp_model/", TestDLModel.as_view(), name="TestDLModel"),
-    )
-
-if "apis_highlighter" in settings.INSTALLED_APPS:
-    from apis_highlighter.api_views import (
-        AnnotatorAgreementView,
-        ShowOverlappingHighlights,
-    )
-
-    urlpatterns.extend(
-        [
-            path(
-                "annotatoragreement/",
-                AnnotatorAgreementView.as_view(),
-                name="AnnotatorAgreementView",
-            ),
-            path(
-                "overlappinghighlights/",
-                ShowOverlappingHighlights.as_view(),
-                name="ShowOverlappingHighlights",
-            ),
-        ]
-    )

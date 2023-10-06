@@ -176,7 +176,6 @@ class RelationEntitySerializer(serializers.Serializer):
     start_date_written = serializers.DateField()
     end_date_written = serializers.DateField()
     relation_type = serializers.SerializerMethodField(method_name="add_relation_label")
-    annotation = serializers.SerializerMethodField(method_name="add_annotations")
     revisions = serializers.SerializerMethodField(method_name="add_revisions")
 
     def add_revisions(self, obj):
@@ -196,44 +195,6 @@ class RelationEntitySerializer(serializers.Serializer):
                 }
             )
         return res
-
-    def add_annotations(self, obj):
-        if "apis_highlighter" in settings.INSTALLED_APPS:
-            res = []
-            offs = 50
-            for an in obj.annotation_set.all():
-                r1 = dict()
-                r1["id"] = an.pk
-                r1["user"] = an.user_added.username
-                text = an.text.text
-                if offs < an.start:
-                    s = an.start - offs
-                else:
-                    s = 0
-                if offs + an.end < len(text):
-                    e = an.end + offs
-                else:
-                    e = len(text)
-                r1["annotation"] = text[an.start : an.end]
-                r1["text"] = text[s:e]
-                r1["text"] = "{}<annotation>{}</annotation>{}".format(
-                    r1["text"][: an.start - s],
-                    r1["text"][an.start - s : an.end - s],
-                    r1["text"][an.end - s :],
-                )
-                r1["text"] = r1["text"].replace("\r\n", "<br/>")
-                r1["text"] = r1["text"].replace("\r", "<br/>")
-                r1["text"] = r1["text"].replace("\n", "<br/>")
-
-                r1["string_offset"] = "{}-{}".format(an.start, an.end)
-                # r1["text_url"] = self.context["request"].build_absolute_uri(
-                #        reverse("apis_core:apis_api:text-detail", kwargs={"pk": an.text_id})
-                # )
-                r1[
-                    "text_url"
-                ] = f"{base_uri}{reverse('apis_core:apis_api:text-detail', kwargs={'pk': an.text_id})}"
-                res.append(r1)
-            return res
 
     def add_entity(self, obj):
         return EntitySerializer(

@@ -17,9 +17,6 @@ from apis_core.apis_vocabularies.models import TextType
 from apis_core.utils import DateParser, caching, settings as apis_settings
 from .fields import ListSelect2, Select2Multiple
 
-if "apis_highlighter" in settings.INSTALLED_APPS:
-    from apis_highlighter.models import AnnotationProject
-
 
 class SearchForm(forms.Form):
     search = forms.CharField(label="Search")

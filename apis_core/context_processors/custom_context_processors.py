@@ -33,10 +33,6 @@ def list_apis_settings(request):
         "request": request,
         "basetemplate": getattr(settings, "BASE_TEMPLATE", "base.html"),
     }
-    if "apis_highlighter" in settings.INSTALLED_APPS:
-        res["highlighter_active"] = True
-    else:
-        res["highlighter_active"] = False
     if "apis_bibsonomy" in settings.INSTALLED_APPS:
         res["bibsonomy_active"] = True
     else:

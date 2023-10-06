@@ -41,9 +41,7 @@ class BaseRelationManager(models.Manager):
         )
 
     def filter_for_user(self):
-        if hasattr(
-            settings, "APIS_SHOW_ONLY_PUBLISHED"
-        ) or "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
+        if hasattr(settings, "APIS_SHOW_ONLY_PUBLISHED"):
             return self.get_queryset().filter_for_user()
         else:
             return self.get_queryset()

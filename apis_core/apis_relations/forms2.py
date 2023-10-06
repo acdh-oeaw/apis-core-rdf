@@ -29,9 +29,6 @@ from apis_core.apis_entities.autocomplete3 import (
 
 # from dal.autocomplete import ListSelect2
 
-if "apis_highlighter" in settings.INSTALLED_APPS:
-    pass
-
 
 class GenericTripleForm(forms.ModelForm):
     # TODO RDF : Add Notes and references
