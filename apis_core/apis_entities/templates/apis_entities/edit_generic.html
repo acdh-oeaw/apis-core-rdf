@@ -4,13 +4,6 @@
 {% block scriptHeader %}
   {{ block.super }}
 
-  {% if highlighter_active %}
-    <link rel="stylesheet"
-          href="{% static 'apis_highlighter/apis_highlighter.css' %}" />
-    <script type="text/javascript"
-            src="{% static 'apis_highlighter/apis_highlighter.js' %}?arbitrary_tag_to_avoid_cache"></script>
-  {% endif %}
-
   {% if apis_bibsonomy %}
     {% include 'apis_bibsonomy/apis_bibsonomy_include.html' %}
   {% endif %}
@@ -126,7 +119,6 @@
 
                     </div>
                   {% endblock editbuttons %}
-
                 </form>
               </div>
 
@@ -205,20 +197,6 @@
         {% endif %}
 
         {% if object_texts %}
-
-          {% if user.is_superuser %}
-            {% if form_ann_agreement %}
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="card card-default">
-                    {% crispy form_ann_agreement form_ann_agreement.helper %}
-                    <div id="ann_agreement_tables"></div>
-                  </div>
-                </div>
-              </div>
-            {% endif %}
-          {% endif %}
-
           <div class="row">
             <div class="col-md-12">
 
@@ -426,19 +404,6 @@
         GetFormAjax("{{obj.2}}");
         //unbind_ajax_forms();
         {% endfor %}
-{% if highlighter_active %}
-    init_apis_highlighter(1, {{instance.pk}});
-    if (typeof $.ApisHigh.vars == 'undefined') {
-        $.ApisHigh.vars = {}; };
-        $.ApisHigh.vars.entity_type = '{{entity_type}}';
-        $.ApisHigh.vars.instance_pk = '{{instance.pk}}';
-        $.ApisHigh.vars.urls = {};
-        $.ApisHigh.vars.urls.get_form_ajax = "{% url 'apis:apis_relations:get_form_ajax' %}";
-        $.ApisHigh.vars.urls.annotatoragreementview = "{% url 'apis:apis_api2:AnnotatorAgreementView' %}";
-        $.ApisHigh.vars.urls.showoverlappinghighlights = "{% url 'apis:apis_api2:ShowOverlappingHighlights' %}";
-      activate_context_menu_highlighter();
-      $('body').on("click", 'mark.highlight', highlight_detail);
-    {% endif %}
  };
 function deactivate_editing(){
     $('.reldelete').addClass("disabled");

@@ -31,11 +31,6 @@ from .apis_relations.models import Triple, Property
 from apis_core.utils import caching
 from apis_core.core.mixins import ListViewObjectFilterMixin
 
-if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
-    from apis_highlighter.highlighter import highlight_text_new
-    from apis_highlighter.models import Annotation
-
-
 try:
     MAX_AGE = settings.MAX_AGE
 except AttributeError:
@@ -200,18 +195,6 @@ class RelatedTripleSerializer(ApisBaseSerializer):
             raise Exception(
                 "Did not find entity in triple where it is supposed to be. Something must be wrong with the code."
             )
-
-
-if "apis_highlighter" in getattr(settings, "INSTALLED_APPS"):
-
-    class AnnotationSerializer(serializers.ModelSerializer):
-        related_object = VocabsBaseSerializer(
-            source="get_related_entity", read_only=True, many=False
-        )
-
-        class Meta:
-            model = Annotation
-            fields = ["id", "start", "end", "related_object"]
 
 
 def generic_serializer_creation_factory():

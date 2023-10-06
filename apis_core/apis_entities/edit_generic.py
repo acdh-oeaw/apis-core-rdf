@@ -30,9 +30,6 @@ from apis_core.utils import helpers
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityMixin, EntityInstanceMixin
 
-if "apis_highlighter" in settings.INSTALLED_APPS:
-    from apis_highlighter.forms import SelectAnnotatorAgreement
-
 
 @method_decorator(login_required, name="dispatch")
 class GenericEntitiesEditView(EntityInstanceMixin, View):
@@ -89,10 +86,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             )
         form = get_entities_form(self.entity.title())
         form = form(instance=self.instance)
-        if "apis_highlighter" in settings.INSTALLED_APPS:
-            form_ann_agreement = SelectAnnotatorAgreement()
-        else:
-            form_ann_agreement = False
         if "apis_bibsonomy" in settings.INSTALLED_APPS:
             apis_bibsonomy = getattr(settings, "APIS_BIBSONOMY_FIELDS", [])
             apis_bibsonomy_texts = getattr(settings, "APIS_BIBSONOMY_TEXTS", False)
@@ -127,7 +120,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             "right_card": side_bar,
             "object_revisions": object_revisions,
             "object_lod": object_lod,
-            "form_ann_agreement": form_ann_agreement,
             "apis_bibsonomy": apis_bibsonomy,
         }
         form_merge_with = GenericEntitiesStanbolForm(self.entity, ent_merge_pk=self.pk)

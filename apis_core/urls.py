@@ -45,23 +45,6 @@ for additional_serializer in load_additional_serializers():
         additional_serializer.name,
     )
 
-if "apis_highlighter" in settings.INSTALLED_APPS:
-    from apis_highlighter.api_views import (
-        HighlighterProjectViewSet,
-        HighlighterTextHighViewSet,
-        HighlighterMenuEntryViewSet,
-        HighlighterAnnotationViewSet,
-    )
-
-    router.register(r"HLProjects", HighlighterProjectViewSet)
-    router.register(r"HLTextHigh", HighlighterTextHighViewSet)
-    router.register(r"HLMenuEntry", HighlighterMenuEntryViewSet)
-    # router.register(
-    #    r"HLTextHighlighter", HighlighterHighlightTextViewSet, "HLTextHighlighter"
-    # )
-    # router.register(r"HLVocabularyAPI", HighlighterVocabularyAPIViewSet)
-    router.register(r"HLAnnotation", HighlighterAnnotationViewSet)
-
 # router.register(r"users", UserViewSet)
 # router.register(r"GeoJsonPlace", PlaceGeoJsonViewSet, "PlaceGeoJson")
 # router.register(r"NetJson", NetJsonViewSet, "NetJson")
@@ -186,11 +169,6 @@ urlpatterns = [
     # url(r'^docs/', include('sphinxdoc.urls')),
     # url(r'^accounts/', include('registration.backends.simple.urls')),
 ]
-
-if "apis_highlighter" in settings.INSTALLED_APPS:
-    urlpatterns.append(
-        path("highlighter/", include("apis_highlighter.urls", namespace="highlighter"))
-    )
 
 if "apis_fulltext_download" in settings.INSTALLED_APPS:
     urlpatterns.append(

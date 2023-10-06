@@ -30,10 +30,6 @@ from .forms import (
 )
 from .tables import get_entities_table
 
-if "apis_highlighter" in settings.INSTALLED_APPS:
-    from apis_highlighter.forms import SelectAnnotationProject
-    from apis_highlighter.highlighter import highlight_text_new
-
 if "charts" in settings.INSTALLED_APPS:
     from charts.models import ChartConfig
     from charts.views import create_payload

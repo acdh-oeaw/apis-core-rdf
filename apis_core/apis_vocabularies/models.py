@@ -48,10 +48,6 @@ class VocabsBaseClass(RootObject):
     vocab_name = models.ForeignKey(
         VocabNames, blank=True, null=True, on_delete=models.SET_NULL
     )
-    if "apis_highlighter" in settings.INSTALLED_APPS:
-        from apis_highlighter.models import Annotation
-
-        annotation_set = GenericRelation(Annotation)
 
     def __str__(self):
         return self.label

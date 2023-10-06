@@ -41,9 +41,6 @@ else:
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
-if "apis_highlighter" in settings.INSTALLED_APPS:
-    from apis_highlighter.models import Annotation
-
 
 @reversion.register()
 class RootObject(models.Model):
