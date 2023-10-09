@@ -7,4 +7,4 @@ register = template.Library()
 
 @register.simple_tag
 def shared_url():
-    return getattr(settings, "SHARED_URL", "/static")
+    return getattr(settings, "SHARED_URL", "/static/")
