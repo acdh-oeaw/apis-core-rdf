@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import select_template
 from django.views import View
 from django_tables2 import RequestConfig
+from django.forms.models import model_to_dict
 
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
@@ -110,43 +111,11 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
         except AttributeError:
             no_merge_labels = []
 
-        # TODO : Hackish work-around, do this more properly later
-        def get_relevant_fields(instance):
-
-            list_key_val_pairs = []
-            attr_to_exclude = [
-                "id",
-                "name",
-                "self_contenttype_id",
-                "start_start_date",
-                "start_end_date",
-                "end_start_date",
-                "end_end_date",
-                "start_date_written",
-                "end_date_written",
-                "status",
-                "source_id",
-                "references",
-                "notes",
-                "published",
-                "references",
-                "collection",
-                "review",
-                "text",
-            ]
-            for f in instance._meta.get_fields():
-                if hasattr(f, "attname"):
-                    if (
-                        not f.attname.endswith("_ptr_id")
-                        and f.attname not in attr_to_exclude
-                    ):
-                        list_key_val_pairs.append(
-                            (f.attname, getattr(instance, f.attname))
-                        )
-
-            return list_key_val_pairs
-
-        relvant_fields = get_relevant_fields(self.instance)
+        relevant_fields = []
+        for field in model_to_dict(self.instance).keys():
+            relevant_fields.append(
+                (self.instance._meta.get_field(field), getattr(self.instance, field))
+            )
 
         return HttpResponse(
             template.render(
@@ -154,7 +123,7 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
                 context={
                     "entity_type": entity,
                     "object": self.instance,
-                    "relvant_fields": relvant_fields,
+                    "relevant_fields": relevant_fields,
                     "right_card": side_bar,
                     "no_merge_labels": no_merge_labels,
                     "object_lables": object_labels,
