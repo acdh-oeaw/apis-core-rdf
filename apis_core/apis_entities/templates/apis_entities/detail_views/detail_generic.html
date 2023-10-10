@@ -217,14 +217,8 @@
                     {% for obj in right_card %}
 
                       {% if obj.1.data|length > 0 %}
-                        <div class="card card-default">
-                          <div class="card-heading">
-                            <h4 class="card-title">{{ obj.0 }}</h4>
-                          </div>
-                          <div class="card-body">
-                            <div id="tab_{{ obj.2 }}" class="card-body">{% render_table obj.1 %}</div>
-                          </div>
-                        </div>
+                        <h4>{{ obj.0 }}</h4>
+                        <div id="tab_{{ obj.2 }}">{% render_table obj.1 %}</div>
                       {% endif %}
 
                     {% endfor %}
