@@ -114,11 +114,11 @@
                       <th>Titel</th>
                       <td>{{ object.name }}</td>
                     </tr>
-                    {% for x in relvant_fields %}
+                    {% for field, value in relevant_fields %}
                       <tr>
-                        <th>{{ x.0 }}</th>
+                        <th>{{ field.verbose_name }}</th>
                         <td>
-                          <small>{{ x.1 }}</small>
+                          <small>{{ value }}</small>
                         </td>
                       </tr>
                     {% endfor %}
