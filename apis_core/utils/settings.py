@@ -32,3 +32,7 @@ def get_entity_settings_by_modelname(entity: str = None) -> dict:
         # lookup entity settings by name and by capitalized name
         return apis_entities.get(entity, apis_entities.get(entity.capitalize(), {}))
     return apis_entities
+
+
+def list_links_to_edit() -> bool:
+    return getattr(settings, "APIS_LIST_LINKS_TO_EDIT", False)

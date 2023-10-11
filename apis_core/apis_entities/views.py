@@ -45,16 +45,12 @@ def set_session_variables(request):
     ann_proj_pk = request.GET.get("project", None)
     types = request.GET.getlist("types", None)
     users_show = request.GET.getlist("users_show", None)
-    edit_views = request.GET.get("edit_views", False)
     if types:
         request.session["entity_types_highlighter"] = types
     if users_show:
         request.session["users_show_highlighter"] = users_show
     if ann_proj_pk:
         request.session["annotation_project"] = ann_proj_pk
-    if edit_views:
-        if edit_views != "false":
-            request.session["edit_views"] = True
     return request
 
 
@@ -120,10 +116,6 @@ class GenericListViewNew(
         class_name = model.__name__
 
         session = getattr(self.request, "session", False)
-        if session:
-            edit_v = self.request.session.get("edit_views", False)
-        else:
-            edit_v = False
 
         selected_cols = self.request.GET.getlist(
             "columns"
@@ -133,9 +125,7 @@ class GenericListViewNew(
         default_cols = entity_settings.get("table_fields", [])
         default_cols = default_cols + selected_cols
 
-        self.table_class = get_entities_table(
-            class_name, edit_v, default_cols=default_cols
-        )
+        self.table_class = get_entities_table(class_name, default_cols=default_cols)
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(
             self.request, paginate={"page": 1, "per_page": self.paginate_by}
