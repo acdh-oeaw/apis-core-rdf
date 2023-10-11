@@ -2,7 +2,6 @@
 {% load static %}
 {% load django_tables2 %}
 {% load apis_metainfo_extras %}
-{% load charts_extras %}
 {% load i18n %}
 {% load crispy_forms_field %}
 {% load crispy_forms_tags %}
@@ -360,8 +359,3 @@
 
 </div>
 {% endblock %}
-
-{% block scripts2 %}
-  {% load_highcharts_js %}
-  {% config_highcharts %}
-{% endblock scripts2 %}
