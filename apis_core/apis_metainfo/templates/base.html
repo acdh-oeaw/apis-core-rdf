@@ -126,10 +126,10 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                       {% block relations-menu-items %}
-                        {% for ent in relations_list %}
-                          <a class="dropdown-item"
-                             href="{% url 'apis:apis_relations:generic_relations_list' ent %}">{{ ent|title }}</a>
-                        {% endfor %}
+                        <a class="dropdown-item"
+                           href="{% url 'apis:apis_relations:generic_relations_list' "property" %}">Properties</a>
+                        <a class="dropdown-item"
+                           href="{% url 'apis:apis_relations:generic_relations_list' "triple" %}">Triples</a>
                       {% endblock relations-menu-items %}
 
                     </div>
