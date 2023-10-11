@@ -31,10 +31,6 @@ from .forms import (
 )
 from .tables import get_entities_table
 
-if "charts" in settings.INSTALLED_APPS:
-    from charts.models import ChartConfig
-    from charts.views import create_payload
-
 ###########################################################################
 ############################################################################
 #
@@ -204,25 +200,6 @@ class GenericListViewNew(
             context["create_view_link"] = model.get_createview_url()
         except AttributeError:
             context["create_view_link"] = None
-
-        if "charts" in settings.INSTALLED_APPS:
-            app_label = model._meta.app_label
-            filtered_objs = ChartConfig.objects.filter(
-                model_name=model.__name__.lower(), app_name=app_label
-            )
-            context["vis_list"] = filtered_objs
-            context["property_name"] = self.request.GET.get("property")
-            context["charttype"] = self.request.GET.get("charttype")
-            if context["charttype"] and context["property_name"]:
-                qs = self.get_queryset()
-                chartdata = create_payload(
-                    context["entity"],
-                    context["property_name"],
-                    context["charttype"],
-                    qs,
-                    app_label=app_label,
-                )
-                context = dict(context, **chartdata)
 
         toggleable_cols = []
         entity_settings = get_entity_settings_by_modelname(class_name)

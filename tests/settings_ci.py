@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     "django_tables2",
     "dal",
     "dal_select2",
-    "charts",
     # api
     "rest_framework",
     "rest_framework.authtoken",
