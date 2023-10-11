@@ -1,6 +1,7 @@
 import django_tables2 as tables
 from django.utils.safestring import mark_safe
 from django_tables2.utils import A
+from apis_core.utils.settings import list_links_to_edit
 
 from apis_core.apis_metainfo.tables import (
     generic_order_start_date_written,
@@ -11,7 +12,7 @@ from apis_core.apis_metainfo.tables import (
 from apis_core.utils import caching
 
 
-def get_entities_table(entity, edit_v, default_cols):
+def get_entities_table(entity, default_cols):
     if default_cols is None:
         default_cols = [
             "name",
@@ -31,7 +32,7 @@ def get_entities_table(entity, edit_v, default_cols):
         order_end_date_written = generic_order_end_date_written
         render_start_date_written = generic_render_start_date_written
         render_end_date_written = generic_render_end_date_written
-        if edit_v:
+        if list_links_to_edit():
             name = tables.LinkColumn(
                 "apis:apis_entities:generic_entities_edit_view",
                 args=[entity.lower(), A("pk")],
