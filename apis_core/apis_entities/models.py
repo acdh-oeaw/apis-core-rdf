@@ -216,20 +216,22 @@ class AbstractEntity(RootObject):
                 continue
             lt, created = LabelType.objects.get_or_create(name="Legacy name (merge)")
             col_list = list(self.collection.all())
-            for col2 in ent.collection.all():
-                if col2 not in col_list:
-                    self.collection.add(col2)
+            if hasattr(ent, "collection"):
+                for col2 in ent.collection.all():
+                    if col2 not in col_list:
+                        self.collection.add(col2)
             for f in ent._meta.local_many_to_many:
                 if not f.name.endswith("_set"):
                     sl = list(getattr(self, f.name).all())
                     for s in getattr(ent, f.name).all():
                         if s not in sl:
                             getattr(self, f.name).add(s)
-            Label.objects.create(label=str(ent), label_type=lt, temp_entity=self)
+            if isinstance(ent, TempEntityClass):
+                Label.objects.create(label=str(ent), label_type=lt, temp_entity=self)
+                for l in Label.objects.filter(temp_entity=ent):
+                    l.temp_entity = self
+                    l.save()
             Uri.objects.filter(root_object=ent).update(root_object=self)
-            for l in Label.objects.filter(temp_entity=ent):
-                l.temp_entity = self
-                l.save()
             TempTriple.objects.filter(obj__id=ent.id).update(obj=self)
             TempTriple.objects.filter(subj__id=ent.id).update(subj=self)
 
