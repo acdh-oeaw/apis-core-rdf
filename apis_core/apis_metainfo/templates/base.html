@@ -197,40 +197,47 @@
       <!-- End main content block -->
       <div class="d-flex footer-separator justify-content-center p-2"></div>
       <!-- Start site footer -->
-      <div id="wrapper-footer-full" class="fundament-default-footer">
-        <div class="d-flex flex-column container-fluid p-4"
-             id="footer-full-content"
-             tabindex="-1">
-          <div class="d-flex flex-column align-self-center justify-content-center">
-            <div class="d-flex flex-column">
-              <div class="align-self-center p-1">
-                <a href="https://www.oeaw.ac.at/acdh/">
-                  <img class="w-75"
-                       alt="ACDH website"
-                       src="https://fundament.acdh.oeaw.ac.at/common-assets/images/acdh_logo.svg" />
-                </a>
-              </div>
-              <div class="align-self-center w-50 p-1 text-center">
-                Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences
+
+      {% block footer %}
+        <div id="wrapper-footer-full" class="fundament-default-footer">
+          <div class="d-flex flex-column container-fluid p-4"
+               id="footer-full-content"
+               tabindex="-1">
+            <div class="d-flex flex-column align-self-center justify-content-center">
+              <div class="d-flex flex-column">
+                <div class="align-self-center p-1">
+                  <a href="https://www.oeaw.ac.at/acdh/">
+                    <img class="w-75"
+                         alt="ACDH website"
+                         src="https://fundament.acdh.oeaw.ac.at/common-assets/images/acdh_logo.svg" />
+                  </a>
+                </div>
+                <div class="align-self-center w-50 p-1 text-center">
+                  Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- Start imprint, project partners -->
-      <div id="wrapper-footer-secondary"
-           class="footer-imprint-bar p-2 text-center">
-        <a href="/imprint.html">Imprint | Impressum</a>
+      {% endblock footer %}
 
-        {% if user.is_authenticated %}
-          {% if DB_NAME %}
-            <div class="footer-imprint-bar">
-              <div>{{ DB_NAME }}</div>
-            </div>
+      {% block imprint %}
+        <!-- Start imprint, project partners -->
+        <div id="wrapper-footer-secondary"
+             class="footer-imprint-bar p-2 text-center">
+          <a href="/imprint.html">Imprint | Impressum</a>
+
+          {% if user.is_authenticated %}
+            {% if DB_NAME %}
+              <div class="footer-imprint-bar">
+                <div>{{ DB_NAME }}</div>
+              </div>
+            {% endif %}
           {% endif %}
-        {% endif %}
 
-      </div>
+        </div>
+      {% endblock imprint %}
+
       <!-- End imprint, project partners -->
       <!-- End site footer -->
     </div>
