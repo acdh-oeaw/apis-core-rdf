@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.6.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.5.0...v0.6.0) (2023-10-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop the charts dependency
+* if the GenericEntityListFilter was used with the `method` set to one of the included methods, the `method` attribute should now point to `apis_core.utils.filtermethods...`
+
+### Features
+
+* add Property to admin interface ([b11352d](https://github.com/acdh-oeaw/apis-core-rdf/commit/b11352dbfa29ce9f062b626c224a4f62829ffd4f))
+
+
+### Bug Fixes
+
+* add slash to `shared_url` templatetag ([ff47d2a](https://github.com/acdh-oeaw/apis-core-rdf/commit/ff47d2aadf75cfe6936e5cc3a9f37ad9101f1cb1))
+* fixes `merge_with` function expecting TempEntityClass ([e40ecb3](https://github.com/acdh-oeaw/apis-core-rdf/commit/e40ecb32d11ecbc6024173d5f40341a66b6741f2))
+* introduce APIS_LIST_LINKS_TO_EDIT variable ([8bc259c](https://github.com/acdh-oeaw/apis-core-rdf/commit/8bc259ca24f03da35ae659a84d38314dc5801a33))
+* migrate management commands from `apis-webpage` to `apis-rdf-core` ([09fac5e](https://github.com/acdh-oeaw/apis-core-rdf/commit/09fac5ee9f1bc20d21610326bfa3b74e42b63cf5))
+* put function call in separate document.ready function ([dd51f5b](https://github.com/acdh-oeaw/apis-core-rdf/commit/dd51f5b394de077c84eab22913d2db83534459af))
+* remove duplicate of `references` attribute in detail view ([a381b02](https://github.com/acdh-oeaw/apis-core-rdf/commit/a381b028cb25637dd638f11c03181a8a9c5dc238))
+* the contenttype of the rootobject should not be user editable ([872386e](https://github.com/acdh-oeaw/apis-core-rdf/commit/872386eb35640f1bf13b8716e5ac696422ffc970))
+
+
+### Documentation
+
+* reference `utils.filtermethods` in configuration ([8b6700d](https://github.com/acdh-oeaw/apis-core-rdf/commit/8b6700d497e42ce3682d063d7f8226c25f441652))
+
+
+### Code Refactoring
+
+* drop the charts dependency ([c963cd8](https://github.com/acdh-oeaw/apis-core-rdf/commit/c963cd83b7d4e5c32471da6f1d7cb73dbcfe19ff))
+* move filtermethods from apis_entities to utils ([5068b49](https://github.com/acdh-oeaw/apis-core-rdf/commit/5068b49633693be0d5054672fe9252b5ee5e0037)), closes [#152](https://github.com/acdh-oeaw/apis-core-rdf/issues/152)
+
 ## [0.5.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.4.0...v0.5.0) (2023-10-05)
 
 
