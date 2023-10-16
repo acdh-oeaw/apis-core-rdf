@@ -3,8 +3,8 @@
 
 import pathlib
 import logging
+import tomllib
 
-from yaml import safe_load
 from rdflib import Graph
 from typing import Tuple
 
@@ -24,7 +24,7 @@ def get_modelname_and_dict_from_uri(
     graph.parse(uri)
 
     settings_file = settings_file or rdf_object_mapping_file()
-    settings = safe_load(settings_file.read_text())
+    settings = tomllib.loads(settings_file.read_text())
     matching_definition = None
     for key, definition in settings.items():
         if set(definition_must_have_keys) <= set(definition.keys()):
