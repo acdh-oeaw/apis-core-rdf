@@ -17,7 +17,7 @@ def clean_uri_mapping_file() -> Path:
 
 
 def rdf_object_mapping_file() -> Path:
-    default = default_settings() / "RDF_default_settings.yml"
+    default = default_settings() / "RDF_default_settings.toml"
     mapping_file = getattr(settings, "APIS_RDF_YAML_SETTINGS", default)
     return Path(mapping_file)
 
