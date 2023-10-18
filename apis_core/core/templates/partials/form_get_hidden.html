@@ -1,0 +1,11 @@
+{# this template is meant to be used in forms #}
+{# it add exisiting GET parameters to the form as hidden input fields #}
+{# it requires the request as argument `request` as well as an `exclude_fields` list #}
+{# this should be the list of fields of the form itself #}
+{% for field, values in request.GET.lists %}
+
+  {% if field not in exclude_fields %}
+    {% for value in values %}<input type="hidden" name="{{ field }}" value="{{ value }}" />{% endfor %}
+  {% endif %}
+
+{% endfor %}

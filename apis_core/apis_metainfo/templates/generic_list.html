@@ -52,14 +52,8 @@
 
             <!--Search mask-->
             {% load django_tables2 crispy_forms_tags %}
-            <form action="." class="uniForm" method="get">
-
-              {% if togglable_colums %}
-                <legend>Select additional columns</legend>
-                {% column_selector %}
-              {% endif %}
-
-              <br />
+            <form class="uniForm">
+              {% include "partials/form_get_hidden.html" with request=request exclude_fields=filter.form.fields %}
               {% crispy filter.form filter.form.helper %}
             </form>
 
@@ -118,6 +112,7 @@
               {% endif %}
 
             {% endblock %}
+
           </div>
         </div>
       </div>
@@ -125,7 +120,18 @@
         <div class="card">
           <div class="card-body">
             {% with table.paginator.count as total %}
-              <legend>Result: {{ total }} items</legend>
+              <div class="row">
+                <div class="col">
+                  <h3>Result: {{ total }} items</h3>
+                </div>
+                <div class="col">
+
+                  {% if togglable_colums %}
+                    {% include "partials/column_selector.html" with togglable_columns=togglable_colums request=request %}
+                  {% endif %}
+
+                </div>
+              </div>
 
               {% if conf_items %}
                 <div class="dropdown">

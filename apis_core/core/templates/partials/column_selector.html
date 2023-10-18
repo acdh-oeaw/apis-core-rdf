@@ -1,0 +1,20 @@
+{% if togglable_columns %}
+  <form class="form-inline float-right">
+    <select class="selectpicker"
+            multiple
+            data-selected-text-format="count > 2"
+            name="columns"
+            id="column_selector">
+      {% for col in togglable_columns %}<option value="{{ col }}">{{ col|title }}</option>{% endfor %}
+    </select>
+    {% include "partials/form_get_hidden.html" with request=request exclude_fields="columns" %}
+    <button type="submit" class="form-control">Show</button>
+    <script>
+    $('#column_selector').on('loaded.bs.select', function (e) {
+        var url = new URL(window.location.href);
+        var columns = url.searchParams.getAll("columns");
+        $('#column_selector').selectpicker('val', columns);
+    });
+    </script>
+  </form>
+{% endif %}

@@ -14,12 +14,3 @@ def class_definition(context):
         print(e)
         pass
     return values
-
-
-@register.inclusion_tag("apis_metainfo/tags/column_selector.html", takes_context=True)
-def column_selector(context):
-    try:
-        return {"columns": context["togglable_colums"]}
-    except Exception as e:
-        print(e)
-        return {"columns": None}
