@@ -13,6 +13,7 @@ Welcome to APIS's documentation!
    :caption: Documentation:
 
    installation
+   ontology
    configuration
    user_documentation
    data_model
