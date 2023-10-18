@@ -190,6 +190,7 @@ APIS_ENTITIES
                 },
             },
             "list_filters_exclude": ["lat", "lng", "status"],
+            "detail_view_exclude": ["notes", "references"],
         },}
 
 ``APIS_ENTITIES`` is the setting to define the behavior of the entities list views. Every entity has its own setting.
@@ -202,6 +203,7 @@ allows to merge several entities in one target entity at once.
 ``table_fields`` sets the default columns to show in the list views.
 ``additional_cols`` allows to set the columns that user can add to the result view.
 ``relations_per_page`` allows to set the number of relations listed before pagination begins
+``detail_view_exclude`` allows to set fields that are excluded from the default detail view
 
 ``list_filters``
 ^^^^^^^^^^^^^^^^
