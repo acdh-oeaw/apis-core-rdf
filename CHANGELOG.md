@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.6.0...v0.6.1) (2023-10-18)
+
+
+### Bug Fixes
+
+* drop `collections` as default field from entities filter ([05e8ad9](https://github.com/acdh-oeaw/apis-core-rdf/commit/05e8ad9dffd36c6244105fe8a909da9f5dd6be9e)), closes [#354](https://github.com/acdh-oeaw/apis-core-rdf/issues/354)
+* instead of pointing to admin, use the user login/logout routes ([a5073db](https://github.com/acdh-oeaw/apis-core-rdf/commit/a5073dbdf7bcecb7f185f9a212f421f4e3dcd316)), closes [#353](https://github.com/acdh-oeaw/apis-core-rdf/issues/353)
+* put footer and imprint in separate template blocks ([53b3e10](https://github.com/acdh-oeaw/apis-core-rdf/commit/53b3e10a4f589a73d7163a58ee8bfeab59e879f2)), closes [#345](https://github.com/acdh-oeaw/apis-core-rdf/issues/345)
+* readd exclude list of fields in detail view and allow customization ([0bd2446](https://github.com/acdh-oeaw/apis-core-rdf/commit/0bd2446cc590a04c144b819da87f2dcdca69e940))
+* use value from model_to_dict instead of getattr ([2e2f5fe](https://github.com/acdh-oeaw/apis-core-rdf/commit/2e2f5fedf5b4494b010fbbf8d58b73702f85869a))
+
 ## [0.6.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.5.0...v0.6.0) (2023-10-16)
 
 
