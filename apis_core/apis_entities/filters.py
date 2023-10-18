@@ -53,10 +53,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
         method=related_property_name, label="Related property"
     )
 
-    collection = django_filters.ModelMultipleChoiceFilter(
-        queryset=Collection.objects.all()
-    )
-
     # TODO: look into how the date values can be intercepted so that they can be parsed with the same logic as in edit forms
     start_date = django_filters.DateFromToRangeFilter()
     end_date = django_filters.DateFromToRangeFilter()
