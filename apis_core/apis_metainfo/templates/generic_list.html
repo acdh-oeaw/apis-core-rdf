@@ -26,25 +26,35 @@
     <div class="row">
       <div class="col-md-4">
         <div class="card">
-          <div class="card-body">
-            <h3 style="margin-bottom:15px;">
-              Browse {% class_definition %}
+          <div class="card-header">
+            <div class="row">
+              <div class="col-sm">
+                <h2 class="mb-0">
+                  Browse {% class_definition %}
 
-              {% block list_title %}{% endblock %}
+                  {% block list_title %}{% endblock %}
 
-            </h3>
+                </h2>
+              </div>
 
-            {% if get_arche_dump %}
-              <a class="btn btn-outline-secondary"
-                 href="{{ get_arche_dump }}{% querystring %}">Dump as RDF</a>
-            {% endif %}
-
-            {% if user.is_authenticated %}
-
-              {% if create_view_link %}
-                <a class ="btn btn-outline-secondary"  href="{{ create_view_link }}">Create new {{ class_name }}</a>
+              {% if get_arche_dump %}
+                <a class="btn btn-outline-secondary"
+                   href="{{ get_arche_dump }}{% querystring %}">Dump as RDF</a>
               {% endif %}
-            {% endif %}
+
+              <div class="col-sm">
+
+                {% if user.is_authenticated %}
+                  {% if create_view_link %}
+                    <a class="btn btn-outline-success float-right"
+                       href="{{ create_view_link }}">Create new {{ class_name }}</a>
+                  {% endif %}
+                {% endif %}
+
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
 
             {% block customView %}{% endblock %}
 
@@ -62,9 +72,11 @@
               <br />
               {% crispy filter.form filter.form.helper %}
             </form>
+          </div>
+          <div class="card-footer text-muted">
 
             {% block reset_button %}
-              <a class ="btn btn-outline-secondary"  href=".">Reset search</a>
+              <a class="btn btn-outline-secondary"  href=".">Reset filter</a>
 
               {% if vis_list %}
                 <div class="btn-group">
@@ -123,9 +135,9 @@
       </div>
       <div class="col-md-8" id="results">
         <div class="card">
-          <div class="card-body">
+          <div class="card-header">
             {% with table.paginator.count as total %}
-              <legend>Result: {{ total }} items</legend>
+              <legend class="mb-0">Result: {{ total }} items</legend>
 
               {% if conf_items %}
                 <div class="dropdown">
@@ -154,6 +166,8 @@
               {% endif %}
 
             {% endwith %}
+          </div>
+          <div class="card-body">
             <div class="table-responsive">
 
               {% block table %}
