@@ -49,7 +49,9 @@
     {% include "apis_entities/apis_templatetag.html" %}
     <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,500"
           rel="stylesheet" />
-    <link rel="stylesheet" href="{{ PROJECT_CSS }}?rnd=1" rel="stylesheet" />
+
+    {% if PROJECT_CSS %}<link rel="stylesheet" href="{{ PROJECT_CSS }}?rnd=1" rel="stylesheet" />{% endif %}
+
     <link rel="stylesheet"
           href="{% shared_url %}apis/libraries/scroll-to-top/css/ap-scroll-top.min.css" />
 
