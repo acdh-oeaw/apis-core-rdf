@@ -88,13 +88,6 @@ class AbstractEntity(RootObject):
             kwargs={"entity": entity, "pk": self.id},
         )
 
-    def get_child_class(self):
-        child = self.get_child_entity()
-        if child:
-            return "{}".format(child.__class__.__name__)
-        else:
-            return "{}".format(child.__class__.__name__)
-
     def get_absolute_url(self):
         entity = self.__class__.__name__.lower()
         return reverse(
