@@ -100,11 +100,8 @@ make sure the files shipped with it are served in precedence.
 ```
 
 
-You will also need the following dependencies:
-```shell
-poetry add django-crispy-forms django-filter django-tables2 django-autocomplete-light django-rest-framework drf-spectacular
-```
-Add them to the `INSTALLED_APPS`:
+You will also need to add the following dependencies to
+[`INSTALLED_APPS`](https://docs.djangoproject.com/en/4.2/ref/settings/#installed-apps):
 
 ```python
 # ui stuff
