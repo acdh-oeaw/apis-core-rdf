@@ -7,7 +7,6 @@ from django.views.static import serve
 from django.views.generic import TemplateView
 from rest_framework import routers
 
-from apis_core.api_routers import load_additional_serializers
 from apis_core.api_routers import views
 
 # from apis_core.apis_entities.api_views import (
@@ -37,13 +36,6 @@ for app_label, model_str in caching.get_all_class_modules_and_names():
 
 # inject the manually created UriToObjectViewSet into the api router
 router.register(r"metainfo/uritoobject", UriToObjectViewSet, basename="uritoobject")
-
-for additional_serializer in load_additional_serializers():
-    router.register(
-        additional_serializer.url,
-        additional_serializer.viewset,
-        additional_serializer.name,
-    )
 
 # router.register(r"users", UserViewSet)
 # router.register(r"GeoJsonPlace", PlaceGeoJsonViewSet, "PlaceGeoJson")
