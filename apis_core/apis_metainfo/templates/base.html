@@ -52,9 +52,6 @@
 
     {% if PROJECT_CSS %}<link rel="stylesheet" href="{{ PROJECT_CSS }}?rnd=1" rel="stylesheet" />{% endif %}
 
-    <link rel="stylesheet"
-          href="{% shared_url %}apis/libraries/scroll-to-top/css/ap-scroll-top.min.css" />
-
     {% block scriptHeader %}{% endblock %}
 
   </head>
@@ -250,7 +247,6 @@
       {% include "partials/bootstrap4_js.html" %}
       <script type="text/javascript"
               src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-      <script src="{% shared_url %}apis/libraries/scroll-to-top/js/ap-scroll-top.min.js"></script>
     {% endblock %}
 
     {% block scripts2 %}
@@ -268,6 +264,10 @@
         </div>
       </div>
     {% endblock modal %}
+
+    {% block backtotopbtn %}
+      {% include "partials/backtotopbtn.html" %}
+    {% endblock backtotopbtn %}
 
   </body>
 </html>
