@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.6.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.6.1...v0.6.2) (2023-10-20)
+
+
+### Bug Fixes
+
+* add `setuptools` as django-model-utils dependency ([de3a10a](https://github.com/acdh-oeaw/apis-core-rdf/commit/de3a10a71f6a9f25085cbb137b9e1553753aacb4))
+* drop `get_child_class()` from AbstractEntity ([e10c661](https://github.com/acdh-oeaw/apis-core-rdf/commit/e10c661ed0bff8e996d9ad2e850aafb909923de3)), closes [#323](https://github.com/acdh-oeaw/apis-core-rdf/issues/323)
+* move management command ([f3097ba](https://github.com/acdh-oeaw/apis-core-rdf/commit/f3097baddadf76edf6045a7ceb04a4fe452f688b)), closes [#372](https://github.com/acdh-oeaw/apis-core-rdf/issues/372)
+* surround embedding of custom stylesheet with if statement ([039f9d4](https://github.com/acdh-oeaw/apis-core-rdf/commit/039f9d46058b59238b747be9ac16dfa9ca6920b9)), closes [#364](https://github.com/acdh-oeaw/apis-core-rdf/issues/364)
+* **ux:** add nav class in template block ([d389856](https://github.com/acdh-oeaw/apis-core-rdf/commit/d3898567810bae976a0286e0b2cd3bd33cce0754))
+
+
+### Documentation
+
+* drop the poetry add line, as those are all dependencies ([5c61809](https://github.com/acdh-oeaw/apis-core-rdf/commit/5c618098fdd2cc6713aa82826ec6ec0584fc776b))
+* start documenting development practices ([025186f](https://github.com/acdh-oeaw/apis-core-rdf/commit/025186f37fcbc6244022e1ed911547da4cd01903))
+* update README.md ([8c74d97](https://github.com/acdh-oeaw/apis-core-rdf/commit/8c74d97b6de82022aa157ad5351bbac68ec89921)), closes [#361](https://github.com/acdh-oeaw/apis-core-rdf/issues/361)
+
 ## [0.6.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.6.0...v0.6.1) (2023-10-18)
 
 
