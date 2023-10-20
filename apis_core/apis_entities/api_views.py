@@ -16,8 +16,7 @@ from rest_framework.reverse import reverse_lazy
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
-from apis_core.apis_entities.models import TempEntityClass
-from apis_core.apis_metainfo.models import Uri
+from apis_core.apis_metainfo.models import Uri, RootObject
 from .api_renderers import (
     EntityToTEI,
     EntityToCIDOCXML,
@@ -39,7 +38,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class GetEntityGeneric(GenericAPIView):
     serializer_class = EntitySerializer
-    queryset = TempEntityClass.objects.all()
+    queryset = RootObject.objects.all()
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (
         EntityToTEI,
         EntityToCIDOCXML,
@@ -58,13 +57,11 @@ class GetEntityGeneric(GenericAPIView):
 
     def get_object(self, pk, request):
         try:
-            return TempEntityClass.objects_inheritance.get_subclass(pk=pk)
-        except TempEntityClass.DoesNotExist:
+            return RootObject.objects_inheritance.get_subclass(pk=pk)
+        except RootObject.DoesNotExist:
             uri2 = Uri.objects.filter(uri=request.build_absolute_uri())
             if uri2.count() == 1:
-                return TempEntityClass.objects_inheritance.get_subclass(
-                    pk=uri2[0].entity_id
-                )
+                return RootObject.objects_inheritance.get_subclass(pk=uri2[0].entity_id)
             else:
                 raise Http404
 
