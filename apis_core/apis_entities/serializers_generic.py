@@ -39,11 +39,7 @@ class TextSerializer(serializers.Serializer):
 class EntitySerializer(serializers.Serializer):
     id = serializers.IntegerField()
     url = serializers.SerializerMethodField(method_name="add_url")
-    name = serializers.CharField()
-    start_date = serializers.DateField()
-    end_date = serializers.DateField()
     uris = EntityUriSerializer(source="uri_set", many=True)
-    labels = LabelSerializer(source="label_set", many=True)
     revisions = serializers.SerializerMethodField(method_name="add_revisions")
 
     def add_revisions(self, obj):
@@ -167,6 +163,8 @@ class EntitySerializer(serializers.Serializer):
             )
         if add_texts:
             self.fields["text"] = TextSerializer(many=True)
+        if hasattr(self.instance, "label_set"):
+            self.labels = LabelSerializer(source="label_set", many=True)
 
 
 class RelationEntitySerializer(serializers.Serializer):
