@@ -86,24 +86,15 @@ To use the APIS framework in your application, add the following APIS modules to
 
 ### Dependencies
 
-```shell
-poetry add git+https://github.com/acdh-oeaw/apis-override-select2js#v0.1.0
-```
-
-`apis_override_select2js` is a workaround for APIS' handling of autocomplete
-forms. You will need it if you want to use autocomplete. Add it to your
-`INSTALLED_APPS` and make sure it is listed at the beginning of the list, to
-make sure the files shipped with it are served in precedence.
-
-```python
-"apis_override_select2js"
-```
-
-
-You will also need to add the following dependencies to
+You will need to add the following dependencies to
 [`INSTALLED_APPS`](https://docs.djangoproject.com/en/4.2/ref/settings/#installed-apps):
 
 ```python
+# `apis_override_select2js` is a workaround for APIS' handling of autocomplete
+# forms. It should be listed at the beginning of the list, to make sure the
+# files shipped with it are served in precedence.
+"apis_override_select2js",
+
 # ui stuff
 "crispy_forms",
 "django_filters",
