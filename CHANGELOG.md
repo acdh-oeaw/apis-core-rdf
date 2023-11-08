@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.6.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.6.2...v0.6.3) (2023-11-08)
+
+
+### Bug Fixes
+
+* add apis-override-select2js to dependencies ([697b4e1](https://github.com/acdh-oeaw/apis-core-rdf/commit/697b4e14ebb6313e1b6435984e3b07975817c47e)), closes [#389](https://github.com/acdh-oeaw/apis-core-rdf/issues/389)
+* do not expect fields in EntitySerializer ([e4480f3](https://github.com/acdh-oeaw/apis-core-rdf/commit/e4480f3ac1d56a5ff3fa4757cc00e2664d6854a9)), closes [#383](https://github.com/acdh-oeaw/apis-core-rdf/issues/383)
+* use RootObject instead of TempEntityClass in GetEntityGeneric ([d03fad5](https://github.com/acdh-oeaw/apis-core-rdf/commit/d03fad57265c4463bbafbf299f2ac2c95b7096a0)), closes [#380](https://github.com/acdh-oeaw/apis-core-rdf/issues/380)
+
+
+### Documentation
+
+* rearrange installation info and add URL dispatcher info ([7d9fff3](https://github.com/acdh-oeaw/apis-core-rdf/commit/7d9fff3008ec164fb71f43413726f2a07932401e)), closes [#393](https://github.com/acdh-oeaw/apis-core-rdf/issues/393)
+* update README, now that apis-override-select2js is a dependency ([f23e9eb](https://github.com/acdh-oeaw/apis-core-rdf/commit/f23e9eb937a6bf74565af2cadce4f1a0591a5c67))
+
 ## [0.6.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.6.1...v0.6.2) (2023-10-20)
 
 
