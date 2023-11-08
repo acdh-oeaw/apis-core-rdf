@@ -71,22 +71,7 @@ Now start using your Django project
 poetry run ./manage.py runserver
 ```
 
-To use the APIS framework in your application, add the following APIS modules to your Django settings module:
-
-```python
-"apis_ontology",
-"apis_core.core",
-"apis_core.apis_entities",
-"apis_core.apis_metainfo",
-"apis_core.apis_relations",
-"apis_core.apis_vocabularies",
-"apis_core.apis_labels",
-
-```
-
-### Dependencies
-
-You will need to add the following dependencies to
+To use the APIS framework in your application, you will need to add the following dependencies to
 [`INSTALLED_APPS`](https://docs.djangoproject.com/en/4.2/ref/settings/#installed-apps):
 
 ```python
@@ -95,7 +80,7 @@ You will need to add the following dependencies to
 # files shipped with it are served in precedence.
 "apis_override_select2js",
 
-# ui stuff
+# ui stuff used by APIS
 "crispy_forms",
 "django_filters",
 "django_tables2",
@@ -109,6 +94,38 @@ You will need to add the following dependencies to
 # for swagger ui generation
 "drf_spectacular",
 
+# Your ontology
+"apis_ontology",
+
+# The APIS apps
+"apis_core.core",
+"apis_core.apis_entities",
+"apis_core.apis_metainfo",
+"apis_core.apis_relations",
+"apis_core.apis_vocabularies",
+"apis_core.apis_labels",
+
+```
+
+Finally, add the APIS urls to your applications [URL Dispatcher](https://docs.djangoproject.com/en/4.2/topics/http/urls/):
+```python
+from django.urls import include
+from apis_core.apis_entities.api_views import GetEntityGeneric
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+urlpatterns = [
+    # APIS refers to the `login` and `logout` urls in its `base.html` template
+    # you can define your own or use the ones shipped with Django
+    path("accounts/", include("django.contrib.auth.urls")),
+    # The APIS views
+    path("apis/", include("apis_core.urls", namespace="apis")),
+    # It is common for APIS projects to have a shortcut for accessing entities
+    path(
+        "entity/<int:pk>/", GetEntityGeneric.as_view(), name="GetEntityGenericRoot"
+    ),
+]
+
+urlpatterns += staticfiles_urlpatterns()
 ```
 
 Now you should be ready to roll. Start creating your entities in you `apis_ontology/models.py`.
