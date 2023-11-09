@@ -47,7 +47,7 @@ Installation
 Create a project using your favourite package manager:
 
 ```shell
-poetry new foobar --name apis_ontology
+poetry new foobar-repository --name apis_ontology
 ```
 
 Currently (as of 2023-10) the name of the apis application **has** to be
@@ -62,8 +62,7 @@ poetry add git+https://github.com/acdh-oeaw/apis-core-rdf#v0.6.1
 
 Setup your Django project
 ```shell
-rm -rf apis_ontology
-poetry run django-admin startproject apis_ontology .
+poetry run django-admin startproject foobar_django_project .
 ```
 
 Now start using your Django project
@@ -105,6 +104,14 @@ To use the APIS framework in your application, you will need to add the followin
 "apis_core.apis_vocabularies",
 "apis_core.apis_labels",
 
+```
+
+Also, add the following two [context processors](https://docs.djangoproject.com/en/4.2/ref/templates/api/#django.template.RequestContext):
+```
+# we need this for listing entities in the base template
+"apis_core.context_processors.custom_context_processors.list_entities",
+# we need this for accessing `basetemplate`
+"apis_core.context_processors.custom_context_processors.list_apis_settings",
 ```
 
 Finally, add the APIS urls to your applications [URL Dispatcher](https://docs.djangoproject.com/en/4.2/topics/http/urls/):
