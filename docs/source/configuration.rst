@@ -201,6 +201,7 @@ allows to merge several entities in one target entity at once.
 ``form_order`` defines the order of the fields in the metadata form of the respective entity.
 ``form`` allows you to set a custom form for the entity, instead of the default `apis_entities.forms.GenericEntityForm`
 ``table_fields`` sets the default columns to show in the list views.
+``table`` allows you to set a custom table class for the list view of the entity, instead of the default :class:`apis_core.apis_entities.tables.get_entities_table.GenericEntitiesTable`
 ``additional_cols`` allows to set the columns that user can add to the result view.
 ``relations_per_page`` allows to set the number of relations listed before pagination begins
 ``detail_view_exclude`` allows to set fields that are excluded from the default detail view

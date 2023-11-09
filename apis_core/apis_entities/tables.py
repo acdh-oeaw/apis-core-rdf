@@ -1,7 +1,10 @@
 import django_tables2 as tables
 from django.utils.safestring import mark_safe
 from django_tables2.utils import A
-from apis_core.utils.settings import list_links_to_edit
+from apis_core.utils.settings import (
+    list_links_to_edit,
+    get_entity_settings_by_modelname,
+)
 
 from apis_core.apis_metainfo.tables import (
     generic_order_start_date_written,
@@ -69,4 +72,5 @@ def get_entities_table(entity, default_cols):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
 
-    return GenericEntitiesTable
+    entity_settings = get_entity_settings_by_modelname(entity)
+    return entity_settings.get("table", GenericEntitiesTable)
