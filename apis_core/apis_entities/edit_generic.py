@@ -103,7 +103,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
                 apis_bibsonomy = "|".join([x.strip() for x in apis_bibsonomy])
         else:
             apis_bibsonomy = False
-        object_revisions = Version.objects.get_for_object(self.instance)
         object_lod = Uri.objects.filter(root_object=self.instance)
         object_labels = Label.objects.filter(temp_entity__id=self.instance.id)
         tb_label = LabelTableEdit(
@@ -118,7 +117,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             "form": form,
             "instance": self.instance,
             "right_card": side_bar,
-            "object_revisions": object_revisions,
             "object_lod": object_lod,
             "apis_bibsonomy": apis_bibsonomy,
         }
