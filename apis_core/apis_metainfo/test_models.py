@@ -14,9 +14,9 @@ class ModelTestCase(TestCase):
     def test_root_object(self):
         rfoo = RootObject.objects.get(name="foo")
         rnone = RootObject.objects.get(name="")
-        self.assertEquals(str(rfoo), "foo")
-        self.assertEquals(str(rnone), "no name provided")
+        self.assertEqual(str(rfoo), "foo")
+        self.assertEqual(str(rnone), "no name provided")
 
     def test_uri(self):
         ufoo = Uri.objects.create()
-        self.assertEquals(str(ufoo), "None")
+        self.assertEqual(str(ufoo), "None")
