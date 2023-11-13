@@ -30,6 +30,7 @@ from .forms import (
     GenericEntitiesStanbolForm,
 )
 from .tables import get_entities_table
+from apis_core.utils.helpers import get_member_for_entity
 
 ###########################################################################
 ############################################################################
@@ -125,7 +126,9 @@ class GenericListViewNew(
         default_cols = entity_settings.get("table_fields", [])
         default_cols = default_cols + selected_cols
 
-        self.table_class = get_entities_table(class_name, default_cols=default_cols)
+        self.table_class = get_member_for_entity(self.get_model(), suffix="table")
+        if self.table_class is None:
+            self.table_class = get_entities_table(class_name, default_cols=default_cols)
         table = super(GenericListViewNew, self).get_table()
         RequestConfig(
             self.request, paginate={"page": 1, "per_page": self.paginate_by}
