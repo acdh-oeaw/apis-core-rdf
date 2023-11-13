@@ -57,9 +57,11 @@ class RelationView(CreateView):
         return kwargs
 
     def get_success_url(self):
-        url = reverse("relation", kwargs=self.request.resolver_match.kwargs)
+        url = reverse("apis:relation", kwargs=self.request.resolver_match.kwargs)
         if self.inverted:
-            url = reverse("relationinverted", kwargs=self.request.resolver_match.kwargs)
+            url = reverse(
+                "apis:relationinverted", kwargs=self.request.resolver_match.kwargs
+            )
         if self.partial:
             url += "?partial"
         return url
@@ -108,7 +110,7 @@ class RelationUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse(
-            "relationupdate",
+            "apis:relationupdate",
             args=[
                 self.get_object().id,
             ],
@@ -132,7 +134,7 @@ class RelationDelete(DeleteView):
             return self.request.GET.get("next")
         contenttype = ContentType.objects.get_for_model(self.get_object())
         return reverse(
-            "relation",
+            "apis:relation",
             args=[
                 contenttype.id,
             ],

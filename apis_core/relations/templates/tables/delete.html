@@ -1,5 +1,5 @@
-<a href='{% url 'relationdelete' record.id %}?next={{ request.GET.next|default:request.path }}'
-   hx-delete='{% url 'relationdelete' record.id %}?status_only'
+<a href='{% url 'apis:relationdelete' record.id %}?next={{ request.GET.next|default:request.path }}'
+   hx-delete='{% url 'apis:relationdelete' record.id %}?status_only'
    hx-target='closest tr'
    hx-confirm='Are your sure you want to delete {{ record }}?'
    hx-swap="outerHTML swap:1s">Delete</a>
