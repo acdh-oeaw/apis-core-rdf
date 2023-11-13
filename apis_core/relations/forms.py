@@ -48,9 +48,9 @@ class RelationForm(ModelForm):
             args.append(frominstance.pk)
         if tocontenttype:
             args.append(tocontenttype.pk)
-        hx_post = reverse("relation", args=args)
+        hx_post = reverse("apis:relation", args=args)
         if inverted:
-            hx_post = reverse("relationinverted", args=args)
+            hx_post = reverse("apis:relationinverted", args=args)
 
         hx_post += "?partial"
 

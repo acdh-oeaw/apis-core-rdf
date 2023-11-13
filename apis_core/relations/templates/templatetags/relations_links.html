@@ -3,14 +3,14 @@
 {% for rel, model in relation_types %}
 
   {% if instance %}
-    {% url 'relation' rel.pk instancect.pk instance.pk contenttype.pk as hrefurl %}
+    {% url 'apis:relation' rel.pk instancect.pk instance.pk contenttype.pk as hrefurl %}
 
     {% if rel in relation_types_reverse %}
-      {% url 'relationinverted' rel.pk instancect.pk instance.pk contenttype.pk as hrefurl %}
+      {% url 'apis:relationinverted' rel.pk instancect.pk instance.pk contenttype.pk as hrefurl %}
     {% endif %}
 
   {% else %}
-    {% url 'relation' rel.pk as hrefurl %}
+    {% url 'apis:relation' rel.pk as hrefurl %}
   {% endif %}
 
   <a href="{{ hrefurl }}" 
