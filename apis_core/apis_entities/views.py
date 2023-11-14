@@ -126,7 +126,7 @@ class GenericListViewNew(
         default_cols = entity_settings.get("table_fields", [])
         default_cols = default_cols + selected_cols
 
-        self.table_class = get_member_for_entity(self.get_model(), suffix="table")
+        self.table_class = get_member_for_entity(self.get_model(), suffix="Table")
         if self.table_class is None:
             self.table_class = get_entities_table(class_name, default_cols=default_cols)
         table = super(GenericListViewNew, self).get_table()
