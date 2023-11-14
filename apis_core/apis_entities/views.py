@@ -96,7 +96,11 @@ class GenericListViewNew(
     def get_queryset(self, **kwargs):
         self.entity = self.kwargs.get("entity")
 
-        qs = (self.get_model().objects.all()).order_by("name")
+        qs = get_member_for_entity(
+            self.get_model(), path="querysets", suffix="ListViewQueryset"
+        )
+        if qs is None:
+            qs = (self.get_model().objects.all()).order_by("name")
         self.filter = get_list_filter_of_entity(self.entity)(
             self.request.GET, queryset=qs
         )
