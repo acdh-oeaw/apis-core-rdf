@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.7.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.6.3...v0.7.0) (2023-11-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* get rid of additional_serializer
+
+### Features
+
+* allow overriding the entity listview queryset ([0548faa](https://github.com/acdh-oeaw/apis-core-rdf/commit/0548faab7ac1a99266e5b728de00d373d688b76a))
+* introduce `get_member_for_entity` helper ([6436f2f](https://github.com/acdh-oeaw/apis-core-rdf/commit/6436f2f15219daf1c423f4426c6531c40720bd7e))
+
+
+### Bug Fixes
+
+* cleanup entities detail template ([87834b3](https://github.com/acdh-oeaw/apis-core-rdf/commit/87834b3bfde1edbd75648533103ae5ff0d09f6df)), closes [#396](https://github.com/acdh-oeaw/apis-core-rdf/issues/396)
+* don't expect entities to have {start|end}_date_written fields ([4952af2](https://github.com/acdh-oeaw/apis-core-rdf/commit/4952af24727fff9115e84cd9200c9da9af9eaffb)), closes [#405](https://github.com/acdh-oeaw/apis-core-rdf/issues/405)
+* drop object_revisions from generic entities edit view ([f08b10c](https://github.com/acdh-oeaw/apis-core-rdf/commit/f08b10c99fccb30a48134e02651c60125aba3fa0))
+* improve `get_member_for_entity` helper function ([1f9a1a0](https://github.com/acdh-oeaw/apis-core-rdf/commit/1f9a1a00b368f95000d331ad37fdb9efa6be604c))
+* use the new `get_member_for_entity` helper to override table ([caa6f65](https://github.com/acdh-oeaw/apis-core-rdf/commit/caa6f65fa6b1db7a9cd5030d43d32f4b050396ed)), closes [#400](https://github.com/acdh-oeaw/apis-core-rdf/issues/400)
+
+
+### Documentation
+
+* make install instructions more clear ([e6a4efe](https://github.com/acdh-oeaw/apis-core-rdf/commit/e6a4efe9d243e9eab151ebbd3c85829d4defeb56))
+
+
+### Code Refactoring
+
+* get rid of additional_serializer ([190e5f3](https://github.com/acdh-oeaw/apis-core-rdf/commit/190e5f3f95b1fd2d7351e6807e27e3acdafd7d80)), closes [#338](https://github.com/acdh-oeaw/apis-core-rdf/issues/338)
+
 ## [0.6.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.6.2...v0.6.3) (2023-11-08)
 
 
