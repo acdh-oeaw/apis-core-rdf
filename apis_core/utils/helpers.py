@@ -61,23 +61,19 @@ def get_member_for_entity(
     module = ct.app_label
     model = ct.model.capitalize()
     if suffix:
-        model += suffix.capitalize()
+        model += suffix
     if path:
         module += f".{path}"
     else:
         if suffix:
             module += f".{suffix.lower()}s"
+    logging.debug("Checking if %s.%s exists", module, model)
     try:
         members = inspect.getmembers(importlib.import_module(module))
         members = list(filter(lambda c: c[0] == model, members))
     except ModuleNotFoundError:
         members = []
     if members:
-        logging.debug(
-            "Based on path %s and suffix %s using class %s",
-            path,
-            suffix,
-            model,
-        )
+        logging.debug("Found %s.%s", module, model)
         return members[0][1]
     return None
