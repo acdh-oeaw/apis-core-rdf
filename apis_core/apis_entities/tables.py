@@ -61,9 +61,8 @@ def get_entities_table(entity, default_cols):
             for col in default_cols:
                 if not hasattr(model, col):
                     raise Exception(
-                        f'Model for "{entity}" entity has no field "{col}".\n'
-                        f'Check values in "table_fields" list in "entity_settings" '
-                        f"(models.py or Settings file)."
+                        f'APIS_ENTITIES "table_fields" setting for {entity} entity\n'
+                        f'references "{col}" field, which model class does not possess.\n'
                     )
 
         def __init__(self, *args, **kwargs):
