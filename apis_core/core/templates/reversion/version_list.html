@@ -1,0 +1,9 @@
+{% extends basetemplate %}
+
+{% block content %}
+  <ul>
+    {% for version in object_list %}
+      <li>{{ version.revision.date_created }} - {{ version.revision.user }}: {{ version.revision.get_comment }}</li>
+    {% endfor %}
+  </ul>
+{% endblock content %}
