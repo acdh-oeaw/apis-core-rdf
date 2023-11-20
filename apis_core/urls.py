@@ -16,6 +16,7 @@ from apis_core.api_routers import views
 # from apis_core.apis_vocabularies.api_views import UserViewSet
 from apis_core.utils import caching
 from apis_core.apis_metainfo.viewsets import UriToObjectViewSet
+from apis_core.core.views import Dumpdata
 
 app_name = "apis_core"
 
@@ -103,7 +104,6 @@ def build_apis_mock_request(method, path, view, original_request, **kwargs):
 
 from apis_core.apis_entities.api_views import GetEntityGeneric
 
-
 urlpatterns = [
     path("", TemplateView.as_view(template_name="base.html"), name="apis_index"),
     path("admin/", admin.site.urls),
@@ -168,6 +168,7 @@ urlpatterns = [
         GetEntityGeneric.as_view(),
         name="GetEntityGeneric",
     ),
+    path("api/dumpdata", Dumpdata.as_view()),
 ]
 
 if "apis_fulltext_download" in settings.INSTALLED_APPS:
