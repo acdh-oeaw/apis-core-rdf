@@ -1,0 +1,65 @@
+<!-- omit in toc -->
+# Contributing to APIS
+
+First off, thanks for taking the time to contribute! ❤️
+
+All types of contributions are encouraged and valued. See the [Table of
+Contents](#table-of-contents) for different ways to help and details about how
+this project handles them. Please make sure to read the relevant section before
+making your contribution. It will make it a lot easier for us maintainers and
+smooth out the experience for all involved. The community looks forward to your
+contributions. 🎉
+
+<!-- omit in toc -->
+## Table of Contents
+
+- [I Have a Question](#i-have-a-question)
+- [Styleguides](#styleguides)
+  - [Commit Messages](#commit-messages)
+
+
+
+## I Have a Question
+
+If you want to ask a question, we assume that you have read the available
+[Documentation](https://acdh-oeaw.github.io/apis-core-rdf/).
+
+Before you ask a question, it is best to search for existing
+[Issues](https://github.com/acdh-oeaw/apis-core-rdf/issues) that might help
+you. In case you have found a suitable issue and still need clarification, you
+can write your question in this issue. It is also advisable to search the
+internet for answers first.
+
+If you then still feel the need to ask a question and need clarification, we
+recommend the following:
+
+- Open an [Issue](https://github.com/acdh-oeaw/apis-core-rdf/issues/new).
+- Provide as much context as you can about what you're running into.
+- Provide project and platform versions, depending on what seems relevant.
+
+We will then take care of the issue as soon as possible.
+
+## Styleguides
+
+Please try to keep your commit changes focused on the change you want to
+implement - don't start fixing typos if your commit is actually about adding a
+feature.
+
+We are using [black](https://github.com/psf/black) for codeformatting and
+[djlint](https://github.com/Riverside-Healthcare/djlint) for formatting
+templates - the configuration for those is part of our `pyproject.toml`.
+
+Base your commit on the latest changes in `main`. Your work might take some
+time and other people are also working on APIS, so please rebase your changes
+early and often.
+
+### Commit Messages
+
+We are using [conventional
+commits](https://www.conventionalcommits.org/en/v1.0.0/) so please format your
+commit messages accordingly.
+
+<!-- omit in toc -->
+## Attribution
+This guide is loosely based on the **contributing-gen**. [Make your
+own](https://github.com/bttger/contributing-gen)!
