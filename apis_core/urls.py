@@ -101,6 +101,9 @@ def build_apis_mock_request(method, path, view, original_request, **kwargs):
     return request
 
 
+from apis_core.apis_entities.api_views import GetEntityGeneric
+
+
 urlpatterns = [
     path("", TemplateView.as_view(template_name="base.html"), name="apis_index"),
     path("admin/", admin.site.urls),
@@ -149,7 +152,6 @@ urlpatterns = [
     #    description="APIS API schema definition",
     #    urlconf='apis_core.apis_entities.api_urls',
     # ), name='openapi-schema-api'),
-    path("api2/", include("apis_core.apis_entities.api_urls", namespace="apis_api2")),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # url(r'^api-schema/', schema_view),
     re_path(
@@ -161,6 +163,11 @@ urlpatterns = [
     # url(r'^docs/', include('sphinxdoc.urls')),
     # url(r'^accounts/', include('registration.backends.simple.urls')),
     path("accounts/", include("django.contrib.auth.urls")),
+    path(
+        "entity/<int:pk>/",
+        GetEntityGeneric.as_view(),
+        name="GetEntityGeneric",
+    ),
 ]
 
 if "apis_fulltext_download" in settings.INSTALLED_APPS:

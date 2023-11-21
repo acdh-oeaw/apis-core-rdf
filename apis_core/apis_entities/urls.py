@@ -8,6 +8,7 @@ from .autocomplete3 import (
 
 # from .views import ReversionCompareView TODO: add again when import is fixed
 from .edit_generic import GenericEntitiesCreateStanbolView
+from .api_views import GetOrCreateEntity
 
 app_name = "apis_entities"
 
@@ -103,4 +104,9 @@ urlpatterns = [
     #        r'^compare/(?P<app>[a-z_]+)/(?P<kind>[a-z]+)/(?P<pk>\d+)$', ReversionCompareView.as_view()
     #    ),
     path("merge-objects/", merge_views.merge_objects, name="merge_objects"),
+    path(
+        "getorcreateentity/",
+        GetOrCreateEntity.as_view(),
+        name="GetOrCreateEntity",
+    ),
 ]

@@ -341,28 +341,6 @@ class GetEntityGeneric(GenericAPIView):
 #         return Response(res)
 #
 # __after_rdf_refactoring__
-class SaveNetworkFiles(APIView):
-    def post(self, request, format=None):
-        file_name = request.data["file_name"]
-        file_name_list = file_name.split(".")
-        data = request.data["file"]
-        nmb = False
-        for file in os.listdir("downloads/"):
-            if (
-                fnmatch.fnmatch(file, file_name_list[0] + "_*." + file_name_list[1])
-                or file == file_name
-            ):
-                if nmb:
-                    nmb += 1
-                else:
-                    nmb = 1
-        if nmb:
-            file_name = file_name_list[0] + "_" + str(nmb) + "." + file_name_list[1]
-        with open("downloads/" + file_name, "wb") as fw:
-            data = data.replace('"edges"', '"links"', 1)
-            fw.write(data.encode("utf-8"))
-        res = {"test": True, "file_name": "/downloads/" + file_name}
-        return Response(res)
 
 
 class ResolveAbbreviations(APIView):
