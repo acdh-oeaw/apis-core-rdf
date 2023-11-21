@@ -156,7 +156,7 @@
                          aria-expanded="false">User: {{ user.get_username }}</a>
                       <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-item">
-                          <a class="nav-link p-0" href="{% url 'logout' %}?next=/">
+                          <a class="nav-link p-0" href="{% url 'apis:logout' %}?next=/">
                             <span class="material-symbols-outlined">logout</span>
                             log out
                           </a>
@@ -166,7 +166,7 @@
                   {% else %}
                     <li class="nav-item dropdown ml-auto">
                       <a class="nav-link p-0"
-                         href="{% url 'login' %}?next={{ request.path|urlencode }}">
+                         href="{% url 'apis:login' %}?next={{ request.path|urlencode }}">
                         <span class="material-symbols-outlined">login</span>
                       </a>
                     </li>

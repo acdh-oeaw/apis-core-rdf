@@ -4,7 +4,7 @@
 {% block content %}
   <div class="container">
     <div class="mt-4">
-      <form method="post" action="{% url 'login' %}">
+      <form method="post" action="{% url 'apis:login' %}">
         {% csrf_token %}
         {{ form|crispy }}
         <input type="submit" value="login">
