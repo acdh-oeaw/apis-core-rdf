@@ -159,7 +159,7 @@ class GenericEntitiesCreateView(EntityMixin, View):
         permissions = {
             "create": request.user.has_perm("entities.add_{}".format(self.entity))
         }
-        template = get_template("apis_entities/edit_generic.html")
+        template = get_template("apis_entities/create_generic.html")
         return HttpResponse(
             template.render(
                 request=request,
@@ -188,7 +188,7 @@ class GenericEntitiesCreateView(EntityMixin, View):
                     "apis_entities.add_{}".format(self.entity)
                 )
             }
-            template = get_template("apis_entities/edit_generic.html")
+            template = get_template("apis_entities/create_generic.html")
             return HttpResponse(
                 template.render(
                     request=request,
@@ -227,7 +227,7 @@ class GenericEntitiesCreateStanbolView(EntityMixin, View):
                     "apis_entities.add_{}".format(self.entity)
                 )
             }
-            template = get_template("apis_entities/edit_generic.html")
+            template = get_template("apis_entities/create_generic.html")
             return HttpResponse(
                 template.render(
                     request=request, context={"permissions": permissions, "form": form}
