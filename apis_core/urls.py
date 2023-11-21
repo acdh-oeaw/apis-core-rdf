@@ -160,6 +160,7 @@ urlpatterns = [
     ),
     # url(r'^docs/', include('sphinxdoc.urls')),
     # url(r'^accounts/', include('registration.backends.simple.urls')),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
 
 if "apis_fulltext_download" in settings.INSTALLED_APPS:

@@ -121,9 +121,6 @@ from apis_core.apis_entities.api_views import GetEntityGeneric
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    # APIS refers to the `login` and `logout` urls in its `base.html` template
-    # you can define your own or use the ones shipped with Django
-    path("accounts/", include("django.contrib.auth.urls")),
     # The APIS views
     path("apis/", include("apis_core.urls", namespace="apis")),
     # It is common for APIS projects to have a shortcut for accessing entities
