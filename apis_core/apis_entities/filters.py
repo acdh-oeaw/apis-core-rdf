@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 import django_filters
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, JSONField
 
 from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import TempEntityClass
@@ -63,6 +63,14 @@ class GenericEntityListFilter(django_filters.FilterSet):
         # order to load all filters of all model fields by default so that they are available in the first place.
         # Later those which are not referenced in the settings file will be removed again
         exclude = fields_to_exclude
+        filter_overrides = {
+            JSONField: {
+                "filter_class": django_filters.CharFilter,
+                "extra": lambda f: {
+                    "lookup_expr": "icontains",
+                },
+            }
+        }
 
     def __init__(self, *args, **kwargs):
         # call super init foremost to create dictionary of filters which will be processed further below
