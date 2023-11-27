@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.7.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.7.0...v0.7.1) (2023-11-27)
+
+
+### Bug Fixes
+
+* cleanup generic edit template ([18234e7](https://github.com/acdh-oeaw/apis-core-rdf/commit/18234e710235eacb83b095bc7eb48c70e09de020))
+* integrate django.contrib.auth.urls into apis_core.urls ([39a63f4](https://github.com/acdh-oeaw/apis-core-rdf/commit/39a63f40f3000bb68d76f6e550d9657bc77c2ec6)), closes [#426](https://github.com/acdh-oeaw/apis-core-rdf/issues/426)
+* override default for JSONField field ([18c05dd](https://github.com/acdh-oeaw/apis-core-rdf/commit/18c05ddcdc93318e6898ca295b30095d1cd6b306))
+* rewrite error message ([d560fe8](https://github.com/acdh-oeaw/apis-core-rdf/commit/d560fe815f4322d5265b4ee60cb3fab68854da05))
+
+
+### Documentation
+
+* add CONTRIBUTING.md ([fe8f46b](https://github.com/acdh-oeaw/apis-core-rdf/commit/fe8f46bb72a1838234df1becffab4bc4208f680d)), closes [#425](https://github.com/acdh-oeaw/apis-core-rdf/issues/425)
+
 ## [0.7.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.6.3...v0.7.0) (2023-11-14)
 
 
