@@ -17,7 +17,6 @@ Dependencies
 * django-tables2
 * djangorestframework-csv
 * djangorestframework-xml
-* PyYAML
 * rdflib
 * drf-spectacular
 * requests
@@ -36,3 +35,10 @@ Dependencies
 * setuptools
 
   ``django-model-utils`` uses this, see https://github.com/jazzband/django-model-utils/issues/568
+
+* apis-override-select2js
+
+  APIS overrides select2js to be able to provide autocomplete fields that also
+  integrate external sources. This package provides the patched Javascript
+  files - it has to be listed in ``INSTALLED_APPS`` *before*
+  ``django-autocomplete-light`` packages.
