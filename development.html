@@ -107,7 +107,6 @@
 <li><p>django-tables2</p></li>
 <li><p>djangorestframework-csv</p></li>
 <li><p>djangorestframework-xml</p></li>
-<li><p>PyYAML</p></li>
 <li><p>rdflib</p></li>
 <li><p>drf-spectacular</p></li>
 <li><p>requests</p></li>
@@ -123,6 +122,12 @@ the export functionality is used in the entities list view.</p>
 </li>
 <li><p>setuptools</p>
 <p><code class="docutils literal notranslate"><span class="pre">django-model-utils</span></code> uses this, see <a class="reference external" href="https://github.com/jazzband/django-model-utils/issues/568">https://github.com/jazzband/django-model-utils/issues/568</a></p>
+</li>
+<li><p>apis-override-select2js</p>
+<p>APIS overrides select2js to be able to provide autocomplete fields that also
+integrate external sources. This package provides the patched Javascript
+files - it has to be listed in <code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code> <em>before</em>
+<code class="docutils literal notranslate"><span class="pre">django-autocomplete-light</span></code> packages.</p>
 </li>
 </ul>
 </section>
