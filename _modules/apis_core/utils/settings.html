@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.utils.settings &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -109,9 +112,31 @@
 <div class="viewcode-block" id="rdf_object_mapping_file">
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.rdf_object_mapping_file">[docs]</a>
 <span class="k">def</span> <span class="nf">rdf_object_mapping_file</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="n">default</span> <span class="o">=</span> <span class="n">default_settings</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;RDF_default_settings.yml&quot;</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="n">default_settings</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;RDF_default_settings.toml&quot;</span>
     <span class="n">mapping_file</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RDF_YAML_SETTINGS&quot;</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">mapping_file</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_entity_settings_by_modelname">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.get_entity_settings_by_modelname">[docs]</a>
+<span class="k">def</span> <span class="nf">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">entity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return the settings for a specific entity or the dict for all entities</span>
+<span class="sd">    if no entity is given</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">apis_entities</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_ENTITIES&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="n">entity</span><span class="p">:</span>
+        <span class="c1"># lookup entity settings by name and by capitalized name</span>
+        <span class="k">return</span> <span class="n">apis_entities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">apis_entities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="p">{}))</span>
+    <span class="k">return</span> <span class="n">apis_entities</span></div>
+
+
+
+<div class="viewcode-block" id="list_links_to_edit">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.list_links_to_edit">[docs]</a>
+<span class="k">def</span> <span class="nf">list_links_to_edit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_LINKS_TO_EDIT&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
 
 </pre></div>
 

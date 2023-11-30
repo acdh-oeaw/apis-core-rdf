@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_entities.tables &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -85,6 +88,7 @@
 <span></span><span class="kn">import</span> <span class="nn">django_tables2</span> <span class="k">as</span> <span class="nn">tables</span>
 <span class="kn">from</span> <span class="nn">django.utils.safestring</span> <span class="kn">import</span> <span class="n">mark_safe</span>
 <span class="kn">from</span> <span class="nn">django_tables2.utils</span> <span class="kn">import</span> <span class="n">A</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">list_links_to_edit</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.tables</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">generic_order_start_date_written</span><span class="p">,</span>
@@ -97,7 +101,7 @@
 
 <div class="viewcode-block" id="get_entities_table">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.tables.get_entities_table">[docs]</a>
-<span class="k">def</span> <span class="nf">get_entities_table</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">edit_v</span><span class="p">,</span> <span class="n">default_cols</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_entities_table</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">default_cols</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">default_cols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">default_cols</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;name&quot;</span><span class="p">,</span>
@@ -117,7 +121,7 @@
         <span class="n">order_end_date_written</span> <span class="o">=</span> <span class="n">generic_order_end_date_written</span>
         <span class="n">render_start_date_written</span> <span class="o">=</span> <span class="n">generic_render_start_date_written</span>
         <span class="n">render_end_date_written</span> <span class="o">=</span> <span class="n">generic_render_end_date_written</span>
-        <span class="k">if</span> <span class="n">edit_v</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">list_links_to_edit</span><span class="p">():</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
                 <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
                 <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;pk&quot;</span><span class="p">)],</span>
@@ -146,9 +150,8 @@
             <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">default_cols</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s1">&#39;Model for &quot;</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s1">&quot; entity has no field &quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">&quot;.</span><span class="se">\n</span><span class="s1">&#39;</span>
-                        <span class="sa">f</span><span class="s1">&#39;Check values in &quot;table_fields&quot; list in &quot;entity_settings&quot; &#39;</span>
-                        <span class="sa">f</span><span class="s2">&quot;(models.py or Settings file).&quot;</span>
+                        <span class="sa">f</span><span class="s1">&#39;APIS_ENTITIES &quot;table_fields&quot; setting for </span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s1"> entity</span><span class="se">\n</span><span class="s1">&#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39;references &quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">&quot; field, which model class does not possess.</span><span class="se">\n</span><span class="s1">&#39;</span>
                     <span class="p">)</span>
 
         <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

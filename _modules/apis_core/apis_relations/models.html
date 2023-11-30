@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_relations.models &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -83,6 +86,7 @@
              
   <h1>Source code for apis_core.apis_relations.models</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">unicodedata</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="c1"># from reversion import revisions as reversion</span>
 <span class="kn">import</span> <span class="nn">reversion</span>
@@ -98,6 +102,7 @@
 <span class="c1"># from apis_core.apis_entities.models import Person</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">DateParser</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo</span> <span class="kn">import</span> <span class="n">signals</span>
 
 
 <div class="viewcode-block" id="find_if_user_accepted">
@@ -136,9 +141,7 @@
 <div class="viewcode-block" id="BaseRelationManager.filter_for_user">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.BaseRelationManager.filter_for_user">[docs]</a>
     <span class="k">def</span> <span class="nf">filter_for_user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span>
-            <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_SHOW_ONLY_PUBLISHED&quot;</span>
-        <span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;INSTALLED_APPS&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_SHOW_ONLY_PUBLISHED&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">filter_for_user</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span></div>
@@ -148,7 +151,7 @@
 
 <div class="viewcode-block" id="Property">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.Property">[docs]</a>
-<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;vocabsbaseclass_ptr&quot;</span><span class="p">])</span>
+<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rootobject_ptr&quot;</span><span class="p">])</span>
 <span class="k">class</span> <span class="nc">Property</span><span class="p">(</span><span class="n">RootObject</span><span class="p">):</span>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Properties&quot;</span>
@@ -448,6 +451,25 @@
                 <span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Triple.duplicate">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.Triple.duplicate">[docs]</a>
+    <span class="k">def</span> <span class="nf">duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">signals</span><span class="o">.</span><span class="n">pre_duplicate</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pk</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">adding</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">duplicate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">signals</span><span class="o">.</span><span class="n">post_duplicate</span><span class="o">.</span><span class="n">send</span><span class="p">(</span>
+            <span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">,</span> <span class="n">duplicate</span><span class="o">=</span><span class="n">duplicate</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">duplicate</span></div>
 </div>
 
 

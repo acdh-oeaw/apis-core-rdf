@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_entities.views &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -99,29 +102,22 @@
 
 <span class="kn">from</span> <span class="nn">apis_core.core.mixins</span> <span class="kn">import</span> <span class="n">ListViewObjectFilterMixin</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span><span class="p">,</span> <span class="n">UriCandidate</span><span class="p">,</span> <span class="n">Text</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.stanbolQueries</span> <span class="kn">import</span> <span class="n">retrieve_obj</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">access_for_all</span><span class="p">,</span>
     <span class="n">access_for_all_function</span><span class="p">,</span>
     <span class="n">ENTITIES_DEFAULT_COLS</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
 <span class="kn">from</span> <span class="nn">.filters</span> <span class="kn">import</span> <span class="n">get_list_filter_of_entity</span>
 <span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">GenericFilterFormHelper</span><span class="p">,</span>
-    <span class="n">NetworkVizFilterForm</span><span class="p">,</span>
     <span class="n">PersonResolveUriForm</span><span class="p">,</span>
     <span class="n">GenericEntitiesStanbolForm</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">get_entities_table</span>
-
-<span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">apis_highlighter.forms</span> <span class="kn">import</span> <span class="n">SelectAnnotationProject</span>
-    <span class="kn">from</span> <span class="nn">apis_highlighter.highlighter</span> <span class="kn">import</span> <span class="n">highlight_text_new</span>
-
-<span class="k">if</span> <span class="s2">&quot;charts&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">charts.models</span> <span class="kn">import</span> <span class="n">ChartConfig</span>
-    <span class="kn">from</span> <span class="nn">charts.views</span> <span class="kn">import</span> <span class="n">create_payload</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">get_member_for_entity</span>
 
 <span class="c1">###########################################################################</span>
 <span class="c1">############################################################################</span>
@@ -139,53 +135,13 @@
     <span class="n">ann_proj_pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;project&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">types</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;types&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">users_show</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;users_show&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">edit_views</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;edit_views&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">types</span><span class="p">:</span>
         <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;entity_types_highlighter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">types</span>
     <span class="k">if</span> <span class="n">users_show</span><span class="p">:</span>
         <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;users_show_highlighter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">users_show</span>
     <span class="k">if</span> <span class="n">ann_proj_pk</span><span class="p">:</span>
         <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;annotation_project&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ann_proj_pk</span>
-    <span class="k">if</span> <span class="n">edit_views</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">edit_views</span> <span class="o">!=</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
-            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;edit_views&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="n">request</span></div>
-
-
-
-<div class="viewcode-block" id="get_highlighted_texts">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.get_highlighted_texts">[docs]</a>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_highlighted_texts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
-    <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-        <span class="n">set_ann_proj</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;annotation_project&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">entity_types_highlighter</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity_types_highlighter&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">users_show</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;users_show_highlighter&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">object_texts</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">highlight_text_new</span><span class="p">(</span>
-                    <span class="n">x</span><span class="p">,</span>
-                    <span class="n">set_ann_proj</span><span class="o">=</span><span class="n">set_ann_proj</span><span class="p">,</span>
-                    <span class="n">types</span><span class="o">=</span><span class="n">entity_types_highlighter</span><span class="p">,</span>
-                    <span class="n">users_show</span><span class="o">=</span><span class="n">users_show</span><span class="p">,</span>
-                <span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
-                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
-                <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span>
-            <span class="p">}</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">Text</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">tempentityclass</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-        <span class="p">]</span>
-        <span class="n">ann_proj_form</span> <span class="o">=</span> <span class="n">SelectAnnotationProject</span><span class="p">(</span>
-            <span class="n">set_ann_proj</span><span class="o">=</span><span class="n">set_ann_proj</span><span class="p">,</span>
-            <span class="n">entity_types_highlighter</span><span class="o">=</span><span class="n">entity_types_highlighter</span><span class="p">,</span>
-            <span class="n">users_show_highlighter</span><span class="o">=</span><span class="n">users_show</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="n">object_texts</span><span class="p">,</span> <span class="n">ann_proj_form</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">object_texts</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">kind</span><span class="p">}</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">Text</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">tempentityclass</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-        <span class="p">]</span>
-        <span class="k">return</span> <span class="n">object_texts</span><span class="p">,</span> <span class="kc">False</span></div>
 
 
 
@@ -206,10 +162,7 @@
     <span class="n">formhelper_class</span> <span class="o">=</span> <span class="n">GenericFilterFormHelper</span>
     <span class="n">context_filter_name</span> <span class="o">=</span> <span class="s2">&quot;filter&quot;</span>
     <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">25</span>
-    <span class="n">template_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
-        <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_VIEW_TEMPLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;apis_entities/generic_list.html&quot;</span>
-    <span class="p">)</span>
-    <span class="n">login_url</span> <span class="o">=</span> <span class="s2">&quot;/accounts/login/&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_VIEW_TEMPLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;generic_list.html&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GenericListViewNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -243,7 +196,11 @@
     <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity&quot;</span><span class="p">)</span>
 
-        <span class="n">qs</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="n">get_member_for_entity</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">(),</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ListViewQueryset&quot;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">qs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">qs</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="n">get_list_filter_of_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">,</span> <span class="n">queryset</span><span class="o">=</span><span class="n">qs</span>
         <span class="p">)</span>
@@ -267,23 +224,18 @@
         <span class="n">class_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
 
         <span class="n">session</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">session</span><span class="p">:</span>
-            <span class="n">edit_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;edit_views&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">edit_v</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="n">selected_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span>
             <span class="s2">&quot;columns&quot;</span>
         <span class="p">)</span>  <span class="c1"># populates &quot;Select additional columns&quot; dropdown</span>
         <span class="n">default_cols</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># get set to &quot;name&quot; in get_entities_table when empty</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_ENTITIES&quot;</span><span class="p">):</span>
-            <span class="n">class_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">class_name</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">default_cols</span> <span class="o">=</span> <span class="n">class_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;table_fields&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">class_name</span><span class="p">)</span>
+        <span class="n">default_cols</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;table_fields&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="n">default_cols</span> <span class="o">=</span> <span class="n">default_cols</span> <span class="o">+</span> <span class="n">selected_cols</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span> <span class="o">=</span> <span class="n">get_entities_table</span><span class="p">(</span>
-            <span class="n">class_name</span><span class="p">,</span> <span class="n">edit_v</span><span class="p">,</span> <span class="n">default_cols</span><span class="o">=</span><span class="n">default_cols</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span> <span class="o">=</span> <span class="n">get_member_for_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">(),</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Table&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span> <span class="o">=</span> <span class="n">get_entities_table</span><span class="p">(</span><span class="n">class_name</span><span class="p">,</span> <span class="n">default_cols</span><span class="o">=</span><span class="n">default_cols</span><span class="p">)</span>
         <span class="n">table</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericListViewNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span>
         <span class="n">RequestConfig</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">paginate_by</span><span class="p">}</span>
@@ -352,29 +304,9 @@
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="n">context</span><span class="p">[</span><span class="s2">&quot;create_view_link&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="s2">&quot;charts&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-            <span class="n">app_label</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">app_label</span>
-            <span class="n">filtered_objs</span> <span class="o">=</span> <span class="n">ChartConfig</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-                <span class="n">model_name</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">app_name</span><span class="o">=</span><span class="n">app_label</span>
-            <span class="p">)</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;vis_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtered_objs</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;property_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;property&quot;</span><span class="p">)</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;charttype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;charttype&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;charttype&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">context</span><span class="p">[</span><span class="s2">&quot;property_name&quot;</span><span class="p">]:</span>
-                <span class="n">qs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span>
-                <span class="n">chartdata</span> <span class="o">=</span> <span class="n">create_payload</span><span class="p">(</span>
-                    <span class="n">context</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">],</span>
-                    <span class="n">context</span><span class="p">[</span><span class="s2">&quot;property_name&quot;</span><span class="p">],</span>
-                    <span class="n">context</span><span class="p">[</span><span class="s2">&quot;charttype&quot;</span><span class="p">],</span>
-                    <span class="n">qs</span><span class="p">,</span>
-                    <span class="n">app_label</span><span class="o">=</span><span class="n">app_label</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="n">context</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">chartdata</span><span class="p">)</span>
-
         <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_ENTITIES&quot;</span><span class="p">):</span>
-            <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">class_name</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;additional_cols&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">class_name</span><span class="p">)</span>
+        <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;additional_cols&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
         <span class="c1"># TODO kk spelling of this dict key should get fixed throughout</span>
         <span class="c1">#  (togglable_colums -&gt; toggleable_columns)</span>
@@ -454,10 +386,7 @@
     <span class="n">pk_obj</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_id&quot;</span><span class="p">)</span>
     <span class="n">instance</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk_obj</span><span class="p">)</span>
     <span class="n">uria</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-    <span class="n">urib</span> <span class="o">=</span> <span class="n">UriCandidate</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">urib</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">uric</span> <span class="o">=</span> <span class="n">urib</span>
-    <span class="k">elif</span> <span class="n">uria</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">uria</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">uric</span> <span class="o">=</span> <span class="n">uria</span>
         <span class="n">add_info</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="n">lst_json</span> <span class="o">=</span> <span class="p">[]</span>
@@ -727,53 +656,6 @@
         <span class="n">pers</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
             <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis:apis_entities:person_edit&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">pers</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span>
-        <span class="p">)</span></div>
-
-
-
-<span class="c1">############################################################################</span>
-<span class="c1">############################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#   VisualizationViews</span>
-<span class="c1">#</span>
-<span class="c1">############################################################################</span>
-<span class="c1">############################################################################</span>
-
-
-<div class="viewcode-block" id="birth_death_map">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.birth_death_map">[docs]</a>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">birth_death_map</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;apis:apis_entities/map_list.html&quot;</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="pers_place_netw">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.pers_place_netw">[docs]</a>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">pers_place_netw</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;apis:apis_entities/network.html&quot;</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="pers_inst_netw">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.pers_inst_netw">[docs]</a>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">pers_inst_netw</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;apis:apis_entities/network_institution.html&quot;</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="generic_network_viz">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.generic_network_viz">[docs]</a>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">generic_network_viz</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">NetworkVizFilterForm</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">render</span><span class="p">(</span>
-            <span class="n">request</span><span class="p">,</span>
-            <span class="s2">&quot;apis:apis_entities/generic_network_visualization.html&quot;</span><span class="p">,</span>
-            <span class="p">{</span><span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">},</span>
         <span class="p">)</span></div>
 
 

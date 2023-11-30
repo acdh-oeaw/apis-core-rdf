@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -51,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -91,9 +94,7 @@
 <li class="toctree-l3"><a class="reference internal" href="apis_core.apis_entities.html">apis_core.apis_entities package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#subpackages">Subpackages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#module-apis_core.apis_entities.admin">apis_core.apis_entities.admin module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#module-apis_core.apis_entities.api_renderers">apis_core.apis_entities.api_renderers module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#module-apis_core.apis_entities.api_urls">apis_core.apis_entities.api_urls module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#module-apis_core.apis_entities.api_views">apis_core.apis_entities.api_views module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#module-apis_core.apis_entities.apps">apis_core.apis_entities.apps module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#module-apis_core.apis_entities.autocomplete3">apis_core.apis_entities.autocomplete3 module</a></li>
@@ -135,13 +136,12 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.admin">apis_core.apis_metainfo.admin module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.api_renderers">apis_core.apis_metainfo.api_renderers module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.apps">apis_core.apis_metainfo.apps module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.browsingviews">apis_core.apis_metainfo.browsingviews module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.dal_urls">apis_core.apis_metainfo.dal_urls module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.dal_views">apis_core.apis_metainfo.dal_views module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.filters">apis_core.apis_metainfo.filters module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.forms">apis_core.apis_metainfo.forms module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.models">apis_core.apis_metainfo.models module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.serializers">apis_core.apis_metainfo.serializers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#apis-core-apis-metainfo-serializers-module">apis_core.apis_metainfo.serializers module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.signals">apis_core.apis_metainfo.signals module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.tables">apis_core.apis_metainfo.tables module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.test_models">apis_core.apis_metainfo.test_models module</a></li>
@@ -159,22 +159,12 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.forms2">apis_core.apis_relations.forms2 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.models">apis_core.apis_relations.models module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.rel_filters">apis_core.apis_relations.rel_filters module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.rel_tables">apis_core.apis_relations.rel_tables module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.rel_views">apis_core.apis_relations.rel_views module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.signals">apis_core.apis_relations.signals module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.tables">apis_core.apis_relations.tables module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.tests">apis_core.apis_relations.tests module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.urls">apis_core.apis_relations.urls module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.views">apis_core.apis_relations.views module</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="apis_core.apis_vis.html">apis_core.apis_vis package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_vis.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_vis.html#module-apis_core.apis_vis.api_views">apis_core.apis_vis.api_views module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_vis.html#module-apis_core.apis_vis.apps">apis_core.apis_vis.apps module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_vis.html#module-apis_core.apis_vis.serializers">apis_core.apis_vis.serializers module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_vis.html#module-apis_core.apis_vis.urls">apis_core.apis_vis.urls module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_vis.html#module-apis_core.apis_vis.utils">apis_core.apis_vis.utils module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_vis.html#module-apis_core.apis_vis.views">apis_core.apis_vis.views module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.apis_vocabularies.html">apis_core.apis_vocabularies package</a><ul>
@@ -206,9 +196,8 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.DateParser">apis_core.utils.DateParser module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.authentication">apis_core.utils.authentication module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.caching">apis_core.utils.caching module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#apis-core-utils-dl-models-module">apis_core.utils.dl_models module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.filtermethods">apis_core.utils.filtermethods module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.helpers">apis_core.utils.helpers module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#apis-core-utils-inter-annotator-agreement-module">apis_core.utils.inter_annotator_agreement module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.normalize">apis_core.utils.normalize module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.pylobid">apis_core.utils.pylobid module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.rdf">apis_core.utils.rdf module</a></li>
@@ -216,6 +205,7 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.stanbolQueries">apis_core.utils.stanbolQueries module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.test_DateParser">apis_core.utils.test_DateParser module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.test_caching">apis_core.utils.test_caching module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.test_filtermethods">apis_core.utils.test_filtermethods module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.test_normalize">apis_core.utils.test_normalize module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.test_rdf">apis_core.utils.test_rdf module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.utils.html#module-apis_core.utils.utils">apis_core.utils.utils module</a></li>
@@ -234,12 +224,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.html#module-apis_core.api_routers">apis_core.api_routers module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="apis_core.html#apis_core.api_routers.AdditionalSerializerConfig"><code class="docutils literal notranslate"><span class="pre">AdditionalSerializerConfig</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.html#apis_core.api_routers.AdditionalSerializerConfig.name"><code class="docutils literal notranslate"><span class="pre">AdditionalSerializerConfig.name</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.html#apis_core.api_routers.AdditionalSerializerConfig.path_structure"><code class="docutils literal notranslate"><span class="pre">AdditionalSerializerConfig.path_structure</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.html#apis_core.api_routers.AdditionalSerializerConfig.url"><code class="docutils literal notranslate"><span class="pre">AdditionalSerializerConfig.url</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.html#apis_core.api_routers.ApisBaseSerializer"><code class="docutils literal notranslate"><span class="pre">ApisBaseSerializer</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.html#apis_core.api_routers.ApisBaseSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">ApisBaseSerializer.Meta</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_id"><code class="docutils literal notranslate"><span class="pre">ApisBaseSerializer.add_id()</span></code></a></li>
@@ -272,7 +256,6 @@
 <li class="toctree-l3"><a class="reference internal" href="apis_core.html#apis_core.api_routers.create_query_parameters"><code class="docutils literal notranslate"><span class="pre">create_query_parameters()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.html#apis_core.api_routers.deep_get"><code class="docutils literal notranslate"><span class="pre">deep_get()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.html#apis_core.api_routers.generic_serializer_creation_factory"><code class="docutils literal notranslate"><span class="pre">generic_serializer_creation_factory()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="apis_core.html#apis_core.api_routers.load_additional_serializers"><code class="docutils literal notranslate"><span class="pre">load_additional_serializers()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.html#module-apis_core.testrunners">apis_core.testrunners module</a><ul>

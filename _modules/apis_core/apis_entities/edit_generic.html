@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_entities.edit_generic &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -106,16 +109,13 @@
     <span class="n">get_generic_triple_table</span><span class="p">,</span>
     <span class="n">LabelTableEdit</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">get_entities_form</span><span class="p">,</span> <span class="n">FullTextForm</span><span class="p">,</span> <span class="n">GenericEntitiesStanbolForm</span>
-<span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">get_highlighted_texts</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">get_entities_form</span><span class="p">,</span> <span class="n">GenericEntitiesStanbolForm</span>
 <span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">set_session_variables</span>
 <span class="kn">from</span> <span class="nn">..apis_vocabularies.models</span> <span class="kn">import</span> <span class="n">TextType</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.mixins</span> <span class="kn">import</span> <span class="n">EntityMixin</span><span class="p">,</span> <span class="n">EntityInstanceMixin</span>
-
-<span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">apis_highlighter.forms</span> <span class="kn">import</span> <span class="n">SelectAnnotatorAgreement</span>
 
 
 <div class="viewcode-block" id="GenericEntitiesEditView">
@@ -163,7 +163,9 @@
             <span class="n">title_card</span> <span class="o">=</span> <span class="n">prefix</span>
             <span class="n">tb_object</span> <span class="o">=</span> <span class="n">table_class</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">triples_related_by_entity</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
             <span class="n">tb_object_open</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;page&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">RequestConfig</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">})</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">tb_object</span><span class="p">)</span>
+            <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="n">per_page</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relations_per_page&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="n">RequestConfig</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="n">per_page</span><span class="p">})</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">tb_object</span><span class="p">)</span>
             <span class="n">side_bar</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="c1"># (title_card, tb_object, &#39;&#39;.join([x.title() for x in match]), tb_object_open)</span>
                 <span class="p">(</span>
@@ -175,11 +177,6 @@
             <span class="p">)</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-            <span class="n">form_ann_agreement</span> <span class="o">=</span> <span class="n">SelectAnnotatorAgreement</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">form_ann_agreement</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="s2">&quot;apis_bibsonomy&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
             <span class="n">apis_bibsonomy</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_BIBSONOMY_FIELDS&quot;</span><span class="p">,</span> <span class="p">[])</span>
             <span class="n">apis_bibsonomy_texts</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_BIBSONOMY_TEXTS&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
@@ -197,10 +194,8 @@
                 <span class="n">apis_bibsonomy</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">apis_bibsonomy</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">apis_bibsonomy</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">object_revisions</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
         <span class="n">object_lod</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">object_texts</span><span class="p">,</span> <span class="n">ann_proj_form</span> <span class="o">=</span> <span class="n">get_highlighted_texts</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">object_labels</span> <span class="o">=</span> <span class="n">Label</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">temp_entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">object_labels</span> <span class="o">=</span> <span class="n">Label</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">temp_entity__id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
         <span class="n">tb_label</span> <span class="o">=</span> <span class="n">LabelTableEdit</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">object_labels</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;L-&quot;</span>
         <span class="p">)</span>
@@ -211,14 +206,9 @@
         <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span>
             <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
-            <span class="s2">&quot;form_text&quot;</span><span class="p">:</span> <span class="n">form_text</span><span class="p">,</span>
             <span class="s2">&quot;instance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span>
             <span class="s2">&quot;right_card&quot;</span><span class="p">:</span> <span class="n">side_bar</span><span class="p">,</span>
-            <span class="s2">&quot;object_revisions&quot;</span><span class="p">:</span> <span class="n">object_revisions</span><span class="p">,</span>
-            <span class="s2">&quot;object_texts&quot;</span><span class="p">:</span> <span class="n">object_texts</span><span class="p">,</span>
             <span class="s2">&quot;object_lod&quot;</span><span class="p">:</span> <span class="n">object_lod</span><span class="p">,</span>
-            <span class="s2">&quot;ann_proj_form&quot;</span><span class="p">:</span> <span class="n">ann_proj_form</span><span class="p">,</span>
-            <span class="s2">&quot;form_ann_agreement&quot;</span><span class="p">:</span> <span class="n">form_ann_agreement</span><span class="p">,</span>
             <span class="s2">&quot;apis_bibsonomy&quot;</span><span class="p">:</span> <span class="n">apis_bibsonomy</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">form_merge_with</span> <span class="o">=</span> <span class="n">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span> <span class="n">ent_merge_pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
@@ -231,10 +221,8 @@
     <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
-        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
-        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="ow">and</span> <span class="n">form_text</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
             <span class="n">entity_2</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="n">form_text</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">entity_2</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
                 <span class="n">reverse</span><span class="p">(</span>
                     <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
@@ -246,7 +234,6 @@
             <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
                 <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span>
-                <span class="s2">&quot;form_text&quot;</span><span class="p">:</span> <span class="n">form_text</span><span class="p">,</span>
                 <span class="s2">&quot;instance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span>
             <span class="p">}</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;place&quot;</span><span class="p">:</span>
@@ -269,11 +256,10 @@
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">()</span>
-        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">permissions</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;create&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s2">&quot;entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">))</span>
         <span class="p">}</span>
-        <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/edit_generic.html&quot;</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/create_generic.html&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
             <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
                 <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
@@ -281,7 +267,6 @@
                     <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span>
                     <span class="s2">&quot;permissions&quot;</span><span class="p">:</span> <span class="n">permissions</span><span class="p">,</span>
                     <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
-                    <span class="s2">&quot;form_text&quot;</span><span class="p">:</span> <span class="n">form_text</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
@@ -292,10 +277,8 @@
     <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
-        <span class="n">form_text</span> <span class="o">=</span> <span class="n">FullTextForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
-        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="ow">and</span> <span class="n">form_text</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
             <span class="n">entity_2</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="n">form_text</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">entity_2</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
                 <span class="n">reverse</span><span class="p">(</span>
                     <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
@@ -308,14 +291,13 @@
                     <span class="s2">&quot;apis_entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">}</span>
-            <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/edit_generic.html&quot;</span><span class="p">)</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/create_generic.html&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
                 <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
                     <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
                     <span class="n">context</span><span class="o">=</span><span class="p">{</span>
                         <span class="s2">&quot;permissions&quot;</span><span class="p">:</span> <span class="n">permissions</span><span class="p">,</span>
                         <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span>
-                        <span class="s2">&quot;form_text&quot;</span><span class="p">:</span> <span class="n">form_text</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">)</span>
             <span class="p">)</span></div>
@@ -354,7 +336,7 @@
                     <span class="s2">&quot;apis_entities.add_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">}</span>
-            <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/edit_generic.html&quot;</span><span class="p">)</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/create_generic.html&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
                 <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
                     <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;permissions&quot;</span><span class="p">:</span> <span class="n">permissions</span><span class="p">,</span> <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>

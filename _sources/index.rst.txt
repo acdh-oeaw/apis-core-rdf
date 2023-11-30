@@ -17,6 +17,7 @@ Welcome to APIS's documentation!
    user_documentation
    data_model
    glossary
+   development
 
 .. toctree::
    :maxdepth: 2

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.utils.filtermethods &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.utils.filtermethods</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.utils.filtermethods</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains filter functions that can be used by django-filter filters</span>
+<span class="sd">See https://django-filter.readthedocs.io/en/main/ref/filters.html#method</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+
+
+<span class="c1"># should return tuple[str, str] once we are &gt;=3.9</span>
+<div class="viewcode-block" id="construct_lookup">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.filtermethods.construct_lookup">[docs]</a>
+<span class="k">def</span> <span class="nf">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper method to parse input values and construct field lookups</span>
+<span class="sd">    (https://docs.djangoproject.com/en/4.2/ref/models/querysets/#field-lookups)</span>
+<span class="sd">    Parses user input for wildcards and returns a tuple containing the</span>
+<span class="sd">    interpreted django lookup string and the trimmed value</span>
+<span class="sd">    E.g.</span>
+<span class="sd">        - ``example`` -&gt; ``(&#39;__icontains&#39;, &#39;example&#39;)``</span>
+<span class="sd">        - ``*example*`` -&gt; ``(&#39;__icontains&#39;, &#39;example&#39;)``</span>
+<span class="sd">        - ``*example`` -&gt; ``(&#39;__iendswith&#39;, &#39;example&#39;)``</span>
+<span class="sd">        - ``example*``-&gt; ``(&#39;__istartswith&#39;, &#39;example&#39;)``</span>
+<span class="sd">        - ``&quot;example&quot;`` -&gt; ``(&#39;__iexact&#39;, &#39;example&#39;)``</span>
+
+<span class="sd">    :param str value: text to be parsed for ``*``</span>
+<span class="sd">    :return: a tuple containing the lookup type and the value without modifiers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="s2">&quot;__iendswith&quot;</span><span class="p">,</span> <span class="n">value</span>
+
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;__istartswith&quot;</span><span class="p">,</span> <span class="n">value</span>
+
+    <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;__iexact&quot;</span><span class="p">,</span> <span class="n">value</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;__icontains&quot;</span><span class="p">,</span> <span class="n">value</span></div>
+
+
+
+<div class="viewcode-block" id="flexible_string">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.filtermethods.flexible_string">[docs]</a>
+<span class="k">def</span> <span class="nf">flexible_string</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    filter method for filtering arbitrary fields using :func:`construct_lookup`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span></div>
+
+
+
+<span class="c1"># filtermethods for specific usecases:</span>
+
+<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
+<div class="viewcode-block" id="related_entity_name">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.filtermethods.related_entity_name">[docs]</a>
+<span class="k">def</span> <span class="nf">related_entity_name</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    filter on the name of a related entity using :func:`construct_lookup`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_obj__subj__name</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+        <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_subj__obj__name</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">queryset</span></div>
+
+
+
+<div class="viewcode-block" id="related_property_name">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.filtermethods.related_property_name">[docs]</a>
+<span class="k">def</span> <span class="nf">related_property_name</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    filter on the name of a related property using :func:`construct_lookup`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_obj__prop__name</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+        <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_obj__prop__name_reverse</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+        <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_subj__prop__name</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+        <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_subj__prop__name_reverse</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">queryset</span></div>
+
+
+
+<div class="viewcode-block" id="related_arbitrary_model_name">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.filtermethods.related_arbitrary_model_name">[docs]</a>
+<span class="k">def</span> <span class="nf">related_arbitrary_model_name</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Searches through an arbitrarily related model on its name field using :func:`construct_lookup`.</span>
+<span class="sd">    Note that this works only if</span>
+<span class="sd">        - the related model has a field &#39;name&#39;</span>
+<span class="sd">        - the filter using this method has the same name as the field of the model on which the filter is applied.</span>
+
+<span class="sd">          (E.g. the field ``profession`` on a person relates to another model: the professiontype. Here the filter on a person</span>
+<span class="sd">          must also be called ``profession`` as the field ``profession`` exists within the person model and is then used to search in.</span>
+<span class="sd">          Using this example of professions, such a lookup would be generated: ``Person.objects.filter(profession__name__... )`` )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># name variable is the name of the filter and needs the corresponding field within the model</span>
+    <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;__name&quot;</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="name_label_filter">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.filtermethods.name_label_filter">[docs]</a>
+<span class="k">def</span> <span class="nf">name_label_filter</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="n">queryset_related_label</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;label__label&quot;</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+    <span class="n">queryset_self_name</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">queryset_related_label</span> <span class="o">|</span> <span class="n">queryset_self_name</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

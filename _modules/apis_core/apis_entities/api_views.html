@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_entities.api_views &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -100,8 +103,7 @@
 <span class="kn">from</span> <span class="nn">rest_framework.settings</span> <span class="kn">import</span> <span class="n">api_settings</span>
 <span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span><span class="p">,</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">.api_renderers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EntityToTEI</span><span class="p">,</span>
     <span class="n">EntityToCIDOCXML</span><span class="p">,</span>
@@ -128,7 +130,7 @@
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric">[docs]</a>
 <span class="k">class</span> <span class="nc">GetEntityGeneric</span><span class="p">(</span><span class="n">GenericAPIView</span><span class="p">):</span>
     <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">EntitySerializer</span>
-    <span class="n">queryset</span> <span class="o">=</span> <span class="n">TempEntityClass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
     <span class="n">renderer_classes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">api_settings</span><span class="o">.</span><span class="n">DEFAULT_RENDERER_CLASSES</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span>
         <span class="n">EntityToTEI</span><span class="p">,</span>
         <span class="n">EntityToCIDOCXML</span><span class="p">,</span>
@@ -149,13 +151,11 @@
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.get_object">[docs]</a>
     <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TempEntityClass</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">get_subclass</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">TempEntityClass</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">get_subclass</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
             <span class="n">uri2</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">build_absolute_uri</span><span class="p">())</span>
             <span class="k">if</span> <span class="n">uri2</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">TempEntityClass</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">get_subclass</span><span class="p">(</span>
-                    <span class="n">pk</span><span class="o">=</span><span class="n">uri2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">entity_id</span>
-                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">get_subclass</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">uri2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">entity_id</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">Http404</span></div>
 
@@ -440,34 +440,6 @@
 <span class="c1">#         return Response(res)</span>
 <span class="c1">#</span>
 <span class="c1"># __after_rdf_refactoring__</span>
-<div class="viewcode-block" id="SaveNetworkFiles">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.SaveNetworkFiles">[docs]</a>
-<span class="k">class</span> <span class="nc">SaveNetworkFiles</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
-<div class="viewcode-block" id="SaveNetworkFiles.post">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.SaveNetworkFiles.post">[docs]</a>
-    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">file_name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;file_name&quot;</span><span class="p">]</span>
-        <span class="n">file_name_list</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span>
-        <span class="n">nmb</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;downloads/&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">file_name_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_*.&quot;</span> <span class="o">+</span> <span class="n">file_name_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="ow">or</span> <span class="n">file</span> <span class="o">==</span> <span class="n">file_name</span>
-            <span class="p">):</span>
-                <span class="k">if</span> <span class="n">nmb</span><span class="p">:</span>
-                    <span class="n">nmb</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">nmb</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">nmb</span><span class="p">:</span>
-            <span class="n">file_name</span> <span class="o">=</span> <span class="n">file_name_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nmb</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">file_name_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;downloads/&quot;</span> <span class="o">+</span> <span class="n">file_name</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fw</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;edges&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&quot;links&quot;&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">fw</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;/downloads/&quot;</span> <span class="o">+</span> <span class="n">file_name</span><span class="p">}</span>
-        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div>
-</div>
-
 
 
 <div class="viewcode-block" id="ResolveAbbreviations">

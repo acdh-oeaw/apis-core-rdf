@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Configuration &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -64,6 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#apis-api-exclude-sets">APIS_API_EXCLUDE_SETS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis-api-id-writable">APIS_API_ID_WRITABLE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#apis-list-views-allowed">APIS_LIST_VIEWS_ALLOWED</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#apis-detail-views-allowed">APIS_DETAIL_VIEWS_ALLOWED</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#apis-view-passes-test">APIS_VIEW_PASSES_TEST</a></li>
@@ -75,6 +78,7 @@
 <li class="toctree-l1"><a class="reference internal" href="user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -262,6 +266,7 @@ The setting uses wildcards (*) and therefore allows to use subsets of attributes
             <span class="p">},</span>
         <span class="p">},</span>
         <span class="s2">&quot;list_filters_exclude&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lng&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;detail_view_exclude&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;notes&quot;</span><span class="p">,</span> <span class="s2">&quot;references&quot;</span><span class="p">],</span>
     <span class="p">},}</span>
 </pre></div>
 </div>
@@ -271,8 +276,11 @@ The example above is the default setting of the Place entity.
 allows to merge several entities in one target entity at once.
 <code class="docutils literal notranslate"><span class="pre">search</span></code> is an array and sets the fields that the search field searches.
 <code class="docutils literal notranslate"><span class="pre">form_order</span></code> defines the order of the fields in the metadata form of the respective entity.
+<code class="docutils literal notranslate"><span class="pre">form</span></code> allows you to set a custom form for the entity, instead of the default <cite>apis_entities.forms.GenericEntityForm</cite>
 <code class="docutils literal notranslate"><span class="pre">table_fields</span></code> sets the default columns to show in the list views.
-<code class="docutils literal notranslate"><span class="pre">additional_cols</span></code> allows to set the columns that user can add to the result view.</p>
+<code class="docutils literal notranslate"><span class="pre">additional_cols</span></code> allows to set the columns that user can add to the result view.
+<code class="docutils literal notranslate"><span class="pre">relations_per_page</span></code> allows to set the number of relations listed before pagination begins
+<code class="docutils literal notranslate"><span class="pre">detail_view_exclude</span></code> allows to set fields that are excluded from the default detail view</p>
 <section id="list-filters">
 <h3><code class="docutils literal notranslate"><span class="pre">list_filters</span></code><a class="headerlink" href="#list-filters" title="Link to this heading"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">list_filters</span></code> is a dictionary of configured filters for the list view. The default filters are generated based on the fields of an entity.
@@ -280,7 +288,8 @@ But you can override a generated filter or add additional filters. Overriding a 
 with the key being the name of a generated filter (usually that’s identical to the name of the field it refers to).
 If the entry does <strong>not</strong> refer to the name of a generated filter, you are creating a new filter and you have
 to define the filter type using the <code class="docutils literal notranslate"><span class="pre">filter</span></code> keyword being one of <a class="reference external" href="https://django-filter.readthedocs.io/en/stable/ref/filters.html#filters">the ones defined in the django-filters documentation</a>.</p>
-<p>The attributes of the <code class="docutils literal notranslate"><span class="pre">list_filter</span></code> dict items can be <a class="reference external" href="https://django-filter.readthedocs.io/en/stable/ref/filters.html">attributes listed in the django-filters documentation</a>.</p>
+<p>The attributes of the <code class="docutils literal notranslate"><span class="pre">list_filter</span></code> dict items can be <a class="reference external" href="https://django-filter.readthedocs.io/en/stable/ref/filters.html">attributes listed in the django-filters documentation</a>.
+The <a class="reference internal" href="modules/apis_core.utils.html#module-apis_core.utils.filtermethods" title="apis_core.utils.filtermethods"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.utils.filtermethods</span></code></a> module contains some functions that can be used as <code class="docutils literal notranslate"><span class="pre">method</span></code> for the filters.</p>
 <p>The view shows all the filters, first the ones changed or created in the <code class="docutils literal notranslate"><span class="pre">list_filters</span></code> dict, then the rest of the automatically generated ones.
 Using the <code class="docutils literal notranslate"><span class="pre">list_filters_exclude</span></code> setting it is possible to list the names of the fields that should <strong>not</strong> be part of the list views filter form.
 This does <em>not</em> override filters that are defined in the <code class="docutils literal notranslate"><span class="pre">list_filters</span></code> settings. If they should not be displayed, they should be removed from <code class="docutils literal notranslate"><span class="pre">list_filters</span></code>.
@@ -293,6 +302,15 @@ Using the keyword <code class="docutils literal notranslate"><span class="pre">_
 </pre></div>
 </div>
 <p>Boolean setting for excluding related objects from the API. Normally its not needed to touch this.</p>
+</section>
+<section id="apis-api-id-writable">
+<h2>APIS_API_ID_WRITABLE<a class="headerlink" href="#apis-api-id-writable" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_API_ID_WRITABLE</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Boolean setting for defining if the <cite>id</cite> field of an entity is writable via the
+API. Defaults to false. You can set it to <cite>True</cite> if you want to import entities
+from another instance and want to keep the <cite>id</cite>.</p>
 </section>
 <section id="apis-list-views-allowed">
 <h2>APIS_LIST_VIEWS_ALLOWED<a class="headerlink" href="#apis-list-views-allowed" title="Link to this heading"></a></h2>
@@ -324,7 +342,7 @@ This can be used to set the listviews to public using the
 </section>
 <section id="apis-list-view-template">
 <h2>APIS_LIST_VIEW_TEMPLATE<a class="headerlink" href="#apis-list-view-template" title="Link to this heading"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_LIST_VIEW_TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;browsing/generic_list.html&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_LIST_VIEW_TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;generic_list.html&quot;</span>
 </pre></div>
 </div>
 <p>Sets the path of the list view template. This is only needed if you want to customize the appearance of the list views.</p>

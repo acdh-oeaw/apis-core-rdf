@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul class="current">
@@ -93,7 +96,6 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
- | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -127,8 +129,6 @@
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.actions">(apis_core.apis_vocabularies.admin.BaseAdminVocabularies attribute)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer.add_annotations">add_annotations() (apis_core.apis_entities.serializers_generic.RelationEntitySerializer method)</a>
-</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer.add_entity">add_entity() (apis_core.apis_entities.serializers_generic.RelationEntitySerializer method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_entity_type">add_entity_type() (apis_core.apis_entities.serializers_generic.EntitySerializer method)</a>
@@ -167,8 +167,6 @@
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.GenericVocabsSerializer.add_vocabname">add_vocabname() (apis_core.apis_vocabularies.serializers.GenericVocabsSerializer method)</a>
 </li>
-      <li><a href="modules/apis_core.html#apis_core.api_routers.AdditionalSerializerConfig">AdditionalSerializerConfig (class in apis_core.api_routers)</a>
-</li>
       <li>
     apis_core
 
@@ -198,13 +196,6 @@
 </li>
       </ul></li>
       <li>
-    apis_core.apis_entities.admin
-
-      <ul>
-        <li><a href="modules/apis_core.apis_entities.html#module-apis_core.apis_entities.admin">module</a>
-</li>
-      </ul></li>
-      <li>
     apis_core.apis_entities.api_mappings
 
       <ul>
@@ -223,13 +214,6 @@
 
       <ul>
         <li><a href="modules/apis_core.apis_entities.html#module-apis_core.apis_entities.api_renderers">module</a>
-</li>
-      </ul></li>
-      <li>
-    apis_core.apis_entities.api_urls
-
-      <ul>
-        <li><a href="modules/apis_core.apis_entities.html#module-apis_core.apis_entities.api_urls">module</a>
 </li>
       </ul></li>
       <li>
@@ -464,13 +448,6 @@
 </li>
       </ul></li>
       <li>
-    apis_core.apis_metainfo.browsingviews
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.browsingviews">module</a>
-</li>
-      </ul></li>
-      <li>
     apis_core.apis_metainfo.dal_urls
 
       <ul>
@@ -505,13 +482,8 @@
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.models">module</a>
 </li>
       </ul></li>
-      <li>
-    apis_core.apis_metainfo.serializers
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.serializers">module</a>
-</li>
-      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     apis_core.apis_metainfo.signals
 
@@ -519,8 +491,6 @@
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.signals">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     apis_core.apis_metainfo.tables
 
@@ -606,17 +576,17 @@
 </li>
       </ul></li>
       <li>
-    apis_core.apis_relations.rel_tables
-
-      <ul>
-        <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.rel_tables">module</a>
-</li>
-      </ul></li>
-      <li>
     apis_core.apis_relations.rel_views
 
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.rel_views">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.apis_relations.signals
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.signals">module</a>
 </li>
       </ul></li>
       <li>
@@ -659,55 +629,6 @@
 
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.views">module</a>
-</li>
-      </ul></li>
-      <li>
-    apis_core.apis_vis
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis">module</a>
-</li>
-      </ul></li>
-      <li>
-    apis_core.apis_vis.api_views
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.api_views">module</a>
-</li>
-      </ul></li>
-      <li>
-    apis_core.apis_vis.apps
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.apps">module</a>
-</li>
-      </ul></li>
-      <li>
-    apis_core.apis_vis.serializers
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.serializers">module</a>
-</li>
-      </ul></li>
-      <li>
-    apis_core.apis_vis.urls
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.urls">module</a>
-</li>
-      </ul></li>
-      <li>
-    apis_core.apis_vis.utils
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.utils">module</a>
-</li>
-      </ul></li>
-      <li>
-    apis_core.apis_vis.views
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.views">module</a>
 </li>
       </ul></li>
       <li>
@@ -844,6 +765,13 @@
 </li>
       </ul></li>
       <li>
+    apis_core.utils.filtermethods
+
+      <ul>
+        <li><a href="modules/apis_core.utils.html#module-apis_core.utils.filtermethods">module</a>
+</li>
+      </ul></li>
+      <li>
     apis_core.utils.helpers
 
       <ul>
@@ -900,6 +828,13 @@
 </li>
       </ul></li>
       <li>
+    apis_core.utils.test_filtermethods
+
+      <ul>
+        <li><a href="modules/apis_core.utils.html#module-apis_core.utils.test_filtermethods">module</a>
+</li>
+      </ul></li>
+      <li>
     apis_core.utils.test_normalize
 
       <ul>
@@ -940,12 +875,6 @@
       </ul></li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.authentication.TokenAuthSupportQueryString.authenticate">authenticate() (apis_core.utils.authentication.TokenAuthSupportQueryString method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.author">author (apis_core.apis_metainfo.models.Source attribute)</a>
-</li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.AvgAge">AvgAge (class in apis_core.apis_vis.views)</a>
-</li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.serializers.AvRelations">AvRelations (class in apis_core.apis_vis.serializers)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -966,13 +895,9 @@
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTable.base_columns">(apis_core.apis_relations.tables.TripleTable attribute)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm.base_fields">base_fields (apis_core.apis_entities.forms.FullTextForm attribute)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.base_fields">base_fields (apis_core.apis_entities.forms.GenericEntitiesStanbolForm attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.base_fields">(apis_core.apis_entities.forms.GenericEntitiesStanbolForm attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.NetworkVizFilterForm.base_fields">(apis_core.apis_entities.forms.NetworkVizFilterForm attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.base_fields">(apis_core.apis_entities.forms.PersonResolveUriForm attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.SearchForm.base_fields">(apis_core.apis_entities.forms.SearchForm attribute)</a>
@@ -1002,17 +927,11 @@
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies">BaseAdminVocabularies (class in apis_core.apis_vocabularies.admin)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseCreateView">BaseCreateView (class in apis_core.apis_metainfo.browsingviews)</a>
-</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.BaseEntitySerializer">BaseEntitySerializer (class in apis_core.apis_entities.serializers)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.viewsets.UriToObjectViewSet.basename">basename (apis_core.apis_metainfo.viewsets.UriToObjectViewSet attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.BaseRelationManager">BaseRelationManager (class in apis_core.apis_relations.models)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseUpdateView">BaseUpdateView (class in apis_core.apis_metainfo.browsingviews)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.birth_death_map">birth_death_map() (in module apis_core.apis_entities.views)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.urls.build_apis_mock_request">build_apis_mock_request() (in module apis_core.urls)</a>
 </li>
@@ -1023,10 +942,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_caching.CachingTest">CachingTest (class in apis_core.utils.test_caching)</a>
-</li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.utils.calculate_age">calculate_age() (in module apis_core.apis_vis.utils)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.check_for_deleted_annotations">check_for_deleted_annotations() (apis_core.apis_metainfo.models.Text method)</a>
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsBaseClass.choices_status">choices_status (apis_core.apis_vocabularies.models.VocabsBaseClass attribute)</a>
 </li>
@@ -1072,21 +987,11 @@
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.collection_type_id">collection_type_id (apis_core.apis_metainfo.models.Collection attribute)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.TextType.collections">collections (apis_core.apis_metainfo.models.Text.TextType attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.TextType.collections">(apis_core.apis_vocabularies.models.TextType attribute)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.CollectionSerializer">CollectionSerializer (class in apis_core.apis_entities.serializers_generic)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.CollectionSerializer">(class in apis_core.apis_metainfo.serializers)</a>
+      <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.TextType.collections">collections (apis_core.apis_vocabularies.models.TextType attribute)</a>
 </li>
-      </ul></li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.CollectionSerializer.Meta">CollectionSerializer.Meta (class in apis_core.apis_metainfo.serializers)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.CollectionSerializer">CollectionSerializer (class in apis_core.apis_entities.serializers_generic)</a>
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsBaseClass.collectiontype">collectiontype (apis_core.apis_vocabularies.models.VocabsBaseClass attribute)</a>
 </li>
@@ -1100,25 +1005,19 @@
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.CollectionTypeSerializer.Meta">CollectionTypeSerializer.Meta (class in apis_core.apis_vocabularies.serializers)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.confidence">confidence (apis_core.apis_metainfo.models.UriCandidate attribute)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.construct_lookup">construct_lookup() (apis_core.apis_entities.filters.GenericEntityListFilter method)</a>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.filtermethods.construct_lookup">construct_lookup() (in module apis_core.utils.filtermethods)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.templatetags.html#apis_core.apis_relations.templatetags.apis_helpers.content_type">content_type() (in module apis_core.apis_relations.templatetags.apis_helpers)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.ContentTypeSerializer">ContentTypeSerializer (class in apis_core.apis_metainfo.serializers)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.ContentTypeSerializer.Meta">ContentTypeSerializer.Meta (class in apis_core.apis_metainfo.serializers)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.context_filter_name">context_filter_name (apis_core.apis_entities.views.GenericListViewNew attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.context_filter_name">(apis_core.apis_metainfo.browsingviews.GenericListView attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.context_filter_name">(apis_core.apis_relations.rel_views.GenericRelationView attribute)</a>
 </li>
       </ul></li>
       <li><a href="modules/apis_core.apis_labels.html#apis_core.apis_labels.views.LabelListView.context_object_name">context_object_name (apis_core.apis_labels.views.LabelListView attribute)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.signals.copy_relations">copy_relations() (in module apis_core.apis_relations.signals)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.testrunners.create_data">create_data() (in module apis_core.testrunners)</a>
 </li>
@@ -1144,13 +1043,9 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.stanbolQueries.decide_score_stanbol">decide_score_stanbol() (in module apis_core.utils.stanbolQueries)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm.declared_fields">declared_fields (apis_core.apis_entities.forms.FullTextForm attribute)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.declared_fields">declared_fields (apis_core.apis_entities.forms.GenericEntitiesStanbolForm attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.declared_fields">(apis_core.apis_entities.forms.GenericEntitiesStanbolForm attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.NetworkVizFilterForm.declared_fields">(apis_core.apis_entities.forms.NetworkVizFilterForm attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.declared_fields">(apis_core.apis_entities.forms.PersonResolveUriForm attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.SearchForm.declared_fields">(apis_core.apis_entities.forms.SearchForm attribute)</a>
@@ -1190,13 +1085,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.settings.default_settings">default_settings() (in module apis_core.utils.settings)</a>
 </li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.api_views.GetVisJson.depth">depth (apis_core.apis_vis.api_views.GetVisJson attribute)</a>
-</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.description">description (apis_core.apis_metainfo.models.Collection attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.description">(apis_core.apis_metainfo.models.UriCandidate attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.viewsets.UriToObjectViewSet.description">(apis_core.apis_metainfo.viewsets.UriToObjectViewSet attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsBaseClass.description">(apis_core.apis_vocabularies.models.VocabsBaseClass attribute)</a>
@@ -1225,7 +1116,11 @@
 </li>
       </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.duplicate">duplicate() (apis_core.apis_metainfo.models.RootObject method)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.duplicate">(apis_core.apis_relations.models.Triple method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1238,8 +1133,6 @@
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.LabelTableBase.Meta.empty_text">(apis_core.apis_relations.tables.LabelTableBase.Meta attribute)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriListView.enable_merge">enable_merge (apis_core.apis_metainfo.views.UriListView attribute)</a>
-</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.end_date">end_date (apis_core.apis_entities.models.TempEntityClass attribute)</a>
 
       <ul>
@@ -1277,19 +1170,11 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_renderers.EntityToCIDOC.ent_func">ent_func (apis_core.apis_entities.api_renderers.EntityToCIDOC attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.apps.EntitiesConfig">EntitiesConfig (class in apis_core.apis_entities.apps)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.apps.EntitiesConfig">(class in apis_core.apis_vis.apps)</a>
 </li>
-      </ul></li>
       <li><a href="glossary.html#term-Entity"><strong>Entity</strong></a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.TextType.entity">entity (apis_core.apis_metainfo.models.Text.TextType attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.TextType.entity">(apis_core.apis_vocabularies.models.TextType attribute)</a>
+      <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.TextType.entity">entity (apis_core.apis_vocabularies.models.TextType attribute)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.mixins.EntityInstanceMixin">EntityInstanceMixin (class in apis_core.apis_entities.mixins)</a>
@@ -1361,17 +1246,7 @@
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.forms.UriForm.Meta.fields">(apis_core.apis_metainfo.forms.UriForm.Meta attribute)</a>
 </li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.CollectionSerializer.Meta.fields">(apis_core.apis_metainfo.serializers.CollectionSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.ContentTypeSerializer.Meta.fields">(apis_core.apis_metainfo.serializers.ContentTypeSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.SourceSerializer.Meta.fields">(apis_core.apis_metainfo.serializers.SourceSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TempEntityClassSerializer.Meta.fields">(apis_core.apis_metainfo.serializers.TempEntityClassSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TextSerializer.Meta.fields">(apis_core.apis_metainfo.serializers.TextSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer.Meta.fields">(apis_core.apis_metainfo.serializers.UriSerializer.Meta attribute)</a>
+        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta.fields">(apis_core.apis_metainfo.tables.UriTable.Meta attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.Meta.fields">(apis_core.apis_relations.forms2.GenericTripleForm.Meta attribute)</a>
 </li>
@@ -1404,22 +1279,20 @@
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.RelationPublishedQueryset.filter_ann_proj">(apis_core.apis_relations.models.RelationPublishedQueryset method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.api_views.GetVisJson.filter_backends">filter_backends (apis_core.apis_vis.api_views.GetVisJson attribute)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.filter_class">filter_class (apis_core.apis_metainfo.browsingviews.GenericListView attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriListView.filter_class">(apis_core.apis_metainfo.views.UriListView attribute)</a>
-</li>
-      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.BaseRelationManager.filter_for_user">filter_for_user() (apis_core.apis_relations.models.BaseRelationManager method)</a>
 
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.RelationPublishedQueryset.filter_for_user">(apis_core.apis_relations.models.RelationPublishedQueryset method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.Meta.filter_overrides">filter_overrides (apis_core.apis_entities.filters.GenericEntityListFilter.Meta attribute)</a>
+</li>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.test_filtermethods.FilterMethodstest">FilterMethodstest (class in apis_core.utils.test_filtermethods)</a>
+</li>
+      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriListView.filterset_class">filterset_class (apis_core.apis_metainfo.views.UriListView attribute)</a>
+</li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.stanbolQueries.find_geonames2">find_geonames2() (in module apis_core.utils.stanbolQueries)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.find_if_user_accepted">find_if_user_accepted() (in module apis_core.apis_relations.models)</a>
@@ -1428,13 +1301,11 @@
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.test_models.PermissionsModelTestCase.first_name">first_name (apis_core.apis_entities.test_models.PermissionsModelTestCase attribute)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseCreateView.form_class">form_class (apis_core.apis_metainfo.browsingviews.BaseCreateView attribute)</a>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.filtermethods.flexible_string">flexible_string() (in module apis_core.utils.filtermethods)</a>
+</li>
+      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriCreate.form_class">form_class (apis_core.apis_metainfo.views.UriCreate attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseUpdateView.form_class">(apis_core.apis_metainfo.browsingviews.BaseUpdateView attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriCreate.form_class">(apis_core.apis_metainfo.views.UriCreate attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriGetOrCreate.form_class">(apis_core.apis_metainfo.views.UriGetOrCreate attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriUpdate.form_class">(apis_core.apis_metainfo.views.UriUpdate attribute)</a>
@@ -1463,8 +1334,6 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.formhelper_class">formhelper_class (apis_core.apis_entities.views.GenericListViewNew attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.formhelper_class">(apis_core.apis_metainfo.browsingviews.GenericListView attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriListView.formhelper_class">(apis_core.apis_metainfo.views.UriListView attribute)</a>
 </li>
       </ul></li>
@@ -1476,16 +1345,12 @@
       </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.from_db">from_db() (apis_core.apis_metainfo.models.Collection class method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm">FullTextForm (class in apis_core.apis_entities.forms)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.generic_network_viz">generic_network_viz() (in module apis_core.apis_entities.views)</a>
-</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_end_date_written">generic_order_end_date_written() (in module apis_core.apis_metainfo.tables)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_start_date_written">generic_order_start_date_written() (in module apis_core.apis_metainfo.tables)</a>
@@ -1495,8 +1360,6 @@
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_render_start_date_written">generic_render_start_date_written() (in module apis_core.apis_metainfo.tables)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.api_routers.generic_serializer_creation_factory">generic_serializer_creation_factory() (in module apis_core.api_routers)</a>
-</li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.serializers.GenericBaseSerializer">GenericBaseSerializer (class in apis_core.apis_vis.serializers)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericEntitiesAutocomplete">GenericEntitiesAutocomplete (class in apis_core.apis_entities.autocomplete3)</a>
 </li>
@@ -1519,12 +1382,6 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.Meta">GenericEntityListFilter.Meta (class in apis_core.apis_entities.filters)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericFilterFormHelper">GenericFilterFormHelper (class in apis_core.apis_entities.forms)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericFilterFormHelper">(class in apis_core.apis_metainfo.browsingviews)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView">GenericListView (class in apis_core.apis_metainfo.browsingviews)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew">GenericListViewNew (class in apis_core.apis_entities.views)</a>
 </li>
@@ -1568,15 +1425,13 @@
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesEditView.get">(apis_core.apis_entities.edit_generic.GenericEntitiesEditView method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_absolute_url">get_absolute_url() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_absolute_url">get_absolute_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 
       <ul>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.get_absolute_url">(apis_core.apis_metainfo.models.Uri method)</a>
 </li>
       </ul></li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.caching.get_all_class_modules_and_names">get_all_class_modules_and_names() (in module apis_core.utils.caching)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_all_cols">get_all_cols() (apis_core.apis_metainfo.browsingviews.GenericListView method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.caching.get_all_contenttype_classes">get_all_contenttype_classes() (in module apis_core.utils.caching)</a>
 </li>
@@ -1590,15 +1445,7 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.caching.get_autocomplete_property_choices">get_autocomplete_property_choices() (in module apis_core.utils.caching)</a>
 </li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_average_age_data">get_average_age_data() (in module apis_core.apis_vis.views)</a>
-</li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_average_members_data">get_average_members_data() (in module apis_core.apis_vis.views)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_child_class">get_child_class() (apis_core.apis_entities.models.TempEntityClass method)</a>
-</li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.utils.get_child_classes">get_child_classes() (in module apis_core.utils.utils)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_child_entity">get_child_entity() (apis_core.apis_entities.models.TempEntityClass method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.helpers.get_classes_with_allowed_relation_from">get_classes_with_allowed_relation_from() (in module apis_core.utils.helpers)</a>
 </li>
@@ -1607,16 +1454,10 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_context_data">get_context_data() (apis_core.apis_entities.views.GenericListViewNew method)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseCreateView.get_context_data">(apis_core.apis_metainfo.browsingviews.BaseCreateView method)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseUpdateView.get_context_data">(apis_core.apis_metainfo.browsingviews.BaseUpdateView method)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_context_data">(apis_core.apis_metainfo.browsingviews.GenericListView method)</a>
-</li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationDetailView.get_context_data">(apis_core.apis_relations.rel_views.GenericRelationDetailView method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_createview_url">get_createview_url() (apis_core.apis_entities.models.TempEntityClass class method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_createview_url">get_createview_url() (apis_core.apis_entities.models.AbstractEntity class method)</a>
 
       <ul>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.get_createview_url">(apis_core.apis_metainfo.models.Uri class method)</a>
@@ -1628,33 +1469,31 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.DateParser.get_date_help_text_from_dates">get_date_help_text_from_dates() (in module apis_core.utils.DateParser)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_delete_url">get_delete_url() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_delete_url">get_delete_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 
       <ul>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.get_delete_url">(apis_core.apis_metainfo.models.Uri method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_duplicate_url">get_duplicate_url() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_duplicate_url">get_duplicate_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_edit_url">get_edit_url() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_edit_url">get_edit_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 
       <ul>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.get_edit_url">(apis_core.apis_metainfo.models.Uri method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.get_entities_form">get_entities_form() (in module apis_core.apis_entities.forms)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.tables.get_entities_table">get_entities_table() (in module apis_core.apis_entities.tables)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.get_entities_table">(in module apis_core.apis_metainfo.browsingviews)</a>
 </li>
-      </ul></li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.caching.get_entity_class_of_name">get_entity_class_of_name() (in module apis_core.utils.caching)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_entity_list_filter">get_entity_list_filter() (apis_core.apis_entities.models.AbstractEntity class method)</a>
+</li>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.settings.get_entity_settings_by_modelname">get_entity_settings_by_modelname() (in module apis_core.utils.settings)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_excluded_fields">get_excluded_fields() (in module apis_core.apis_relations.rel_filters)</a>
 </li>
@@ -1663,6 +1502,8 @@
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.get_fields">get_fields() (apis_core.apis_vocabularies.admin.BaseAdminVocabularies method)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_filters">get_filters() (in module apis_core.apis_relations.rel_filters)</a>
+</li>
+      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriListView.get_filterset">get_filterset() (apis_core.apis_metainfo.views.UriListView method)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.views.get_form_ajax">get_form_ajax() (in module apis_core.apis_relations.views)</a>
 </li>
@@ -1674,24 +1515,20 @@
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.get_generic_triple_table">get_generic_triple_table() (in module apis_core.apis_relations.tables)</a>
 </li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_heatmap_data">get_heatmap_data() (in module apis_core.apis_vis.views)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.get_highlighted_texts">get_highlighted_texts() (in module apis_core.apis_entities.views)</a>
-</li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.get_html_table">get_html_table() (apis_core.apis_relations.forms2.GenericTripleForm method)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_included_fields">get_included_fields() (in module apis_core.apis_relations.rel_filters)</a>
 </li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.get_inst_range_data">get_inst_range_data() (in module apis_core.apis_vis.views)</a>
-</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.get_list_filter_of_entity">get_list_filter_of_entity() (in module apis_core.apis_entities.filters)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_listview_url">get_listview_url() (apis_core.apis_entities.models.TempEntityClass class method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_listview_url">get_listview_url() (apis_core.apis_entities.models.AbstractEntity class method)</a>
 
       <ul>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.get_listview_url">(apis_core.apis_metainfo.models.Uri class method)</a>
 </li>
       </ul></li>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.helpers.get_member_for_entity">get_member_for_entity() (in module apis_core.utils.helpers)</a>
+</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_model">get_model() (apis_core.apis_entities.views.GenericListViewNew method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.rdf.get_modelname_and_dict_from_uri">get_modelname_and_dict_from_uri() (in module apis_core.utils.rdf)</a>
@@ -1702,7 +1539,7 @@
 </li>
       <li><a href="modules/apis_core.default_settings.html#apis_core.default_settings.NER_settings.StbGeoQuerySettings.get_next_feature">get_next_feature() (apis_core.default_settings.NER_settings.StbGeoQuerySettings method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_next_url">get_next_url() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_next_url">get_next_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.get_object">get_object() (apis_core.apis_entities.api_views.GetEntityGeneric method)</a>
 
@@ -1718,7 +1555,7 @@
 </li>
       <li><a href="modules/apis_core.html#apis_core.api_routers.CustomPagination.get_paginated_response">get_paginated_response() (apis_core.api_routers.CustomPagination method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_prev_url">get_prev_url() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_prev_url">get_prev_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.utils.get_python_safe_module_path">get_python_safe_module_path() (in module apis_core.utils.utils)</a>
 </li>
@@ -1726,8 +1563,6 @@
 
       <ul>
         <li><a href="modules/apis_core.apis_labels.html#apis_core.apis_labels.views.LabelListView.get_queryset">(apis_core.apis_labels.views.LabelListView method)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_queryset">(apis_core.apis_metainfo.browsingviews.GenericListView method)</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.dal_views.TempEntityClassAC.get_queryset">(apis_core.apis_metainfo.dal_views.TempEntityClassAC method)</a>
 </li>
@@ -1741,14 +1576,10 @@
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.get_queryset">(apis_core.apis_relations.rel_views.GenericRelationView method)</a>
 </li>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.api_views.GetVisJson.get_queryset">(apis_core.apis_vis.api_views.GetVisJson method)</a>
-</li>
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.get_queryset">(apis_core.apis_vocabularies.admin.BaseAdminVocabularies method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.get_serialization">get_serialization() (apis_core.apis_entities.models.TempEntityClass method)</a>
-</li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.api_views.GetVisJson.get_serializer">get_serializer() (apis_core.apis_vis.api_views.GetVisJson method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_serialization">get_serialization() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.api_mappings.html#apis_core.apis_entities.api_mappings.cidoc_mapping.get_skos_url">get_skos_url() (in module apis_core.apis_entities.api_mappings.cidoc_mapping)</a>
 </li>
@@ -1757,13 +1588,9 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_table">get_table() (apis_core.apis_entities.views.GenericListViewNew method)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_table">(apis_core.apis_metainfo.browsingviews.GenericListView method)</a>
-</li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.get_table">(apis_core.apis_relations.rel_views.GenericRelationView method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.get_table_class">get_table_class() (apis_core.apis_metainfo.browsingviews.GenericListView method)</a>
-</li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.get_text_id">get_text_id() (apis_core.apis_relations.forms2.GenericTripleForm method)</a>
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabNames.get_vocab_label">get_vocab_label() (apis_core.apis_vocabularies.models.VocabNames method)</a>
@@ -1786,8 +1613,6 @@
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.test_api.GetTestCase">GetTestCase (class in apis_core.apis_entities.test_api)</a>
 </li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.api_views.GetVisJson">GetVisJson (class in apis_core.apis_vis.api_views)</a>
-</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.groups_allowed">groups_allowed (apis_core.apis_metainfo.models.Collection attribute)</a>
 </li>
   </ul></td>
@@ -1796,12 +1621,10 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.HeatMapView">HeatMapView (class in apis_core.apis_vis.views)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.SearchForm.helper">helper (apis_core.apis_entities.forms.SearchForm property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.SearchForm.helper">helper (apis_core.apis_entities.forms.SearchForm property)</a>
-</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.helper_render_date">helper_render_date() (in module apis_core.apis_metainfo.tables)</a>
 </li>
   </ul></td>
@@ -1817,13 +1640,7 @@
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.id">(apis_core.apis_metainfo.models.RootObject attribute)</a>
 </li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.id">(apis_core.apis_metainfo.models.Source attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.id">(apis_core.apis_metainfo.models.Text attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.id">(apis_core.apis_metainfo.models.Uri attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.id">(apis_core.apis_metainfo.models.UriCandidate attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.id">(apis_core.apis_relations.models.Triple attribute)</a>
 </li>
@@ -1834,8 +1651,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.indexed">indexed (apis_core.apis_metainfo.models.Source attribute)</a>
-</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.InheritanceForeignKey">InheritanceForeignKey (class in apis_core.apis_metainfo.models)</a>
 
       <ul>
@@ -1848,27 +1663,7 @@
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.InheritanceForwardManyToOneDescriptor">(class in apis_core.apis_relations.models)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.init_columns">init_columns (apis_core.apis_metainfo.browsingviews.GenericListView attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriListView.init_columns">(apis_core.apis_metainfo.views.UriListView attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.InstRange">InstRange (class in apis_core.apis_vis.views)</a>
-</li>
       <li><a href="modules/apis_core.apis_labels.html#apis_core.apis_labels.models.Label.isoCode_639_3">isoCode_639_3 (apis_core.apis_labels.models.Label attribute)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="K">K</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.kind">kind (apis_core.apis_metainfo.models.Text attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.kind_id">kind_id (apis_core.apis_metainfo.models.Text attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1928,12 +1723,12 @@
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.LabelTableEdit">LabelTableEdit (class in apis_core.apis_relations.tables)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.LabelTableEdit.Meta">LabelTableEdit.Meta (class in apis_core.apis_relations.tables)</a>
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsBaseClass.labeltype">labeltype (apis_core.apis_vocabularies.models.VocabsBaseClass attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.LabelType">LabelType (class in apis_core.apis_vocabularies.models)</a>
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.LabelType.DoesNotExist">LabelType.DoesNotExist</a>
@@ -1944,12 +1739,8 @@
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.LabelTypeSerializer.Meta">LabelTypeSerializer.Meta (class in apis_core.apis_vocabularies.serializers)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.TextType.lang">lang (apis_core.apis_metainfo.models.Text.TextType attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.TextType.lang">(apis_core.apis_vocabularies.models.TextType attribute)</a>
+      <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.TextType.lang">lang (apis_core.apis_vocabularies.models.TextType attribute)</a>
 </li>
-      </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.viewsets.UriToObjectViewSet.list">list() (apis_core.apis_metainfo.viewsets.UriToObjectViewSet method)</a>
 </li>
       <li><a href="modules/apis_core.context_processors.html#apis_core.context_processors.custom_context_processors.list_apis_settings">list_apis_settings() (in module apis_core.context_processors.custom_context_processors)</a>
@@ -1964,11 +1755,11 @@
 </li>
       <li><a href="modules/apis_core.apis_labels.html#apis_core.apis_labels.admin.BaseAdmin.list_filter">list_filter (apis_core.apis_labels.admin.BaseAdmin attribute)</a>
 </li>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.settings.list_links_to_edit">list_links_to_edit() (in module apis_core.utils.settings)</a>
+</li>
       <li><a href="modules/apis_core.context_processors.html#apis_core.context_processors.custom_context_processors.list_relations">list_relations() (in module apis_core.context_processors.custom_context_processors)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.ListSelect2">ListSelect2 (class in apis_core.apis_entities.fields)</a>
-</li>
-      <li><a href="modules/apis_core.html#apis_core.api_routers.load_additional_serializers">load_additional_serializers() (in module apis_core.api_routers)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_input">load_remaining_data_from_input() (apis_core.apis_relations.forms2.GenericTripleForm method)</a>
 </li>
@@ -1990,14 +1781,6 @@
       </ul></li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.pylobid.lobid_qs">lobid_qs() (in module apis_core.utils.pylobid)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.detail_generic.GenericEntitiesDetailView.login_url">login_url (apis_core.apis_entities.detail_generic.GenericEntitiesDetailView attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.login_url">(apis_core.apis_entities.views.GenericListViewNew attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.login_url">(apis_core.apis_relations.rel_views.GenericRelationView attribute)</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -2041,11 +1824,7 @@
 </li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.TagSelect2.media">(apis_core.apis_entities.fields.TagSelect2 property)</a>
 </li>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm.media">(apis_core.apis_entities.forms.FullTextForm property)</a>
-</li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.media">(apis_core.apis_entities.forms.GenericEntitiesStanbolForm property)</a>
-</li>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.NetworkVizFilterForm.media">(apis_core.apis_entities.forms.NetworkVizFilterForm property)</a>
 </li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.media">(apis_core.apis_entities.forms.PersonResolveUriForm property)</a>
 </li>
@@ -2076,23 +1855,21 @@
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.media_type">(apis_core.apis_metainfo.api_renderers.TEIBaseRenderer attribute)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.MembersAmountPerYear">MembersAmountPerYear (class in apis_core.apis_vis.views)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_booleanfield">merge_booleanfield() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.merge_booleanfield">merge_booleanfield() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_charfield">merge_charfield() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.merge_charfield">merge_charfield() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_end_date_written">merge_end_date_written() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.merge_end_date_written">merge_end_date_written() (apis_core.apis_entities.models.TempEntityClass method)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.merge_fields">merge_fields() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_fields">merge_fields() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.merge_views.merge_objects">merge_objects() (in module apis_core.apis_entities.merge_views)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.merge_start_date_written">merge_start_date_written() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_start_date_written">merge_start_date_written() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.merge_textfield">merge_textfield() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_textfield">merge_textfield() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.merge_with">merge_with() (apis_core.apis_entities.models.TempEntityClass method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_with">merge_with() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.apps.MetainfoConfig">MetainfoConfig (class in apis_core.apis_metainfo.apps)</a>
 </li>
@@ -2113,25 +1890,9 @@
 </li>
         <li><a href="modules/apis_core.apis_labels.html#apis_core.apis_labels.views.LabelListView.model">(apis_core.apis_labels.views.LabelListView attribute)</a>
 </li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseCreateView.model">(apis_core.apis_metainfo.browsingviews.BaseCreateView attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseUpdateView.model">(apis_core.apis_metainfo.browsingviews.BaseUpdateView attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.UriListFilter.Meta.model">(apis_core.apis_metainfo.filters.UriListFilter.Meta attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.forms.UriForm.Meta.model">(apis_core.apis_metainfo.forms.UriForm.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.CollectionSerializer.Meta.model">(apis_core.apis_metainfo.serializers.CollectionSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.ContentTypeSerializer.Meta.model">(apis_core.apis_metainfo.serializers.ContentTypeSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.SourceSerializer.Meta.model">(apis_core.apis_metainfo.serializers.SourceSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TempEntityClassSerializer.Meta.model">(apis_core.apis_metainfo.serializers.TempEntityClassSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TextSerializer.Meta.model">(apis_core.apis_metainfo.serializers.TextSerializer.Meta attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer.Meta.model">(apis_core.apis_metainfo.serializers.UriSerializer.Meta attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta.model">(apis_core.apis_metainfo.tables.UriTable.Meta attribute)</a>
 </li>
@@ -2190,15 +1951,11 @@
 </li>
         <li><a href="modules/apis_core.apis_entities.html#module-apis_core.apis_entities">apis_core.apis_entities</a>
 </li>
-        <li><a href="modules/apis_core.apis_entities.html#module-apis_core.apis_entities.admin">apis_core.apis_entities.admin</a>
-</li>
         <li><a href="modules/apis_core.apis_entities.api_mappings.html#module-apis_core.apis_entities.api_mappings">apis_core.apis_entities.api_mappings</a>
 </li>
         <li><a href="modules/apis_core.apis_entities.api_mappings.html#module-apis_core.apis_entities.api_mappings.cidoc_mapping">apis_core.apis_entities.api_mappings.cidoc_mapping</a>
 </li>
         <li><a href="modules/apis_core.apis_entities.html#module-apis_core.apis_entities.api_renderers">apis_core.apis_entities.api_renderers</a>
-</li>
-        <li><a href="modules/apis_core.apis_entities.html#module-apis_core.apis_entities.api_urls">apis_core.apis_entities.api_urls</a>
 </li>
         <li><a href="modules/apis_core.apis_entities.html#module-apis_core.apis_entities.api_views">apis_core.apis_entities.api_views</a>
 </li>
@@ -2266,8 +2023,6 @@
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.apps">apis_core.apis_metainfo.apps</a>
 </li>
-        <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.browsingviews">apis_core.apis_metainfo.browsingviews</a>
-</li>
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.dal_urls">apis_core.apis_metainfo.dal_urls</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.dal_views">apis_core.apis_metainfo.dal_views</a>
@@ -2277,8 +2032,6 @@
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.forms">apis_core.apis_metainfo.forms</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.models">apis_core.apis_metainfo.models</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.serializers">apis_core.apis_metainfo.serializers</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.signals">apis_core.apis_metainfo.signals</a>
 </li>
@@ -2306,9 +2059,9 @@
 </li>
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.rel_filters">apis_core.apis_relations.rel_filters</a>
 </li>
-        <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.rel_tables">apis_core.apis_relations.rel_tables</a>
-</li>
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.rel_views">apis_core.apis_relations.rel_views</a>
+</li>
+        <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.signals">apis_core.apis_relations.signals</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.tables">apis_core.apis_relations.tables</a>
 </li>
@@ -2321,20 +2074,6 @@
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.urls">apis_core.apis_relations.urls</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.views">apis_core.apis_relations.views</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis">apis_core.apis_vis</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.api_views">apis_core.apis_vis.api_views</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.apps">apis_core.apis_vis.apps</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.serializers">apis_core.apis_vis.serializers</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.urls">apis_core.apis_vis.urls</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.utils">apis_core.apis_vis.utils</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#module-apis_core.apis_vis.views">apis_core.apis_vis.views</a>
 </li>
         <li><a href="modules/apis_core.apis_vocabularies.html#module-apis_core.apis_vocabularies">apis_core.apis_vocabularies</a>
 </li>
@@ -2374,6 +2113,8 @@
 </li>
         <li><a href="modules/apis_core.utils.html#module-apis_core.utils.DateParser">apis_core.utils.DateParser</a>
 </li>
+        <li><a href="modules/apis_core.utils.html#module-apis_core.utils.filtermethods">apis_core.utils.filtermethods</a>
+</li>
         <li><a href="modules/apis_core.utils.html#module-apis_core.utils.helpers">apis_core.utils.helpers</a>
 </li>
         <li><a href="modules/apis_core.utils.html#module-apis_core.utils.normalize">apis_core.utils.normalize</a>
@@ -2390,6 +2131,8 @@
 </li>
         <li><a href="modules/apis_core.utils.html#module-apis_core.utils.test_DateParser">apis_core.utils.test_DateParser</a>
 </li>
+        <li><a href="modules/apis_core.utils.html#module-apis_core.utils.test_filtermethods">apis_core.utils.test_filtermethods</a>
+</li>
         <li><a href="modules/apis_core.utils.html#module-apis_core.utils.test_normalize">apis_core.utils.test_normalize</a>
 </li>
         <li><a href="modules/apis_core.utils.html#module-apis_core.utils.test_rdf">apis_core.utils.test_rdf</a>
@@ -2403,11 +2146,9 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.html#apis_core.api_routers.AdditionalSerializerConfig.name">name (apis_core.api_routers.AdditionalSerializerConfig attribute)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.apps.EntitiesConfig.name">name (apis_core.apis_entities.apps.EntitiesConfig attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.apps.EntitiesConfig.name">(apis_core.apis_entities.apps.EntitiesConfig attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.test_models.PermissionsModelTestCase.name">(apis_core.apis_entities.test_models.PermissionsModelTestCase attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_labels.html#apis_core.apis_labels.apps.LabelsConfig.name">(apis_core.apis_labels.apps.LabelsConfig attribute)</a>
@@ -2422,8 +2163,6 @@
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.apps.RelationsConfig.name">(apis_core.apis_relations.apps.RelationsConfig attribute)</a>
 </li>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.apps.EntitiesConfig.name">(apis_core.apis_vis.apps.EntitiesConfig attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.apps.VocabulariesConfig.name">(apis_core.apis_vocabularies.apps.VocabulariesConfig attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabNames.name">(apis_core.apis_vocabularies.models.VocabNames attribute)</a>
@@ -2433,7 +2172,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.name_forward">name_forward (apis_core.apis_relations.models.Property attribute)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.name_label_filter">name_label_filter() (apis_core.apis_entities.filters.GenericEntityListFilter method)</a>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.filtermethods.name_label_filter">name_label_filter() (in module apis_core.utils.filtermethods)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.name_reverse">name_reverse (apis_core.apis_relations.models.Property attribute)</a>
 </li>
@@ -2442,8 +2181,6 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.NetJsonNodeSerializer">NetJsonNodeSerializer (class in apis_core.apis_entities.serializers)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.api_renderers.NetJsonRenderer">NetJsonRenderer (class in apis_core.api_renderers)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.NetworkVizFilterForm">NetworkVizFilterForm (class in apis_core.apis_entities.forms)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_normalize.NormalizeTest">NormalizeTest (class in apis_core.utils.test_normalize)</a>
 </li>
@@ -2476,13 +2213,7 @@
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.objects">(apis_core.apis_metainfo.models.RootObject attribute)</a>
 </li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.objects">(apis_core.apis_metainfo.models.Source attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.objects">(apis_core.apis_metainfo.models.Text attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.objects">(apis_core.apis_metainfo.models.Uri attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.objects">(apis_core.apis_metainfo.models.UriCandidate attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.objects">(apis_core.apis_relations.models.Property attribute)</a>
 </li>
@@ -2513,10 +2244,6 @@
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.PropertyTable.order_subject">order_subject() (apis_core.apis_relations.tables.PropertyTable method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.orig_filename">orig_filename (apis_core.apis_metainfo.models.Source attribute)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.orig_id">orig_id (apis_core.apis_metainfo.models.Source attribute)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -2530,8 +2257,6 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.paginate_by">paginate_by (apis_core.apis_entities.views.GenericListViewNew attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.paginate_by">(apis_core.apis_metainfo.browsingviews.GenericListView attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.paginate_by">(apis_core.apis_relations.rel_views.GenericRelationView attribute)</a>
 </li>
       </ul></li>
@@ -2555,21 +2280,13 @@
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.ResolveAbbreviations.parser_classes">parser_classes (apis_core.apis_entities.api_views.ResolveAbbreviations attribute)</a>
 </li>
-      <li><a href="modules/apis_core.html#apis_core.api_routers.AdditionalSerializerConfig.path_structure">path_structure (apis_core.api_routers.AdditionalSerializerConfig attribute)</a>
-</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.test_models.PermissionsModelTestCase">PermissionsModelTestCase (class in apis_core.apis_entities.test_models)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.pers_inst_netw">pers_inst_netw() (in module apis_core.apis_entities.views)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.pers_place_netw">pers_place_netw() (in module apis_core.apis_entities.views)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm">PersonResolveUriForm (class in apis_core.apis_entities.forms)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.SaveNetworkFiles.post">post() (apis_core.apis_entities.api_views.SaveNetworkFiles method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateStanbolView.post">post() (apis_core.apis_entities.edit_generic.GenericEntitiesCreateStanbolView method)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateStanbolView.post">(apis_core.apis_entities.edit_generic.GenericEntitiesCreateStanbolView method)</a>
-</li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesCreateView.post">(apis_core.apis_entities.edit_generic.GenericEntitiesCreateView method)</a>
 </li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesEditView.post">(apis_core.apis_entities.edit_generic.GenericEntitiesEditView method)</a>
@@ -2604,8 +2321,6 @@
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.PropertyTable">PropertyTable (class in apis_core.apis_relations.tables)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.PropertyTable.Meta">PropertyTable.Meta (class in apis_core.apis_relations.tables)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.pubinfo">pubinfo (apis_core.apis_metainfo.models.Source attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.published">published (apis_core.apis_entities.models.TempEntityClass attribute)</a>
 
@@ -2645,17 +2360,19 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest">RdfTest (class in apis_core.utils.test_rdf)</a>
 </li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.apps.RelationsConfig.ready">ready() (apis_core.apis_relations.apps.RelationsConfig method)</a>
+</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.references">references (apis_core.apis_entities.models.TempEntityClass attribute)</a>
 
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.references">(apis_core.apis_relations.models.TempTriple attribute)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_arbitrary_model_name">related_arbitrary_model_name() (apis_core.apis_entities.filters.GenericEntityListFilter method)</a>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.filtermethods.related_arbitrary_model_name">related_arbitrary_model_name() (in module apis_core.utils.filtermethods)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_entity_name_method">related_entity_name_method() (apis_core.apis_entities.filters.GenericEntityListFilter method)</a>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.filtermethods.related_entity_name">related_entity_name() (in module apis_core.utils.filtermethods)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_property_name_method">related_property_name_method() (apis_core.apis_entities.filters.GenericEntityListFilter method)</a>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.filtermethods.related_property_name">related_property_name() (in module apis_core.utils.filtermethods)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.api_routers.RelatedTripleSerializer">RelatedTripleSerializer (class in apis_core.api_routers)</a>
 </li>
@@ -2683,25 +2400,19 @@
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.render">(apis_core.apis_metainfo.api_renderers.TEIBaseRenderer method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.LabelTableBase.render_end_date_written">render_end_date_written() (apis_core.apis_relations.tables.LabelTableBase method)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.LabelTableBase.render_start_date_written">render_start_date_written() (apis_core.apis_relations.tables.LabelTableBase method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.render_to_response">render_to_response() (apis_core.apis_entities.views.GenericListViewNew method)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.render_to_response">(apis_core.apis_metainfo.browsingviews.GenericListView method)</a>
 </li>
-      </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.renderer_classes">renderer_classes (apis_core.apis_entities.api_views.GetEntityGeneric attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.resolve_ambigue_person">resolve_ambigue_person() (in module apis_core.apis_entities.views)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.ResolveAbbreviations">ResolveAbbreviations (class in apis_core.apis_entities.api_views)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.responsible">responsible (apis_core.apis_metainfo.models.UriCandidate attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer.results_field">results_field (apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer attribute)</a>
 </li>
@@ -2714,17 +2425,9 @@
 </li>
       </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.root_object">root_object (apis_core.apis_metainfo.models.Uri attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.root_object">(apis_core.apis_metainfo.models.UriCandidate attribute)</a>
 </li>
-      </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.root_object_id">root_object_id (apis_core.apis_metainfo.models.Uri attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.root_object_id">(apis_core.apis_metainfo.models.UriCandidate attribute)</a>
 </li>
-      </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject">RootObject (class in apis_core.apis_metainfo.models)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.DoesNotExist">RootObject.DoesNotExist</a>
@@ -2757,11 +2460,9 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm.save">save() (apis_core.apis_entities.forms.FullTextForm method)</a>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.save">save() (apis_core.apis_entities.forms.GenericEntitiesStanbolForm method)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.save">(apis_core.apis_entities.forms.GenericEntitiesStanbolForm method)</a>
-</li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.save">(apis_core.apis_entities.forms.PersonResolveUriForm method)</a>
 </li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.save">(apis_core.apis_entities.models.TempEntityClass method)</a>
@@ -2771,8 +2472,6 @@
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.save">(apis_core.apis_metainfo.models.Collection method)</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.save">(apis_core.apis_metainfo.models.RootObject method)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.save">(apis_core.apis_metainfo.models.Text method)</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.save">(apis_core.apis_metainfo.models.Uri method)</a>
 </li>
@@ -2790,10 +2489,6 @@
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.views.save_ajax_form">save_ajax_form() (in module apis_core.apis_relations.views)</a>
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.admin.BaseAdminVocabularies.save_model">save_model() (apis_core.apis_vocabularies.admin.BaseAdminVocabularies method)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.SaveNetworkFiles">SaveNetworkFiles (class in apis_core.apis_entities.api_views)</a>
-</li>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.api_views.GetVisJson.schema">schema (apis_core.apis_vis.api_views.GetVisJson attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_labels.html#apis_core.apis_labels.admin.BaseAdmin.search_fields">search_fields (apis_core.apis_labels.admin.BaseAdmin attribute)</a>
 
@@ -2839,6 +2534,8 @@
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.set_and_sort_filters">set_and_sort_filters() (apis_core.apis_entities.filters.GenericEntityListFilter method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.set_session_variables">set_session_variables() (in module apis_core.apis_entities.views)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.mixins.EntityInstanceMixin.setup">setup() (apis_core.apis_entities.mixins.EntityInstanceMixin method)</a>
@@ -2847,8 +2544,6 @@
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.mixins.EntityMixin.setup">(apis_core.apis_entities.mixins.EntityMixin method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.test_models.ModelTestCase.setUp">setUp() (apis_core.apis_metainfo.test_models.ModelTestCase method)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.testrunners.APISTestRunner.setup_databases">setup_databases() (apis_core.testrunners.APISTestRunner method)</a>
@@ -2860,28 +2555,6 @@
 </li>
       </ul></li>
       <li><a href="modules/apis_core.context_processors.html#apis_core.context_processors.webpage_content_processors.shared_url">shared_url() (in module apis_core.context_processors.webpage_content_processors)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.source">source (apis_core.apis_entities.models.TempEntityClass attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.source">(apis_core.apis_metainfo.models.Text attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source">Source (class in apis_core.apis_metainfo.models)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.DoesNotExist">Source.DoesNotExist</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.MultipleObjectsReturned">Source.MultipleObjectsReturned</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.source_id">source_id (apis_core.apis_entities.models.TempEntityClass attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.source_id">(apis_core.apis_metainfo.models.Text attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.SourceSerializer">SourceSerializer (class in apis_core.apis_metainfo.serializers)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.SourceSerializer.Meta">SourceSerializer.Meta (class in apis_core.apis_metainfo.serializers)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.StandardResultsSetPagination">StandardResultsSetPagination (class in apis_core.apis_entities.api_views)</a>
 </li>
@@ -2974,18 +2647,8 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.MultipleObjectsReturned">TempEntityClass.MultipleObjectsReturned</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.tempentityclass_set">tempentityclass_set (apis_core.apis_metainfo.models.Collection attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.tempentityclass_set">(apis_core.apis_metainfo.models.Source attribute)</a>
 </li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.tempentityclass_set">(apis_core.apis_metainfo.models.Text attribute)</a>
-</li>
-      </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.dal_views.TempEntityClassAC">TempEntityClassAC (class in apis_core.apis_metainfo.dal_views)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TempEntityClassSerializer">TempEntityClassSerializer (class in apis_core.apis_metainfo.serializers)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TempEntityClassSerializer.Meta">TempEntityClassSerializer.Meta (class in apis_core.apis_metainfo.serializers)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDeleteView.template_name">template_name (apis_core.apis_entities.edit_generic.GenericEntitiesDeleteView attribute)</a>
 
@@ -2996,29 +2659,17 @@
 </li>
         <li><a href="modules/apis_core.apis_labels.html#apis_core.apis_labels.views.LabelListView.template_name">(apis_core.apis_labels.views.LabelListView attribute)</a>
 </li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseCreateView.template_name">(apis_core.apis_metainfo.browsingviews.BaseCreateView attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.BaseUpdateView.template_name">(apis_core.apis_metainfo.browsingviews.BaseUpdateView attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.browsingviews.GenericListView.template_name">(apis_core.apis_metainfo.browsingviews.GenericListView attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriDelete.template_name">(apis_core.apis_metainfo.views.UriDelete attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriDetailView.template_name">(apis_core.apis_metainfo.views.UriDetailView attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriGetOrCreate.template_name">(apis_core.apis_metainfo.views.UriGetOrCreate attribute)</a>
 </li>
+        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriListView.template_name">(apis_core.apis_metainfo.views.UriListView attribute)</a>
+</li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationDetailView.template_name">(apis_core.apis_relations.rel_views.GenericRelationDetailView attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.template_name">(apis_core.apis_relations.rel_views.GenericRelationView attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.AvgAge.template_name">(apis_core.apis_vis.views.AvgAge attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.HeatMapView.template_name">(apis_core.apis_vis.views.HeatMapView attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.InstRange.template_name">(apis_core.apis_vis.views.InstRange attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.views.MembersAmountPerYear.template_name">(apis_core.apis_vis.views.MembersAmountPerYear attribute)</a>
 </li>
       </ul></li>
       <li><a href="glossary.html#term-TempTriple"><strong>TempTriple</strong></a>
@@ -3043,6 +2694,8 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_institution_from_dnb2">test_get_modelname_from_dict_institution_from_dnb2() (apis_core.utils.test_rdf.RdfTest method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_person_from_dnb">test_get_modelname_from_dict_person_from_dnb() (apis_core.utils.test_rdf.RdfTest method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_dnb">test_get_modelname_from_dict_place_from_dnb() (apis_core.utils.test_rdf.RdfTest method)</a>
@@ -3051,51 +2704,13 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest.test_help_text">test_help_text() (apis_core.utils.test_DateParser.DateParserTest method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.test_models.ModelTestCase.test_root_object">test_root_object() (apis_core.apis_metainfo.test_models.ModelTestCase method)</a>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.test_filtermethods.FilterMethodstest.test_lookup">test_lookup() (apis_core.utils.test_filtermethods.FilterMethodstest method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.test_models.ModelTestCase.test_source">test_source() (apis_core.apis_metainfo.test_models.ModelTestCase method)</a>
+      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.test_models.ModelTestCase.test_root_object">test_root_object() (apis_core.apis_metainfo.test_models.ModelTestCase method)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.test_models.ModelTestCase.test_uri">test_uri() (apis_core.apis_metainfo.test_models.ModelTestCase method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.test_models.ModelTestCase.test_uri_candidate">test_uri_candidate() (apis_core.apis_metainfo.test_models.ModelTestCase method)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.TempEntityClass.text">text (apis_core.apis_entities.models.TempEntityClass attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.test_models.PermissionsModelTestCase.text">(apis_core.apis_entities.test_models.PermissionsModelTestCase attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.text">(apis_core.apis_metainfo.models.Text attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text">Text (class in apis_core.apis_metainfo.models)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.DoesNotExist">Text.DoesNotExist</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.MultipleObjectsReturned">Text.MultipleObjectsReturned</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.TextType">Text.TextType (class in apis_core.apis_metainfo.models)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.TextType.DoesNotExist">Text.TextType.DoesNotExist</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.TextType.MultipleObjectsReturned">Text.TextType.MultipleObjectsReturned</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Source.text_set">text_set (apis_core.apis_metainfo.models.Source attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.TextType.text_set">(apis_core.apis_metainfo.models.Text.TextType attribute)</a>
-</li>
-        <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.TextType.text_set">(apis_core.apis_vocabularies.models.TextType attribute)</a>
-</li>
-      </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.TextSerializer">TextSerializer (class in apis_core.apis_entities.serializers_generic)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TextSerializer">(class in apis_core.apis_metainfo.serializers)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.TextSerializer.Meta">TextSerializer.Meta (class in apis_core.apis_metainfo.serializers)</a>
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsBaseClass.texttype">texttype (apis_core.apis_vocabularies.models.VocabsBaseClass attribute)</a>
 </li>
@@ -3119,12 +2734,6 @@
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.NetJsonEdgeSerializer.to_representation">(apis_core.apis_entities.serializers.NetJsonEdgeSerializer method)</a>
 </li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.NetJsonNodeSerializer.to_representation">(apis_core.apis_entities.serializers.NetJsonNodeSerializer method)</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.serializers.AvRelations.to_representation">(apis_core.apis_vis.serializers.AvRelations method)</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.serializers.GenericBaseSerializer.to_representation">(apis_core.apis_vis.serializers.GenericBaseSerializer method)</a>
-</li>
-        <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.serializers.VisAgeSerializer.to_representation">(apis_core.apis_vis.serializers.VisAgeSerializer method)</a>
 </li>
       </ul></li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.authentication.TokenAuthSupportQueryString">TokenAuthSupportQueryString (class in apis_core.utils.authentication)</a>
@@ -3166,8 +2775,6 @@
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.uri">uri (apis_core.apis_metainfo.models.Uri attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.uri">(apis_core.apis_metainfo.models.UriCandidate attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsUri.uri">(apis_core.apis_vocabularies.models.VocabsUri attribute)</a>
 </li>
       </ul></li>
@@ -3178,14 +2785,6 @@
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.MultipleObjectsReturned">Uri.MultipleObjectsReturned</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.uri_set">uri_set (apis_core.apis_metainfo.models.RootObject attribute)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate">UriCandidate (class in apis_core.apis_metainfo.models)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.DoesNotExist">UriCandidate.DoesNotExist</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriCandidate.MultipleObjectsReturned">UriCandidate.MultipleObjectsReturned</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.uricandidate_set">uricandidate_set (apis_core.apis_metainfo.models.RootObject attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriCreate">UriCreate (class in apis_core.apis_metainfo.views)</a>
 </li>
@@ -3199,10 +2798,10 @@
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.forms.UriForm.Meta">UriForm.Meta (class in apis_core.apis_metainfo.forms)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriGetOrCreate">UriGetOrCreate (class in apis_core.apis_metainfo.views)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.forms.UriGetOrCreateForm">UriGetOrCreateForm (class in apis_core.apis_metainfo.forms)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filters.UriListFilter">UriListFilter (class in apis_core.apis_metainfo.filters)</a>
@@ -3215,10 +2814,6 @@
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriQuerySet">UriQuerySet (class in apis_core.apis_metainfo.models)</a>
 </li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer">UriSerializer (class in apis_core.apis_metainfo.serializers)</a>
-</li>
-      <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer.Meta">UriSerializer.Meta (class in apis_core.apis_metainfo.serializers)</a>
-</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable">UriTable (class in apis_core.apis_metainfo.tables)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta">UriTable.Meta (class in apis_core.apis_metainfo.tables)</a>
@@ -3226,8 +2821,6 @@
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.viewsets.UriToObjectViewSet">UriToObjectViewSet (class in apis_core.apis_metainfo.viewsets)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.views.UriUpdate">UriUpdate (class in apis_core.apis_metainfo.views)</a>
-</li>
-      <li><a href="modules/apis_core.html#apis_core.api_routers.AdditionalSerializerConfig.url">url (apis_core.api_routers.AdditionalSerializerConfig attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.serializers.UserAccSerializer">UserAccSerializer (class in apis_core.apis_vocabularies.serializers)</a>
 </li>
@@ -3243,8 +2836,6 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_vis.html#apis_core.apis_vis.serializers.VisAgeSerializer">VisAgeSerializer (class in apis_core.apis_vis.serializers)</a>
-</li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsUri.vocab">vocab (apis_core.apis_vocabularies.models.VocabsUri attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.VocabsUri.vocab_id">vocab_id (apis_core.apis_vocabularies.models.VocabsUri attribute)</a>
@@ -3274,8 +2865,6 @@
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.CollectionType.vocabsbaseclass_ptr">vocabsbaseclass_ptr (apis_core.apis_metainfo.models.Collection.CollectionType attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.TextType.vocabsbaseclass_ptr">(apis_core.apis_metainfo.models.Text.TextType attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.CollectionType.vocabsbaseclass_ptr">(apis_core.apis_vocabularies.models.CollectionType attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.LabelType.vocabsbaseclass_ptr">(apis_core.apis_vocabularies.models.LabelType attribute)</a>
@@ -3288,8 +2877,6 @@
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.CollectionType.vocabsbaseclass_ptr_id">vocabsbaseclass_ptr_id (apis_core.apis_metainfo.models.Collection.CollectionType attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Text.TextType.vocabsbaseclass_ptr_id">(apis_core.apis_metainfo.models.Text.TextType attribute)</a>
-</li>
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.CollectionType.vocabsbaseclass_ptr_id">(apis_core.apis_vocabularies.models.CollectionType attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_vocabularies.html#apis_core.apis_vocabularies.models.LabelType.vocabsbaseclass_ptr_id">(apis_core.apis_vocabularies.models.LabelType attribute)</a>

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_entities.forms &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -96,13 +99,11 @@
 <span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">ModelMultipleChoiceField</span><span class="p">,</span> <span class="n">ModelChoiceField</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Uri</span><span class="p">,</span> <span class="n">Collection</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span><span class="p">,</span> <span class="n">Collection</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_vocabularies.models</span> <span class="kn">import</span> <span class="n">TextType</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">DateParser</span><span class="p">,</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">DateParser</span><span class="p">,</span> <span class="n">caching</span><span class="p">,</span> <span class="n">settings</span> <span class="k">as</span> <span class="n">apis_settings</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
 <span class="kn">from</span> <span class="nn">.fields</span> <span class="kn">import</span> <span class="n">ListSelect2</span><span class="p">,</span> <span class="n">Select2Multiple</span>
-
-<span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">apis_highlighter.models</span> <span class="kn">import</span> <span class="n">AnnotationProject</span>
 
 
 <div class="viewcode-block" id="SearchForm">
@@ -130,6 +131,9 @@
 <span class="sd">    :param entity: entity name as String</span>
 <span class="sd">    :return: GenericEntitiesForm class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">form</span> <span class="o">:=</span> <span class="n">apis_settings</span><span class="o">.</span><span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">form</span>
 
     <span class="k">class</span> <span class="nc">GenericEntitiesForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
         <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
@@ -245,17 +249,12 @@
 <span class="sd">                :param entity_name: string representation of an entity name</span>
 <span class="sd">                :return: a list of strings</span>
 <span class="sd">                &quot;&quot;&quot;</span>
-                <span class="n">entity_settings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_ENTITIES&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">entity_name</span><span class="p">)</span>
+                <span class="n">form_order</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form_order&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
-                <span class="k">if</span> <span class="n">entity_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">form_order</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="p">[</span><span class="n">entity_name</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form_order&quot;</span><span class="p">,</span> <span class="p">[])</span>
-                    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="n">form_order</span> <span class="o">=</span> <span class="p">[]</span>
-
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">form_order</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">remaining</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">field_names</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">form_order</span><span class="p">)</span>
-                        <span class="n">field_names</span> <span class="o">=</span> <span class="n">form_order</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">remaining</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">form_order</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">remaining</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">field_names</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">form_order</span><span class="p">)</span>
+                    <span class="n">field_names</span> <span class="o">=</span> <span class="n">form_order</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">remaining</span><span class="p">)</span>
 
                 <span class="k">return</span> <span class="n">field_names</span>
 
@@ -267,50 +266,69 @@
                     <span class="n">crispy_main_fields</span><span class="p">,</span> <span class="n">crispy_meta_fields</span>
                 <span class="p">)</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;collection&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># backwards compatibility:</span>
+            <span class="c1"># those fields are part of TempEntityClass - this</span>
+            <span class="c1"># block can probably be removed when TempEntityClass</span>
+            <span class="c1"># is gone from apis_entities</span>
+            <span class="c1"># for now we at least check if they exist</span>
+            <span class="k">if</span> <span class="s2">&quot;status&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="s2">&quot;collection&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;collection&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="s2">&quot;start_date_written&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;start_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="s2">&quot;end_date_written&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;end_date_written&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
 
             <span class="n">instance</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;instance&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">instance</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
 
-                <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">start_date_written</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
-                        <span class="s2">&quot;start_date_written&quot;</span>
-                    <span class="p">]</span><span class="o">.</span><span class="n">help_text</span> <span class="o">=</span> <span class="n">DateParser</span><span class="o">.</span><span class="n">get_date_help_text_from_dates</span><span class="p">(</span>
-                        <span class="n">single_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">start_date</span><span class="p">,</span>
-                        <span class="n">single_start_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">start_start_date</span><span class="p">,</span>
-                        <span class="n">single_end_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">start_end_date</span><span class="p">,</span>
-                        <span class="n">single_date_written</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">start_date_written</span><span class="p">,</span>
-                    <span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
-                        <span class="s2">&quot;start_date_written&quot;</span>
-                    <span class="p">]</span><span class="o">.</span><span class="n">help_text</span> <span class="o">=</span> <span class="n">DateParser</span><span class="o">.</span><span class="n">get_date_help_text_default</span><span class="p">()</span>
+                <span class="c1"># same as above, part of TempEntityClass</span>
+                <span class="k">if</span> <span class="s2">&quot;start_date_written&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">start_date_written</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
+                            <span class="s2">&quot;start_date_written&quot;</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">help_text</span> <span class="o">=</span> <span class="n">DateParser</span><span class="o">.</span><span class="n">get_date_help_text_from_dates</span><span class="p">(</span>
+                            <span class="n">single_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">start_date</span><span class="p">,</span>
+                            <span class="n">single_start_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">start_start_date</span><span class="p">,</span>
+                            <span class="n">single_end_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">start_end_date</span><span class="p">,</span>
+                            <span class="n">single_date_written</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">start_date_written</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
+                            <span class="s2">&quot;start_date_written&quot;</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">help_text</span> <span class="o">=</span> <span class="n">DateParser</span><span class="o">.</span><span class="n">get_date_help_text_default</span><span class="p">()</span>
 
-                <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">end_date_written</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
-                        <span class="s2">&quot;end_date_written&quot;</span>
-                    <span class="p">]</span><span class="o">.</span><span class="n">help_text</span> <span class="o">=</span> <span class="n">DateParser</span><span class="o">.</span><span class="n">get_date_help_text_from_dates</span><span class="p">(</span>
-                        <span class="n">single_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">end_date</span><span class="p">,</span>
-                        <span class="n">single_start_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">end_start_date</span><span class="p">,</span>
-                        <span class="n">single_end_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">end_end_date</span><span class="p">,</span>
-                        <span class="n">single_date_written</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">end_date_written</span><span class="p">,</span>
-                    <span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
-                        <span class="s2">&quot;end_date_written&quot;</span>
-                    <span class="p">]</span><span class="o">.</span><span class="n">help_text</span> <span class="o">=</span> <span class="n">DateParser</span><span class="o">.</span><span class="n">get_date_help_text_default</span><span class="p">()</span>
+                <span class="c1"># same as above, part of TempEntityClass</span>
+                <span class="k">if</span> <span class="s2">&quot;end_date_written&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">end_date_written</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
+                            <span class="s2">&quot;end_date_written&quot;</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">help_text</span> <span class="o">=</span> <span class="n">DateParser</span><span class="o">.</span><span class="n">get_date_help_text_from_dates</span><span class="p">(</span>
+                            <span class="n">single_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">end_date</span><span class="p">,</span>
+                            <span class="n">single_start_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">end_start_date</span><span class="p">,</span>
+                            <span class="n">single_end_date</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">end_end_date</span><span class="p">,</span>
+                            <span class="n">single_date_written</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">end_date_written</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
+                            <span class="s2">&quot;end_date_written&quot;</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">help_text</span> <span class="o">=</span> <span class="n">DateParser</span><span class="o">.</span><span class="n">get_date_help_text_default</span><span class="p">()</span>
 
         <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericEntitiesForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">col_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
-                    <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_DEFAULT_COLLECTION&quot;</span><span class="p">,</span> <span class="s2">&quot;manually created entity&quot;</span>
-                <span class="p">)</span>
-                <span class="n">col</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">col_name</span><span class="p">)</span>
-                <span class="n">obj</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+
+            <span class="c1"># backwards compatibility</span>
+            <span class="c1"># collection is a field of TempEntityClass - this block</span>
+            <span class="c1"># can be removed when TempEntityClass is gone from apis_entities</span>
+            <span class="c1"># for now we at least check if the attribute exist</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;collection&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">col_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+                        <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_DEFAULT_COLLECTION&quot;</span><span class="p">,</span> <span class="s2">&quot;manually created entity&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">col</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">col_name</span><span class="p">)</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">obj</span>
 
     <span class="k">return</span> <span class="n">GenericEntitiesForm</span></div>
@@ -367,73 +385,6 @@
 
 
 
-<div class="viewcode-block" id="FullTextForm">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm">[docs]</a>
-<span class="k">class</span> <span class="nc">FullTextForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-<div class="viewcode-block" id="FullTextForm.save">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.FullTextForm.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
-        <span class="n">cd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">cd</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">text_type</span> <span class="o">=</span> <span class="n">TextType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">text</span> <span class="o">=</span> <span class="n">Text</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">tempentityclass</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">text_type</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">text</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">cd</span><span class="p">[</span><span class="n">f</span><span class="p">]</span>
-                <span class="n">text</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="k">elif</span> <span class="n">text</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="n">Text</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">cd</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="n">kind</span><span class="o">=</span><span class="n">text_type</span><span class="p">)</span>
-                <span class="n">text</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-                <span class="n">entity</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">text</span></div>
-
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;entity&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">entity</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">entity</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="s2">&quot;instance&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;instance&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FullTextForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_class</span> <span class="o">=</span> <span class="s2">&quot;FullTextForm&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_tag</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">help_text_inline</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">collections</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">instance</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                <span class="n">collections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">collections</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="c1"># TODO : make this filter call respect entity class hierarchy</span>
-                <span class="c1"># Here texttypes are searched for a given entity. But since this is an exact search</span>
-                <span class="c1"># for the entity, it does not regard any subclasses of the class to which a texttype</span>
-                <span class="c1"># was assigned</span>
-                <span class="n">q</span> <span class="o">=</span> <span class="n">TextType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-                    <span class="n">entity__iexact</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span> <span class="n">collections__in</span><span class="o">=</span><span class="n">collections</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">q</span> <span class="o">=</span> <span class="n">TextType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">entity__iexact</span><span class="o">=</span><span class="n">entity</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">txt</span> <span class="ow">in</span> <span class="n">q</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;text_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">txt</span><span class="o">.</span><span class="n">pk</span><span class="p">)]</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
-                    <span class="n">label</span><span class="o">=</span><span class="n">txt</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                    <span class="n">help_text</span><span class="o">=</span><span class="n">txt</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
-                    <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">Textarea</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="n">instance</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="s2">&quot;text_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">kind</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;text_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">kind</span><span class="o">.</span><span class="n">pk</span><span class="p">)]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">text</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">pass</span></div>
-
-
-
 <div class="viewcode-block" id="PersonResolveUriForm">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm">[docs]</a>
 <span class="k">class</span> <span class="nc">PersonResolveUriForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
@@ -469,109 +420,6 @@
             <span class="k">if</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">add_error</span><span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;This URI has already been added to the DB.&quot;</span><span class="p">)</span></div>
 </div>
-
-
-
-<div class="viewcode-block" id="NetworkVizFilterForm">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.NetworkVizFilterForm">[docs]</a>
-<span class="k">class</span> <span class="nc">NetworkVizFilterForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-    <span class="n">ann_include_all</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Include general relations&quot;</span><span class="p">,</span>
-        <span class="n">help_text</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Not all relations are connected to an annotation.</span><span class="se">\</span>
-<span class="s2">        If checked relations that are not attached to an annotation are include.</span><span class="se">\</span>
-<span class="s2">        This setting is only used when an Annotation project is specified.&quot;&quot;&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">start_date</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Start date&quot;</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span>
-            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data-provide&quot;</span><span class="p">:</span> <span class="s2">&quot;datepicker&quot;</span><span class="p">,</span> <span class="s2">&quot;data-date-format&quot;</span><span class="p">:</span> <span class="s2">&quot;dd.mm.yyyy&quot;</span><span class="p">}</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
-    <span class="n">end_date</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;End date&quot;</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span>
-            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data-provide&quot;</span><span class="p">:</span> <span class="s2">&quot;datepicker&quot;</span><span class="p">,</span> <span class="s2">&quot;data-date-format&quot;</span><span class="p">:</span> <span class="s2">&quot;dd.mm.yyyy&quot;</span><span class="p">}</span>
-        <span class="p">),</span>
-    <span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">rel_attrs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;data-placeholder&quot;</span><span class="p">:</span> <span class="s2">&quot;Type to get suggestions&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;data-minimum-input-length&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_MIN_CHAR&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-            <span class="s2">&quot;data-html&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;data-placeholder&quot;</span><span class="p">:</span> <span class="s2">&quot;Type to get suggestions&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;data-minimum-input-length&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_MIN_CHAR&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-            <span class="s2">&quot;data-html&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">NetworkVizFilterForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;select_relation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Relation type&quot;</span><span class="p">,</span>
-            <span class="n">choices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
-                <span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">app_label</span><span class="o">=</span><span class="s2">&quot;apis_relations&quot;</span><span class="p">)</span>
-            <span class="p">),</span>
-            <span class="n">help_text</span><span class="o">=</span><span class="s2">&quot;Include only relations related to this annotation project </span><span class="se">\</span>
-<span class="s2">            (See the include general relations checkbox)&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;select_relation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;person-place&quot;</span><span class="p">,</span> <span class="s2">&quot;person place&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;search_source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListCreateChoiceField</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Search source&quot;</span><span class="p">,</span>
-            <span class="n">widget</span><span class="o">=</span><span class="n">ListSelect2</span><span class="p">(</span>
-                <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
-                    <span class="s2">&quot;apis:apis_entities:generic_network_entities_autocomplete&quot;</span><span class="p">,</span>
-                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="s2">&quot;person&quot;</span><span class="p">},</span>
-                <span class="p">),</span>
-                <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;search_target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListCreateChoiceField</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Search target&quot;</span><span class="p">,</span>
-            <span class="n">widget</span><span class="o">=</span><span class="n">ListSelect2</span><span class="p">(</span>
-                <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
-                    <span class="s2">&quot;apis:apis_entities:generic_network_entities_autocomplete&quot;</span><span class="p">,</span>
-                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="s2">&quot;place&quot;</span><span class="p">},</span>
-                <span class="p">),</span>
-                <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;select_kind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListCreateChoiceField</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Select kind&quot;</span><span class="p">,</span>
-            <span class="n">widget</span><span class="o">=</span><span class="n">ListSelect2</span><span class="p">(</span>
-                <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
-                    <span class="s2">&quot;apis:apis_vocabularies:generic_vocabularies_autocomplete&quot;</span><span class="p">,</span>
-                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;vocab&quot;</span><span class="p">:</span> <span class="s2">&quot;personplacerelation&quot;</span><span class="p">,</span> <span class="s2">&quot;direct&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">},</span>
-                <span class="p">),</span>
-                <span class="n">attrs</span><span class="o">=</span><span class="n">rel_attrs</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;annotation_proj&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span>
-                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Annotation Project&quot;</span><span class="p">,</span>
-                <span class="n">choices</span><span class="o">=</span><span class="n">BLANK_CHOICE_DASH</span>
-                <span class="o">+</span> <span class="nb">list</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">AnnotationProject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()),</span>
-                <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">help_text</span><span class="o">=</span><span class="s2">&quot;Include only relations related to this annotation project </span><span class="se">\</span>
-<span class="s2">                (See the include general relations checkbox)&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_class</span> <span class="o">=</span> <span class="s2">&quot;FilterNodesForm&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_action</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis:apis_core:NetJson-list&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;Submit&quot;</span><span class="p">,</span> <span class="s2">&quot;Add nodes&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">order_fields</span><span class="p">(</span>
-            <span class="p">(</span>
-                <span class="s2">&quot;select_relation&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;ann_include_all&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;annotation_proj&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;search_source&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;select_kind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;search_target&quot;</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="p">)</span></div>
 
 
 

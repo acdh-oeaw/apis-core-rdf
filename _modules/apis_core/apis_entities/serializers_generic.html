@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_entities.serializers_generic &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -137,11 +140,7 @@
 <span class="k">class</span> <span class="nc">EntitySerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_url&quot;</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">CharField</span><span class="p">()</span>
-    <span class="n">start_date</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
-    <span class="n">end_date</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
     <span class="n">uris</span> <span class="o">=</span> <span class="n">EntityUriSerializer</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;uri_set&quot;</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">LabelSerializer</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;label_set&quot;</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">revisions</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_revisions&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EntitySerializer.add_revisions">
@@ -276,7 +275,9 @@
                 <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_relations&quot;</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">add_texts</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TextSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TextSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span> <span class="s2">&quot;label_set&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">LabelSerializer</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;label_set&quot;</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 
@@ -289,7 +290,6 @@
     <span class="n">start_date_written</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
     <span class="n">end_date_written</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
     <span class="n">relation_type</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_relation_label&quot;</span><span class="p">)</span>
-    <span class="n">annotation</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_annotations&quot;</span><span class="p">)</span>
     <span class="n">revisions</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_revisions&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RelationEntitySerializer.add_revisions">
@@ -311,47 +311,6 @@
                 <span class="p">}</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
-
-
-<div class="viewcode-block" id="RelationEntitySerializer.add_annotations">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.RelationEntitySerializer.add_annotations">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">offs</span> <span class="o">=</span> <span class="mi">50</span>
-            <span class="k">for</span> <span class="n">an</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">annotation_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                <span class="n">r1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">pk</span>
-                <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">user_added</span><span class="o">.</span><span class="n">username</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">text</span>
-                <span class="k">if</span> <span class="n">offs</span> <span class="o">&lt;</span> <span class="n">an</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>
-                    <span class="n">s</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">offs</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="k">if</span> <span class="n">offs</span> <span class="o">+</span> <span class="n">an</span><span class="o">.</span><span class="n">end</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-                    <span class="n">e</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">end</span> <span class="o">+</span> <span class="n">offs</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">e</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-                <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;annotation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">an</span><span class="o">.</span><span class="n">start</span> <span class="p">:</span> <span class="n">an</span><span class="o">.</span><span class="n">end</span><span class="p">]</span>
-                <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">s</span><span class="p">:</span><span class="n">e</span><span class="p">]</span>
-                <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&lt;annotation&gt;</span><span class="si">{}</span><span class="s2">&lt;/annotation&gt;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">][:</span> <span class="n">an</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">s</span><span class="p">],</span>
-                    <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">][</span><span class="n">an</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">s</span> <span class="p">:</span> <span class="n">an</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="n">s</span><span class="p">],</span>
-                    <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">][</span><span class="n">an</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="n">s</span> <span class="p">:],</span>
-                <span class="p">)</span>
-                <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br/&gt;&quot;</span><span class="p">)</span>
-                <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br/&gt;&quot;</span><span class="p">)</span>
-                <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;br/&gt;&quot;</span><span class="p">)</span>
-
-                <span class="n">r1</span><span class="p">[</span><span class="s2">&quot;string_offset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">-</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">an</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">an</span><span class="o">.</span><span class="n">end</span><span class="p">)</span>
-                <span class="c1"># r1[&quot;text_url&quot;] = self.context[&quot;request&quot;].build_absolute_uri(</span>
-                <span class="c1">#        reverse(&quot;apis_core:apis_api:text-detail&quot;, kwargs={&quot;pk&quot;: an.text_id})</span>
-                <span class="c1"># )</span>
-                <span class="n">r1</span><span class="p">[</span>
-                    <span class="s2">&quot;text_url&quot;</span>
-                <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_uri</span><span class="si">}{</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;apis_core:apis_api:text-detail&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;pk&#39;</span><span class="p">:</span><span class="w"> </span><span class="n">an</span><span class="o">.</span><span class="n">text_id</span><span class="p">})</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r1</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">res</span></div>
 
 
 <div class="viewcode-block" id="RelationEntitySerializer.add_entity">

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.api_routers &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -82,9 +85,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.api_routers</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
-<span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">literal_eval</span>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">apis_ontology.models</span> <span class="kn">import</span> <span class="o">*</span>
@@ -94,6 +95,7 @@
 
 <span class="c1"># from django.contrib.contenttypes.models import ContentType</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">pagination</span><span class="p">,</span> <span class="n">serializers</span><span class="p">,</span> <span class="n">viewsets</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">renderers</span>
 <span class="kn">from</span> <span class="nn">rest_framework.response</span> <span class="kn">import</span> <span class="n">Response</span>
@@ -113,11 +115,6 @@
 <span class="kn">from</span> <span class="nn">.apis_relations.models</span> <span class="kn">import</span> <span class="n">Triple</span><span class="p">,</span> <span class="n">Property</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 <span class="kn">from</span> <span class="nn">apis_core.core.mixins</span> <span class="kn">import</span> <span class="n">ListViewObjectFilterMixin</span>
-
-<span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;INSTALLED_APPS&quot;</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">apis_highlighter.highlighter</span> <span class="kn">import</span> <span class="n">highlight_text_new</span>
-    <span class="kn">from</span> <span class="nn">apis_highlighter.models</span> <span class="kn">import</span> <span class="n">Annotation</span>
-
 
 <span class="k">try</span><span class="p">:</span>
     <span class="n">MAX_AGE</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">MAX_AGE</span>
@@ -348,18 +345,6 @@
 
 
 
-<span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;INSTALLED_APPS&quot;</span><span class="p">):</span>
-
-    <span class="k">class</span> <span class="nc">AnnotationSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
-        <span class="n">related_object</span> <span class="o">=</span> <span class="n">VocabsBaseSerializer</span><span class="p">(</span>
-            <span class="n">source</span><span class="o">=</span><span class="s2">&quot;get_related_entity&quot;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span>
-
-        <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-            <span class="n">model</span> <span class="o">=</span> <span class="n">Annotation</span>
-            <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="s2">&quot;related_object&quot;</span><span class="p">]</span>
-
-
 <div class="viewcode-block" id="generic_serializer_creation_factory">
 <a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.generic_serializer_creation_factory">[docs]</a>
 <span class="k">def</span> <span class="nf">generic_serializer_creation_factory</span><span class="p">():</span>
@@ -393,8 +378,6 @@
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">exclude_lst</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">entity_field_name_list</span><span class="p">:</span>
                 <span class="n">exclude_lst_fin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">entity_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
-            <span class="n">exclude_lst_fin</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;ManyToManyField&quot;</span><span class="p">:</span>
                 <span class="n">prefetch_rel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -404,6 +387,8 @@
         <span class="k">class</span> <span class="nc">TemplateSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedModelSerializer</span><span class="p">):</span>
 
             <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ReadOnlyField</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_API_ID_WRITABLE&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
             <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
                 <span class="n">view_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;apis:apis_api:</span><span class="si">{</span><span class="n">entity_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">-detail&quot;</span>
             <span class="p">)</span>
@@ -419,167 +404,84 @@
             <span class="k">def</span> <span class="nf">add_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
                 <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)}</span>
 
-            <span class="k">if</span> <span class="n">entity_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
-
-                <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-                    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_highlight</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;kind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-
-                <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-                    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                    <span class="n">entity_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span><span class="o">.</span><span class="vm">__name__</span>
-                    <span class="n">app_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app_label</span>
-                    <span class="n">lst_labels_set</span> <span class="o">=</span> <span class="n">deep_get</span><span class="p">(</span>
-                        <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">app_label</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="p">{}),</span>
-                        <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.labels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity_str</span><span class="p">),</span>
-                        <span class="p">[],</span>
-                    <span class="p">)</span>
-                    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">():</span>
-                        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_API_EXCLUDE_SETS&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span>
-                            <span class="n">f</span><span class="o">.</span><span class="n">name</span>
-                        <span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_set&quot;</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                            <span class="k">continue</span>
-                        <span class="n">ck_many</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;ManyToManyField&quot;</span>
-                        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_lst</span><span class="p">:</span>
-                            <span class="k">continue</span>
-                        <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span>
-                            <span class="s2">&quot;ManyToManyField&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;ForeignKey&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;InheritanceForeignKey&quot;</span><span class="p">,</span>
-                        <span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;apis_vocabularies&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">related_model</span><span class="p">):</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApisBaseSerializer</span><span class="p">(</span>
-                                <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
-                            <span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ManyToManyField&quot;</span><span class="p">,</span> <span class="s2">&quot;ForeignKey&quot;</span><span class="p">]:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelSerializer</span><span class="p">(</span>
-                                <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
-                            <span class="p">)</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">entity_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="n">app_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app_label</span>
+                <span class="n">lst_labels_set</span> <span class="o">=</span> <span class="n">deep_get</span><span class="p">(</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">app_label</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="p">{}),</span>
+                    <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.labels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity_str</span><span class="p">),</span>
+                    <span class="p">[],</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_API_EXCLUDE_SETS&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">name</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_set&quot;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="n">ck_many</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;ManyToManyField&quot;</span>
+                    <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_lst</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span>
+                        <span class="s2">&quot;ManyToManyField&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;ForeignKey&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;InheritanceForeignKey&quot;</span><span class="p">,</span>
+                    <span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;apis_vocabularies&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">related_model</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApisBaseSerializer</span><span class="p">(</span>
+                            <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ManyToManyField&quot;</span><span class="p">,</span> <span class="s2">&quot;ForeignKey&quot;</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelSerializer</span><span class="p">(</span>
+                            <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
+                        <span class="p">)</span>
 
         <span class="n">TemplateSerializer</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">TemplateSerializer</span><span class="o">.</span><span class="vm">__qualname__</span>
         <span class="p">)</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entity_str</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">Serializer&quot;</span>
 
         <span class="k">class</span> <span class="nc">TemplateSerializerRetrieve</span><span class="p">(</span><span class="n">TemplateSerializer</span><span class="p">):</span>
-
-            <span class="k">if</span> <span class="n">entity_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span>
-                    <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;txt_serializer_add_text&quot;</span>
+            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">entity_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="n">app_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app_label</span>
+                <span class="n">lst_labels_set</span> <span class="o">=</span> <span class="n">deep_get</span><span class="p">(</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">app_label</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="p">{}),</span>
+                    <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.labels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity_str</span><span class="p">),</span>
+                    <span class="p">[],</span>
                 <span class="p">)</span>
-                <span class="k">if</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;INSTALLED_APPS&quot;</span><span class="p">):</span>
-                    <span class="n">annotations</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span>
-                        <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;txt_serializer_add_annotations&quot;</span>
-                    <span class="p">)</span>
-
-                    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">AnnotationSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-                    <span class="k">def</span> <span class="nf">txt_serializer_add_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highlight</span><span class="p">:</span>
-                            <span class="k">return</span> <span class="n">AnnotationSerializer</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">_annotations</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span>
-                            <span class="p">)</span><span class="o">.</span><span class="n">data</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">return</span> <span class="kc">None</span>
-
-                <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-                    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                    <span class="n">highlight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;highlight&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_inline_annotations</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="k">if</span> <span class="n">highlight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;apis_highlighter&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span>
-                        <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;INSTALLED_APPS&quot;</span>
-                    <span class="p">):</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_highlight</span> <span class="o">=</span> <span class="n">highlight</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highlight</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_highlight</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_highlight</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highlight</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">_highlight</span> <span class="o">=</span> <span class="kc">False</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_ann_proj_pk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ann_proj_pk&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_types</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;types&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_users_show</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;users_show&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_inline_annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                            <span class="s2">&quot;inline_annotations&quot;</span><span class="p">,</span> <span class="kc">True</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_API_EXCLUDE_SETS&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">name</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_set&quot;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="n">ck_many</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;ManyToManyField&quot;</span>
+                    <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_lst</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span>
+                        <span class="s2">&quot;ManyToManyField&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;ForeignKey&quot;</span><span class="p">,</span>
+                    <span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;apis_vocabularies&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">related_model</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApisBaseSerializer</span><span class="p">(</span>
+                            <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
                         <span class="p">)</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inline_annotations</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inline_annotations</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">_inline_annotations</span> <span class="o">=</span> <span class="kc">False</span>
-                            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inline_annotations</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">_inline_annotations</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_txt_html</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotations</span> <span class="o">=</span> <span class="n">highlight_text_new</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span>
-                                <span class="n">set_ann_proj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ann_proj_pk</span><span class="p">,</span>
-                                <span class="n">types</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_types</span><span class="p">,</span>
-                                <span class="n">users_show</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_users_show</span><span class="p">,</span>
-                                <span class="n">inline_annotations</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_inline_annotations</span><span class="p">,</span>
-                            <span class="p">)</span>
-                            <span class="n">qs_an</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">}</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_users_show</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                <span class="n">qs_an</span><span class="p">[</span><span class="s2">&quot;users_added__in&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_users_show</span>
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ann_proj_pk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                <span class="n">qs_an</span><span class="p">[</span><span class="s2">&quot;annotation_project_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ann_proj_pk</span>
-                            <span class="c1"># self._annotations = Annotation.objects.filter(</span>
-                            <span class="c1">#    **qs_an</span>
-                            <span class="c1"># )  # FIXME: Currently this QS is called twice (highlight_text_new)</span>
-                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_txt_html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_annotations</span> <span class="o">=</span> <span class="p">[]</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_highlight</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;kind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-                <span class="k">def</span> <span class="nf">txt_serializer_add_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inline_annotations</span><span class="p">:</span>
-                        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_txt_html</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">return</span> <span class="n">instance</span><span class="o">.</span><span class="n">text</span>
-
-            <span class="k">else</span><span class="p">:</span>
-
-                <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-                    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                    <span class="n">entity_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span><span class="o">.</span><span class="vm">__name__</span>
-                    <span class="n">app_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app_label</span>
-                    <span class="n">lst_labels_set</span> <span class="o">=</span> <span class="n">deep_get</span><span class="p">(</span>
-                        <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">app_label</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="p">{}),</span>
-                        <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.labels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity_str</span><span class="p">),</span>
-                        <span class="p">[],</span>
-                    <span class="p">)</span>
-                    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">():</span>
-                        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_API_EXCLUDE_SETS&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span>
-                            <span class="n">f</span><span class="o">.</span><span class="n">name</span>
-                        <span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_set&quot;</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                            <span class="k">continue</span>
-                        <span class="n">ck_many</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;ManyToManyField&quot;</span>
-                        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_lst</span><span class="p">:</span>
-                            <span class="k">continue</span>
-                        <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span>
-                            <span class="s2">&quot;ManyToManyField&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;ForeignKey&quot;</span><span class="p">,</span>
-                        <span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;apis_vocabularies&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">related_model</span><span class="p">):</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ApisBaseSerializer</span><span class="p">(</span>
-                                <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
-                            <span class="p">)</span>
-                        <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ManyToManyField&quot;</span><span class="p">,</span> <span class="s2">&quot;ForeignKey&quot;</span><span class="p">]:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelSerializer</span><span class="p">(</span>
-                                <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
-                            <span class="p">)</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">entity</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;triple_set_from_subj&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span>
-                            <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;triple_set_from_obj&quot;</span>
-                        <span class="p">):</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;relations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RelatedTripleSerializer</span><span class="p">(</span>
-                                <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                <span class="n">source</span><span class="o">=</span><span class="s2">&quot;get_triples&quot;</span><span class="p">,</span>
-                                <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                <span class="n">pk_instance</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
-                            <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ManyToManyField&quot;</span><span class="p">,</span> <span class="s2">&quot;ForeignKey&quot;</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelSerializer</span><span class="p">(</span>
+                            <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
+                        <span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">entity</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;triple_set_from_subj&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span>
+                        <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;triple_set_from_obj&quot;</span>
+                    <span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;relations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RelatedTripleSerializer</span><span class="p">(</span>
+                            <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">source</span><span class="o">=</span><span class="s2">&quot;get_triples&quot;</span><span class="p">,</span>
+                            <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">pk_instance</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+                        <span class="p">)</span>
 
         <span class="n">TemplateSerializerRetrieve</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">TemplateSerializerRetrieve</span><span class="o">.</span><span class="vm">__qualname__</span>
@@ -701,42 +603,6 @@
             <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
                 <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">entity_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
-
-                <span class="nd">@extend_schema</span><span class="p">(</span>
-                    <span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
-                        <span class="n">OpenApiParameter</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;highlight&quot;</span><span class="p">,</span>
-                            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether to add annotations or not, defaults to true&quot;</span><span class="p">,</span>
-                            <span class="nb">type</span><span class="o">=</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span>
-                        <span class="p">),</span>
-                        <span class="n">OpenApiParameter</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;inline_annotations&quot;</span><span class="p">,</span>
-                            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether to add html5 mark tags for annotations to the text, defaults to false&quot;</span><span class="p">,</span>
-                            <span class="nb">type</span><span class="o">=</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span>
-                        <span class="p">),</span>
-                        <span class="n">OpenApiParameter</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ann_proj_pk&quot;</span><span class="p">,</span>
-                            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;PK of the annotation project to use for annotations&quot;</span><span class="p">,</span>
-                            <span class="nb">type</span><span class="o">=</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">INT</span><span class="p">,</span>
-                        <span class="p">),</span>
-                        <span class="n">OpenApiParameter</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;types&quot;</span><span class="p">,</span>
-                            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Content type pks of annotation types to show. E.g. PersonPlace relations (comma sperated list)&quot;</span><span class="p">,</span>
-                            <span class="nb">type</span><span class="o">=</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">STR</span><span class="p">,</span>
-                        <span class="p">),</span>
-                        <span class="n">OpenApiParameter</span><span class="p">(</span>
-                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;users_show&quot;</span><span class="p">,</span>
-                            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Filter annotations for users. PKs of users, comma seperated list&quot;</span><span class="p">,</span>
-                            <span class="nb">type</span><span class="o">=</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">STR</span><span class="p">,</span>
-                        <span class="p">),</span>
-                    <span class="p">],</span>
-                    <span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="mi">200</span><span class="p">:</span> <span class="n">TemplateSerializerRetrieve</span><span class="p">},</span>
-                <span class="p">)</span>
-                <span class="k">def</span> <span class="nf">retrieve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-                    <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="n">res</span>
-
         <span class="n">TemplateViewSet</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">TemplateViewSet</span><span class="o">.</span><span class="vm">__qualname__</span>
         <span class="p">)</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Generic</span><span class="si">{</span><span class="n">entity_str</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">ViewSet&quot;</span>
@@ -754,208 +620,6 @@
 <span class="c1"># filter_classes = dict()</span>
 <span class="c1"># lst_filter_classes_check = []</span>
 <span class="n">generic_serializer_creation_factory</span><span class="p">()</span>
-
-
-<div class="viewcode-block" id="AdditionalSerializerConfig">
-<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.AdditionalSerializerConfig">[docs]</a>
-<span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AdditionalSerializerConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    use this class in a list named &#39;additional_serializers_list&#39; to load custom</span>
-<span class="sd">    serializers</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># For now, it is recommended to prefix the url with &#39;additional&#39;</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># unique name for django</span>
-    <span class="n">path_structure</span><span class="p">:</span> <span class="nb">dict</span>  <span class="c1"># see example structure</span></div>
-
-
-
-<div class="viewcode-block" id="load_additional_serializers">
-<a class="viewcode-back" href="../../modules/apis_core.html#apis_core.api_routers.load_additional_serializers">[docs]</a>
-<span class="k">def</span> <span class="nf">load_additional_serializers</span><span class="p">():</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">additional_serializers_list</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
-            <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;apis_ontology.additional_serializers&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;additional_serializers_list&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[]</span>
-    <span class="c1"># imports had to be done here, because if imported at top, python would mistake class &#39;InheritanceForwardManyToOneDescriptor&#39;</span>
-    <span class="c1"># from different module apis_metainfo. No idea how this is even possible or could be properly fixed.</span>
-    <span class="kn">from</span> <span class="nn">django.db.models.query_utils</span> <span class="kn">import</span> <span class="n">DeferredAttribute</span>
-    <span class="kn">from</span> <span class="nn">django.db.models.fields.related_descriptors</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">ForwardManyToOneDescriptor</span><span class="p">,</span>
-        <span class="n">ReverseManyToOneDescriptor</span><span class="p">,</span>
-        <span class="n">ManyToManyDescriptor</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="kn">from</span> <span class="nn">django.db.models.base</span> <span class="kn">import</span> <span class="n">ModelBase</span>
-    <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">InheritanceForwardManyToOneDescriptor</span>
-
-    <span class="k">def</span> <span class="nf">create_additional_viewset</span><span class="p">(</span><span class="n">path_structure</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">create_additional_serializer</span><span class="p">(</span><span class="n">path_structure</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">path_structure</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">()</span>
-            <span class="n">target</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">path_structure</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">model_fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">path_structure</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ModelBase</span><span class="p">:</span>
-                <span class="n">model_class</span> <span class="o">=</span> <span class="n">target</span>
-            <span class="k">elif</span> <span class="p">(</span>
-                <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ForwardManyToOneDescriptor</span>
-                <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">InheritanceForwardManyToOneDescriptor</span>
-                <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ManyToManyDescriptor</span>
-            <span class="p">):</span>
-                <span class="n">model_class</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">related_model</span>
-            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ReverseManyToOneDescriptor</span><span class="p">:</span>
-                <span class="n">model_class</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">model</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Unhandled case. Report to Stefan. type of field is: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
-            <span class="n">meta_fields</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">sub_serializers</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">model_fields</span><span class="p">:</span>
-                <span class="k">if</span> <span class="p">(</span>
-                    <span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="ow">is</span> <span class="n">DeferredAttribute</span>
-                    <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ForwardManyToOneDescriptor</span>
-                    <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="ow">is</span> <span class="n">InheritanceForwardManyToOneDescriptor</span>
-                <span class="p">):</span>
-                    <span class="n">meta_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                    <span class="c1"># In case the referenced model class by the foreign key is parent class</span>
-                    <span class="c1"># of designated target class, use the target class:</span>
-                    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">model_class</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span>
-                        <span class="n">field</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">model_class</span>
-                    <span class="p">):</span>
-                        <span class="n">model_class</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">model</span>
-                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ReverseManyToOneDescriptor</span><span class="p">:</span>
-                    <span class="n">meta_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">rel</span><span class="o">.</span><span class="n">related_name</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
-                    <span class="n">target</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ManyToManyDescriptor</span><span class="p">:</span>
-                        <span class="n">target_name</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">name</span>
-                        <span class="n">is_many</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="k">elif</span> <span class="p">(</span>
-                        <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ForwardManyToOneDescriptor</span>
-                        <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">InheritanceForwardManyToOneDescriptor</span>
-                    <span class="p">):</span>
-                        <span class="n">target_name</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">name</span>
-                        <span class="n">is_many</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ReverseManyToOneDescriptor</span><span class="p">:</span>
-                        <span class="n">target_name</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">rel</span><span class="o">.</span><span class="n">name</span>
-                        <span class="n">is_many</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Unhandled case. Report to Stefan. type of field is: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                        <span class="p">)</span>
-                    <span class="n">sub_serializers</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_additional_serializer</span><span class="p">(</span><span class="n">field</span><span class="p">)(</span>
-                        <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="n">is_many</span>
-                    <span class="p">)</span>
-                    <span class="n">field</span><span class="p">[</span><span class="s2">&quot;path_self&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_name</span>
-                    <span class="n">meta_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target_name</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Unhandled case. Report to Stefan. type of field is: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span>
-
-            <span class="k">class</span> <span class="nc">AdditionalSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sub_serializers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="c1"># Don&#39;t use temporary veriables here for the sub-serializer. Otherwise django would mistake</span>
-                    <span class="c1"># the temporary variable as belonging to the parent serializer. Hence &#39;item[1]&#39;</span>
-                    <span class="nb">vars</span><span class="p">()[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-                <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-                    <span class="n">model</span> <span class="o">=</span> <span class="n">model_class</span>
-                    <span class="n">fields</span> <span class="o">=</span> <span class="n">meta_fields</span>
-
-            <span class="n">AdditionalSerializer</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">AdditionalSerializer</span><span class="o">.</span><span class="vm">__qualname__</span>
-            <span class="p">)</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Additional</span><span class="si">{</span><span class="n">model_class</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">Serializer&quot;</span>
-
-            <span class="k">return</span> <span class="n">AdditionalSerializer</span>
-
-        <span class="k">def</span> <span class="nf">construct_prefetch_path_set</span><span class="p">(</span><span class="n">path_structure</span><span class="p">):</span>
-            <span class="n">path_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">path_structure</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
-                <span class="n">path_current</span> <span class="o">=</span> <span class="n">path_structure</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;path_self&quot;</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">path_structure_sub</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">path_structure</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]:</span>
-                    <span class="k">for</span> <span class="n">path_sub</span> <span class="ow">in</span> <span class="n">construct_prefetch_path_set</span><span class="p">(</span><span class="n">path_structure_sub</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="n">path_current</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">path_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">path_current</span> <span class="o">+</span> <span class="s2">&quot;__&quot;</span> <span class="o">+</span> <span class="n">path_sub</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">path_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">path_sub</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">path_set</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">path_current</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">path_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">path_current</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
-
-            <span class="k">return</span> <span class="n">path_set</span>
-
-        <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-            <span class="n">additional_serializer_class</span> <span class="o">=</span> <span class="n">create_additional_serializer</span><span class="p">(</span><span class="n">path_structure</span><span class="p">)</span>
-
-            <span class="k">class</span> <span class="nc">AdditionalViewSet</span><span class="p">(</span><span class="n">viewsets</span><span class="o">.</span><span class="n">ModelViewSet</span><span class="p">):</span>
-                <span class="n">queryset</span> <span class="o">=</span> <span class="n">additional_serializer_class</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-                <span class="k">for</span> <span class="n">prefetch_path</span> <span class="ow">in</span> <span class="n">construct_prefetch_path_set</span><span class="p">(</span><span class="n">path_structure</span><span class="p">):</span>
-                    <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="n">prefetch_path</span><span class="p">)</span>
-                <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">additional_serializer_class</span>
-
-                <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                    <span class="c1"># TODO: Improve this param handling by extending the parsing logic</span>
-                    <span class="c1">#  or by forwarding the params untouched</span>
-                    <span class="c1"># The original &#39;self.request.query_params&#39; could not be forwarded</span>
-                    <span class="c1"># directly to django&#39;s ORM filter So as a work-around, a dictionary</span>
-                    <span class="c1"># is created and its values are casted. Maybe there a possibility</span>
-                    <span class="c1"># can be found to forward the params directly?</span>
-                    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
-                    <span class="n">was_parsed</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                        <span class="c1"># check for pagination params:</span>
-                        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;limit&quot;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;offset&quot;</span><span class="p">:</span>
-                            <span class="k">continue</span>
-                        <span class="c1"># check for int</span>
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="n">v</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-                        <span class="k">except</span><span class="p">:</span>
-                            <span class="k">pass</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">was_parsed</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="c1"># check for boolean</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="n">was_parsed</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
-                                <span class="n">v</span> <span class="o">=</span> <span class="kc">True</span>
-                                <span class="n">was_parsed</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="k">elif</span> <span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
-                                <span class="n">v</span> <span class="o">=</span> <span class="kc">False</span>
-                                <span class="n">was_parsed</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="c1"># check for list</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="n">was_parsed</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;__in&quot;</span><span class="p">):</span>
-                                <span class="k">try</span><span class="p">:</span>
-                                    <span class="n">v</span> <span class="o">=</span> <span class="n">literal_eval</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-                                <span class="k">except</span><span class="p">:</span>
-                                    <span class="k">pass</span>
-                                <span class="k">else</span><span class="p">:</span>
-                                    <span class="n">was_parsed</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">params</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
-
-            <span class="n">AdditionalViewSet</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">AdditionalViewSet</span><span class="o">.</span><span class="vm">__qualname__</span>
-            <span class="p">)</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Additional</span><span class="si">{</span><span class="n">additional_serializer_class</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">ViewSet&quot;</span>
-
-            <span class="k">return</span> <span class="n">AdditionalViewSet</span>
-
-        <span class="k">return</span> <span class="n">main</span><span class="p">()</span>
-
-    <span class="k">for</span> <span class="n">additional_serializer</span> <span class="ow">in</span> <span class="n">additional_serializers_list</span><span class="p">:</span>
-        <span class="n">additional_serializer</span><span class="o">.</span><span class="n">viewset</span> <span class="o">=</span> <span class="n">create_additional_viewset</span><span class="p">(</span>
-            <span class="n">additional_serializer</span><span class="o">.</span><span class="n">path_structure</span>
-        <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">additional_serializers_list</span></div>
-
 </pre></div>
 
            </div>

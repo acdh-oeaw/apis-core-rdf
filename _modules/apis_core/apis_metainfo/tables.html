@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_metainfo.tables &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -204,12 +207,12 @@
 <span class="k">class</span> <span class="nc">UriTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">()</span>
     <span class="n">entity</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
-        <span class="s2">&quot;&lt;a href=&#39;{{ record.entity.get_absolute_url }}&#39;&gt;{{ record.entity }}&lt;/a&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&lt;a href=&#39;{{ record.root_object.get_absolute_url }}&#39;&gt;{{ record.root_object }}&lt;/a&gt;&quot;</span><span class="p">,</span>
         <span class="n">orderable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;related Entity&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">ent_type</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
-        <span class="s2">&quot;{{ record.entity.get_child_class }}&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;{{ record.root_object.self_contenttype.model }}&quot;</span><span class="p">,</span>
         <span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Entity Type&quot;</span><span class="p">,</span>
     <span class="p">)</span>
@@ -219,6 +222,7 @@
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
         <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="s2">&quot;ent_type&quot;</span><span class="p">)</span>
         <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-responsive table-hover&quot;</span><span class="p">}</span></div>
 </div>
 

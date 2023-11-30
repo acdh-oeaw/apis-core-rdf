@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_entities.autocomplete3 &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -103,6 +106,7 @@
 <span class="kn">from</span> <span class="nn">apis_core.apis_vocabularies.models</span> <span class="kn">import</span> <span class="n">VocabsBaseClass</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.caching</span> <span class="kn">import</span> <span class="n">get_autocomplete_property_choices</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
 
 <span class="n">path_ac_settings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_AUTOCOMPLETE_SETTINGS&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">path_ac_settings</span><span class="p">:</span>
@@ -227,6 +231,11 @@
         <span class="n">ent_model</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_ontology_class_of_name</span><span class="p">(</span><span class="n">ac_type</span><span class="p">)</span>
         <span class="n">ent_model_name</span> <span class="o">=</span> <span class="n">ent_model</span><span class="o">.</span><span class="vm">__name__</span>
 
+        <span class="n">model_fields</span> <span class="o">=</span> <span class="n">ent_model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">()</span>
+        <span class="n">default_search_fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">model_fields</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">is_relation</span>
+        <span class="p">]</span>
+
         <span class="c1"># inspect user search query</span>
         <span class="n">q3</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
@@ -257,7 +266,9 @@
                 <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="n">arg_list</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">x</span> <span class="o">+</span> <span class="n">search_type</span><span class="p">:</span> <span class="n">q</span><span class="p">})</span>
-                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="p">[</span><span class="n">ent_model_name</span><span class="p">][</span><span class="s2">&quot;search&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">ent_model_name</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="n">default_search_fields</span>
+                <span class="p">)</span>
             <span class="p">]</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">ent_model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">,</span> <span class="n">arg_list</span><span class="p">))</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">q3</span><span class="p">:</span>
@@ -555,7 +566,9 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">arg_list</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">x</span> <span class="o">+</span> <span class="s2">&quot;__icontains&quot;</span><span class="p">:</span> <span class="n">q</span><span class="p">})</span>
-                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">()][</span><span class="s2">&quot;search&quot;</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">[]</span>
+                    <span class="p">)</span>
                 <span class="p">]</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="n">arg_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">x</span> <span class="o">+</span> <span class="s2">&quot;__icontains&quot;</span><span class="p">:</span> <span class="n">q</span><span class="p">})</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_relations.tables &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -579,6 +582,7 @@
                 <span class="s2">&quot;end_date_written&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;other_prop&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;other_entity&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;notes&quot;</span><span class="p">,</span>
             <span class="p">]</span>
             <span class="c1"># reuse the list for ordering</span>
             <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
@@ -639,6 +643,12 @@
                     <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
                     <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">other_entity_class_name</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)],</span>
                 <span class="p">)</span>
+
+                <span class="c1"># bibsonomy button</span>
+                <span class="k">if</span> <span class="s2">&quot;apis_bibsonomy&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+                        <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/references_button_generic_ajax_form.html&quot;</span>
+                    <span class="p">)</span>
 
                 <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.apis_entities.filters &mdash; APIS 1.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -50,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -89,11 +92,17 @@
 
 <span class="kn">import</span> <span class="nn">django_filters</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span><span class="p">,</span> <span class="n">JSONField</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Collection</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.filtermethods</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">related_entity_name</span><span class="p">,</span>
+    <span class="n">related_property_name</span><span class="p">,</span>
+    <span class="n">name_label_filter</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1"># The following classes define the filter sets respective to their models.</span>
 <span class="c1"># Also by what was enabled in the global settings file (or disabled by not explicitley enabling it).</span>
@@ -126,17 +135,11 @@
 
     <span class="n">fields_to_exclude</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS_FILTER_EXCLUDE&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
-    <span class="c1"># add default labels to form fields on frontend</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;name_label_filter&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Name or label&quot;</span><span class="p">)</span>
     <span class="n">related_entity_name</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;related_entity_name_method&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related entity&quot;</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">related_entity_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related entity&quot;</span>
     <span class="p">)</span>
     <span class="n">related_property_name</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;related_property_name_method&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related property&quot;</span>
-    <span class="p">)</span>
-
-    <span class="n">collection</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">ModelMultipleChoiceFilter</span><span class="p">(</span>
-        <span class="n">queryset</span><span class="o">=</span><span class="n">Collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">related_property_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related property&quot;</span>
     <span class="p">)</span>
 
     <span class="c1"># TODO: look into how the date values can be intercepted so that they can be parsed with the same logic as in edit forms</span>
@@ -150,7 +153,15 @@
         <span class="c1"># exclude all hardcoded fields or nothing, however this exclude is only defined here as a temporary measure in</span>
         <span class="c1"># order to load all filters of all model fields by default so that they are available in the first place.</span>
         <span class="c1"># Later those which are not referenced in the settings file will be removed again</span>
-        <span class="n">exclude</span> <span class="o">=</span> <span class="n">fields_to_exclude</span></div>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="n">fields_to_exclude</span>
+        <span class="n">filter_overrides</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">JSONField</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;filter_class&quot;</span><span class="p">:</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">,</span>
+                <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;lookup_expr&quot;</span><span class="p">:</span> <span class="s2">&quot;icontains&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
 
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -194,11 +205,9 @@
             <span class="s2">&quot;status&quot;</span><span class="p">,</span>
             <span class="s2">&quot;references&quot;</span><span class="p">,</span>
         <span class="p">]</span>
-        <span class="n">list_filters</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="p">:</span>
-            <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_ENTITIES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">list_filters</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list_filters&quot;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">list_filters_exclude</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list_filters_exclude&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">list_filters</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list_filters&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">list_filters_exclude</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list_filters_exclude&quot;</span><span class="p">,</span> <span class="p">[]))</span>
 
         <span class="c1"># The `list_filters` setting of an entity defines both the order of filters and it allows to define additional filters</span>
         <span class="c1"># A filter is defined by a name and a dict describing its attributes</span>
@@ -237,162 +246,6 @@
                     <span class="n">sorted_filters</span><span class="p">[</span><span class="n">f_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">f_filter</span>
 
         <span class="k">return</span> <span class="n">sorted_filters</span></div>
-
-
-<div class="viewcode-block" id="GenericEntityListFilter.construct_lookup">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.construct_lookup">[docs]</a>
-    <span class="k">def</span> <span class="nf">construct_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parses user input for wildcards and returns a tuple containing the interpreted django lookup string and the trimmed value</span>
-<span class="sd">        E.g.</span>
-<span class="sd">            &#39;example&#39; -&gt; (&#39;__icontains&#39;, &#39;example&#39;)</span>
-<span class="sd">            &#39;*example&#39; -&gt; (&#39;__iendswith&#39;, &#39;example&#39;)</span>
-<span class="sd">            &#39;example*&#39; -&gt; (&#39;__istartswith&#39;, &#39;example&#39;)</span>
-<span class="sd">            &#39;&quot;example&quot;&#39; -&gt; (&#39;__iexact&#39;, &#39;example&#39;)</span>
-
-<span class="sd">        :param value : str : text to be parsed for *</span>
-<span class="sd">        :return: (lookup : str, value : str)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-            <span class="k">return</span> <span class="s2">&quot;__iendswith&quot;</span><span class="p">,</span> <span class="n">value</span>
-
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">return</span> <span class="s2">&quot;__istartswith&quot;</span><span class="p">,</span> <span class="n">value</span>
-
-        <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">):</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">return</span> <span class="s2">&quot;__iexact&quot;</span><span class="p">,</span> <span class="n">value</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">return</span> <span class="s2">&quot;__icontains&quot;</span><span class="p">,</span> <span class="n">value</span></div>
-
-
-<div class="viewcode-block" id="GenericEntityListFilter.name_label_filter">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.name_label_filter">[docs]</a>
-    <span class="k">def</span> <span class="nf">name_label_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="c1"># TODO: include alternative names queries</span>
-        <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-
-        <span class="n">queryset_related_label</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;label__label&quot;</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-        <span class="n">queryset_self_name</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-
-        <span class="k">return</span> <span class="p">(</span><span class="n">queryset_related_label</span> <span class="o">|</span> <span class="n">queryset_self_name</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
-
-
-    <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
-<div class="viewcode-block" id="GenericEntityListFilter.related_entity_name_method">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_entity_name_method">[docs]</a>
-    <span class="k">def</span> <span class="nf">related_entity_name_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-            <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_obj__subj__name</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-            <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_subj__obj__name</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">queryset</span></div>
-
-
-<div class="viewcode-block" id="GenericEntityListFilter.related_property_name_method">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_property_name_method">[docs]</a>
-    <span class="k">def</span> <span class="nf">related_property_name_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="c1"># TODO RDF: Check if this should be removed or adapted_</span>
-        <span class="c1">#</span>
-        <span class="c1"># &quot;&quot;&quot;</span>
-        <span class="c1"># Searches through the all name fields of all related relationtypes of a given queryset</span>
-        <span class="c1">#</span>
-        <span class="c1"># The following logic is almost identical to the one in method &#39;related_entity_name_method&#39;, so please look up its</span>
-        <span class="c1"># comments for documentational purpose therein.</span>
-        <span class="c1">#</span>
-        <span class="c1"># Differences are commented however.</span>
-        <span class="c1">#</span>
-        <span class="c1"># :param queryset: the queryset currently to be filtered on</span>
-        <span class="c1"># :param name: Here not used, because this method filters on names of related relationtypes</span>
-        <span class="c1"># :param value: The value to be filtered for, input by the user or a programmatic call</span>
-        <span class="c1"># :return: filtered queryset</span>
-        <span class="c1"># &quot;&quot;&quot;</span>
-        <span class="c1">#</span>
-        <span class="c1"># lookup, value = self.construct_lookup(value)</span>
-        <span class="c1">#</span>
-        <span class="c1"># # look up through name and name_reverse of Property</span>
-        <span class="c1"># property_hit = (</span>
-        <span class="c1">#     Property.objects.filter(**{&quot;name&quot; + lookup: value}).values_list(&quot;pk&quot;, flat=True) |</span>
-        <span class="c1">#     Property.objects.filter(**{&quot;name_reverse&quot; + lookup: value}).values_list(&quot;pk&quot;, flat=True)</span>
-        <span class="c1"># ).distinct()</span>
-        <span class="c1">#</span>
-        <span class="c1"># related_relations_to_hit_list = []</span>
-        <span class="c1">#</span>
-        <span class="c1"># for relation_class in queryset.model.get_related_relation_classes():</span>
-        <span class="c1">#</span>
-        <span class="c1">#     related_entity_classA = relation_class.get_related_entity_classA()</span>
-        <span class="c1">#     related_entity_classB = relation_class.get_related_entity_classB()</span>
-        <span class="c1">#     related_entity_field_nameA = relation_class.get_related_entity_field_nameA()</span>
-        <span class="c1">#     related_entity_field_nameB = relation_class.get_related_entity_field_nameB()</span>
-        <span class="c1">#</span>
-        <span class="c1">#     if queryset.model == related_entity_classA:</span>
-        <span class="c1">#</span>
-        <span class="c1">#         # Only difference to method &#39;related_entity_name_method&#39; is that the lookup is done on &#39;relation_type_id&#39;</span>
-        <span class="c1">#         related_relations_to_hit_list.append(</span>
-        <span class="c1">#             relation_class.objects.filter(</span>
-        <span class="c1">#                 **{&quot;relation_type_id__in&quot;: property_hit}</span>
-        <span class="c1">#             ).values_list(related_entity_field_nameA + &quot;_id&quot;, flat=True)</span>
-        <span class="c1">#         )</span>
-        <span class="c1">#</span>
-        <span class="c1">#     if queryset.model == related_entity_classB:</span>
-        <span class="c1">#</span>
-        <span class="c1">#         # Only difference to method &#39;related_entity_name_method&#39; is that the lookup is done on &#39;relation_type_id&#39;</span>
-        <span class="c1">#         related_relations_to_hit_list.append(</span>
-        <span class="c1">#             relation_class.objects.filter(</span>
-        <span class="c1">#                 **{&quot;relation_type_id__in&quot;: property_hit}</span>
-        <span class="c1">#             ).values_list(related_entity_field_nameB + &quot;_id&quot;, flat=True)</span>
-        <span class="c1">#         )</span>
-        <span class="c1">#</span>
-        <span class="c1">#     if queryset.model != related_entity_classA and queryset.model != related_entity_classB:</span>
-        <span class="c1">#</span>
-        <span class="c1">#         raise ValueError(&quot;queryset model class has a wrong relation class associated!&quot;)</span>
-        <span class="c1">#</span>
-        <span class="c1"># queryset_filtered_list = [ queryset.filter(pk__in=related_relation) for related_relation in related_relations_to_hit_list ]</span>
-        <span class="c1">#</span>
-        <span class="c1"># result = reduce( lambda a,b : a | b, queryset_filtered_list).distinct()</span>
-        <span class="c1">#</span>
-        <span class="c1"># return result</span>
-        <span class="c1">#</span>
-        <span class="c1"># __after_rdf_refactoring__</span>
-        <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-            <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_obj__prop__name</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-            <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_obj__prop__name_reverse</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-            <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_subj__prop__name</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-            <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;triple_set_from_subj__prop__name_reverse</span><span class="si">{</span><span class="n">lookup</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">queryset</span></div>
-
-
-<div class="viewcode-block" id="GenericEntityListFilter.related_arbitrary_model_name">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.related_arbitrary_model_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">related_arbitrary_model_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Searches through an arbitrarily related model on its name field.</span>
-
-<span class="sd">        Note that this works only if</span>
-<span class="sd">            * the related model has a field &#39;name&#39;</span>
-<span class="sd">            * the filter using this method has the same name as the field of the model on which the filter is applied.</span>
-<span class="sd">                (E.g. the field &#39;profession&#39; on a person relates to another model: the professiontype. Here the filter on a person</span>
-<span class="sd">                must also be called &#39;profession&#39; as the field &#39;profession&#39; exists within the person model and is then used to search in.</span>
-<span class="sd">                Using this example of professions, such a lookup would be generated: Person.objects.filter(profession__name__... ) )</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-
-        <span class="c1"># name variable is the name of the filter and needs the corresponding field within the model</span>
-        <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;__name&quot;</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span></div>
 </div>
 
 
