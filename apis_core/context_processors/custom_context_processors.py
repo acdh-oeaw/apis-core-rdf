@@ -1,29 +1,4 @@
-from operator import itemgetter
-
 from django.conf import settings
-
-from apis_core.utils import caching
-
-
-def list_entities(request):
-    """
-    Retrieve all models which inherit from AbstractEntity class
-    and make information about them available on the frontend.
-
-    :return a dictionary of context items
-    """
-    entities_classes = caching.get_all_entity_classes() or []
-    # create (uri, label) tuples for entities for use in templates
-    entities_links = [
-        (e.__name__.lower(), e._meta.verbose_name.title()) for e in entities_classes
-    ]
-    entities_links.sort(key=itemgetter(1))
-
-    return {"entities_links": entities_links, "request": request}
-
-
-def list_relations(request):
-    return {"relations_list": ["property", "triple"], "request": request}
 
 
 def list_apis_settings(request):
