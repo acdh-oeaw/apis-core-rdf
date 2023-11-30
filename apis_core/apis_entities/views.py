@@ -208,54 +208,6 @@ class GenericListViewNew(
 
         return context
 
-    def render_to_response(self, context, **kwargs):
-        download = self.request.GET.get("sep", None)
-        if download and "browsing" in settings.INSTALLED_APPS:
-            import datetime
-            import time
-            import pandas as pd
-
-            sep = self.request.GET.get("sep", ",")
-            timestamp = datetime.datetime.fromtimestamp(time.time()).strftime(
-                "%Y-%m-%d-%H-%M-%S"
-            )
-            filename = "export_{}".format(timestamp)
-            response = HttpResponse(content_type="text/csv")
-            if context["conf_items"]:
-                conf_items = context["conf_items"]
-                try:
-                    df = pd.DataFrame(
-                        list(
-                            self.get_queryset().values_list(*[x[0] for x in conf_items])
-                        ),
-                        columns=[x[1] for x in conf_items],
-                    )
-                except AssertionError:
-                    response[
-                        "Content-Disposition"
-                    ] = 'attachment; filename="{}.csv"'.format(filename)
-                    return response
-            else:
-                response[
-                    "Content-Disposition"
-                ] = 'attachment; filename="{}.csv"'.format(filename)
-                return response
-            if sep == "comma":
-                df.to_csv(response, sep=",", index=False)
-            elif sep == "semicolon":
-                df.to_csv(response, sep=";", index=False)
-            elif sep == "tab":
-                df.to_csv(response, sep="\t", index=False)
-            else:
-                df.to_csv(response, sep=",", index=False)
-            response["Content-Disposition"] = 'attachment; filename="{}.csv"'.format(
-                filename
-            )
-            return response
-        else:
-            response = super(GenericListViewNew, self).render_to_response(context)
-            return response
-
 
 ############################################################################
 ############################################################################
