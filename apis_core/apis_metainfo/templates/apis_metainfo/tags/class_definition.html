@@ -1,1 +1,5 @@
-<abbr title="{{ docstring }}">{{ class_name }}</abbr>
+{% if docstring %}
+  <abbr title="{{ docstring }}">{{ class_name }}</abbr>
+{% else %}
+  {{ class_name }}
+{% endif %}

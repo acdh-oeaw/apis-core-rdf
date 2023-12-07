@@ -156,9 +156,15 @@ class GenericListViewNew(
         context[self.context_filter_name] = self.filter
         context["entity"] = self.entity  # model slug
         context["app_name"] = "apis_entities"
-        context["docstring"] = f"{model.__doc__}"
-
         context["entity_create_stanbol"] = GenericEntitiesStanbolForm(self.entity)
+
+        # model.__doc__ defaults to "ClassName(attr1, attr2)" when there is no
+        # actual docstring, which is not helpful to output on the frontend
+        if (
+            f"{model.__doc__}"
+            != f"{model.__name__}({', '.join([f.name for f in model._meta.fields])})"
+        ):
+            context["docstring"] = f"{model.__doc__}"
 
         if "browsing" in settings.INSTALLED_APPS:
             from browsing.models import BrowsConf
