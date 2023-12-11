@@ -106,12 +106,6 @@ To use the APIS framework in your application, you will need to add the followin
 
 ```
 
-Also, add the following two [context processors](https://docs.djangoproject.com/en/4.2/ref/templates/api/#django.template.RequestContext):
-```
-# we need this for accessing `basetemplate`
-"apis_core.context_processors.custom_context_processors.list_apis_settings",
-```
-
 Finally, add the APIS urls to your applications [URL Dispatcher](https://docs.djangoproject.com/en/4.2/topics/http/urls/):
 ```python
 from django.urls import include
