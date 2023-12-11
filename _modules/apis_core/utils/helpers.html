@@ -96,7 +96,10 @@
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span>
 
+<span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">apps</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">DEFAULT_DB_ALIAS</span><span class="p">,</span> <span class="n">router</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.core</span> <span class="kn">import</span> <span class="n">serializers</span>
 
 
 <div class="viewcode-block" id="get_classes_with_allowed_relation_from">
@@ -169,6 +172,69 @@
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">members</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="datadump_get_objects">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.helpers.datadump_get_objects">[docs]</a>
+<span class="k">def</span> <span class="nf">datadump_get_objects</span><span class="p">(</span><span class="n">models</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">proxy</span> <span class="ow">and</span> <span class="n">router</span><span class="o">.</span><span class="n">allow_migrate_model</span><span class="p">(</span>
+            <span class="n">DEFAULT_DB_ALIAS</span><span class="p">,</span> <span class="n">model</span>
+        <span class="p">):</span>
+            <span class="n">objects</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_default_manager</span>
+            <span class="n">queryset</span> <span class="o">=</span> <span class="n">objects</span><span class="o">.</span><span class="n">using</span><span class="p">(</span><span class="n">DEFAULT_DB_ALIAS</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">pk</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">yield from</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="datadump_get_queryset">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.helpers.datadump_get_queryset">[docs]</a>
+<span class="k">def</span> <span class="nf">datadump_get_queryset</span><span class="p">(</span><span class="n">additional_app_labels</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method is loosely based on the `dumpdata` admin command.</span>
+<span class="sd">    It iterates throug the relevant app models and exports them using</span>
+<span class="sd">    a serializer and natural foreign keys.</span>
+<span class="sd">    Data exported this way can be reimported into a newly created Django APIS app</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># get all APIS apps and all APIS models</span>
+    <span class="n">apis_app_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;apis_relations&quot;</span><span class="p">,</span> <span class="s2">&quot;apis_metainfo&quot;</span><span class="p">]</span>
+    <span class="n">apis_app_models</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">model</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">apps</span><span class="o">.</span><span class="n">get_models</span><span class="p">()</span> <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">app_label</span> <span class="ow">in</span> <span class="n">apis_app_labels</span>
+    <span class="p">]</span>
+
+    <span class="c1"># create a list of app labels we want to iterate</span>
+    <span class="c1"># this allows to extend the apps via the ?app_labels= parameter</span>
+    <span class="n">app_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">apis_app_labels</span><span class="p">)</span>
+    <span class="n">app_labels</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">(</span><span class="n">additional_app_labels</span><span class="p">)</span>
+
+    <span class="c1"># look for models that inherit from APIS models and add their</span>
+    <span class="c1"># app label to app_labels</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">apps</span><span class="o">.</span><span class="n">get_models</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">apis_app_models</span><span class="p">)):</span>
+            <span class="n">app_labels</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">app_label</span><span class="p">)</span>
+
+    <span class="c1"># now go through all app labels</span>
+    <span class="n">app_list</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">app_label</span> <span class="ow">in</span> <span class="n">app_labels</span><span class="p">:</span>
+        <span class="n">app_config</span> <span class="o">=</span> <span class="n">apps</span><span class="o">.</span><span class="n">get_app_config</span><span class="p">(</span><span class="n">app_label</span><span class="p">)</span>
+        <span class="n">app_list</span><span class="p">[</span><span class="n">app_config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">models</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">sort_dependencies</span><span class="p">(</span><span class="n">app_list</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">allow_cycles</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">yield from</span> <span class="n">datadump_get_objects</span><span class="p">(</span><span class="n">models</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="datadump_serializer">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.helpers.datadump_serializer">[docs]</a>
+<span class="k">def</span> <span class="nf">datadump_serializer</span><span class="p">(</span><span class="n">additional_app_labels</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">serialier_format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">serializers</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span>
+        <span class="n">serialier_format</span><span class="p">,</span>
+        <span class="n">datadump_get_queryset</span><span class="p">(</span><span class="n">additional_app_labels</span><span class="p">),</span>
+        <span class="n">use_natural_foreign_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 </pre></div>
 

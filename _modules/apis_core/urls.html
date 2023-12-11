@@ -103,6 +103,7 @@
 <span class="c1"># from apis_core.apis_vocabularies.api_views import UserViewSet</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.viewsets</span> <span class="kn">import</span> <span class="n">UriToObjectViewSet</span>
+<span class="kn">from</span> <span class="nn">apis_core.core.views</span> <span class="kn">import</span> <span class="n">Dumpdata</span>
 
 <span class="n">app_name</span> <span class="o">=</span> <span class="s2">&quot;apis_core&quot;</span>
 
@@ -193,7 +194,6 @@
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.api_views</span> <span class="kn">import</span> <span class="n">GetEntityGeneric</span>
 
-
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">path</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">TemplateView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(</span><span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;base.html&quot;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;apis_index&quot;</span><span class="p">),</span>
     <span class="n">path</span><span class="p">(</span><span class="s2">&quot;admin/&quot;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
@@ -258,6 +258,7 @@
         <span class="n">GetEntityGeneric</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;GetEntityGeneric&quot;</span><span class="p">,</span>
     <span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;api/dumpdata&quot;</span><span class="p">,</span> <span class="n">Dumpdata</span><span class="o">.</span><span class="n">as_view</span><span class="p">()),</span>
 <span class="p">]</span>
 
 <span class="k">if</span> <span class="s2">&quot;apis_fulltext_download&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
