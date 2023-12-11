@@ -29,6 +29,7 @@ from apis_core.utils import caching
 from apis_core.utils import helpers
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityMixin, EntityInstanceMixin
+from apis_core.utils.helpers import get_member_for_entity
 
 
 @method_decorator(login_required, name="dispatch")
@@ -84,7 +85,10 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
                     tb_object_open,
                 )
             )
-        form = get_entities_form(self.entity.title())
+
+        form = get_member_for_entity(self.entity_model, suffix="Form")
+        if form is None:
+            form = get_entities_form(self.entity.title())
         form = form(instance=self.instance)
         if "apis_bibsonomy" in settings.INSTALLED_APPS:
             apis_bibsonomy = getattr(settings, "APIS_BIBSONOMY_FIELDS", [])
@@ -125,7 +129,9 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
         return HttpResponse(template.render(request=request, context=context))
 
     def post(self, request, *args, **kwargs):
-        form = get_entities_form(self.entity.title())
+        form = get_member_for_entity(self.entity_model, suffix="Form")
+        if form is None:
+            form = get_entities_form(self.entity.title())
         form = form(request.POST, instance=self.instance)
         if form.is_valid():
             entity_2 = form.save()
@@ -154,7 +160,9 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
 @method_decorator(login_required, name="dispatch")
 class GenericEntitiesCreateView(EntityMixin, View):
     def get(self, request, *args, **kwargs):
-        form = get_entities_form(self.entity.title())
+        form = get_member_for_entity(self.entity_model, suffix="Form")
+        if form is None:
+            form = get_entities_form(self.entity.title())
         form = form()
         permissions = {
             "create": request.user.has_perm("entities.add_{}".format(self.entity))
@@ -172,7 +180,9 @@ class GenericEntitiesCreateView(EntityMixin, View):
         )
 
     def post(self, request, *args, **kwargs):
-        form = get_entities_form(self.entity.title())
+        form = get_member_for_entity(self.entity_model, suffix="Form")
+        if form is None:
+            form = get_entities_form(self.entity.title())
         form = form(request.POST)
         if form.is_valid():
             entity_2 = form.save()
