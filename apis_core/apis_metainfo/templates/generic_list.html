@@ -359,17 +359,5 @@
 
 {% if 'entities' in APPS %}{% endif %}
 
-{% if user.is_authenticated %}
-
-  {% if entity_create_stanbol %}
-    <div class="card">
-      <div class="card-header">
-        <h4>Import new {{ entity|title }} from GND</h4>
-      </div>
-      <div class="card-body">{% crispy entity_create_stanbol  entity_create_stanbol.helper %}</div>
-    </div>
-  {% endif %}
-{% endif %}
-
 </div>
 {% endblock %}

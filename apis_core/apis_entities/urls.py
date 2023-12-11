@@ -7,7 +7,6 @@ from .autocomplete3 import (
 )
 
 # from .views import ReversionCompareView TODO: add again when import is fixed
-from .edit_generic import GenericEntitiesCreateStanbolView
 from .api_views import GetOrCreateEntity
 
 app_name = "apis_entities"
@@ -46,16 +45,6 @@ entity_patterns = [
 ]
 
 autocomplete_patterns = [
-    path(
-        "createstanbol/<slug:entity>/<int:ent_merge_pk>/",
-        GenericEntitiesCreateStanbolView.as_view(),
-        name="generic_entities_stanbol_create",
-    ),
-    path(
-        "createstanbol/<slug:entity>/",
-        GenericEntitiesCreateStanbolView.as_view(),
-        name="generic_entities_stanbol_create",
-    ),
     path(
         "<slug:entity>/<int:ent_merge_pk>/",
         GenericEntitiesAutocomplete.as_view(),

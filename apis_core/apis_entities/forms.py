@@ -242,50 +242,6 @@ def get_entities_form(entity):
     return GenericEntitiesForm
 
 
-class GenericEntitiesStanbolForm(forms.Form):
-    def save(self, *args, **kwargs):
-        form_uri = self.cleaned_data["entity"]
-        uri, _ = Uri.objects.get_or_create(uri=form_uri)
-        return uri.root_object
-
-    def __init__(self, entity, *args, **kwargs):
-
-        attrs = {
-            "data-placeholder": "Type to get suggestions",
-            "data-minimum-input-length": getattr(settings, "APIS_MIN_CHAR", 3),
-            "data-html": True,
-            "style": "width: auto",
-        }
-        ent_merge_pk = kwargs.pop("ent_merge_pk", False)
-        super(GenericEntitiesStanbolForm, self).__init__(*args, **kwargs)
-        self.entity = entity
-        self.helper = FormHelper()
-        form_kwargs = {"entity": entity}
-        url = reverse(
-            "apis:apis_entities:generic_entities_autocomplete",
-            args=[entity.title(), "remove"],
-        )
-        label = "Create {} from reference resources".format(entity.title())
-        button_label = "Create"
-        if ent_merge_pk:
-            form_kwargs["ent_merge_pk"] = ent_merge_pk
-            url = reverse(
-                "apis:apis_entities:generic_entities_autocomplete",
-                args=[entity.title(), ent_merge_pk],
-            )
-            label = "Search for {0} in reference resources or db".format(entity.title())
-            button_label = "Merge"
-        self.helper.form_action = reverse(
-            "apis:apis_entities:generic_entities_stanbol_create", kwargs=form_kwargs
-        )
-        self.helper.add_input(Submit("submit", button_label))
-        self.fields["entity"] = autocomplete.Select2ListCreateChoiceField(
-            label=label,
-            widget=ListSelect2(url=url, attrs=attrs),
-            validators=[URLValidator],
-        )
-
-
 class PersonResolveUriForm(forms.Form):
     # person = forms.CharField(label=False, widget=al.TextWidget('PersonAutocomplete'))
     person = forms.CharField(label=False)

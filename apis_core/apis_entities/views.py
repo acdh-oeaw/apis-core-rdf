@@ -27,7 +27,6 @@ from .filters import get_list_filter_of_entity
 from .forms import (
     GenericFilterFormHelper,
     PersonResolveUriForm,
-    GenericEntitiesStanbolForm,
 )
 from .tables import get_entities_table
 from apis_core.utils.helpers import get_member_for_entity
@@ -157,8 +156,6 @@ class GenericListViewNew(
         context["entity"] = self.entity  # model slug
         context["app_name"] = "apis_entities"
         context["docstring"] = f"{model.__doc__}"
-
-        context["entity_create_stanbol"] = GenericEntitiesStanbolForm(self.entity)
 
         if "browsing" in settings.INSTALLED_APPS:
             from browsing.models import BrowsConf
