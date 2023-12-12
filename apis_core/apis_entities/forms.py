@@ -71,17 +71,9 @@ def get_entities_form(entity):
             self.helper.form_tag = False
             self.helper.help_text_inline = True
             main_fields = []  # fields to display for entity
-            meta_fields = [
-                "references",
-                "notes",
-                "review",
-            ]  # fields for separate meta info section
             crispy_main_fields = Fieldset(
                 f"Entity type: {entity.title()}"
             )  # crispy forms field collection for entity fields
-            crispy_meta_fields = AccordionGroup(  # crispy forms Accordion Group needs be expanded manually
-                "MetaInfo", *[Field(f) for f in meta_fields]
-            )
             attrs = {
                 "data-placeholder": "Type to get suggestions",
                 "data-minimum-input-length": getattr(settings, "APIS_MIN_CHAR", 3),
@@ -142,9 +134,7 @@ def get_entities_form(entity):
                                 except ValueError:
                                     res = ""
 
-                # add fields not meant for meta section to main fields list
-                if f not in meta_fields:
-                    main_fields.append(f)
+                main_fields.append(f)
 
             def sort_fields_list(field_names, entity_name):
                 """
@@ -169,11 +159,7 @@ def get_entities_form(entity):
             for field in sort_fields_list(main_fields, entity):
                 crispy_main_fields.append(Field(field))
 
-            self.helper.layout = Layout(
-                Accordion(  # creates two blocks for fields
-                    crispy_main_fields, crispy_meta_fields
-                )
-            )
+            self.helper.layout = Layout(crispy_main_fields)
             # backwards compatibility:
             # those fields are part of TempEntityClass - this
             # block can probably be removed when TempEntityClass
