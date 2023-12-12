@@ -19,55 +19,15 @@ from apis_core.utils import caching
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityInstanceMixin
 from apis_core.core.mixins import ViewPassesTestMixin
+from apis_core.utils import helpers
 
 
 class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
     def get(self, request, *args, **kwargs):
 
         entity = self.entity.lower()
-        side_bar = []
 
-        triples_related_all = (
-            TempTriple.objects_inheritance.filter(
-                Q(subj__pk=self.pk) | Q(obj__pk=self.pk)
-            )
-            .all()
-            .select_subclasses()
-        )
-
-        for entity_class in caching.get_all_entity_classes():
-
-            entity_content_type = ContentType.objects.get_for_model(entity_class)
-
-            other_entity_class_name = entity_class.__name__.lower()
-
-            triples_related_by_entity = triples_related_all.filter(
-                (Q(subj__self_contenttype=entity_content_type) & Q(obj__pk=self.pk))
-                | (Q(obj__self_contenttype=entity_content_type) & Q(subj__pk=self.pk))
-            )
-
-            table = get_generic_triple_table(
-                other_entity_class_name=other_entity_class_name,
-                entity_pk_self=self.pk,
-                detail=True,
-            )
-
-            prefix = f"{other_entity_class_name}"
-            title_card = prefix
-            match = [prefix]
-            tb_object = table(data=triples_related_by_entity, prefix=prefix)
-            tb_object_open = request.GET.get(prefix + "page", None)
-            entity_settings = get_entity_settings_by_modelname(entity_class.__name__)
-            per_page = entity_settings.get("relations_per_page", 10)
-            RequestConfig(request, paginate={"per_page": per_page}).configure(tb_object)
-            side_bar.append(
-                (
-                    title_card,
-                    tb_object,
-                    "".join([x.title() for x in match]),
-                    tb_object_open,
-                )
-            )
+        side_bar = helpers.triple_sidebar(self.pk, self.entity, request)
 
         # TODO RDF : Check / Adapt the following code to rdf architecture
         object_lod = Uri.objects.filter(root_object=self.instance)
