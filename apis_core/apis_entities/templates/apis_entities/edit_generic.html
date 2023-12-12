@@ -103,7 +103,8 @@
                                   data-tooltip='{"app":"apis_entities","kind":"{{ entity_type|lower }}","pk":"{{ instance.pk }}"}'>
                             Revisions
                           </button>
-                          <a class ="btn btn-danger btn-primary" href="delete">Delete</a>
+                          <a class="btn btn-danger btn-primary"
+                             href="{% url 'apis:apis_entities:generic_entities_delete_view' entity=entity_type pk=instance.pk %}">Delete</a>
                           <a class="btn btn-success"
                              href="{% url 'apis:apis_entities:generic_entities_create_view' entity_type %}">Create new {{ entity_type|title }}</a>
                         </div>
