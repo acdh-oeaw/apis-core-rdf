@@ -26,7 +26,7 @@ from .api_renderers import (
     EntityToCIDOCTURTLE,
 )
 from .serializers_generic import EntitySerializer
-from apis_core.utils import caching
+from apis_core.utils import helpers
 from apis_core.utils.utils import get_python_safe_module_path
 
 
@@ -373,7 +373,7 @@ class GetOrCreateEntity(APIView):
                 if len(r1_2) == 2:
                     q_d["first_name"] = r1_2[1].strip()
                     q_d["name"] = r1_2[0].strip()
-            ent = caching.get_ontology_class_of_name(entity).objects.create(**q_d)
+            ent = helpers.get_entity_class_by_name(entity).objects.create(**q_d)
         res = {
             "id": ent.pk,
             "url": reverse_lazy(

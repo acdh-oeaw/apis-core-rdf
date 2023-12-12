@@ -11,7 +11,7 @@ from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 
 from apis_core.apis_relations.models import Property, TempTriple
 
-from apis_core.utils import caching
+from apis_core.utils import helpers
 
 
 # TODO RDF: After full conversion to ne ajax logic, remove this function
@@ -102,8 +102,8 @@ def save_ajax_form(
     self_other = kind_form.split("triple_form_")[1].split("_to_")
     entity_type_self_str = self_other[0]
     entity_type_other_str = self_other[1]
-    entity_type_self_class = caching.get_entity_class_of_name(entity_type_self_str)
-    entity_type_other_class = caching.get_entity_class_of_name(entity_type_other_str)
+    entity_type_self_class = helpers.get_entity_class_by_name(entity_type_self_str)
+    entity_type_other_class = helpers.get_entity_class_by_name(entity_type_other_str)
     entity_instance_self = entity_type_self_class.objects.get(pk=SiteID)
     entity_instance_other = entity_type_other_class.get_or_create_uri(
         uri=request.POST["other_entity"]

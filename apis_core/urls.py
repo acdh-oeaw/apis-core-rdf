@@ -14,26 +14,27 @@ from apis_core.api_routers import views
 #     PlaceGeoJsonViewSet,
 # )
 # from apis_core.apis_vocabularies.api_views import UserViewSet
-from apis_core.utils import caching
+from apis_core.utils import helpers
 from apis_core.apis_metainfo.viewsets import UriToObjectViewSet
 from apis_core.core.views import Dumpdata
 
 app_name = "apis_core"
 
 router = routers.DefaultRouter()
-for app_label, model_str in caching.get_all_class_modules_and_names():
+for model in helpers.get_apis_model_classes() + helpers.get_entities_model_classes():
+    app_label, modelname = model._meta.label_lower.split(".")
     if "_" in app_label:
         route_prefix = app_label.split("_")[1]
     else:
         route_prefix = app_label
     try:
         router.register(
-            r"{}/{}".format(route_prefix, model_str.lower()),
-            views[model_str.lower()],
-            model_str.lower(),
+            r"{}/{}".format(route_prefix, modelname),
+            views[modelname],
+            modelname,
         )
-    except Exception as e:
-        print("{} not found, skipping".format(model_str.lower()))
+    except Exception:
+        print("{} not found, skipping".format(modelname))
 
 # inject the manually created UriToObjectViewSet into the api router
 router.register(r"metainfo/uritoobject", UriToObjectViewSet, basename="uritoobject")

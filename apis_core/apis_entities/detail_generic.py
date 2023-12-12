@@ -17,7 +17,7 @@ from apis_core.apis_relations.tables import (
 )
 from apis_core.utils.utils import access_for_all
 from apis_core.apis_relations.models import TempTriple
-from apis_core.utils import caching
+from apis_core.utils import helpers
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityInstanceMixin
 from apis_core.core.mixins import ViewPassesTestMixin
@@ -37,7 +37,7 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
             .select_subclasses()
         )
 
-        for entity_class in caching.get_all_entity_classes():
+        for entity_class in helpers.get_entities_model_classes():
 
             entity_content_type = ContentType.objects.get_for_model(entity_class)
 

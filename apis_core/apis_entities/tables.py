@@ -9,7 +9,7 @@ from apis_core.apis_metainfo.tables import (
     generic_render_start_date_written,
     generic_render_end_date_written,
 )
-from apis_core.utils import caching
+from apis_core.utils import helpers
 
 
 def get_entities_table(entity, default_cols):
@@ -54,7 +54,7 @@ def get_entities_table(entity, default_cols):
             id = tables.LinkColumn()
 
         class Meta:
-            model = caching.get_ontology_class_of_name(entity)
+            model = helpers.get_entity_class_by_name(entity)
             fields = default_cols
             attrs = {"class": "table table-hover table-striped table-condensed"}
             # quick ensurance if column is indeed a field of this entity

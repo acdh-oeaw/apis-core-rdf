@@ -25,7 +25,6 @@ from apis_core.apis_relations.tables import (
 from .forms import get_entities_form, GenericEntitiesStanbolForm
 from .views import set_session_variables
 from ..apis_vocabularies.models import TextType
-from apis_core.utils import caching
 from apis_core.utils import helpers
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityMixin, EntityInstanceMixin

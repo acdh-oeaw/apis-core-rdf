@@ -14,7 +14,7 @@ from apis_core.apis_entities.api_renderers import EntityToCIDOC
 from apis_core.apis_entities.serializers_generic import EntitySerializer
 from apis_core.apis_vocabularies.api_renderers import VocabToSkos
 from apis_core.apis_vocabularies.serializers import GenericVocabsSerializer
-from apis_core.utils import caching
+from apis_core.utils import helpers
 
 map_ct = {
     "trig": ("application/x-trig", "trig"),
@@ -157,7 +157,7 @@ class Command(BaseCommand):
                 named_graph_vocabs = "/".join(named_graph.split("/")[:-1]) + "/vocabs#"
             else:
                 named_graph_vocabs = named_graph + "/vocabs#"
-        ent = caching.get_ontology_class_of_name(options["entity"])
+        ent = helpers.get_entity_class_by_name(options["entity"])
         res = []
         objcts = ent.objects.filter(**json.loads(options["filter"]))
         if objcts.filter(uri__uri__icontains=" ").count() > 0:

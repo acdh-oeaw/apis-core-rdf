@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.core.serializers.json import DjangoJSONEncoder
 
 from apis_core.apis_entities.serializers_generic import EntitySerializer
-from apis_core.utils import caching
+from apis_core.utils import helpers
 
 
 class Command(BaseCommand):
@@ -62,7 +62,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        ent = caching.get_ontology_class_of_name(options["entity"])
+        ent = helpers.get_entity_class_by_name(options["entity"])
         res = []
         objcts = ent.objects.filter(**json.loads(options["filter"]))
         if objcts.filter(uri__uri__icontains=" ").count() > 0:

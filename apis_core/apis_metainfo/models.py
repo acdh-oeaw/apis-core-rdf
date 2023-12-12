@@ -23,7 +23,7 @@ from django.core.exceptions import ValidationError, ImproperlyConfigured
 
 # from django.contrib.contenttypes.fields import GenericRelation
 # from utils.highlighter import highlight_text
-from apis_core.utils import caching, rdf
+from apis_core.utils import helpers, rdf
 
 from apis_core.apis_metainfo import signals
 
@@ -65,7 +65,7 @@ class RootObject(models.Model):
 
     def save(self, *args, **kwargs):
         if self.self_contenttype is None:
-            self.self_contenttype = caching.get_contenttype_of_class(self.__class__)
+            self.self_contenttype = ContentType.objects.get_for_model(self)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -91,7 +91,7 @@ class RootObject(models.Model):
         for field in related_fields:
             objdict.pop(field.name, None)
 
-        entity_model = caching.get_entity_class_of_name(self._meta.model_name)
+        entity_model = helpers.get_entity_class_by_name(self._meta.model_name)
         newobj = entity_model.objects.create(**objdict)
 
         for field in related_fields:
