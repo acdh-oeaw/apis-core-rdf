@@ -2,8 +2,6 @@ import importlib
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.template.loader import get_template
@@ -12,13 +10,9 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DeleteView
-from django_tables2 import RequestConfig
-from apis_core.apis_relations.models import TempTriple
-from apis_core.apis_relations.tables import get_generic_triple_table
 from .forms import get_entities_form, GenericEntitiesStanbolForm
 from .views import set_session_variables
 from apis_core.utils import helpers
-from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityMixin, EntityInstanceMixin
 from apis_core.utils.helpers import get_member_for_entity
 
@@ -28,54 +22,7 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
     def get(self, request, *args, **kwargs):
         request = set_session_variables(request)
 
-        side_bar = []
-
-        triples_related_all = (
-            TempTriple.objects_inheritance.filter(
-                Q(subj__pk=self.pk) | Q(obj__pk=self.pk)
-            )
-            .all()
-            .select_subclasses()
-        )
-
-        for entity_class in helpers.get_classes_with_allowed_relation_from(self.entity):
-            entity_content_type = ContentType.objects.get_for_model(entity_class)
-
-            other_entity_class_name = entity_class.__name__.lower()
-
-            triples_related_by_entity = triples_related_all.filter(
-                (
-                    Q(**{f"subj__self_contenttype": entity_content_type})
-                    & Q(**{f"obj__pk": self.pk})
-                )
-                | (
-                    Q(**{f"obj__self_contenttype": entity_content_type})
-                    & Q(**{f"subj__pk": self.pk})
-                )
-            )
-
-            table_class = get_generic_triple_table(
-                other_entity_class_name=other_entity_class_name,
-                entity_pk_self=self.pk,
-                detail=False,
-            )
-
-            prefix = f"{other_entity_class_name}"
-            title_card = prefix
-            tb_object = table_class(data=triples_related_by_entity, prefix=prefix)
-            tb_object_open = request.GET.get(prefix + "page", None)
-            entity_settings = get_entity_settings_by_modelname(entity_class.__name__)
-            per_page = entity_settings.get("relations_per_page", 10)
-            RequestConfig(request, paginate={"per_page": per_page}).configure(tb_object)
-            side_bar.append(
-                # (title_card, tb_object, ''.join([x.title() for x in match]), tb_object_open)
-                (
-                    title_card,
-                    tb_object,
-                    f"triple_form_{self.entity}_to_{other_entity_class_name}",
-                    tb_object_open,
-                )
-            )
+        side_bar = helpers.triple_sidebar(self.pk, self.entity, request, detail=False)
 
         form = get_member_for_entity(self.entity_model, suffix="Form")
         if form is None:
