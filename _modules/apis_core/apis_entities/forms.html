@@ -163,17 +163,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_tag</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">help_text_inline</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">main_fields</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># fields to display for entity</span>
-            <span class="n">meta_fields</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;references&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;notes&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;review&quot;</span><span class="p">,</span>
-            <span class="p">]</span>  <span class="c1"># fields for separate meta info section</span>
             <span class="n">crispy_main_fields</span> <span class="o">=</span> <span class="n">Fieldset</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Entity type: </span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>  <span class="c1"># crispy forms field collection for entity fields</span>
-            <span class="n">crispy_meta_fields</span> <span class="o">=</span> <span class="n">AccordionGroup</span><span class="p">(</span>  <span class="c1"># crispy forms Accordion Group needs be expanded manually</span>
-                <span class="s2">&quot;MetaInfo&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">Field</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">meta_fields</span><span class="p">]</span>
-            <span class="p">)</span>
             <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;data-placeholder&quot;</span><span class="p">:</span> <span class="s2">&quot;Type to get suggestions&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;data-minimum-input-length&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_MIN_CHAR&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
@@ -234,9 +226,7 @@
                                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
                                     <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-                <span class="c1"># add fields not meant for meta section to main fields list</span>
-                <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">meta_fields</span><span class="p">:</span>
-                    <span class="n">main_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="n">main_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
             <span class="k">def</span> <span class="nf">sort_fields_list</span><span class="p">(</span><span class="n">field_names</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">):</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
@@ -261,11 +251,7 @@
             <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">sort_fields_list</span><span class="p">(</span><span class="n">main_fields</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
                 <span class="n">crispy_main_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Field</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span>
-                <span class="n">Accordion</span><span class="p">(</span>  <span class="c1"># creates two blocks for fields</span>
-                    <span class="n">crispy_main_fields</span><span class="p">,</span> <span class="n">crispy_meta_fields</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">crispy_main_fields</span><span class="p">)</span>
             <span class="c1"># backwards compatibility:</span>
             <span class="c1"># those fields are part of TempEntityClass - this</span>
             <span class="c1"># block can probably be removed when TempEntityClass</span>
