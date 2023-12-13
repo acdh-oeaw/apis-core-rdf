@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.8.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.7.1...v0.8.0) (2023-12-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* APIS projects will have to remove the `custom_context_processors` from the list of used `context_processors`
+* **apis_entites:** any template in your ontology that inherits from the person_detail_generic template needs to point to the detail_generic template instead
+
+### Features
+
+* **apis_entites:** remove person detail template ([75753d4](https://github.com/acdh-oeaw/apis-core-rdf/commit/75753d49dae4dd2850754fcc3afb44dcd110f80b)), closes [#397](https://github.com/acdh-oeaw/apis-core-rdf/issues/397)
+* implement dumpdata view and admin command ([9115fc9](https://github.com/acdh-oeaw/apis-core-rdf/commit/9115fc96bd616e3a0f0d2a5d1fc9b18330fee836)), closes [#273](https://github.com/acdh-oeaw/apis-core-rdf/issues/273)
+* let projects override entities forms using classes ([14a2489](https://github.com/acdh-oeaw/apis-core-rdf/commit/14a24898a19fd41e441533d280f02ed16858ac9a))
+
+
+### Bug Fixes
+
+* drop meta_fields from forms ([378d162](https://github.com/acdh-oeaw/apis-core-rdf/commit/378d1622ac10e938c02f0c411ca06a353b14ff61)), closes [#475](https://github.com/acdh-oeaw/apis-core-rdf/issues/475)
+* drop unused code block ([a8488f3](https://github.com/acdh-oeaw/apis-core-rdf/commit/a8488f383458eee8ec02fa60e347195365e8509f))
+* drop unused custom context processors ([5b2bfd6](https://github.com/acdh-oeaw/apis-core-rdf/commit/5b2bfd6de18e074edcc52282943e054d06e19f39))
+* link to delete view in entity edit template ([5503a6d](https://github.com/acdh-oeaw/apis-core-rdf/commit/5503a6dbbf89baf3fd6fa3fd7a379136cc3b960e)), closes [#437](https://github.com/acdh-oeaw/apis-core-rdf/issues/437)
+* provide a fallback template if basetemplate is not set ([2ee69ce](https://github.com/acdh-oeaw/apis-core-rdf/commit/2ee69ce6b3402b5e598805d0f52155ddfcd919f3))
+
+
+### Documentation
+
+* drop PyYAML from dependency list, add apis-override-select2js ([087ed95](https://github.com/acdh-oeaw/apis-core-rdf/commit/087ed957070a37cea4157aaf964f2e44c2294c8e))
+
+
+### Code Refactoring
+
+* drop custom_context_processors ([c3d7155](https://github.com/acdh-oeaw/apis-core-rdf/commit/c3d7155c0756a8f58470e20a3474c7acc2ecddac))
+
 ## [0.7.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.7.0...v0.7.1) (2023-11-27)
 
 
