@@ -350,8 +350,9 @@
             <span class="k">if</span> <span class="n">e_a</span> <span class="o">!=</span> <span class="n">e_b</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">lt</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">LabelType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Legacy name (merge)&quot;</span><span class="p">)</span>
-            <span class="n">col_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+            <span class="c1"># TODO: if collections are removed, remove this as well</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="s2">&quot;collection&quot;</span><span class="p">):</span>
+                <span class="n">col_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
                 <span class="k">for</span> <span class="n">col2</span> <span class="ow">in</span> <span class="n">ent</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
                     <span class="k">if</span> <span class="n">col2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">col_list</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">col2</span><span class="p">)</span>
