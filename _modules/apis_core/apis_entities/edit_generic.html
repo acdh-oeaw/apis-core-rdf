@@ -100,9 +100,8 @@
 <span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
 <span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">DeleteView</span>
 <span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">RequestConfig</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_labels.models</span> <span class="kn">import</span> <span class="n">Label</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_relations.tables</span> <span class="kn">import</span> <span class="n">get_generic_triple_table</span><span class="p">,</span> <span class="n">LabelTableEdit</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.tables</span> <span class="kn">import</span> <span class="n">get_generic_triple_table</span>
 <span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">get_entities_form</span><span class="p">,</span> <span class="n">GenericEntitiesStanbolForm</span>
 <span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">set_session_variables</span>
 <span class="kn">from</span> <span class="nn">..apis_vocabularies.models</span> <span class="kn">import</span> <span class="n">TextType</span>
@@ -191,11 +190,6 @@
                 <span class="n">apis_bibsonomy</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">apis_bibsonomy</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">apis_bibsonomy</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">object_labels</span> <span class="o">=</span> <span class="n">Label</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">temp_entity__id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-        <span class="n">tb_label</span> <span class="o">=</span> <span class="n">LabelTableEdit</span><span class="p">(</span>
-            <span class="n">data</span><span class="o">=</span><span class="n">object_labels</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;L-&quot;</span>
-        <span class="p">)</span>
-        <span class="n">RequestConfig</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">})</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">tb_label</span><span class="p">)</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;apis_entities/edit_generic.html&quot;</span><span class="p">)</span>
         <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">,</span>
