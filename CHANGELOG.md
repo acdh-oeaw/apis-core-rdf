@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.8.0...v0.8.1) (2023-12-14)
+
+
+### Bug Fixes
+
+* checks if collections exist in merge function ([f9c5d6d](https://github.com/acdh-oeaw/apis-core-rdf/commit/f9c5d6d14fdc9329a58dfc147db732e05f3bb7ee)), closes [#492](https://github.com/acdh-oeaw/apis-core-rdf/issues/492)
+
 ## [0.8.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.7.1...v0.8.0) (2023-12-13)
 
 
