@@ -81,6 +81,7 @@ To use the APIS framework in your application, you will need to add the followin
 
 # ui stuff used by APIS
 "crispy_forms",
+"crispy_bootstrap4",
 "django_filters",
 "django_tables2",
 "dal",
