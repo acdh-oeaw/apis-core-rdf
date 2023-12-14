@@ -208,8 +208,9 @@ class AbstractEntity(RootObject):
             if e_a != e_b:
                 continue
             lt, created = LabelType.objects.get_or_create(name="Legacy name (merge)")
-            col_list = list(self.collection.all())
+            # TODO: if collections are removed, remove this as well
             if hasattr(ent, "collection"):
+                col_list = list(self.collection.all())
                 for col2 in ent.collection.all():
                     if col2 not in col_list:
                         self.collection.add(col2)
