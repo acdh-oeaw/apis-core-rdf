@@ -20,7 +20,6 @@ from apis_core.apis_metainfo.models import Uri, RootObject
 from .api_renderers import (
     EntityToTEI,
     EntityToCIDOCXML,
-    EntityToProsopogrAPhI,
     EntityToCIDOCN3,
     EntityToCIDOCNQUADS,
     EntityToCIDOCTURTLE,
@@ -42,7 +41,6 @@ class GetEntityGeneric(GenericAPIView):
     renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (
         EntityToTEI,
         EntityToCIDOCXML,
-        EntityToProsopogrAPhI,
         EntityToCIDOCN3,
         EntityToCIDOCNQUADS,
         EntityToCIDOCTURTLE,
