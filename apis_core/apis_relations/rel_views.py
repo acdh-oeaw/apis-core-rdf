@@ -4,7 +4,6 @@ from django_tables2 import RequestConfig
 
 from apis_core.apis_entities.views import GenericListViewNew
 
-# from apis_core.apis_relations.models import AbstractRelation
 from apis_core.apis_relations.models import Triple, Property
 from .rel_filters import TripleFilter, PropertyFilter
 from .tables import TripleTable, PropertyTable

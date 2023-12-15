@@ -1,33 +1,22 @@
 import copy
-import re
 
-import yaml
 from crispy_forms.helper import FormHelper
 from dal import autocomplete
 from django import forms
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.urls import reverse
-
-# import autocomplete_light.shortcuts as al
-from django.utils.translation import gettext_lazy as _
 
 from apis_core.apis_relations.models import TempTriple
 from apis_core.apis_entities.fields import ListSelect2
 
-# from apis_core.apis_entities.models import AbstractEntity
-# from dal.autocomplete import ListSelect2
 from apis_core.apis_metainfo.models import Uri
 
-# from apis_core.apis_relations.models import AbstractRelation
 from .tables import get_generic_triple_table
 from apis_core.apis_entities.autocomplete3 import (
     PropertyAutocomplete,
     GenericEntitiesAutocomplete,
 )
-
-# from dal.autocomplete import ListSelect2
 
 
 class GenericTripleForm(forms.ModelForm):

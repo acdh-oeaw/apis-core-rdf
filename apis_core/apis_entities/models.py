@@ -345,22 +345,6 @@ def prepare_fields_dict(fields_list, vocabs, vocabs_m2m):
     return res
 
 
-# ents_cls_list = []
-# if a_ents:
-#     with open(a_ents, "r") as ents_file:
-#         ents = yaml.load(ents_file, Loader=yaml.CLoader)
-#         print(ents)
-#         for ent in ents["entities"]:
-#             attributes = prepare_fields_dict(
-#                 ent["fields"], ent.get("vocabs", []), ent.get("vocabs_m2m", [])
-#             )
-#             attributes["__module__"] = __name__
-#             ent_class = type(ent["name"], (AbstractEntity,), attributes)
-#             globals()[ent["name"]] = ent_class
-#             ents_cls_list.append(ent_class)
-#             reversion.register(ent_class, follow=["tempentityclass_ptr"])
-
-
 @receiver(post_save, dispatch_uid="create_default_uri")
 def create_default_uri(sender, instance, raw, **kwargs):
     # with django reversion, browsing deleted entries in the admin interface

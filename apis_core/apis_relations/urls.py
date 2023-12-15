@@ -7,17 +7,11 @@ from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 app_name = "apis_relations"
 
 urlpatterns = [
-    path(
-        "ajax/get/", views.get_form_ajax, name="get_form_ajax"
-    ),  # rel_form_logic_breadcrumb (for refinding the implicit connections)
+    path("ajax/get/", views.get_form_ajax, name="get_form_ajax"),
     re_path(
         r"^ajax/save/(?P<entity_type>\w+)/(?P<kind_form>\w+)/(?P<SiteID>[0-9]+)(?:/(?P<ObjectID>[0-9]*))?/$",
-        # r'^ajax/save/(?P<entity_type>\w+)/(?P<kind_form>\w+)/(?P<SiteID>[0-9]+)/$', # working without ObjectID
-        # r'^ajax/save/(?P<entity_type>\w+)/(?P<kind_form>\w+)/(?P<SiteID>[0-9]+)/(?P<abcde>[0])/$',
-        # r'^ajax/save/(?P<entity_type>\w+)/$',
-        # r'^ajax/save/(?P<entity_type>\w+)/$',
         views.save_ajax_form,
-        name="save_ajax_form",  # rel_form_logic_breadcrumb (for refinding the implicit connections)
+        name="save_ajax_form",
     ),
     re_path(
         r"^(?P<entity>[a-z0-9_]+)/list/$",

@@ -79,15 +79,6 @@ class ContentTypeSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name="apis:apis_api:contenttype-detail", lookup_field="pk"
     )
-    # collection = serializers.HyperlinkedRelatedField(
-    #     view_name="apis:apis_api:collection-detail", lookup_field="pk", read_only=True
-    # )
-    # text = serializers.HyperlinkedRelatedField(
-    #     view_name="apis:apis_api:text-detail", lookup_field="pk", read_only=True
-    # )
-    # source = serializers.HyperlinkedRelatedField(
-    #     view_name="apis:apis_api:source-detail", lookup_field="pk", read_only=True
-    # )
 
     class Meta:
         fields = "__all__"

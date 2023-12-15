@@ -1,7 +1,6 @@
 import unicodedata
 import copy
 
-# from reversion import revisions as reversion
 import reversion
 from crum import get_current_request
 from django.conf import settings
@@ -12,7 +11,6 @@ from django.db.models.signals import m2m_changed
 from model_utils.managers import InheritanceManager
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
-# from apis_core.apis_entities.models import Person
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.utils import DateParser
 from apis_core.apis_metainfo import signals
@@ -395,29 +393,3 @@ class TempTriple(Triple):
         super().save(*args, **kwargs)
 
         return self
-
-
-# TODO RDF: Check if this should be removed or adapted
-# a_ents = getattr(settings, 'APIS_ADDITIONAL_ENTITIES', False)
-# if a_ents:
-#     with open(a_ents, 'r') as ents_file:
-#         ents = yaml.load(ents_file, Loader=yaml.CLoader)
-#         print(ents)
-#         for ent in ents['entities']:
-#             rels = ent.get("relations", [])
-#             base_ents = ['Person', 'Institution', 'Place', 'Work', 'Event']
-#             if isinstance(rels, str):
-#                 if rels == 'all':
-#                     rels = base_ents + [x['name'].title() for x in ents['entities']]
-#             else:
-#                 rels = base_ents + rels
-#             for r2 in rels:
-#                 attributes = {"__module__":__name__}
-#                 if r2 in base_ents:
-#                     rel_class_name = f"{r2.title()}{ent['name'].title()}"
-#                 else:
-#                     rel_class_name = f"{ent['name'].title()}{r2.title()}"
-#                 if rel_class_name not in globals().keys():
-#                     print(rel_class_name)
-#                     ent_class = type(rel_class_name, (AbstractRelation,), attributes)
-#                     globals()[rel_class_name] = ent_class

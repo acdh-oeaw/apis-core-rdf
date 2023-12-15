@@ -242,9 +242,3 @@ class Uri(models.Model):
                     )
             except Exception as e:
                 raise ValidationError(f"{e}: {self.uri}")
-
-
-# @receiver(post_save, sender=Uri, dispatch_uid="remove_default_uri")
-# def remove_default_uri(sender, instance, **kwargs):
-#    if Uri.objects.filter(root_object=instance.entity).count() > 1:
-#        Uri.objects.filter(root_object=instance.entity, domain="apis default").delete()

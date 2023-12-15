@@ -12,8 +12,6 @@ from apis_core.apis_metainfo.tables import (
     generic_render_end_date_written,
 )
 
-# from apis_core.apis_relations.models import AbstractRelation
-
 empty_text_default = "There are currently no relations"
 
 from apis_core.apis_relations.models import Triple, Property
