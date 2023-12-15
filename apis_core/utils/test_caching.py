@@ -10,7 +10,6 @@ all_class_modules_and_names = {
     ],
     "apis_vocabularies": [
         "CollectionType",
-        "TextType",
         "VocabNames",
         "VocabsBaseClass",
         "VocabsUri",

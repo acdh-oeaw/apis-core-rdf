@@ -3,7 +3,6 @@ from django.db.models.query import QuerySet
 from rest_framework import serializers
 
 from .models import (
-    TextType,
     CollectionType,
     VocabsBaseClass,
     VocabNames,
@@ -108,22 +107,6 @@ class VocabNamesSerializer(VocabsBaseSerializer):
 # Entity Types
 #
 ###########################################################
-
-
-class TextTypeSerializer(VocabsBaseSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:texttype-detail", lookup_field="pk"
-    )
-    collections = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:collection-detail",
-        lookup_field="pk",
-        many=True,
-        read_only=True,
-    )
-
-    class Meta:
-        fields = "__all__"
-        model = TextType
 
 
 # TODO RDF: Check if this should be removed or adapted

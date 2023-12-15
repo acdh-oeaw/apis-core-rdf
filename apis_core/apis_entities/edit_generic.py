@@ -17,7 +17,6 @@ from apis_core.apis_relations.models import TempTriple
 from apis_core.apis_relations.tables import get_generic_triple_table
 from .forms import get_entities_form, GenericEntitiesStanbolForm
 from .views import set_session_variables
-from ..apis_vocabularies.models import TextType
 from apis_core.utils import helpers
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityMixin, EntityInstanceMixin
@@ -84,17 +83,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
         form = form(instance=self.instance)
         if "apis_bibsonomy" in settings.INSTALLED_APPS:
             apis_bibsonomy = getattr(settings, "APIS_BIBSONOMY_FIELDS", [])
-            apis_bibsonomy_texts = getattr(settings, "APIS_BIBSONOMY_TEXTS", False)
-            if apis_bibsonomy_texts:
-                apis_bibsonomy.extend(
-                    [
-                        f"text_{self.pk}"
-                        for pk in TextType.objects.filter(
-                            name__in=apis_bibsonomy_texts
-                        ).values_list("pk", flat=True)
-                        if f"text_{self.pk}" not in apis_bibsonomy
-                    ]
-                )
             if isinstance(apis_bibsonomy, list):
                 apis_bibsonomy = "|".join([x.strip() for x in apis_bibsonomy])
         else:
