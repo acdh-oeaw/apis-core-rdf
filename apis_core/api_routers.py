@@ -13,9 +13,6 @@ from rest_framework import pagination, serializers, viewsets
 from rest_framework import renderers
 from rest_framework.response import Response
 
-# from drf_spectacular.contrib.django_filters import (
-#     DjangoFilterBackend as DjangoFilterbackendSpectacular,
-# )
 from drf_spectacular.utils import (
     extend_schema,
     extend_schema_field,
@@ -464,6 +461,4 @@ def generic_serializer_creation_factory():
 # which doesn't make sense
 serializers_dict = dict()
 views = dict()
-# filter_classes = dict()
-# lst_filter_classes_check = []
 generic_serializer_creation_factory()

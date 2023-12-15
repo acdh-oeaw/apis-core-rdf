@@ -87,22 +87,7 @@ urlpatterns = [
         GenericNetworkEntitiesAutocomplete.as_view(),
         name="generic_network_entities_autocomplete",
     ),
-    # TODO: This seems unused. Remove it once sure
-    # url(r"^detail/work/(?P<pk>[0-9]+)$",
-    #     detail_generic.WorkDetailView.as_view(), name="work_detail"),
     path("place/geojson/", views.getGeoJson, name="getGeoJson"),
-    # TODO RDF: Check if this should be removed or adapted
-    # url(r"^place/geojson/list/$", views.getGeoJsonList, name="getGeoJsonList"),
-    # url(r"^place/network/list/$", views.getNetJsonList, name="getNetJsonList"),
-    # url(
-    #     r"^resolve/place/(?P<pk>[0-9]+)/(?P<uri>.+)$",
-    #     views.resolve_ambigue_place,
-    #     name="resolve_ambigue_place",
-    # ),
-    # TODO RDF: Check if this should be removed or adapted
-    #    url(
-    #        r'^compare/(?P<app>[a-z_]+)/(?P<kind>[a-z]+)/(?P<pk>\d+)$', ReversionCompareView.as_view()
-    #    ),
     path("merge-objects/", merge_views.merge_objects, name="merge_objects"),
     path(
         "getorcreateentity/",
