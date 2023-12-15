@@ -126,9 +126,11 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
         ]
         entity_settings = get_entity_settings_by_modelname(self.entity)
         exclude_fields.extend(entity_settings.get("detail_view_exclude", []))
-        for field, value in model_to_dict(self.instance).items():
-            if field not in exclude_fields:
-                relevant_fields.append((self.instance._meta.get_field(field), value))
+
+        for field_name in model_to_dict(self.instance, exclude=exclude_fields):
+            field_obj = self.instance._meta.get_field(field_name)
+            value = self.instance._get_FIELD_display(field_obj)
+            relevant_fields.append((field_obj, value))
 
         return HttpResponse(
             template.render(
