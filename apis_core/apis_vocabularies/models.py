@@ -130,13 +130,6 @@ class VocabsUri(models.Model):
 #     """Holds controlled vocabularies about event-types"""
 #     pass
 
-# TODO RDF: Remove this
-@reversion.register(follow=["vocabsbaseclass_ptr"])
-class LabelType(VocabsBaseClass):
-    """Holds controlled vocabularies about label-types"""
-
-    pass
-
 
 # TODO RDF: Remove this
 @reversion.register(follow=["vocabsbaseclass_ptr"])

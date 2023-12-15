@@ -7,7 +7,6 @@ from .models import (
     CollectionType,
     VocabsBaseClass,
     VocabNames,
-    LabelType,
 )
 
 
@@ -184,7 +183,3 @@ class TextTypeSerializer(VocabsBaseSerializer):
 #         model = WorkType
 #
 #
-class LabelTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ("id", "name")
-        model = LabelType

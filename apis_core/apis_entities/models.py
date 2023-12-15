@@ -189,7 +189,6 @@ class AbstractEntity(RootObject):
 
         # TODO: check if these imports can be put to top of module without
         #  causing circular import issues.
-        from apis_core.apis_vocabularies.models import LabelType
         from apis_core.apis_metainfo.models import Uri
 
         e_a = type(self).__name__
@@ -206,7 +205,6 @@ class AbstractEntity(RootObject):
             e_b = type(ent).__name__
             if e_a != e_b:
                 continue
-            lt, created = LabelType.objects.get_or_create(name="Legacy name (merge)")
             # TODO: if collections are removed, remove this as well
             if hasattr(ent, "collection"):
                 col_list = list(self.collection.all())
