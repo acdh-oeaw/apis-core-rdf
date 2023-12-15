@@ -13,7 +13,6 @@ from django.forms import ModelMultipleChoiceField, ModelChoiceField
 from django.urls import reverse
 
 from apis_core.apis_metainfo.models import Uri, Collection
-from apis_core.apis_vocabularies.models import TextType
 from apis_core.utils import DateParser, caching, settings as apis_settings
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from .fields import ListSelect2, Select2Multiple

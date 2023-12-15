@@ -137,20 +137,3 @@ class CollectionType(VocabsBaseClass):
     """e.g. reseachCollection, importCollection"""
 
     pass
-
-
-# TODO RDF: Remove this
-@reversion.register(follow=["vocabsbaseclass_ptr"])
-class TextType(VocabsBaseClass):
-    """used to store the Text types for the forms"""
-
-    entity = models.CharField(max_length=255)
-    collections = models.ManyToManyField("apis_metainfo.Collection", blank=True)
-    lang = models.CharField(
-        max_length=3,
-        blank=True,
-        null=True,
-        help_text="The ISO 639-3 (or 2) code for the label's language.",
-        verbose_name="ISO Code",
-        default="deu",
-    )
