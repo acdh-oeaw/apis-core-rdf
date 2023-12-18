@@ -395,12 +395,6 @@
                 <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 </div>
 
-
-
-<span class="c1"># @receiver(post_save, sender=Uri, dispatch_uid=&quot;remove_default_uri&quot;)</span>
-<span class="c1"># def remove_default_uri(sender, instance, **kwargs):</span>
-<span class="c1">#    if Uri.objects.filter(root_object=instance.entity).count() &gt; 1:</span>
-<span class="c1">#        Uri.objects.filter(root_object=instance.entity, domain=&quot;apis default&quot;).delete()</span>
 </pre></div>
 
            </div>

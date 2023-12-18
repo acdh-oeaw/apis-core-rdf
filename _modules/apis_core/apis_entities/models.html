@@ -501,22 +501,6 @@
 
 
 
-<span class="c1"># ents_cls_list = []</span>
-<span class="c1"># if a_ents:</span>
-<span class="c1">#     with open(a_ents, &quot;r&quot;) as ents_file:</span>
-<span class="c1">#         ents = yaml.load(ents_file, Loader=yaml.CLoader)</span>
-<span class="c1">#         print(ents)</span>
-<span class="c1">#         for ent in ents[&quot;entities&quot;]:</span>
-<span class="c1">#             attributes = prepare_fields_dict(</span>
-<span class="c1">#                 ent[&quot;fields&quot;], ent.get(&quot;vocabs&quot;, []), ent.get(&quot;vocabs_m2m&quot;, [])</span>
-<span class="c1">#             )</span>
-<span class="c1">#             attributes[&quot;__module__&quot;] = __name__</span>
-<span class="c1">#             ent_class = type(ent[&quot;name&quot;], (AbstractEntity,), attributes)</span>
-<span class="c1">#             globals()[ent[&quot;name&quot;]] = ent_class</span>
-<span class="c1">#             ents_cls_list.append(ent_class)</span>
-<span class="c1">#             reversion.register(ent_class, follow=[&quot;tempentityclass_ptr&quot;])</span>
-
-
 <div class="viewcode-block" id="create_default_uri">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.create_default_uri">[docs]</a>
 <span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">dispatch_uid</span><span class="o">=</span><span class="s2">&quot;create_default_uri&quot;</span><span class="p">)</span>

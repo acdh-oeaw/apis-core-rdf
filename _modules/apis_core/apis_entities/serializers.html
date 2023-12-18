@@ -300,65 +300,6 @@
         <span class="k">return</span> <span class="n">r</span></div>
 </div>
 
-
-
-<span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
-<span class="c1">#</span>
-<span class="c1"># class LifePathPlaceSerializer(serializers.ModelSerializer):</span>
-<span class="c1">#     id = serializers.ReadOnlyField()</span>
-<span class="c1">#     name = serializers.CharField()</span>
-<span class="c1">#     lat = serializers.FloatField()</span>
-<span class="c1">#     long = serializers.FloatField(source=&#39;lng&#39;)</span>
-<span class="c1">#</span>
-<span class="c1">#     class Meta:</span>
-<span class="c1">#         fields = [&#39;id&#39;, &#39;name&#39;, &#39;lat&#39;, &#39;long&#39;]</span>
-<span class="c1">#         model = Place</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># class LifePathSerializer(serializers.BaseSerializer):</span>
-<span class="c1">#     place = serializers.SerializerMethodField(method_name=&#39;get_place&#39;)</span>
-<span class="c1">#     year = serializers.SerializerMethodField(method_name=&#39;get_year&#39;)</span>
-<span class="c1">#     relation_type = serializers.CharField(source=&#39;relation_type__name&#39;)</span>
-<span class="c1">#</span>
-<span class="c1">#     def get_place(self, obj):</span>
-<span class="c1">#         if isinstance(obj, PersonInstitution):</span>
-<span class="c1">#             inst = obj.related_institution</span>
-<span class="c1">#             rel_type = getattr(settings, &#39;APIS_LOCATED_IN_ATTR&#39;, [&#39;situated in&#39;,])</span>
-<span class="c1">#             ipl_rel = InstitutionPlaceRelation.objects.filter(name__in=rel_type).values_list(&#39;pk&#39;, flat=True)</span>
-<span class="c1">#             plc = InstitutionPlace.objects.filter(relation_type_id__in=ipl_rel, related_institution=inst)</span>
-<span class="c1">#             if plc.count() == 1:</span>
-<span class="c1">#                 plc = plc.first().related_place</span>
-<span class="c1">#                 if plc.lng and plc.lat:</span>
-<span class="c1">#                     return LifePathPlaceSerializer(plc).data</span>
-<span class="c1">#         elif isinstance(obj, PersonPlace):</span>
-<span class="c1">#             plc = obj.related_place</span>
-<span class="c1">#             if plc.lat and plc.lng:</span>
-<span class="c1">#                 return LifePathPlaceSerializer(plc).data</span>
-<span class="c1">#</span>
-<span class="c1">#     def get_year(self, obj):</span>
-<span class="c1">#         if not obj.start_date and not obj.end_date:</span>
-<span class="c1">#             return None</span>
-<span class="c1">#         if obj.start_date and obj.end_date:</span>
-<span class="c1">#             start = int(obj.start_date.strftime(&quot;%Y&quot;))</span>
-<span class="c1">#             end = int(obj.end_date.strftime(&quot;%Y&quot;))</span>
-<span class="c1">#             return int((start + end) / 2)</span>
-<span class="c1">#         elif obj.start_date:</span>
-<span class="c1">#             return int(obj.start_date.strftime(&quot;%Y&quot;))</span>
-<span class="c1">#         elif obj.end_date:</span>
-<span class="c1">#             return int(obj.end_date.strftime(&quot;%Y&quot;))</span>
-<span class="c1">#</span>
-<span class="c1">#     def to_representation(self, instance):</span>
-<span class="c1">#         p = self.get_place(instance)</span>
-<span class="c1">#         if p is None:</span>
-<span class="c1">#             return None</span>
-<span class="c1">#         res = {</span>
-<span class="c1">#             &#39;id&#39;: instance.pk,</span>
-<span class="c1">#             &#39;coords&#39;: [p[&#39;lat&#39;], p[&#39;long&#39;]],</span>
-<span class="c1">#             &#39;name&#39;: p[&#39;name&#39;],</span>
-<span class="c1">#             &#39;year&#39;: self.get_year(instance),</span>
-<span class="c1">#             &#39;relation_type&#39;: str(instance.relation_type)</span>
-<span class="c1">#         }</span>
-<span class="c1">#         return res</span>
 </pre></div>
 
            </div>

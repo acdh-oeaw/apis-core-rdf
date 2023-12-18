@@ -86,35 +86,24 @@
              
   <h1>Source code for apis_core.apis_relations.forms2</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">re</span>
 
-<span class="kn">import</span> <span class="nn">yaml</span>
 <span class="kn">from</span> <span class="nn">crispy_forms.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
 <span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
-
-<span class="c1"># import autocomplete_light.shortcuts as al</span>
-<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">gettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.fields</span> <span class="kn">import</span> <span class="n">ListSelect2</span>
 
-<span class="c1"># from apis_core.apis_entities.models import AbstractEntity</span>
-<span class="c1"># from dal.autocomplete import ListSelect2</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 
-<span class="c1"># from apis_core.apis_relations.models import AbstractRelation</span>
 <span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">get_generic_triple_table</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.autocomplete3</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">PropertyAutocomplete</span><span class="p">,</span>
     <span class="n">GenericEntitiesAutocomplete</span><span class="p">,</span>
 <span class="p">)</span>
-
-<span class="c1"># from dal.autocomplete import ListSelect2</span>
 
 
 <div class="viewcode-block" id="GenericTripleForm">
