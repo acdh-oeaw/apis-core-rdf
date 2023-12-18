@@ -331,7 +331,6 @@
 
         <span class="c1"># TODO: check if these imports can be put to top of module without</span>
         <span class="c1">#  causing circular import issues.</span>
-        <span class="kn">from</span> <span class="nn">apis_core.apis_vocabularies.models</span> <span class="kn">import</span> <span class="n">LabelType</span>
         <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 
         <span class="n">e_a</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
@@ -348,7 +347,6 @@
             <span class="n">e_b</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">ent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
             <span class="k">if</span> <span class="n">e_a</span> <span class="o">!=</span> <span class="n">e_b</span><span class="p">:</span>
                 <span class="k">continue</span>
-            <span class="n">lt</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">LabelType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Legacy name (merge)&quot;</span><span class="p">)</span>
             <span class="c1"># TODO: if collections are removed, remove this as well</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="s2">&quot;collection&quot;</span><span class="p">):</span>
                 <span class="n">col_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>

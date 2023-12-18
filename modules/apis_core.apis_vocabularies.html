@@ -247,42 +247,6 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.LabelType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.models.</span></span><span class="sig-name descname"><span class="pre">LabelType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#LabelType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.LabelType" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_vocabularies.models.VocabsBaseClass" title="apis_core.apis_vocabularies.models.VocabsBaseClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">VocabsBaseClass</span></code></a></p>
-<p>Holds controlled vocabularies about label-types</p>
-<dl class="py exception">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.LabelType.DoesNotExist">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.LabelType.DoesNotExist" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_vocabularies.models.VocabsBaseClass.DoesNotExist" title="apis_core.apis_vocabularies.models.VocabsBaseClass.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoesNotExist</span></code></a></p>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.LabelType.MultipleObjectsReturned">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.LabelType.MultipleObjectsReturned" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_vocabularies.models.VocabsBaseClass.MultipleObjectsReturned" title="apis_core.apis_vocabularies.models.VocabsBaseClass.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.LabelType.vocabsbaseclass_ptr">
-<span class="sig-name descname"><span class="pre">vocabsbaseclass_ptr</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.LabelType.vocabsbaseclass_ptr" title="Link to this definition"></a></dt>
-<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.LabelType.vocabsbaseclass_ptr_id">
-<span class="sig-name descname"><span class="pre">vocabsbaseclass_ptr_id</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.LabelType.vocabsbaseclass_ptr_id" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.TextType">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.models.</span></span><span class="sig-name descname"><span class="pre">TextType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/models.html#TextType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.models.TextType" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#apis_core.apis_vocabularies.models.VocabsBaseClass" title="apis_core.apis_vocabularies.models.VocabsBaseClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">VocabsBaseClass</span></code></a></p>
@@ -459,19 +423,6 @@ object the first time, the query is executed.</p>
 <dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsBaseClass.label">
 <span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabsBaseClass.label" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsBaseClass.labeltype">
-<span class="sig-name descname"><span class="pre">labeltype</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.models.VocabsBaseClass.labeltype" title="Link to this definition"></a></dt>
-<dd><p>Accessor to the related object on the reverse side of a one-to-one
-relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_vocabularies.models.VocabsBaseClass.parent_class">
@@ -734,31 +685,6 @@ so that we can present a helpful representation of the object.</p>
 <dt class="sig sig-object py" id="apis_core.apis_vocabularies.serializers.GenericVocabsSerializer.add_vocabname">
 <span class="sig-name descname"><span class="pre">add_vocabname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/serializers.html#GenericVocabsSerializer.add_vocabname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.serializers.GenericVocabsSerializer.add_vocabname" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.serializers.LabelTypeSerializer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_vocabularies.serializers.</span></span><span class="sig-name descname"><span class="pre">LabelTypeSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/serializers.html#LabelTypeSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.serializers.LabelTypeSerializer" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
-<p>When a field is instantiated, we store the arguments that were used,
-so that we can present a helpful representation of the object.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.serializers.LabelTypeSerializer.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_vocabularies/serializers.html#LabelTypeSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_vocabularies.serializers.LabelTypeSerializer.Meta" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.serializers.LabelTypeSerializer.Meta.fields">
-<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('id',</span> <span class="pre">'name')</span></em><a class="headerlink" href="#apis_core.apis_vocabularies.serializers.LabelTypeSerializer.Meta.fields" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_vocabularies.serializers.LabelTypeSerializer.Meta.model">
-<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#apis_core.apis_vocabularies.serializers.LabelTypeSerializer.Meta.model" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#apis_core.apis_vocabularies.models.LabelType" title="apis_core.apis_vocabularies.models.LabelType"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelType</span></code></a></p>
-</dd></dl>
-
-</dd></dl>
 
 </dd></dl>
 
