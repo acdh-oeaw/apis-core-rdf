@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.9.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.8.1...v0.9.0) (2023-12-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop EntityToProsopogrAPhI API endpoint
+* drop `resolve_abbrevations` command
+* drop `apis_vocabularies.models.TextType`
+* drop `apis_vocabularies.models.LabelType`
+* **deps:** django-crispy-forms uses separate template packs since version 2. we depend on crispy-bootstrap4 by default, but projects have to add `crispy_bootstrap4` to the INSTALLED_APPS themselves.
+* **apis_labels:** APIS projects will have to remove `apis_core.apis_labels` from their settings `INSTALLED_APPS`
+
+### Features
+
+* **apis_labels:** drop apis_labels ([0c44287](https://github.com/acdh-oeaw/apis-core-rdf/commit/0c44287eac678f40a24c98ffe8b7efb053487db4)), closes [#15](https://github.com/acdh-oeaw/apis-core-rdf/issues/15)
+* improve listview pagination ([13088b6](https://github.com/acdh-oeaw/apis-core-rdf/commit/13088b62ffe62ac12599bf91d80c114f3a735f78)), closes [#416](https://github.com/acdh-oeaw/apis-core-rdf/issues/416)
+
+
+### Bug Fixes
+
+* allow `dumpdata` API access for all authenticated users ([a2ffbfd](https://github.com/acdh-oeaw/apis-core-rdf/commit/a2ffbfd1f7fa96018c79894b3e072f66df8301e2))
+
+
+### Miscellaneous Chores
+
+* **deps:** add crispy-bootstrap4 as dependency ([759e0c6](https://github.com/acdh-oeaw/apis-core-rdf/commit/759e0c60143b854b706c226293a3c64fd19bab65))
+
+
+### Code Refactoring
+
+* drop `apis_vocabularies.models.LabelType` ([d690d93](https://github.com/acdh-oeaw/apis-core-rdf/commit/d690d9313805f1f1d582b1689bea2dfa1d9b64c1)), closes [#498](https://github.com/acdh-oeaw/apis-core-rdf/issues/498)
+* drop `apis_vocabularies.models.TextType` ([22562cb](https://github.com/acdh-oeaw/apis-core-rdf/commit/22562cbefa82a9aeca94c32e2b2c4b9cfa33fe84)), closes [#499](https://github.com/acdh-oeaw/apis-core-rdf/issues/499)
+* drop `resolve_abbrevations` command ([7c3edd8](https://github.com/acdh-oeaw/apis-core-rdf/commit/7c3edd810be7fa6f12c40766dc292d0985fb81ea)), closes [#501](https://github.com/acdh-oeaw/apis-core-rdf/issues/501)
+* drop EntityToProsopogrAPhI API endpoint ([0448fec](https://github.com/acdh-oeaw/apis-core-rdf/commit/0448fec6fa715a195dadfc60ec415f4ca64099c3))
+
 ## [0.8.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.8.0...v0.8.1) (2023-12-14)
 
 
