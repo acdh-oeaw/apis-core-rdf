@@ -2,6 +2,7 @@ import json
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from apis_core.utils.helpers import datadump_serializer
 
@@ -15,6 +16,8 @@ class Dumpdata(APIView):
     output it as an API reponse.
     so basically: serialize -> deserialize -> serialize
     """
+
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         params = request.query_params.dict()
