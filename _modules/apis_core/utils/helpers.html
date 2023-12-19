@@ -94,12 +94,16 @@
 
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">TempTriple</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.tables</span> <span class="kn">import</span> <span class="n">get_generic_triple_table</span>
 
 <span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">apps</span>
 <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">DEFAULT_DB_ALIAS</span><span class="p">,</span> <span class="n">router</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.core</span> <span class="kn">import</span> <span class="n">serializers</span>
+<span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">RequestConfig</span>
 
 
 <div class="viewcode-block" id="get_classes_with_allowed_relation_from">
@@ -235,6 +239,53 @@
         <span class="n">datadump_get_queryset</span><span class="p">(</span><span class="n">additional_app_labels</span><span class="p">),</span>
         <span class="n">use_natural_foreign_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="triple_sidebar">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.helpers.triple_sidebar">[docs]</a>
+<span class="k">def</span> <span class="nf">triple_sidebar</span><span class="p">(</span><span class="n">pk</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">side_bar</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">triples_related_all</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">select_subclasses</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">entity_class</span> <span class="ow">in</span> <span class="n">get_classes_with_allowed_relation_from</span><span class="p">(</span><span class="n">entity_name</span><span class="p">):</span>
+        <span class="n">entity_content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">entity_class</span><span class="p">)</span>
+
+        <span class="n">other_entity_class_name</span> <span class="o">=</span> <span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="n">triples_related_by_entity</span> <span class="o">=</span> <span class="n">triples_related_all</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj__self_contenttype</span><span class="o">=</span><span class="n">entity_content_type</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">))</span>
+            <span class="o">|</span> <span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">obj__self_contenttype</span><span class="o">=</span><span class="n">entity_content_type</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="n">pk</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="n">table_class</span> <span class="o">=</span> <span class="n">get_generic_triple_table</span><span class="p">(</span>
+            <span class="n">other_entity_class_name</span><span class="o">=</span><span class="n">other_entity_class_name</span><span class="p">,</span>
+            <span class="n">entity_pk_self</span><span class="o">=</span><span class="n">pk</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">other_entity_class_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">title_card</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="n">tb_object</span> <span class="o">=</span> <span class="n">table_class</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">triples_related_by_entity</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="n">tb_object_open</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;page&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="n">per_page</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relations_per_page&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">RequestConfig</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="n">per_page</span><span class="p">})</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">tb_object</span><span class="p">)</span>
+        <span class="n">tab_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;triple_form_</span><span class="si">{</span><span class="n">entity_name</span><span class="si">}</span><span class="s2">_to_</span><span class="si">{</span><span class="n">other_entity_class_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">side_bar</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">title_card</span><span class="p">,</span>
+                <span class="n">tb_object</span><span class="p">,</span>
+                <span class="n">tab_id</span><span class="p">,</span>
+                <span class="n">tb_object_open</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">side_bar</span></div>
 
 </pre></div>
 
