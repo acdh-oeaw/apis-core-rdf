@@ -101,9 +101,16 @@ class GenericListViewNew(
         )
         if qs is None:
             qs = (self.get_model().objects.all()).order_by("name")
-        self.filter = get_list_filter_of_entity(self.entity)(
-            self.request.GET, queryset=qs
+
+        filterset = get_member_for_entity(
+            self.get_model(), path="filersets", suffix="FilterSet"
         )
+        if filterset:
+            self.filter = filterset(self.request.GET, queryset=qs)
+        else:
+            self.filter = get_list_filter_of_entity(self.entity)(
+                self.request.GET, queryset=qs
+            )
         self.filter.form.helper = self.formhelper_class()
 
         return self.filter_queryset(self.filter.qs)
