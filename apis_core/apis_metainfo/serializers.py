@@ -2,7 +2,6 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
 from .models import Collection, Text, Uri
-from apis_core.apis_entities.models import TempEntityClass
 
 
 class CollectionSerializer(serializers.HyperlinkedModelSerializer):
@@ -54,25 +53,6 @@ class UriSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         fields = "__all__"
         model = Uri
-
-
-class TempEntityClassSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:tempentityclass-detail", lookup_field="pk"
-    )
-    collection = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:collection-detail", lookup_field="pk", read_only=True
-    )
-    text = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:text-detail", lookup_field="pk", read_only=True
-    )
-    source = serializers.HyperlinkedRelatedField(
-        view_name="apis:apis_api:source-detail", lookup_field="pk", read_only=True
-    )
-
-    class Meta:
-        fields = "__all__"
-        model = TempEntityClass
 
 
 class ContentTypeSerializer(serializers.HyperlinkedModelSerializer):

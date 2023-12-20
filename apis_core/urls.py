@@ -71,10 +71,6 @@ urlpatterns = [
         include("apis_core.apis_metainfo.urls", namespace="apis_metainfo"),
     ),
     path(
-        "metainfo-ac/",
-        include("apis_core.apis_metainfo.dal_urls", namespace="apis_metainfo-ac"),
-    ),
-    path(
         "api/", include((router.urls, "apis_core"), namespace="apis_api")
     ),  # routers do not support namespaces out of the box
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),

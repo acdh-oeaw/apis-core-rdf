@@ -6,7 +6,6 @@ import logging
 from typing import Type
 
 
-from apis_core.apis_entities.models import TempEntityClass
 from apis_core.apis_relations.models import Property, TempTriple
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_relations.tables import get_generic_triple_table
@@ -22,7 +21,7 @@ from django_tables2 import RequestConfig
 @functools.lru_cache
 def get_classes_with_allowed_relation_from(
     entity_name: str,
-) -> list[Type[TempEntityClass]]:
+) -> list[object]:
     """Returns a list of classes to which the given class may be related by a Property"""
 
     # Find all the properties where the entity is either subject or object
