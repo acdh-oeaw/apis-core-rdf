@@ -1,3 +1,4 @@
+from datetime import datetime
 import unicodedata
 import copy
 
@@ -15,6 +16,7 @@ from apis_core.generic.abc import GenericModel
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.utils import DateParser
 from apis_core.apis_metainfo import signals
+from simple_history.models import HistoricalRecords
 
 
 def find_if_user_accepted():
@@ -46,7 +48,6 @@ class BaseRelationManager(models.Manager):
             return self.get_queryset()
 
 
-@reversion.register(follow=["rootobject_ptr"])
 class Property(RootObject):
     class Meta:
         verbose_name_plural = "Properties"
@@ -249,6 +250,16 @@ class Triple(GenericModel, models.Model):
 
     objects = BaseRelationManager()
     objects_inheritance = InheritanceManager()
+    history = HistoricalRecords(inherit=True)
+    __history_date = datetime.now()
+
+    @property
+    def _history_date(self):
+        return self.__history_date
+
+    @_history_date.setter
+    def _history_date(self, value):
+        self.__history_date = value
 
     def __repr__(self):
         if self.subj is not None or self.obj is not None or self.prop is not None:
