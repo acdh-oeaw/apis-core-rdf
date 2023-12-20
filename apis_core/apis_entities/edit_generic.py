@@ -165,12 +165,12 @@ class GenericEntitiesCreateStanbolView(EntityMixin, View):
 
 @method_decorator(login_required, name="dispatch")
 class GenericEntitiesDeleteView(EntityInstanceMixin, DeleteView):
-    # model = ContentType.objects.get(
-    #     app_label='apis_entities', model='tempentityclass').model_class()
-    model = importlib.import_module("apis_core.apis_entities.models").TempEntityClass
     template_name = getattr(
         settings, "APIS_DELETE_VIEW_TEMPLATE", "confirm_delete.html"
     )
+
+    def get_queryset(self):
+        return self.entity_model.objects.all()
 
     def dispatch(self, request, *args, **kwargs):
         self.success_url = reverse(
