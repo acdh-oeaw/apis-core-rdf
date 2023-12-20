@@ -5,7 +5,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
 from django.urls import reverse
 from rest_framework import serializers
-from reversion.models import Version
 
 
 base_uri = getattr(settings, "APIS_BASE_URI", "http://apis.info")
@@ -39,25 +38,6 @@ class EntitySerializer(serializers.Serializer):
     id = serializers.IntegerField()
     url = serializers.SerializerMethodField(method_name="add_url")
     uris = EntityUriSerializer(source="uri_set", many=True)
-    revisions = serializers.SerializerMethodField(method_name="add_revisions")
-
-    def add_revisions(self, obj):
-        ver = Version.objects.get_for_object(obj)
-        res = []
-        for v in ver:
-            usr_1 = getattr(v.revision, "user", None)
-            if usr_1 is not None:
-                usr_1 = usr_1.username
-            else:
-                usr_1 = "Not specified"
-            res.append(
-                {
-                    "id": v.id,
-                    "date_created": v.revision.date_created,
-                    "user_created": usr_1,
-                }
-            )
-        return res
 
     def add_relations(self, obj):
         res = {}
@@ -163,25 +143,6 @@ class RelationEntitySerializer(serializers.Serializer):
     start_date_written = serializers.DateField()
     end_date_written = serializers.DateField()
     relation_type = serializers.SerializerMethodField(method_name="add_relation_label")
-    revisions = serializers.SerializerMethodField(method_name="add_revisions")
-
-    def add_revisions(self, obj):
-        ver = Version.objects.get_for_object(obj)
-        res = []
-        for v in ver:
-            usr_1 = getattr(v.revision, "user", None)
-            if usr_1 is not None:
-                usr_1 = usr_1.username
-            else:
-                usr_1 = "Not specified"
-            res.append(
-                {
-                    "id": v.id,
-                    "date_created": v.revision.date_created,
-                    "user_created": usr_1,
-                }
-            )
-        return res
 
     def add_entity(self, obj):
         return EntitySerializer(

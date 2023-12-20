@@ -15,6 +15,7 @@ from apis_core.api_routers import views
 from apis_core.utils import caching
 from apis_core.apis_metainfo.viewsets import UriToObjectViewSet
 from apis_core.core.views import Dumpdata
+from apis_core.apis_history.api_views import GenericHistoryLogs
 from apis_core.apis_entities.api_views import GetEntityGeneric
 
 from drf_spectacular.views import (
@@ -42,6 +43,8 @@ for app_label, model_str in caching.get_all_class_modules_and_names():
 
 # inject the manually created UriToObjectViewSet into the api router
 router.register(r"metainfo/uritoobject", UriToObjectViewSet, basename="uritoobject")
+if "apis_core.apis_history" in settings.INSTALLED_APPS:
+    router.register(r"history/entity/edit_log", GenericHistoryLogs, "historylog")
 
 
 urlpatterns = [

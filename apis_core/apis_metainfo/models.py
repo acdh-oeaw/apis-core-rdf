@@ -1,27 +1,46 @@
-import reversion
+import re
+from difflib import SequenceMatcher
+from math import inf
+import copy
+import importlib
+
+import requests
+
+# from reversion import revisions as reversion
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models.fields.related import ForeignKey, ManyToManyField
+from django.db.models.fields.reverse_related import ManyToOneRel
+from django.db.models.fields.related import OneToOneField, ForeignKey, ManyToManyField
 from django.forms import model_to_dict
 from django.urls import reverse
+from django.utils.functional import cached_property
 from model_utils.managers import InheritanceManager
 from apis_core.utils.normalize import clean_uri
 from django.core.exceptions import ValidationError, ImproperlyConfigured
-from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
-from apis_core.generic.abc import GenericModel
 
+# from django.contrib.contenttypes.fields import GenericRelation
+# from utils.highlighter import highlight_text
 from apis_core.utils import caching, rdf
 
 from apis_core.apis_metainfo import signals
 
+# from apis_core.apis_entities.serializers_generic import EntitySerializer
+# from apis_core.apis_vocabularies.models import CollectionType, LabelType, TextType
+
+path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
+if path_ac_settings:
+    ac_settings = importlib.import_module(path_ac_settings)
+    autocomp_settings = getattr(ac_settings, "autocomp_settings")
+else:
+    from apis_core.default_settings.NER_settings import autocomp_settings
+# from apis_core.utils import DateParser
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
 
-@reversion.register()
-class RootObject(GenericModel, models.Model):
+class RootObject(models.Model):
     """
     The very root thing that can exist in a given ontology. Several classes inherit from it.
     By having one overarching super class we gain the advantage of unique identifiers.
@@ -86,15 +105,17 @@ class RootObject(GenericModel, models.Model):
         signals.post_duplicate.send(sender=origin, instance=self, duplicate=duplicate)
         return duplicate
 
-    duplicate.alters_data = True
 
-
-@reversion.register()
-class Collection(GenericModel, models.Model):
+class Collection(models.Model):
     """Allows to group entities and relation."""
+
+    from apis_core.apis_vocabularies.models import CollectionType
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    collection_type = models.ForeignKey(
+        CollectionType, blank=True, null=True, on_delete=models.SET_NULL
+    )
     groups_allowed = models.ManyToManyField(Group)
     parent_class = models.ForeignKey(
         "self", blank=True, null=True, on_delete=models.CASCADE
@@ -119,6 +140,10 @@ class Collection(GenericModel, models.Model):
         super().save(*args, **kwargs)
 
 
+# TODO: Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
+from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
+
+
 class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):
     def get_queryset(self, **hints):
         return self.field.remote_field.model.objects_inheritance.db_manager(
@@ -131,15 +156,15 @@ class InheritanceForeignKey(models.ForeignKey):
 
 
 # Uri model
-# We use a custom UriManager, so we can override the queryset `get`
-# method. This way we can normalize the uri field.
+# We use a custom UriManager, so we can override the queryset `get_or_create`
+# method. This is useful because we normalize the uri field before saving.
 
 
 class UriQuerySet(models.query.QuerySet):
-    def get(self, *args, **kwargs):
+    def get_or_create(self, defaults=None, **kwargs):
         if "uri" in kwargs:
             kwargs["uri"] = clean_uri(kwargs["uri"])
-        return super().get(*args, **kwargs)
+        return super().get_or_create(defaults, **kwargs)
 
 
 class UriManager(models.Manager):
@@ -147,8 +172,7 @@ class UriManager(models.Manager):
         return UriQuerySet(self.model)
 
 
-@reversion.register()
-class Uri(GenericModel, models.Model):
+class Uri(models.Model):
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
     domain = models.CharField(max_length=255, blank=True)
     rdf_link = models.URLField(blank=True)
@@ -201,18 +225,16 @@ class Uri(GenericModel, models.Model):
         self.uri = clean_uri(self.uri)
         if self.uri and not hasattr(self, "root_object"):
             try:
-                definition, attributes = rdf.get_definition_and_attributes_from_uri(
-                    self.uri
-                )
-                if definition.getattr("model", False) and attributes:
-                    app_label, model = definition.getattr("model").split(".", 1)
+                model, attributes = rdf.get_modelname_and_dict_from_uri(self.uri)
+                if model and attributes:
+                    app_label, model = model.split(".", 1)
                     ct = ContentType.objects.get_by_natural_key(app_label, model)
                     obj = ct.model_class()(**attributes)
                     obj.save()
                     self.root_object = obj
                 else:
                     raise ImproperlyConfigured(
-                        f"{self.uri}: did not find matching rdf defintion"
+                        f"{uri}: found model <{model}> and attributes <{attributes}>"
                     )
             except Exception as e:
                 raise ValidationError(f"{e}: {self.uri}")
