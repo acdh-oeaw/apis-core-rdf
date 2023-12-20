@@ -19,7 +19,6 @@ from drf_spectacular.utils import (
 )
 from drf_spectacular.types import OpenApiTypes
 from django_filters import rest_framework as filters
-from apis_core.apis_entities.models import TempEntityClass
 from .api_renderers import NetJsonRenderer
 from .apis_relations.models import Triple, Property
 from apis_core.utils import caching
@@ -82,7 +81,6 @@ class ApisBaseSerializer(serializers.ModelSerializer):
         )
 
     class Meta:
-        model = TempEntityClass
         fields = ["id", "label", "url"]
 
 

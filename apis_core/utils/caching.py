@@ -26,7 +26,7 @@ def _init_all_ontology_classes():
 
     # the imports are done here as this module here might be called before full Django
     # initialization. Otherwise, it would break.
-    from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
+    from apis_core.apis_entities.models import AbstractEntity
 
     # from apis_core.apis_relations.models import AbstractReification
 
@@ -66,8 +66,6 @@ def _init_all_ontology_classes():
             if (
                 issubclass(ontology_class, AbstractEntity)
                 and not ontology_class._meta.abstract
-                and ontology_class
-                is not TempEntityClass  # TODO RDF: remove this once TempEntityClass is removed
             ):
                 _entity_classes.append(ontology_class)
                 _entity_class_names.append(ontology_class_name.lower())

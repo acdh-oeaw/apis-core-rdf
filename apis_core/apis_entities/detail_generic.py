@@ -48,20 +48,8 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
         iiif_info_json = self.instance.name
 
         relevant_fields = []
-        # those are fields from TempEntityClass, this exclude list can be removed once TempEntityClass is dropped
-        exclude_fields = [
-            "start_date",
-            "start_start_date",
-            "start_end_date",
-            "end_date",
-            "end_start_date",
-            "end_end_date",
-            "tempentityclass_ptr",
-            "rootobject_ptr",
-            "collection",
-        ]
         entity_settings = get_entity_settings_by_modelname(self.entity)
-        exclude_fields.extend(entity_settings.get("detail_view_exclude", []))
+        exclude_fields = entity_settings.get("detail_view_exclude", [])
         for field, value in model_to_dict(self.instance).items():
             if field not in exclude_fields:
                 relevant_fields.append((self.instance._meta.get_field(field), value))

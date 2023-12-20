@@ -6,7 +6,6 @@ import django_filters
 from django.conf import settings
 from django.db.models import JSONField
 
-from apis_core.apis_entities.models import TempEntityClass
 from apis_core.utils import caching
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.utils.filtermethods import (
@@ -55,7 +54,6 @@ class GenericEntityListFilter(django_filters.FilterSet):
     end_date = django_filters.DateFromToRangeFilter()
 
     class Meta:
-        model = TempEntityClass
         # exclude all hardcoded fields or nothing, however this exclude is only defined here as a temporary measure in
         # order to load all filters of all model fields by default so that they are available in the first place.
         # Later those which are not referenced in the settings file will be removed again
