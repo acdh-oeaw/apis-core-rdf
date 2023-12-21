@@ -44,6 +44,12 @@ class SimpleHistoryTestCase(TestCase):
         triples = Place.history.latest().get_triples_for_version()
         print("fin")
 
+    def test_history_delete_entry(self):
+        """Tests the deletion of an entry."""
+        pers = Person.objects.get(first_name="John")
+        pers.delete()
+        assert len(Person.history.all()) == 2
+
     def test_history_merge(self):
         """Tests the merge function of the Place model. This is still expected to fail."""
         pl1 = Place.objects.first()

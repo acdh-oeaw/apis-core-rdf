@@ -65,5 +65,10 @@ class VersionMixin(models.Model):
             self._history_date = datetime.now()
         return super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
+        if self._history_date is None:
+            self._history_date = datetime.now()
+        return super().delete(*args, **kwargs)
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
