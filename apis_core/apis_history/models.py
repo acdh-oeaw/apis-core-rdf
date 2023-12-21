@@ -62,10 +62,6 @@ class VersionMixin(models.Model):
 
     @_history_date.setter
     def _history_date(self, value):
-        if isinstance(value, datetime):
-            self.__history_date = value
-        elif value is None:
-            self.__history_date = datetime.now()
         self.__history_date = value
 
     class Meta:
