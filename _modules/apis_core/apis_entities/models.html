@@ -112,7 +112,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity">[docs]</a>
 <span class="k">class</span> <span class="nc">AbstractEntity</span><span class="p">(</span><span class="n">RootObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract super class which encapsulates common logic between the</span>
@@ -125,7 +125,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="AbstractEntity.Meta">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.Meta">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">abstract</span> <span class="o">=</span> <span class="kc">True</span></div>
 
@@ -140,7 +140,7 @@
             <span class="k">return</span> <span class="s2">&quot;no name provided&quot;</span>
 
 <div class="viewcode-block" id="AbstractEntity.get_or_create_uri">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_or_create_uri">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_or_create_uri">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_or_create_uri</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uri</span><span class="p">):</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
@@ -157,14 +157,14 @@
 
     <span class="c1"># TODO</span>
 <div class="viewcode-block" id="AbstractEntity.get_entity_list_filter">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_entity_list_filter">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_entity_list_filter">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_entity_list_filter</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="AbstractEntity.get_listview_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_listview_url">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_listview_url">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_listview_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -175,7 +175,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.get_createview_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_createview_url">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_createview_url">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_createview_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -186,7 +186,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.get_edit_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_edit_url">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_edit_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_edit_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
@@ -196,7 +196,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.get_absolute_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_absolute_url">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_absolute_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
@@ -206,7 +206,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.get_prev_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_prev_url">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_prev_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_prev_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">NEXT_PREV</span><span class="p">:</span>
@@ -223,7 +223,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.get_next_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_next_url">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_next_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_next_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">NEXT_PREV</span><span class="p">:</span>
@@ -240,7 +240,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.get_delete_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_delete_url">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_delete_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_delete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
@@ -250,7 +250,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.get_duplicate_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_duplicate_url">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_duplicate_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_duplicate_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
@@ -260,7 +260,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.merge_charfield">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.merge_charfield">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.merge_charfield">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_charfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
         <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -271,7 +271,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.merge_textfield">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.merge_textfield">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.merge_textfield">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_textfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
@@ -280,7 +280,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.merge_booleanfield">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.merge_booleanfield">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.merge_booleanfield">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_booleanfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
         <span class="nb">setattr</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -288,19 +288,19 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.merge_start_date_written">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.merge_start_date_written">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.merge_start_date_written">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start_date_written</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_date_written</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">start_date_written</span></div>
 
 
 <div class="viewcode-block" id="AbstractEntity.merge_end_date_written">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.merge_end_date_written">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.merge_end_date_written">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_date_written</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_date_written</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">end_date_written</span></div>
 
 
 <div class="viewcode-block" id="AbstractEntity.merge_fields">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.merge_fields">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.merge_fields">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method iterates through the model fields and copies</span>
@@ -324,7 +324,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.merge_with">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.merge_with">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.merge_with">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
         <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
         <span class="n">signals</span><span class="o">.</span><span class="n">pre_merge_with</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="n">entities</span><span class="p">)</span>
@@ -373,7 +373,7 @@
 
 
 <div class="viewcode-block" id="AbstractEntity.get_serialization">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.AbstractEntity.get_serialization">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.AbstractEntity.get_serialization">[docs]</a>
     <span class="k">def</span> <span class="nf">get_serialization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">apis_core.apis_entities.serializers_generic</span> <span class="kn">import</span> <span class="n">EntitySerializer</span>
 
@@ -383,7 +383,7 @@
 
 
 <div class="viewcode-block" id="TempEntityClass">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.TempEntityClass">[docs]</a>
 <span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rootobject_ptr&quot;</span><span class="p">])</span>
 <span class="k">class</span> <span class="nc">TempEntityClass</span><span class="p">(</span><span class="n">AbstractEntity</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -440,7 +440,7 @@
             <span class="k">return</span> <span class="s2">&quot;(ID: </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TempEntityClass.save">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.TempEntityClass.save">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.TempEntityClass.save">[docs]</a>
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adaption of the save() method of the class to automatically parse</span>
@@ -486,7 +486,7 @@
 
 
 <div class="viewcode-block" id="prepare_fields_dict">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.prepare_fields_dict">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.prepare_fields_dict">[docs]</a>
 <span class="k">def</span> <span class="nf">prepare_fields_dict</span><span class="p">(</span><span class="n">fields_list</span><span class="p">,</span> <span class="n">vocabs</span><span class="p">,</span> <span class="n">vocabs_m2m</span><span class="p">):</span>
     <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields_list</span><span class="p">:</span>
@@ -502,7 +502,7 @@
 
 
 <div class="viewcode-block" id="create_default_uri">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.create_default_uri">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.create_default_uri">[docs]</a>
 <span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">dispatch_uid</span><span class="o">=</span><span class="s2">&quot;create_default_uri&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">create_default_uri</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="c1"># with django reversion, browsing deleted entries in the admin interface</span>

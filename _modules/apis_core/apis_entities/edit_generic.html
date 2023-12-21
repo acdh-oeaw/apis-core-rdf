@@ -278,12 +278,15 @@
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDeleteView">[docs]</a>
 <span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dispatch&quot;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">GenericEntitiesDeleteView</span><span class="p">(</span><span class="n">EntityInstanceMixin</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">):</span>
-    <span class="c1"># model = ContentType.objects.get(</span>
-    <span class="c1">#     app_label=&#39;apis_entities&#39;, model=&#39;tempentityclass&#39;).model_class()</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_entities.models&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">TempEntityClass</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
         <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_DELETE_VIEW_TEMPLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;confirm_delete.html&quot;</span>
     <span class="p">)</span>
+
+<div class="viewcode-block" id="GenericEntitiesDeleteView.get_queryset">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDeleteView.get_queryset">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
+
 
 <div class="viewcode-block" id="GenericEntitiesDeleteView.dispatch">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesDeleteView.dispatch">[docs]</a>
