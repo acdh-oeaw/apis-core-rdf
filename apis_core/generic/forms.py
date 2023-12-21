@@ -1,0 +1,66 @@
+from django import forms
+from django.contrib.contenttypes.models import ContentType
+from django.urls import reverse
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+from dal import autocomplete
+
+
+class GenericFilterSetForm(forms.Form):
+    """
+    FilterSet form for generic models
+    Adds a submit button using the django crispy form helper
+    Adds a `columns` selector that lists all the fields from
+    the model
+    """
+
+    columns = forms.MultipleChoiceField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        model = kwargs.pop("model")
+        super().__init__(*args, **kwargs)
+        self.fields["columns"].choices = [
+            (field.name, field.verbose_name) for field in model._meta.fields
+        ]
+
+        self.helper = FormHelper()
+        self.helper.form_method = "GET"
+        self.helper.add_input(Submit("submit", "Submit"))
+
+    def clean(self):
+        self.cleaned_data = super().clean()
+        self.cleaned_data.pop("columns", None)
+        return self.cleaned_data
+
+
+class GenericModelForm(forms.ModelForm):
+    """
+    Model form for generic models
+    Adds a submit button using the django crispy form helper
+    and sets the ModelChoiceFields and ModelMultipleChoiceFields
+    to use autocomplete replacement fields
+    """
+
+    class Meta:
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.add_input(Submit("submit", "Submit"))
+
+        # override the fields pointing to other models,
+        # to make them use the autocomplete widgets
+        override_fieldtypes = {
+            "ModelMultipleChoiceField": autocomplete.ModelSelect2Multiple,
+            "ModelChoiceField": autocomplete.ModelSelect2,
+        }
+        for field in self.fields:
+            clsname = self.fields[field].__class__.__name__
+            if clsname in override_fieldtypes.keys():
+                ct = ContentType.objects.get_for_model(
+                    self.fields[field]._queryset.model
+                )
+                url = reverse("apis_core:generic:autocomplete", args=[ct])
+                self.fields[field].widget = override_fieldtypes[clsname](url)
+                self.fields[field].widget.choices = self.fields[field].choices

@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "apis_core.apis_relations",
     "apis_core.apis_entities",
     "apis_core.apis_vocabularies",
+    "apis_core.generic",
     "reversion",
     # ui stuff
     "crispy_forms",
