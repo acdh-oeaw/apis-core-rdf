@@ -16,7 +16,7 @@ from apis_core.generic.abc import GenericModel
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.utils import DateParser
 from apis_core.apis_metainfo import signals
-from simple_history.models import HistoricalRecords
+from apis_core.apis_history.models import VersionMixin
 
 
 def find_if_user_accepted():
@@ -222,7 +222,7 @@ class InheritanceForeignKey(models.ForeignKey):
     forward_related_accessor_class = InheritanceForwardManyToOneDescriptor
 
 
-class Triple(GenericModel, models.Model):
+class Triple(GenericModel, VersionMixin):
     subj = InheritanceForeignKey(
         RootObject,
         blank=True,
@@ -250,16 +250,6 @@ class Triple(GenericModel, models.Model):
 
     objects = BaseRelationManager()
     objects_inheritance = InheritanceManager()
-    history = HistoricalRecords(inherit=True)
-    __history_date = datetime.now()
-
-    @property
-    def _history_date(self):
-        return self.__history_date
-
-    @_history_date.setter
-    def _history_date(self, value):
-        self.__history_date = value
 
     def __repr__(self):
         if self.subj is not None or self.obj is not None or self.prop is not None:
