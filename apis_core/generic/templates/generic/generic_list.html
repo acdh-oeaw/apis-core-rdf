@@ -1,0 +1,63 @@
+{% extends "generic/generic_content.html" %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load apisgeneric %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script>
+document.body.addEventListener('htmx:beforeSwap', function(event) {
+  if (event.detail.xhr.status === 204) {
+    // Swap content even when the response is empty.
+    event.detail.shouldSwap = true;
+  }
+});
+  </script>
+{% endblock scripts %}
+
+{% if filter %}
+
+  {% block col %}
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col">{{ object_list.model|contenttype }}</div>
+          <div class="col">
+            <a class="btn btn-outline-success float-right btn-sm"
+               href="{% url 'apis_core:generic:create' object_list.model|contenttype %}">Create</a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        {% block filter %}
+          {% crispy filter.form filter.form.helper %}
+        {% endblock filter %}
+
+      </div>
+      <div class="card-footer text-muted">
+        <a class="btn btn-outline-secondary"  href=".">Reset filter</a>
+      </div>
+    </div>
+  {% endblock col %}
+
+{% endif %}
+
+{% if table %}
+
+  {% block additionalcols %}
+    <div class="col-8">
+      <div class="card">
+        <div class="card-header">{{ table.paginator.count }} results</div>
+        <div class="card-body">
+
+          {% block table %}
+            {% render_table table %}
+          {% endblock table %}
+
+        </div>
+      </div>
+    </div>
+  {% endblock additionalcols %}
+
+{% endif %}

@@ -1,0 +1,18 @@
+{% extends basetemplate|default:"base.html" %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+
+        {% block col %}
+        {% endblock col %}
+
+      </div>
+
+      {% block additionalcols %}
+      {% endblock additionalcols %}
+
+    </div>
+  </div>
+{% endblock content %}
