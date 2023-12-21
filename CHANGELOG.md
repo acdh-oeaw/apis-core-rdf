@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.9.0...v0.9.1) (2023-12-21)
+
+
+### Bug Fixes
+
+* deletion of entity objects ([e95e030](https://github.com/acdh-oeaw/apis-core-rdf/commit/e95e030bcb40553e96df6334f121bb5927247bb8)), closes [#485](https://github.com/acdh-oeaw/apis-core-rdf/issues/485)
+
 ## [0.9.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.8.1...v0.9.0) (2023-12-19)
 
 
