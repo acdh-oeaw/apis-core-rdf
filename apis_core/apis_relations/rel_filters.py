@@ -197,25 +197,6 @@ def get_generic_relation_filter(entity):
                                 ),
                             ),
                         )
-                    elif (
-                        ContentType.objects.filter(
-                            app_label="apis_vocabularies", model=current_model_name
-                        ).count()
-                        > 0
-                    ):
-                        self.filters[x] = django_filters.ModelMultipleChoiceFilter(
-                            field_name=x,
-                            queryset=current_qs,
-                            widget=autocomplete.ModelSelect2Multiple(
-                                url=reverse(
-                                    "apis:apis_vocabularies:generic_vocabularies_autocomplete",
-                                    kwargs={
-                                        "vocab": current_model_name,
-                                        "direct": "normal",
-                                    },
-                                ),
-                            ),
-                        )
                 if type(self.filters[x].field).__name__ == "DateField":
                     self.filters[x] = django_filters.DateFromToRangeFilter(
                         field_name=x,

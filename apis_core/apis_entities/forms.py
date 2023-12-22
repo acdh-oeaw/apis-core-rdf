@@ -95,43 +95,9 @@ def get_entities_form(entity):
                             "apis_entities",
                             "apis_metainfo",
                             "apis_relations",
-                            "apis_vocabularies",
                         ],
                         model=model_uri,
                     )
-                    if (
-                        len(matching_content_type) == 1
-                        and matching_content_type[0].app_label.lower()
-                        == "apis_vocabularies"
-                    ):
-                        self.fields[f].widget = widget1(
-                            url=reverse(
-                                "apis:apis_vocabularies:generic_vocabularies_autocomplete",
-                                kwargs={"vocab": model_uri, "direct": "normal"},
-                            ),
-                            attrs=attrs,
-                        )
-                        if self.instance:
-                            res = []
-                            if isinstance(self.fields[f], ModelMultipleChoiceField):
-                                try:
-                                    for x in getattr(self.instance, f).all():
-                                        res.append((x.pk, x.label))
-                                except ValueError:
-                                    pass
-                                self.fields[f].initial = res
-                                self.fields[f].choices = res
-                            else:
-                                try:
-                                    res = getattr(self.instance, f)
-                                    if res is not None:
-                                        self.fields[f].initial = (res.pk, res.label)
-                                        self.fields[f].choices = [
-                                            (res.pk, res.label),
-                                        ]
-                                except ValueError:
-                                    res = ""
-
                 main_fields.append(f)
 
             def sort_fields_list(field_names, entity_name):

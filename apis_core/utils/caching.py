@@ -10,8 +10,6 @@ _entity_classes = None
 _entity_class_names = None
 # _reification_classes = None
 # _reification_class_names = None
-# _vocabulary_classes = None
-# _vocabulary_class_names = None
 _contenttype_classes = None
 _contenttype_class_names = None
 _property_autocomplete_choices = None
@@ -21,7 +19,7 @@ _class_contenttype_dict = None
 def _init_all_ontology_classes():
     """
     internal function that initiales the lists containing all ontology classes (entities,
-    reifications, vocabularies)
+    reifications)
 
     :return: None
     """
@@ -31,7 +29,6 @@ def _init_all_ontology_classes():
     from apis_core.apis_entities.models import AbstractEntity, TempEntityClass
 
     # from apis_core.apis_relations.models import AbstractReification
-    # from apis_core.apis_vocabularies.models import AbstractVocabulary
 
     global _ontology_classes
     global _ontology_class_names
@@ -39,8 +36,6 @@ def _init_all_ontology_classes():
     global _entity_class_names
     # global _reification_classes
     # global _reification_class_names
-    # global _vocabulary_classes
-    # global _vocabulary_class_names
     if (
         _ontology_classes is not None
         or _ontology_class_names is not None
@@ -48,8 +43,6 @@ def _init_all_ontology_classes():
         or _entity_class_names is not None
         # or _reification_classes is not None
         # or _reification_class_names is not None
-        # or _vocabulary_classes is not None
-        # or _vocabulary_class_names is not None
     ):
         raise Exception(
             "initialization is called but some variables are already initialized."
@@ -60,8 +53,6 @@ def _init_all_ontology_classes():
     _entity_class_names = []
     # _reification_classes = []
     # _reification_class_names = []
-    # _vocabulary_classes = []
-    # _vocabulary_class_names = []
 
     try:
         from apis_ontology import models as ontology_models
@@ -86,18 +77,8 @@ def _init_all_ontology_classes():
             # ):
             #     _reification_classes.append(ontology_class)
             #     _reification_class_names.append(ontology_class_name.lower())
-            # elif (
-            #     issubclass(ontology_class, AbstractVocabulary)
-            #     and not ontology_class._meta.abstract
-            # ):
-            #     _vocabulary_classes.append(ontology_class)
-            #     _vocabulary_class_names.append(ontology_class_name.lower())
-        # _ontology_classes = _entity_classes + _reification_classes + _vocabulary_classes
         _ontology_classes = _entity_classes
-        _ontology_class_names = (
-            # _entity_class_names + _reification_class_names + _vocabulary_class_names
-            _entity_class_names
-        )
+        _ontology_class_names = _entity_class_names
 
 
 def get_all_ontology_classes():
@@ -290,7 +271,6 @@ def get_all_contenttype_classes():
         ]
         apis_modules = [
             "apis_core.apis_metainfo.models",
-            "apis_core.apis_vocabularies.models",
             "apis_core.apis_entities.models",
             "apis_core.apis_relations.models",
             "apis_ontology.models",

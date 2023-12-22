@@ -140,19 +140,11 @@ class EntitySerializer(serializers.Serializer):
                 "FloatField",
             ]:
                 self.fields[f.name] = getattr(serializers, field_name)()
-            elif field_name in ["ForeignKey", "ManyToMany"]:
-                if str(f.related_model.__module__).endswith("apis_vocabularies.models"):
-                    many = False
-                    if f.many_to_many or f.one_to_many:
-                        many = True
-                    self.fields[f.name] = VocabsSerializer(many=many)
         for f in inst._meta.many_to_many:
             if f.name.endswith("relationtype_set"):
                 continue
             elif f.name == "collection":
                 self.fields["collection"] = CollectionSerializer(many=True)
-            elif str(f.related_model.__module__).endswith("apis_vocabularies.models"):
-                self.fields[f.name] = VocabsSerializer(many=True)
         self.fields["entity_type"] = serializers.SerializerMethodField(
             method_name="add_entity_type"
         )

@@ -82,32 +82,6 @@ class ApisBaseSerializer(serializers.ModelSerializer):
             )
         )
 
-    @extend_schema_field(OpenApiTypes.OBJECT)
-    def add_type(self, obj):
-        lst_type = ["kind", "type", "collection_type", "relation_type"]
-        lst_kind = [
-            x
-            for x in obj._meta.fields
-            if x.name in lst_type and "apis_vocabularies" in str(x.related_model)
-        ]
-        if len(lst_kind):
-            pk_obj = getattr(obj, f"{lst_kind[0].name}_id")
-            if pk_obj is not None:
-                obj_type = getattr(obj, str(lst_kind[0].name))
-                res = {
-                    "id": pk_obj,
-                    "url": self.context["view"].request.build_absolute_uri(
-                        reverse(
-                            f"apis:apis_api:{lst_kind[0].related_model.__name__.lower()}-detail",
-                            kwargs={"pk": pk_obj},
-                        )
-                    ),
-                    "type": obj_type.__class__.__name__,
-                    "label": str(obj_type),
-                    "parent_class": getattr(obj, "parent_class_id", None),
-                }
-                return res
-
     class Meta:
         model = TempEntityClass
         fields = ["id", "label", "url"]
@@ -136,10 +110,6 @@ class LabelSerializer(ApisBaseSerializer):
         fields = ApisBaseSerializer.Meta.fields + [
             "parent_id",
         ]
-
-
-class VocabsBaseSerializer(LabelSerializer, EntitySerializer):
-    pass
 
 
 class RelatedTripleSerializer(ApisBaseSerializer):
@@ -196,9 +166,7 @@ def generic_serializer_creation_factory():
     lst_cont = caching.get_all_contenttype_classes()
     not_allowed_filter_fields = [
         "useradded",
-        "vocab_name",
         "parent_class",
-        "vocab",
         "entity",
         "autofield",
     ]
@@ -272,7 +240,7 @@ def generic_serializer_creation_factory():
                         "ManyToManyField",
                         "ForeignKey",
                         "InheritanceForeignKey",
-                    ] and "apis_vocabularies" not in str(f.related_model):
+                    ]:
                         self.fields[f.name] = ApisBaseSerializer(
                             many=ck_many, read_only=True
                         )
@@ -308,7 +276,7 @@ def generic_serializer_creation_factory():
                     elif f.__class__.__name__ in [
                         "ManyToManyField",
                         "ForeignKey",
-                    ] and "apis_vocabularies" not in str(f.related_model):
+                    ]:
                         self.fields[f.name] = ApisBaseSerializer(
                             many=ck_many, read_only=True
                         )

@@ -31,7 +31,6 @@ class APISTestRunner(DiscoverRunner):
             for x in ct.objects.filter(
                 app_label__in=[
                     "apis_metainfo",
-                    "apis_vocabularies",
                     "apis_entities",
                     "apis_relations",
                 ]
@@ -40,8 +39,6 @@ class APISTestRunner(DiscoverRunner):
                 model__in=[
                     "tempentityclass",
                     "texttype_collections",
-                    "vocabnames",
-                    "vocabsuri",
                     "uricandidate",
                 ]
             )

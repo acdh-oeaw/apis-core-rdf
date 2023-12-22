@@ -332,19 +332,6 @@ class TempEntityClass(AbstractEntity):
         return self
 
 
-def prepare_fields_dict(fields_list, vocabs, vocabs_m2m):
-    res = dict()
-    for f in fields_list:
-        res[f["name"]] = getattr(models, f["field_type"])(**f["attributes"])
-    for v in vocabs:
-        res[v] = models.ForeignKey(
-            f"apis_vocabularies.{v}", blank=True, null=True, on_delete=models.SET_NULL
-        )
-    for v2 in vocabs_m2m:
-        res[v2] = models.ManyToManyField(f"apis_vocabularies.{v2}", blank=True)
-    return res
-
-
 @receiver(post_save, dispatch_uid="create_default_uri")
 def create_default_uri(sender, instance, raw, **kwargs):
     # with django reversion, browsing deleted entries in the admin interface

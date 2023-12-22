@@ -14,9 +14,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "apis_core.apis_metainfo",
-    "apis_core.apis_vocabularies",
     "apis_core.apis_relations",
     "apis_core.apis_entities",
+    "apis_core.apis_vocabularies",
     "reversion",
     # ui stuff
     "crispy_forms",

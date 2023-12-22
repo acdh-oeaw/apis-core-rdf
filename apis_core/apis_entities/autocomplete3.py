@@ -16,7 +16,6 @@ from django.core.exceptions import FieldError
 from django.db.models import Q
 
 from apis_core.apis_metainfo.models import Uri, Collection
-from apis_core.apis_vocabularies.models import VocabsBaseClass
 from apis_core.utils import caching
 from apis_core.utils.caching import get_autocomplete_property_choices
 from apis_core.utils.settings import get_entity_settings_by_modelname
@@ -371,50 +370,6 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
         if not test_db and not test_stanbol and not cust_auto_more:
             more = False
 
-        return http.HttpResponse(
-            json.dumps({"results": choices + [], "pagination": {"more": more}}),
-            content_type="application/json",
-        )
-
-
-# TODO RDF: Check if this should be removed or adapted
-class GenericVocabulariesAutocomplete(autocomplete.Select2ListView):
-    def get(self, request, *args, **kwargs):
-        page_size = 20
-        offset = (int(self.request.GET.get("page", 1)) - 1) * page_size
-        more = False
-        vocab = self.kwargs["vocab"]
-        direct = self.kwargs["direct"]
-        q = self.q
-        vocab_model = ContentType.objects.get(
-            app_label="apis_vocabularies", model=vocab
-        ).model_class()
-        if direct == "normal":
-            if vocab_model.__bases__[0] == VocabsBaseClass:
-                choices = [
-                    {"id": x.pk, "text": x.label}
-                    for x in vocab_model.objects.filter(name__icontains=q).order_by(
-                        "parent_class__name", "name"
-                    )[offset : offset + page_size]
-                ]
-            else:
-                choices = [
-                    {"id": x.pk, "text": x.label}
-                    for x in vocab_model.objects.filter(
-                        Q(name__icontains=q) | Q(name_reverse__icontains=q)
-                    ).order_by("parent_class__name", "name")[
-                        offset : offset + page_size
-                    ]
-                ]
-        elif direct == "reverse":
-            choices = [
-                {"id": x.pk, "text": x.label_reverse}
-                for x in vocab_model.objects.filter(
-                    Q(name__icontains=q) | Q(name_reverse__icontains=q)
-                ).order_by("parent_class__name", "name")[offset : offset + page_size]
-            ]
-        if len(choices) == page_size:
-            more = True
         return http.HttpResponse(
             json.dumps({"results": choices + [], "pagination": {"more": more}}),
             content_type="application/json",

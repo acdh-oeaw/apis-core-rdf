@@ -13,7 +13,6 @@ from apis_core.api_routers import views
 #     NetJsonViewSet,
 #     PlaceGeoJsonViewSet,
 # )
-# from apis_core.apis_vocabularies.api_views import UserViewSet
 from apis_core.utils import caching
 from apis_core.apis_metainfo.viewsets import UriToObjectViewSet
 from apis_core.core.views import Dumpdata
@@ -128,10 +127,6 @@ urlpatterns = [
     path(
         "relations/",
         include("apis_core.apis_relations.urls", namespace="apis_relations"),
-    ),
-    path(
-        "vocabularies/",
-        include("apis_core.apis_vocabularies.urls", namespace="apis_vocabularies"),
     ),
     path(
         "metainfo/",
