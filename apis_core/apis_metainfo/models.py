@@ -111,14 +111,8 @@ class RootObject(models.Model):
 @reversion.register()
 class Collection(models.Model):
     """Allows to group entities and relation."""
-
-    from apis_core.apis_vocabularies.models import CollectionType
-
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    collection_type = models.ForeignKey(
-        CollectionType, blank=True, null=True, on_delete=models.SET_NULL
-    )
     groups_allowed = models.ManyToManyField(Group)
     parent_class = models.ForeignKey(
         "self", blank=True, null=True, on_delete=models.CASCADE
