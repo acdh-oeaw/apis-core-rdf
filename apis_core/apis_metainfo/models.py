@@ -28,7 +28,6 @@ from apis_core.utils import caching, rdf
 from apis_core.apis_metainfo import signals
 
 # from apis_core.apis_entities.serializers_generic import EntitySerializer
-# from apis_core.apis_vocabularies.models import CollectionType, LabelType, TextType
 
 path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
 if path_ac_settings:
@@ -111,6 +110,7 @@ class RootObject(models.Model):
 @reversion.register()
 class Collection(models.Model):
     """Allows to group entities and relation."""
+
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     groups_allowed = models.ManyToManyField(Group)
