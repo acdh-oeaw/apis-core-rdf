@@ -72,7 +72,3 @@ class ModelSelect2(Select2WidgetMixin, DALModelSelect2):
 
 class ModelSelect2Multiple(Select2WidgetMixin, DALModelSelect2Multiple):
     pass
-
-
-class TagSelect2(Select2WidgetMixin, DALTagSelect2):
-    pass

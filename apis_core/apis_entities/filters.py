@@ -1,20 +1,17 @@
 import logging
-import copy
 
 from collections import OrderedDict
 
 import django_filters
 from django.conf import settings
-from django.db.models import Q, JSONField
+from django.db.models import JSONField
 
-from apis_core.apis_metainfo.models import Collection
 from apis_core.apis_entities.models import TempEntityClass
 from apis_core.utils import caching
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.utils.filtermethods import (
     related_entity_name,
     related_property_name,
-    name_label_filter,
 )
 
 # The following classes define the filter sets respective to their models.

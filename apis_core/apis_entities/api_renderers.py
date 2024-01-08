@@ -1,11 +1,8 @@
-import json
 import os
 import pickle
 from datetime import date
 
 from django.conf import settings
-from django.core.serializers.json import DjangoJSONEncoder
-from django.utils import timezone
 from rdflib import XSD, Graph, Literal, Namespace, URIRef, ConjunctiveGraph, OWL
 from rdflib.namespace import DCTERMS, VOID
 from rdflib import plugin

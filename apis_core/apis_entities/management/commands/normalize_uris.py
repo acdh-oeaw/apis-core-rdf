@@ -1,9 +1,5 @@
-import os
-
-import yaml
-from django.conf import settings
 from django.core.management.base import BaseCommand
-from django.db import IntegrityError, transaction
+from django.db import transaction
 
 from apis_core.apis_metainfo.models import Uri
 from apis_core.utils.normalize import clean_uri

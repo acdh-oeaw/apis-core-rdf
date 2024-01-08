@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.urls import reverse_lazy
 from django_tables2 import RequestConfig
@@ -119,8 +119,6 @@ class GenericListViewNew(
         """
         model = self.get_model()
         class_name = model.__name__
-
-        session = getattr(self.request, "session", False)
 
         selected_cols = self.request.GET.getlist(
             "columns"
@@ -245,7 +243,7 @@ def getGeoJson(request):
                     add_info = "<b>Confidence:</b> {}<br/><b>Feature:</b> <a href='{}'>{}</a>".format(
                         x.confidence, x.uri, x.uri
                     )
-                except:
+                except Exception:
                     add_info = "<b>Confidence:</b>no value provided <br/><b>Feature:</b> <a href='{}'>{}</a>".format(
                         x.uri, x.uri
                     )

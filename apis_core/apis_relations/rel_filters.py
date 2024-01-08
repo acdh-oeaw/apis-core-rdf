@@ -9,6 +9,8 @@ from django.db.models import Q
 from django.urls import reverse
 
 
+from apis_core.apis_relations.models import Triple, Property
+
 # TODO: Change this whole module according to the same logic as in apis_core/apis_entities/filters.py
 
 
@@ -79,7 +81,7 @@ def get_filters(model, exclude=False, include=False, include_parents=False):
             if x.startswith("*") and not x.endswith("*"):
                 filters = [f for f in filters if not f.lower().endswith(x[1:].lower())]
             elif x.startswith("*") and x.endswith("*"):
-                filters = [f for f in filters if not x[1:-1].lower() in f]
+                filters = [f for f in filters if x[1:-1].lower() not in f]
             elif not x.startswith("*") and x.endswith("*"):
                 filters = [
                     f for f in filters if not f.lower().startswith(x[:-1].lower())
@@ -169,11 +171,6 @@ def get_generic_relation_filter(entity):
             fields = get_filters(model, exclude=[], include_parents=True)
 
         def __init__(self, *args, **kwargs):
-            attrs = {
-                "data-placeholder": "Type to get suggestions",
-                "data-minimum-input-length": getattr(settings, "APIS_MIN_CHAR", 3),
-                "data-html": True,
-            }
             super(GenericListFilter, self).__init__(*args, **kwargs)
             for x in self.filters.keys():
                 if type(self.filters[x].field).__name__ == "ModelChoiceField":
@@ -223,9 +220,6 @@ def get_generic_relation_filter(entity):
                     )
 
     return GenericListFilter
-
-
-from apis_core.apis_relations.models import Triple, Property
 
 
 class TripleFilter(django_filters.FilterSet):

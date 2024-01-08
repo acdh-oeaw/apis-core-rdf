@@ -422,7 +422,7 @@ class StbGeoQuerySettings:
                     self.last_selected = idnx + 1
                     self.stored_feature = self.features[idnx + 1]
                     return self.features[idnx + 1]
-                except:
+                except Exception:
                     return None
         return self.features[0]
 

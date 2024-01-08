@@ -6,4 +6,4 @@ class RelationsConfig(AppConfig):
     name = "apis_core.apis_relations"
 
     def ready(self):
-        from . import signals
+        from . import signals  # noqa: F401

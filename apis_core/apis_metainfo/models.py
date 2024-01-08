@@ -1,41 +1,20 @@
-import re
-from difflib import SequenceMatcher
-from math import inf
-import copy
-import importlib
-
-import requests
-
-# from reversion import revisions as reversion
 import reversion
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models.fields.reverse_related import ManyToOneRel
-from django.db.models.fields.related import OneToOneField, ForeignKey, ManyToManyField
+from django.db.models.fields.related import ForeignKey, ManyToManyField
 from django.forms import model_to_dict
 from django.urls import reverse
-from django.utils.functional import cached_property
 from model_utils.managers import InheritanceManager
 from apis_core.utils.normalize import clean_uri
 from django.core.exceptions import ValidationError, ImproperlyConfigured
+from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
-# from django.contrib.contenttypes.fields import GenericRelation
-# from utils.highlighter import highlight_text
 from apis_core.utils import caching, rdf
 
 from apis_core.apis_metainfo import signals
 
-# from apis_core.apis_entities.serializers_generic import EntitySerializer
-
-path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
-if path_ac_settings:
-    ac_settings = importlib.import_module(path_ac_settings)
-    autocomp_settings = getattr(ac_settings, "autocomp_settings")
-else:
-    from apis_core.default_settings.NER_settings import autocomp_settings
-# from apis_core.utils import DateParser
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
@@ -135,10 +114,6 @@ class Collection(models.Model):
                     ent.published = self.published
                     ent.save()
         super().save(*args, **kwargs)
-
-
-# TODO: Move this somewhere else so that it can be imported at several places (right now it's redundant with copies)
-from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
 
 class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):

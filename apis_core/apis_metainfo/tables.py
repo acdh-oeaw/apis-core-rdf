@@ -63,11 +63,11 @@ def helper_render_date(value, var_date, var_start_date, var_end_date):
 
     # Various if-else branches checking which of the date fields are not None and should be used
 
-    if var_start_date != None and var_end_date != None:
+    if var_start_date is not None and var_end_date is not None:
 
         overlay_help_text = str(var_start_date) + " - " + str(var_end_date)
 
-    elif var_date != None:
+    elif var_date is not None:
 
         overlay_help_text = str(var_date)
 

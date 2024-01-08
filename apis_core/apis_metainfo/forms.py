@@ -1,12 +1,10 @@
-from crispy_forms.bootstrap import Accordion, AccordionGroup
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout
+from crispy_forms.layout import Submit
 from dal import autocomplete
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import *
-from apis_core.utils.rdf import get_modelname_and_dict_from_uri
+from .models import Uri
 
 
 class UriForm(forms.ModelForm):

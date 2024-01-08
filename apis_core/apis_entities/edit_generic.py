@@ -1,5 +1,3 @@
-import importlib
-
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -52,7 +50,6 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             form = get_entities_form(self.entity.title())
         form = form(request.POST, instance=self.instance)
         if form.is_valid():
-            entity_2 = form.save()
             return redirect(
                 reverse(
                     "apis:apis_entities:generic_entities_edit_view",

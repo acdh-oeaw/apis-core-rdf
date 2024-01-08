@@ -1,21 +1,10 @@
 from django.conf import settings
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.template.loader import select_template
 from django.views import View
-from django_tables2 import RequestConfig
 from django.forms.models import model_to_dict
 
 from apis_core.apis_metainfo.models import Uri
-from apis_core.apis_relations.tables import (
-    get_generic_triple_table,
-)
-from apis_core.utils.utils import access_for_all
-from apis_core.apis_relations.models import TempTriple
-from apis_core.utils import caching
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_entities.mixins import EntityInstanceMixin
 from apis_core.core.mixins import ViewPassesTestMixin
