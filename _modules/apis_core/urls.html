@@ -100,7 +100,6 @@
 <span class="c1">#     NetJsonViewSet,</span>
 <span class="c1">#     PlaceGeoJsonViewSet,</span>
 <span class="c1"># )</span>
-<span class="c1"># from apis_core.apis_vocabularies.api_views import UserViewSet</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.viewsets</span> <span class="kn">import</span> <span class="n">UriToObjectViewSet</span>
 <span class="kn">from</span> <span class="nn">apis_core.core.views</span> <span class="kn">import</span> <span class="n">Dumpdata</span>
@@ -218,10 +217,6 @@
     <span class="n">path</span><span class="p">(</span>
         <span class="s2">&quot;relations/&quot;</span><span class="p">,</span>
         <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_relations.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_relations&quot;</span><span class="p">),</span>
-    <span class="p">),</span>
-    <span class="n">path</span><span class="p">(</span>
-        <span class="s2">&quot;vocabularies/&quot;</span><span class="p">,</span>
-        <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.apis_vocabularies.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis_vocabularies&quot;</span><span class="p">),</span>
     <span class="p">),</span>
     <span class="n">path</span><span class="p">(</span>
         <span class="s2">&quot;metainfo/&quot;</span><span class="p">,</span>

@@ -485,22 +485,6 @@
 
 
 
-<div class="viewcode-block" id="prepare_fields_dict">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.prepare_fields_dict">[docs]</a>
-<span class="k">def</span> <span class="nf">prepare_fields_dict</span><span class="p">(</span><span class="n">fields_list</span><span class="p">,</span> <span class="n">vocabs</span><span class="p">,</span> <span class="n">vocabs_m2m</span><span class="p">):</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields_list</span><span class="p">:</span>
-        <span class="n">res</span><span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">])(</span><span class="o">**</span><span class="n">f</span><span class="p">[</span><span class="s2">&quot;attributes&quot;</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vocabs</span><span class="p">:</span>
-        <span class="n">res</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;apis_vocabularies.</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span>
-        <span class="p">)</span>
-    <span class="k">for</span> <span class="n">v2</span> <span class="ow">in</span> <span class="n">vocabs_m2m</span><span class="p">:</span>
-        <span class="n">res</span><span class="p">[</span><span class="n">v2</span><span class="p">]</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;apis_vocabularies.</span><span class="si">{</span><span class="n">v2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">res</span></div>
-
-
-
 <div class="viewcode-block" id="create_default_uri">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.create_default_uri">[docs]</a>
 <span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">dispatch_uid</span><span class="o">=</span><span class="s2">&quot;create_default_uri&quot;</span><span class="p">)</span>

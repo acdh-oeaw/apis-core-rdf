@@ -97,8 +97,6 @@
 <span class="n">_entity_class_names</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="c1"># _reification_classes = None</span>
 <span class="c1"># _reification_class_names = None</span>
-<span class="c1"># _vocabulary_classes = None</span>
-<span class="c1"># _vocabulary_class_names = None</span>
 <span class="n">_contenttype_classes</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">_contenttype_class_names</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">_property_autocomplete_choices</span> <span class="o">=</span> <span class="kc">None</span>
@@ -108,7 +106,7 @@
 <span class="k">def</span> <span class="nf">_init_all_ontology_classes</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    internal function that initiales the lists containing all ontology classes (entities,</span>
-<span class="sd">    reifications, vocabularies)</span>
+<span class="sd">    reifications)</span>
 
 <span class="sd">    :return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -118,7 +116,6 @@
     <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span><span class="p">,</span> <span class="n">TempEntityClass</span>
 
     <span class="c1"># from apis_core.apis_relations.models import AbstractReification</span>
-    <span class="c1"># from apis_core.apis_vocabularies.models import AbstractVocabulary</span>
 
     <span class="k">global</span> <span class="n">_ontology_classes</span>
     <span class="k">global</span> <span class="n">_ontology_class_names</span>
@@ -126,8 +123,6 @@
     <span class="k">global</span> <span class="n">_entity_class_names</span>
     <span class="c1"># global _reification_classes</span>
     <span class="c1"># global _reification_class_names</span>
-    <span class="c1"># global _vocabulary_classes</span>
-    <span class="c1"># global _vocabulary_class_names</span>
     <span class="k">if</span> <span class="p">(</span>
         <span class="n">_ontology_classes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="ow">or</span> <span class="n">_ontology_class_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
@@ -135,8 +130,6 @@
         <span class="ow">or</span> <span class="n">_entity_class_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="c1"># or _reification_classes is not None</span>
         <span class="c1"># or _reification_class_names is not None</span>
-        <span class="c1"># or _vocabulary_classes is not None</span>
-        <span class="c1"># or _vocabulary_class_names is not None</span>
     <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
             <span class="s2">&quot;initialization is called but some variables are already initialized.&quot;</span>
@@ -147,8 +140,6 @@
     <span class="n">_entity_class_names</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># _reification_classes = []</span>
     <span class="c1"># _reification_class_names = []</span>
-    <span class="c1"># _vocabulary_classes = []</span>
-    <span class="c1"># _vocabulary_class_names = []</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">apis_ontology</span> <span class="kn">import</span> <span class="n">models</span> <span class="k">as</span> <span class="n">ontology_models</span>
@@ -173,18 +164,8 @@
             <span class="c1"># ):</span>
             <span class="c1">#     _reification_classes.append(ontology_class)</span>
             <span class="c1">#     _reification_class_names.append(ontology_class_name.lower())</span>
-            <span class="c1"># elif (</span>
-            <span class="c1">#     issubclass(ontology_class, AbstractVocabulary)</span>
-            <span class="c1">#     and not ontology_class._meta.abstract</span>
-            <span class="c1"># ):</span>
-            <span class="c1">#     _vocabulary_classes.append(ontology_class)</span>
-            <span class="c1">#     _vocabulary_class_names.append(ontology_class_name.lower())</span>
-        <span class="c1"># _ontology_classes = _entity_classes + _reification_classes + _vocabulary_classes</span>
         <span class="n">_ontology_classes</span> <span class="o">=</span> <span class="n">_entity_classes</span>
-        <span class="n">_ontology_class_names</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="c1"># _entity_class_names + _reification_class_names + _vocabulary_class_names</span>
-            <span class="n">_entity_class_names</span>
-        <span class="p">)</span>
+        <span class="n">_ontology_class_names</span> <span class="o">=</span> <span class="n">_entity_class_names</span>
 
 
 <div class="viewcode-block" id="get_all_ontology_classes">
@@ -400,7 +381,6 @@
         <span class="p">]</span>
         <span class="n">apis_modules</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;apis_core.apis_metainfo.models&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;apis_core.apis_vocabularies.models&quot;</span><span class="p">,</span>
             <span class="s2">&quot;apis_core.apis_entities.models&quot;</span><span class="p">,</span>
             <span class="s2">&quot;apis_core.apis_relations.models&quot;</span><span class="p">,</span>
             <span class="s2">&quot;apis_ontology.models&quot;</span><span class="p">,</span>

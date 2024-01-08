@@ -187,43 +187,9 @@
                             <span class="s2">&quot;apis_entities&quot;</span><span class="p">,</span>
                             <span class="s2">&quot;apis_metainfo&quot;</span><span class="p">,</span>
                             <span class="s2">&quot;apis_relations&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;apis_vocabularies&quot;</span><span class="p">,</span>
                         <span class="p">],</span>
                         <span class="n">model</span><span class="o">=</span><span class="n">model_uri</span><span class="p">,</span>
                     <span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span>
-                        <span class="nb">len</span><span class="p">(</span><span class="n">matching_content_type</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-                        <span class="ow">and</span> <span class="n">matching_content_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">app_label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                        <span class="o">==</span> <span class="s2">&quot;apis_vocabularies&quot;</span>
-                    <span class="p">):</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">widget1</span><span class="p">(</span>
-                            <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
-                                <span class="s2">&quot;apis:apis_vocabularies:generic_vocabularies_autocomplete&quot;</span><span class="p">,</span>
-                                <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;vocab&quot;</span><span class="p">:</span> <span class="n">model_uri</span><span class="p">,</span> <span class="s2">&quot;direct&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">},</span>
-                            <span class="p">),</span>
-                            <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span>
-                        <span class="p">)</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">:</span>
-                            <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
-                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="n">ModelMultipleChoiceField</span><span class="p">):</span>
-                                <span class="k">try</span><span class="p">:</span>
-                                    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                                        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">label</span><span class="p">))</span>
-                                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                                    <span class="k">pass</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">res</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="n">res</span>
-                            <span class="k">else</span><span class="p">:</span>
-                                <span class="k">try</span><span class="p">:</span>
-                                    <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-                                    <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span>
-                                            <span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">label</span><span class="p">),</span>
-                                        <span class="p">]</span>
-                                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                                    <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
                 <span class="n">main_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
             <span class="k">def</span> <span class="nf">sort_fields_list</span><span class="p">(</span><span class="n">field_names</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">):</span>

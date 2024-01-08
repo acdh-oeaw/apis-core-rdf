@@ -298,25 +298,6 @@
                                 <span class="p">),</span>
                             <span class="p">),</span>
                         <span class="p">)</span>
-                    <span class="k">elif</span> <span class="p">(</span>
-                        <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-                            <span class="n">app_label</span><span class="o">=</span><span class="s2">&quot;apis_vocabularies&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">current_model_name</span>
-                        <span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-                        <span class="o">&gt;</span> <span class="mi">0</span>
-                    <span class="p">):</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">ModelMultipleChoiceFilter</span><span class="p">(</span>
-                            <span class="n">field_name</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
-                            <span class="n">queryset</span><span class="o">=</span><span class="n">current_qs</span><span class="p">,</span>
-                            <span class="n">widget</span><span class="o">=</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2Multiple</span><span class="p">(</span>
-                                <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span>
-                                    <span class="s2">&quot;apis:apis_vocabularies:generic_vocabularies_autocomplete&quot;</span><span class="p">,</span>
-                                    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span>
-                                        <span class="s2">&quot;vocab&quot;</span><span class="p">:</span> <span class="n">current_model_name</span><span class="p">,</span>
-                                        <span class="s2">&quot;direct&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
-                                    <span class="p">},</span>
-                                <span class="p">),</span>
-                            <span class="p">),</span>
-                        <span class="p">)</span>
                 <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;DateField&quot;</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">DateFromToRangeFilter</span><span class="p">(</span>
                         <span class="n">field_name</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
