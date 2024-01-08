@@ -1,6 +1,6 @@
 import django_filters
 
-from .models import *
+from .models import Uri
 
 
 class UriListFilter(django_filters.FilterSet):

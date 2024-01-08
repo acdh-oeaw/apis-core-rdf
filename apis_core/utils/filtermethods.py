@@ -94,7 +94,7 @@ def related_arbitrary_model_name(queryset, name, value):
           Using this example of professions, such a lookup would be generated: ``Person.objects.filter(profession__name__... )`` )
     """
 
-    lookup, value = self.construct_lookup(value)
+    lookup, value = construct_lookup(value)
 
     # name variable is the name of the filter and needs the corresponding field within the model
     return queryset.filter(**{name + "__name" + lookup: value})

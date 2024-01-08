@@ -16,7 +16,6 @@ from rest_framework.response import Response
 from drf_spectacular.utils import (
     extend_schema,
     extend_schema_field,
-    OpenApiParameter,
 )
 from drf_spectacular.types import OpenApiTypes
 from django_filters import rest_framework as filters
@@ -219,13 +218,6 @@ def generic_serializer_creation_factory():
 
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
-                entity_str = self._entity.__name__
-                app_label = self._app_label
-                lst_labels_set = deep_get(
-                    getattr(settings, app_label.upper(), {}),
-                    "{}.labels".format(entity_str),
-                    [],
-                )
                 for f in self._entity._meta.get_fields():
                     if getattr(settings, "APIS_API_EXCLUDE_SETS", False) and str(
                         f.name
@@ -256,13 +248,6 @@ def generic_serializer_creation_factory():
         class TemplateSerializerRetrieve(TemplateSerializer):
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
-                entity_str = self._entity.__name__
-                app_label = self._app_label
-                lst_labels_set = deep_get(
-                    getattr(settings, app_label.upper(), {}),
-                    "{}.labels".format(entity_str),
-                    [],
-                )
                 for f in self._entity._meta.get_fields():
                     if getattr(settings, "APIS_API_EXCLUDE_SETS", False) and str(
                         f.name

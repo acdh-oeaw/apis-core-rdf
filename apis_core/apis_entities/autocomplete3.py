@@ -95,7 +95,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
             if lst1 is not None:
                 try:
                     return dateutil.parser.parse(lst1[key][0]["value"])
-                except:
+                except Exception:
                     return lst1[key][0]["value"]
             else:
                 return obj[0]
@@ -110,7 +110,7 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                     return re.search(
                         "Point \( [+-]([0-9\.]+) [+-]([0-9\.]+)", lst1[key][0]["value"]
                     ).group(1)
-                except:
+                except Exception:
                     print("extract fails")
                     return None
             else:

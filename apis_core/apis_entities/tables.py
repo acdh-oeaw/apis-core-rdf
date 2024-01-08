@@ -1,5 +1,4 @@
 import django_tables2 as tables
-from django.utils.safestring import mark_safe
 from django_tables2.utils import A
 from apis_core.utils.settings import list_links_to_edit
 

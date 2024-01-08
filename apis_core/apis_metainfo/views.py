@@ -3,8 +3,6 @@ from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, FormView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
-from django.views import View
 from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView
 
@@ -12,8 +10,6 @@ from .filters import UriListFilter
 from .forms import UriFilterFormHelper, UriForm, UriGetOrCreateForm
 from .models import Uri
 from .tables import UriTable
-from apis_core.utils.rdf import get_modelname_and_dict_from_uri
-from apis_core.utils.normalize import clean_uri
 
 
 class UriListView(SingleTableMixin, FilterView):

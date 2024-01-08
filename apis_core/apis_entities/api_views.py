@@ -1,5 +1,4 @@
 import re
-from io import TextIOWrapper
 
 from django.conf import settings
 from django.http import Http404
@@ -76,8 +75,6 @@ class ResolveAbbreviations(APIView):
     parser_classes = (FileUploadParser,)
 
     def put(self, request, filename, format=None):
-        file_obj = request.data["file"]
-        txt = TextIOWrapper(file_obj, encoding="utf8")
         return Response(status=204)
 
 

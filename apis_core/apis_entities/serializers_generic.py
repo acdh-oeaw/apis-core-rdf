@@ -154,8 +154,6 @@ class EntitySerializer(serializers.Serializer):
             )
         if add_texts:
             self.fields["text"] = TextSerializer(many=True)
-        if hasattr(self.instance, "label_set"):
-            self.labels = LabelSerializer(source="label_set", many=True)
 
 
 class RelationEntitySerializer(serializers.Serializer):

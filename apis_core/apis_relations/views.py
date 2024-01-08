@@ -1,7 +1,5 @@
 import json
-import inspect
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template.loader import render_to_string

@@ -178,7 +178,7 @@ def parse_date(date_string: str) -> (datetime, datetime, datetime):
                         month=int(date_string_split[1]),
                         day=int(date_string_split[2]),
                     )
-                except:
+                except Exception:
                     raise ValueError("Invalid iso date: ", date_string)
 
             if len(date_split_angle) > 3:

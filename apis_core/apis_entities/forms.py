@@ -1,21 +1,17 @@
 # -*- coding: utf-8 -*-
-from crispy_forms.bootstrap import Accordion, AccordionGroup
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Field
 from crispy_forms.layout import Submit
 from dal import autocomplete
 from django import forms
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from django.core.validators import URLValidator
-from django.db.models.fields import BLANK_CHOICE_DASH
-from django.forms import ModelMultipleChoiceField, ModelChoiceField
 from django.urls import reverse
 
 from apis_core.apis_metainfo.models import Uri, Collection
 from apis_core.utils import DateParser, caching, settings as apis_settings
 from apis_core.utils.settings import get_entity_settings_by_modelname
-from .fields import ListSelect2, Select2Multiple
+from .fields import ListSelect2
 
 
 class SearchForm(forms.Form):
@@ -73,31 +69,8 @@ def get_entities_form(entity):
             crispy_main_fields = Fieldset(
                 f"Entity type: {entity.title()}"
             )  # crispy forms field collection for entity fields
-            attrs = {
-                "data-placeholder": "Type to get suggestions",
-                "data-minimum-input-length": getattr(settings, "APIS_MIN_CHAR", 3),
-                "data-html": True,
-            }
 
             for f in self.fields.keys():
-                if isinstance(
-                    self.fields[f], (ModelMultipleChoiceField, ModelChoiceField)
-                ):
-                    model_uri = self.fields[f].queryset.model.__name__.lower()
-
-                    if isinstance(self.fields[f], ModelMultipleChoiceField):
-                        widget1 = Select2Multiple
-                    else:
-                        widget1 = ListSelect2
-
-                    matching_content_type = ContentType.objects.filter(
-                        app_label__in=[
-                            "apis_entities",
-                            "apis_metainfo",
-                            "apis_relations",
-                        ],
-                        model=model_uri,
-                    )
                 main_fields.append(f)
 
             def sort_fields_list(field_names, entity_name):
@@ -139,7 +112,7 @@ def get_entities_form(entity):
                 self.fields["end_date_written"].required = False
 
             instance = getattr(self, "instance", None)
-            if instance != None:
+            if instance is not None:
 
                 # same as above, part of TempEntityClass
                 if "start_date_written" in self.fields:
@@ -250,7 +223,6 @@ class PersonResolveUriForm(forms.Form):
         return uri
 
     def __init__(self, *args, **kwargs):
-        entity_type = kwargs.pop("entity_type", False)
         self.request = kwargs.pop("request", False)
         super(PersonResolveUriForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
