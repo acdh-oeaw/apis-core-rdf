@@ -22,7 +22,6 @@ Dependencies
 * requests
 * SPARQLWrapper
 * django-model-utils
-* pandas
 * django-admin-csvexport
 
   Used in the ``apis_labels`` and ``apis_vocabularies`` admin apps
@@ -42,3 +41,7 @@ Dependencies
   integrate external sources. This package provides the patched Javascript
   files - it has to be listed in ``INSTALLED_APPS`` *before*
   ``django-autocomplete-light`` packages.
+
+* python-dateutil
+  
+  Used in ``apis_entities.autocomplete3``
