@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+Hello {{ request.user }}
+
+{% if request.user.bookmark_set %}
+Bookmarks
+<ul>
+{% for bookmark in request.user.bookmark_set.all %}
+<li>{{ bookmark.content_object }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock content %}

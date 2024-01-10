@@ -2,6 +2,7 @@
 {% load static %}
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
+{% load profile %}
 
 {% block scriptHeader %}
   {{ block.super }}
@@ -30,6 +31,7 @@
               <a href="/entity/{{ instance.id }}">
                 <span class="material-symbols-outlined">database</span>
               </a>
+	      {% toggle_bookmark instance %}
             </h1>
           {% endblock card-header-content %}
 

@@ -91,4 +91,5 @@ urlpatterns = [
         name="GetEntityGeneric",
     ),
     path("api/dumpdata", Dumpdata.as_view()),
+    path("profile", include("apis_core.profile.urls")),
 ]
