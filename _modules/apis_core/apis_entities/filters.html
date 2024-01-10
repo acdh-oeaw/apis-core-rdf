@@ -86,22 +86,19 @@
              
   <h1>Source code for apis_core.apis_entities.filters</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 
 <span class="kn">import</span> <span class="nn">django_filters</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span><span class="p">,</span> <span class="n">JSONField</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">JSONField</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Collection</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.filtermethods</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">related_entity_name</span><span class="p">,</span>
     <span class="n">related_property_name</span><span class="p">,</span>
-    <span class="n">name_label_filter</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># The following classes define the filter sets respective to their models.</span>

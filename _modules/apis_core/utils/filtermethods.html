@@ -195,7 +195,7 @@
 <span class="sd">          Using this example of professions, such a lookup would be generated: ``Person.objects.filter(profession__name__... )`` )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="c1"># name variable is the name of the filter and needs the corresponding field within the model</span>
     <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;__name&quot;</span> <span class="o">+</span> <span class="n">lookup</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span></div>

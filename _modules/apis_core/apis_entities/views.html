@@ -93,7 +93,7 @@
 <span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">UserPassesTestMixin</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">get_object_or_404</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse_lazy</span>
 <span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">RequestConfig</span>
@@ -222,8 +222,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
         <span class="n">class_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
-
-        <span class="n">session</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="n">selected_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span>
             <span class="s2">&quot;columns&quot;</span>
@@ -355,7 +353,7 @@
                     <span class="n">add_info</span> <span class="o">=</span> <span class="s2">&quot;&lt;b&gt;Confidence:&lt;/b&gt; </span><span class="si">{}</span><span class="s2">&lt;br/&gt;&lt;b&gt;Feature:&lt;/b&gt; &lt;a href=&#39;</span><span class="si">{}</span><span class="s2">&#39;&gt;</span><span class="si">{}</span><span class="s2">&lt;/a&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">x</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">uri</span>
                     <span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                     <span class="n">add_info</span> <span class="o">=</span> <span class="s2">&quot;&lt;b&gt;Confidence:&lt;/b&gt;no value provided &lt;br/&gt;&lt;b&gt;Feature:&lt;/b&gt; &lt;a href=&#39;</span><span class="si">{}</span><span class="s2">&#39;&gt;</span><span class="si">{}</span><span class="s2">&lt;/a&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">x</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">uri</span>
                     <span class="p">)</span>

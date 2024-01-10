@@ -267,7 +267,7 @@
                         <span class="n">month</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">date_string_split</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
                         <span class="n">day</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">date_string_split</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
                     <span class="p">)</span>
-                <span class="k">except</span><span class="p">:</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid iso date: &quot;</span><span class="p">,</span> <span class="n">date_string</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">date_split_angle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>

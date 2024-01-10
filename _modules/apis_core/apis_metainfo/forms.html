@@ -85,15 +85,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.apis_metainfo.forms</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">crispy_forms.bootstrap</span> <span class="kn">import</span> <span class="n">Accordion</span><span class="p">,</span> <span class="n">AccordionGroup</span>
-<span class="kn">from</span> <span class="nn">crispy_forms.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
-<span class="kn">from</span> <span class="nn">crispy_forms.layout</span> <span class="kn">import</span> <span class="n">Submit</span><span class="p">,</span> <span class="n">Layout</span>
+<span></span><span class="kn">from</span> <span class="nn">crispy_forms.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
+<span class="kn">from</span> <span class="nn">crispy_forms.layout</span> <span class="kn">import</span> <span class="n">Submit</span>
 <span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
 <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.rdf</span> <span class="kn">import</span> <span class="n">get_modelname_and_dict_from_uri</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 
 
 <div class="viewcode-block" id="UriForm">
