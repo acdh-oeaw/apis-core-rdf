@@ -58,7 +58,8 @@
   <body role="document"
         class="home contained fixed-nav"
         id="body"
-        style="height: unset!important">
+        style="height: unset!important"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <div class="hfeed site" id="page">
       <div class="wrapper-fluid wrapper-navbar sticky-navbar"
            id="wrapper-navbar"
@@ -247,6 +248,7 @@
       {% include "partials/bootstrap4_js.html" %}
       <script type="text/javascript"
               src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+      <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     {% endblock %}
 
     {% block scripts2 %}
