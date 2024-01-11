@@ -13,3 +13,18 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return f"{self.user}: {self.content_object}"
+
+
+class Comment(models.Model):
+    body = models.TextField()
+    parent = models.ForeignKey("self", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
+
+
+class Issue(models.Model):
+    comment = models.OneToOneField(Comment, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    assignee = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
