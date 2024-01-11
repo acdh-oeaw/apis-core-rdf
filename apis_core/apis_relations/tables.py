@@ -70,7 +70,7 @@ class PropertyTable(tables.Table):
             "model"
         ),  # order retrieved objects within table cell
         # use .name for model verbose name, .model for model class name
-        transform=lambda ent: f"{ent.model.title()}",
+        transform=lambda ent: f"{ent.name.capitalize()}",
         linkify_item={
             "viewname": "apis_core:apis_entities:generic_entities_list",
             "args": [tables.A("model")],
@@ -86,7 +86,7 @@ class PropertyTable(tables.Table):
             "model"
         ),  # order retrieved objects within table cell
         # use .name for model verbose name, .model for model class name
-        transform=lambda ent: f"{ent.model.title()}",
+        transform=lambda ent: f"{ent.name.capitalize()}",
         linkify_item={
             "viewname": "apis_core:apis_entities:generic_entities_list",
             "args": [tables.A("model")],
