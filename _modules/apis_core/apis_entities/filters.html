@@ -93,7 +93,6 @@
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">JSONField</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">TempEntityClass</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.filtermethods</span> <span class="kn">import</span> <span class="p">(</span>
@@ -146,7 +145,6 @@
 <div class="viewcode-block" id="GenericEntityListFilter.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">TempEntityClass</span>
         <span class="c1"># exclude all hardcoded fields or nothing, however this exclude is only defined here as a temporary measure in</span>
         <span class="c1"># order to load all filters of all model fields by default so that they are available in the first place.</span>
         <span class="c1"># Later those which are not referenced in the settings file will be removed again</span>

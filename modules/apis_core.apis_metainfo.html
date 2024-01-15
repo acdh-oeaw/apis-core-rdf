@@ -158,26 +158,6 @@
 </dd></dl>
 
 </section>
-<section id="module-apis_core.apis_metainfo.dal_urls">
-<span id="apis-core-apis-metainfo-dal-urls-module"></span><h2>apis_core.apis_metainfo.dal_urls module<a class="headerlink" href="#module-apis_core.apis_metainfo.dal_urls" title="Link to this heading"></a></h2>
-</section>
-<section id="module-apis_core.apis_metainfo.dal_views">
-<span id="apis-core-apis-metainfo-dal-views-module"></span><h2>apis_core.apis_metainfo.dal_views module<a class="headerlink" href="#module-apis_core.apis_metainfo.dal_views" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.dal_views.TempEntityClassAC">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.dal_views.</span></span><span class="sig-name descname"><span class="pre">TempEntityClassAC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/dal_views.html#TempEntityClassAC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.dal_views.TempEntityClassAC" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Select2QuerySetView</span></code></p>
-<p>Constructor. Called in the URLconf; can contain helpful extra
-keyword arguments, and other things.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.dal_views.TempEntityClassAC.get_queryset">
-<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/dal_views.html#TempEntityClassAC.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.dal_views.TempEntityClassAC.get_queryset" title="Link to this definition"></a></dt>
-<dd><p>Filter the queryset with GET[‘q’].</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
 <section id="module-apis_core.apis_metainfo.filters">
 <span id="apis-core-apis-metainfo-filters-module"></span><h2>apis_core.apis_metainfo.filters module<a class="headerlink" href="#module-apis_core.apis_metainfo.filters" title="Link to this heading"></a></h2>
 <dl class="py class">
@@ -410,22 +390,6 @@ that the “save” must be an SQL insert or update (or equivalent for
 non-SQL backends), respectively. Normally, they should not be set.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Collection.tempentityclass_set">
-<span class="sig-name descname"><span class="pre">tempentityclass_set</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Collection.tempentityclass_set" title="Link to this definition"></a></dt>
-<dd><p>Accessor to the related objects manager on the forward and reverse sides of
-a many-to-many relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
-instances.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -538,19 +502,6 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.self_contenttype_id">
 <span class="sig-name descname"><span class="pre">self_contenttype_id</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.self_contenttype_id" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.tempentityclass">
-<span class="sig-name descname"><span class="pre">tempentityclass</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.tempentityclass" title="Link to this definition"></a></dt>
-<dd><p>Accessor to the related object on the reverse side of a one-to-one
-relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.triple_set_from_obj">

@@ -139,20 +139,8 @@
         <span class="n">iiif_info_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">name</span>
 
         <span class="n">relevant_fields</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># those are fields from TempEntityClass, this exclude list can be removed once TempEntityClass is dropped</span>
-        <span class="n">exclude_fields</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;start_date&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;start_start_date&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;start_end_date&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;end_date&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;end_start_date&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;end_end_date&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;tempentityclass_ptr&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;rootobject_ptr&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;collection&quot;</span><span class="p">,</span>
-        <span class="p">]</span>
         <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
-        <span class="n">exclude_fields</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;detail_view_exclude&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">exclude_fields</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;detail_view_exclude&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">model_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_fields</span><span class="p">:</span>
                 <span class="n">relevant_fields</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">field</span><span class="p">),</span> <span class="n">value</span><span class="p">))</span>
