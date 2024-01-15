@@ -11,6 +11,13 @@
           <button type="button" class="btn btn-outline-dark m-2">{{ contenttype }}</button>
         </a>
       {% endfor %}
+      <hr>
+      {% contenttypes "collections" as contenttypes %}
+      {% for contenttype in contenttypes %}
+        <a href="{% url 'apis_core:generic:list' contenttype %}">
+          <button type="button" class="btn btn-outline-dark m-2">{{ contenttype }}</button>
+        </a>
+      {% endfor %}
     </div>
   </div>
 {% endblock col %}
