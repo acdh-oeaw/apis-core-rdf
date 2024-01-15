@@ -1,0 +1,69 @@
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+
+
+class SkosCollection(models.Model):
+    """
+    SKOS collections are labeled and/or ordered groups of SKOS concepts.
+    Collections are useful where a group of concepts shares something in common,
+    and it is convenient to group them under a common label, or
+    where some concepts can be placed in a meaningful order.
+
+    Miles, Alistair, and Sean Bechhofer. "SKOS simple knowledge
+    organization system reference. W3C recommendation (2009)."
+
+    """
+
+    parent = models.ForeignKey("self", null=True, on_delete=models.CASCADE, blank=True)
+    name = models.CharField(
+        max_length=300,
+        verbose_name="skos:prefLabel",
+        help_text="Collection label or name",
+    )
+    label_lang = models.CharField(
+        max_length=3,
+        blank=True,
+        default="en",
+        verbose_name="skos:prefLabel language",
+        help_text="Language of preferred label given above",
+    )
+    creator = models.TextField(
+        blank=True,
+        verbose_name="dc:creator",
+        help_text="Person or organisation that created this collection"
+        "If more than one list all using a semicolon ;",
+    )
+    contributor = models.TextField(
+        blank=True,
+        verbose_name="dc:contributor",
+        help_text="Person or organisation that made contributions to the collection"
+        "If more than one list all using a semicolon ;",
+    )
+
+    def __str__(self):
+        return self.name
+
+    def children(self):
+        return SkosCollection.objects.filter(parent=self)
+
+    def children_tree_as_list(self):
+        childtrees = [self]
+        for child in self.children():
+            childtrees.extend(child.children_tree_as_list())
+        return childtrees
+
+
+class SkosCollectionContentObject(models.Model):
+    """
+    *Throughtable* datamodel to connect collections to arbitrary content
+    """
+
+    collection = models.ForeignKey(SkosCollection, on_delete=models.CASCADE)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    def __str__(self):
+        return f"{self.content_object} -> {self.collection}"
