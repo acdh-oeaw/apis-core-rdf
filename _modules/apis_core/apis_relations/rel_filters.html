@@ -85,10 +85,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.apis_relations.rel_filters</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">operator</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
-
-<span class="kn">import</span> <span class="nn">django_filters</span>
+<span></span><span class="kn">import</span> <span class="nn">django_filters</span>
 <span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
@@ -194,8 +191,6 @@
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_filters.get_generic_relation_filter">[docs]</a>
 <span class="k">def</span> <span class="nf">get_generic_relation_filter</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
     <span class="k">class</span> <span class="nc">GenericListFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">FilterSet</span><span class="p">):</span>
-        <span class="c1"># search = django_filters.CharFilter(method=&#39;search_filter_method&#39;)</span>
-
         <span class="k">def</span> <span class="nf">name_label_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Filter for including the alternative names in the names search.\</span>
@@ -256,15 +251,6 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">f</span> <span class="o">+=</span> <span class="s2">&quot;exact&quot;</span>
             <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-
-        <span class="k">def</span> <span class="nf">search_filter_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-            <span class="bp">cls</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
-            <span class="n">sett_filters</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RELATIONS&quot;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">sett_filters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">filter_attr</span> <span class="o">=</span> <span class="n">sett_filters</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
-                <span class="n">query</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span>
-                    <span class="n">operator</span><span class="o">.</span><span class="n">or_</span><span class="p">,</span> <span class="p">[</span><span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">attr</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">filter_attr</span><span class="p">]</span>
-                <span class="p">)</span>
 
         <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
             <span class="c1"># model = AbstractRelation.get_relation_class_of_name(entity)</span>
