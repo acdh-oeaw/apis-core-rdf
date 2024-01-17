@@ -8,8 +8,8 @@ from django.conf import settings
 from django.core.validators import URLValidator
 from django.urls import reverse
 
-from apis_core.apis_metainfo.models import Uri, Collection
-from apis_core.utils import DateParser, caching, settings as apis_settings
+from apis_core.apis_metainfo.models import Uri
+from apis_core.utils import caching, settings as apis_settings
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from .fields import ListSelect2
 

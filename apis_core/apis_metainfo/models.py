@@ -207,7 +207,7 @@ class Uri(models.Model):
                     self.root_object = obj
                 else:
                     raise ImproperlyConfigured(
-                        f"{uri}: found model <{model}> and attributes <{attributes}>"
+                        f"{self.uri}: found model <{model}> and attributes <{attributes}>"
                     )
             except Exception as e:
                 raise ValidationError(f"{e}: {self.uri}")
