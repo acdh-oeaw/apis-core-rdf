@@ -1,6 +1,3 @@
-import operator
-from functools import reduce
-
 import django_filters
 from dal import autocomplete
 from django.conf import settings
@@ -93,8 +90,6 @@ def get_filters(model, exclude=False, include=False, include_parents=False):
 
 def get_generic_relation_filter(entity):
     class GenericListFilter(django_filters.FilterSet):
-        # search = django_filters.CharFilter(method='search_filter_method')
-
         def name_label_filter(self, queryset, name, value):
             """
             Filter for including the alternative names in the names search.\
@@ -155,15 +150,6 @@ def get_generic_relation_filter(entity):
             else:
                 f += "exact"
             return queryset.filter(**{f: value})
-
-        def search_filter_method(self, queryset, name, value):
-            cls = queryset.model.__name__
-            sett_filters = getattr(settings, "APIS_RELATIONS", {})
-            if cls.lower() in sett_filters.keys():
-                filter_attr = sett_filters[cls.lower()].get("search", ["name"])
-                query = reduce(
-                    operator.or_, [Q(**{attr: value}) for attr in filter_attr]
-                )
 
         class Meta:
             # model = AbstractRelation.get_relation_class_of_name(entity)

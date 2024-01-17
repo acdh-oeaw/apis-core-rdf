@@ -3,7 +3,6 @@ import importlib
 import inspect
 import itertools
 import logging
-from typing import Type
 
 
 from apis_core.apis_relations.models import Property, TempTriple

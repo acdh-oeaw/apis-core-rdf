@@ -1,19 +1,14 @@
 import re
-import unicodedata
 
 from django.contrib.contenttypes.models import ContentType
-import reversion
 from django.conf import settings
 from django.contrib.auth.models import Group
-from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-from model_utils.managers import InheritanceManager
 from django.db.models.query import QuerySet
 
 from apis_core.utils import caching
-from apis_core.utils import DateParser
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.apis_relations.models import TempTriple
 from apis_core.apis_entities import signals
