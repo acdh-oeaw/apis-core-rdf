@@ -77,7 +77,7 @@ class RelationForm(ModelForm):
         fields = {k: v for k, v in self.fields.items() if k not in ["obj", "subj"]}
 
         self.helper.layout = Layout(
-            HTML(f"<h3>{self._meta.model.name}</h3>"),
+            HTML(f"<h3>{self._meta.model.__name__}</h3>"),
             div,
             *fields,
         )
