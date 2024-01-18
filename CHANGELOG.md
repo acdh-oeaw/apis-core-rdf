@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.10.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.9.1...v0.10.0) (2024-01-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_entities:** drop TempEntityClass
+* **apis_vocabularies:** remove apis_vocabularies app
+
+### Features
+
+* add htmx to base template ([f33b707](https://github.com/acdh-oeaw/apis-core-rdf/commit/f33b7075dfed00c765d264edcac25ebbfc247f57))
+* introduce generic app ([edb7a88](https://github.com/acdh-oeaw/apis-core-rdf/commit/edb7a884f6afe3542d27c6c749f8091a47d8ad64)), closes [#509](https://github.com/acdh-oeaw/apis-core-rdf/issues/509)
+
+
+### Bug Fixes
+
+* **apis_entities:** drop TempEntityClass ([b08bfb6](https://github.com/acdh-oeaw/apis-core-rdf/commit/b08bfb6f27df35f5f7c8c185ab4e8cb0a9e69791)), closes [#6](https://github.com/acdh-oeaw/apis-core-rdf/issues/6)
+* drop collectiontype field from Collection model ([c74f628](https://github.com/acdh-oeaw/apis-core-rdf/commit/c74f6280991fc388c27dc1eadf2f5e7f000be345))
+
+
+### Code Refactoring
+
+* **apis_vocabularies:** remove apis_vocabularies app ([e89e03d](https://github.com/acdh-oeaw/apis-core-rdf/commit/e89e03dc2e9ce3562bac5c9a7a3b6bf619a23135)), closes [#514](https://github.com/acdh-oeaw/apis-core-rdf/issues/514)
+
 ## [0.9.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.9.0...v0.9.1) (2023-12-21)
 
 
