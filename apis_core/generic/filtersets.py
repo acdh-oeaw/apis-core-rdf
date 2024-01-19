@@ -1,4 +1,5 @@
 from django_filters.filterset import FilterSet
+from django_filters.constants import ALL_FIELDS
 from .forms import GenericFilterSetForm
 
 
@@ -10,6 +11,9 @@ class GenericFilterSet(FilterSet):
     field.
     See also: https://github.com/carltongibson/django-filter/issues/1630
     """
+
+    class Meta:
+        form = GenericFilterSetForm
 
     @property
     def form(self):
@@ -24,22 +28,12 @@ class GenericFilterSet(FilterSet):
         return self._form
 
 
-def filterset_factory(model, filterset=GenericFilterSet, fields="__all__"):
-    """
-    A custom filterset_factory, because we want to be a able to set the
-    filterset as well as the `form` attribute of the filterset
-    This can hopefully be removed once
-    https://github.com/carltongibson/django-filter/issues/1631 is implemented.
-    """
-
-    meta = type(
-        str("Meta"),
-        (object,),
-        {"model": model, "fields": fields, "form": GenericFilterSetForm},
+# This is a backport from https://github.com/carltongibson/django-filter/pull/1636
+# It can be removed once that is merged and released
+def filterset_factory(model, filterset=FilterSet, fields=ALL_FIELDS):
+    attrs = {"model": model, "fields": fields}
+    bases = (filterset.Meta,) if hasattr(filterset, "Meta") else ()
+    Meta = type("Meta", bases, attrs)
+    return type(filterset)(
+        str("%sFilterSet" % model._meta.object_name), (filterset,), {"Meta": Meta}
     )
-    filterset = type(
-        str("%sFilterSet" % model._meta.object_name),
-        (filterset,),
-        {"Meta": meta},
-    )
-    return filterset
