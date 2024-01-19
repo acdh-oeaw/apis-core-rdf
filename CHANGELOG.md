@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.10.0...v0.10.1) (2024-01-19)
+
+
+### Bug Fixes
+
+* **generic:** backport `filterset_factory` from django-filters ([c235107](https://github.com/acdh-oeaw/apis-core-rdf/commit/c235107154ab50a1e90b9a5f1aba8d324fdc0df9))
+* **generic:** filter the iterator before returning the first element ([a6fba0f](https://github.com/acdh-oeaw/apis-core-rdf/commit/a6fba0f0d362158d768926196733567d392f983c))
+
 ## [0.10.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.9.1...v0.10.0) (2024-01-18)
 
 
