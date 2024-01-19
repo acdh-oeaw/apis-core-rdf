@@ -1,4 +1,7 @@
-from django.urls import include, path
+from django.contrib.contenttypes.models import ContentType
+from django.http import Http404
+from django.urls import include, path, register_converter
+from django.shortcuts import get_list_or_404
 
 from . import views, edit_generic, detail_generic, merge_views
 from .autocomplete3 import (
@@ -9,13 +12,40 @@ from .autocomplete3 import (
 # from .views import ReversionCompareView TODO: add again when import is fixed
 from .edit_generic import GenericEntitiesCreateStanbolView
 from .api_views import GetOrCreateEntity
+from apis_core.generic.views import List
+from .models import AbstractEntity
+
+
+class EntityToContenttypeConverter:
+    """
+    A converter that converts from a the name of an entity class
+    (i.e. `person`) to the actual Django model class.
+    """
+
+    regex = r"\w+"
+
+    def to_python(self, value):
+        candiates = get_list_or_404(ContentType, model=value)
+        candiates = list(
+            filter(lambda ct: issubclass(ct.model_class(), AbstractEntity), candiates)
+        )
+        if len(candiates) > 1:
+            raise Http404("Multiple entities match the <%s> identifier" % value)
+        return candiates[0]
+
+    def to_url(self, value):
+        return value
+
+
+register_converter(EntityToContenttypeConverter, "entitytocontenttype")
+
 
 app_name = "apis_entities"
 
 entity_patterns = [
     path(
         "list/",
-        views.GenericListViewNew.as_view(),
+        List.as_view(),
         name="generic_entities_list",
     ),
     path(
@@ -75,7 +105,7 @@ autocomplete_patterns = [
 
 urlpatterns = [
     path(
-        "entity/<slug:entity>/",
+        "entity/<entitytocontenttype:contenttype>/",
         include(entity_patterns),
     ),
     path(
