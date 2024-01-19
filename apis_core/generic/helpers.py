@@ -68,4 +68,4 @@ def first_match_via_mro(model, path: str = "", suffix: str = ""):
     """
     paths = list(map(lambda x: x[:-1] + [path] + x[-1:], mro_paths(model)))
     classes = [".".join(prefix) + suffix for prefix in paths]
-    return next(map(class_from_path, classes), None)
+    return next(filter(bool, map(class_from_path, classes)), None)
