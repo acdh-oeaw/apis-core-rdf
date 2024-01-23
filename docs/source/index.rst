@@ -18,6 +18,7 @@ Welcome to APIS's documentation!
    data_model
    glossary
    development
+   collections
 
 .. toctree::
    :maxdepth: 2
