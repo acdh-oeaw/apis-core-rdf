@@ -1,6 +1,7 @@
 from operator import itemgetter
 from django import template
 from apis_core.utils import caching
+from apis_core.utils.helpers import triple_sidebar
 
 register = template.Library()
 
@@ -32,3 +33,11 @@ def entities_list_links():
     entities_links.sort(key=itemgetter(1))
 
     return entities_links
+
+
+@register.simple_tag(takes_context=True)
+def object_relations(context, detail=True):
+    obj = context["object"]
+    return triple_sidebar(
+        obj.pk, obj.__class__.__name__.lower(), context["request"], detail
+    )

@@ -1,227 +1,66 @@
-# -*- coding: utf-8 -*-
-import json
-
-from django.conf import settings
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponse
-from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-from django.urls import reverse_lazy
-from django_tables2 import RequestConfig
-from django_tables2 import SingleTableView
-from django_tables2.export.views import ExportMixin
+from django.views import View
+from django.views.generic.edit import FormView
 
-from apis_core.core.mixins import ListViewObjectFilterMixin
-
-from apis_core.apis_metainfo.models import Uri
-from apis_core.utils.stanbolQueries import retrieve_obj
-from apis_core.utils.utils import (
-    access_for_all,
-    access_for_all_function,
-    ENTITIES_DEFAULT_COLS,
-)
-from apis_core.utils.settings import get_entity_settings_by_modelname
-from .filters import get_list_filter_of_entity
-from .forms import (
-    GenericFilterFormHelper,
-    PersonResolveUriForm,
-    GenericEntitiesStanbolForm,
-)
-from .tables import get_entities_table
-from apis_core.utils.helpers import get_member_for_entity
-
-###########################################################################
-############################################################################
-#
-#   Helper Functions
-#
-############################################################################
-############################################################################
+from apis_core.generic.views import GenericModelMixin, Update
+from apis_core.apis_entities.forms import EntitiesMergeForm
 
 
-@user_passes_test(access_for_all_function)
-def set_session_variables(request):
-    ann_proj_pk = request.GET.get("project", None)
-    types = request.GET.getlist("types", None)
-    users_show = request.GET.getlist("users_show", None)
-    if types:
-        request.session["entity_types_highlighter"] = types
-    if users_show:
-        request.session["users_show_highlighter"] = users_show
-    if ann_proj_pk:
-        request.session["annotation_project"] = ann_proj_pk
-    return request
-
-
-############################################################################
-############################################################################
-#
-#   GenericViews
-#
-############################################################################
-############################################################################
-
-
-class GenericListViewNew(
-    UserPassesTestMixin, ListViewObjectFilterMixin, ExportMixin, SingleTableView
-):
-    formhelper_class = GenericFilterFormHelper
-    context_filter_name = "filter"
-    paginate_by = 25
-    template_name = getattr(settings, "APIS_LIST_VIEW_TEMPLATE", "generic_list.html")
-
-    def __init__(self, *args, **kwargs):
-        super(GenericListViewNew, self).__init__(*args, **kwargs)
-        self.entity = None
-        self.filter = None
-
-    def get_model(self):
-        """
-        Look up the model class for the given entity
-        """
-        model = ContentType.objects.get(
-            app_label__startswith="apis_", model=self.entity
-        ).model_class()
-
-        return model
-
-    def test_func(self):
-        access = access_for_all(self, viewtype="list")
-        if access:
-            self.request = set_session_variables(self.request)
-        return access
-
-    def get_queryset(self, **kwargs):
-        self.entity = self.kwargs.get("entity")
-
-        qs = get_member_for_entity(
-            self.get_model(), path="querysets", suffix="ListViewQueryset"
-        )
-        if qs is None:
-            qs = (self.get_model().objects.all()).order_by("name")
-        self.filter = get_list_filter_of_entity(self.entity)(
-            self.request.GET, queryset=qs
-        )
-        self.filter.form.helper = self.formhelper_class()
-
-        return self.filter_queryset(self.filter.qs)
-
-    def get_table(self, **kwargs):
-        """
-        Create entity-specific table object for use on the frontend.
-
-        Holds information on e.g. which fields to use for table columns.
-        Incorporates variables provided in Models, Settings where available.
-
-        :return: a dictionary
-        """
-        model = self.get_model()
-        class_name = model.__name__
-
-        selected_cols = self.request.GET.getlist(
-            "columns"
-        )  # populates "Select additional columns" dropdown
-        default_cols = []  # get set to "name" in get_entities_table when empty
-        entity_settings = get_entity_settings_by_modelname(class_name)
-        default_cols = entity_settings.get("table_fields", [])
-        default_cols = default_cols + selected_cols
-
-        self.table_class = get_member_for_entity(self.get_model(), suffix="Table")
-        if self.table_class is None:
-            self.table_class = get_entities_table(class_name, default_cols=default_cols)
-        table = super(GenericListViewNew, self).get_table()
-        RequestConfig(
-            self.request, paginate={"page": 1, "per_page": self.paginate_by}
-        ).configure(table)
-
-        return table
-
-    def get_context_data(self, **kwargs):
-        """
-        Create entity-specific context object for use on the frontend.
-
-        Holds display values and information on functionality based on
-        model data as well as variables provided in Settings (where available).
-
-        :return: a dictionary
-        """
-        context = super(GenericListViewNew, self).get_context_data()
-        model = self.get_model()
-        class_name = model.__name__
-
-        context[self.context_filter_name] = self.filter
-        context["entity"] = self.entity  # model slug
-        context["app_name"] = "apis_entities"
-        context["docstring"] = f"{model.__doc__}"
-
-        context["entity_create_stanbol"] = GenericEntitiesStanbolForm(self.entity)
-
-        if "browsing" in settings.INSTALLED_APPS:
-            from browsing.models import BrowsConf
-
-            context["conf_items"] = list(
-                BrowsConf.objects.filter(model_name=class_name).values_list(
-                    "field_path", "label"
-                )
-            )
-
-        # TODO kk
-        #  suggestion: rename context['class_name'] to context['entity_name']
-        #  throughout (+ same for plural versions) to avoid confusion with
-        #  actual model class name
-        if model._meta.verbose_name:
-            context["class_name"] = f"{model._meta.verbose_name.title()}"
-        else:
-            context["class_name"] = f"{class_name}"
-        if model._meta.verbose_name_plural:
-            context["class_name_plural"] = f"{model._meta.verbose_name_plural.title()}"
-        # rudimentary way of pluralising the name of a model class
-        else:
-            if class_name.endswith("s"):
-                context["class_name_plural"] = f"{class_name}es"
-            elif class_name.endswith("y"):
-                context["class_name_plural"] = f"{class_name[:-1]}ies"
-            else:
-                context["class_name_plural"] = f"{class_name}s"
-
-        try:
-            context["get_arche_dump"] = model.get_arche_dump()
-        except AttributeError:
-            context["get_arche_dump"] = None
-
-        try:
-            context["create_view_link"] = model.get_createview_url()
-        except AttributeError:
-            context["create_view_link"] = None
-
-        toggleable_cols = []
-        entity_settings = get_entity_settings_by_modelname(class_name)
-        toggleable_cols = entity_settings.get("additional_cols", [])
-
-        # TODO kk spelling of this dict key should get fixed throughout
-        #  (togglable_colums -> toggleable_columns)
-        context["togglable_colums"] = toggleable_cols + ENTITIES_DEFAULT_COLS
-
+class EntitiesUpdate(Update):
+    def get_context_data(self, *args, **kwargs):
+        print(self.get_object())
+        context = super().get_context_data(*args, **kwargs)
+        context["mergeform"] = EntitiesMergeForm(instance=self.get_object())
         return context
 
 
-############################################################################
-############################################################################
-#
-#   OtherViews
-#
-############################################################################
-############################################################################
+class EntitiesDuplicate(GenericModelMixin, PermissionRequiredMixin, View):
+    permission_action_required = "create"
 
+    def get(self, request, *args, **kwargs):
+        source_obj = get_object_or_404(self.model, pk=kwargs["pk"])
+        newobj = source_obj.duplicate()
 
-@login_required
-def resolve_ambigue_person(request):
-    if request.method == "POST":
-        form = PersonResolveUriForm(request.POST)
-    if form.is_valid():
-        pers = form.save()
         return redirect(
-            reverse("apis:apis_entities:person_edit", kwargs={"pk": pers.pk})
+            reverse(
+                "apis:apis_entities:generic_entities_edit_view",
+                kwargs={
+                    "pk": newobj.id,
+                    "contenttype": newobj.__class__.__name__.lower(),
+                },
+            )
+        )
+
+
+class EntitiesMerge(GenericModelMixin, PermissionRequiredMixin, FormView):
+    permission_action_required = "create"
+    form_class = EntitiesMergeForm
+    template_name = "entity_merge.html"
+    template_name_suffix = "_merge"
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(self.model, pk=self.kwargs.get("pk"))
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["object"] = self.get_object()
+        return context
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs["instance"] = self.get_object()
+        return kwargs
+
+    def form_valid(self, form):
+        obj = self.get_object()
+        other = form.cleaned_data["uri"]
+        obj.merge_with([other])
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "apis:apis_entities:generic_entities_edit_view",
+            args=[self.get_object().__class__.__name__.lower(), self.get_object().id],
         )

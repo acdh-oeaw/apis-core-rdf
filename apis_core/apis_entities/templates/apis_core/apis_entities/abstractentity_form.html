@@ -1,0 +1,173 @@
+{% extends "apis_core/apis_entities/abstractentity.html" %}
+{% load crispy_forms_tags %}
+{% load apis_templatetags %}
+{% load apiscore %}
+
+{% block col-zero %}
+  <div class="card">
+    <div class="card-body">{% crispy form form.helper %}</div>
+    <div class="card-footer">{% include "apis_entities/partials/linked_open_data.html" %}</div>
+  </div>
+{% endblock col-zero %}
+
+{% block col-one %}
+  <div class="card">
+    <div class="card-body">{% include "apis_entities/partials/entity_relations_multiple_cards.html" %}</div>
+  </div>
+  <div class="card mt-2">
+    <div class="card-body">
+
+      {% if mergeform %}
+        {% crispy mergeform mergeform.helper %}
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock col-one %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script type="text/javascript">
+{% with object|opts as opts %}
+function GetFormAjax(FormName , ObjectID , ButtonText) {
+    function add_form(data) {
+        // update our tooltip content with our returned data and cache it
+        $('#tab_'+data.tab).find('div:eq(1)').remove();
+        $('#tab_'+data.tab).append(data.form);
+            $('#form_PersonInstitutionForm div:first div:first select').focus();
+        $('#tab_'+data.tab+" select.listselect2").each(function( index, element ){
+            console.log($(this).data("autocompleteLightUrl"))
+        $(this).select2({
+            escapeMarkup: function(markup) {
+            return markup;
+        },
+        templateResult: function(data) {
+            return data.text;
+        },
+        templateSelection: function(data) {
+            return data.text;
+        },
+            ajax: {
+            url: $(this).data("autocompleteLightUrl"),
+            dataType: 'json'
+            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            },
+        })
+
+
+        })            //$(".form.ajax_form").unbind()
+        console.log($('#tab_'+data.tab+" select.listselect2"))
+        {% if apis_bibsonomy %}
+        reinitialize_bibsonomy_tooltips()
+        {% endif %}
+    };
+    if (!$.ApisForms) {
+        $.ApisForms = {}
+    };
+    if (ObjectID === undefined) {
+        if ($.ApisForms[FormName+'_'+'{{object}}']) {
+            var new_data = $.ApisForms[FormName+'_'+'{{opts.verbose_name}}']
+            new_data.form = new_data.form.replace('##ENT_PK##', {{object.pk}});
+            add_form(new_data);
+            return;
+        };
+    };
+    if (ButtonText === undefined) {
+        ButtonText = 'create/modify';
+    };
+    return $.ajax(
+        {
+            type: 'POST',
+            url: '{% url 'apis:apis_relations:get_form_ajax' %}',
+            beforeSend: function(request) {
+                var csrftoken = getCookie('csrftoken');
+                request.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            data: {
+                'FormName':FormName,
+                'SiteID':{{object.pk}},
+                'ObjectID':ObjectID,
+                'ButtonText':ButtonText,
+                'entity_type': '{{opts.verbose_name}}',
+            },
+            success: function(data) {
+		console.log(data);
+                add_form(data);
+                if (!ObjectID) {
+                    $.ApisForms[FormName+'_'+'{{opts.verbose_name}}'] = data;
+                    $.ApisForms[FormName+'_'+'{{opts.verbose_name}}'].form = $.ApisForms[FormName+'_'+'{{opts.verbose_name}}'].form
+                    .replace('/{{object.pk}}/', '/##ENT_PK##/');
+                };
+            },
+            error: function(error) {
+                console.log(error)
+            }
+        }
+    );
+}
+{% endwith %}
+
+function EntityRelationForm_response(response){
+  if (response.test == false) {
+      $('#'+response.DivID).replaceWith(response.form);
+      //$(".form.ajax_form").unbind();
+      if ($.ApisHigh.tt_instance_detail) {
+      if ($.ApisHigh.tt_instance_detail["__state"] == 'stable') {
+          $.ApisHigh.tt_instance_detail.content(response.form);
+      } }
+  } else {
+      console.log('test did not fail');
+       $('#tab_'+response.tab).find('div').remove();
+       $('#tab_'+response.tab).append(response.table_html);
+       initiate_compare_tooltip();
+       {% if object %}
+       if (response.right_card) {
+         GetFormAjax(response.tab);
+       };
+       if ($.ApisHigh){
+         if ($.ApisHigh.tt_instance_detail["__state"] == 'stable') {
+            $.ApisHigh.tt_instance_detail.close()
+         } else {
+            $('.reldelete').addClass('disabled')
+         }
+       }
+       {% endif %}
+  };
+  unbind_compare_forms();
+}
+
+function DeleteTempEntity(pk, kind, app_name=false) {
+    if (app_name){
+        var url = '/apis/api/'+app_name+'/'+kind+'/'+pk.toString()
+    } else {
+    var url = '/apis/api/'+kind+'/'+pk.toString()}
+    $.ajax({
+        type: 'DELETE',
+        url: url,
+        beforeSend: function(request) {
+              var csrftoken = getCookie('csrftoken');
+                request.setRequestHeader("X-CSRFToken", csrftoken);
+              },
+        statusCode : {
+            204: function() {
+                if (kind=='HLAnnotation') {
+                    $('*[data-hl-ann-id="'+pk+'"]').contents().unwrap()
+                } else {
+                $('#tempEntity_'+pk).parents('tr').remove()
+            }
+            }
+        }
+    })
+}
+  </script>
+  {% object_relations as object_relations %}
+  <script type="text/javascript">
+function activate_editing(){
+       {% for obj in object_relations %}
+       GetFormAjax("{{obj.2}}");
+       //unbind_ajax_forms();
+       {% endfor %}
+};
+activate_editing();
+  </script>
+{% endblock scripts %}
