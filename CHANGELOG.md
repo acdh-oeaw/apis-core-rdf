@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.11.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.10.1...v0.11.0) (2024-01-24)
+
+
+### Features
+
+* add collections app ([6e6753e](https://github.com/acdh-oeaw/apis-core-rdf/commit/6e6753e15a4aa905634805e40d58f97191c60f92))
+* allow to exclude fields from table columns ([92cba82](https://github.com/acdh-oeaw/apis-core-rdf/commit/92cba8214e02e4b0cfc081016821e234f389a5da))
+
+
+### Documentation
+
+* add documentation for new collections app ([e5020be](https://github.com/acdh-oeaw/apis-core-rdf/commit/e5020be1eab755b99b80285b9885ae5b155f817f))
+
 ## [0.10.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.10.0...v0.10.1) (2024-01-19)
 
 
