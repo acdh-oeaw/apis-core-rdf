@@ -35,8 +35,9 @@ class GenericModelMixin:
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
-        self.model = kwargs.get("contenttype").model_class()
-        self.queryset = self.model.objects.all()
+        if contenttype := kwargs.get("contenttype"):
+            self.model = contenttype.model_class()
+            self.queryset = self.model.objects.all()
 
     def get_template_names(self):
         template_names = super().get_template_names()
