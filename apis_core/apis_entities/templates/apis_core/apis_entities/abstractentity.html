@@ -1,0 +1,63 @@
+{% extends "generic/generic_content.html" %}
+
+{% block title %}
+  {{ object }}
+{% endblock title %}
+
+{% block styles %}
+  {{ block.super }}
+  <style>
+.material-symbols-align {
+  vertical-align: bottom;
+}
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+
+        {% block card-header-content %}
+          <div class="row">
+            <div class="col-md-2">{% include "apis_entities/partials/prev_url.html" %}</div>
+            <div class="col-md-8">
+              <h2 style="text-align: center;">
+                {% include "apis_entities/partials/listview_url.html" %}
+                {{ object }}
+
+                {% block object-actions %}
+                {% endblock object-actions %}
+
+              </h2>
+            </div>
+            <div class="col-md-2">{% include "apis_entities/partials/next_url.html" %}</div>
+          </div>
+        {% endblock card-header-content %}
+
+        {% include "apis_entities/partials/entity_base_nav.html" %}
+        {% include "apis_entities/partials/entity_actions_nav.html" %}
+      </div>
+      <div class="card-body">
+
+        {% block card-body %}
+          <div class="row">
+            <div class="col-md-4">
+
+              {% block col-zero %}
+              {% endblock col-zero %}
+
+            </div>
+            <div class="col-md-8">
+
+              {% block col-one %}
+              {% endblock col-one %}
+
+            </div>
+          </div>
+        {% endblock card-body %}
+
+      </div>
+    </div>
+  </div>
+{% endblock content %}

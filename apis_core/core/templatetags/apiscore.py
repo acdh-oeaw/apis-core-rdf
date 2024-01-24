@@ -13,3 +13,8 @@ def shared_url():
 @register.simple_tag
 def page_range(paginator, number):
     return paginator.get_elided_page_range(number=number)
+
+
+@register.filter
+def opts(obj):
+    return obj._meta
