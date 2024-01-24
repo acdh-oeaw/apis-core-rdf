@@ -1,0 +1,7 @@
+<h5 class="card-title">Linked Open Data</h5>
+
+{% if object.uri_set %}
+  <ul>
+    {% for uri in object.uri_set.all %}<li>{{ uri.uri | urlize }}</li>{% endfor %}
+  </ul>
+{% endif %}

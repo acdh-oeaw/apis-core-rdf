@@ -63,7 +63,7 @@ class AbstractEntity(RootObject):
         entity = self.__name__.lower()
         return reverse(
             "apis_core:apis_entities:generic_entities_list",
-            kwargs={"entity": entity},
+            kwargs={"contenttype": entity},
         )
 
     @classmethod
@@ -78,14 +78,14 @@ class AbstractEntity(RootObject):
         entity = self.__class__.__name__.lower()
         return reverse(
             "apis_core:apis_entities:generic_entities_edit_view",
-            kwargs={"entity": entity, "pk": self.id},
+            kwargs={"contenttype": entity, "pk": self.id},
         )
 
     def get_absolute_url(self):
         entity = self.__class__.__name__.lower()
         return reverse(
             "apis_core:apis_entities:generic_entities_detail_view",
-            kwargs={"entity": entity, "pk": self.id},
+            kwargs={"contenttype": entity, "pk": self.id},
         )
 
     def get_prev_url(self):
@@ -97,7 +97,7 @@ class AbstractEntity(RootObject):
         if prev:
             return reverse(
                 "apis_core:apis_entities:generic_entities_detail_view",
-                kwargs={"entity": entity, "pk": prev.first().id},
+                kwargs={"contenttype": entity, "pk": prev.first().id},
             )
         else:
             return False
@@ -111,7 +111,7 @@ class AbstractEntity(RootObject):
         if next:
             return reverse(
                 "apis_core:apis_entities:generic_entities_detail_view",
-                kwargs={"entity": entity, "pk": next.first().id},
+                kwargs={"contenttype": entity, "pk": next.first().id},
             )
         else:
             return False
@@ -120,14 +120,14 @@ class AbstractEntity(RootObject):
         entity = self.__class__.__name__.lower()
         return reverse(
             "apis_core:apis_entities:generic_entities_delete_view",
-            kwargs={"entity": entity, "pk": self.id},
+            kwargs={"contenttype": entity, "pk": self.id},
         )
 
     def get_duplicate_url(self):
         entity = self.__class__.__name__.lower()
         return reverse(
             "apis_core:apis_entities:generic_entities_duplicate_view",
-            kwargs={"entity": entity, "pk": self.id},
+            kwargs={"contenttype": entity, "pk": self.id},
         )
 
     def merge_charfield(self, other, field):
