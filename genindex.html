@@ -53,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collections.html">Working with collections</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul class="current">
@@ -398,8 +399,6 @@
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.signals">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     apis_core.apis_metainfo.tables
 
@@ -428,6 +427,8 @@
         <li><a href="modules/apis_core.apis_metainfo.html#module-apis_core.apis_metainfo.validators">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     apis_core.apis_metainfo.views
 
@@ -538,6 +539,62 @@
 
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.views">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.collections
+
+      <ul>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.collections.admin
+
+      <ul>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.admin">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.collections.apps
+
+      <ul>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.apps">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.collections.models
+
+      <ul>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.models">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.collections.templatetags
+
+      <ul>
+        <li><a href="modules/apis_core.collections.templatetags.html#module-apis_core.collections.templatetags">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.collections.templatetags.apis_collections
+
+      <ul>
+        <li><a href="modules/apis_core.collections.templatetags.html#module-apis_core.collections.templatetags.apis_collections">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.collections.urls
+
+      <ul>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.urls">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.collections.views
+
+      <ul>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.views">module</a>
 </li>
       </ul></li>
       <li>
@@ -754,6 +811,10 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_caching.CachingTest">CachingTest (class in apis_core.utils.test_caching)</a>
 </li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.children">children() (apis_core.collections.models.SkosCollection method)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.children_tree_as_list">children_tree_as_list() (apis_core.collections.models.SkosCollection method)</a>
+</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.clean">clean() (apis_core.apis_entities.forms.PersonResolveUriForm method)</a>
 
       <ul>
@@ -770,21 +831,49 @@
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.test_models.PermissionsModelTestCase.col_name">col_name (apis_core.apis_entities.test_models.PermissionsModelTestCase attribute)</a>
 </li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.collection">collection (apis_core.collections.models.SkosCollectionContentObject attribute)</a>
+</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection">Collection (class in apis_core.apis_metainfo.models)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.DoesNotExist">Collection.DoesNotExist</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.MultipleObjectsReturned">Collection.MultipleObjectsReturned</a>
 </li>
+      <li><a href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_children_toggle">collection_children_toggle() (in module apis_core.collections.templatetags.apis_collections)</a>
+</li>
+      <li><a href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_children_toggle_by_id">collection_children_toggle_by_id() (in module apis_core.collections.templatetags.apis_collections)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.collection_id">collection_id (apis_core.collections.models.SkosCollectionContentObject attribute)</a>
+</li>
+      <li><a href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_object_parent">collection_object_parent() (in module apis_core.collections.templatetags.apis_collections)</a>
+</li>
+      <li><a href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_object_parent_by_id">collection_object_parent_by_id() (in module apis_core.collections.templatetags.apis_collections)</a>
+</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.collection_set">collection_set (apis_core.apis_metainfo.models.Collection attribute)</a>
+</li>
+      <li><a href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_toggle">collection_toggle() (in module apis_core.collections.templatetags.apis_collections)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_toggle_by_id">collection_toggle_by_id() (in module apis_core.collections.templatetags.apis_collections)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionObjectParent">CollectionObjectParent (class in apis_core.collections.views)</a>
+</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.CollectionSerializer">CollectionSerializer (class in apis_core.apis_entities.serializers_generic)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionToggle">CollectionToggle (class in apis_core.collections.views)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.filtermethods.construct_lookup">construct_lookup() (in module apis_core.utils.filtermethods)</a>
 </li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.content_object">content_object (apis_core.collections.models.SkosCollectionContentObject attribute)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.content_type">content_type (apis_core.collections.models.SkosCollectionContentObject attribute)</a>
+</li>
       <li><a href="modules/apis_core.apis_relations.templatetags.html#apis_core.apis_relations.templatetags.apis_helpers.content_type">content_type() (in module apis_core.apis_relations.templatetags.apis_helpers)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.content_type_id">content_type_id (apis_core.collections.models.SkosCollectionContentObject attribute)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.views.ContentObjectMixin">ContentObjectMixin (class in apis_core.collections.views)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.context_filter_name">context_filter_name (apis_core.apis_entities.views.GenericListViewNew attribute)</a>
 
@@ -792,6 +881,8 @@
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.context_filter_name">(apis_core.apis_relations.rel_views.GenericRelationView attribute)</a>
 </li>
       </ul></li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.contributor">contributor (apis_core.collections.models.SkosCollection attribute)</a>
+</li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.signals.copy_relations">copy_relations() (in module apis_core.apis_relations.signals)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.testrunners.create_data">create_data() (in module apis_core.testrunners)</a>
@@ -799,6 +890,8 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.create_default_uri">create_default_uri() (in module apis_core.apis_entities.models)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.api_routers.create_query_parameters">create_query_parameters() (in module apis_core.api_routers)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.creator">creator (apis_core.collections.models.SkosCollection attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.CustomEntityAutocompletes">CustomEntityAutocompletes (class in apis_core.apis_entities.autocomplete3)</a>
 </li>
@@ -854,6 +947,8 @@
 
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.apps.RelationsConfig.default_auto_field">(apis_core.apis_relations.apps.RelationsConfig attribute)</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.apps.VocabsConfig.default_auto_field">(apis_core.collections.apps.VocabsConfig attribute)</a>
 </li>
       </ul></li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.settings.default_settings">default_settings() (in module apis_core.utils.settings)</a>
@@ -1127,6 +1222,8 @@
 </li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.edit_generic.GenericEntitiesEditView.get">(apis_core.apis_entities.edit_generic.GenericEntitiesEditView method)</a>
 </li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionToggle.get">(apis_core.collections.views.CollectionToggle method)</a>
+</li>
       </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_absolute_url">get_absolute_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 
@@ -1159,6 +1256,12 @@
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationDetailView.get_context_data">(apis_core.apis_relations.rel_views.GenericRelationDetailView method)</a>
 </li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionObjectParent.get_context_data">(apis_core.collections.views.CollectionObjectParent method)</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionToggle.get_context_data">(apis_core.collections.views.CollectionToggle method)</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.views.ContentObjectMixin.get_context_data">(apis_core.collections.views.ContentObjectMixin method)</a>
+</li>
       </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_createview_url">get_createview_url() (apis_core.apis_entities.models.AbstractEntity class method)</a>
 
@@ -1178,10 +1281,10 @@
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.get_delete_url">(apis_core.apis_metainfo.models.Uri method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_duplicate_url">get_duplicate_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_duplicate_url">get_duplicate_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
+</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_edit_url">get_edit_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 
       <ul>
@@ -1333,6 +1436,10 @@
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.id">(apis_core.apis_relations.models.Triple attribute)</a>
 </li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.id">(apis_core.collections.models.SkosCollection attribute)</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.id">(apis_core.collections.models.SkosCollectionContentObject attribute)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1355,6 +1462,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="glossary.html#term-Label"><strong>Label</strong></a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.label_lang">label_lang (apis_core.collections.models.SkosCollection attribute)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.api_routers.LabelSerializer">LabelSerializer (class in apis_core.api_routers)</a>
 </li>
@@ -1612,6 +1721,22 @@
 </li>
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.views">apis_core.apis_relations.views</a>
 </li>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections">apis_core.collections</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.admin">apis_core.collections.admin</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.apps">apis_core.collections.apps</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.models">apis_core.collections.models</a>
+</li>
+        <li><a href="modules/apis_core.collections.templatetags.html#module-apis_core.collections.templatetags">apis_core.collections.templatetags</a>
+</li>
+        <li><a href="modules/apis_core.collections.templatetags.html#module-apis_core.collections.templatetags.apis_collections">apis_core.collections.templatetags.apis_collections</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.urls">apis_core.collections.urls</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#module-apis_core.collections.views">apis_core.collections.views</a>
+</li>
         <li><a href="modules/apis_core.default_settings.html#module-apis_core.default_settings">apis_core.default_settings</a>
 </li>
         <li><a href="modules/apis_core.default_settings.html#module-apis_core.default_settings.NER_settings">apis_core.default_settings.NER_settings</a>
@@ -1674,6 +1799,10 @@
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.apps.RelationsConfig.name">(apis_core.apis_relations.apps.RelationsConfig attribute)</a>
 </li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.apps.VocabsConfig.name">(apis_core.collections.apps.VocabsConfig attribute)</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.name">(apis_core.collections.models.SkosCollection attribute)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1707,6 +1836,8 @@
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.obj_id">obj_id (apis_core.apis_relations.models.Triple attribute)</a>
 </li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.object_id">object_id (apis_core.collections.models.SkosCollectionContentObject attribute)</a>
+</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.objects">objects (apis_core.apis_metainfo.models.Collection attribute)</a>
 
       <ul>
@@ -1717,6 +1848,10 @@
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.objects">(apis_core.apis_relations.models.Property attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.objects">(apis_core.apis_relations.models.Triple attribute)</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.objects">(apis_core.collections.models.SkosCollection attribute)</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.objects">(apis_core.collections.models.SkosCollectionContentObject attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1751,9 +1886,13 @@
       </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer">PaginatedCSVRenderer (class in apis_core.apis_metainfo.api_renderers)</a>
 </li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.parent">parent (apis_core.collections.models.SkosCollection attribute)</a>
+</li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.parent_class">parent_class (apis_core.apis_metainfo.models.Collection attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.parent_class_id">parent_class_id (apis_core.apis_metainfo.models.Collection attribute)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.parent_id">parent_id (apis_core.collections.models.SkosCollection attribute)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.DateParser.parse_date">parse_date() (in module apis_core.utils.DateParser)</a>
 </li>
@@ -1957,8 +2096,6 @@
       </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.serializer_class">serializer_class (apis_core.apis_entities.api_views.GetEntityGeneric attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filters.GenericEntityListFilter.set_and_sort_filters">set_and_sort_filters() (apis_core.apis_entities.filters.GenericEntityListFilter method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.set_session_variables">set_session_variables() (in module apis_core.apis_entities.views)</a>
@@ -1971,6 +2108,14 @@
       </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.test_models.ModelTestCase.setUp">setUp() (apis_core.apis_metainfo.test_models.ModelTestCase method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionToggle.setup">setup() (apis_core.collections.views.CollectionToggle method)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.views.ContentObjectMixin.setup">(apis_core.collections.views.ContentObjectMixin method)</a>
+</li>
+      </ul></li>
       <li><a href="modules/apis_core.html#apis_core.testrunners.APISTestRunner.setup_databases">setup_databases() (apis_core.testrunners.APISTestRunner method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.test_api.GetTestCase.setUpTestData">setUpTestData() (apis_core.apis_entities.test_api.GetTestCase class method)</a>
@@ -1979,6 +2124,22 @@
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.test_models.PermissionsModelTestCase.setUpTestData">(apis_core.apis_entities.test_models.PermissionsModelTestCase class method)</a>
 </li>
       </ul></li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection">SkosCollection (class in apis_core.collections.models)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.DoesNotExist">SkosCollection.DoesNotExist</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.MultipleObjectsReturned">SkosCollection.MultipleObjectsReturned</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.skoscollection_set">skoscollection_set (apis_core.collections.models.SkosCollection attribute)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject">SkosCollectionContentObject (class in apis_core.collections.models)</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.DoesNotExist">SkosCollectionContentObject.DoesNotExist</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.MultipleObjectsReturned">SkosCollectionContentObject.MultipleObjectsReturned</a>
+</li>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.skoscollectioncontentobject_set">skoscollectioncontentobject_set (apis_core.collections.models.SkosCollection attribute)</a>
+</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.StandardResultsSetPagination">StandardResultsSetPagination (class in apis_core.apis_entities.api_views)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.test_models.PermissionsModelTestCase.start_date">start_date (apis_core.apis_entities.test_models.PermissionsModelTestCase attribute)</a>
@@ -2042,6 +2203,10 @@
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.rel_views.GenericRelationView.template_name">(apis_core.apis_relations.rel_views.GenericRelationView attribute)</a>
 </li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionObjectParent.template_name">(apis_core.collections.views.CollectionObjectParent attribute)</a>
+</li>
+        <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionToggle.template_name">(apis_core.collections.views.CollectionToggle attribute)</a>
+</li>
       </ul></li>
       <li><a href="glossary.html#term-TempTriple"><strong>TempTriple</strong></a>
 </li>
@@ -2067,10 +2232,10 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_person_from_dnb">test_get_modelname_from_dict_person_from_dnb() (apis_core.utils.test_rdf.RdfTest method)</a>
 </li>
-      <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_dnb">test_get_modelname_from_dict_place_from_dnb() (apis_core.utils.test_rdf.RdfTest method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_dnb">test_get_modelname_from_dict_place_from_dnb() (apis_core.utils.test_rdf.RdfTest method)</a>
+</li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_geonames">test_get_modelname_from_dict_place_from_geonames() (apis_core.utils.test_rdf.RdfTest method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest.test_help_text">test_help_text() (apis_core.utils.test_DateParser.DateParserTest method)</a>
@@ -2183,10 +2348,12 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.VocabsSerializer">VocabsSerializer (class in apis_core.apis_entities.serializers_generic)</a>
+      <li><a href="modules/apis_core.collections.html#apis_core.collections.apps.VocabsConfig">VocabsConfig (class in apis_core.collections.apps)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.VocabsSerializer">VocabsSerializer (class in apis_core.apis_entities.serializers_generic)</a>
+</li>
       <li><a href="glossary.html#term-Vocabulary"><strong>Vocabulary</strong></a>
 </li>
   </ul></td>
