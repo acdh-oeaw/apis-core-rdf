@@ -4,12 +4,24 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
-from apis_core.apis_relations.forms2 import GenericTripleForm
+from apis_core.apis_relations.forms import GenericTripleForm
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 
-from apis_core.apis_relations.models import Property, TempTriple
+from apis_core.apis_relations.models import Property, TempTriple, Triple
 
 from apis_core.utils import caching
+
+from apis_core.generic.views import List
+
+
+class GenericRelationView(List):
+    def setup(self, *args, **kwargs):
+        super().setup(*args, **kwargs)
+        if self.kwargs["entity"] == "property":
+            self.model = Property
+        else:
+            self.model = Triple
+        self.queryset = self.model.objects.all()
 
 
 # TODO RDF: After full conversion to ne ajax logic, remove this function
