@@ -10,30 +10,31 @@ from apis_core.apis_metainfo.tables import (
     generic_render_start_date_written,
     generic_render_end_date_written,
 )
-from apis_core.apis_relations.models import Triple, Property
+from apis_core.generic.tables import GenericTable
 
 empty_text_default = "There are currently no relations"
 
 
-# TODO RDF : combine this or re-use this class here in get_generic_triple_table
-# TODO RDF : Also consider implementing proper form search fields for this (instead of default drop-downs)
-class TripleTable(tables.Table):
+class TripleTable(GenericTable):
+    class Meta:
+        fields = ["id", "subj", "prop", "obj"]
+        exclude = ["desc"]
+
+
+class SubjObjColumn(tables.ManyToManyColumn):
     def __init__(self, *args, **kwargs):
+        kwargs["separator"] = format_html(",<br>")
+        kwargs["orderable"] = True
+        kwargs["filter"] = lambda qs: qs.order_by("model")
+        kwargs["transform"] = lambda ent: f"{ent.name.capitalize()}"
+        kwargs["linkify_item"] = {
+            "viewname": "apis_core:apis_entities:generic_entities_list",
+            "args": [tables.A("model")],
+        }
         super().__init__(*args, **kwargs)
 
-    class Meta:
-        model = Triple
-        fields = [
-            "id",
-            "subj",
-            "prop",
-            "obj",
-        ]
-        sequence = tuple(fields)
-        attrs = {"class": "table table-hover table-striped table-condensed"}
 
-
-class PropertyTable(tables.Table):
+class PropertyTable(GenericTable):
     """Construct table for properties.
 
     The table shows how entities connect with one another via properties (relations).
@@ -51,60 +52,27 @@ class PropertyTable(tables.Table):
     # in the user's browser address bar, so for UX reasons, it may make sense to
     # use different variable names than the original field names.
 
-    predicate = tables.Column(
-        accessor="name_forward",  # original field name in model class
-        verbose_name="Predicate",
-    )
+    predicate = tables.Column(accessor="name_forward", verbose_name="Predicate")
     predicate_reverse = tables.Column(
-        accessor="name_reverse",  # original field name in model class
-        verbose_name="Reverse predicate",
+        accessor="name_reverse", verbose_name="Reverse predicate"
     )
-
-    subject = tables.ManyToManyColumn(
-        accessor="subj_class",  # original field name in model class
-        verbose_name="Subject",
-        separator=format_html(",<br>"),
-        orderable=True,
-        filter=lambda qs: qs.order_by(
-            "model"
-        ),  # order retrieved objects within table cell
-        # use .name for model verbose name, .model for model class name
-        transform=lambda ent: f"{ent.name.capitalize()}",
-        linkify_item={
-            "viewname": "apis_core:apis_entities:generic_entities_list",
-            "args": [tables.A("model")],
-        },
-    )
-
-    object = tables.ManyToManyColumn(
-        accessor="obj_class",  # original field name in model class
-        verbose_name="Object",
-        separator=format_html(",<br>"),
-        orderable=True,
-        filter=lambda qs: qs.order_by(
-            "model"
-        ),  # order retrieved objects within table cell
-        # use .name for model verbose name, .model for model class name
-        transform=lambda ent: f"{ent.name.capitalize()}",
-        linkify_item={
-            "viewname": "apis_core:apis_entities:generic_entities_list",
-            "args": [tables.A("model")],
-        },
-    )
+    subject = SubjObjColumn(accessor="subj_class", verbose_name="Subject")
+    object = SubjObjColumn(accessor="obj_class", verbose_name="Object")
 
     class Meta:
-        model = Property
-        fields = []
-        sequence = [
-            "subject",
-            "predicate",
-            "object",
-            "predicate_reverse",
-        ]
+        fields = ["subject", "predicate", "object", "predicate_reverse"]
         order_by = "predicate"
-        attrs = {"class": "table table-hover table-striped table-condensed"}
+        exclude = ["desc"]
 
     def __init__(self, *args, **kwargs):
+        if "sequence" not in kwargs:
+            kwargs["sequence"] = [
+                "subject",
+                "predicate",
+                "object",
+                "predicate_reverse",
+                "...",
+            ]
         super().__init__(*args, **kwargs)
 
     # Use order_ methods to define how individual columns should be sorted.

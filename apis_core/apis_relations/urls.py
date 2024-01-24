@@ -1,6 +1,5 @@
 from django.urls import path, re_path
 
-from . import rel_views
 from . import views
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 
@@ -15,13 +14,8 @@ urlpatterns = [
     ),
     re_path(
         r"^(?P<entity>[a-z0-9_]+)/list/$",
-        rel_views.GenericRelationView.as_view(),
+        views.GenericRelationView.as_view(),
         name="generic_relations_list",
-    ),
-    re_path(
-        r"^(?P<entity>[a-z0-9_]+)/(?P<pk>[0-9]+)/detail$",
-        rel_views.GenericRelationDetailView.as_view(),
-        name="generic_relations_detail_view",
     ),
     re_path(
         r"^autocomplete/(?P<entity_self>[a-zA-Z0-9-_]+)/(?P<entity_other>[a-zA-Z0-9-_]+)/$",
