@@ -15,6 +15,9 @@ class SkosCollection(models.Model):
 
     """
 
+    class Meta:
+        ordering = ["name"]
+
     parent = models.ForeignKey("self", null=True, on_delete=models.CASCADE, blank=True)
     name = models.CharField(
         max_length=300,
