@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.11.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.11.0...v0.11.1) (2024-01-25)
+
+
+### Bug Fixes
+
+* **collections:** add collection_content_objects templatetag ([865754a](https://github.com/acdh-oeaw/apis-core-rdf/commit/865754abe1926d7fde4e6db6edb4fb24790d8c52))
+* **collections:** set default order of SkosCollection ([88543d2](https://github.com/acdh-oeaw/apis-core-rdf/commit/88543d2db2b15ea4fc4095402b4cd9f956fd5110))
+* let users override generic views ([7b30880](https://github.com/acdh-oeaw/apis-core-rdf/commit/7b308808969503a5ea97b304e8f310247e9c45d3))
+
 ## [0.11.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.10.1...v0.11.0) (2024-01-24)
 
 
