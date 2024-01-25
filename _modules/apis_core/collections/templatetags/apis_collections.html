@@ -187,6 +187,21 @@
     <span class="n">collectionobject</span> <span class="o">=</span> <span class="n">SkosCollectionContentObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">collectionobject_id</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">collection_object_parent</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">collectionobject</span><span class="p">)</span></div>
 
+
+
+<div class="viewcode-block" id="collection_content_objects">
+<a class="viewcode-back" href="../../../../modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_content_objects">[docs]</a>
+<span class="nd">@register</span><span class="o">.</span><span class="n">simple_tag</span><span class="p">(</span><span class="n">takes_context</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">collection_content_objects</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">collectionids</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="n">sccos</span> <span class="o">=</span> <span class="n">SkosCollectionContentObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">id</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">collectionids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="n">collectionids</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+        <span class="n">sccos</span> <span class="o">=</span> <span class="n">sccos</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">collection__id__in</span><span class="o">=</span><span class="n">ids</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sccos</span></div>
+
 </pre></div>
 
            </div>
