@@ -81,3 +81,15 @@ def collection_object_parent_by_id(context, obj, collectionobject_id):
     """
     collectionobject = SkosCollectionContentObject.objects.get(pk=collectionobject_id)
     return collection_object_parent(context, obj, collectionobject)
+
+
+@register.simple_tag(takes_context=True)
+def collection_content_objects(context, obj, collectionids=None):
+    content_type = ContentType.objects.get_for_model(obj)
+    sccos = SkosCollectionContentObject.objects.filter(
+        content_type=content_type, object_id=obj.id
+    )
+    if collectionids is not None:
+        ids = collectionids.split(",")
+        sccos = sccos.filter(collection__id__in=ids)
+    return sccos
