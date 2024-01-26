@@ -52,11 +52,11 @@ class GenericModelMixin:
 
     def get_permission_required(self):
         if hasattr(self, "permission_action_required"):
-            return [
-                get_permission_codename(
-                    self.permission_action_required, self.model._meta
-                )
-            ]
+            permission_codename = get_permission_codename(
+                self.permission_action_required, self.model._meta
+            )
+            permission = f"{self.model._meta.app_label}.{permission_codename}"
+            return [permission]
         return []
 
 
