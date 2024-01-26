@@ -50,6 +50,7 @@ class GenericEntitiesEditView(EntityInstanceMixin, View):
             form = get_entities_form(self.entity.title())
         form = form(request.POST, instance=self.instance)
         if form.is_valid():
+            form.save()
             return redirect(
                 reverse(
                     "apis:apis_entities:generic_entities_edit_view",
