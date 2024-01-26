@@ -145,6 +145,7 @@
             <span class="n">form</span> <span class="o">=</span> <span class="n">get_entities_form</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">form</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
                 <span class="n">reverse</span><span class="p">(</span>
                     <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
