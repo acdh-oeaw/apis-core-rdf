@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.11.2...v0.11.3) (2024-01-26)
+
+
+### Bug Fixes
+
+* **apis_entities:** fix accidently removed form save ([33792cc](https://github.com/acdh-oeaw/apis-core-rdf/commit/33792cc277360d73abc4b88cd2be6a9addc8ca7e))
+
 ## [0.11.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.11.1...v0.11.2) (2024-01-26)
 
 
