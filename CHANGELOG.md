@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.11.1...v0.11.2) (2024-01-26)
+
+
+### Bug Fixes
+
+* add missing skoscollection migration ([7c8d861](https://github.com/acdh-oeaw/apis-core-rdf/commit/7c8d861341747efa49cb795f03b75cf181ea1d22))
+* **generic:** the permission string must also contain the app_label ([8140a3d](https://github.com/acdh-oeaw/apis-core-rdf/commit/8140a3db3e6b95550947a1254cde2ad1ec9d2fc8))
+
 ## [0.11.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.11.0...v0.11.1) (2024-01-25)
 
 
