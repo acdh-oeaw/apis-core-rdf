@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth import get_permission_codename
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse, reverse_lazy
 from django.forms import modelform_factory
 
@@ -14,7 +14,7 @@ from dal import autocomplete
 
 from .tables import GenericTable
 from .filtersets import filterset_factory, GenericFilterSet
-from .forms import GenericModelForm
+from .forms import GenericModelForm, GenericImportForm
 from .helpers import first_match_via_mro, template_names_via_mro, generate_search_filter
 
 
@@ -221,3 +221,26 @@ class Autocomplete(
         if ExternalAutocomplete:
             results.extend(ExternalAutocomplete().get_results(self.q))
         return results
+
+
+class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
+    template_name = "generic/generic_import_form.html"
+    template_name_suffix = "_import"
+    permission_action_required = "create"
+
+    def get_form_class(self):
+        form_class = (
+            first_match_via_mro(self.model, path="forms", suffix="ImportForm")
+            or GenericImportForm
+        )
+        return modelform_factory(self.model, form_class)
+
+    def form_valid(self, form):
+        self.object = form.cleaned_data["url"]
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "apis:generic:detail",
+            args=[self.request.resolver_match.kwargs["contenttype"], self.object.id],
+        )

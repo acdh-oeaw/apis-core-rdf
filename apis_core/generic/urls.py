@@ -41,6 +41,13 @@ urlpatterns = [
                 path("delete/<int:pk>", views.Delete.as_view(), name="delete"),
                 path("update/<int:pk>", views.Update.as_view(), name="update"),
                 path("autocomplete", views.Autocomplete.as_view(), name="autocomplete"),
+                path("import", views.Import.as_view(), name="import"),
+                path(
+                    "autocomplete/externalonly",
+                    views.Autocomplete.as_view(),
+                    {"external_only": True},
+                    name="autocompleteexternalonly",
+                ),
             ]
         ),
     ),

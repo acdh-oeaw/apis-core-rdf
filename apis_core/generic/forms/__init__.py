@@ -4,6 +4,24 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from dal import autocomplete
+from apis_core.generic.forms.fields import ModelImportChoiceField
+
+
+class GenericImportForm(forms.Form):
+    class Meta:
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["url"] = ModelImportChoiceField(
+            queryset=self.Meta.model.objects.all()
+        )
+        ct = ContentType.objects.get_for_model(self.Meta.model)
+        url = reverse("apis_core:generic:autocompleteexternalonly", args=[ct])
+        self.fields["url"].widget = autocomplete.ModelSelect2(url)
+        self.fields["url"].widget.choices = self.fields["url"].choices
+        self.helper = FormHelper()
+        self.helper.add_input(Submit("submit", "Submit"))
 
 
 class GenericFilterSetForm(forms.Form):
@@ -57,6 +75,7 @@ class GenericModelForm(forms.ModelForm):
         override_fieldtypes = {
             "ModelMultipleChoiceField": autocomplete.ModelSelect2Multiple,
             "ModelChoiceField": autocomplete.ModelSelect2,
+            "ModelImportChoiceField": autocomplete.ModelSelect2,
         }
         for field in self.fields:
             clsname = self.fields[field].__class__.__name__
