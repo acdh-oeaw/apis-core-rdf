@@ -42,7 +42,6 @@ class GenericRelationView(GenericListViewNew):
 
     def get_table(self, **kwargs):
         # relation_name = self.kwargs["entity"].lower()
-        # self.table_class = get_generic_relation_listview_table(relation_name=relation_name)
         if self.entity == "property":
             self.table_class = PropertyTable
         else:
