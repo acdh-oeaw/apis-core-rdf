@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 Birger Schacht
 # SPDX-License-Identifier: MIT
 
+import os
 from pathlib import Path
 from django.conf import settings
 
@@ -11,7 +12,7 @@ def default_settings() -> Path:
 
 
 def clean_uri_mapping_file() -> Path:
-    default = default_settings() / "URI_replace_settings.yml"
+    default = Path(__file__).parent / "clean_uri.toml"
     mapping_file = getattr(settings, "CLEANURI_MAPPINGS", default)
     return Path(mapping_file)
 
