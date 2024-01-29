@@ -54,10 +54,11 @@ Currently (as of 2023-10) the name of the apis application **has** to be
 `apis_ontology` - this is considered a bug and is tracked in [this bug
 report](https://github.com/acdh-oeaw/apis-core-rdf/issues/100).
 
-In your project folder, add apis as a dependency:
+In your project folder, add apis as a dependency (replace `RELEASE_VERSION`
+with the version you want to install):
 
 ```shell
-poetry add git+https://github.com/acdh-oeaw/apis-core-rdf#v0.6.1
+poetry add git+https://github.com/acdh-oeaw/apis-core-rdf#RELEASE_VERSION
 ```
 
 Setup your Django project
@@ -102,8 +103,8 @@ To use the APIS framework in your application, you will need to add the followin
 "apis_core.apis_entities",
 "apis_core.apis_metainfo",
 "apis_core.apis_relations",
-"apis_core.apis_vocabularies",
-"apis_core.apis_labels",
+"apis_core.generic",
+"apis_core.collections", # if you want to use collections
 
 ```
 
