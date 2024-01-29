@@ -128,15 +128,15 @@ class InheritanceForeignKey(models.ForeignKey):
 
 
 # Uri model
-# We use a custom UriManager, so we can override the queryset `get_or_create`
-# method. This is useful because we normalize the uri field before saving.
+# We use a custom UriManager, so we can override the queryset `get`
+# method. This way we can normalize the uri field.
 
 
 class UriQuerySet(models.query.QuerySet):
-    def get_or_create(self, defaults=None, **kwargs):
+    def get(self, *args, **kwargs):
         if "uri" in kwargs:
             kwargs["uri"] = clean_uri(kwargs["uri"])
-        return super().get_or_create(defaults, **kwargs)
+        return super().get(*args, **kwargs)
 
 
 class UriManager(models.Manager):
