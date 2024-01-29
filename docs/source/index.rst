@@ -19,6 +19,7 @@ Welcome to APIS's documentation!
    glossary
    development
    collections
+   autocomplete
 
 .. toctree::
    :maxdepth: 2
