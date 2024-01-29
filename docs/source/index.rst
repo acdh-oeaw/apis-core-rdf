@@ -20,6 +20,7 @@ Welcome to APIS's documentation!
    development
    collections
    autocomplete
+   importing
 
 .. toctree::
    :maxdepth: 2
