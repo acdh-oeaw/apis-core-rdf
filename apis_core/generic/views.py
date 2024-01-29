@@ -211,3 +211,13 @@ class Autocomplete(
         if queryset:
             return queryset(self.model, self.q)
         return self.model.objects.filter(generate_search_filter(self.model, self.q))
+
+    def get_results(self, context):
+        external_only = self.kwargs.get("external_only", False)
+        results = [] if external_only else super().get_results(context)
+        ExternalAutocomplete = first_match_via_mro(
+            self.model, path="querysets", suffix="ExternalAutocomplete"
+        )
+        if ExternalAutocomplete:
+            results.extend(ExternalAutocomplete().get_results(self.q))
+        return results
