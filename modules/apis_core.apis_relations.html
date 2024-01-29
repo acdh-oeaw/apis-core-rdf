@@ -134,80 +134,169 @@
 </dd></dl>
 
 </section>
-<section id="module-apis_core.apis_relations.forms2">
-<span id="apis-core-apis-relations-forms2-module"></span><h2>apis_core.apis_relations.forms2 module<a class="headerlink" href="#module-apis_core.apis_relations.forms2" title="Link to this heading"></a></h2>
+<section id="module-apis_core.apis_relations.filtersets">
+<span id="apis-core-apis-relations-filtersets-module"></span><h2>apis_core.apis_relations.filtersets module<a class="headerlink" href="#module-apis_core.apis_relations.filtersets" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.forms2.</span></span><span class="sig-name descname"><span class="pre">GenericTripleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_type_self_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_type_other_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms2.html#GenericTripleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.filtersets.</span></span><span class="sig-name descname"><span class="pre">PropertyFilterSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filtersets.html#PropertyFilterSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericFilterSet</span></code></p>
 <dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms2.html#GenericTripleForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.Meta" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSet.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/filtersets.html#PropertyFilterSet.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSet.Meta" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.Meta.fields">
-<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['subj',</span> <span class="pre">'obj',</span> <span class="pre">'prop',</span> <span class="pre">'start_date_written',</span> <span class="pre">'end_date_written',</span> <span class="pre">'notes']</span></em><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.Meta.fields" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSet.Meta.exclude">
+<span class="sig-name descname"><span class="pre">exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['self_contenttype',</span> <span class="pre">'name',</span> <span class="pre">'property_class_uri',</span> <span class="pre">'rootobject_ptr']</span></em><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSet.Meta.exclude" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.Meta.model">
-<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.Meta.model" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSet.Meta.form">
+<span class="sig-name descname"><span class="pre">form</span></span><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSet.Meta.form" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#apis_core.apis_relations.filtersets.PropertyFilterSetForm" title="apis_core.apis_relations.filtersets.PropertyFilterSetForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyFilterSetForm</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSet.base_filters">
+<span class="sig-name descname"><span class="pre">base_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'name_forward':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'name_reverse':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSet.base_filters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSet.declared_filters">
+<span class="sig-name descname"><span class="pre">declared_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'name_forward':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'name_reverse':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSet.declared_filters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSetForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.filtersets.</span></span><span class="sig-name descname"><span class="pre">PropertyFilterSetForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filtersets.html#PropertyFilterSetForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSetForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericFilterSetForm</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSetForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'columns':</span> <span class="pre">&lt;django.forms.fields.MultipleChoiceField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSetForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSetForm.columns_exclude">
+<span class="sig-name descname"><span class="pre">columns_exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['self_contenttype',</span> <span class="pre">'name',</span> <span class="pre">'property_class_uri',</span> <span class="pre">'rootobject_ptr']</span></em><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSetForm.columns_exclude" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSetForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'columns':</span> <span class="pre">&lt;django.forms.fields.MultipleChoiceField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSetForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.PropertyFilterSetForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#apis_core.apis_relations.filtersets.PropertyFilterSetForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.TripleFilterSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.filtersets.</span></span><span class="sig-name descname"><span class="pre">TripleFilterSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filtersets.html#TripleFilterSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filtersets.TripleFilterSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericFilterSet</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.TripleFilterSet.base_filters">
+<span class="sig-name descname"><span class="pre">base_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'obj':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'subj':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.filtersets.TripleFilterSet.base_filters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.TripleFilterSet.declared_filters">
+<span class="sig-name descname"><span class="pre">declared_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'obj':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'subj':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.filtersets.TripleFilterSet.declared_filters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.TripleFilterSet.obj_icontains">
+<span class="sig-name descname"><span class="pre">obj_icontains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filtersets.html#TripleFilterSet.obj_icontains"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filtersets.TripleFilterSet.obj_icontains" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filtersets.TripleFilterSet.subj_icontains">
+<span class="sig-name descname"><span class="pre">subj_icontains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filtersets.html#TripleFilterSet.subj_icontains"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filtersets.TripleFilterSet.subj_icontains" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-apis_core.apis_relations.forms">
+<span id="apis-core-apis-relations-forms-module"></span><h2>apis_core.apis_relations.forms module<a class="headerlink" href="#module-apis_core.apis_relations.forms" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.forms.</span></span><span class="sig-name descname"><span class="pre">GenericTripleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_type_self_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_type_other_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms.html#GenericTripleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms.html#GenericTripleForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['subj',</span> <span class="pre">'obj',</span> <span class="pre">'prop',</span> <span class="pre">'start_date_written',</span> <span class="pre">'end_date_written',</span> <span class="pre">'notes']</span></em><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.Meta.model" title="Link to this definition"></a></dt>
 <dd><p>alias of <a class="reference internal" href="#apis_core.apis_relations.models.TempTriple" title="apis_core.apis_relations.models.TempTriple"><code class="xref py py-class docutils literal notranslate"><span class="pre">TempTriple</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.Meta.widgets">
-<span class="sig-name descname"><span class="pre">widgets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'obj':</span> <span class="pre">&lt;django.forms.widgets.HiddenInput</span> <span class="pre">object&gt;,</span> <span class="pre">'prop':</span> <span class="pre">&lt;django.forms.widgets.HiddenInput</span> <span class="pre">object&gt;,</span> <span class="pre">'subj':</span> <span class="pre">&lt;django.forms.widgets.HiddenInput</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.Meta.widgets" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.Meta.widgets">
+<span class="sig-name descname"><span class="pre">widgets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'obj':</span> <span class="pre">&lt;django.forms.widgets.HiddenInput</span> <span class="pre">object&gt;,</span> <span class="pre">'prop':</span> <span class="pre">&lt;django.forms.widgets.HiddenInput</span> <span class="pre">object&gt;,</span> <span class="pre">'subj':</span> <span class="pre">&lt;django.forms.widgets.HiddenInput</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.Meta.widgets" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.base_fields">
-<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'end_date_written':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'notes':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'obj':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'prop':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'start_date_written':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'subj':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.base_fields" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'end_date_written':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'notes':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'obj':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'prop':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;,</span> <span class="pre">'start_date_written':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'subj':</span> <span class="pre">&lt;django.forms.models.ModelChoiceField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.base_fields" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.declared_fields">
-<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.declared_fields" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.declared_fields" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.get_html_table">
-<span class="sig-name descname"><span class="pre">get_html_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_instance_self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_instance_other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms2.html#GenericTripleForm.get_html_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.get_html_table" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.get_html_table">
+<span class="sig-name descname"><span class="pre">get_html_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_instance_self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_instance_other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms.html#GenericTripleForm.get_html_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.get_html_table" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.get_text_id">
-<span class="sig-name descname"><span class="pre">get_text_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms2.html#GenericTripleForm.get_text_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.get_text_id" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.get_text_id">
+<span class="sig-name descname"><span class="pre">get_text_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms.html#GenericTripleForm.get_text_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.get_text_id" title="Link to this definition"></a></dt>
 <dd><p>Function to retrieve the highlighted text.
 :return: ID of text that was highlighted</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_input">
-<span class="sig-name descname"><span class="pre">load_remaining_data_from_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_date_written</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date_written</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms2.html#GenericTripleForm.load_remaining_data_from_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_input" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.load_remaining_data_from_input">
+<span class="sig-name descname"><span class="pre">load_remaining_data_from_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_date_written</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date_written</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms.html#GenericTripleForm.load_remaining_data_from_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.load_remaining_data_from_input" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_triple">
-<span class="sig-name descname"><span class="pre">load_remaining_data_from_triple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms2.html#GenericTripleForm.load_remaining_data_from_triple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.load_remaining_data_from_triple" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.load_remaining_data_from_triple">
+<span class="sig-name descname"><span class="pre">load_remaining_data_from_triple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">triple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms.html#GenericTripleForm.load_remaining_data_from_triple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.load_remaining_data_from_triple" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.load_subj_obj_prop">
-<span class="sig-name descname"><span class="pre">load_subj_obj_prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_instance_self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_instance_other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property_instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property_direction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms2.html#GenericTripleForm.load_subj_obj_prop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.load_subj_obj_prop" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.load_subj_obj_prop">
+<span class="sig-name descname"><span class="pre">load_subj_obj_prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_instance_self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_instance_other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property_instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property_direction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms.html#GenericTripleForm.load_subj_obj_prop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.load_subj_obj_prop" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.media" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.media" title="Link to this definition"></a></dt>
 <dd><p>Return all media required to render the widgets on this form.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.forms2.GenericTripleForm.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms2.html#GenericTripleForm.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms2.GenericTripleForm.save" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.forms.GenericTripleForm.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/forms.html#GenericTripleForm.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.forms.GenericTripleForm.save" title="Link to this definition"></a></dt>
 <dd><p>Save this form’s self.instance object if commit=True. Otherwise, add
 a save_m2m() method to the form which can be called after the instance
 is saved manually at a later time. Return the model instance.</p>
@@ -660,172 +749,6 @@ relation.</p>
 <dd></dd></dl>
 
 </section>
-<section id="module-apis_core.apis_relations.rel_filters">
-<span id="apis-core-apis-relations-rel-filters-module"></span><h2>apis_core.apis_relations.rel_filters module<a class="headerlink" href="#module-apis_core.apis_relations.rel_filters" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.PropertyFilter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.rel_filters.</span></span><span class="sig-name descname"><span class="pre">PropertyFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_filters.html#PropertyFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_filters.PropertyFilter" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterSet</span></code></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.PropertyFilter.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_filters.html#PropertyFilter.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_filters.PropertyFilter.Meta" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.PropertyFilter.Meta.exclude">
-<span class="sig-name descname"><span class="pre">exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_filters.PropertyFilter.Meta.exclude" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.PropertyFilter.Meta.model">
-<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#apis_core.apis_relations.rel_filters.PropertyFilter.Meta.model" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#apis_core.apis_relations.models.Property" title="apis_core.apis_relations.models.Property"><code class="xref py py-class docutils literal notranslate"><span class="pre">Property</span></code></a></p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.PropertyFilter.base_filters">
-<span class="sig-name descname"><span class="pre">base_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'name':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'name_forward':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'name_reverse':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'obj_class':</span> <span class="pre">&lt;django_filters.filters.ModelMultipleChoiceFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'property_class_uri':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'self_contenttype':</span> <span class="pre">&lt;django_filters.filters.ModelChoiceFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'subj_class':</span> <span class="pre">&lt;django_filters.filters.ModelMultipleChoiceFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_filters.PropertyFilter.base_filters" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.PropertyFilter.declared_filters">
-<span class="sig-name descname"><span class="pre">declared_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_filters.PropertyFilter.declared_filters" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.TripleFilter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.rel_filters.</span></span><span class="sig-name descname"><span class="pre">TripleFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_filters.html#TripleFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_filters.TripleFilter" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterSet</span></code></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.TripleFilter.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_filters.html#TripleFilter.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_filters.TripleFilter.Meta" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.TripleFilter.Meta.exclude">
-<span class="sig-name descname"><span class="pre">exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_filters.TripleFilter.Meta.exclude" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.TripleFilter.Meta.model">
-<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#apis_core.apis_relations.rel_filters.TripleFilter.Meta.model" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#apis_core.apis_relations.models.Triple" title="apis_core.apis_relations.models.Triple"><code class="xref py py-class docutils literal notranslate"><span class="pre">Triple</span></code></a></p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.TripleFilter.base_filters">
-<span class="sig-name descname"><span class="pre">base_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'obj':</span> <span class="pre">&lt;django_filters.filters.ModelChoiceFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'prop':</span> <span class="pre">&lt;django_filters.filters.ModelChoiceFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'subj':</span> <span class="pre">&lt;django_filters.filters.ModelChoiceFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_filters.TripleFilter.base_filters" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.TripleFilter.declared_filters">
-<span class="sig-name descname"><span class="pre">declared_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_filters.TripleFilter.declared_filters" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.get_excluded_fields">
-<span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.rel_filters.</span></span><span class="sig-name descname"><span class="pre">get_excluded_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_filters.html#get_excluded_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_filters.get_excluded_fields" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.get_field_dicts">
-<span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.rel_filters.</span></span><span class="sig-name descname"><span class="pre">get_field_dicts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_parents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_filters.html#get_field_dicts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_filters.get_field_dicts" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.get_filters">
-<span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.rel_filters.</span></span><span class="sig-name descname"><span class="pre">get_filters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_parents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_filters.html#get_filters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_filters.get_filters" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.get_generic_relation_filter">
-<span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.rel_filters.</span></span><span class="sig-name descname"><span class="pre">get_generic_relation_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_filters.html#get_generic_relation_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_filters.get_generic_relation_filter" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_filters.get_included_fields">
-<span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.rel_filters.</span></span><span class="sig-name descname"><span class="pre">get_included_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_filters.html#get_included_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_filters.get_included_fields" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-apis_core.apis_relations.rel_views">
-<span id="apis-core-apis-relations-rel-views-module"></span><h2>apis_core.apis_relations.rel_views module<a class="headerlink" href="#module-apis_core.apis_relations.rel_views" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationDetailView">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.rel_views.</span></span><span class="sig-name descname"><span class="pre">GenericRelationDetailView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_views.html#GenericRelationDetailView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationDetailView" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DetailView</span></code></p>
-<p>Constructor. Called in the URLconf; can contain helpful extra
-keyword arguments, and other things.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationDetailView.get_context_data">
-<span class="sig-name descname"><span class="pre">get_context_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_views.html#GenericRelationDetailView.get_context_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationDetailView.get_context_data" title="Link to this definition"></a></dt>
-<dd><p>Insert the single object into the context dict.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationDetailView.get_object">
-<span class="sig-name descname"><span class="pre">get_object</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_views.html#GenericRelationDetailView.get_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationDetailView.get_object" title="Link to this definition"></a></dt>
-<dd><p>Return the object the view is displaying.</p>
-<p>Require <cite>self.queryset</cite> and a <cite>pk</cite> or <cite>slug</cite> argument in the URLconf.
-Subclasses can override this to return any object.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationDetailView.template_name">
-<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'apis_relations/relations_detail_generic.html'</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationDetailView.template_name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationView">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.rel_views.</span></span><span class="sig-name descname"><span class="pre">GenericRelationView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_views.html#GenericRelationView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationView" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew" title="apis_core.apis_entities.views.GenericListViewNew"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericListViewNew</span></code></a></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationView.context_filter_name">
-<span class="sig-name descname"><span class="pre">context_filter_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'filter'</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationView.context_filter_name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationView.get_queryset">
-<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_views.html#GenericRelationView.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationView.get_queryset" title="Link to this definition"></a></dt>
-<dd><p>Return the list of items for this view.</p>
-<p>The return value must be an iterable and may be an instance of
-<cite>QuerySet</cite> in which case <cite>QuerySet</cite> specific behavior will be enabled.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationView.get_table">
-<span class="sig-name descname"><span class="pre">get_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/rel_views.html#GenericRelationView.get_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationView.get_table" title="Link to this definition"></a></dt>
-<dd><p>Create entity-specific table object for use on the frontend.</p>
-<p>Holds information on e.g. which fields to use for table columns.
-Incorporates variables provided in Models, Settings where available.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a dictionary</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationView.paginate_by">
-<span class="sig-name descname"><span class="pre">paginate_by</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationView.paginate_by" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.rel_views.GenericRelationView.template_name">
-<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'generic_list.html'</span></em><a class="headerlink" href="#apis_core.apis_relations.rel_views.GenericRelationView.template_name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
 <section id="module-apis_core.apis_relations.signals">
 <span id="apis-core-apis-relations-signals-module"></span><h2>apis_core.apis_relations.signals module<a class="headerlink" href="#module-apis_core.apis_relations.signals" title="Link to this heading"></a></h2>
 <dl class="py function">
@@ -839,7 +762,7 @@ Incorporates variables provided in Models, Settings where available.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_relations.tables.PropertyTable">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.tables.</span></span><span class="sig-name descname"><span class="pre">PropertyTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#PropertyTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericTable</span></code></p>
 <p>Construct table for properties.</p>
 <p>The table shows how entities connect with one another via properties (relations).
 It uses the format of an RDF triple – Subject-Predicate-Object – plus
@@ -852,36 +775,25 @@ It uses the format of an RDF triple – Subject-Predicate-Object – plus
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#PropertyTable.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.Meta" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.tables.PropertyTable.Meta.attrs">
-<span class="sig-name descname"><span class="pre">attrs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'class':</span> <span class="pre">'table</span> <span class="pre">table-hover</span> <span class="pre">table-striped</span> <span class="pre">table-condensed'}</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.Meta.attrs" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.PropertyTable.Meta.exclude">
+<span class="sig-name descname"><span class="pre">exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['desc']</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.Meta.exclude" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_relations.tables.PropertyTable.Meta.fields">
-<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.Meta.fields" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['subject',</span> <span class="pre">'predicate',</span> <span class="pre">'object',</span> <span class="pre">'predicate_reverse']</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.Meta.fields" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.tables.PropertyTable.Meta.model">
-<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.Meta.model" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#apis_core.apis_relations.models.Property" title="apis_core.apis_relations.models.Property"><code class="xref py py-class docutils literal notranslate"><span class="pre">Property</span></code></a></p>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_relations.tables.PropertyTable.Meta.order_by">
 <span class="sig-name descname"><span class="pre">order_by</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'predicate'</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.Meta.order_by" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.tables.PropertyTable.Meta.sequence">
-<span class="sig-name descname"><span class="pre">sequence</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['subject',</span> <span class="pre">'predicate',</span> <span class="pre">'object',</span> <span class="pre">'predicate_reverse']</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.Meta.sequence" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_relations.tables.PropertyTable.base_columns">
-<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'object':</span> <span class="pre">&lt;django_tables2.columns.manytomanycolumn.ManyToManyColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'predicate':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'predicate_reverse':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'subject':</span> <span class="pre">&lt;django_tables2.columns.manytomanycolumn.ManyToManyColumn</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.base_columns" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'delete':</span> <span class="pre">&lt;apis_core.generic.tables.DeleteColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'edit':</span> <span class="pre">&lt;apis_core.generic.tables.EditColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'object':</span> <span class="pre">&lt;apis_core.apis_relations.tables.SubjObjColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'predicate':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'predicate_reverse':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'subject':</span> <span class="pre">&lt;apis_core.apis_relations.tables.SubjObjColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'view':</span> <span class="pre">&lt;apis_core.generic.tables.ViewColumn</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.PropertyTable.base_columns" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -897,16 +809,22 @@ It uses the format of an RDF triple – Subject-Predicate-Object – plus
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.SubjObjColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.tables.</span></span><span class="sig-name descname"><span class="pre">SubjObjColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#SubjObjColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.SubjObjColumn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ManyToManyColumn</span></code></p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTable">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.tables.</span></span><span class="sig-name descname"><span class="pre">TripleTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#TripleTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTable" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericTable</span></code></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTable.Meta">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#TripleTable.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTable.Meta" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTable.Meta.attrs">
-<span class="sig-name descname"><span class="pre">attrs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'class':</span> <span class="pre">'table</span> <span class="pre">table-hover</span> <span class="pre">table-striped</span> <span class="pre">table-condensed'}</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTable.Meta.attrs" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTable.Meta.exclude">
+<span class="sig-name descname"><span class="pre">exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['desc']</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTable.Meta.exclude" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -914,22 +832,11 @@ It uses the format of an RDF triple – Subject-Predicate-Object – plus
 <span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'subj',</span> <span class="pre">'prop',</span> <span class="pre">'obj']</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTable.Meta.fields" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTable.Meta.model">
-<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTable.Meta.model" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#apis_core.apis_relations.models.Triple" title="apis_core.apis_relations.models.Triple"><code class="xref py py-class docutils literal notranslate"><span class="pre">Triple</span></code></a></p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTable.Meta.sequence">
-<span class="sig-name descname"><span class="pre">sequence</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('id',</span> <span class="pre">'subj',</span> <span class="pre">'prop',</span> <span class="pre">'obj')</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTable.Meta.sequence" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTable.base_columns">
-<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'obj':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'prop':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'subj':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTable.base_columns" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'delete':</span> <span class="pre">&lt;apis_core.generic.tables.DeleteColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'edit':</span> <span class="pre">&lt;apis_core.generic.tables.EditColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'view':</span> <span class="pre">&lt;apis_core.generic.tables.ViewColumn</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTable.base_columns" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -948,6 +855,20 @@ It uses the format of an RDF triple – Subject-Predicate-Object – plus
 </section>
 <section id="module-apis_core.apis_relations.views">
 <span id="apis-core-apis-relations-views-module"></span><h2>apis_core.apis_relations.views module<a class="headerlink" href="#module-apis_core.apis_relations.views" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.views.GenericRelationView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.views.</span></span><span class="sig-name descname"><span class="pre">GenericRelationView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/views.html#GenericRelationView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.views.GenericRelationView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.views.GenericRelationView.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/views.html#GenericRelationView.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.views.GenericRelationView.setup" title="Link to this definition"></a></dt>
+<dd><p>Initialize attributes shared by all view methods.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="apis_core.apis_relations.views.get_form_ajax">
 <span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.views.</span></span><span class="sig-name descname"><span class="pre">get_form_ajax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/views.html#get_form_ajax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.views.get_form_ajax" title="Link to this definition"></a></dt>
