@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Development &mdash; APIS 1.0 documentation</title>
+  <title>Extending autocomplete results &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -21,8 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Working with collections" href="collections.html" />
-    <link rel="prev" title="Glossary" href="glossary.html" /> 
+    <link rel="prev" title="Working with collections" href="collections.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,12 +54,9 @@
 <li class="toctree-l1"><a class="reference internal" href="user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="collections.html">Working with collections</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autocomplete.html">Extending autocomplete results</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Extending autocomplete results</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -82,9 +78,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Development</li>
+      <li class="breadcrumb-item active">Extending autocomplete results</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/development.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/autocomplete.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -92,58 +88,43 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="development">
-<h1>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h1>
-<section id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>
-<ul>
-<li><p>Django</p></li>
-<li><p>djangorestframework</p></li>
-<li><p>django-filter</p></li>
-<li><p>django-autocomplete-light</p></li>
-<li><p>django-cors-headers</p></li>
-<li><p>django-crum</p></li>
-<li><p>django-crispy-forms</p></li>
-<li><p>django-gm2m</p></li>
-<li><p>django-leaflet</p></li>
-<li><p>django-reversion</p></li>
-<li><p>django-tables2</p></li>
-<li><p>djangorestframework-csv</p></li>
-<li><p>djangorestframework-xml</p></li>
-<li><p>rdflib</p></li>
-<li><p>drf-spectacular</p></li>
-<li><p>requests</p></li>
-<li><p>SPARQLWrapper</p></li>
-<li><p>django-model-utils</p></li>
-<li><p>django-admin-csvexport</p>
-<p>Used in the <code class="docutils literal notranslate"><span class="pre">apis_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">apis_vocabularies</span></code> admin apps</p>
-</li>
-<li><p>tablib</p>
-<p><cite>You must have tablib installed in order to use the django-tables2 export functionality</cite> -
-the export functionality is used in the entities list view.</p>
-</li>
-<li><p>setuptools</p>
-<p><code class="docutils literal notranslate"><span class="pre">django-model-utils</span></code> uses this, see <a class="reference external" href="https://github.com/jazzband/django-model-utils/issues/568">https://github.com/jazzband/django-model-utils/issues/568</a></p>
-</li>
-<li><p>apis-override-select2js</p>
-<p>APIS overrides select2js to be able to provide autocomplete fields that also
-integrate external sources. This package provides the patched Javascript
-files - it has to be listed in <code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code> <em>before</em>
-<code class="docutils literal notranslate"><span class="pre">django-autocomplete-light</span></code> packages.</p>
-</li>
-<li><p>python-dateutil</p>
-<p>Used in <code class="docutils literal notranslate"><span class="pre">apis_entities.autocomplete3</span></code></p>
-</li>
-</ul>
-</section>
+  <section id="extending-autocomplete-results">
+<h1>Extending autocomplete results<a class="headerlink" href="#extending-autocomplete-results" title="Link to this heading"></a></h1>
+<p>The autocomplete endpoint <code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.views.Autocomplete</span></code> can
+be extended to provide additional autocomplete results, that are not
+based on the default Django querysets. The autocomplete view always refers to a
+Django model. To extend the results for a specific model, you have to create an
+<cite>ExternalAutocomplete</cite> class, that is named after the model and resides in the
+<cite>querysets</cite> module in the same app. So if you have an app called <cite>myapp</cite> with a
+<cite>models.py</cite></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>then the respective autocomplete class should reside in <cite>myapp.querysets</cite> and
+has to be called <cite>PersonExternalAutocomplete</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PersonExternalAutocomplete</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">extract_results</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="o">...</span> <span class="n">do</span> <span class="n">something</span> <span class="k">with</span> <span class="n">the</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://some.uri.tld/search?q=</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">extract_results</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span>
+            <span class="k">return</span> <span class="n">results</span>
+        <span class="k">return</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>The class has to have a <cite>get_results</cite> method that receives a query as the first
+parameter and returns a result in the format, the <cite>django-autocomplete-light</cite>
+module uses- this is a dict with the keys “id”, “text” and “selected_text”.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="glossary.html" class="btn btn-neutral float-left" title="Glossary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="collections.html" class="btn btn-neutral float-right" title="Working with collections" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="collections.html" class="btn btn-neutral float-left" title="Working with collections" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
