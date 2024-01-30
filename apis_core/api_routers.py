@@ -159,6 +159,9 @@ class RelatedTripleSerializer(ApisBaseSerializer):
             )
 
 
+from apis_core.generic.serializers import GenericHyperlinkedModelSerializer
+
+
 def generic_serializer_creation_factory():
     lst_cont = caching.get_all_contenttype_classes()
     not_allowed_filter_fields = [
@@ -194,7 +197,7 @@ def generic_serializer_creation_factory():
             elif f.__class__.__name__ == "ForeignKey":
                 select_related.append(f.name)
 
-        class TemplateSerializer(serializers.HyperlinkedModelSerializer):
+        class TemplateSerializer(GenericHyperlinkedModelSerializer):
 
             id = serializers.ReadOnlyField()
             if getattr(settings, "APIS_API_ID_WRITABLE", False):
@@ -231,9 +234,7 @@ def generic_serializer_creation_factory():
                         "ForeignKey",
                         "InheritanceForeignKey",
                     ]:
-                        self.fields[f.name] = ApisBaseSerializer(
-                            many=ck_many, read_only=True
-                        )
+                        pass
                     elif f.__class__.__name__ in ["ManyToManyField", "ForeignKey"]:
                         self.fields[f.name] = LabelSerializer(
                             many=ck_many, read_only=True
@@ -260,9 +261,7 @@ def generic_serializer_creation_factory():
                         "ManyToManyField",
                         "ForeignKey",
                     ]:
-                        self.fields[f.name] = ApisBaseSerializer(
-                            many=ck_many, read_only=True
-                        )
+                        pass
                     elif f.__class__.__name__ in ["ManyToManyField", "ForeignKey"]:
                         self.fields[f.name] = LabelSerializer(
                             many=ck_many, read_only=True
