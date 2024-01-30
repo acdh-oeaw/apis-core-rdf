@@ -3,6 +3,7 @@ import inspect
 import importlib
 
 from django.db.models import CharField, TextField, Q, Model
+from django.contrib.auth import get_permission_codename
 
 
 def generate_search_filter(model, query):
@@ -69,3 +70,8 @@ def first_match_via_mro(model, path: str = "", suffix: str = ""):
     paths = list(map(lambda x: x[:-1] + [path] + x[-1:], mro_paths(model)))
     classes = [".".join(prefix) + suffix for prefix in paths]
     return next(filter(bool, map(class_from_path, classes)), None)
+
+
+def permission_fullname(action: str, model: object) -> str:
+    permission_codename = get_permission_codename(action, model._meta)
+    return f"{model._meta.app_label}.{permission_codename}"

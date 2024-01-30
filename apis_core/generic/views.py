@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth import get_permission_codename
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
@@ -15,7 +14,12 @@ from dal import autocomplete
 from .tables import GenericTable
 from .filtersets import filterset_factory, GenericFilterSet
 from .forms import GenericModelForm, GenericImportForm
-from .helpers import first_match_via_mro, template_names_via_mro, generate_search_filter
+from .helpers import (
+    first_match_via_mro,
+    template_names_via_mro,
+    generate_search_filter,
+    permission_fullname,
+)
 
 from apis_core.core.mixins import ListViewObjectFilterMixin
 
@@ -54,11 +58,7 @@ class GenericModelMixin:
 
     def get_permission_required(self):
         if hasattr(self, "permission_action_required"):
-            permission_codename = get_permission_codename(
-                self.permission_action_required, self.model._meta
-            )
-            permission = f"{self.model._meta.app_label}.{permission_codename}"
-            return [permission]
+            return [permission_fullname(self.permission_action_required, self.model)]
         return []
 
 
