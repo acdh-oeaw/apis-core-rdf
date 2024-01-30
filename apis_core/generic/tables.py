@@ -1,4 +1,5 @@
 import django_tables2 as tables
+from apis_core.generic.helpers import permission_fullname
 
 
 class CustomTemplateColumn(tables.TemplateColumn):
@@ -21,7 +22,7 @@ class CustomTemplateColumn(tables.TemplateColumn):
             exclude_from_export=self.exclude_from_export,
             verbose_name=self.verbose_name,
             *args,
-            **kwargs
+            **kwargs,
         )
 
 
@@ -90,3 +91,12 @@ class GenericTable(tables.Table):
             kwargs["sequence"] = ["...", "view", "edit", "delete"]
 
         super().__init__(*args, **kwargs)
+
+    def before_render(self, request):
+        if model := getattr(self.Meta, "model"):
+            if not request.user.has_perm(permission_fullname("delete", model)):
+                self.columns.hide("delete")
+            if not request.user.has_perm(permission_fullname("edit", model)):
+                self.columns.hide("edit")
+            if not request.user.has_perm(permission_fullname("view", model)):
+                self.columns.hide("view")
