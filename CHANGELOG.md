@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.12.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.11.3...v0.12.0) (2024-01-30)
+
+
+### Features
+
+* **generic:** allow to extend autocomplete results with custom results ([cbad572](https://github.com/acdh-oeaw/apis-core-rdf/commit/cbad572207d419e5a8ed5be1d8bb8315054cd407))
+* **generic:** implement extendable importer ([06ad57b](https://github.com/acdh-oeaw/apis-core-rdf/commit/06ad57b629c912f9419024e77bc4aff299a518fe)), closes [#541](https://github.com/acdh-oeaw/apis-core-rdf/issues/541)
+
+
+### Documentation
+
+* document extending the autocomplete endpoint ([8f1613b](https://github.com/acdh-oeaw/apis-core-rdf/commit/8f1613b7b52cede4d58962e4b6fbf2c434f4be16))
+* document importing data from external resources ([280413e](https://github.com/acdh-oeaw/apis-core-rdf/commit/280413e4fe607d6a5500484a527840c0bf736058))
+* update readme ([bba2c8c](https://github.com/acdh-oeaw/apis-core-rdf/commit/bba2c8c0b8acbe16f45f8414d5970de4cc6c3bee))
+
 ## [0.11.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.11.2...v0.11.3) (2024-01-26)
 
 
