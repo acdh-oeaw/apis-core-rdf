@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Development &mdash; APIS 1.0 documentation</title>
+  <title>Importing data from external resources &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -21,8 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Working with collections" href="collections.html" />
-    <link rel="prev" title="Glossary" href="glossary.html" /> 
+    <link rel="prev" title="Extending autocomplete results" href="autocomplete.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,13 +54,10 @@
 <li class="toctree-l1"><a class="reference internal" href="user_documentation.html">User documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="collections.html">Working with collections</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autocomplete.html">Extending autocomplete results</a></li>
-<li class="toctree-l1"><a class="reference internal" href="importing.html">Importing data from external resources</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Importing data from external resources</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -83,9 +79,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Development</li>
+      <li class="breadcrumb-item active">Importing data from external resources</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/development.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/importing.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -93,58 +89,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="development">
-<h1>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h1>
-<section id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>
-<ul>
-<li><p>Django</p></li>
-<li><p>djangorestframework</p></li>
-<li><p>django-filter</p></li>
-<li><p>django-autocomplete-light</p></li>
-<li><p>django-cors-headers</p></li>
-<li><p>django-crum</p></li>
-<li><p>django-crispy-forms</p></li>
-<li><p>django-gm2m</p></li>
-<li><p>django-leaflet</p></li>
-<li><p>django-reversion</p></li>
-<li><p>django-tables2</p></li>
-<li><p>djangorestframework-csv</p></li>
-<li><p>djangorestframework-xml</p></li>
-<li><p>rdflib</p></li>
-<li><p>drf-spectacular</p></li>
-<li><p>requests</p></li>
-<li><p>SPARQLWrapper</p></li>
-<li><p>django-model-utils</p></li>
-<li><p>django-admin-csvexport</p>
-<p>Used in the <code class="docutils literal notranslate"><span class="pre">apis_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">apis_vocabularies</span></code> admin apps</p>
-</li>
-<li><p>tablib</p>
-<p><cite>You must have tablib installed in order to use the django-tables2 export functionality</cite> -
-the export functionality is used in the entities list view.</p>
-</li>
-<li><p>setuptools</p>
-<p><code class="docutils literal notranslate"><span class="pre">django-model-utils</span></code> uses this, see <a class="reference external" href="https://github.com/jazzband/django-model-utils/issues/568">https://github.com/jazzband/django-model-utils/issues/568</a></p>
-</li>
-<li><p>apis-override-select2js</p>
-<p>APIS overrides select2js to be able to provide autocomplete fields that also
-integrate external sources. This package provides the patched Javascript
-files - it has to be listed in <code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code> <em>before</em>
-<code class="docutils literal notranslate"><span class="pre">django-autocomplete-light</span></code> packages.</p>
-</li>
-<li><p>python-dateutil</p>
-<p>Used in <code class="docutils literal notranslate"><span class="pre">apis_entities.autocomplete3</span></code></p>
-</li>
-</ul>
-</section>
+  <section id="importing-data-from-external-resources">
+<h1>Importing data from external resources<a class="headerlink" href="#importing-data-from-external-resources" title="Link to this heading"></a></h1>
+<p>APIS provides the structure for easily importing data from external resources.
+One main component for this are <cite>Importer</cite> classes. They always belong to a
+Django Model, reside in the same app as the Djang model in the <cite>importers</cite>
+module and are named after the Django Model. So if you have an app called
+<cite>myapp</cite> with a <cite>models.py</cite></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>then the respective importer should reside in <cite>myapp.importers</cite> and has to be
+called <cite>PersonImporter</cite>.</p>
+<p>An importer takes two arguments to instantiate: an <cite>uri</cite> and a <cite>model</cite>. The
+importers task is then to create a model instance from this URI, usually by
+fetching data from the URI, parsing it and extracting the needed fields.
+The instance should then be returned by the <cite>create_instance</cite> method of the
+importer. There is <code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.importers.GenericImporter</span></code>
+which you can inherit from.</p>
+<p>To use this logic in forms, there is
+<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.fields.ModelImportChoiceField</span></code> which is
+based on <cite>django.forms.ModelChoiceField</cite>. It checks if the passed value starts
+with <cite>http</cite> and if so, it uses the importer that fits the model and uses it to
+create the model instance.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="glossary.html" class="btn btn-neutral float-left" title="Glossary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="collections.html" class="btn btn-neutral float-right" title="Working with collections" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="autocomplete.html" class="btn btn-neutral float-left" title="Extending autocomplete results" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
