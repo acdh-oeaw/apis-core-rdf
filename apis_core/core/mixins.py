@@ -45,3 +45,8 @@ class ListViewObjectFilterMixin:
         if hasattr(settings, "APIS_LIST_VIEW_OBJECT_FILTER"):
             return settings.APIS_LIST_VIEW_OBJECT_FILTER(self, queryset)
         return queryset
+
+    def get_permission_required(self):
+        if getattr(settings, "APIS_LIST_VIEWS_ALLOWED", False):
+            return []
+        return super().get_permission_required()

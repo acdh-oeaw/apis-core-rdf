@@ -17,6 +17,8 @@ from .filtersets import filterset_factory, GenericFilterSet
 from .forms import GenericModelForm, GenericImportForm
 from .helpers import first_match_via_mro, template_names_via_mro, generate_search_filter
 
+from apis_core.core.mixins import ListViewObjectFilterMixin
+
 
 class Overview(TemplateView):
     template_name = "generic/overview.html"
@@ -60,7 +62,13 @@ class GenericModelMixin:
         return []
 
 
-class List(GenericModelMixin, PermissionRequiredMixin, SingleTableMixin, FilterView):
+class List(
+    ListViewObjectFilterMixin,
+    GenericModelMixin,
+    PermissionRequiredMixin,
+    SingleTableMixin,
+    FilterView,
+):
     """
     List view for a generic model.
     Access requires the `<model>_view` permission.
@@ -103,10 +111,9 @@ class List(GenericModelMixin, PermissionRequiredMixin, SingleTableMixin, FilterV
         return filterset_factory(self.model, filterset_class)
 
     def get_queryset(self):
-        return (
-            first_match_via_mro(self.model, path="querysets", suffix="ListViewQueryset")
-            or self.model.objects.all()
-        )
+        return first_match_via_mro(
+            self.model, path="querysets", suffix="ListViewQueryset"
+        ) or self.filter_queryset(self.model.objects.all())
 
 
 class Detail(GenericModelMixin, PermissionRequiredMixin, DetailView):
