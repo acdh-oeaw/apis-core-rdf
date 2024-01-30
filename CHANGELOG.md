@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.1...v0.12.2) (2024-01-30)
+
+
+### Bug Fixes
+
+* use the ListViewObjectFilterMixin in the generic.views.List view ([94734dc](https://github.com/acdh-oeaw/apis-core-rdf/commit/94734dc425333edf04b1f0f9268dcf9941ce79f1))
+
 ## [0.12.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.0...v0.12.1) (2024-01-30)
 
 
