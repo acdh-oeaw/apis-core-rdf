@@ -32,3 +32,8 @@ def entities_list_links():
     entities_links.sort(key=itemgetter(1))
 
     return entities_links
+
+
+@register.simple_tag
+def entities():
+    return caching.get_all_entity_classes() or []
