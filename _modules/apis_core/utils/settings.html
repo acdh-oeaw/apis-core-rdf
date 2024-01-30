@@ -90,6 +90,7 @@
 <span></span><span class="c1"># SPDX-FileCopyrightText: 2023 Birger Schacht</span>
 <span class="c1"># SPDX-License-Identifier: MIT</span>
 
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 
@@ -105,7 +106,7 @@
 <div class="viewcode-block" id="clean_uri_mapping_file">
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.clean_uri_mapping_file">[docs]</a>
 <span class="k">def</span> <span class="nf">clean_uri_mapping_file</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="n">default</span> <span class="o">=</span> <span class="n">default_settings</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;URI_replace_settings.yml&quot;</span>
+    <span class="n">default</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;clean_uri.toml&quot;</span>
     <span class="n">mapping_file</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;CLEANURI_MAPPINGS&quot;</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">mapping_file</span><span class="p">)</span></div>
 
