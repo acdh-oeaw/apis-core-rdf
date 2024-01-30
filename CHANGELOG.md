@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.0...v0.12.1) (2024-01-30)
+
+
+### Bug Fixes
+
+* **api_routers:** fix generic_serializer_creation_factory ([eeb7430](https://github.com/acdh-oeaw/apis-core-rdf/commit/eeb743086cb9cca725e7f9401d2e028302db467b)), closes [#577](https://github.com/acdh-oeaw/apis-core-rdf/issues/577)
+* drop TextSerializer and use GenericHyperlinkedModelSerializer ([5c0091b](https://github.com/acdh-oeaw/apis-core-rdf/commit/5c0091baee43515ca9bc2fff5e18f52f789e2c97))
+
 ## [0.12.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.11.3...v0.12.0) (2024-01-30)
 
 
