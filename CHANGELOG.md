@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.2...v0.12.3) (2024-01-31)
+
+
+### Bug Fixes
+
+* **apis_entities:** add more information to autocomplete results ([db1c0c7](https://github.com/acdh-oeaw/apis-core-rdf/commit/db1c0c73b038e93e75feb0a71e691f1bb2c0ea13))
+* **generic:** only show table actions if user has required permissions ([79d74a3](https://github.com/acdh-oeaw/apis-core-rdf/commit/79d74a317aa3e2b8a50595b81456f72f21a4ae5e)), closes [#584](https://github.com/acdh-oeaw/apis-core-rdf/issues/584)
+
 ## [0.12.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.1...v0.12.2) (2024-01-30)
 
 
