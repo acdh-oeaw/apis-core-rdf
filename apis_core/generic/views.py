@@ -20,6 +20,7 @@ from .helpers import (
     generate_search_filter,
     permission_fullname,
 )
+from apis_core.utils.helpers import create_object_from_uri
 
 from apis_core.core.mixins import ListViewObjectFilterMixin
 
@@ -210,6 +211,7 @@ class Autocomplete(
     """
 
     permission_action_required = "view"
+    create_field = "thisisnotimportant"  # because we are using create_object_from_uri
 
     def get_queryset(self):
         queryset = first_match_via_mro(
@@ -228,6 +230,9 @@ class Autocomplete(
         if ExternalAutocomplete:
             results.extend(ExternalAutocomplete().get_results(self.q))
         return results
+
+    def create_object(self, value):
+        return create_object_from_uri(value, self.queryset.model)
 
 
 class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
