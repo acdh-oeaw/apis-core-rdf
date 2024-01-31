@@ -87,7 +87,6 @@ urlpatterns = [
         GenericNetworkEntitiesAutocomplete.as_view(),
         name="generic_network_entities_autocomplete",
     ),
-    path("place/geojson/", views.getGeoJson, name="getGeoJson"),
     path("merge-objects/", merge_views.merge_objects, name="merge_objects"),
     path(
         "getorcreateentity/",
