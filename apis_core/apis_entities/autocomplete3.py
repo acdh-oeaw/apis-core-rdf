@@ -203,9 +203,19 @@ class GenericEntitiesAutocomplete(autocomplete.Select2ListView):
                         data-long="{}"  class="apis-autocomplete-span"'.format(
                             ac_type, r.lat, r.lng
                         )
-                f["text"] = "<span {}><small>db</small> {}</span>".format(
-                    dataclass, str(r)
-                )
+                # this is a temporary workaround and can be removed once
+                # we use the new custom autocomplete overrides for the relations
+                text = str(r)
+                dateend = datestart = ""
+                if hasattr(r, "end_date") and r.end_date is not None:
+                    dateend = r.end_date.year
+                if hasattr(r, "start_date") and r.start_date is not None:
+                    datestart = r.start_date.year
+                if dateend or datestart:
+                    text += f" ({datestart} - {dateend})"
+                if hasattr(r, "professioncategory"):
+                    text += f" <i>{r.professioncategory}</i>"
+                f["text"] = f"<span {dataclass}><small>db</small> {text}</span>"
                 choices.append(f)
             if len(choices) < page_size:
                 test_db = False
