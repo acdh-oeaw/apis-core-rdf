@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.3...v0.12.4) (2024-01-31)
+
+
+### Bug Fixes
+
+* **generic:** don't allow access to `admin`, `auth` and `sessions` ([ff43fc8](https://github.com/acdh-oeaw/apis-core-rdf/commit/ff43fc846ca94718b1d23533a1d836e92c8c0ef5))
+
 ## [0.12.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.2...v0.12.3) (2024-01-31)
 
 
