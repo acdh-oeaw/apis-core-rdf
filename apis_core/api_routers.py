@@ -169,6 +169,7 @@ def generic_serializer_creation_factory():
         "parent_class",
         "entity",
         "autofield",
+        "metadata",
     ]
     for cont in lst_cont:
         prefetch_rel = []
