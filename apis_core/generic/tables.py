@@ -26,40 +26,43 @@ class CustomTemplateColumn(tables.TemplateColumn):
         )
 
 
-class DeleteColumn(CustomTemplateColumn):
+class ActionButton(CustomTemplateColumn):
+    orderable = False
+    exclude_from_export = True
+    verbose_name = ""
+    attrs = {"td": {"style": "width:1%;"}}
+
+
+class DeleteColumn(ActionButton):
     """
     A column showing a delete button
     """
 
     template_name = "columns/delete.html"
-    orderable = False
-    exclude_from_export = True
-    verbose_name = ""
-    attrs = {"td": {"style": "width:1%;"}}
 
 
-class EditColumn(CustomTemplateColumn):
+class EditColumn(ActionButton):
     """
     A column showing an edit button
     """
 
     template_name = "columns/edit.html"
-    orderable = False
-    exclude_from_export = True
-    verbose_name = ""
-    attrs = {"td": {"style": "width:1%;"}}
 
 
-class ViewColumn(CustomTemplateColumn):
+class ViewColumn(ActionButton):
     """
     A column showing a view button
     """
 
     template_name = "columns/view.html"
-    orderable = False
-    exclude_from_export = True
-    verbose_name = ""
-    attrs = {"td": {"style": "width:1%;"}}
+
+
+class DuplicateColumn(ActionButton):
+    """
+    A column showing a duplicate button
+    """
+
+    template_name = "columns/duplicate.html"
 
 
 class DescriptionColumn(CustomTemplateColumn):
@@ -81,6 +84,7 @@ class GenericTable(tables.Table):
     desc = DescriptionColumn()
     delete = DeleteColumn()
     view = ViewColumn()
+    duplicate = DuplicateColumn()
 
     class Meta:
         fields = ["id", "desc"]
@@ -88,7 +92,7 @@ class GenericTable(tables.Table):
     def __init__(self, *args, **kwargs):
         # if there is no custom sequence set, move `edit` and `delete` to the back
         if "sequence" not in kwargs:
-            kwargs["sequence"] = ["...", "view", "edit", "delete"]
+            kwargs["sequence"] = ["...", "view", "edit", "delete", "duplicate"]
 
         super().__init__(*args, **kwargs)
 
@@ -100,3 +104,7 @@ class GenericTable(tables.Table):
                 self.columns.hide("edit")
             if not request.user.has_perm(permission_fullname("view", model)):
                 self.columns.hide("view")
+            if not request.user.has_perm(permission_fullname("add", model)):
+                self.columns.hide("duplicate")
+            if not hasattr(model, "duplicate"):
+                self.columns.hide("duplicate")

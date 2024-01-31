@@ -1,9 +1,12 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import Http404
 from django.views.generic import DetailView
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.views.generic.detail import SingleObjectMixin
 from django.urls import reverse, reverse_lazy
 from django.forms import modelform_factory
+from django.shortcuts import redirect
 
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
@@ -147,6 +150,29 @@ class Create(GenericModelMixin, PermissionRequiredMixin, CreateView):
         return reverse(
             "apis:generic:list",
             args=[self.request.resolver_match.kwargs["contenttype"]],
+        )
+
+
+class Duplicate(GenericModelMixin, PermissionRequiredMixin, SingleObjectMixin, View):
+    """
+    Create view for a generic model.
+    Access requires the `<model>_add` permission.
+    The form class is overridden by the first match from
+    the `first_match_via_mro` helper.
+    """
+
+    template_name = "generic/generic_form.html"
+    permission_action_required = "add"
+
+    def get(self, request, *args, **kwargs):
+        if not hasattr(self.get_object(), "duplicate"):
+            raise Http404(f"{self.get_object()} can not be duplicated")
+        newobj = self.get_object().duplicate()
+        return redirect(
+            reverse(
+                "apis:generic:update",
+                args=[self.request.resolver_match.kwargs["contenttype"], newobj.id],
+            )
         )
 
 

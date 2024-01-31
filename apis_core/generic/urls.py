@@ -40,6 +40,7 @@ urlpatterns = [
                 path("create", views.Create.as_view(), name="create"),
                 path("delete/<int:pk>", views.Delete.as_view(), name="delete"),
                 path("update/<int:pk>", views.Update.as_view(), name="update"),
+                path("duplicate/<int:pk>", views.Duplicate.as_view(), name="duplicate"),
                 path("autocomplete", views.Autocomplete.as_view(), name="autocomplete"),
                 path("import", views.Import.as_view(), name="import"),
                 path(
