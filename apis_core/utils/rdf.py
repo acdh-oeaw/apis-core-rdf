@@ -44,5 +44,5 @@ def get_modelname_and_dict_from_uri(
                 for key, value in binding.items():
                     model_attributes[str(key)] = str(value)
     else:
-        raise AttributeError("No matching definition found")
+        raise AttributeError(f"No matching definition found for {uri}")
     return model_name, model_attributes
