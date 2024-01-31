@@ -8,6 +8,8 @@ import logging
 from apis_core.apis_relations.models import Property, TempTriple
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_relations.tables import get_generic_triple_table
+from apis_core.apis_metainfo.models import Uri
+from apis_core.generic.helpers import first_match_via_mro
 
 from django.apps import apps
 from django.db import DEFAULT_DB_ALIAS, router
@@ -180,3 +182,22 @@ def triple_sidebar(pk: int, entity_name: str, request, detail=True):
             )
         )
     return side_bar
+
+
+def create_object_from_uri(uri: str, model: object) -> object:
+    if uri.startswith("http"):
+        try:
+            uri = Uri.objects.get(uri=uri)
+            return uri.root_object
+        except Uri.DoesNotExist:
+            Importer = first_match_via_mro(
+                model,
+                path="importers",
+                suffix="Importer",
+            )
+            if Importer is not None:
+                importer = Importer(uri, model)
+                instance = importer.create_instance()
+                uri = Uri.objects.create(uri=importer.get_uri, root_object=instance)
+                return instance
+    return None
