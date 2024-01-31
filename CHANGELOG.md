@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.6](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.5...v0.12.6) (2024-01-31)
+
+
+### Bug Fixes
+
+* let the autocomplete form create objects ([a07f23b](https://github.com/acdh-oeaw/apis-core-rdf/commit/a07f23beed83614832c085b6de0f9a46008eb34f))
+
 ## [0.12.5](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.4...v0.12.5) (2024-01-31)
 
 
