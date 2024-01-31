@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.5](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.4...v0.12.5) (2024-01-31)
+
+
+### Bug Fixes
+
+* exclude `metadata` field from legacy api viewset stuff ([dd2fb57](https://github.com/acdh-oeaw/apis-core-rdf/commit/dd2fb578b99e7a8cebd388576c6ad10971a889be))
+
 ## [0.12.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.3...v0.12.4) (2024-01-31)
 
 
