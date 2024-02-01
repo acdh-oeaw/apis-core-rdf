@@ -1,40 +1,55 @@
 # SPDX-FileCopyrightText: 2023 Birger Schacht
 # SPDX-License-Identifier: MIT
 
-import pathlib
 import logging
 import tomllib
 
 from rdflib import Graph
 from typing import Tuple
 
-from apis_core.utils.settings import rdf_object_mapping_file
+from django.template.utils import get_app_template_dirs
+
 from apis_core.utils.normalize import clean_uri
 
 logger = logging.getLogger(__name__)
 
-definition_must_have_keys = ["filter_sparql", "model"]
 
-
-def get_modelname_and_dict_from_uri(
-    uri: str, settings_file: pathlib.Path = None
-) -> Tuple[str, dict]:
+def get_definition_and_attributes_from_uri(uri: str) -> Tuple[dict, dict]:
+    """
+    This function looks for `.toml` files in the `rdfimport` app directories
+    and loads all the files it can parse. For every file that contains a
+    `filter_sparql` key it tries to use that key on the RDF graph that
+    represents the data at the given RDF endpoint. It uses the first file that
+    matches to extract attributes from the RDF endpoint and then returns both
+    the parsed file contents and the extracted attributes.
+    The reason we are also returning the parsed file contents is, that you then
+    can define a model *in* the file and then use this function to iterate over
+    a list of URIs and you can use the matched definition to choose which model
+    to create.
+    The dict containing the parsed file contents also contains the filename, to
+    make debugging a bit easier.
+    """
     uri = clean_uri(uri)
     graph = Graph()
     graph.parse(uri)
 
-    settings_file = settings_file or rdf_object_mapping_file()
-    settings = tomllib.loads(settings_file.read_text())
+    configs = {}
+    pathlists = [path.glob("**/*.toml") for path in get_app_template_dirs("rdfimport")]
+    for file in [path for pathlist in pathlists for path in pathlist]:
+        try:
+            configs[file.resolve()] = tomllib.loads(file.read_text())
+        except Exception as e:
+            logger.error(f"TOML parser could not read {file}: {e}")
     matching_definition = None
-    for key, definition in settings.items():
-        if set(definition_must_have_keys) <= set(definition.keys()):
+    for key, definition in configs.items():
+        if definition.get("filter_sparql", False):
             if bool(graph.query(definition["filter_sparql"])):
                 logger.info(f"Found {key} to match the Uri")
                 matching_definition = definition
+                matching_definition["filename"] = str(key)
+                break
     model_attributes = dict()
-    model_name = None
     if matching_definition:
-        model_name = matching_definition.get("model")
         attributes = matching_definition.get("attributes", [])
         sparql_attributes = list(filter(lambda d: d.get("sparql"), attributes))
         for attribute in sparql_attributes:
@@ -44,5 +59,5 @@ def get_modelname_and_dict_from_uri(
                 for key, value in binding.items():
                     model_attributes[str(key)] = str(value)
     else:
-        raise AttributeError("No matching definition found")
-    return model_name, model_attributes
+        raise AttributeError(f"No matching definition found for {uri}")
+    return definition, model_attributes

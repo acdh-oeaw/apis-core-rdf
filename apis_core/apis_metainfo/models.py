@@ -198,16 +198,18 @@ class Uri(models.Model):
         self.uri = clean_uri(self.uri)
         if self.uri and not hasattr(self, "root_object"):
             try:
-                model, attributes = rdf.get_modelname_and_dict_from_uri(self.uri)
-                if model and attributes:
-                    app_label, model = model.split(".", 1)
+                definition, attributes = rdf.get_definition_and_attributes_from_uri(
+                    self.uri
+                )
+                if definition.getattr("model", False) and attributes:
+                    app_label, model = definition.getattr("model").split(".", 1)
                     ct = ContentType.objects.get_by_natural_key(app_label, model)
                     obj = ct.model_class()(**attributes)
                     obj.save()
                     self.root_object = obj
                 else:
                     raise ImproperlyConfigured(
-                        f"{self.uri}: found model <{model}> and attributes <{attributes}>"
+                        f"{self.uri}: did not find matching rdf defintion"
                     )
             except Exception as e:
                 raise ValidationError(f"{e}: {self.uri}")
