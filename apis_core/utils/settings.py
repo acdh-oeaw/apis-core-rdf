@@ -17,12 +17,6 @@ def clean_uri_mapping_file() -> Path:
     return Path(mapping_file)
 
 
-def rdf_object_mapping_file() -> Path:
-    default = default_settings() / "RDF_default_settings.toml"
-    mapping_file = getattr(settings, "APIS_RDF_YAML_SETTINGS", default)
-    return Path(mapping_file)
-
-
 def get_entity_settings_by_modelname(entity: str = None) -> dict:
     """
     return the settings for a specific entity or the dict for all entities
