@@ -1,3 +1,3 @@
 <a href="{% url "collectiontoggle" content_type.id object.id collection.id %}?to={{ request.get_full_path }}" hx-get="{% url "collectiontoggle" content_type.id object.id collection.id %}" hx-swap="outerHTML" class="btn btn-sm 
   {% if exists %}btn-success{% else %}btn-outline-secondary{% endif %}
- ">{{ collection.name }}</a>
+ col-{{ collection.name|slugify }}">{{ collection.name }}</a>
