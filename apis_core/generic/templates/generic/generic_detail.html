@@ -4,20 +4,7 @@
 {% if object %}
 
   {% block col %}
-    <div class="card">
-      <div class="card-header">{{ object }}</div>
-      <div class="card-body">
-        <table class="table table-hover">
-          {% modeldict object as d %}
-          {% for key, value in d.items %}
-            <tr>
-              <th>{{ key.verbose_name }}</th>
-              <td>{{ value }}</td>
-            </tr>
-          {% endfor %}
-        </table>
-      </div>
-    </div>
+    {% include "generic/partials/object_card.html" %}
   {% endblock col %}
 
 {% endif %}
