@@ -1,0 +1,10 @@
+{% load apisgeneric %}
+<table class="table table-hover">
+  {% modeldict object as d %}
+  {% for key, value in d.items %}
+    <tr>
+      <th>{{ key.verbose_name }}</th>
+      <td>{{ value }}</td>
+    </tr>
+  {% endfor %}
+</table>
