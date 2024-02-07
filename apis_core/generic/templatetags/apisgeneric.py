@@ -25,6 +25,8 @@ def modeldict(instance, fields=None, exclude=None):
             continue
         field = instance._meta.get_field(f.name)
         data[field] = instance._get_FIELD_display(field)
+        if getattr(field, "remote_field", False):
+            data[field] = getattr(instance, field.name)
         if getattr(field, "m2m_field_name", False):
             values = getattr(instance, field.name).all()
             data[field] = ", ".join([str(value) for value in values])
