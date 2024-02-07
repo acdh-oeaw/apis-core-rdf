@@ -134,9 +134,6 @@ class GenericTripleForm(forms.ModelForm):
             str(
                 Uri.objects.filter(
                     root_object=entity_instance_other,
-                    uri__startswith=getattr(
-                        settings, "APIS_BASE_URI", "http://apis.info/"
-                    ),
                 ).first()
             ),
             f"<span ><small>db</small> {str(entity_instance_other)}</span>",
