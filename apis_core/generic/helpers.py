@@ -6,17 +6,27 @@ from django.db.models import CharField, TextField, Q, Model
 from django.contrib.auth import get_permission_codename
 
 
-def generate_search_filter(model, query):
+def generate_search_filter(model, query, fields_to_search=None):
     """
     Generate a default search filter that searches for the `query`
     in all the CharFields and TextFields of a model (case-insensitive)
+    or in the fields listed in the `fields_to_search` argument.
+    This helper can be used by autocomplete querysets if nothing
+    fancier is needed.
     """
+    query = query.split()
 
-    fields_to_search = [
-        field.name
-        for field in model._meta.fields
-        if isinstance(field, (CharField, TextField))
-    ]
+    if isinstance(fields_to_search, list):
+        fields_to_search = [
+            field.name for field in model._meta.fields if field.name in fields_to_search
+        ]
+    else:
+        fields_to_search = [
+            field.name
+            for field in model._meta.fields
+            if isinstance(field, (CharField, TextField))
+        ]
+
     q = Q()
 
     for token in query:
