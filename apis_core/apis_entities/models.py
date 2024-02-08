@@ -141,7 +141,7 @@ class AbstractEntity(RootObject):
     def merge_textfield(self, other, field):
         res = getattr(self, field.name)
         if getattr(other, field.name):
-            res += "\n" + "Merged from {other}\n" + getattr(other, field.name)
+            res += "\n" + f"Merged from {other}:\n" + getattr(other, field.name)
         setattr(self, field.name, res)
 
     def merge_booleanfield(self, other, field):
