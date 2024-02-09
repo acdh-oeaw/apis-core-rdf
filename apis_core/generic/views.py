@@ -146,8 +146,8 @@ class Create(GenericModelMixin, PermissionRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse(
-            "apis:generic:list",
-            args=[self.request.resolver_match.kwargs["contenttype"]],
+            "apis:generic:update",
+            args=[self.kwargs.get("contenttype"), getattr(self.object, "pk")],
         )
 
 
@@ -195,8 +195,8 @@ class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse(
-            "apis:generic:list",
-            args=[self.request.resolver_match.kwargs["contenttype"]],
+            "apis:generic:update",
+            args=[self.kwargs.get("contenttype"), getattr(self.object, "pk")],
         )
 
 
