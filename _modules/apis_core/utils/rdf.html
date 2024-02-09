@@ -92,42 +92,57 @@
 <span></span><span class="c1"># SPDX-FileCopyrightText: 2023 Birger Schacht</span>
 <span class="c1"># SPDX-License-Identifier: MIT</span>
 
-<span class="kn">import</span> <span class="nn">pathlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">tomllib</span>
 
 <span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">Graph</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">rdf_object_mapping_file</span>
+<span class="kn">from</span> <span class="nn">django.template.utils</span> <span class="kn">import</span> <span class="n">get_app_template_dirs</span>
+
 <span class="kn">from</span> <span class="nn">apis_core.utils.normalize</span> <span class="kn">import</span> <span class="n">clean_uri</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="n">definition_must_have_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;filter_sparql&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">]</span>
 
-
-<div class="viewcode-block" id="get_modelname_and_dict_from_uri">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.rdf.get_modelname_and_dict_from_uri">[docs]</a>
-<span class="k">def</span> <span class="nf">get_modelname_and_dict_from_uri</span><span class="p">(</span>
-    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">settings_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<div class="viewcode-block" id="get_definition_and_attributes_from_uri">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.rdf.get_definition_and_attributes_from_uri">[docs]</a>
+<span class="k">def</span> <span class="nf">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function looks for `.toml` files in the `rdfimport` app directories</span>
+<span class="sd">    and loads all the files it can parse. For every file that contains a</span>
+<span class="sd">    `filter_sparql` key it tries to use that key on the RDF graph that</span>
+<span class="sd">    represents the data at the given RDF endpoint. It uses the first file that</span>
+<span class="sd">    matches to extract attributes from the RDF endpoint and then returns both</span>
+<span class="sd">    the parsed file contents and the extracted attributes.</span>
+<span class="sd">    The reason we are also returning the parsed file contents is, that you then</span>
+<span class="sd">    can define a model *in* the file and then use this function to iterate over</span>
+<span class="sd">    a list of URIs and you can use the matched definition to choose which model</span>
+<span class="sd">    to create.</span>
+<span class="sd">    The dict containing the parsed file contents also contains the filename, to</span>
+<span class="sd">    make debugging a bit easier.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">uri</span> <span class="o">=</span> <span class="n">clean_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
     <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
     <span class="n">graph</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
 
-    <span class="n">settings_file</span> <span class="o">=</span> <span class="n">settings_file</span> <span class="ow">or</span> <span class="n">rdf_object_mapping_file</span><span class="p">()</span>
-    <span class="n">settings</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">settings_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+    <span class="n">configs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">pathlists</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;**/*.toml&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">get_app_template_dirs</span><span class="p">(</span><span class="s2">&quot;rdfimport&quot;</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="p">[</span><span class="n">path</span> <span class="k">for</span> <span class="n">pathlist</span> <span class="ow">in</span> <span class="n">pathlists</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">pathlist</span><span class="p">]:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">configs</span><span class="p">[</span><span class="n">file</span><span class="o">.</span><span class="n">resolve</span><span class="p">()]</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TOML parser could not read </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">matching_definition</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">definition_must_have_keys</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">configs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filter_sparql&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">definition</span><span class="p">[</span><span class="s2">&quot;filter_sparql&quot;</span><span class="p">])):</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> to match the Uri&quot;</span><span class="p">)</span>
                 <span class="n">matching_definition</span> <span class="o">=</span> <span class="n">definition</span>
+                <span class="n">matching_definition</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="k">break</span>
     <span class="n">model_attributes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">model_name</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">matching_definition</span><span class="p">:</span>
-        <span class="n">model_name</span> <span class="o">=</span> <span class="n">matching_definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
         <span class="n">attributes</span> <span class="o">=</span> <span class="n">matching_definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="n">sparql_attributes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sparql&quot;</span><span class="p">),</span> <span class="n">attributes</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">sparql_attributes</span><span class="p">:</span>
@@ -137,8 +152,8 @@
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">binding</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="n">model_attributes</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;No matching definition found&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">model_attributes</span></div>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No matching definition found for </span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">definition</span><span class="p">,</span> <span class="n">model_attributes</span></div>
 
 </pre></div>
 

@@ -106,9 +106,9 @@
 <div class="viewcode-block" id="RdfTest">
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest">[docs]</a>
 <span class="k">class</span> <span class="nc">RdfTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
-<div class="viewcode-block" id="RdfTest.test_get_modelname_from_dict_place_from_geonames">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_geonames">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_get_modelname_from_dict_place_from_geonames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfTest.test_get_definition_from_dict_place_from_geonames">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_place_from_geonames">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_get_definition_from_dict_place_from_geonames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">achensee</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.geonames.org/ontology#P.PPL&quot;</span><span class="p">,</span>
             <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="s2">&quot;47.5&quot;</span><span class="p">,</span>
@@ -118,25 +118,25 @@
         <span class="p">}</span>
         <span class="c1"># https://www.geonames.org/2783029/achensee.html</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">testdata</span> <span class="o">/</span> <span class="s2">&quot;achensee.rdf&quot;</span><span class="p">)</span>
-        <span class="n">modelname</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_modelname_and_dict_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">modelname</span><span class="p">,</span> <span class="s2">&quot;apis_ontology.Place&quot;</span><span class="p">)</span>
+        <span class="n">defintion</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">defintion</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="s2">&quot;apis_ontology.Place&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">achensee</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="RdfTest.test_get_modelname_from_dict_place_from_dnb">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_dnb">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_get_modelname_from_dict_place_from_dnb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfTest.test_get_definition_from_dict_place_from_dnb">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_place_from_dnb">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_get_definition_from_dict_place_from_dnb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">wien</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Wien&quot;</span><span class="p">,</span> <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="s2">&quot;048.208199&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="s2">&quot;016.371690&quot;</span><span class="p">}</span>
         <span class="c1"># https://d-nb.info/gnd/4066009-6</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">testdata</span> <span class="o">/</span> <span class="s2">&quot;wien.rdf&quot;</span><span class="p">)</span>
-        <span class="n">modelname</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_modelname_and_dict_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">modelname</span><span class="p">,</span> <span class="s2">&quot;apis_ontology.Place&quot;</span><span class="p">)</span>
+        <span class="n">defintion</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">defintion</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="s2">&quot;apis_ontology.Place&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">wien</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="RdfTest.test_get_modelname_from_dict_person_from_dnb">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_person_from_dnb">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_get_modelname_from_dict_person_from_dnb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfTest.test_get_definition_from_dict_person_from_dnb">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_person_from_dnb">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_get_definition_from_dict_person_from_dnb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">pierre</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ramus,Pierre&quot;</span><span class="p">,</span>
             <span class="s2">&quot;profession&quot;</span><span class="p">:</span> <span class="s2">&quot;https://d-nb.info/gnd/4053309-8&quot;</span><span class="p">,</span>
@@ -146,14 +146,14 @@
         <span class="p">}</span>
         <span class="c1"># https://d-nb.info/gnd/118833197</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">testdata</span> <span class="o">/</span> <span class="s2">&quot;ramus.rdf&quot;</span><span class="p">)</span>
-        <span class="n">modelname</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_modelname_and_dict_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">modelname</span><span class="p">,</span> <span class="s2">&quot;apis_ontology.Person&quot;</span><span class="p">)</span>
+        <span class="n">defintion</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">defintion</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="s2">&quot;apis_ontology.Person&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pierre</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="RdfTest.test_get_modelname_from_dict_institution_from_dnb">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_institution_from_dnb">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_get_modelname_from_dict_institution_from_dnb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfTest.test_get_definition_from_dict_institution_from_dnb">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_institution_from_dnb">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_get_definition_from_dict_institution_from_dnb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">pierre_ges</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Pierre-Ramus-Gesellschaft&quot;</span><span class="p">,</span>
             <span class="s2">&quot;altName&quot;</span><span class="p">:</span> <span class="s2">&quot;Pierre Ramus-Gesellschaft&quot;</span><span class="p">,</span>
@@ -161,14 +161,14 @@
         <span class="p">}</span>
         <span class="c1"># https://d-nb.info/gnd/415006-5</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">testdata</span> <span class="o">/</span> <span class="s2">&quot;ramus_gesellschaft.rdf&quot;</span><span class="p">)</span>
-        <span class="n">modelname</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_modelname_and_dict_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">modelname</span><span class="p">,</span> <span class="s2">&quot;apis_ontology.Institution&quot;</span><span class="p">)</span>
+        <span class="n">defintion</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">defintion</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="s2">&quot;apis_ontology.Institution&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pierre_ges</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="RdfTest.test_get_modelname_from_dict_institution_from_dnb2">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_institution_from_dnb2">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_get_modelname_from_dict_institution_from_dnb2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RdfTest.test_get_definition_from_dict_institution_from_dnb2">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_institution_from_dnb2">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_get_definition_from_dict_institution_from_dnb2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">pierre_ges</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Akademie der Wissenschaften in Wien&quot;</span><span class="p">,</span>
             <span class="s2">&quot;altName&quot;</span><span class="p">:</span> <span class="s2">&quot;Akademie der Wissenschaften (Wien)&quot;</span><span class="p">,</span>
@@ -178,8 +178,8 @@
         <span class="p">}</span>
         <span class="c1"># https://d-nb.info/gnd/35077-1</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">testdata</span> <span class="o">/</span> <span class="s2">&quot;oeaw.rdf&quot;</span><span class="p">)</span>
-        <span class="n">modelname</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_modelname_and_dict_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">modelname</span><span class="p">,</span> <span class="s2">&quot;apis_ontology.Institution&quot;</span><span class="p">)</span>
+        <span class="n">defintion</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">rdf</span><span class="o">.</span><span class="n">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">defintion</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="s2">&quot;apis_ontology.Institution&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pierre_ges</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span></div>
 </div>
 

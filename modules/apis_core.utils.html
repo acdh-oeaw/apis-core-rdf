@@ -401,9 +401,21 @@ returns None. If we add the path “mytables” it looks for the member
 <section id="module-apis_core.utils.rdf">
 <span id="apis-core-utils-rdf-module"></span><h2>apis_core.utils.rdf module<a class="headerlink" href="#module-apis_core.utils.rdf" title="Link to this heading"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.rdf.get_modelname_and_dict_from_uri">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.rdf.</span></span><span class="sig-name descname"><span class="pre">get_modelname_and_dict_from_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/apis_core/utils/rdf.html#get_modelname_and_dict_from_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.rdf.get_modelname_and_dict_from_uri" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="apis_core.utils.rdf.get_definition_and_attributes_from_uri">
+<span class="sig-prename descclassname"><span class="pre">apis_core.utils.rdf.</span></span><span class="sig-name descname"><span class="pre">get_definition_and_attributes_from_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/apis_core/utils/rdf.html#get_definition_and_attributes_from_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.rdf.get_definition_and_attributes_from_uri" title="Link to this definition"></a></dt>
+<dd><p>This function looks for <cite>.toml</cite> files in the <cite>rdfimport</cite> app directories
+and loads all the files it can parse. For every file that contains a
+<cite>filter_sparql</cite> key it tries to use that key on the RDF graph that
+represents the data at the given RDF endpoint. It uses the first file that
+matches to extract attributes from the RDF endpoint and then returns both
+the parsed file contents and the extracted attributes.
+The reason we are also returning the parsed file contents is, that you then
+can define a model <em>in</em> the file and then use this function to iterate over
+a list of URIs and you can use the matched definition to choose which model
+to create.
+The dict containing the parsed file contents also contains the filename, to
+make debugging a bit easier.</p>
+</dd></dl>
 
 </section>
 <section id="module-apis_core.utils.settings">
@@ -428,11 +440,6 @@ if no entity is given</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="apis_core.utils.settings.list_links_to_edit">
 <span class="sig-prename descclassname"><span class="pre">apis_core.utils.settings.</span></span><span class="sig-name descname"><span class="pre">list_links_to_edit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/apis_core/utils/settings.html#list_links_to_edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.settings.list_links_to_edit" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.settings.rdf_object_mapping_file">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.settings.</span></span><span class="sig-name descname"><span class="pre">rdf_object_mapping_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../_modules/apis_core/utils/settings.html#rdf_object_mapping_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.settings.rdf_object_mapping_file" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -552,28 +559,28 @@ not have a method with the specified name.</p>
 method when executed. Raises a ValueError if the instance does
 not have a method with the specified name.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_institution_from_dnb">
-<span class="sig-name descname"><span class="pre">test_get_modelname_from_dict_institution_from_dnb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_modelname_from_dict_institution_from_dnb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_institution_from_dnb" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_institution_from_dnb">
+<span class="sig-name descname"><span class="pre">test_get_definition_from_dict_institution_from_dnb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_definition_from_dict_institution_from_dnb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_institution_from_dnb" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_institution_from_dnb2">
-<span class="sig-name descname"><span class="pre">test_get_modelname_from_dict_institution_from_dnb2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_modelname_from_dict_institution_from_dnb2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_institution_from_dnb2" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_institution_from_dnb2">
+<span class="sig-name descname"><span class="pre">test_get_definition_from_dict_institution_from_dnb2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_definition_from_dict_institution_from_dnb2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_institution_from_dnb2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_person_from_dnb">
-<span class="sig-name descname"><span class="pre">test_get_modelname_from_dict_person_from_dnb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_modelname_from_dict_person_from_dnb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_person_from_dnb" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_person_from_dnb">
+<span class="sig-name descname"><span class="pre">test_get_definition_from_dict_person_from_dnb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_definition_from_dict_person_from_dnb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_person_from_dnb" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_dnb">
-<span class="sig-name descname"><span class="pre">test_get_modelname_from_dict_place_from_dnb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_modelname_from_dict_place_from_dnb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_dnb" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_place_from_dnb">
+<span class="sig-name descname"><span class="pre">test_get_definition_from_dict_place_from_dnb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_definition_from_dict_place_from_dnb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_place_from_dnb" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_geonames">
-<span class="sig-name descname"><span class="pre">test_get_modelname_from_dict_place_from_geonames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_modelname_from_dict_place_from_geonames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_modelname_from_dict_place_from_geonames" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_place_from_geonames">
+<span class="sig-name descname"><span class="pre">test_get_definition_from_dict_place_from_geonames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_rdf.html#RdfTest.test_get_definition_from_dict_place_from_geonames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_place_from_geonames" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
