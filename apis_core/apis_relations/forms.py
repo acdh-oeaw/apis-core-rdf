@@ -9,6 +9,7 @@ from django.urls import reverse
 
 from apis_core.apis_relations.models import TempTriple
 from apis_core.apis_entities.fields import ListSelect2
+from django.contrib.contenttypes.models import ContentType
 
 from apis_core.apis_metainfo.models import Uri
 
@@ -61,13 +62,13 @@ class GenericTripleForm(forms.ModelForm):
         # Select2ListCreateChoiceField object afterwards uses.
         assert GenericEntitiesAutocomplete
 
+        ct = ContentType.objects.get(model=entity_type_other_str.lower())
+        url = reverse("apis:generic:autocomplete", args=[ct])
+
         self.fields["other_entity"] = autocomplete.Select2ListCreateChoiceField(
             label="entity",
             widget=ListSelect2(
-                url=reverse(
-                    "apis:apis_entities:generic_entities_autocomplete",
-                    kwargs={"entity": entity_type_other_str},
-                ),
+                url=url,
                 attrs=attrs_target,
             ),
             help_text=help_text_other_entity,
