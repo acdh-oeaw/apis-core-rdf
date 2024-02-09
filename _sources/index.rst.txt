@@ -14,6 +14,7 @@ Welcome to APIS's documentation!
 
    installation
    configuration
+   customization
    user_documentation
    data_model
    glossary

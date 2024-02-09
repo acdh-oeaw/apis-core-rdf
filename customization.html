@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customization &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User documentation" href="user_documentation.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Customization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#list-views">List views</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#list-view-templates">List view templates</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#create-and-update-views">Create and Update views</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-and-update-view-templates">Create and update view templates</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#autocomplete-views">Autocomplete views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#import-view">Import view</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-view-template">Import view template</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#class-method-and-template-lookup">Class, method and template lookup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collections.html">Working with collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autocomplete.html">Extending autocomplete results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing.html">Importing data from external resources</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Customization</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/customization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="customization">
+<h1>Customization<a class="headerlink" href="#customization" title="Link to this heading"></a></h1>
+<section id="list-views">
+<h2>List views<a class="headerlink" href="#list-views" title="Link to this heading"></a></h2>
+<p>The list views consist of a <a class="reference external" href="https://django-filter.readthedocs.io">django-filters</a> <a class="reference external" href="https://django-filter.readthedocs.io/en/stable/ref/filterset.html">filterset</a> on the
+left and a <a class="reference external" href="django-tables2.readthedocs.io/">django-tables</a> <a class="reference external" href="https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#table">table</a>
+of results on the right side.</p>
+<p>The default filterset used is
+<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.filtersets.GenericFilterSet</span></code>. You can override the
+filterset for you models by defining a custom filterset class in
+<code class="docutils literal notranslate"><span class="pre">you_app.filtersets</span></code>. The filterset has to be named <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;FilterSet</span></code>,
+so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for
+the filterset <code class="docutils literal notranslate"><span class="pre">myproject.filtersets.PersonFilterSet</span></code>. You can inherit from
+<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.filtersets.GenericFilterSet</span></code> and add your
+customzations.</p>
+<p>The default table used is <code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.tables.GenericTable</span></code>. You
+can override the table for your models by defining a custom table class in
+<code class="docutils literal notranslate"><span class="pre">your_app.tables</span></code>. The table class has to be named <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;Table</span></code>, so
+if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for
+the table class <code class="docutils literal notranslate"><span class="pre">myproject.tables.PersonTable</span></code>. You can inherit from
+<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.tables.GenericTable</span></code> and add your customizations.
+<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.tables.GenericTable</span></code> also contains a handful of
+useful <a class="reference external" href="https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#columns">django table columns</a>
+that you might want to use.</p>
+<p>The base queryset that is used in the listview, which is then filtered using
+the django-filters filter, is <code class="docutils literal notranslate"><span class="pre">model.objects.all()</span></code> - but you can override
+the queryset by creating a custom queryset for your model in
+<code class="docutils literal notranslate"><span class="pre">you_app.querysets</span></code>. The queryset function has to be named
+<code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;ListViewQueryset</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your app
+<code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the queryset
+<code class="docutils literal notranslate"><span class="pre">myproject.querysets.PersonListViewQueryset</span></code>.</p>
+<section id="list-view-templates">
+<h3>List view templates<a class="headerlink" href="#list-view-templates" title="Link to this heading"></a></h3>
+<p>The list view looks for templates using the <code class="docutils literal notranslate"><span class="pre">_list.html</span></code> suffix. It uses the
+<code class="docutils literal notranslate"><span class="pre">generic/generic_list.html</span></code> template as fallback, but you can use a custom
+template using your model name, so if your model is <code class="docutils literal notranslate"><span class="pre">myproject.Person</span></code> then
+you can use the <code class="docutils literal notranslate"><span class="pre">myproject/person_list.html</span></code> template to override the generic
+template.</p>
+</section>
+</section>
+<section id="create-and-update-views">
+<h2>Create and Update views<a class="headerlink" href="#create-and-update-views" title="Link to this heading"></a></h2>
+<p>The create and update view use the form
+<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.GenericModelForm</span></code> by default. You can override
+the form it uses by creating a custom form in <code class="docutils literal notranslate"><span class="pre">you_app.forms</span></code>. The form class
+has to be named <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;Form</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
+app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the form class
+<code class="docutils literal notranslate"><span class="pre">myproject.forms.PersonForm</span></code>.</p>
+<section id="create-and-update-view-templates">
+<h3>Create and update view templates<a class="headerlink" href="#create-and-update-view-templates" title="Link to this heading"></a></h3>
+<p>The create and update views looks for templates using the <code class="docutils literal notranslate"><span class="pre">_form.html</span></code>
+suffix. It uses the <code class="docutils literal notranslate"><span class="pre">generic/generic_form.html</span></code> template as fallback, but you
+can use a custom template using your model name, so if your model is
+<code class="docutils literal notranslate"><span class="pre">myproject.Person</span></code> then you can use the <code class="docutils literal notranslate"><span class="pre">myproject/person_form.html</span></code>
+template to override the generic template.</p>
+</section>
+</section>
+<section id="autocomplete-views">
+<h2>Autocomplete views<a class="headerlink" href="#autocomplete-views" title="Link to this heading"></a></h2>
+<p>The autocomplete views filter your model instances based on a query string
+provided. By default, the autocomplete views use
+<code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.generic.helpers.generate_search_filter()</span></code> to filter the model
+queryset. You can override the queryset by creating a custom queryset for your
+model in <code class="docutils literal notranslate"><span class="pre">your_app.querysets</span></code>. The queryset function has to be named
+<code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;AutocompleteQueryset</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
+app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the queryset
+<code class="docutils literal notranslate"><span class="pre">myproject.querysets.PersonAutocompleteQueryset</span></code>.</p>
+<p>The results of the autocomplete view can be extended with additional results
+coming from another source (an external API or another queryset). The view
+looks for this function in <code class="docutils literal notranslate"><span class="pre">your_app.querysets</span></code> and it has to be named
+<code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;ExternalAutocomplete</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in yoru
+app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the function in
+<code class="docutils literal notranslate"><span class="pre">myproject.querysets.PersonExternalAutocomplete</span></code>.</p>
+</section>
+<section id="import-view">
+<h2>Import view<a class="headerlink" href="#import-view" title="Link to this heading"></a></h2>
+<p>The import view uses the form
+<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.GenericImportForm</span></code> by default. You can override
+the form it uses by creating a custom form in <code class="docutils literal notranslate"><span class="pre">your_app.forms</span></code>. The form
+class has to be named <code class="docutils literal notranslate"><span class="pre">&lt;ModelName&gt;ImportForm</span></code>, so if you have a model
+<code class="docutils literal notranslate"><span class="pre">Person</span></code> in your app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the form class
+<code class="docutils literal notranslate"><span class="pre">myproject.forms.PersonImportForm</span></code>.</p>
+<section id="import-view-template">
+<h3>Import view template<a class="headerlink" href="#import-view-template" title="Link to this heading"></a></h3>
+<p>The import view looks for templates using the <code class="docutils literal notranslate"><span class="pre">_import.html</span></code> suffix. It uses
+the <code class="docutils literal notranslate"><span class="pre">generic/generic_import.html</span></code> template as fallback, but you can use a
+custom template using your model name, so if your model is <code class="docutils literal notranslate"><span class="pre">myproject.Person</span></code>
+then you can use the <code class="docutils literal notranslate"><span class="pre">myproject/person_import.html</span></code> template to override the
+generic template.</p>
+</section>
+</section>
+<section id="class-method-and-template-lookup">
+<h2>Class, method and template lookup<a class="headerlink" href="#class-method-and-template-lookup" title="Link to this heading"></a></h2>
+<p>As mentioned above, APIS tries to find the correct class or method to override
+the ones the <code class="docutils literal notranslate"><span class="pre">generic</span></code> one ships. This is done using
+<code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.generic.helpers.first_match_via_mro()</span></code>. The method does not only
+look for possible overrides using the name of the model itself, but also using
+all the parent models following the full inheritance chain. So if all your models
+inherit from <code class="docutils literal notranslate"><span class="pre">MyAbstractModel</span></code>, you can for example create an override table
+for all your models by creating a <code class="docutils literal notranslate"><span class="pre">myproject.tables.MyAbstractModelTable</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="user_documentation.html" class="btn btn-neutral float-right" title="User documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
