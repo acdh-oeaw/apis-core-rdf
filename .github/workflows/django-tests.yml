@@ -40,7 +40,7 @@ jobs:
     - name: Install dependencies
       run: |
         poetry lock
-        poetry install
+        poetry install --with tests
 
     - name: Make migrations
       run: poetry run ./manage.py makemigrations
