@@ -1,9 +1,12 @@
 import functools
 import inspect
 import importlib
+import logging
 
 from django.db.models import CharField, TextField, Q, Model
 from django.contrib.auth import get_permission_codename
+
+logger = logging.getLogger(__name__)
 
 
 def generate_search_filter(model, query, fields_to_search=None):
@@ -68,7 +71,7 @@ def class_from_path(classpath):
     except ModuleNotFoundError:
         return False
     if members:
-        return members[0][1]
+        return members[0]
     return False
 
 
@@ -79,7 +82,15 @@ def first_match_via_mro(model, path: str = "", suffix: str = ""):
     """
     paths = list(map(lambda x: x[:-1] + [path] + x[-1:], mro_paths(model)))
     classes = [".".join(prefix) + suffix for prefix in paths]
-    return next(filter(bool, map(class_from_path, classes)), None)
+    name, res = next(filter(bool, map(class_from_path, classes)), ("nothing", None))
+    logger.debug(
+        "first_match_via_mro: found %s for %s, path: `%s`, suffix: `%s`",
+        name,
+        model,
+        path,
+        suffix,
+    )
+    return res
 
 
 def permission_fullname(action: str, model: object) -> str:
