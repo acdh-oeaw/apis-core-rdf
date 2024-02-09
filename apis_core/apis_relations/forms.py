@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.urls import reverse
 
 from apis_core.apis_relations.models import TempTriple
-from apis_core.apis_entities.fields import ListSelect2
+from dal.autocomplete import ListSelect2
 
 from apis_core.apis_metainfo.models import Uri
 
