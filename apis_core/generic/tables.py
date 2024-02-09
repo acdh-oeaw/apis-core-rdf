@@ -26,40 +26,40 @@ class CustomTemplateColumn(tables.TemplateColumn):
         )
 
 
-class DeleteColumn(CustomTemplateColumn):
+class ActionColumn(CustomTemplateColumn):
+    """
+    A custom template column with some additional attributes
+    for actions.
+    """
+
+    orderable = False
+    exclude_from_export = True
+    verbose_name = ""
+    attrs = {"td": {"style": "width:1%;"}}
+
+
+class DeleteColumn(ActionColumn):
     """
     A column showing a delete button
     """
 
     template_name = "columns/delete.html"
-    orderable = False
-    exclude_from_export = True
-    verbose_name = ""
-    attrs = {"td": {"style": "width:1%;"}}
 
 
-class EditColumn(CustomTemplateColumn):
+class EditColumn(ActionColumn):
     """
     A column showing an edit button
     """
 
     template_name = "columns/edit.html"
-    orderable = False
-    exclude_from_export = True
-    verbose_name = ""
-    attrs = {"td": {"style": "width:1%;"}}
 
 
-class ViewColumn(CustomTemplateColumn):
+class ViewColumn(ActionColumn):
     """
     A column showing a view button
     """
 
     template_name = "columns/view.html"
-    orderable = False
-    exclude_from_export = True
-    verbose_name = ""
-    attrs = {"td": {"style": "width:1%;"}}
 
 
 class DescriptionColumn(CustomTemplateColumn):
