@@ -85,6 +85,8 @@ class RootObject(models.Model):
         signals.post_duplicate.send(sender=origin, instance=self, duplicate=duplicate)
         return duplicate
 
+    duplicate.alters_data = True
+
 
 @reversion.register()
 class Collection(models.Model):
