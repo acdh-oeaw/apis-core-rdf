@@ -4,6 +4,8 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse, reverse_lazy
 from django.forms import modelform_factory
+from django.template.loader import select_template
+from django.template.exceptions import TemplateDoesNotExist
 
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
@@ -40,6 +42,8 @@ class GenericModelMixin:
     to set the permission required to access the view for this specific model.
     """
 
+    template_name_suffix = ""
+
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
         if contenttype := kwargs.get("contenttype"):
@@ -47,7 +51,9 @@ class GenericModelMixin:
             self.queryset = self.model.objects.all()
 
     def get_template_names(self):
-        template_names = super().get_template_names()
+        template_names = []
+        if hasattr(super(), "get_template_names"):
+            template_names = super().get_template_names()
         suffix = self.template_name_suffix + ".html"
         additional_templates = template_names_via_mro(self.model, suffix) + [
             f"generic/generic{suffix}"
@@ -211,7 +217,16 @@ class Autocomplete(
     """
 
     permission_action_required = "view"
+    template_name_suffix = "_autocomplete_result"
     create_field = "thisisnotimportant"  # because we are using create_object_from_uri
+
+    def setup(self, *args, **kwargs):
+        super().setup(*args, **kwargs)
+        try:
+            template = select_template(self.get_template_names())
+            self.template = template.template.name
+        except TemplateDoesNotExist:
+            self.template = None
 
     def get_queryset(self):
         queryset = first_match_via_mro(
