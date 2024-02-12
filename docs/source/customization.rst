@@ -79,6 +79,13 @@ model in ``your_app.querysets``. The queryset function has to be named
 app ``myproject``, the view looks for the queryset
 ``myproject.querysets.PersonAutocompleteQueryset``.
 
+The results of the autocomplete view can be themed using templates. The
+autocomplete view looks for templates using the ``autocomplete_result.html``
+suffix, if no such template is found, the string representation of the result
+is used. The autocomplete view uses the same template search function as for
+other templates, so if you have a model ``myproject.Person`` then you can use
+the ``myproject/person_autocomplete_result.html`` template.
+
 The results of the autocomplete view can be extended with additional results
 coming from another source (an external API or another queryset). The view
 looks for this function in ``your_app.querysets`` and it has to be named
