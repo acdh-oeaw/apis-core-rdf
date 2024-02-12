@@ -73,9 +73,9 @@ def related_property_name(queryset, name, value):
     lookup, value = construct_lookup(value)
 
     queryset = queryset.filter(
-        Q(**{f"triple_set_from_obj__prop__name{lookup}": value})
+        Q(**{f"triple_set_from_obj__prop__deprecated_name{lookup}": value})
         | Q(**{f"triple_set_from_obj__prop__name_reverse{lookup}": value})
-        | Q(**{f"triple_set_from_subj__prop__name{lookup}": value})
+        | Q(**{f"triple_set_from_subj__prop__deprecated_name{lookup}": value})
         | Q(**{f"triple_set_from_subj__prop__name_reverse{lookup}": value})
     ).distinct()
 

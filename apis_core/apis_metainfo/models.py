@@ -27,7 +27,18 @@ class RootObject(GenericModel, models.Model):
     By having one overarching super class we gain the advantage of unique identifiers.
     """
 
-    name = models.CharField(max_length=255, verbose_name="Name")
+    deprecated_name = models.CharField(
+        max_length=255,
+        verbose_name="Name (deprecated)",
+        blank=True,
+    )
+    deprecated_name.system_check_deprecated_details = {
+        "msg": "RootObject's field for name is being deprecated.",
+        "hint": "Create a new field in all affected model classes and "
+        "transfer the current contents of the 'deprecated_name' CharField.",
+        "id": "apis_core.W001",
+    }
+
     # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
     # triples where the subject's or object's contenttype must be respected (e.g. get all triples
     # where the subject is a Person)
@@ -47,8 +58,8 @@ class RootObject(GenericModel, models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        if self.name != "":
-            return self.name
+        if self.deprecated_name != "":
+            return self.deprecated_name
         else:
             return "no name provided"
 

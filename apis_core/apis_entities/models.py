@@ -34,8 +34,8 @@ class AbstractEntity(RootObject):
         super().__init__(*args, **kwargs)
 
     def __str__(self):
-        if self.name != "":
-            return self.name
+        if self.deprecated_name != "":
+            return self.deprecated_name
         else:
             return "no name provided"
 

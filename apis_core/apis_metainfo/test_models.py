@@ -8,14 +8,14 @@ class ModelTestCase(TestCase):
     def setUp(cls):
         # Set up data for the whole TestCase
         user_type = ContentType.objects.get(app_label="auth", model="user")
-        RootObject.objects.create(self_contenttype=user_type, name="foo")
+        RootObject.objects.create(self_contenttype=user_type, deprecated_name="foo")
         RootObject.objects.create(self_contenttype=user_type)
 
     def test_root_object(self):
-        rfoo = RootObject.objects.get(name="foo")
-        rnone = RootObject.objects.get(name="")
-        self.assertEqual(str(rfoo), "foo")
-        self.assertEqual(str(rnone), "no name provided")
+        root_foo = RootObject.objects.get(deprecated_name="foo")
+        root_none = RootObject.objects.get(deprecated_name="")
+        self.assertEqual(str(root_foo), "foo")
+        self.assertEqual(str(root_none), "no name provided")
 
     def test_uri(self):
         ufoo = Uri.objects.create()

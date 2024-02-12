@@ -79,15 +79,22 @@ class Property(RootObject):
     )
 
     def __str__(self):
-        return self.name
+        return self.deprecated_name
 
     def save(self, *args, **kwargs):
         if self.name_reverse != unicodedata.normalize("NFC", self.name_reverse):
             self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
         if self.name_reverse == "" or self.name_reverse is None:
-            self.name_reverse = self.name + " [REVERSE]"
+            self.name_reverse = f"{self.deprecated_name} [INVERSE]"
+
         # TODO RDF: Temporary hack, remove this once better solution is found
-        self.name_forward = self.name
+        self.name_forward = self.deprecated_name
+
+        if "update_fields" in kwargs and (
+            include_fields := {"name_forward", "name_reverse", "deprecated_name"}
+        ).intersection(update_fields := kwargs.get("update_fields")):
+            kwargs["update_fields"] = set(update_fields) | include_fields
+
         super(Property, self).save(*args, **kwargs)
         return self
 
@@ -262,9 +269,9 @@ class Triple(GenericModel, models.Model):
     def get_web_object(self):
         return {
             "relation_pk": self.pk,
-            "subj": self.subj.name,
-            "obj": self.obj.name,
-            "prop": self.prop.name,
+            "subj": self.subj.deprecated_name,
+            "obj": self.obj.deprecated_name,
+            "prop": self.prop.deprecated_name,
         }
 
     def save(self, *args, **kwargs):
