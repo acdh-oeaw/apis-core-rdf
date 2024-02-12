@@ -68,7 +68,7 @@ class GenericModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.add_input(Submit("submit", "Submit", accesskey="s"))
 
         # override the fields pointing to other models,
         # to make them use the autocomplete widgets
