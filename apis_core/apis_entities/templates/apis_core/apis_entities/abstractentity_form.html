@@ -171,5 +171,33 @@ function activate_editing(){
        {% endfor %}
 };
 activate_editing();
+
+function showMap(element) {
+  $('.popover').remove();
+  let map;
+
+  let rect = element.getBoundingClientRect();
+  let pTop = rect.top + window.scrollY - 250;
+  let pLeft = rect.left + window.scrollX - 550;
+
+  let mapDiv = document.createElement("div");
+  mapDiv.classList.add("popover");
+  mapDiv.setAttribute("id", "popovermap");
+
+  $(mapDiv).offset({top: pTop, left: pLeft});
+  document.body.appendChild(mapDiv);
+
+  if (typeof map !== "undefined") { map.off(); map.remove(); }
+
+  map = L.map('popovermap', { center: [parseInt(element.dataset.latitude), parseInt(element.dataset.longitude)], zoom: 5 });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  L.marker([parseInt(element.dataset.latitude), parseInt(element.dataset.longitude)]).addTo(map);
+}
+
+function delMap(element) {
+  $('.popover').remove();
+}
   </script>
 {% endblock scripts %}
