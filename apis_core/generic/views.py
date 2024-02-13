@@ -42,8 +42,6 @@ class GenericModelMixin:
     to set the permission required to access the view for this specific model.
     """
 
-    template_name_suffix = ""
-
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
         if contenttype := kwargs.get("contenttype"):
@@ -54,7 +52,9 @@ class GenericModelMixin:
         template_names = []
         if hasattr(super(), "get_template_names"):
             template_names = super().get_template_names()
-        suffix = self.template_name_suffix + ".html"
+        suffix = ".html"
+        if hasattr(self, "template_name_suffix"):
+            suffix = self.template_name_suffix + ".html"
         additional_templates = template_names_via_mro(self.model, suffix) + [
             f"generic/generic{suffix}"
         ]
