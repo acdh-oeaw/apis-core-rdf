@@ -18,7 +18,9 @@ class GenericImportForm(forms.Form):
         )
         ct = ContentType.objects.get_for_model(self.Meta.model)
         url = reverse("apis_core:generic:autocompleteexternalonly", args=[ct])
-        self.fields["url"].widget = autocomplete.ModelSelect2(url)
+        self.fields["url"].widget = autocomplete.ModelSelect2(
+            url, attrs={"data-html": True}
+        )
         self.fields["url"].widget.choices = self.fields["url"].choices
         self.helper = FormHelper()
         self.helper.add_input(Submit("submit", "Submit"))
@@ -84,5 +86,7 @@ class GenericModelForm(forms.ModelForm):
                     self.fields[field]._queryset.model
                 )
                 url = reverse("apis_core:generic:autocomplete", args=[ct])
-                self.fields[field].widget = override_fieldtypes[clsname](url)
+                self.fields[field].widget = override_fieldtypes[clsname](
+                    url, attrs={"data-html": True}
+                )
                 self.fields[field].widget.choices = self.fields[field].choices
