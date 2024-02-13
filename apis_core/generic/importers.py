@@ -46,4 +46,4 @@ class GenericImporter:
         data = {key: data[key] for key in data if key in modelfields}
         if data:
             return self.model.objects.create(**data)
-        raise ImproperlyConfigured
+        raise ImproperlyConfigured(f"Could not extract data from {self.import_uri}")
