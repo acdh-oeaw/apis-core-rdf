@@ -174,6 +174,12 @@ model in <code class="docutils literal notranslate"><span class="pre">your_app.q
 <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;AutocompleteQueryset</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
 app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the queryset
 <code class="docutils literal notranslate"><span class="pre">myproject.querysets.PersonAutocompleteQueryset</span></code>.</p>
+<p>The results of the autocomplete view can be themed using templates. The
+autocomplete view looks for templates using the <code class="docutils literal notranslate"><span class="pre">autocomplete_result.html</span></code>
+suffix, if no such template is found, the string representation of the result
+is used. The autocomplete view uses the same template search function as for
+other templates, so if you have a model <code class="docutils literal notranslate"><span class="pre">myproject.Person</span></code> then you can use
+the <code class="docutils literal notranslate"><span class="pre">myproject/person_autocomplete_result.html</span></code> template.</p>
 <p>The results of the autocomplete view can be extended with additional results
 coming from another source (an external API or another queryset). The view
 looks for this function in <code class="docutils literal notranslate"><span class="pre">your_app.querysets</span></code> and it has to be named
