@@ -12,9 +12,5 @@ class DuplicateColumn(ActionColumn):
 class AbstractEntityTable(GenericTable):
     noduplicate = DuplicateColumn()
 
-    def __init__(self, *args, **kwargs):
-        # if there is no custom sequence set, move `edit` and `delete` to the back
-        if "sequence" not in kwargs:
-            kwargs["sequence"] = ["...", "view", "edit", "noduplicate", "delete"]
-
-        super().__init__(*args, **kwargs)
+    class Meta(GenericTable.Meta):
+        sequence = ("...", "view", "edit", "noduplicate", "delete")
