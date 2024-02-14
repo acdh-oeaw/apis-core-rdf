@@ -14,7 +14,7 @@ class NormalizeTest(TestCase):
 
     def test_clean_uri_wikidata(self):
         uri = "https://www.wikidata.org/wiki/Q1735"
-        res = "https://www.wikidata.org/wiki/Special:EntityData/Q1735.rdf?flavor=simple"
+        res = "http://www.wikidata.org/entity/Q1735"
         self.assertEqual(normalize.clean_uri(uri), res)
 
     def test_clean_uri_dnb(self):
