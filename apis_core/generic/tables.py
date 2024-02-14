@@ -96,7 +96,7 @@ class GenericTable(tables.Table):
         if model := getattr(self.Meta, "model"):
             if not request.user.has_perm(permission_fullname("delete", model)):
                 self.columns.hide("delete")
-            if not request.user.has_perm(permission_fullname("edit", model)):
+            if not request.user.has_perm(permission_fullname("change", model)):
                 self.columns.hide("edit")
             if not request.user.has_perm(permission_fullname("view", model)):
                 self.columns.hide("view")
