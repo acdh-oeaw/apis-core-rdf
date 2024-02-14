@@ -89,211 +89,43 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.apis_entities.forms</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">from</span> <span class="nn">crispy_forms.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
-<span class="kn">from</span> <span class="nn">crispy_forms.layout</span> <span class="kn">import</span> <span class="n">Layout</span><span class="p">,</span> <span class="n">Fieldset</span><span class="p">,</span> <span class="n">Field</span>
+<span></span><span class="kn">from</span> <span class="nn">crispy_forms.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
 <span class="kn">from</span> <span class="nn">crispy_forms.layout</span> <span class="kn">import</span> <span class="n">Submit</span>
 <span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
-<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.core.validators</span> <span class="kn">import</span> <span class="n">URLValidator</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span><span class="p">,</span> <span class="n">settings</span> <span class="k">as</span> <span class="n">apis_settings</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
-<span class="kn">from</span> <span class="nn">.fields</span> <span class="kn">import</span> <span class="n">ListSelect2</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.forms.fields</span> <span class="kn">import</span> <span class="n">ModelImportChoiceField</span>
 
 
-<div class="viewcode-block" id="SearchForm">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.SearchForm">[docs]</a>
-<span class="k">class</span> <span class="nc">SearchForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-    <span class="n">search</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Search&quot;</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">helper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
-        <span class="n">helper</span><span class="o">.</span><span class="n">form_id</span> <span class="o">=</span> <span class="s2">&quot;searchForm&quot;</span>
-        <span class="n">helper</span><span class="o">.</span><span class="n">form_tag</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;fieldn&quot;</span><span class="p">,</span> <span class="s2">&quot;search&quot;</span><span class="p">))</span>
-        <span class="n">helper</span><span class="o">.</span><span class="n">form_method</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span>
-        <span class="k">return</span> <span class="n">helper</span></div>
-
-
-
-<div class="viewcode-block" id="get_entities_form">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.get_entities_form">[docs]</a>
-<span class="k">def</span> <span class="nf">get_entities_form</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Form for edit view for an entity object.</span>
-
-<span class="sd">    :param entity: entity name as String</span>
-<span class="sd">    :return: GenericEntitiesForm class</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">form</span> <span class="o">:=</span> <span class="n">apis_settings</span><span class="o">.</span><span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">form</span>
-
-    <span class="k">class</span> <span class="nc">GenericEntitiesForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
-        <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-            <span class="n">model</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_entity_class_of_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-
-            <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;start_date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;start_start_date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;start_end_date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;start_date_is_exact&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;end_date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;end_start_date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;end_end_date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;end_date_is_exact&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;text&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;source&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;published&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;self_contenttype&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="c1"># exclude.extend(model.get_related_entity_field_names())</span>
-            <span class="c1"># exclude.extend(model.get_related_relationtype_field_names())</span>
-
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="nb">super</span><span class="p">(</span><span class="n">GenericEntitiesForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_class</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Form&quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_tag</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">help_text_inline</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">main_fields</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># fields to display for entity</span>
-            <span class="n">crispy_main_fields</span> <span class="o">=</span> <span class="n">Fieldset</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Entity type: </span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>  <span class="c1"># crispy forms field collection for entity fields</span>
-
-            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">main_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-            <span class="k">def</span> <span class="nf">sort_fields_list</span><span class="p">(</span><span class="n">field_names</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">):</span>
-<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">                Sorts an entity&#39;s field names based on the form_order setting</span>
-<span class="sd">                defined in the entity&#39;s class (if available).</span>
-<span class="sd">                Field names included in form_order are listed first, followed</span>
-<span class="sd">                by the remaining field names.</span>
-
-<span class="sd">                :param field_names: a list of strings</span>
-<span class="sd">                :param entity_name: string representation of an entity name</span>
-<span class="sd">                :return: a list of strings</span>
-<span class="sd">                &quot;&quot;&quot;</span>
-                <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">entity_name</span><span class="p">)</span>
-                <span class="n">form_order</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form_order&quot;</span><span class="p">,</span> <span class="p">[])</span>
-
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">form_order</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">remaining</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">field_names</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">form_order</span><span class="p">)</span>
-                    <span class="n">field_names</span> <span class="o">=</span> <span class="n">form_order</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">remaining</span><span class="p">)</span>
-
-                <span class="k">return</span> <span class="n">field_names</span>
-
-            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">sort_fields_list</span><span class="p">(</span><span class="n">main_fields</span><span class="p">,</span> <span class="n">entity</span><span class="p">):</span>
-                <span class="n">crispy_main_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Field</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">crispy_main_fields</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">GenericEntitiesForm</span></div>
-
-
-
-<div class="viewcode-block" id="GenericEntitiesStanbolForm">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm">[docs]</a>
-<span class="k">class</span> <span class="nc">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-<div class="viewcode-block" id="GenericEntitiesStanbolForm.save">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericEntitiesStanbolForm.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">form_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
-        <span class="n">uri</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">form_uri</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">uri</span><span class="o">.</span><span class="n">root_object</span></div>
-
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
-        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;data-placeholder&quot;</span><span class="p">:</span> <span class="s2">&quot;Type to get suggestions&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;data-minimum-input-length&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_MIN_CHAR&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-            <span class="s2">&quot;data-html&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;width: auto&quot;</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="n">ent_merge_pk</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;ent_merge_pk&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GenericEntitiesStanbolForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="n">entity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
-        <span class="n">form_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">}</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span>
-            <span class="s2">&quot;apis:apis_entities:generic_entities_autocomplete&quot;</span><span class="p">,</span>
-            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="s2">&quot;remove&quot;</span><span class="p">],</span>
+<div class="viewcode-block" id="EntitiesMergeForm">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.EntitiesMergeForm">[docs]</a>
+<span class="k">class</span> <span class="nc">EntitiesMergeForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;instance&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;instance&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ModelImportChoiceField</span><span class="p">(</span>
+            <span class="n">queryset</span><span class="o">=</span><span class="n">ct</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
         <span class="p">)</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Create </span><span class="si">{}</span><span class="s2"> from reference resources&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
-        <span class="n">button_label</span> <span class="o">=</span> <span class="s2">&quot;Create&quot;</span>
-        <span class="k">if</span> <span class="n">ent_merge_pk</span><span class="p">:</span>
-            <span class="n">form_kwargs</span><span class="p">[</span><span class="s2">&quot;ent_merge_pk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ent_merge_pk</span>
-            <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span>
-                <span class="s2">&quot;apis:apis_entities:generic_entities_autocomplete&quot;</span><span class="p">,</span>
-                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="n">ent_merge_pk</span><span class="p">],</span>
-            <span class="p">)</span>
-            <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Search for </span><span class="si">{0}</span><span class="s2"> in reference resources or db&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
-            <span class="n">button_label</span> <span class="o">=</span> <span class="s2">&quot;Merge&quot;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:autocomplete&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">])</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data-placeholder&quot;</span><span class="p">:</span> <span class="s2">&quot;Search ...&quot;</span><span class="p">,</span> <span class="s2">&quot;data-minimum-input-length&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span>
+        <span class="n">entitytype</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">verbose_name</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;The attributes of the source </span><span class="si">{</span><span class="n">entitytype</span><span class="si">}</span><span class="s2"> you</span>
+<span class="s2">        choose will be copied/moved to this one and the source</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">entitytype</span><span class="si">}</span><span class="s2"> will then be deleted.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">help_text</span> <span class="o">=</span> <span class="n">help_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Merge with...&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;submit&quot;</span><span class="p">,</span> <span class="s2">&quot;Submit&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_action</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span>
-            <span class="s2">&quot;apis:apis_entities:generic_entities_stanbol_create&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">form_kwargs</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;submit&quot;</span><span class="p">,</span> <span class="n">button_label</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListCreateChoiceField</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
-            <span class="n">widget</span><span class="o">=</span><span class="n">ListSelect2</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">),</span>
-            <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">URLValidator</span><span class="p">],</span>
+            <span class="s2">&quot;apis_core:apis_entities:generic_entities_merge_view&quot;</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">instance</span><span class="o">.</span><span class="n">pk</span><span class="p">],</span>
         <span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="PersonResolveUriForm">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm">[docs]</a>
-<span class="k">class</span> <span class="nc">PersonResolveUriForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-    <span class="c1"># person = forms.CharField(label=False, widget=al.TextWidget(&#39;PersonAutocomplete&#39;))</span>
-    <span class="n">person</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">person_uri</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">HiddenInput</span><span class="p">())</span>
-
-<div class="viewcode-block" id="PersonResolveUriForm.save">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">site_instance</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="n">cd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span>
-        <span class="k">if</span> <span class="n">cd</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
-            <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">cd</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">],</span> <span class="n">entity</span><span class="o">=</span><span class="n">site_instance</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">cd</span><span class="p">[</span><span class="s2">&quot;person_uri&quot;</span><span class="p">],</span> <span class="n">entity</span><span class="o">=</span><span class="n">site_instance</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">uri</span></div>
-
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;request&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PersonResolveUriForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_tag</span> <span class="o">=</span> <span class="kc">False</span>
-
-<div class="viewcode-block" id="PersonResolveUriForm.clean">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.PersonResolveUriForm.clean">[docs]</a>
-    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">cleaned_data</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">PersonResolveUriForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;person_uri&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_error</span><span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;This Person has already been added to the DB.&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_error</span><span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s2">&quot;This URI has already been added to the DB.&quot;</span><span class="p">)</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="GenericFilterFormHelper">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.GenericFilterFormHelper">[docs]</a>
-<span class="k">class</span> <span class="nc">GenericFilterFormHelper</span><span class="p">(</span><span class="n">FormHelper</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GenericFilterFormHelper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">form_class</span> <span class="o">=</span> <span class="s2">&quot;genericFilterForm&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">form_method</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;Filter&quot;</span><span class="p">,</span> <span class="s2">&quot;Filter&quot;</span><span class="p">))</span></div>
 
 </pre></div>
 

@@ -89,256 +89,101 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.apis_entities.views</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">json</span>
-
-<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">user_passes_test</span>
-<span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">UserPassesTestMixin</span>
-<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">get_object_or_404</span>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">PermissionRequiredMixin</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse_lazy</span>
-<span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">RequestConfig</span>
-<span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">SingleTableView</span>
-<span class="kn">from</span> <span class="nn">django_tables2.export.views</span> <span class="kn">import</span> <span class="n">ExportMixin</span>
+<span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="kn">import</span> <span class="n">FormView</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.core.mixins</span> <span class="kn">import</span> <span class="n">ListViewObjectFilterMixin</span>
-
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.stanbolQueries</span> <span class="kn">import</span> <span class="n">retrieve_obj</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.utils</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">access_for_all</span><span class="p">,</span>
-    <span class="n">access_for_all_function</span><span class="p">,</span>
-    <span class="n">ENTITIES_DEFAULT_COLS</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
-<span class="kn">from</span> <span class="nn">.filters</span> <span class="kn">import</span> <span class="n">get_list_filter_of_entity</span>
-<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">GenericFilterFormHelper</span><span class="p">,</span>
-    <span class="n">PersonResolveUriForm</span><span class="p">,</span>
-    <span class="n">GenericEntitiesStanbolForm</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">get_entities_table</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">get_member_for_entity</span>
-
-<span class="c1">###########################################################################</span>
-<span class="c1">############################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#   Helper Functions</span>
-<span class="c1">#</span>
-<span class="c1">############################################################################</span>
-<span class="c1">############################################################################</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.views</span> <span class="kn">import</span> <span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">Update</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.forms</span> <span class="kn">import</span> <span class="n">EntitiesMergeForm</span>
 
 
-<div class="viewcode-block" id="set_session_variables">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.set_session_variables">[docs]</a>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">access_for_all_function</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">set_session_variables</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">ann_proj_pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;project&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">types</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;types&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">users_show</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;users_show&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">types</span><span class="p">:</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;entity_types_highlighter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">types</span>
-    <span class="k">if</span> <span class="n">users_show</span><span class="p">:</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;users_show_highlighter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">users_show</span>
-    <span class="k">if</span> <span class="n">ann_proj_pk</span><span class="p">:</span>
-        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;annotation_project&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ann_proj_pk</span>
-    <span class="k">return</span> <span class="n">request</span></div>
-
-
-
-<span class="c1">############################################################################</span>
-<span class="c1">############################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#   GenericViews</span>
-<span class="c1">#</span>
-<span class="c1">############################################################################</span>
-<span class="c1">############################################################################</span>
-
-
-<div class="viewcode-block" id="GenericListViewNew">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew">[docs]</a>
-<span class="k">class</span> <span class="nc">GenericListViewNew</span><span class="p">(</span>
-    <span class="n">UserPassesTestMixin</span><span class="p">,</span> <span class="n">ListViewObjectFilterMixin</span><span class="p">,</span> <span class="n">ExportMixin</span><span class="p">,</span> <span class="n">SingleTableView</span>
-<span class="p">):</span>
-    <span class="n">formhelper_class</span> <span class="o">=</span> <span class="n">GenericFilterFormHelper</span>
-    <span class="n">context_filter_name</span> <span class="o">=</span> <span class="s2">&quot;filter&quot;</span>
-    <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">25</span>
-    <span class="n">template_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_VIEW_TEMPLATE&quot;</span><span class="p">,</span> <span class="s2">&quot;generic_list.html&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GenericListViewNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="kc">None</span>
-
-<div class="viewcode-block" id="GenericListViewNew.get_model">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_model">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Look up the model class for the given entity</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="n">app_label__startswith</span><span class="o">=</span><span class="s2">&quot;apis_&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">model</span></div>
-
-
-<div class="viewcode-block" id="GenericListViewNew.test_func">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.test_func">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">access</span> <span class="o">=</span> <span class="n">access_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">viewtype</span><span class="o">=</span><span class="s2">&quot;list&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">access</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">set_session_variables</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">access</span></div>
-
-
-<div class="viewcode-block" id="GenericListViewNew.get_queryset">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_queryset">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity&quot;</span><span class="p">)</span>
-
-        <span class="n">qs</span> <span class="o">=</span> <span class="n">get_member_for_entity</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">(),</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ListViewQueryset&quot;</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="n">qs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">qs</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="n">get_list_filter_of_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">,</span> <span class="n">queryset</span><span class="o">=</span><span class="n">qs</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formhelper_class</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_queryset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">qs</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="GenericListViewNew.get_table">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_table">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create entity-specific table object for use on the frontend.</span>
-
-<span class="sd">        Holds information on e.g. which fields to use for table columns.</span>
-<span class="sd">        Incorporates variables provided in Models, Settings where available.</span>
-
-<span class="sd">        :return: a dictionary</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
-        <span class="n">class_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
-
-        <span class="n">selected_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span>
-            <span class="s2">&quot;columns&quot;</span>
-        <span class="p">)</span>  <span class="c1"># populates &quot;Select additional columns&quot; dropdown</span>
-        <span class="n">default_cols</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># get set to &quot;name&quot; in get_entities_table when empty</span>
-        <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">class_name</span><span class="p">)</span>
-        <span class="n">default_cols</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;table_fields&quot;</span><span class="p">,</span> <span class="p">[])</span>
-        <span class="n">default_cols</span> <span class="o">=</span> <span class="n">default_cols</span> <span class="o">+</span> <span class="n">selected_cols</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span> <span class="o">=</span> <span class="n">get_member_for_entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">(),</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Table&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">table_class</span> <span class="o">=</span> <span class="n">get_entities_table</span><span class="p">(</span><span class="n">class_name</span><span class="p">,</span> <span class="n">default_cols</span><span class="o">=</span><span class="n">default_cols</span><span class="p">)</span>
-        <span class="n">table</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericListViewNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span>
-        <span class="n">RequestConfig</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">paginate_by</span><span class="p">}</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">table</span></div>
-
-
-<div class="viewcode-block" id="GenericListViewNew.get_context_data">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.GenericListViewNew.get_context_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create entity-specific context object for use on the frontend.</span>
-
-<span class="sd">        Holds display values and information on functionality based on</span>
-<span class="sd">        model data as well as variables provided in Settings (where available).</span>
-
-<span class="sd">        :return: a dictionary</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GenericListViewNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">()</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
-        <span class="n">class_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
-
-        <span class="n">context</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context_filter_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span>
-        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span>  <span class="c1"># model slug</span>
-        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;app_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;apis_entities&quot;</span>
-        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;docstring&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="vm">__doc__</span><span class="si">}</span><span class="s2">&quot;</span>
-
-        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;entity_create_stanbol&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GenericEntitiesStanbolForm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="s2">&quot;browsing&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">browsing.models</span> <span class="kn">import</span> <span class="n">BrowsConf</span>
-
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;conf_items&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-                <span class="n">BrowsConf</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">class_name</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span>
-                    <span class="s2">&quot;field_path&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-
-        <span class="c1"># TODO kk</span>
-        <span class="c1">#  suggestion: rename context[&#39;class_name&#39;] to context[&#39;entity_name&#39;]</span>
-        <span class="c1">#  throughout (+ same for plural versions) to avoid confusion with</span>
-        <span class="c1">#  actual model class name</span>
-        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">verbose_name</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;class_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">verbose_name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;class_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">verbose_name_plural</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;class_name_plural&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">verbose_name_plural</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="c1"># rudimentary way of pluralising the name of a model class</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">class_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">):</span>
-                <span class="n">context</span><span class="p">[</span><span class="s2">&quot;class_name_plural&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s2">es&quot;</span>
-            <span class="k">elif</span> <span class="n">class_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">):</span>
-                <span class="n">context</span><span class="p">[</span><span class="s2">&quot;class_name_plural&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">class_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">ies&quot;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">context</span><span class="p">[</span><span class="s2">&quot;class_name_plural&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s2">s&quot;</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;get_arche_dump&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_arche_dump</span><span class="p">()</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;get_arche_dump&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;create_view_link&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_createview_url</span><span class="p">()</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-            <span class="n">context</span><span class="p">[</span><span class="s2">&quot;create_view_link&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">class_name</span><span class="p">)</span>
-        <span class="n">toggleable_cols</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;additional_cols&quot;</span><span class="p">,</span> <span class="p">[])</span>
-
-        <span class="c1"># TODO kk spelling of this dict key should get fixed throughout</span>
-        <span class="c1">#  (togglable_colums -&gt; toggleable_columns)</span>
-        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;togglable_colums&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">toggleable_cols</span> <span class="o">+</span> <span class="n">ENTITIES_DEFAULT_COLS</span>
-
+<div class="viewcode-block" id="EntitiesUpdate">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesUpdate">[docs]</a>
+<span class="k">class</span> <span class="nc">EntitiesUpdate</span><span class="p">(</span><span class="n">Update</span><span class="p">):</span>
+<div class="viewcode-block" id="EntitiesUpdate.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesUpdate.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">())</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;mergeform&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EntitiesMergeForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">context</span></div>
 </div>
 
 
 
-<span class="c1">############################################################################</span>
-<span class="c1">############################################################################</span>
-<span class="c1">#</span>
-<span class="c1">#   OtherViews</span>
-<span class="c1">#</span>
-<span class="c1">############################################################################</span>
-<span class="c1">############################################################################</span>
+<div class="viewcode-block" id="EntitiesDuplicate">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesDuplicate">[docs]</a>
+<span class="k">class</span> <span class="nc">EntitiesDuplicate</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
+    <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;create&quot;</span>
 
+<div class="viewcode-block" id="EntitiesDuplicate.get">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesDuplicate.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">source_obj</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">])</span>
+        <span class="n">newobj</span> <span class="o">=</span> <span class="n">source_obj</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
 
-<div class="viewcode-block" id="resolve_ambigue_person">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.resolve_ambigue_person">[docs]</a>
-<span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">resolve_ambigue_person</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">PersonResolveUriForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
-        <span class="n">pers</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span>
-            <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis:apis_entities:person_edit&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">pers</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span>
+            <span class="n">reverse</span><span class="p">(</span>
+                <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
+                <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">newobj</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="s2">&quot;contenttype&quot;</span><span class="p">:</span> <span class="n">newobj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
         <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EntitiesMerge">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge">[docs]</a>
+<span class="k">class</span> <span class="nc">EntitiesMerge</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+    <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;create&quot;</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">EntitiesMergeForm</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;entity_merge.html&quot;</span>
+    <span class="n">template_name_suffix</span> <span class="o">=</span> <span class="s2">&quot;_merge&quot;</span>
+
+<div class="viewcode-block" id="EntitiesMerge.get_object">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge.get_object">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pk&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="EntitiesMerge.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">context</span></div>
+
+
+<div class="viewcode-block" id="EntitiesMerge.get_form_kwargs">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge.get_form_kwargs">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_form_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_form_kwargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;instance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">kwargs</span></div>
+
+
+<div class="viewcode-block" id="EntitiesMerge.form_valid">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge.form_valid">[docs]</a>
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">merge_with</span><span class="p">([</span><span class="n">other</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EntitiesMerge.get_success_url">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge.get_success_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
+            <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span><span class="o">.</span><span class="n">id</span><span class="p">],</span>
+        <span class="p">)</span></div>
+</div>
 
 </pre></div>
 

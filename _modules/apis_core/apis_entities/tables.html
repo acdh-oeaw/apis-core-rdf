@@ -89,78 +89,31 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.apis_entities.tables</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">django_tables2</span> <span class="k">as</span> <span class="nn">tables</span>
-<span class="kn">from</span> <span class="nn">django_tables2.utils</span> <span class="kn">import</span> <span class="n">A</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">list_links_to_edit</span>
-
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.tables</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">generic_order_start_date_written</span><span class="p">,</span>
-    <span class="n">generic_order_end_date_written</span><span class="p">,</span>
-    <span class="n">generic_render_start_date_written</span><span class="p">,</span>
-    <span class="n">generic_render_end_date_written</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
+<span></span><span class="kn">from</span> <span class="nn">apis_core.generic.tables</span> <span class="kn">import</span> <span class="n">GenericTable</span><span class="p">,</span> <span class="n">ActionColumn</span>
 
 
-<div class="viewcode-block" id="get_entities_table">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.tables.get_entities_table">[docs]</a>
-<span class="k">def</span> <span class="nf">get_entities_table</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">default_cols</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">default_cols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">default_cols</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-        <span class="p">]</span>
+<div class="viewcode-block" id="DuplicateColumn">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.tables.DuplicateColumn">[docs]</a>
+<span class="k">class</span> <span class="nc">DuplicateColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A column showing a view button</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">class</span> <span class="nc">GenericEntitiesTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">render_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="s2">&quot;(No name provided)&quot;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">value</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;columns/duplicate.html&quot;</span></div>
 
-        <span class="c1"># reuse the logic for ordering and rendering *_date_written</span>
-        <span class="c1"># Important: The names of these class variables must correspond to the column field name,</span>
-        <span class="c1"># e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written</span>
-        <span class="n">order_start_date_written</span> <span class="o">=</span> <span class="n">generic_order_start_date_written</span>
-        <span class="n">order_end_date_written</span> <span class="o">=</span> <span class="n">generic_order_end_date_written</span>
-        <span class="n">render_start_date_written</span> <span class="o">=</span> <span class="n">generic_render_start_date_written</span>
-        <span class="n">render_end_date_written</span> <span class="o">=</span> <span class="n">generic_render_end_date_written</span>
-        <span class="k">if</span> <span class="n">list_links_to_edit</span><span class="p">():</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
-                <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
-                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;pk&quot;</span><span class="p">)],</span>
-                <span class="n">empty_values</span><span class="o">=</span><span class="p">[],</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
-                <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
-                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;pk&quot;</span><span class="p">)],</span>
-                <span class="n">empty_values</span><span class="o">=</span><span class="p">[],</span>
-            <span class="p">)</span>
-        <span class="n">export_formats</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;csv&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;json&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;xls&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;xlsx&quot;</span><span class="p">,</span>
-        <span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">default_cols</span><span class="p">:</span>
-            <span class="nb">id</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">()</span>
 
-        <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-            <span class="n">model</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_ontology_class_of_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
-            <span class="n">fields</span> <span class="o">=</span> <span class="n">default_cols</span>
-            <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-hover table-striped table-condensed&quot;</span><span class="p">}</span>
-            <span class="c1"># quick ensurance if column is indeed a field of this entity</span>
-            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">default_cols</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s1">&#39;APIS_ENTITIES &quot;table_fields&quot; setting for </span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s1"> entity</span><span class="se">\n</span><span class="s1">&#39;</span>
-                        <span class="sa">f</span><span class="s1">&#39;references &quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">&quot; field, which model class does not possess.</span><span class="se">\n</span><span class="s1">&#39;</span>
-                    <span class="p">)</span>
 
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<div class="viewcode-block" id="AbstractEntityTable">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.tables.AbstractEntityTable">[docs]</a>
+<span class="k">class</span> <span class="nc">AbstractEntityTable</span><span class="p">(</span><span class="n">GenericTable</span><span class="p">):</span>
+    <span class="n">noduplicate</span> <span class="o">=</span> <span class="n">DuplicateColumn</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">GenericEntitiesTable</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># if there is no custom sequence set, move `edit` and `delete` to the back</span>
+        <span class="k">if</span> <span class="s2">&quot;sequence&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;view&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;noduplicate&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">]</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 </pre></div>
 
