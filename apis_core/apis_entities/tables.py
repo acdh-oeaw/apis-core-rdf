@@ -1,4 +1,5 @@
 from apis_core.generic.tables import GenericTable, ActionColumn
+from apis_core.generic.helpers import permission_fullname
 
 
 class DuplicateColumn(ActionColumn):
@@ -18,3 +19,9 @@ class AbstractEntityTable(GenericTable):
             kwargs["sequence"] = ["...", "view", "edit", "noduplicate", "delete"]
 
         super().__init__(*args, **kwargs)
+
+    def before_render(self, request):
+        super().before_render(request)
+        if model := getattr(self.Meta, "model"):
+            if not request.user.has_perm(permission_fullname("create", model)):
+                self.columns.hide("noduplicate")
