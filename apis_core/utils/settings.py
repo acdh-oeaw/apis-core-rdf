@@ -16,12 +16,6 @@ def default_settings() -> Path:
     return curpath.parent / "default_settings"
 
 
-def clean_uri_mapping_file() -> Path:
-    default = Path(__file__).parent / "clean_uri.toml"
-    mapping_file = getattr(settings, "CLEANURI_MAPPINGS", default)
-    return Path(mapping_file)
-
-
 def get_entity_settings_by_modelname(entity: str = None) -> dict:
     """
     return the settings for a specific entity or the dict for all entities
