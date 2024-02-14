@@ -84,13 +84,7 @@ class GenericTable(tables.Table):
 
     class Meta:
         fields = ["id", "desc"]
-
-    def __init__(self, *args, **kwargs):
-        # if there is no custom sequence set, move `edit` and `delete` to the back
-        if "sequence" not in kwargs:
-            kwargs["sequence"] = ["...", "view", "edit", "delete"]
-
-        super().__init__(*args, **kwargs)
+        sequence = ("...", "view", "edit", "delete")
 
     def before_render(self, request):
         if model := getattr(self.Meta, "model"):
