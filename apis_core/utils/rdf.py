@@ -2,14 +2,12 @@
 # SPDX-License-Identifier: MIT
 
 import logging
-import tomllib
 
 from rdflib import Graph
 from typing import Tuple
 
-from django.template.utils import get_app_template_dirs
-
 from apis_core.utils.normalize import clean_uri
+from apis_core.utils.settings import dict_from_toml_directory
 
 logger = logging.getLogger(__name__)
 
@@ -33,13 +31,7 @@ def get_definition_and_attributes_from_uri(uri: str) -> Tuple[dict, dict]:
     graph = Graph()
     graph.parse(uri)
 
-    configs = {}
-    pathlists = [path.glob("**/*.toml") for path in get_app_template_dirs("rdfimport")]
-    for file in [path for pathlist in pathlists for path in pathlist]:
-        try:
-            configs[file.resolve()] = tomllib.loads(file.read_text())
-        except Exception as e:
-            logger.error(f"TOML parser could not read {file}: {e}")
+    configs = dict_from_toml_directory("rdfimport")
     matching_definition = None
     for key, definition in configs.items():
         if definition.get("filter_sparql", False):
