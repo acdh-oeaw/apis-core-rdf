@@ -2,16 +2,15 @@
 # SPDX-License-Identifier: MIT
 
 import re
-import tomllib
-from apis_core.utils.settings import clean_uri_mapping_file
+from apis_core.utils.settings import dict_from_toml_directory
 
 
 def clean_uri(uri: str) -> str:
-    settings = tomllib.loads(clean_uri_mapping_file().read_text())
+    configs = dict_from_toml_directory("cleanuri")
     if uri is not None:
-        for entry in settings.values():
-            regex = entry["regex"]
-            replace = entry["replace"]
+        for key, definition in configs.items():
+            regex = definition["regex"]
+            replace = definition["replace"]
             if m := re.match(regex, uri):
                 uri = replace.format(m.group(1))
     return uri
