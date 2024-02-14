@@ -41,6 +41,7 @@ def generate_search_filter(model, query, fields_to_search=None):
     return q
 
 
+@functools.lru_cache
 def mro_paths(model):
     """
     Create a list of MRO classes for a Django model
@@ -51,6 +52,7 @@ def mro_paths(model):
     return paths
 
 
+@functools.lru_cache
 def template_names_via_mro(model, suffix=""):
     """
     Use the MRO to generate a list of template names for a model
@@ -59,6 +61,7 @@ def template_names_via_mro(model, suffix=""):
     return [f"{prefix.lower()}{suffix}" for prefix in mro_prefix_list]
 
 
+@functools.lru_cache
 def class_from_path(classpath):
     """
     Lookup if the class in `classpath` exists - if so return it,
@@ -75,6 +78,7 @@ def class_from_path(classpath):
     return False
 
 
+@functools.lru_cache
 def first_match_via_mro(model, path: str = "", suffix: str = ""):
     """
     Based on the MRO of a Django model, look for classes based on a
@@ -93,6 +97,7 @@ def first_match_via_mro(model, path: str = "", suffix: str = ""):
     return res
 
 
+@functools.lru_cache
 def permission_fullname(action: str, model: object) -> str:
     permission_codename = get_permission_codename(action, model._meta)
     return f"{model._meta.app_label}.{permission_codename}"
