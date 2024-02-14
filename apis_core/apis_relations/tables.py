@@ -16,9 +16,13 @@ empty_text_default = "There are currently no relations"
 
 
 class TripleTable(GenericTable):
+    subj = tables.Column(linkify=True)
+    obj = tables.Column(linkify=True)
+
     class Meta:
         fields = ["id", "subj", "prop", "obj"]
         exclude = ["desc"]
+        sequence = ("id", "subj", "prop", "obj", "...")
 
 
 class SubjObjColumn(tables.ManyToManyColumn):
