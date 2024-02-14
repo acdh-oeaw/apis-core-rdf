@@ -82,10 +82,11 @@ class Property(RootObject):
         return self.deprecated_name
 
     def save(self, *args, **kwargs):
-        if self.name_reverse != unicodedata.normalize("NFC", self.name_reverse):
-            self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
-        if self.name_reverse == "" or self.name_reverse is None:
+        if self.name_reverse == "":
             self.name_reverse = f"{self.deprecated_name} [INVERSE]"
+
+        self.deprecated_name = unicodedata.normalize("NFC", self.deprecated_name)
+        self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
 
         # TODO RDF: Temporary hack, remove this once better solution is found
         self.name_forward = self.deprecated_name
