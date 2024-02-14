@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.13.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.6...v0.13.0) (2024-02-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_entities:** with the removal of `filters.py` and `tables.py` your configuration in `APIS_ENTITIES` won't have any effect anymore. Please replace them with custom tables and custom filtersets. Also the the locations and names and structure of the templates changed, so you will have to update those.
+
+### Features
+
+* add collection name as css class to collection templates ([44e1cf1](https://github.com/acdh-oeaw/apis-core-rdf/commit/44e1cf128aab9b214f245da7019e74a4f7ec2490)), closes [#604](https://github.com/acdh-oeaw/apis-core-rdf/issues/604)
+* **generic:** add debug log message to first_match_via_mro ([458ffd2](https://github.com/acdh-oeaw/apis-core-rdf/commit/458ffd2178532f6eac11c443374515be26e74c56))
+* **generic:** display foreign key fields as value instead of id ([7936d8a](https://github.com/acdh-oeaw/apis-core-rdf/commit/7936d8aaaacb66dfee6a2a7f4534bdd525196cb3))
+* **generic:** fix and enhance the generate_search_filter helper ([03eb3fe](https://github.com/acdh-oeaw/apis-core-rdf/commit/03eb3fe9c08f04ba676ff06de35aed496e12cf2a))
+* **generic:** make GenericImporter more verbose ([63aa960](https://github.com/acdh-oeaw/apis-core-rdf/commit/63aa9600e8a42486d4a3fc41420ef6524f8d9261))
+* **generic:** use `data-html` in autocomplete widgets ([c6d326f](https://github.com/acdh-oeaw/apis-core-rdf/commit/c6d326f676e039550abb8f4fda420cb9843c5aeb))
+* **generic:** use template attribute of autocomplete view ([a9f0d38](https://github.com/acdh-oeaw/apis-core-rdf/commit/a9f0d38dc5a9850421ddfee60a335a8100aa84d3))
+* **utils:** use dict_from_toml_directory for cleaning uris ([a703f51](https://github.com/acdh-oeaw/apis-core-rdf/commit/a703f513931e5cf957c8499f1ba1dfa05d79f728))
+
+
+### Bug Fixes
+
+* **apis_entities:** f string in merge_textfield missing f ([2b7bdb9](https://github.com/acdh-oeaw/apis-core-rdf/commit/2b7bdb951410deae0dee4443d77cdacf06d5be65))
+* **apis_entities:** fix wikidata uri mapping ([7372ff1](https://github.com/acdh-oeaw/apis-core-rdf/commit/7372ff16f7e7688561ca81aaef4ba68d0cf613e5))
+* **apis_metainfo:** set the `alters_data` attribute of duplicate ([d5cfdb5](https://github.com/acdh-oeaw/apis-core-rdf/commit/d5cfdb55cb005d3967bfd04aad7130526225d93b))
+* **apis_relations:** don't rely on APIS_BASE_URI for editing relations ([39f2cf1](https://github.com/acdh-oeaw/apis-core-rdf/commit/39f2cf189cb0705bc03efd40664db8da7754ec8b))
+* **apis_relations:** use generic autocomplete in GenericTripleForm ([0b23cc7](https://github.com/acdh-oeaw/apis-core-rdf/commit/0b23cc7c7535e945ee36b2213aa5350f495476d6))
+* **generic:** don't set template_name_suffix, only use it if its set ([71aef12](https://github.com/acdh-oeaw/apis-core-rdf/commit/71aef12645aa8b4a5b655a1e0cac40e54255ba54))
+* **generic:** redirect to update view after create or update ([1faf5c4](https://github.com/acdh-oeaw/apis-core-rdf/commit/1faf5c472cd5f65e648bef99c89a3964d10b452d))
+
+
+### Documentation
+
+* **generic:** add documentation about generic app customization ([6de3708](https://github.com/acdh-oeaw/apis-core-rdf/commit/6de370891d0b450afc44eefd1062a899dcfcdfec))
+
+
+### Code Refactoring
+
+* **apis_entities:** use new generic app ([45de48b](https://github.com/acdh-oeaw/apis-core-rdf/commit/45de48bea2b81823873066820a079635b8d7a04a))
+
 ## [0.12.6](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.5...v0.12.6) (2024-01-31)
 
 
