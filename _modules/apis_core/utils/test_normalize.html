@@ -100,11 +100,27 @@
 <div class="viewcode-block" id="NormalizeTest">
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_normalize.NormalizeTest">[docs]</a>
 <span class="k">class</span> <span class="nc">NormalizeTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
-<div class="viewcode-block" id="NormalizeTest.test_clean_uri">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_normalize.NormalizeTest.test_clean_uri">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_clean_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NormalizeTest.test_clean_uri_geonames">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_normalize.NormalizeTest.test_clean_uri_geonames">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_clean_uri_geonames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;https://www.geonames.org/2783029/achensee.html&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot;https://sws.geonames.org/2783029/&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">normalize</span><span class="o">.</span><span class="n">clean_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">),</span> <span class="n">res</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NormalizeTest.test_clean_uri_wikidata">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_normalize.NormalizeTest.test_clean_uri_wikidata">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_clean_uri_wikidata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;https://www.wikidata.org/wiki/Q1735&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot;https://www.wikidata.org/wiki/Special:EntityData/Q1735.rdf?flavor=simple&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">normalize</span><span class="o">.</span><span class="n">clean_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">),</span> <span class="n">res</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NormalizeTest.test_clean_uri_dnb">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_normalize.NormalizeTest.test_clean_uri_dnb">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_clean_uri_dnb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;https://d-nb.info/gnd/118540475&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="s2">&quot;https://d-nb.info/gnd/118540475&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">normalize</span><span class="o">.</span><span class="n">clean_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">),</span> <span class="n">res</span><span class="p">)</span></div>
 </div>
 

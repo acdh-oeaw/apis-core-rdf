@@ -93,8 +93,13 @@
 <span class="c1"># SPDX-License-Identifier: MIT</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">tomllib</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.template.utils</span> <span class="kn">import</span> <span class="n">get_app_template_dirs</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="default_settings">
@@ -102,15 +107,6 @@
 <span class="k">def</span> <span class="nf">default_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
     <span class="n">curpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
     <span class="k">return</span> <span class="n">curpath</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;default_settings&quot;</span></div>
-
-
-
-<div class="viewcode-block" id="clean_uri_mapping_file">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.clean_uri_mapping_file">[docs]</a>
-<span class="k">def</span> <span class="nf">clean_uri_mapping_file</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="n">default</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;clean_uri.toml&quot;</span>
-    <span class="n">mapping_file</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;CLEANURI_MAPPINGS&quot;</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">mapping_file</span><span class="p">)</span></div>
 
 
 
@@ -133,6 +129,20 @@
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.list_links_to_edit">[docs]</a>
 <span class="k">def</span> <span class="nf">list_links_to_edit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_LINKS_TO_EDIT&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="dict_from_toml_directory">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.dict_from_toml_directory">[docs]</a>
+<span class="k">def</span> <span class="nf">dict_from_toml_directory</span><span class="p">(</span><span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">configs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">pathlists</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;**/*.toml&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">get_app_template_dirs</span><span class="p">(</span><span class="n">directory</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="p">[</span><span class="n">path</span> <span class="k">for</span> <span class="n">pathlist</span> <span class="ow">in</span> <span class="n">pathlists</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">pathlist</span><span class="p">]:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">configs</span><span class="p">[</span><span class="n">file</span><span class="o">.</span><span class="n">resolve</span><span class="p">()]</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TOML parser could not read </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">configs</span></div>
 
 </pre></div>
 
