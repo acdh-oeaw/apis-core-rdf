@@ -11,13 +11,7 @@ from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
 from apis_core.apis_metainfo.models import Uri, RootObject
-from .api_renderers import (
-    EntityToTEI,
-    EntityToCIDOCXML,
-    EntityToCIDOCN3,
-    EntityToCIDOCNQUADS,
-    EntityToCIDOCTURTLE,
-)
+from .api_renderers import EntityToTEI
 from .serializers_generic import EntitySerializer
 from apis_core.utils import caching
 from apis_core.utils.utils import get_python_safe_module_path
@@ -32,13 +26,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 class GetEntityGeneric(GenericAPIView):
     serializer_class = EntitySerializer
     queryset = RootObject.objects.all()
-    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (
-        EntityToTEI,
-        EntityToCIDOCXML,
-        EntityToCIDOCN3,
-        EntityToCIDOCNQUADS,
-        EntityToCIDOCTURTLE,
-    )
+    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (EntityToTEI,)
     if getattr(settings, "APIS_RENDERERS", None) is not None:
         rend_add = tuple()
         for rd in settings.APIS_RENDERERS:
