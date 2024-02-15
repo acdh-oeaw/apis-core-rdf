@@ -108,12 +108,11 @@
 <span class="k">class</span> <span class="nc">AbstractEntityTable</span><span class="p">(</span><span class="n">GenericTable</span><span class="p">):</span>
     <span class="n">noduplicate</span> <span class="o">=</span> <span class="n">DuplicateColumn</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="c1"># if there is no custom sequence set, move `edit` and `delete` to the back</span>
-        <span class="k">if</span> <span class="s2">&quot;sequence&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;view&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;noduplicate&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">]</span>
-
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<div class="viewcode-block" id="AbstractEntityTable.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.tables.AbstractEntityTable.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">GenericTable</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;view&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;noduplicate&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">)</span></div>
+</div>
 
 </pre></div>
 
