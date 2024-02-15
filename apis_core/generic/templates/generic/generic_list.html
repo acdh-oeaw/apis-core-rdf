@@ -2,6 +2,7 @@
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
 {% load apisgeneric %}
+{% load apiscore %}
 
 {% block scripts %}
   {{ block.super }}
@@ -23,8 +24,16 @@ document.body.addEventListener('htmx:beforeSwap', function(event) {
         <div class="row">
           <div class="col">{{ object_list.model|contenttype }}</div>
           <div class="col">
-            <a class="btn btn-outline-success float-right btn-sm"
-               href="{% url 'apis_core:generic:create' object_list.model|contenttype %}">Create</a>
+            {% with object_list.model|opts as opts %}
+              {% with opts.app_label|add:"."|add:opts.verbose_name|add:"_create" as object_create_perm %}
+
+                {% if object_create_perm in perms %}
+                  <a class="btn btn-outline-success float-right btn-sm"
+                     href="{% url 'apis_core:generic:create' object_list.model|contenttype %}">Create</a>
+                {% endif %}
+
+              {% endwith %}
+            {% endwith %}
           </div>
         </div>
       </div>
