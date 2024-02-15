@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.13.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.13.0...v0.13.1) (2024-02-15)
+
+
+### Bug Fixes
+
+* **apis_entities:** hide duplicate button on missing permission ([096181f](https://github.com/acdh-oeaw/apis-core-rdf/commit/096181fdaaca4fbb3caa4d06260e19abb2290acb))
+* **apis_relations:** linkify subject and object columns ([bd1ed3d](https://github.com/acdh-oeaw/apis-core-rdf/commit/bd1ed3d45bdbcbba9979cbb586de0bdbb5dc8937)), closes [#1](https://github.com/acdh-oeaw/apis-core-rdf/issues/1)
+* **generic:** check for permissions in actions nav ([0ec25df](https://github.com/acdh-oeaw/apis-core-rdf/commit/0ec25dfae9d7b7802521a1916a13e40506036fdd))
+* **generic:** hide create button if permission does not exist ([154d2dd](https://github.com/acdh-oeaw/apis-core-rdf/commit/154d2dd3928f801fbb3a93671baf42118d31d3de))
+* **generic:** the relevant permission name is `change` not `edit` ([fcdb491](https://github.com/acdh-oeaw/apis-core-rdf/commit/fcdb491b17814733a50f9b77d833ea59bb1891c9))
+* **generic:** use custom permission solution in views ([edb783e](https://github.com/acdh-oeaw/apis-core-rdf/commit/edb783ec69eb790a936c2cdf4dd4b65c09ca8f89))
+
 ## [0.13.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.12.6...v0.13.0) (2024-02-14)
 
 
