@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
@@ -64,6 +65,9 @@ class GenericModelMixin:
         return template_names
 
     def get_permission_required(self):
+        if hasattr(settings, "APIS_VIEW_PASSES_TEST"):
+            if settings.APIS_VIEW_PASSES_TEST(self):
+                return []
         if hasattr(self, "permission_action_required"):
             return [permission_fullname(self.permission_action_required, self.model)]
         return []
