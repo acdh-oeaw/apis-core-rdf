@@ -110,7 +110,7 @@
 <div class="viewcode-block" id="decide_score_stanbol">
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.stanbolQueries.decide_score_stanbol">[docs]</a>
 <span class="k">def</span> <span class="nf">decide_score_stanbol</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">dec_diff</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">results</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
