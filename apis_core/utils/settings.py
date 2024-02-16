@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: 2023 Birger Schacht
 # SPDX-License-Identifier: MIT
 
-import os
 import logging
 import tomllib
 from pathlib import Path

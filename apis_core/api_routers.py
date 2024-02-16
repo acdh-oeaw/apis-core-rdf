@@ -5,6 +5,7 @@ try:
 except ImportError:
     pass
 from apis_core.apis_metainfo.models import *
+from apis_core.generic.serializers import GenericHyperlinkedModelSerializer
 
 # from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
@@ -157,9 +158,6 @@ class RelatedTripleSerializer(ApisBaseSerializer):
             raise Exception(
                 "Did not find entity in triple where it is supposed to be. Something must be wrong with the code."
             )
-
-
-from apis_core.generic.serializers import GenericHyperlinkedModelSerializer
 
 
 def generic_serializer_creation_factory():
