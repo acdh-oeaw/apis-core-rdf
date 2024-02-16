@@ -8,7 +8,7 @@ register = template.Library()
 def content_type(obj):
     if not obj:
         return False
-    if type(obj) == dict:
+    if isinstance(obj, dict):
         for x in obj.keys():
             if x.startswith("related_"):
                 nl = [x.split("_")[1], x.split("_")[1]]

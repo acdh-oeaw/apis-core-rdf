@@ -17,7 +17,7 @@ else:
 
 
 def decide_score_stanbol(results, dec_diff):
-    if type(results) == dict:
+    if isinstance(results, dict):
         return results
     if len(results) == 1:
         return results[0]
