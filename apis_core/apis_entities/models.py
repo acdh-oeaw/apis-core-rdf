@@ -191,7 +191,7 @@ class AbstractEntity(RootObject):
         if not isinstance(entities, list) and not isinstance(entities, QuerySet):
             entities = [entities]
             entities = [
-                self_model_class.objects.get(pk=ent) if type(ent) == int else ent
+                self_model_class.objects.get(pk=ent) if isinstance(ent, int) else ent
                 for ent in entities
             ]
         for ent in entities:
