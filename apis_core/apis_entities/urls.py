@@ -4,7 +4,6 @@ from django.urls import include, path, register_converter
 from django.shortcuts import get_list_or_404
 
 from .autocomplete3 import (
-    GenericEntitiesAutocomplete,
     GenericNetworkEntitiesAutocomplete,
 )
 
@@ -82,32 +81,10 @@ entity_patterns = [
     ),
 ]
 
-autocomplete_patterns = [
-    path(
-        "<slug:entity>/<int:ent_merge_pk>/",
-        GenericEntitiesAutocomplete.as_view(),
-        name="generic_entities_autocomplete",
-    ),
-    path(
-        "<slug:entity>/<str:db_include>/",
-        GenericEntitiesAutocomplete.as_view(),
-        name="generic_entities_autocomplete",
-    ),
-    path(
-        "<slug:entity>/",
-        GenericEntitiesAutocomplete.as_view(),
-        name="generic_entities_autocomplete",
-    ),
-]
-
 urlpatterns = [
     path(
         "entity/<entitytocontenttype:contenttype>/",
         include(entity_patterns),
-    ),
-    path(
-        "autocomplete/",
-        include(autocomplete_patterns),
     ),
     path(
         "autocomplete-network/<slug:entity>/",
