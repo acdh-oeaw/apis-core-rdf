@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.db.models.signals import m2m_changed
 from model_utils.managers import InheritanceManager
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
+from apis_core.generic.abc import GenericModel
 
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.utils import DateParser
@@ -222,7 +223,7 @@ class InheritanceForeignKey(models.ForeignKey):
     forward_related_accessor_class = InheritanceForwardManyToOneDescriptor
 
 
-class Triple(models.Model):
+class Triple(GenericModel, models.Model):
     subj = InheritanceForeignKey(
         RootObject,
         blank=True,

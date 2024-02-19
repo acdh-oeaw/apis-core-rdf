@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import include, path, register_converter
 from django.http import Http404
 from rest_framework import routers
+from .abc import GenericModel
 
 from apis_core.generic import views, api_views
 
@@ -16,13 +17,13 @@ class ContenttypeConverter:
     """
 
     regex = r"\w+\.\w+"
-    exclude_app_labels = ["admin", "auth", "sessions"]
 
     def to_python(self, value):
         app_label, model = value.split(".")
-        if app_label in self.exclude_app_labels:
-            raise Http404
-        return get_object_or_404(ContentType, app_label=app_label, model=model)
+        contenttype = get_object_or_404(ContentType, app_label=app_label, model=model)
+        if issubclass(contenttype.model_class(), GenericModel):
+            return contenttype
+        raise Http404
 
     def to_url(self, value):
         return f"{value.app_label}.{value.model}"
