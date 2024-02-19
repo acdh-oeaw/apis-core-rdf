@@ -10,6 +10,7 @@ from model_utils.managers import InheritanceManager
 from apis_core.utils.normalize import clean_uri
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
+from apis_core.generic.abc import GenericModel
 
 from apis_core.utils import caching, rdf
 
@@ -20,7 +21,7 @@ NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
 
 @reversion.register()
-class RootObject(models.Model):
+class RootObject(GenericModel, models.Model):
     """
     The very root thing that can exist in a given ontology. Several classes inherit from it.
     By having one overarching super class we gain the advantage of unique identifiers.
@@ -147,7 +148,7 @@ class UriManager(models.Manager):
 
 
 @reversion.register()
-class Uri(models.Model):
+class Uri(GenericModel, models.Model):
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
     domain = models.CharField(max_length=255, blank=True)
     rdf_link = models.URLField(blank=True)

@@ -1,9 +1,10 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from apis_core.generic.abc import GenericModel
 
 
-class SkosCollection(models.Model):
+class SkosCollection(GenericModel, models.Model):
     """
     SKOS collections are labeled and/or ordered groups of SKOS concepts.
     Collections are useful where a group of concepts shares something in common,
@@ -57,7 +58,7 @@ class SkosCollection(models.Model):
         return childtrees
 
 
-class SkosCollectionContentObject(models.Model):
+class SkosCollectionContentObject(GenericModel, models.Model):
     """
     *Throughtable* datamodel to connect collections to arbitrary content
     """
