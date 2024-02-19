@@ -16,7 +16,6 @@ from apis_core.apis_metainfo.models import Uri
 from .tables import get_generic_triple_table
 from apis_core.apis_entities.autocomplete3 import (
     PropertyAutocomplete,
-    GenericEntitiesAutocomplete,
 )
 
 
@@ -57,10 +56,6 @@ class GenericTripleForm(forms.ModelForm):
         )
         attrs_target = copy.deepcopy(attrs)
         attrs_target["data-tags"] = "1"
-
-        # This assert only serves as a linking for us devs, to make explicit what internal object the class
-        # Select2ListCreateChoiceField object afterwards uses.
-        assert GenericEntitiesAutocomplete
 
         ct = ContentType.objects.get(model=entity_type_other_str.lower())
         url = reverse("apis:generic:autocomplete", args=[ct])
