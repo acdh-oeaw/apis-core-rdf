@@ -4,20 +4,12 @@ from django.conf import settings
 def access_for_all(self, viewtype="list"):
     if self.request.user.is_authenticated:
         return self.request.user.is_authenticated
-    elif viewtype == "list":
-        try:
-            access = settings.APIS_LIST_VIEWS_ALLOWED
-        except AttributeError:
-            access = False
-            return access
-        return access
-    else:
-        try:
-            access = settings.APIS_DETAIL_VIEWS_ALLOWED
-        except AttributeError:
-            access = False
-            return access
-        return access
+    match viewtype:
+        case "list":
+            return getattr(settings, "APIS_LIST_VIEWS_ALLOWED", False)
+        case "detail":
+            return getattr(settings, "APIS_DETAIL_VIEWS_ALLOWED", False)
+    return False
 
 
 def access_for_all_function(user):
