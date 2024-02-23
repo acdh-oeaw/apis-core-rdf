@@ -35,11 +35,14 @@ def get_definition_and_attributes_from_uri(uri: str) -> Tuple[dict, dict]:
     matching_definition = None
     for key, definition in configs.items():
         if definition.get("filter_sparql", False):
-            if bool(graph.query(definition["filter_sparql"])):
-                logger.info(f"Found {key} to match the Uri")
-                matching_definition = definition
-                matching_definition["filename"] = str(key)
-                break
+            try:
+                if bool(graph.query(definition["filter_sparql"])):
+                    logger.info("Found %s to match the Uri", key)
+                    matching_definition = definition
+                    matching_definition["filename"] = str(key)
+                    break
+            except Exception as e:
+                logger.error("filter_sparql in %s led to: %s", key, e)
     model_attributes = dict()
     if matching_definition:
         attributes = matching_definition.get("attributes", [])
@@ -52,4 +55,4 @@ def get_definition_and_attributes_from_uri(uri: str) -> Tuple[dict, dict]:
                     model_attributes[str(key)] = str(value)
     else:
         raise AttributeError(f"No matching definition found for {uri}")
-    return definition, model_attributes
+    return matching_definition, model_attributes
