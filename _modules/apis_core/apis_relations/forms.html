@@ -107,7 +107,6 @@
 <span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">get_generic_triple_table</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.autocomplete3</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">PropertyAutocomplete</span><span class="p">,</span>
-    <span class="n">GenericEntitiesAutocomplete</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -153,10 +152,6 @@
         <span class="p">)</span>
         <span class="n">attrs_target</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
         <span class="n">attrs_target</span><span class="p">[</span><span class="s2">&quot;data-tags&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
-
-        <span class="c1"># This assert only serves as a linking for us devs, to make explicit what internal object the class</span>
-        <span class="c1"># Select2ListCreateChoiceField object afterwards uses.</span>
-        <span class="k">assert</span> <span class="n">GenericEntitiesAutocomplete</span>
 
         <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">entity_type_other_str</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis:generic:autocomplete&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">])</span>
