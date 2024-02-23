@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Customization" href="customization.html" />
+    <link rel="prev" title="Installation with Docker" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Settings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rest-framework">REST_FRAMEWORK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis-base-uri">APIS_BASE_URI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis-next-prev">APIS_NEXT_PREV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis-api-id-writable">APIS_API_ID_WRITABLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis-list-views-allowed">APIS_LIST_VIEWS_ALLOWED</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis-detail-views-allowed">APIS_DETAIL_VIEWS_ALLOWED</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis-view-passes-test">APIS_VIEW_PASSES_TEST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis-list-view-object-filter">APIS_LIST_VIEW_OBJECT_FILTER</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="customization.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="collections.html">Working with collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autocomplete.html">Extending autocomplete results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="importing.html">Importing data from external resources</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Settings</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/settings.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="settings">
+<h1>Settings<a class="headerlink" href="#settings" title="Link to this heading"></a></h1>
+<p>This section deals with the internal configuration of the APIS tool. For instructions on how to set it up please refer
+to <a class="reference internal" href="installation.html"><span class="doc">Installation with Docker</span></a>.</p>
+<section id="rest-framework">
+<h2>REST_FRAMEWORK<a class="headerlink" href="#rest-framework" title="Link to this heading"></a></h2>
+<p>APIS uses the <a href="#id1"><span class="problematic" id="id2">`Django Restframework`_</span></a> for API provisioning. Restframework specific settings like the default page size can be set here.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">REST_FRAMEWORK</span><span class="p">[</span><span class="s2">&quot;DEFAULT_AUTHENTICATION_CLASSES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;rest_framework.permissions.DjangoObjectPermissions&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Use the above default to allow setting permissions on object level. Meaning that every user gets his permissions depending on his/her user group and the collections this group has permissions for.
+Set <code class="docutils literal notranslate"><span class="pre">&quot;rest_framework.permissions.DjangoModelPermissions&quot;</span></code> for allowing every user with permissions on a model to change all model instances.
+Set <code class="docutils literal notranslate"><span class="pre">&quot;rest_framework.permissions.IsAuthenticated&quot;</span></code> if every logged in user should have all permissions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">REST_FRAMEWORK</span><span class="p">[</span><span class="s2">&quot;PAGE_SIZE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
+</pre></div>
+</div>
+<p>Sets the default page size the APIS RestAPI should deliver.</p>
+</section>
+<section id="apis-base-uri">
+<h2>APIS_BASE_URI<a class="headerlink" href="#apis-base-uri" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_BASE_URI</span> <span class="o">=</span> <span class="s2">&quot;https://your-url-goes-here.com&quot;</span>
+</pre></div>
+</div>
+<p>Sets the base URI your instance should use. This is important as APIS uses mainly URIs instead of IDs. These URIs are also used for the serialization.</p>
+</section>
+<section id="apis-next-prev">
+<h2>APIS_NEXT_PREV<a class="headerlink" href="#apis-next-prev" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_NEXT_PREV</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="apis-api-id-writable">
+<h2>APIS_API_ID_WRITABLE<a class="headerlink" href="#apis-api-id-writable" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_API_ID_WRITABLE</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Boolean setting for defining if the <cite>id</cite> field of an entity is writable via the
+API. Defaults to false. You can set it to <cite>True</cite> if you want to import entities
+from another instance and want to keep the <cite>id</cite>.</p>
+</section>
+<section id="apis-list-views-allowed">
+<h2>APIS_LIST_VIEWS_ALLOWED<a class="headerlink" href="#apis-list-views-allowed" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_LIST_VIEWS_ALLOWED</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Sets whether list views are accessible for anonymous (not logged in) users.</p>
+</section>
+<section id="apis-detail-views-allowed">
+<h2>APIS_DETAIL_VIEWS_ALLOWED<a class="headerlink" href="#apis-detail-views-allowed" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_DETAIL_VIEWS_ALLOWED</span> <span class="o">-</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Sets whether detail views are accessible for anonymous (note logged in) users.</p>
+</section>
+<section id="apis-view-passes-test">
+<h2>APIS_VIEW_PASSES_TEST<a class="headerlink" href="#apis-view-passes-test" title="Link to this heading"></a></h2>
+<p>Allows to define a function that receives the view as an argument - including
+e.g. the <cite>request</cite> object - and can perform checks on any of the views
+attributes. The function can, based on these checks, return a boolean which
+decides if the request is successful or leads to a 403 permission denied.</p>
+</section>
+<section id="apis-list-view-object-filter">
+<h2>APIS_LIST_VIEW_OBJECT_FILTER<a class="headerlink" href="#apis-list-view-object-filter" title="Link to this heading"></a></h2>
+<p>Allows to define a function that receives the view - including e.g. the
+<cite>request</cite> object - and a queryset and can do custom filtering on that queryset.
+This can be used to set the listviews to public using the
+<cite>APIS_LIST_VIEWS_ALLOWED</cite> setting, but still only list specific entities.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation with Docker" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="customization.html" class="btn btn-neutral float-right" title="Customization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
