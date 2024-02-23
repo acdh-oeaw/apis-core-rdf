@@ -1,7 +1,7 @@
 from operator import itemgetter
 from django import template
 from apis_core.utils import caching
-from apis_core.utils.helpers import triple_sidebar
+from apis_core.utils.helpers import get_classes_with_allowed_relation_from
 
 register = template.Library()
 
@@ -29,9 +29,18 @@ def entities_list_links():
     return entities_links
 
 
-@register.simple_tag(takes_context=True)
-def object_relations(context, detail=True):
-    obj = context["object"]
-    return triple_sidebar(
-        obj.pk, obj.__class__.__name__.lower(), context["request"], detail
-    )
+@register.filter
+def triple_form_types(instance):
+    """
+    This is a helper function to generate identifiers which
+    are then used in `abstractentity_form.html` in the javascript
+    part to initialize the old triple tables and forms.
+    """
+    entity_name = instance._meta.verbose_name
+    object_relations = []
+    for entity_class in get_classes_with_allowed_relation_from(entity_name):
+        other_entity_class_name = entity_class.__name__.lower()
+        object_relations.append(
+            f"triple_form_{entity_name}_to_{other_entity_class_name}"
+        )
+    return object_relations

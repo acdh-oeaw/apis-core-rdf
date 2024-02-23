@@ -162,12 +162,10 @@ function DeleteTempEntity(pk, kind, app_name=false) {
     })
 }
   </script>
-  {% object_relations as object_relations %}
   <script type="text/javascript">
 function activate_editing(){
-       {% for obj in object_relations %}
-       GetFormAjax("{{obj.2}}");
-       //unbind_ajax_forms();
+  {% for triple_form_type in object|triple_form_types %}
+       GetFormAjax("{{triple_form_type}}");
        {% endfor %}
 };
 activate_editing();
