@@ -97,20 +97,12 @@
 <span class="k">def</span> <span class="nf">access_for_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">viewtype</span><span class="o">=</span><span class="s2">&quot;list&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span>
-    <span class="k">elif</span> <span class="n">viewtype</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">access</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_LIST_VIEWS_ALLOWED</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-            <span class="n">access</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">return</span> <span class="n">access</span>
-        <span class="k">return</span> <span class="n">access</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">access</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_DETAIL_VIEWS_ALLOWED</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-            <span class="n">access</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">return</span> <span class="n">access</span>
-        <span class="k">return</span> <span class="n">access</span></div>
+    <span class="k">match</span> <span class="n">viewtype</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_VIEWS_ALLOWED&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;detail&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_DETAIL_VIEWS_ALLOWED&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
 
 
 
