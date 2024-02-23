@@ -109,26 +109,40 @@
              
   <section id="customization">
 <h1>Customization<a class="headerlink" href="#customization" title="Link to this heading"></a></h1>
+<p>The core of the logic described here is based on the <a class="reference internal" href="modules/apis_core.generic.html#module-apis_core.generic" title="apis_core.generic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.generic</span></code></a>.
+It provides generic CRUD views and API views for all models that are configured
+to use it. To make a model use the generic functionality, it has to inherit from
+<a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel" title="apis_core.generic.abc.GenericModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.abc.GenericModel</span></code></a>.
+In standard APIS those models are</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject" title="apis_core.apis_metainfo.models.RootObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_metainfo.models.RootObject</span></code></a></p></li>
+<li><p><a class="reference internal" href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri" title="apis_core.apis_metainfo.models.Uri"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_metainfo.models.Uri</span></code></a></p></li>
+<li><p><a class="reference internal" href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple" title="apis_core.apis_relations.models.Triple"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_relations.models.Triple</span></code></a></p></li>
+<li><p><a class="reference internal" href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection" title="apis_core.collections.models.SkosCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.collections.models.SkosCollection</span></code></a></p></li>
+<li><p><a class="reference internal" href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject" title="apis_core.collections.models.SkosCollectionContentObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.collections.models.SkosCollectionContentObject</span></code></a></p></li>
+</ul>
+<p>If you want to use the generic app for your own model, simple make your model
+inherit from <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel" title="apis_core.generic.abc.GenericModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.abc.GenericModel</span></code></a>.</p>
 <section id="list-views">
 <h2>List views<a class="headerlink" href="#list-views" title="Link to this heading"></a></h2>
 <p>The list views consist of a <a class="reference external" href="https://django-filter.readthedocs.io">django-filters</a> <a class="reference external" href="https://django-filter.readthedocs.io/en/stable/ref/filterset.html">filterset</a> on the
 left and a <a class="reference external" href="django-tables2.readthedocs.io/">django-tables</a> <a class="reference external" href="https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#table">table</a>
 of results on the right side.</p>
 <p>The default filterset used is
-<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.filtersets.GenericFilterSet</span></code>. You can override the
+<a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet" title="apis_core.generic.filtersets.GenericFilterSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.filtersets.GenericFilterSet</span></code></a>. You can override the
 filterset for you models by defining a custom filterset class in
 <code class="docutils literal notranslate"><span class="pre">you_app.filtersets</span></code>. The filterset has to be named <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;FilterSet</span></code>,
 so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for
 the filterset <code class="docutils literal notranslate"><span class="pre">myproject.filtersets.PersonFilterSet</span></code>. You can inherit from
-<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.filtersets.GenericFilterSet</span></code> and add your
+<a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet" title="apis_core.generic.filtersets.GenericFilterSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.filtersets.GenericFilterSet</span></code></a> and add your
 customzations.</p>
-<p>The default table used is <code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.tables.GenericTable</span></code>. You
+<p>The default table used is <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.tables.GenericTable" title="apis_core.generic.tables.GenericTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.tables.GenericTable</span></code></a>. You
 can override the table for your models by defining a custom table class in
 <code class="docutils literal notranslate"><span class="pre">your_app.tables</span></code>. The table class has to be named <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;Table</span></code>, so
 if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for
 the table class <code class="docutils literal notranslate"><span class="pre">myproject.tables.PersonTable</span></code>. You can inherit from
-<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.tables.GenericTable</span></code> and add your customizations.
-<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.tables.GenericTable</span></code> also contains a handful of
+<a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.tables.GenericTable" title="apis_core.generic.tables.GenericTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.tables.GenericTable</span></code></a> and add your customizations.
+<a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.tables.GenericTable" title="apis_core.generic.tables.GenericTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.tables.GenericTable</span></code></a> also contains a handful of
 useful <a class="reference external" href="https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#columns">django table columns</a>
 that you might want to use.</p>
 <p>The base queryset that is used in the listview, which is then filtered using
@@ -150,7 +164,7 @@ template.</p>
 <section id="create-and-update-views">
 <h2>Create and Update views<a class="headerlink" href="#create-and-update-views" title="Link to this heading"></a></h2>
 <p>The create and update view use the form
-<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.GenericModelForm</span></code> by default. You can override
+<a class="reference internal" href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm" title="apis_core.generic.forms.GenericModelForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.GenericModelForm</span></code></a> by default. You can override
 the form it uses by creating a custom form in <code class="docutils literal notranslate"><span class="pre">you_app.forms</span></code>. The form class
 has to be named <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;Form</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
 app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the form class
@@ -168,7 +182,7 @@ template to override the generic template.</p>
 <h2>Autocomplete views<a class="headerlink" href="#autocomplete-views" title="Link to this heading"></a></h2>
 <p>The autocomplete views filter your model instances based on a query string
 provided. By default, the autocomplete views use
-<code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.generic.helpers.generate_search_filter()</span></code> to filter the model
+<a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.helpers.generate_search_filter" title="apis_core.generic.helpers.generate_search_filter"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.generic.helpers.generate_search_filter()</span></code></a> to filter the model
 queryset. You can override the queryset by creating a custom queryset for your
 model in <code class="docutils literal notranslate"><span class="pre">your_app.querysets</span></code>. The queryset function has to be named
 <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;AutocompleteQueryset</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
@@ -190,7 +204,7 @@ app <code class="docutils literal notranslate"><span class="pre">myproject</span
 <section id="import-view">
 <h2>Import view<a class="headerlink" href="#import-view" title="Link to this heading"></a></h2>
 <p>The import view uses the form
-<code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.GenericImportForm</span></code> by default. You can override
+<a class="reference internal" href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm" title="apis_core.generic.forms.GenericImportForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.GenericImportForm</span></code></a> by default. You can override
 the form it uses by creating a custom form in <code class="docutils literal notranslate"><span class="pre">your_app.forms</span></code>. The form
 class has to be named <code class="docutils literal notranslate"><span class="pre">&lt;ModelName&gt;ImportForm</span></code>, so if you have a model
 <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the form class
@@ -208,7 +222,7 @@ generic template.</p>
 <h2>Class, method and template lookup<a class="headerlink" href="#class-method-and-template-lookup" title="Link to this heading"></a></h2>
 <p>As mentioned above, APIS tries to find the correct class or method to override
 the ones the <code class="docutils literal notranslate"><span class="pre">generic</span></code> one ships. This is done using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.generic.helpers.first_match_via_mro()</span></code>. The method does not only
+<a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.helpers.first_match_via_mro" title="apis_core.generic.helpers.first_match_via_mro"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.generic.helpers.first_match_via_mro()</span></code></a>. The method does not only
 look for possible overrides using the name of the model itself, but also using
 all the parent models following the full inheritance chain. So if all your models
 inherit from <code class="docutils literal notranslate"><span class="pre">MyAbstractModel</span></code>, you can for example create an override table

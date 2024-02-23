@@ -92,11 +92,12 @@
 <span></span><span class="kn">from</span> <span class="nn">django.contrib.contenttypes.fields</span> <span class="kn">import</span> <span class="n">GenericForeignKey</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
 
 
 <div class="viewcode-block" id="SkosCollection">
 <a class="viewcode-back" href="../../../modules/apis_core.collections.html#apis_core.collections.models.SkosCollection">[docs]</a>
-<span class="k">class</span> <span class="nc">SkosCollection</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SkosCollection</span><span class="p">(</span><span class="n">GenericModel</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    SKOS collections are labeled and/or ordered groups of SKOS concepts.</span>
 <span class="sd">    Collections are useful where a group of concepts shares something in common,</span>
@@ -159,7 +160,7 @@
 
 <div class="viewcode-block" id="SkosCollectionContentObject">
 <a class="viewcode-back" href="../../../modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject">[docs]</a>
-<span class="k">class</span> <span class="nc">SkosCollectionContentObject</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SkosCollectionContentObject</span><span class="p">(</span><span class="n">GenericModel</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Throughtable* datamodel to connect collections to arbitrary content</span>
 <span class="sd">    &quot;&quot;&quot;</span>

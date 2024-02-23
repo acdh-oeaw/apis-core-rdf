@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.generic package &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customization.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../collections.html">Working with collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autocomplete.html">Extending autocomplete results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../importing.html">Importing data from external resources</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">apis_core.generic package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/apis_core.generic.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-apis_core.generic">
+<span id="apis-core-generic-package"></span><h1>apis_core.generic package<a class="headerlink" href="#module-apis_core.generic" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="apis_core.generic.forms.html">apis_core.generic.forms package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm"><code class="docutils literal notranslate"><span class="pre">GenericFilterSetForm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm.base_fields"><code class="docutils literal notranslate"><span class="pre">GenericFilterSetForm.base_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm.clean"><code class="docutils literal notranslate"><span class="pre">GenericFilterSetForm.clean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm.columns_exclude"><code class="docutils literal notranslate"><span class="pre">GenericFilterSetForm.columns_exclude</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm.declared_fields"><code class="docutils literal notranslate"><span class="pre">GenericFilterSetForm.declared_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm.media"><code class="docutils literal notranslate"><span class="pre">GenericFilterSetForm.media</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm"><code class="docutils literal notranslate"><span class="pre">GenericImportForm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.Meta"><code class="docutils literal notranslate"><span class="pre">GenericImportForm.Meta</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.Meta.fields"><code class="docutils literal notranslate"><span class="pre">GenericImportForm.Meta.fields</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.base_fields"><code class="docutils literal notranslate"><span class="pre">GenericImportForm.base_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.declared_fields"><code class="docutils literal notranslate"><span class="pre">GenericImportForm.declared_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.media"><code class="docutils literal notranslate"><span class="pre">GenericImportForm.media</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm"><code class="docutils literal notranslate"><span class="pre">GenericModelForm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.Meta"><code class="docutils literal notranslate"><span class="pre">GenericModelForm.Meta</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.Meta.fields"><code class="docutils literal notranslate"><span class="pre">GenericModelForm.Meta.fields</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.base_fields"><code class="docutils literal notranslate"><span class="pre">GenericModelForm.base_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.declared_fields"><code class="docutils literal notranslate"><span class="pre">GenericModelForm.declared_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.media"><code class="docutils literal notranslate"><span class="pre">GenericModelForm.media</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#module-apis_core.generic.forms.fields">apis_core.generic.forms.fields module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField"><code class="docutils literal notranslate"><span class="pre">ModelImportChoiceField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField.to_python"><code class="docutils literal notranslate"><span class="pre">ModelImportChoiceField.to_python()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-apis_core.generic.abc">
+<span id="apis-core-generic-abc-module"></span><h2>apis_core.generic.abc module<a class="headerlink" href="#module-apis_core.generic.abc" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.abc.</span></span><span class="sig-name descname"><span class="pre">GenericModel</span></span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-apis_core.generic.api_views">
+<span id="apis-core-generic-api-views-module"></span><h2>apis_core.generic.api_views module<a class="headerlink" href="#module-apis_core.generic.api_views" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.api_views.</span></span><span class="sig-name descname"><span class="pre">ModelViewSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/api_views.html#ModelViewSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelViewSet</span></code></p>
+<p>API ViewSet for a generic model.
+The queryset is overridden by the first match from
+the <cite>first_match_via_mro</cite> helper.
+The serializer class is overridden by the first match from
+the <cite>first_match_via_mro</cite> helper.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.basename">
+<span class="sig-name descname"><span class="pre">basename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.basename" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.detail">
+<span class="sig-name descname"><span class="pre">detail</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.detail" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.dispatch">
+<span class="sig-name descname"><span class="pre">dispatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/api_views.html#ModelViewSet.dispatch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.dispatch" title="Link to this definition"></a></dt>
+<dd><p><cite>.dispatch()</cite> is pretty much the same as Django’s regular dispatch,
+but with extra hooks for startup, finalize, and exception handling.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/api_views.html#ModelViewSet.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Get the list of items for this view.
+This must be an iterable, and may be a queryset.
+Defaults to using <cite>self.queryset</cite>.</p>
+<p>This method should always be used rather than accessing <cite>self.queryset</cite>
+directly, as <cite>self.queryset</cite> gets evaluated only once, and those results
+are cached for all subsequent requests.</p>
+<p>You may want to override this if you need to provide different
+querysets depending on the incoming request.</p>
+<p>(Eg. return a list of items that is specific to the user)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.get_serializer_class">
+<span class="sig-name descname"><span class="pre">get_serializer_class</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/api_views.html#ModelViewSet.get_serializer_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.get_serializer_class" title="Link to this definition"></a></dt>
+<dd><p>Return the class to use for the serializer.
+Defaults to using <cite>self.serializer_class</cite>.</p>
+<p>You may want to override this if you need to provide different
+serializations depending on the incoming request.</p>
+<p>(Eg. admins get full serialization, others get basic serialization)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.suffix">
+<span class="sig-name descname"><span class="pre">suffix</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.suffix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-apis_core.generic.filtersets">
+<span id="apis-core-generic-filtersets-module"></span><h2>apis_core.generic.filtersets module<a class="headerlink" href="#module-apis_core.generic.filtersets" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.filtersets.</span></span><span class="sig-name descname"><span class="pre">GenericFilterSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/filtersets.html#GenericFilterSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterSet</span></code></p>
+<p>This is a workaround because the FilterSet class of django-filters
+does not allow passing form arguments to the form - but we want to
+pass the <cite>model</cite> to the form, so we can create the <cite>columns</cite> form
+field.
+See also: <a class="reference external" href="https://github.com/carltongibson/django-filter/issues/1630">https://github.com/carltongibson/django-filter/issues/1630</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/generic/filtersets.html#GenericFilterSet.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet.Meta.form">
+<span class="sig-name descname"><span class="pre">form</span></span><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet.Meta.form" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm" title="apis_core.generic.forms.GenericFilterSetForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericFilterSetForm</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet.base_filters">
+<span class="sig-name descname"><span class="pre">base_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet.base_filters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet.declared_filters">
+<span class="sig-name descname"><span class="pre">declared_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet.declared_filters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet.form">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">form</span></span><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet.form" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.filterset_factory">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.filtersets.</span></span><span class="sig-name descname"><span class="pre">filterset_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filterset=&lt;class</span> <span class="pre">'django_filters.filterset.FilterSet'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields='__all__'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/filtersets.html#filterset_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filtersets.filterset_factory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-apis_core.generic.helpers">
+<span id="apis-core-generic-helpers-module"></span><h2>apis_core.generic.helpers module<a class="headerlink" href="#module-apis_core.generic.helpers" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.class_from_path">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">class_from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#class_from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.class_from_path" title="Link to this definition"></a></dt>
+<dd><p>Lookup if the class in <cite>classpath</cite> exists - if so return it,
+otherwise return False</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.first_match_via_mro">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">first_match_via_mro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#first_match_via_mro"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.first_match_via_mro" title="Link to this definition"></a></dt>
+<dd><p>Based on the MRO of a Django model, look for classes based on a
+lookup algorithm and return the first one that matches.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.generate_search_filter">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">generate_search_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields_to_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#generate_search_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.generate_search_filter" title="Link to this definition"></a></dt>
+<dd><p>Generate a default search filter that searches for the <cite>query</cite>
+in all the CharFields and TextFields of a model (case-insensitive)
+or in the fields listed in the <cite>fields_to_search</cite> argument.
+This helper can be used by autocomplete querysets if nothing
+fancier is needed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.mro_paths">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">mro_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#mro_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.mro_paths" title="Link to this definition"></a></dt>
+<dd><p>Create a list of MRO classes for a Django model</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.permission_fullname">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">permission_fullname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#permission_fullname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.permission_fullname" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.template_names_via_mro">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">template_names_via_mro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#template_names_via_mro"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.template_names_via_mro" title="Link to this definition"></a></dt>
+<dd><p>Use the MRO to generate a list of template names for a model</p>
+</dd></dl>
+
+</section>
+<section id="module-apis_core.generic.importers">
+<span id="apis-core-generic-importers-module"></span><h2>apis_core.generic.importers module<a class="headerlink" href="#module-apis_core.generic.importers" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericImporter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.importers.</span></span><span class="sig-name descname"><span class="pre">GenericImporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericImporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericImporter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A skeleton importer class
+It provides the standard methods for importing data from
+an URI and creating a model instance of it.
+By default it fetches a resource, tries to parse it using json and
+then extracts the fields whose keys match the model field names.
+Projects can inherit from this class and override the default
+methods or simple write their own from scratch.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericImporter.clean_uri">
+<span class="sig-name descname"><span class="pre">clean_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericImporter.clean_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericImporter.clean_uri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericImporter.create_instance">
+<span class="sig-name descname"><span class="pre">create_instance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericImporter.create_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericImporter.create_instance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericImporter.get_uri">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_uri</span></span><a class="headerlink" href="#apis_core.generic.importers.GenericImporter.get_uri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericImporter.import_uri">
+<span class="sig-name descname"><span class="pre">import_uri</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.importers.GenericImporter.import_uri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericImporter.mangle_data">
+<span class="sig-name descname"><span class="pre">mangle_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericImporter.mangle_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericImporter.mangle_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericImporter.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.importers.GenericImporter.model" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericImporter.request">
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericImporter.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericImporter.request" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-apis_core.generic.serializers">
+<span id="apis-core-generic-serializers-module"></span><h2>apis_core.generic.serializers module<a class="headerlink" href="#module-apis_core.generic.serializers" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.serializers.GenericHyperlinkedIdentityField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.serializers.</span></span><span class="sig-name descname"><span class="pre">GenericHyperlinkedIdentityField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/serializers.html#GenericHyperlinkedIdentityField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.serializers.GenericHyperlinkedIdentityField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.serializers.GenericHyperlinkedRelatedField" title="apis_core.generic.serializers.GenericHyperlinkedRelatedField"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericHyperlinkedRelatedField</span></code></a></p>
+<p>When a field is instantiated, we store the arguments that were used,
+so that we can present a helpful representation of the object.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.serializers.GenericHyperlinkedModelSerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.serializers.</span></span><span class="sig-name descname"><span class="pre">GenericHyperlinkedModelSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/serializers.html#GenericHyperlinkedModelSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.serializers.GenericHyperlinkedModelSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">HyperlinkedModelSerializer</span></code></p>
+<p>When a field is instantiated, we store the arguments that were used,
+so that we can present a helpful representation of the object.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.serializers.GenericHyperlinkedModelSerializer.serializer_related_field">
+<span class="sig-name descname"><span class="pre">serializer_related_field</span></span><a class="headerlink" href="#apis_core.generic.serializers.GenericHyperlinkedModelSerializer.serializer_related_field" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#apis_core.generic.serializers.GenericHyperlinkedRelatedField" title="apis_core.generic.serializers.GenericHyperlinkedRelatedField"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericHyperlinkedRelatedField</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.serializers.GenericHyperlinkedModelSerializer.serializer_url_field">
+<span class="sig-name descname"><span class="pre">serializer_url_field</span></span><a class="headerlink" href="#apis_core.generic.serializers.GenericHyperlinkedModelSerializer.serializer_url_field" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#apis_core.generic.serializers.GenericHyperlinkedIdentityField" title="apis_core.generic.serializers.GenericHyperlinkedIdentityField"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericHyperlinkedIdentityField</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.serializers.GenericHyperlinkedRelatedField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.serializers.</span></span><span class="sig-name descname"><span class="pre">GenericHyperlinkedRelatedField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/serializers.html#GenericHyperlinkedRelatedField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.serializers.GenericHyperlinkedRelatedField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">HyperlinkedRelatedField</span></code></p>
+<p>When a field is instantiated, we store the arguments that were used,
+so that we can present a helpful representation of the object.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.serializers.GenericHyperlinkedRelatedField.get_url">
+<span class="sig-name descname"><span class="pre">get_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/serializers.html#GenericHyperlinkedRelatedField.get_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.serializers.GenericHyperlinkedRelatedField.get_url" title="Link to this definition"></a></dt>
+<dd><p>Given an object, return the URL that hyperlinks to the object.</p>
+<p>May raise a <cite>NoReverseMatch</cite> if the <cite>view_name</cite> and <cite>lookup_field</cite>
+attributes are not configured to correctly match the URL conf.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.serializers.GenericHyperlinkedRelatedField.use_pk_only_optimization">
+<span class="sig-name descname"><span class="pre">use_pk_only_optimization</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/serializers.html#GenericHyperlinkedRelatedField.use_pk_only_optimization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.serializers.GenericHyperlinkedRelatedField.use_pk_only_optimization" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.serializers.serializer_factory">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.serializers.</span></span><span class="sig-name descname"><span class="pre">serializer_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serializer=&lt;class</span> <span class="pre">'apis_core.generic.serializers.GenericHyperlinkedModelSerializer'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields='__all__'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/serializers.html#serializer_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.serializers.serializer_factory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-apis_core.generic.tables">
+<span id="apis-core-generic-tables-module"></span><h2>apis_core.generic.tables module<a class="headerlink" href="#module-apis_core.generic.tables" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.tables.ActionColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">ActionColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#ActionColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.ActionColumn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.tables.CustomTemplateColumn" title="apis_core.generic.tables.CustomTemplateColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomTemplateColumn</span></code></a></p>
+<p>A custom template column with some additional attributes
+for actions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.ActionColumn.attrs">
+<span class="sig-name descname"><span class="pre">attrs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'td':</span> <span class="pre">{'style':</span> <span class="pre">'width:1%;'}}</span></em><a class="headerlink" href="#apis_core.generic.tables.ActionColumn.attrs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.ActionColumn.exclude_from_export">
+<span class="sig-name descname"><span class="pre">exclude_from_export</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#apis_core.generic.tables.ActionColumn.exclude_from_export" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.ActionColumn.orderable">
+<span class="sig-name descname"><span class="pre">orderable</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#apis_core.generic.tables.ActionColumn.orderable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.ActionColumn.verbose_name">
+<span class="sig-name descname"><span class="pre">verbose_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#apis_core.generic.tables.ActionColumn.verbose_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.tables.CustomTemplateColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">CustomTemplateColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#CustomTemplateColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.CustomTemplateColumn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TemplateColumn</span></code></p>
+<p>A custom template column - the <cite>tables.TemplateColumn</cite> class does not allow
+to set attributes via class variables. Therefor we use this
+CustomTemplateColumn to set some arguments based on class attributes and
+override the attributes in child classes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.CustomTemplateColumn.exclude_from_export">
+<span class="sig-name descname"><span class="pre">exclude_from_export</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#apis_core.generic.tables.CustomTemplateColumn.exclude_from_export" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.CustomTemplateColumn.orderable">
+<span class="sig-name descname"><span class="pre">orderable</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.tables.CustomTemplateColumn.orderable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.CustomTemplateColumn.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.tables.CustomTemplateColumn.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.CustomTemplateColumn.verbose_name">
+<span class="sig-name descname"><span class="pre">verbose_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.tables.CustomTemplateColumn.verbose_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.tables.DeleteColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">DeleteColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#DeleteColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.DeleteColumn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.tables.ActionColumn" title="apis_core.generic.tables.ActionColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionColumn</span></code></a></p>
+<p>A column showing a delete button</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.DeleteColumn.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'columns/delete.html'</span></em><a class="headerlink" href="#apis_core.generic.tables.DeleteColumn.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.tables.DescriptionColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">DescriptionColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#DescriptionColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.DescriptionColumn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.tables.CustomTemplateColumn" title="apis_core.generic.tables.CustomTemplateColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomTemplateColumn</span></code></a></p>
+<p>A column showing a model description</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.DescriptionColumn.orderable">
+<span class="sig-name descname"><span class="pre">orderable</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#apis_core.generic.tables.DescriptionColumn.orderable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.DescriptionColumn.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'columns/description.html'</span></em><a class="headerlink" href="#apis_core.generic.tables.DescriptionColumn.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.tables.EditColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">EditColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#EditColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.EditColumn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.tables.ActionColumn" title="apis_core.generic.tables.ActionColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionColumn</span></code></a></p>
+<p>A column showing an edit button</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.EditColumn.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'columns/edit.html'</span></em><a class="headerlink" href="#apis_core.generic.tables.EditColumn.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.tables.GenericTable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">GenericTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orderable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pinned_row_attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_page_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_footer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#GenericTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.GenericTable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></p>
+<p>A generic table that contains an edit button column, a delete button column
+and a description column</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.tables.GenericTable.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#GenericTable.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.GenericTable.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.GenericTable.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'desc']</span></em><a class="headerlink" href="#apis_core.generic.tables.GenericTable.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.GenericTable.Meta.sequence">
+<span class="sig-name descname"><span class="pre">sequence</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('...',</span> <span class="pre">'view',</span> <span class="pre">'edit',</span> <span class="pre">'delete')</span></em><a class="headerlink" href="#apis_core.generic.tables.GenericTable.Meta.sequence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.GenericTable.base_columns">
+<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'delete':</span> <span class="pre">&lt;apis_core.generic.tables.DeleteColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'desc':</span> <span class="pre">&lt;apis_core.generic.tables.DescriptionColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'edit':</span> <span class="pre">&lt;apis_core.generic.tables.EditColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'view':</span> <span class="pre">&lt;apis_core.generic.tables.ViewColumn</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.generic.tables.GenericTable.base_columns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.tables.GenericTable.before_render">
+<span class="sig-name descname"><span class="pre">before_render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#GenericTable.before_render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.GenericTable.before_render" title="Link to this definition"></a></dt>
+<dd><p>A way to hook into the moment just before rendering the template.</p>
+<p>Can be used to hide a column.</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><dl class="simple">
+<dt>request: contains the <cite>WGSIRequest</cite> instance, containing a <cite>user</cite> attribute if</dt><dd><p><cite>.django.contrib.auth.middleware.AuthenticationMiddleware</cite> is added to
+your <cite>MIDDLEWARE_CLASSES</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Table</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">country</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">before_render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s1">&#39;foo.delete_bar&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">hide</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.tables.ViewColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">ViewColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#ViewColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.ViewColumn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.tables.ActionColumn" title="apis_core.generic.tables.ActionColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionColumn</span></code></a></p>
+<p>A column showing a view button</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.ViewColumn.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'columns/view.html'</span></em><a class="headerlink" href="#apis_core.generic.tables.ViewColumn.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-apis_core.generic.urls">
+<span id="apis-core-generic-urls-module"></span><h2>apis_core.generic.urls module<a class="headerlink" href="#module-apis_core.generic.urls" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.urls.ContenttypeConverter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.urls.</span></span><span class="sig-name descname"><span class="pre">ContenttypeConverter</span></span><a class="reference internal" href="../_modules/apis_core/generic/urls.html#ContenttypeConverter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.urls.ContenttypeConverter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A converter that converts from a string representation of a
+model (<cite>app_label.model</cite>) to the actual Django model class.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.urls.ContenttypeConverter.regex">
+<span class="sig-name descname"><span class="pre">regex</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\\w+\\.\\w+'</span></em><a class="headerlink" href="#apis_core.generic.urls.ContenttypeConverter.regex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.urls.ContenttypeConverter.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/urls.html#ContenttypeConverter.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.urls.ContenttypeConverter.to_python" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.urls.ContenttypeConverter.to_url">
+<span class="sig-name descname"><span class="pre">to_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/urls.html#ContenttypeConverter.to_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.urls.ContenttypeConverter.to_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-apis_core.generic.views">
+<span id="apis-core-generic-views-module"></span><h2>apis_core.generic.views module<a class="headerlink" href="#module-apis_core.generic.views" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.Autocomplete">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">Autocomplete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Autocomplete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Autocomplete" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Select2QuerySetView</span></code></p>
+<p>Autocomplete view for a generic model.
+Access requires the <cite>&lt;model&gt;_view</cite> permission.
+The queryset is overridden by the first match from
+the <cite>first_match_via_mro</cite> helper.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Autocomplete.create_field">
+<span class="sig-name descname"><span class="pre">create_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'thisisnotimportant'</span></em><a class="headerlink" href="#apis_core.generic.views.Autocomplete.create_field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Autocomplete.create_object">
+<span class="sig-name descname"><span class="pre">create_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Autocomplete.create_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Autocomplete.create_object" title="Link to this definition"></a></dt>
+<dd><p>Create an object given a text.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Autocomplete.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Autocomplete.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Autocomplete.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Filter the queryset with GET[‘q’].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Autocomplete.get_results">
+<span class="sig-name descname"><span class="pre">get_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Autocomplete.get_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Autocomplete.get_results" title="Link to this definition"></a></dt>
+<dd><p>Return data for the ‘results’ key of the response.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Autocomplete.permission_action_required">
+<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'view'</span></em><a class="headerlink" href="#apis_core.generic.views.Autocomplete.permission_action_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Autocomplete.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Autocomplete.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Autocomplete.setup" title="Link to this definition"></a></dt>
+<dd><p>Initialize attributes shared by all view methods.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Autocomplete.template_name_suffix">
+<span class="sig-name descname"><span class="pre">template_name_suffix</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'_autocomplete_result'</span></em><a class="headerlink" href="#apis_core.generic.views.Autocomplete.template_name_suffix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.Create">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">Create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Create" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">CreateView</span></code></p>
+<p>Create view for a generic model.
+Access requires the <cite>&lt;model&gt;_add</cite> permission.
+The form class is overridden by the first match from
+the <cite>first_match_via_mro</cite> helper.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Create.get_form_class">
+<span class="sig-name descname"><span class="pre">get_form_class</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Create.get_form_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Create.get_form_class" title="Link to this definition"></a></dt>
+<dd><p>Return the form class to use in this view.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Create.get_success_url">
+<span class="sig-name descname"><span class="pre">get_success_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Create.get_success_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Create.get_success_url" title="Link to this definition"></a></dt>
+<dd><p>Return the URL to redirect to after processing a valid form.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Create.permission_action_required">
+<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'add'</span></em><a class="headerlink" href="#apis_core.generic.views.Create.permission_action_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Create.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'generic/generic_form.html'</span></em><a class="headerlink" href="#apis_core.generic.views.Create.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.Delete">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">Delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Delete" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DeleteView</span></code></p>
+<p>Delete view for a generic model.
+Access requires the <cite>&lt;model&gt;_delete</cite> permission.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Delete.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Delete.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Delete.delete" title="Link to this definition"></a></dt>
+<dd><p>Call the delete() method on the fetched object and then redirect to the
+success URL.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Delete.get_success_url">
+<span class="sig-name descname"><span class="pre">get_success_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Delete.get_success_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Delete.get_success_url" title="Link to this definition"></a></dt>
+<dd><p>Return the URL to redirect to after processing a valid form.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Delete.permission_action_required">
+<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'delete'</span></em><a class="headerlink" href="#apis_core.generic.views.Delete.permission_action_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.Detail">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">Detail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Detail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Detail" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DetailView</span></code></p>
+<p>Detail view for a generic model.
+Access requires the <cite>&lt;model&gt;_view</cite> permission.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Detail.permission_action_required">
+<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'view'</span></em><a class="headerlink" href="#apis_core.generic.views.Detail.permission_action_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.GenericModelMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">GenericModelMixin</span></span><a class="reference internal" href="../_modules/apis_core/generic/views.html#GenericModelMixin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.GenericModelMixin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A mixin providing the common functionality for all the views working
+with <cite>generic</cite> models - that is models that are accessed via the
+contenttype framework (using <cite>app_label.model</cite>).
+It sets the <cite>.model</cite> of the view and generates a list of possible template
+names (based on the MRO of the model).
+If the view has a <cite>permission_action_required</cite> attribute, this is used
+to set the permission required to access the view for this specific model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.GenericModelMixin.get_permission_required">
+<span class="sig-name descname"><span class="pre">get_permission_required</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#GenericModelMixin.get_permission_required"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.GenericModelMixin.get_permission_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.GenericModelMixin.get_template_names">
+<span class="sig-name descname"><span class="pre">get_template_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#GenericModelMixin.get_template_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.GenericModelMixin.get_template_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.GenericModelMixin.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#GenericModelMixin.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.GenericModelMixin.setup" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.Import">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">Import</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Import"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Import" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FormView</span></code></p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Import.form_valid">
+<span class="sig-name descname"><span class="pre">form_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Import.form_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Import.form_valid" title="Link to this definition"></a></dt>
+<dd><p>If the form is valid, redirect to the supplied URL.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Import.get_form_class">
+<span class="sig-name descname"><span class="pre">get_form_class</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Import.get_form_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Import.get_form_class" title="Link to this definition"></a></dt>
+<dd><p>Return the form class to use.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Import.get_success_url">
+<span class="sig-name descname"><span class="pre">get_success_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Import.get_success_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Import.get_success_url" title="Link to this definition"></a></dt>
+<dd><p>Return the URL to redirect to after processing a valid form.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Import.permission_action_required">
+<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'create'</span></em><a class="headerlink" href="#apis_core.generic.views.Import.permission_action_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Import.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'generic/generic_import_form.html'</span></em><a class="headerlink" href="#apis_core.generic.views.Import.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Import.template_name_suffix">
+<span class="sig-name descname"><span class="pre">template_name_suffix</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'_import'</span></em><a class="headerlink" href="#apis_core.generic.views.Import.template_name_suffix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.List">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">List</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ListViewObjectFilterMixin</span></code>, <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SingleTableMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterView</span></code></p>
+<p>List view for a generic model.
+Access requires the <cite>&lt;model&gt;_view</cite> permission.
+It is based on django-filters FilterView and django-tables SingleTableMixin.
+The table class is overridden by the first match from
+the <cite>first_match_via_mro</cite> helper.
+The filterset class is overridden by the first match from
+the <cite>first_match_via_mro</cite> helper.
+The queryset is overridden by the first match from
+the <cite>first_match_via_mro</cite> helper.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.get_filterset_class">
+<span class="sig-name descname"><span class="pre">get_filterset_class</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_filterset_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_filterset_class" title="Link to this definition"></a></dt>
+<dd><p>Returns the filterset class to use in this view</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Return the list of items for this view.</p>
+<p>The return value must be an iterable and may be an instance of
+<cite>QuerySet</cite> in which case <cite>QuerySet</cite> specific behavior will be enabled.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.get_table_class">
+<span class="sig-name descname"><span class="pre">get_table_class</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_table_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_table_class" title="Link to this definition"></a></dt>
+<dd><p>Return the class to use for the table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.get_table_kwargs">
+<span class="sig-name descname"><span class="pre">get_table_kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_table_kwargs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_table_kwargs" title="Link to this definition"></a></dt>
+<dd><p>Return the keyword arguments for instantiating the table.</p>
+<p>Allows passing customized arguments to the table constructor, for example,
+to remove the buttons column, you could define this method in your View:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_table_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;exclude&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;buttons&#39;</span><span class="p">,</span> <span class="p">)</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.permission_action_required">
+<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'view'</span></em><a class="headerlink" href="#apis_core.generic.views.List.permission_action_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.template_name_suffix">
+<span class="sig-name descname"><span class="pre">template_name_suffix</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'_list'</span></em><a class="headerlink" href="#apis_core.generic.views.List.template_name_suffix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.Overview">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">Overview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Overview"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Overview" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TemplateView</span></code></p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Overview.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'generic/overview.html'</span></em><a class="headerlink" href="#apis_core.generic.views.Overview.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.Update">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">Update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Update" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">UpdateView</span></code></p>
+<p>Update view for a generic model.
+Access requires the <cite>&lt;model&gt;_change</cite> permission.
+The form class is overridden by the first match from
+the <cite>first_match_via_mro</cite> helper.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Update.get_form_class">
+<span class="sig-name descname"><span class="pre">get_form_class</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Update.get_form_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Update.get_form_class" title="Link to this definition"></a></dt>
+<dd><p>Return the form class to use in this view.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.Update.get_success_url">
+<span class="sig-name descname"><span class="pre">get_success_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Update.get_success_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Update.get_success_url" title="Link to this definition"></a></dt>
+<dd><p>Return the URL to redirect to after processing a valid form.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.Update.permission_action_required">
+<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'change'</span></em><a class="headerlink" href="#apis_core.generic.views.Update.permission_action_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

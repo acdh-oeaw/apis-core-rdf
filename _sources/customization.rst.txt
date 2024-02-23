@@ -1,6 +1,21 @@
 Customization
 =============
 
+The core of the logic described here is based on the :mod:`apis_core.generic`.
+It provides generic CRUD views and API views for all models that are configured
+to use it. To make a model use the generic functionality, it has to inherit from
+:class:`apis_core.generic.abc.GenericModel`.
+In standard APIS those models are
+
+* :class:`apis_core.apis_metainfo.models.RootObject`
+* :class:`apis_core.apis_metainfo.models.Uri`
+* :class:`apis_core.apis_relations.models.Triple`
+* :class:`apis_core.collections.models.SkosCollection`
+* :class:`apis_core.collections.models.SkosCollectionContentObject`
+
+If you want to use the generic app for your own model, simple make your model
+inherit from :class:`apis_core.generic.abc.GenericModel`.
+
 List views
 ----------
 
