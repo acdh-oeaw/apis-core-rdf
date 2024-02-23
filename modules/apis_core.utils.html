@@ -160,6 +160,129 @@ in the form of “<a class="reference external" href="http://www.example.com/">h
 </dd></dl>
 
 </section>
+<section id="module-apis_core.utils.autocomplete">
+<span id="apis-core-utils-autocomplete-module"></span><h2>apis_core.utils.autocomplete module<a class="headerlink" href="#module-apis_core.utils.autocomplete" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.ExternalAutocomplete">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.utils.autocomplete.</span></span><span class="sig-name descname"><span class="pre">ExternalAutocomplete</span></span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#ExternalAutocomplete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.ExternalAutocomplete" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a helper base class for implementing external
+autocomplete classes. &lt;Modelname&gt;ExernalAutocomplete classes
+are expected to have a <cite>get_results(self, q)</cite> method that
+returns a list of results usable by the autocomplete view.
+This base class implements this <cite>get_results</cite> method in a
+way that you can inherit from it and just define a list of
+<cite>adapters</cite>. Those adapters are then used one by one to
+add external autocomplete search results.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.ExternalAutocomplete.adapters">
+<span class="sig-name descname"><span class="pre">adapters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#apis_core.utils.autocomplete.ExternalAutocomplete.adapters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.ExternalAutocomplete.get_results">
+<span class="sig-name descname"><span class="pre">get_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#ExternalAutocomplete.get_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.ExternalAutocomplete.get_results" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.ExternalAutocomplete.session">
+<span class="sig-name descname"><span class="pre">session</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;requests.sessions.Session</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#apis_core.utils.autocomplete.ExternalAutocomplete.session" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.ExternalAutocompleteAdapter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.utils.autocomplete.</span></span><span class="sig-name descname"><span class="pre">ExternalAutocompleteAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#ExternalAutocompleteAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.ExternalAutocompleteAdapter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for ExternalAutocompleteAdapters. It provides
+the methods used for templating the autocomplete results.
+You can pass a <cite>template</cite> name to initialization, which
+is then used to style the results.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.ExternalAutocompleteAdapter.default_template">
+<span class="sig-name descname"><span class="pre">default_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#ExternalAutocompleteAdapter.default_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.ExternalAutocompleteAdapter.default_template" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.ExternalAutocompleteAdapter.get_result_label">
+<span class="sig-name descname"><span class="pre">get_result_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#ExternalAutocompleteAdapter.get_result_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.ExternalAutocompleteAdapter.get_result_label" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.ExternalAutocompleteAdapter.template">
+<span class="sig-name descname"><span class="pre">template</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.utils.autocomplete.ExternalAutocompleteAdapter.template" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.LobidAutocompleteAdapter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.utils.autocomplete.</span></span><span class="sig-name descname"><span class="pre">LobidAutocompleteAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#LobidAutocompleteAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.LobidAutocompleteAdapter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.utils.autocomplete.ExternalAutocompleteAdapter" title="apis_core.utils.autocomplete.ExternalAutocompleteAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExternalAutocompleteAdapter</span></code></a></p>
+<p>This autocomplete adapters queries the lobid autocomplete apis.
+See <a class="reference external" href="https://lobid.org/gnd/api">https://lobid.org/gnd/api</a> for details
+You can pass a <cite>lobid_params</cite> dict which will then be use as GET
+request parameters.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.LobidAutocompleteAdapter.extract">
+<span class="sig-name descname"><span class="pre">extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#LobidAutocompleteAdapter.extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.LobidAutocompleteAdapter.extract" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.LobidAutocompleteAdapter.get_results">
+<span class="sig-name descname"><span class="pre">get_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session=&lt;requests.sessions.Session</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#LobidAutocompleteAdapter.get_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.LobidAutocompleteAdapter.get_results" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.LobidAutocompleteAdapter.params">
+<span class="sig-name descname"><span class="pre">params</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.utils.autocomplete.LobidAutocompleteAdapter.params" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.utils.autocomplete.</span></span><span class="sig-name descname"><span class="pre">TypeSenseAutocompleteAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#TypeSenseAutocompleteAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.utils.autocomplete.ExternalAutocompleteAdapter" title="apis_core.utils.autocomplete.ExternalAutocompleteAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExternalAutocompleteAdapter</span></code></a></p>
+<p>This autocomplete adapters queries typesense collections on a
+typesense server. The <cite>collections</cite> variable can either be a
+string or a list - if its a string, that collection is queried
+directly, if its a list, the adapter uses typesense <cite>multi_search</cite>
+endpoint.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.collections">
+<span class="sig-name descname"><span class="pre">collections</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.collections" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.default_template">
+<span class="sig-name descname"><span class="pre">default_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#TypeSenseAutocompleteAdapter.default_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.default_template" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.extract">
+<span class="sig-name descname"><span class="pre">extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#TypeSenseAutocompleteAdapter.extract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.extract" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.get_results">
+<span class="sig-name descname"><span class="pre">get_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session=&lt;requests.sessions.Session</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/autocomplete.html#TypeSenseAutocompleteAdapter.get_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.get_results" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.server">
+<span class="sig-name descname"><span class="pre">server</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.server" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.token">
+<span class="sig-name descname"><span class="pre">token</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.token" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-apis_core.utils.caching">
 <span id="apis-core-utils-caching-module"></span><h2>apis_core.utils.caching module<a class="headerlink" href="#module-apis_core.utils.caching" title="Link to this heading"></a></h2>
 <dl class="py function">
