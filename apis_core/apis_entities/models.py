@@ -2,7 +2,6 @@ import re
 
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
-from django.contrib.auth.models import Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
@@ -248,18 +247,3 @@ def create_default_uri(sender, instance, raw, **kwargs):
             )
             uri2 = Uri(uri=uri_c, domain="apis default", root_object=instance)
             uri2.save()
-
-
-if "registration" in getattr(settings, "INSTALLED_APPS", []):
-    from registration.backends.simple.views import RegistrationView
-    from registration.signals import user_registered
-
-    @receiver(
-        user_registered,
-        sender=RegistrationView,
-        dispatch_uid="add_registered_user_to_group",
-    )
-    def add_user_to_group(sender, user, request, **kwargs):
-        user_group = getattr(settings, "APIS_AUTO_USERGROUP", None)
-        if user_group is not None:
-            user.groups.add(Group.objects.get(name=user_group))
