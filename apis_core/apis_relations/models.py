@@ -72,12 +72,10 @@ class Property(RootObject):
     subj_class = models.ManyToManyField(
         ContentType,
         related_name="property_set_subj",
-        limit_choices_to=Q(app_label="apis_entities"),  # TODO RDF: Add vocab
     )
     obj_class = models.ManyToManyField(
         ContentType,
         related_name="property_set_obj",
-        limit_choices_to=Q(app_label="apis_entities"),
     )
 
     def __str__(self):
