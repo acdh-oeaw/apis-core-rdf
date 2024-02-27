@@ -18,7 +18,11 @@ class EntitiesMergeForm(forms.Form):
             queryset=ct.model_class().objects.all()
         )
         uri = reverse("apis_core:generic:autocomplete", args=[ct])
-        attrs = {"data-placeholder": "Search ...", "data-minimum-input-length": 3}
+        attrs = {
+            "data-placeholder": "Search ...",
+            "data-minimum-input-length": 3,
+            "data-html": True,
+        }
         self.fields["uri"].widget = autocomplete.ModelSelect2(uri, attrs=attrs)
         self.fields["uri"].widget.choices = self.fields["uri"].choices
         entitytype = instance._meta.verbose_name
