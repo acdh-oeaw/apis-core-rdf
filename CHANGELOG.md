@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.14.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.13.1...v0.14.0) (2024-02-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** projects will have to inherit from `GenericModel` from now on, if they want their models to be accessible via the generic views. Models inheriting from APIS models automatically inherit from `GenericModel`.
+
+### Features
+
+* **generic:** use lru cache for smaller methods ([7e56e48](https://github.com/acdh-oeaw/apis-core-rdf/commit/7e56e480a141e81c5920df022e3d66e0c5c193ff))
+* **utils:** provide some abstract base classes for autocomplete ([b3d2cbe](https://github.com/acdh-oeaw/apis-core-rdf/commit/b3d2cbecb34eb2e680139e9b57e502dbb561d558)), closes [#653](https://github.com/acdh-oeaw/apis-core-rdf/issues/653)
+
+
+### Bug Fixes
+
+* **apis_entities:** make import form deal with html data ([e7882e2](https://github.com/acdh-oeaw/apis-core-rdf/commit/e7882e253d950416d46f27af6c7b994e2362b838))
+* **apis_entities:** remove buggy jQuery code ([f4fd17e](https://github.com/acdh-oeaw/apis-core-rdf/commit/f4fd17e21897eecc2f8801ffefef0267c0fe0fa6)), closes [#529](https://github.com/acdh-oeaw/apis-core-rdf/issues/529)
+* **apis_relations:** remove choice limit in Property ([babfe4e](https://github.com/acdh-oeaw/apis-core-rdf/commit/babfe4ecabb3567b00e2970048e3ea653f20c0c4)), closes [#412](https://github.com/acdh-oeaw/apis-core-rdf/issues/412)
+* **generic:** add `__init__.py` to generic module ([a74d445](https://github.com/acdh-oeaw/apis-core-rdf/commit/a74d4457de1567c1c0e911624ea508f195da95cb))
+* **utils:** make rdf parser more robust ([d3ba5e3](https://github.com/acdh-oeaw/apis-core-rdf/commit/d3ba5e369b9eb2a88eb101b2adefadc7402ce85f)), closes [#666](https://github.com/acdh-oeaw/apis-core-rdf/issues/666)
+* **utils:** refactor `access_for_all` ([b021696](https://github.com/acdh-oeaw/apis-core-rdf/commit/b0216968d67b21e1374968156e898a92e0cd831d)), closes [#582](https://github.com/acdh-oeaw/apis-core-rdf/issues/582)
+
+
+### Documentation
+
+* cleanup configuration section and rename it to `settings` ([d2c141c](https://github.com/acdh-oeaw/apis-core-rdf/commit/d2c141cb835df8cbdc1691e533b9a2ab61e30808))
+* **generic:** add documentation about `GenericModel` ([54fbb09](https://github.com/acdh-oeaw/apis-core-rdf/commit/54fbb09e89d04b15b8eb38ec5af85263f7e4eb5b))
+
+
+### Code Refactoring
+
+* **generic:** introduce `generic.abc.GenericModel` ([8a58abc](https://github.com/acdh-oeaw/apis-core-rdf/commit/8a58abcc817267808c55a2d187d3dfe230599de8)), closes [#657](https://github.com/acdh-oeaw/apis-core-rdf/issues/657)
+
 ## [0.13.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.13.0...v0.13.1) (2024-02-15)
 
 
