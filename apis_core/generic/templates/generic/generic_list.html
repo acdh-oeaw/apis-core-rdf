@@ -4,18 +4,6 @@
 {% load apisgeneric %}
 {% load apiscore %}
 
-{% block scripts %}
-  {{ block.super }}
-  <script>
-document.body.addEventListener('htmx:beforeSwap', function(event) {
-  if (event.detail.xhr.status === 204) {
-    // Swap content even when the response is empty.
-    event.detail.shouldSwap = true;
-  }
-});
-  </script>
-{% endblock scripts %}
-
 {% if filter %}
 
   {% block col %}

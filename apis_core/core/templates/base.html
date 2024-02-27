@@ -249,6 +249,14 @@
       <script type="text/javascript"
               src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
       <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+      <script>
+        document.body.addEventListener('htmx:beforeSwap', function(event) {
+          if (event.detail.xhr.status === 204) {
+            // Swap content even when the response is empty.
+            event.detail.shouldSwap = true;
+          }
+        });
+      </script>
     {% endblock %}
 
     {% block scripts2 %}
