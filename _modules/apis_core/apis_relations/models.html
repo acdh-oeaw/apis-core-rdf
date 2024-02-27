@@ -180,12 +180,10 @@
     <span class="n">subj_class</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span>
         <span class="n">ContentType</span><span class="p">,</span>
         <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;property_set_subj&quot;</span><span class="p">,</span>
-        <span class="n">limit_choices_to</span><span class="o">=</span><span class="n">Q</span><span class="p">(</span><span class="n">app_label</span><span class="o">=</span><span class="s2">&quot;apis_entities&quot;</span><span class="p">),</span>  <span class="c1"># TODO RDF: Add vocab</span>
     <span class="p">)</span>
     <span class="n">obj_class</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span>
         <span class="n">ContentType</span><span class="p">,</span>
         <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;property_set_obj&quot;</span><span class="p">,</span>
-        <span class="n">limit_choices_to</span><span class="o">=</span><span class="n">Q</span><span class="p">(</span><span class="n">app_label</span><span class="o">=</span><span class="s2">&quot;apis_entities&quot;</span><span class="p">),</span>
     <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
