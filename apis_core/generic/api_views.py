@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .serializers import serializer_factory
+from .serializers import serializer_factory, GenericHyperlinkedModelSerializer
 from .helpers import first_match_via_mro
 
 
@@ -23,7 +23,8 @@ class ModelViewSet(viewsets.ModelViewSet):
         return queryset or self.model.objects.all()
 
     def get_serializer_class(self):
-        serializer_class = first_match_via_mro(
-            self.model, path="serializers", suffix="Serializer"
-        ) or serializer_factory(self.model)
-        return serializer_class
+        serializer_class = (
+            first_match_via_mro(self.model, path="serializers", suffix="Serializer")
+            or GenericHyperlinkedModelSerializer
+        )
+        return serializer_factory(self.model, serializer=serializer_class)
