@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.14.1...v0.14.2) (2024-02-29)
+
+
+### Bug Fixes
+
+* **apis_metainfo:** let Collection inherit from GenericModel ([0e32a80](https://github.com/acdh-oeaw/apis-core-rdf/commit/0e32a804c322b4b6448342d9f0f04b2cca0e04a5))
+
 ## [0.14.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.14.0...v0.14.1) (2024-02-29)
 
 
