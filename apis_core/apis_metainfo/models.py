@@ -90,7 +90,7 @@ class RootObject(GenericModel, models.Model):
 
 
 @reversion.register()
-class Collection(models.Model):
+class Collection(GenericModel, models.Model):
     """Allows to group entities and relation."""
 
     name = models.CharField(max_length=255)
