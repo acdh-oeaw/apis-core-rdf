@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.14.0...v0.14.1) (2024-02-29)
+
+
+### Bug Fixes
+
+* **generic,core:** move htmx setup from generic template to base.html ([bc4ba98](https://github.com/acdh-oeaw/apis-core-rdf/commit/bc4ba98033db560a02bff058938bdafebc8ecfb9))
+* **generic:** use serializer_factory even with custom serializers ([247200e](https://github.com/acdh-oeaw/apis-core-rdf/commit/247200ebc075e557e450a92447ceb54ffa0fb72b))
+
 ## [0.14.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.13.1...v0.14.0) (2024-02-27)
 
 
