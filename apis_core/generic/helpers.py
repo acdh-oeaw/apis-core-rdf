@@ -83,6 +83,13 @@ def module_paths(model, path: str = "", suffix: str = "") -> list:
 
 
 @functools.lru_cache
+def makeclassprefix(string: str) -> str:
+    string = "".join([c if c.isidentifier() else " " for c in string])
+    string = "".join([word.strip().capitalize() for word in string.split(" ")])
+    return string
+
+
+@functools.lru_cache
 def import_string(dotted_path):
     try:
         return module_loading.import_string(dotted_path)

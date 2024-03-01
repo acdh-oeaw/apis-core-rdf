@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from .serializers import serializer_factory, GenericHyperlinkedModelSerializer
-from .helpers import module_paths, first_member_match
+from .helpers import module_paths, first_member_match, makeclassprefix
 from .filterbackends import GenericFilterBackend
 
 
@@ -31,6 +31,12 @@ class ModelViewSet(viewsets.ModelViewSet):
         serializer_class_modules = module_paths(
             self.model, path="serializers", suffix="Serializer"
         )
+        prefix = makeclassprefix(self.request.accepted_renderer.format)
+        serializer_class_modules = (
+            module_paths(self.model, path="serializers", suffix=f"{prefix}Serializer")
+            + serializer_class_modules
+        )
+
         serializer_class = first_member_match(
             serializer_class_modules,
             getattr(renderer, "serializer", GenericHyperlinkedModelSerializer),
