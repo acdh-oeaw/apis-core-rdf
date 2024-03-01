@@ -6,10 +6,26 @@ from pathlib import Path
 from django.test import TestCase
 
 from apis_core.utils import rdf
+from apis_core.apis_entities.abc import E21_Person, E53_Place, E74_Group
 
 # use `curl -H "Accept: application/rdf+xml" -L $URI` to fetch data
 
 testdata = Path(__file__).parent / "testdata"
+
+
+class Place(E53_Place):
+    class Meta:
+        app_label = "test"
+
+
+class Person(E21_Person):
+    class Meta:
+        app_label = "test"
+
+
+class Institution(E74_Group):
+    class Meta:
+        app_label = "test"
 
 
 class RdfTest(TestCase):
@@ -23,16 +39,18 @@ class RdfTest(TestCase):
         }
         # https://www.geonames.org/2783029/achensee.html
         uri = str(testdata / "achensee.rdf")
-        defintion, attributes = rdf.get_definition_and_attributes_from_uri(uri)
-        self.assertEqual(defintion["model"], "apis_ontology.Place")
+
+        place = Place()
+        defintion, attributes = rdf.get_definition_and_attributes_from_uri(uri, place)
         self.assertEqual(achensee, attributes)
 
     def test_get_definition_from_dict_place_from_dnb(self):
-        wien = {"name": "Wien", "lat": "048.208199", "lon": "016.371690"}
+        wien = {"label": "Wien", "latitude": "048.208199", "longitude": "016.371690"}
         # https://d-nb.info/gnd/4066009-6
         uri = str(testdata / "wien.rdf")
-        defintion, attributes = rdf.get_definition_and_attributes_from_uri(uri)
-        self.assertEqual(defintion["model"], "apis_ontology.Place")
+
+        place = Place()
+        defintion, attributes = rdf.get_definition_and_attributes_from_uri(uri, place)
         self.assertEqual(wien, attributes)
 
     def test_get_definition_from_dict_person_from_dnb(self):
@@ -45,8 +63,9 @@ class RdfTest(TestCase):
         }
         # https://d-nb.info/gnd/118833197
         uri = str(testdata / "ramus.rdf")
-        defintion, attributes = rdf.get_definition_and_attributes_from_uri(uri)
-        self.assertEqual(defintion["model"], "apis_ontology.Person")
+
+        person = Person()
+        defintion, attributes = rdf.get_definition_and_attributes_from_uri(uri, person)
         self.assertEqual(pierre, attributes)
 
     def test_get_definition_from_dict_institution_from_dnb(self):
@@ -57,8 +76,11 @@ class RdfTest(TestCase):
         }
         # https://d-nb.info/gnd/415006-5
         uri = str(testdata / "ramus_gesellschaft.rdf")
-        defintion, attributes = rdf.get_definition_and_attributes_from_uri(uri)
-        self.assertEqual(defintion["model"], "apis_ontology.Institution")
+
+        institution = Institution()
+        defintion, attributes = rdf.get_definition_and_attributes_from_uri(
+            uri, institution
+        )
         self.assertEqual(pierre_ges, attributes)
 
     def test_get_definition_from_dict_institution_from_dnb2(self):
@@ -71,6 +93,9 @@ class RdfTest(TestCase):
         }
         # https://d-nb.info/gnd/35077-1
         uri = str(testdata / "oeaw.rdf")
-        defintion, attributes = rdf.get_definition_and_attributes_from_uri(uri)
-        self.assertEqual(defintion["model"], "apis_ontology.Institution")
+
+        institution = Institution()
+        defintion, attributes = rdf.get_definition_and_attributes_from_uri(
+            uri, institution
+        )
         self.assertEqual(pierre_ges, attributes)

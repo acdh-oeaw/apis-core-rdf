@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+import importlib
+import re
 
 from rdflib import Graph
 from typing import Tuple
@@ -12,12 +14,36 @@ from apis_core.utils.settings import dict_from_toml_directory
 logger = logging.getLogger(__name__)
 
 
-def get_definition_and_attributes_from_uri(uri: str) -> Tuple[dict, dict]:
+def definition_matches_model(definition: str, model: object) -> bool:
+    if definition.get("superclass", False) and model:
+        try:
+            module, cls = definition.get("superclass").rsplit(".", 1)
+            module = importlib.import_module(module)
+            parent = getattr(module, cls)
+            if issubclass(type(model), parent):
+                return True
+        except Exception as e:
+            logger.error("superclass %s led to: %s", definition.get("superclass"), e)
+    return False
+
+
+def definition_matches_uri(definition: str, uri: str) -> bool:
+    if regex := definition.get("regex", False):
+        logger.info("found regex %s", regex)
+        pattern = re.compile(regex)
+        if pattern.fullmatch(uri) is None:
+            return False
+    return True
+
+
+def get_definition_and_attributes_from_uri(
+    uri: str, model: object
+) -> Tuple[dict, dict]:
     """
     This function looks for `.toml` files in the `rdfimport` app directories
     and loads all the files it can parse. For every file that contains a
-    `filter_sparql` key it tries to use that key on the RDF graph that
-    represents the data at the given RDF endpoint. It uses the first file that
+    `superclass` key it checks if it is a superclass of `model`.
+    It uses the first file that
     matches to extract attributes from the RDF endpoint and then returns both
     the parsed file contents and the extracted attributes.
     The reason we are also returning the parsed file contents is, that you then
@@ -34,15 +60,12 @@ def get_definition_and_attributes_from_uri(uri: str) -> Tuple[dict, dict]:
     configs = dict_from_toml_directory("rdfimport")
     matching_definition = None
     for key, definition in configs.items():
-        if definition.get("filter_sparql", False):
-            try:
-                if bool(graph.query(definition["filter_sparql"])):
-                    logger.info("Found %s to match the Uri", key)
-                    matching_definition = definition
-                    matching_definition["filename"] = str(key)
-                    break
-            except Exception as e:
-                logger.error("filter_sparql in %s led to: %s", key, e)
+        if definition_matches_model(definition, model) and definition_matches_uri(
+            definition, uri
+        ):
+            matching_definition = definition
+            matching_definition["filename"] = str(key)
+            break
     model_attributes = dict()
     if matching_definition:
         attributes = matching_definition.get("attributes", [])

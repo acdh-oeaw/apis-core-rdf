@@ -1,0 +1,38 @@
+#####################################################
+# Create an E53_Place from a d-nb.info RDF endpoint #
+#####################################################
+superclass = "apis_core.apis_entities.abc.E53_Place"
+# the second regex is for testing
+regex = "https://d-nb.info.*|/.*wien.rdf"
+[[attributes]]
+# name
+sparql = """
+PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
+SELECT ?label
+WHERE {
+  ?subject gndo:preferredNameForThePlaceOrGeographicName ?prefName
+  BIND(?prefName AS ?label)
+}
+"""
+[[attributes]]
+# lon
+sparql = '''
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+SELECT ?longitude
+WHERE {
+  ?subject geo:hasGeometry ?geo1 .
+  ?geo1 geo:asWKT ?point .
+  BIND(REPLACE(str(?point), "Point \\( \\+(\\d+.\\d+).*", "$1") as ?longitude)
+  }
+'''
+[[attributes]]
+# lat
+sparql = '''
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+SELECT ?latitude
+WHERE {
+  ?subject geo:hasGeometry ?geo1 .
+  ?geo1 geo:asWKT ?point .
+  BIND(REPLACE(str(?point), "Point \\( \\+(\\d+.\\d+) \\+(\\d+.\\d+) .$", "$2") as ?latitude)
+  }
+'''
