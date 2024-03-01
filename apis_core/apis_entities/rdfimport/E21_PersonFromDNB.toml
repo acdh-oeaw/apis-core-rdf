@@ -1,14 +1,8 @@
-#########################################
-# Create an entity `apis_ontology.Person`
-# from a d-nb.info RDF endpoint
-#########################################
-model = "apis_ontology.Person"
-filter_sparql = """
-PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
-ASK {
-  ?subject gndo:preferredNameForThePerson ?object .
-}
-"""
+######################################################
+# Create an E21_Person from a d-nb.info RDF endpoint #
+######################################################
+superclass = "apis_core.apis_entities.abc.E21_Person"
+regex = "https://d-nb.info.*|/.*ramus.rdf"
 [[attributes]]
 # name
 sparql = """

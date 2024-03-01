@@ -1,15 +1,9 @@
-#########################################
-# Create an entity `apis_ontology.Place`
-# from a geonames RDF endpoint
-##########################################
-model = "apis_ontology.Place"
-filter_sparql = """
-PREFIX gn: <http://www.geonames.org/ontology#>
-ASK {
-  ?subject gn:featureClass <https://www.geonames.org/ontology#P> .
-  ?subject gn:featureCode <https://www.geonames.org/ontology#P.PPL> .
-}
-"""
+####################################################
+# Create an E53_Place from a geonames RDF endpoint #
+####################################################
+superclass = "apis_core.apis_entities.abc.E53_Place"
+# the second regex is for the test data
+regex = "https://sws.geonames.org.*|/.*achensee.rdf"
 [[attributes]]
 # name
 sparql = """
