@@ -1,6 +1,7 @@
 import django_tables2 as tables
 from django.db.models import F
 from django.utils.html import format_html
+from apis_core.generic.tables import GenericTable
 
 from .models import Uri
 
@@ -100,8 +101,7 @@ def generic_render_end_date_written(self, record, value):
     )
 
 
-class UriTable(tables.Table):
-    id = tables.LinkColumn()
+class UriTable(GenericTable):
     entity = tables.TemplateColumn(
         "<a href='{{ record.root_object.get_absolute_url }}'>{{ record.root_object }}</a>",
         orderable=True,
@@ -113,8 +113,6 @@ class UriTable(tables.Table):
         verbose_name="Entity Type",
     )
 
-    class Meta:
+    class Meta(GenericTable.Meta):
         model = Uri
-        sequence = ("id", "uri")
-        fields = ("id", "uri", "entity", "ent_type")
-        attrs = {"class": "table table-responsive table-hover"}
+        fields = ["id", "desc", "entity", "ent_type"]
