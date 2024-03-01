@@ -1,8 +1,11 @@
 {% load apisgeneric %}
 <a title="delete"
-   hx-delete="{% url "apis_core:generic:genericmodelapi-detail" record|contenttype record.id %}"
+   hx-delete="{% url 'apis_core:generic:genericmodelapi-detail' record|contenttype record.id %}"
    hx-confirm="Are your sure you want to delete {{ record }}?"
    hx-target="closest tr"
    hx-swap="outerHTML swap:0.3s"
    href="{% url 'apis_core:generic:delete' record|contenttype record.id %}"
-   class="text-danger"><span class="material-symbols-outlined">delete</span></a>
+   class="action-delete d-inline-block">
+  <span class="material-symbols-outlined" role="img" aria-hidden="true">delete</span>
+  <span class="sr-only">delete</span>
+</a>
