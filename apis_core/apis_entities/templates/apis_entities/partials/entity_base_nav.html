@@ -1,23 +1,25 @@
 {% load apiscore %}
 {% with object|opts as opts %}
-  {% with opts.app_label|add:"."|add:opts.verbose_name|add:"_change" as object_change_perm %}
-    {% url "apis_core:apis_entities:generic_entities_detail_view" opts.verbose_name object.id as detailurl %}
-    {% url "apis_core:apis_entities:generic_entities_edit_view" opts.verbose_name object.id as editurl %}
+  {% with opts.object_name|lower as modelname %}
+    {% with opts.app_label|add:"."|add:modelname|add:"_change" as object_change_perm %}
+      {% url "apis_core:apis_entities:generic_entities_detail_view" modelname object.id as detailurl %}
+      {% url "apis_core:apis_entities:generic_entities_edit_view" modelname object.id as editurl %}
 
-    {% if object_change_perm in perms %}
-      <ul class="nav nav-tabs card-header-tabs float-left">
-        <li class="nav-item">
-          <a class="nav-link text-success 
-            {% if request.path == detailurl %}active{% endif %}
-           " href="{{ detailurl }}"><span class="material-symbols-outlined material-symbols-align">visibility</span>View</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-warning 
-            {% if request.path == editurl %}active{% endif %}
-           " href="{{ editurl }}"><span class="material-symbols-outlined material-symbols-align">edit</span>Edit</a>
-        </li>
-      </ul>
-    {% endif %}
+      {% if object_change_perm in perms %}
+        <ul class="nav nav-tabs card-header-tabs float-left">
+          <li class="nav-item">
+            <a class="nav-link text-success 
+              {% if request.path == detailurl %}active{% endif %}
+             " href="{{ detailurl }}"><span class="material-symbols-outlined material-symbols-align">visibility</span>View</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-warning 
+              {% if request.path == editurl %}active{% endif %}
+             " href="{{ editurl }}"><span class="material-symbols-outlined material-symbols-align">edit</span>Edit</a>
+          </li>
+        </ul>
+      {% endif %}
 
+    {% endwith %}
   {% endwith %}
 {% endwith %}
