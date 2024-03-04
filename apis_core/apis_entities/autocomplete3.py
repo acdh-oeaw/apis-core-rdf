@@ -3,11 +3,9 @@
 import json
 import operator
 from functools import reduce
-import importlib
 
 from dal import autocomplete
 from django import http
-from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import FieldError
 from django.db.models import Q
@@ -15,13 +13,6 @@ from django.db.models import Q
 from apis_core.apis_metainfo.models import Collection
 from apis_core.utils.caching import get_autocomplete_property_choices
 from apis_core.utils.settings import get_entity_settings_by_modelname
-
-path_ac_settings = getattr(settings, "APIS_AUTOCOMPLETE_SETTINGS", False)
-if path_ac_settings:
-    ac_settings = importlib.import_module(path_ac_settings)
-    ac_settings = getattr(ac_settings, "autocomp_settings")
-else:
-    from apis_core.default_settings.NER_settings import autocomp_settings as ac_settings
 
 
 class CustomEntityAutocompletes(object):
