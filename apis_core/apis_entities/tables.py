@@ -14,7 +14,7 @@ class AbstractEntityTable(GenericTable):
     noduplicate = DuplicateColumn()
 
     class Meta(GenericTable.Meta):
-        sequence = ("...", "view", "edit", "noduplicate", "delete")
+        sequence = ("...", "view", "edit", "delete", "noduplicate")
 
     def before_render(self, request):
         super().before_render(request)
