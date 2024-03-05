@@ -23,8 +23,10 @@ class ModelViewSet(viewsets.ModelViewSet):
         return queryset(self.model.objects.all())
 
     def get_serializer_class(self):
+        renderer = self.request.accepted_renderer
         serializer_class = (
             first_match_via_mro(self.model, path="serializers", suffix="Serializer")
+            or getattr(renderer, "serializer", None)
             or GenericHyperlinkedModelSerializer
         )
         return serializer_factory(self.model, serializer=serializer_class)
