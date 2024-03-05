@@ -29,6 +29,7 @@
   {{ block.super }}
   <script type="text/javascript">
 {% with object|opts as opts %}
+{% with opts.object_name|lower as modelname %}
 function GetFormAjax(FormName , ObjectID , ButtonText) {
     function add_form(data) {
         // update our tooltip content with our returned data and cache it
@@ -66,7 +67,7 @@ function GetFormAjax(FormName , ObjectID , ButtonText) {
     };
     if (ObjectID === undefined) {
         if ($.ApisForms[FormName+'_'+'{{object}}']) {
-            var new_data = $.ApisForms[FormName+'_'+'{{opts.verbose_name}}']
+            var new_data = $.ApisForms[FormName+'_'+'{{modelname}}']
             new_data.form = new_data.form.replace('##ENT_PK##', {{object.pk}});
             add_form(new_data);
             return;
@@ -88,14 +89,14 @@ function GetFormAjax(FormName , ObjectID , ButtonText) {
                 'SiteID':{{object.pk}},
                 'ObjectID':ObjectID,
                 'ButtonText':ButtonText,
-                'entity_type': '{{opts.verbose_name}}',
+                'entity_type': '{{modelname}}',
             },
             success: function(data) {
 		console.log(data);
                 add_form(data);
                 if (!ObjectID) {
-                    $.ApisForms[FormName+'_'+'{{opts.verbose_name}}'] = data;
-                    $.ApisForms[FormName+'_'+'{{opts.verbose_name}}'].form = $.ApisForms[FormName+'_'+'{{opts.verbose_name}}'].form
+                    $.ApisForms[FormName+'_'+'{{modelname}}'] = data;
+                    $.ApisForms[FormName+'_'+'{{modelname}}'].form = $.ApisForms[FormName+'_'+'{{modelname}}'].form
                     .replace('/{{object.pk}}/', '/##ENT_PK##/');
                 };
             },
@@ -105,6 +106,7 @@ function GetFormAjax(FormName , ObjectID , ButtonText) {
         }
     );
 }
+{% endwith %}
 {% endwith %}
 
 function EntityRelationForm_response(response){
