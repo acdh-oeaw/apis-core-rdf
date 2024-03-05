@@ -93,6 +93,8 @@
 <span class="c1"># SPDX-License-Identifier: MIT</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">Graph</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
@@ -103,14 +105,44 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="definition_matches_model">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.rdf.definition_matches_model">[docs]</a>
+<span class="k">def</span> <span class="nf">definition_matches_model</span><span class="p">(</span><span class="n">definition</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;superclass&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="n">model</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">module</span><span class="p">,</span> <span class="bp">cls</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;superclass&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="n">parent</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;superclass </span><span class="si">%s</span><span class="s2"> led to: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;superclass&quot;</span><span class="p">),</span> <span class="n">e</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="definition_matches_uri">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.rdf.definition_matches_uri">[docs]</a>
+<span class="k">def</span> <span class="nf">definition_matches_uri</span><span class="p">(</span><span class="n">definition</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">regex</span> <span class="o">:=</span> <span class="n">definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regex&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;found regex </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="p">)</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
 <div class="viewcode-block" id="get_definition_and_attributes_from_uri">
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.rdf.get_definition_and_attributes_from_uri">[docs]</a>
-<span class="k">def</span> <span class="nf">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">get_definition_and_attributes_from_uri</span><span class="p">(</span>
+    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">object</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function looks for `.toml` files in the `rdfimport` app directories</span>
 <span class="sd">    and loads all the files it can parse. For every file that contains a</span>
-<span class="sd">    `filter_sparql` key it tries to use that key on the RDF graph that</span>
-<span class="sd">    represents the data at the given RDF endpoint. It uses the first file that</span>
+<span class="sd">    `superclass` key it checks if it is a superclass of `model`.</span>
+<span class="sd">    It uses the first file that</span>
 <span class="sd">    matches to extract attributes from the RDF endpoint and then returns both</span>
 <span class="sd">    the parsed file contents and the extracted attributes.</span>
 <span class="sd">    The reason we are also returning the parsed file contents is, that you then</span>
@@ -127,15 +159,12 @@
     <span class="n">configs</span> <span class="o">=</span> <span class="n">dict_from_toml_directory</span><span class="p">(</span><span class="s2">&quot;rdfimport&quot;</span><span class="p">)</span>
     <span class="n">matching_definition</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">configs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filter_sparql&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">definition</span><span class="p">[</span><span class="s2">&quot;filter_sparql&quot;</span><span class="p">])):</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%s</span><span class="s2"> to match the Uri&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-                    <span class="n">matching_definition</span> <span class="o">=</span> <span class="n">definition</span>
-                    <span class="n">matching_definition</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-                    <span class="k">break</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;filter_sparql in </span><span class="si">%s</span><span class="s2"> led to: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">definition_matches_model</span><span class="p">(</span><span class="n">definition</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span> <span class="ow">and</span> <span class="n">definition_matches_uri</span><span class="p">(</span>
+            <span class="n">definition</span><span class="p">,</span> <span class="n">uri</span>
+        <span class="p">):</span>
+            <span class="n">matching_definition</span> <span class="o">=</span> <span class="n">definition</span>
+            <span class="n">matching_definition</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">break</span>
     <span class="n">model_attributes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">matching_definition</span><span class="p">:</span>
         <span class="n">attributes</span> <span class="o">=</span> <span class="n">matching_definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">,</span> <span class="p">[])</span>
