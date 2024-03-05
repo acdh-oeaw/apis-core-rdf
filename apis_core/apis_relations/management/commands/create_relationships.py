@@ -31,7 +31,7 @@ class Command(BaseCommand):
             #  below msg. purposefully only mentions "labels".
             self.stdout.write("The following labels now exist:")
             for p in props:
-                self.stdout.write(self.style.SUCCESS(f"{p.name}"), ending="")
+                self.stdout.write(self.style.SUCCESS(f"{p.name_forward}"), ending="")
                 self.stdout.write(f" ... {p.name_reverse}")
         else:
             # construct_properties() starts out by deleting all existing
