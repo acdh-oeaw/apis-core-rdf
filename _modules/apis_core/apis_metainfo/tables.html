@@ -92,6 +92,7 @@
 <span></span><span class="kn">import</span> <span class="nn">django_tables2</span> <span class="k">as</span> <span class="nn">tables</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">django.utils.html</span> <span class="kn">import</span> <span class="n">format_html</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.tables</span> <span class="kn">import</span> <span class="n">GenericTable</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 
@@ -208,8 +209,7 @@
 
 <div class="viewcode-block" id="UriTable">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable">[docs]</a>
-<span class="k">class</span> <span class="nc">UriTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">UriTable</span><span class="p">(</span><span class="n">GenericTable</span><span class="p">):</span>
     <span class="n">entity</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
         <span class="s2">&quot;&lt;a href=&#39;{{ record.root_object.get_absolute_url }}&#39;&gt;{{ record.root_object }}&lt;/a&gt;&quot;</span><span class="p">,</span>
         <span class="n">orderable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -223,11 +223,9 @@
 
 <div class="viewcode-block" id="UriTable.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta">[docs]</a>
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">GenericTable</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
-        <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">)</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="s2">&quot;ent_type&quot;</span><span class="p">)</span>
-        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;table table-responsive table-hover&quot;</span><span class="p">}</span></div>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;desc&quot;</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="s2">&quot;ent_type&quot;</span><span class="p">]</span></div>
 </div>
 
 </pre></div>
