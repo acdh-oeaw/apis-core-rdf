@@ -97,13 +97,13 @@ class GenericTripleForm(forms.ModelForm):
     ):
         # the more important function here when writing data from an user input via an ajax call into this form.
         # Because here the direction of the property is respected. Hence the subject and object position of the
-        # triple and the property name or name_reverse are loaded correctly here.
+        # triple and the property name_forward or name_reverse are loaded correctly here.
 
         if property_direction == PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR:
 
             triple_subj = entity_instance_self
             triple_obj = entity_instance_other
-            property_direction_name = property_instance.name
+            property_direction_name = property_instance.name_forward
 
         elif property_direction == PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR:
 

@@ -23,7 +23,7 @@ ABSTRACT_ENTITY_FILTERS_EXCLUDE = [
 
 
 def related_property(queryset, name, value):
-    p = Property.objects.get(name=value)
+    p = Property.objects.get(name_forward=value)
     queryset = queryset.filter(triple_set_from_subj__prop=p).distinct()
     return queryset
 
@@ -37,7 +37,7 @@ class AbstractEntityFilterSet(GenericFilterSet):
         method=related_entity_name, label="Related entity"
     )
     related_property = django_filters.ModelChoiceFilter(
-        queryset=Property.objects.all().order_by("name"),
+        queryset=Property.objects.all().order_by("name_forward"),
         label="Related Property",
         method=related_property,
     )

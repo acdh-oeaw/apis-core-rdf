@@ -204,7 +204,7 @@ def get_autocomplete_property_choices(
         rbc_self_subj_other_obj = Property.objects.filter(
             subj_class=model_self_contenttype,
             obj_class=model_other_contenttype,
-            name__icontains=search_name_str,
+            name_forward__icontains=search_name_str,
         )
         rbc_self_obj_other_subj = Property.objects.filter(
             subj_class=model_other_contenttype,
@@ -228,7 +228,7 @@ def get_autocomplete_property_choices(
                 {
                     # misuse of the id item as explained above
                     "id": f"id:{rbc.pk}__direction:{PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR}",
-                    "text": rbc.name,
+                    "text": rbc.name_forward,
                 }
             )
         for rbc in rbc_self_obj_other_subj:

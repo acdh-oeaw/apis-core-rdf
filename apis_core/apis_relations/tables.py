@@ -163,7 +163,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                 ),
                 other_prop=Case(
                     # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
-                    When(**{"subj__pk": entity_pk_self, "then": "prop__name"}),
+                    When(**{"subj__pk": entity_pk_self, "then": "prop__name_forward"}),
                     When(**{"obj__pk": entity_pk_self, "then": "prop__name_reverse"}),
                 ),
             )
