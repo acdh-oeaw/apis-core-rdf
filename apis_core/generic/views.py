@@ -122,9 +122,10 @@ class List(
         return filterset_factory(self.model, filterset_class)
 
     def get_queryset(self):
-        return first_match_via_mro(
+        queryset = first_match_via_mro(
             self.model, path="querysets", suffix="ListViewQueryset"
-        ) or self.filter_queryset(self.model.objects.all())
+        ) or (lambda x: x)
+        return self.filter_queryset(queryset(self.model.objects.all()))
 
 
 class Detail(GenericModelMixin, PermissionRequiredMixin, DetailView):
