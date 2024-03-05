@@ -19,8 +19,8 @@ class ModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = first_match_via_mro(
             self.model, path="querysets", suffix="ViewSetQueryset"
-        )
-        return queryset or self.model.objects.all()
+        ) or (lambda x: x)
+        return queryset(self.model.objects.all())
 
     def get_serializer_class(self):
         serializer_class = (
