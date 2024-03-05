@@ -33,12 +33,6 @@ class AbstractEntity(RootObject):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def __str__(self):
-        if self.name != "":
-            return self.name
-        else:
-            return "no name provided"
-
     @classmethod
     def get_or_create_uri(cls, uri):
         uri = str(uri)

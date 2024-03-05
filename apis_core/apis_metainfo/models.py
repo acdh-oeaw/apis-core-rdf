@@ -46,12 +46,6 @@ class RootObject(GenericModel, models.Model):
             self.self_contenttype = caching.get_contenttype_of_class(self.__class__)
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        if self.name != "":
-            return self.name
-        else:
-            return "no name provided"
-
     def duplicate(self):
         origin = self.__class__
         signals.pre_duplicate.send(sender=origin, instance=self)

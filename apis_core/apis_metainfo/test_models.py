@@ -11,12 +11,6 @@ class ModelTestCase(TestCase):
         RootObject.objects.create(self_contenttype=user_type, name="foo")
         RootObject.objects.create(self_contenttype=user_type)
 
-    def test_root_object(self):
-        rfoo = RootObject.objects.get(name="foo")
-        rnone = RootObject.objects.get(name="")
-        self.assertEqual(str(rfoo), "foo")
-        self.assertEqual(str(rnone), "no name provided")
-
     def test_uri(self):
         ufoo = Uri.objects.create()
         self.assertEqual(str(ufoo), "None")
