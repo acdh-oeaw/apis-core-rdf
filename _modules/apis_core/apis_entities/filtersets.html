@@ -116,7 +116,7 @@
 <div class="viewcode-block" id="related_property">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.related_property">[docs]</a>
 <span class="k">def</span> <span class="nf">related_property</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name_forward</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">triple_set_from_subj__prop</span><span class="o">=</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">queryset</span></div>
 
@@ -136,7 +136,7 @@
         <span class="n">method</span><span class="o">=</span><span class="n">related_entity_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related entity&quot;</span>
     <span class="p">)</span>
     <span class="n">related_property</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">ModelChoiceFilter</span><span class="p">(</span>
-        <span class="n">queryset</span><span class="o">=</span><span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+        <span class="n">queryset</span><span class="o">=</span><span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name_forward&quot;</span><span class="p">),</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related Property&quot;</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="n">related_property</span><span class="p">,</span>
     <span class="p">)</span>

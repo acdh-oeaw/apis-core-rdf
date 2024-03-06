@@ -195,13 +195,13 @@
     <span class="p">):</span>
         <span class="c1"># the more important function here when writing data from an user input via an ajax call into this form.</span>
         <span class="c1"># Because here the direction of the property is respected. Hence the subject and object position of the</span>
-        <span class="c1"># triple and the property name or name_reverse are loaded correctly here.</span>
+        <span class="c1"># triple and the property name_forward or name_reverse are loaded correctly here.</span>
 
         <span class="k">if</span> <span class="n">property_direction</span> <span class="o">==</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_SUBJ_OTHER_OBJ_STR</span><span class="p">:</span>
 
             <span class="n">triple_subj</span> <span class="o">=</span> <span class="n">entity_instance_self</span>
             <span class="n">triple_obj</span> <span class="o">=</span> <span class="n">entity_instance_other</span>
-            <span class="n">property_direction_name</span> <span class="o">=</span> <span class="n">property_instance</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">property_direction_name</span> <span class="o">=</span> <span class="n">property_instance</span><span class="o">.</span><span class="n">name_forward</span>
 
         <span class="k">elif</span> <span class="n">property_direction</span> <span class="o">==</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_OBJ_OTHER_SUBJ_STR</span><span class="p">:</span>
 
