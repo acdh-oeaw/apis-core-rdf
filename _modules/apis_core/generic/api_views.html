@@ -124,8 +124,10 @@
 <div class="viewcode-block" id="ModelViewSet.get_serializer_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet.get_serializer_class">[docs]</a>
     <span class="k">def</span> <span class="nf">get_serializer_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">accepted_renderer</span>
         <span class="n">serializer_class</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">first_match_via_mro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;serializers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Serializer&quot;</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="s2">&quot;serializer&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="ow">or</span> <span class="n">GenericHyperlinkedModelSerializer</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">serializer_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="n">serializer_class</span><span class="p">)</span></div>
