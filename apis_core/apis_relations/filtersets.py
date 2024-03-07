@@ -4,7 +4,12 @@ from django.contrib.contenttypes.models import ContentType
 from apis_core.apis_relations.models import Property
 from django.db.models import Q
 
-PROPERTY_EXCLUDES = ["self_contenttype", "name", "property_class_uri", "rootobject_ptr"]
+PROPERTY_EXCLUDES = [
+    "self_contenttype",
+    "deprecated_name",
+    "property_class_uri",
+    "rootobject_ptr",
+]
 
 
 class PropertyFilterSetForm(GenericFilterSetForm):
