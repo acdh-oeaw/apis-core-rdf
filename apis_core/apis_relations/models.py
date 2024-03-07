@@ -86,8 +86,6 @@ class Property(RootObject):
             self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
         if self.name_reverse == "" or self.name_reverse is None:
             self.name_reverse = self.name_forward + " [REVERSE]"
-        # TODO RDF: Temporary hack, remove this once better solution is found
-        self.name = self.name_forward
         super(Property, self).save(*args, **kwargs)
         return self
 
@@ -262,8 +260,8 @@ class Triple(GenericModel, models.Model):
     def get_web_object(self):
         return {
             "relation_pk": self.pk,
-            "subj": self.subj.name,
-            "obj": self.obj.name,
+            "subj": str(self.subj),
+            "obj": str(self.obj),
             "prop": self.prop.name_forward,
         }
 
