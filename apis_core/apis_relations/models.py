@@ -82,10 +82,19 @@ class Property(RootObject):
         return self.name_forward
 
     def save(self, *args, **kwargs):
-        if self.name_reverse != unicodedata.normalize("NFC", self.name_reverse):
-            self.name_reverse = unicodedata.normalize("NFC", self.name_reverse)
-        if self.name_reverse == "" or self.name_reverse is None:
-            self.name_reverse = self.name_forward + " [REVERSE]"
+        if self.name_reverse == "":
+            self.name_reverse = f"{self.name_forward} [INVERSE]"
+
+        self.name_forward = unicodedata.normalize("NFC", str(self.name_forward))
+        self.name_reverse = unicodedata.normalize("NFC", str(self.name_reverse))
+
+        self.deprecated_name = self.name_forward
+
+        if "update_fields" in kwargs and (
+            include_fields := {"name_forward", "name_reverse", "deprecated_name"}
+        ).intersection(update_fields := kwargs.get("update_fields")):
+            kwargs["update_fields"] = set(update_fields) | include_fields
+
         super(Property, self).save(*args, **kwargs)
         return self
 
