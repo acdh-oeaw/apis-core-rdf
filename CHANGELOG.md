@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.15.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.14.2...v0.15.0) (2024-03-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_metainfo:** The renaming of RootObject's "name" field to "deprecated_name" affects all inheriting model classes as well as class Property. You will need to create new fields in your model classes to replace it/to preserve its contents before it gets dropped.
+* **core:** projects using the `confirm_delete.html` template will have to change that. There is a replacement in `generic/generic_confirm_delete.html`.
+* **apis_metainfo,apis_entities:** drop __str___ overrides
+
+### Features
+
+* **apis_entities:** implement default abstract entity classes ([b1ebd0a](https://github.com/acdh-oeaw/apis-core-rdf/commit/b1ebd0a7b4c5c388c65aa36704521f646c8aed64)), closes [#403](https://github.com/acdh-oeaw/apis-core-rdf/issues/403)
+* **apis_relations:** add obj and subj class filter to triple filters ([4b890c4](https://github.com/acdh-oeaw/apis-core-rdf/commit/4b890c47ad97ec0579db3892d2d7d562cf5a7d2a)), closes [#668](https://github.com/acdh-oeaw/apis-core-rdf/issues/668)
+* **generic:** allow to override serializer based on renderer ([676251d](https://github.com/acdh-oeaw/apis-core-rdf/commit/676251de08c58266dabdc37038a43e2deab7114d))
+
+
+### Bug Fixes
+
+* **apis_entities:** move duplicate button after other action buttons ([1683968](https://github.com/acdh-oeaw/apis-core-rdf/commit/1683968b1a994c155a5f4e36ec96cf2ee517d1c2)), closes [#694](https://github.com/acdh-oeaw/apis-core-rdf/issues/694)
+* **apis_entities:** use `modelname` instead of `verbose_name` ([ef10a69](https://github.com/acdh-oeaw/apis-core-rdf/commit/ef10a69ba8e66d86f42128789b7facdc9e39df73))
+* **apis_entities:** use modelname instead of verbose_name in javascript ([6fee852](https://github.com/acdh-oeaw/apis-core-rdf/commit/6fee852c3ee1084b7d4ad345efaf2a6464f16370))
+* **generic:** pass existing queryset to custom queryset ([12d4ed8](https://github.com/acdh-oeaw/apis-core-rdf/commit/12d4ed8c22eeb584df122d1c37cde7e1ee780d6a))
+
+
+### Code Refactoring
+
+* **apis_metainfo,apis_entities:** drop __str___ overrides ([c9fbcc8](https://github.com/acdh-oeaw/apis-core-rdf/commit/c9fbcc8f43320dbe1a0b188b14a0a8939fadbe81))
+* **apis_metainfo:** rename RootObject.name to deprecated_name ([fcd4854](https://github.com/acdh-oeaw/apis-core-rdf/commit/fcd485453e88f5247f56c0f92f78ab3772852ece)), closes [#299](https://github.com/acdh-oeaw/apis-core-rdf/issues/299)
+* **core:** drop unused template ([391f2de](https://github.com/acdh-oeaw/apis-core-rdf/commit/391f2dea9d0452e40efcc1f312497941c1ce99ff)), closes [#518](https://github.com/acdh-oeaw/apis-core-rdf/issues/518)
+
 ## [0.14.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.14.1...v0.14.2) (2024-02-29)
 
 
