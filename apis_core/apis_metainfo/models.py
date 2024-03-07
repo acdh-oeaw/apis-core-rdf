@@ -28,6 +28,15 @@ class RootObject(GenericModel, models.Model):
     """
 
     deprecated_name = models.CharField(max_length=255, verbose_name="Name", blank=True)
+    deprecated_name.system_check_deprecated_details = {
+        "msg": "RootObject's field for name is being deprecated.",
+        "hint": "Create a new field in all affected model classes and "
+        "transfer the current contents of the 'deprecated_name' CharField. "
+        "To interact with Property instances, use only the 'name_forward' "
+        "and 'name_reverse' fields going forward, not 'deprecated_name'.",
+        "id": "apis_core.W001",
+    }
+
     # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
     # triples where the subject's or object's contenttype must be respected (e.g. get all triples
     # where the subject is a Person)
