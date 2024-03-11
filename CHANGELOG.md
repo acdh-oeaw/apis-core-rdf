@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.15.0...v0.15.1) (2024-03-11)
+
+
+### Bug Fixes
+
+* **utils:** make rdfimport parent model check more loose ([84b97d3](https://github.com/acdh-oeaw/apis-core-rdf/commit/84b97d341757365deb4abf2cff846306d9a5249f))
+
 ## [0.15.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.14.2...v0.15.0) (2024-03-07)
 
 
