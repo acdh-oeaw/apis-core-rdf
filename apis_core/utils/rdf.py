@@ -20,7 +20,7 @@ def definition_matches_model(definition: str, model: object) -> bool:
             module, cls = definition.get("superclass").rsplit(".", 1)
             module = importlib.import_module(module)
             parent = getattr(module, cls)
-            if issubclass(type(model), parent):
+            if issubclass(type(model), parent) or issubclass(model, parent):
                 return True
         except Exception as e:
             logger.error("superclass %s led to: %s", definition.get("superclass"), e)
