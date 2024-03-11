@@ -27,7 +27,9 @@ class RootObject(GenericModel, models.Model):
     By having one overarching super class we gain the advantage of unique identifiers.
     """
 
-    deprecated_name = models.CharField(max_length=255, verbose_name="Name", blank=True)
+    deprecated_name = models.CharField(
+        max_length=255, verbose_name="(Deprecated) Name", blank=True
+    )
     deprecated_name.system_check_deprecated_details = {
         "msg": "RootObject's field for name is being deprecated.",
         "hint": "Create a new field in all affected model classes and "
