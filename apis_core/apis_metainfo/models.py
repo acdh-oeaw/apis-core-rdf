@@ -41,8 +41,7 @@ class RootObject(GenericModel, models.Model):
     objects_inheritance = InheritanceManager()
 
     def save(self, *args, **kwargs):
-        if self.self_contenttype is None:
-            self.self_contenttype = caching.get_contenttype_of_class(self.__class__)
+        self.self_contenttype = ContentType.objects.get_for_model(self)
         super().save(*args, **kwargs)
 
     def duplicate(self):
