@@ -18,10 +18,11 @@ from .tables import GenericTable
 from .filtersets import filterset_factory, GenericFilterSet
 from .forms import GenericModelForm, GenericImportForm
 from .helpers import (
-    first_match_via_mro,
     template_names_via_mro,
     generate_search_filter,
     permission_fullname,
+    module_paths,
+    first_member_match,
 )
 from apis_core.utils.helpers import create_object_from_uri
 
@@ -85,21 +86,19 @@ class List(
     Access requires the `<model>_view` permission.
     It is based on django-filters FilterView and django-tables SingleTableMixin.
     The table class is overridden by the first match from
-    the `first_match_via_mro` helper.
+    the `first_member_match` helper.
     The filterset class is overridden by the first match from
-    the `first_match_via_mro` helper.
+    the `first_member_match` helper.
     The queryset is overridden by the first match from
-    the `first_match_via_mro` helper.
+    the `first_member_match` helper.
     """
 
     template_name_suffix = "_list"
     permission_action_required = "view"
 
     def get_table_class(self):
-        table_class = (
-            first_match_via_mro(self.model, path="tables", suffix="Table")
-            or GenericTable
-        )
+        table_modules = module_paths(self.model, path="tables", suffix="Table")
+        table_class = first_member_match(table_modules, GenericTable)
         return table_factory(self.model, table_class)
 
     def get_table_kwargs(self):
@@ -115,16 +114,17 @@ class List(
         return kwargs
 
     def get_filterset_class(self):
-        filterset_class = (
-            first_match_via_mro(self.model, path="filtersets", suffix="FilterSet")
-            or GenericFilterSet
+        filterset_modules = module_paths(
+            self.model, path="filtersets", suffix="FilterSet"
         )
+        filterset_class = first_member_match(filterset_modules, GenericFilterSet)
         return filterset_factory(self.model, filterset_class)
 
     def get_queryset(self):
-        queryset = first_match_via_mro(
+        queryset_methods = module_paths(
             self.model, path="querysets", suffix="ListViewQueryset"
-        ) or (lambda x: x)
+        )
+        queryset = first_member_match(queryset_methods) or (lambda x: x)
         return self.filter_queryset(queryset(self.model.objects.all()))
 
 
@@ -142,17 +142,15 @@ class Create(GenericModelMixin, PermissionRequiredMixin, CreateView):
     Create view for a generic model.
     Access requires the `<model>_add` permission.
     The form class is overridden by the first match from
-    the `first_match_via_mro` helper.
+    the `first_member_match` helper.
     """
 
     template_name = "generic/generic_form.html"
     permission_action_required = "add"
 
     def get_form_class(self):
-        form_class = (
-            first_match_via_mro(self.model, path="forms", suffix="Form")
-            or GenericModelForm
-        )
+        form_modules = module_paths(self.model, path="forms", suffix="Form")
+        form_class = first_member_match(form_modules, GenericModelForm)
         return modelform_factory(self.model, form_class)
 
     def get_success_url(self):
@@ -189,16 +187,14 @@ class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
     Update view for a generic model.
     Access requires the `<model>_change` permission.
     The form class is overridden by the first match from
-    the `first_match_via_mro` helper.
+    the `first_member_match` helper.
     """
 
     permission_action_required = "change"
 
     def get_form_class(self):
-        form_class = (
-            first_match_via_mro(self.model, path="forms", suffix="Form")
-            or GenericModelForm
-        )
+        form_modules = module_paths(self.model, path="forms", suffix="Form")
+        form_class = first_member_match(form_modules, GenericModelForm)
         return modelform_factory(self.model, form_class)
 
     def get_success_url(self):
@@ -212,7 +208,7 @@ class Autocomplete(
     Autocomplete view for a generic model.
     Access requires the `<model>_view` permission.
     The queryset is overridden by the first match from
-    the `first_match_via_mro` helper.
+    the `first_member_match` helper.
     """
 
     permission_action_required = "view"
@@ -228,9 +224,10 @@ class Autocomplete(
             self.template = None
 
     def get_queryset(self):
-        queryset = first_match_via_mro(
+        queryset_methods = module_paths(
             self.model, path="querysets", suffix="AutocompleteQueryset"
         )
+        queryset = first_member_match(queryset_methods)
         if queryset:
             return queryset(self.model, self.q)
         return self.model.objects.filter(generate_search_filter(self.model, self.q))
@@ -238,9 +235,10 @@ class Autocomplete(
     def get_results(self, context):
         external_only = self.kwargs.get("external_only", False)
         results = [] if external_only else super().get_results(context)
-        ExternalAutocomplete = first_match_via_mro(
-            self.model, path="querysets", suffix="ExternalAutocomplete"
+        queryset_methods = module_paths(
+            self.model, paths="querysets", suffix="ExternalAutocomplete"
         )
+        ExternalAutocomplete = first_member_match(queryset_methods)
         if ExternalAutocomplete:
             results.extend(ExternalAutocomplete().get_results(self.q))
         return results
@@ -255,10 +253,8 @@ class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
     permission_action_required = "create"
 
     def get_form_class(self):
-        form_class = (
-            first_match_via_mro(self.model, path="forms", suffix="ImportForm")
-            or GenericImportForm
-        )
+        form_modules = module_paths(self.model, paths="forms", suffix="ImportForm")
+        form_class = first_member_match(form_modules, GenericImportForm)
         return modelform_factory(self.model, form_class)
 
     def form_valid(self, form):

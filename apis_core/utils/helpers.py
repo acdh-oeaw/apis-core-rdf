@@ -9,7 +9,7 @@ from apis_core.apis_relations.models import Property, TempTriple
 from apis_core.utils.settings import get_entity_settings_by_modelname
 from apis_core.apis_relations.tables import get_generic_triple_table
 from apis_core.apis_metainfo.models import Uri
-from apis_core.generic.helpers import first_match_via_mro
+from apis_core.generic.helpers import module_paths, first_member_match
 
 from django.apps import apps
 from django.db import DEFAULT_DB_ALIAS, router
@@ -190,11 +190,8 @@ def create_object_from_uri(uri: str, model: object) -> object:
             uri = Uri.objects.get(uri=uri)
             return uri.root_object
         except Uri.DoesNotExist:
-            Importer = first_match_via_mro(
-                model,
-                path="importers",
-                suffix="Importer",
-            )
+            importer_paths = module_paths(model, path="importers", suffix="Importer")
+            Importer = first_member_match(importer_paths)
             if Importer is not None:
                 importer = Importer(uri, model)
                 instance = importer.create_instance()
