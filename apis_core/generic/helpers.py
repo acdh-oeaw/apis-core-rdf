@@ -1,10 +1,9 @@
 import functools
-import inspect
-import importlib
 import logging
 
 from django.db.models import CharField, TextField, Q, Model
 from django.contrib.auth import get_permission_codename
+from django.utils import module_loading
 
 logger = logging.getLogger(__name__)
 
@@ -62,42 +61,33 @@ def template_names_via_mro(model, suffix=""):
 
 
 @functools.lru_cache
-def class_from_path(classpath):
-    """
-    Lookup if the class in `classpath` exists - if so return it,
-    otherwise return False
-    """
-    module, cls = classpath.rsplit(".", 1)
-    try:
-        members = inspect.getmembers(importlib.import_module(module))
-        members = list(filter(lambda c: c[0] == cls, members))
-    except ModuleNotFoundError:
-        return False
-    if members:
-        return members[0]
-    return False
-
-
-@functools.lru_cache
-def first_match_via_mro(model, path: str = "", suffix: str = ""):
-    """
-    Based on the MRO of a Django model, look for classes based on a
-    lookup algorithm and return the first one that matches.
-    """
-    paths = list(map(lambda x: x[:-1] + [path] + x[-1:], mro_paths(model)))
-    classes = [".".join(prefix) + suffix for prefix in paths]
-    name, res = next(filter(bool, map(class_from_path, classes)), ("nothing", None))
-    logger.debug(
-        "first_match_via_mro: found %s for %s, path: `%s`, suffix: `%s`",
-        name,
-        model,
-        path,
-        suffix,
-    )
-    return res
-
-
-@functools.lru_cache
 def permission_fullname(action: str, model: object) -> str:
     permission_codename = get_permission_codename(action, model._meta)
     return f"{model._meta.app_label}.{permission_codename}"
+
+
+@functools.lru_cache
+def module_paths(model, path: str = "", suffix: str = "") -> list:
+    paths = list(map(lambda x: x[:-1] + [path] + x[-1:], mro_paths(model)))
+    classes = tuple(".".join(prefix) + suffix for prefix in paths)
+    return classes
+
+
+@functools.lru_cache
+def import_string(dotted_path):
+    try:
+        return module_loading.import_string(dotted_path)
+    except (ModuleNotFoundError, ImportError):
+        return False
+
+
+@functools.lru_cache
+def first_member_match(dotted_path_list: tuple[str], fallback=None) -> object:
+    logger.debug("Looking for matching class in %s", dotted_path_list)
+    pathgen = map(import_string, dotted_path_list)
+    result = next(filter(bool, pathgen), None)
+    if result:
+        logger.debug("Found matching attribute/class in %s", result)
+    else:
+        logger.debug("Found nothing, returning fallback: %s", fallback)
+    return result or fallback
