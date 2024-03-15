@@ -5,7 +5,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.fields.related import ForeignKey, ManyToManyField
 from django.forms import model_to_dict
-from django.urls import reverse
 from model_utils.managers import InheritanceManager
 from apis_core.utils.normalize import clean_uri
 from django.core.exceptions import ValidationError, ImproperlyConfigured
@@ -169,23 +168,6 @@ class Uri(GenericModel, models.Model):
             "uri": self.uri,
         }
         return result
-
-    @classmethod
-    def get_listview_url(self):
-        return reverse("apis_core:apis_metainfo:uri_browse")
-
-    @classmethod
-    def get_createview_url(self):
-        return reverse("apis_core:apis_metainfo:uri_create")
-
-    def get_absolute_url(self):
-        return reverse("apis_core:apis_metainfo:uri_detail", kwargs={"pk": self.id})
-
-    def get_delete_url(self):
-        return reverse("apis_core:apis_metainfo:uri_delete", kwargs={"pk": self.id})
-
-    def get_edit_url(self):
-        return reverse("apis_core:apis_metainfo:uri_edit", kwargs={"pk": self.id})
 
     def save(self, *args, **kwargs):
         self.clean()

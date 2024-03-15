@@ -51,34 +51,15 @@ class AbstractEntity(RootObject):
     def get_entity_list_filter(cls):
         return None
 
-    @classmethod
-    def get_listview_url(self):
-        entity = self.__name__.lower()
-        return reverse(
-            "apis_core:apis_entities:generic_entities_list",
-            kwargs={"contenttype": entity},
-        )
-
-    @classmethod
-    def get_createview_url(self):
-        entity = self.__name__.lower()
-        return reverse(
-            "apis_core:apis_entities:generic_entities_create_view",
-            kwargs={"entity": entity},
-        )
-
     def get_edit_url(self):
-        entity = self.__class__.__name__.lower()
+        """
+        We override the edit url, because entities have a
+        custom view that includes the relations
+        """
+        ct = ContentType.objects.get_for_model(self)
         return reverse(
             "apis_core:apis_entities:generic_entities_edit_view",
-            kwargs={"contenttype": entity, "pk": self.id},
-        )
-
-    def get_absolute_url(self):
-        entity = self.__class__.__name__.lower()
-        return reverse(
-            "apis_core:apis_entities:generic_entities_detail_view",
-            kwargs={"contenttype": entity, "pk": self.id},
+            args=[ct.model, self.id],
         )
 
     def get_prev_url(self):
@@ -108,13 +89,6 @@ class AbstractEntity(RootObject):
             )
         else:
             return False
-
-    def get_delete_url(self):
-        entity = self.__class__.__name__.lower()
-        return reverse(
-            "apis_core:apis_entities:generic_entities_delete_view",
-            kwargs={"contenttype": entity, "pk": self.id},
-        )
 
     def get_duplicate_url(self):
         entity = self.__class__.__name__.lower()
