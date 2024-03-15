@@ -50,8 +50,6 @@
     <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,500"
           rel="stylesheet" />
 
-    {% if PROJECT_CSS %}<link rel="stylesheet" href="{{ PROJECT_CSS }}?rnd=1" rel="stylesheet" />{% endif %}
-
     {% block scriptHeader %}{% endblock %}
 
   </head>
@@ -71,14 +69,10 @@
           {% block nav-class %}navbar navbar-expand-lg navbar-light bg-light border-bottom mb-2 p-0{% endblock nav-class %}
            ">
           <div class="container-fluid">
-            <!-- Start custom branding -->
-            <a href="/"
-               class="navbar-brand custom-logo-link"
-               rel="home"
-               itemprop="url">
-              <img src="{{ PROJECT_LOGO }}" class="img-fluid" style="height: 36px;" />
-            </a>
-            <!-- End custom branding -->
+
+            {% block navbar-before %}
+            {% endblock navbar-before %}
+
             <button class="navbar-toggler"
                     type="button"
                     data-toggle="collapse"
@@ -186,19 +180,11 @@
       <!-- Start main content block -->
       <div id="content">
 
-        {% if DEV_VERSION %}
-          <div class="alert alert-danger" role="alert">
-            This is a DEVELOPMENT instance. Click <a href="https://{{ PROJECT_NAME }}.acdh.oeaw.ac.at">here</a> for the
-            Production version
-          </div>
-        {% endif %}
-
         {% block content %}{% endblock %}
 
       </div>
       <!-- End main content block -->
       <div class="d-flex footer-separator justify-content-center p-2"></div>
-      <!-- Start site footer -->
 
       {% block footer %}
         <div id="wrapper-footer-full" class="fundament-default-footer">
@@ -224,24 +210,12 @@
       {% endblock footer %}
 
       {% block imprint %}
-        <!-- Start imprint, project partners -->
         <div id="wrapper-footer-secondary"
              class="footer-imprint-bar p-2 text-center">
           <a href="/imprint.html">Imprint | Impressum</a>
-
-          {% if user.is_authenticated %}
-            {% if DB_NAME %}
-              <div class="footer-imprint-bar">
-                <div>{{ DB_NAME }}</div>
-              </div>
-            {% endif %}
-          {% endif %}
-
         </div>
       {% endblock imprint %}
 
-      <!-- End imprint, project partners -->
-      <!-- End site footer -->
     </div>
 
     {% block scripts %}
