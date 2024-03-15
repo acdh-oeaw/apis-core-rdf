@@ -124,11 +124,11 @@ class AbstractEntity(RootObject):
         )
 
     def merge_charfield(self, other, field):
-        print(field)
         res = getattr(self, field.name)
         if not field.choices:
-            if getattr(other, field.name):
-                res += " (" + getattr(other, field.name) + ")"
+            otherres = getattr(other, field.name, res)
+            if otherres != res:
+                res += f" ({otherres})"
         setattr(self, field.name, res)
 
     def merge_textfield(self, other, field):
