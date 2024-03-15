@@ -156,10 +156,7 @@ class Create(GenericModelMixin, PermissionRequiredMixin, CreateView):
         return modelform_factory(self.model, form_class)
 
     def get_success_url(self):
-        return reverse(
-            "apis:generic:update",
-            args=[self.kwargs.get("contenttype"), getattr(self.object, "pk")],
-        )
+        return self.object.get_edit_url()
 
 
 class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
@@ -205,10 +202,7 @@ class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
         return modelform_factory(self.model, form_class)
 
     def get_success_url(self):
-        return reverse(
-            "apis:generic:update",
-            args=[self.kwargs.get("contenttype"), getattr(self.object, "pk")],
-        )
+        return self.object.get_edit_url()
 
 
 class Autocomplete(
@@ -272,7 +266,4 @@ class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse(
-            "apis:generic:detail",
-            args=[self.request.resolver_match.kwargs["contenttype"], self.object.id],
-        )
+        return self.object.get_absolute_url()
