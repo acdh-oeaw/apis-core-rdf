@@ -6,7 +6,6 @@ from django.db.models import Q
 
 PROPERTY_EXCLUDES = [
     "self_contenttype",
-    "deprecated_name",
     "property_class_uri",
     "rootobject_ptr",
 ]
