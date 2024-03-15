@@ -16,9 +16,18 @@ class PropertyFilterSetForm(GenericFilterSetForm):
     columns_exclude = PROPERTY_EXCLUDES
 
 
+class PropertySubjObjFilter(ModelMultipleChoiceFilter):
+    def get_queryset(self, request):
+        return ContentType.objects.filter(
+            pk__in=Property.objects.all().values(self.field_name)
+        )
+
+
 class PropertyFilterSet(GenericFilterSet):
     name_forward = CharFilter(lookup_expr="icontains")
     name_reverse = CharFilter(lookup_expr="icontains")
+    subj_class = PropertySubjObjFilter()
+    obj_class = PropertySubjObjFilter()
 
     class Meta:
         form = PropertyFilterSetForm
@@ -28,18 +37,12 @@ class PropertyFilterSet(GenericFilterSet):
 class TripleFilterSet(GenericFilterSet):
     subj = CharFilter(method="subj_icontains")
     obj = CharFilter(method="obj_icontains")
-    subj_class = ModelMultipleChoiceFilter(
+    subj_class = PropertySubjObjFilter(
         label="Subj class",
-        queryset=ContentType.objects.filter(
-            pk__in=Property.objects.all().values("subj_class")
-        ),
         method="class_in",
     )
-    obj_class = ModelMultipleChoiceFilter(
+    obj_class = PropertySubjObjFilter(
         label="Obj class",
-        queryset=ContentType.objects.filter(
-            pk__in=Property.objects.all().values("obj_class")
-        ),
         method="class_in",
     )
 
