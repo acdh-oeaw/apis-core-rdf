@@ -236,7 +236,7 @@ class Autocomplete(
         external_only = self.kwargs.get("external_only", False)
         results = [] if external_only else super().get_results(context)
         queryset_methods = module_paths(
-            self.model, paths="querysets", suffix="ExternalAutocomplete"
+            self.model, path="querysets", suffix="ExternalAutocomplete"
         )
         ExternalAutocomplete = first_member_match(queryset_methods)
         if ExternalAutocomplete:
