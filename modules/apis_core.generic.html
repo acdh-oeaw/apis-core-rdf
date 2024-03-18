@@ -182,9 +182,9 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelViewSet</span></code></p>
 <p>API ViewSet for a generic model.
 The queryset is overridden by the first match from
-the <cite>first_match_via_mro</cite> helper.
+the <cite>first_member_match</cite> helper.
 The serializer class is overridden by the first match from
-the <cite>first_match_via_mro</cite> helper.</p>
+the <cite>first_member_match</cite> helper.</p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
 <dl class="py attribute">
@@ -295,18 +295,9 @@ See also: <a class="reference external" href="https://github.com/carltongibson/d
 <section id="module-apis_core.generic.helpers">
 <span id="apis-core-generic-helpers-module"></span><h2>apis_core.generic.helpers module<a class="headerlink" href="#module-apis_core.generic.helpers" title="Link to this heading"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="apis_core.generic.helpers.class_from_path">
-<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">class_from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#class_from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.class_from_path" title="Link to this definition"></a></dt>
-<dd><p>Lookup if the class in <cite>classpath</cite> exists - if so return it,
-otherwise return False</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.generic.helpers.first_match_via_mro">
-<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">first_match_via_mro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#first_match_via_mro"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.first_match_via_mro" title="Link to this definition"></a></dt>
-<dd><p>Based on the MRO of a Django model, look for classes based on a
-lookup algorithm and return the first one that matches.</p>
-</dd></dl>
+<dt class="sig sig-object py" id="apis_core.generic.helpers.first_member_match">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">first_member_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dotted_path_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#first_member_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.first_member_match" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="apis_core.generic.helpers.generate_search_filter">
@@ -317,6 +308,16 @@ or in the fields listed in the <cite>fields_to_search</cite> argument.
 This helper can be used by autocomplete querysets if nothing
 fancier is needed.</p>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.import_string">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">import_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dotted_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#import_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.import_string" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.module_paths">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">module_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#module_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.module_paths" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="apis_core.generic.helpers.mro_paths">
@@ -649,7 +650,7 @@ model (<cite>app_label.model</cite>) to the actual Django model class.</p>
 <p>Autocomplete view for a generic model.
 Access requires the <cite>&lt;model&gt;_view</cite> permission.
 The queryset is overridden by the first match from
-the <cite>first_match_via_mro</cite> helper.</p>
+the <cite>first_member_match</cite> helper.</p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
 <dl class="py attribute">
@@ -700,7 +701,7 @@ keyword arguments, and other things.</p>
 <p>Create view for a generic model.
 Access requires the <cite>&lt;model&gt;_add</cite> permission.
 The form class is overridden by the first match from
-the <cite>first_match_via_mro</cite> helper.</p>
+the <cite>first_member_match</cite> helper.</p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
 <dl class="py method">
@@ -845,11 +846,11 @@ keyword arguments, and other things.</p>
 Access requires the <cite>&lt;model&gt;_view</cite> permission.
 It is based on django-filters FilterView and django-tables SingleTableMixin.
 The table class is overridden by the first match from
-the <cite>first_match_via_mro</cite> helper.
+the <cite>first_member_match</cite> helper.
 The filterset class is overridden by the first match from
-the <cite>first_match_via_mro</cite> helper.
+the <cite>first_member_match</cite> helper.
 The queryset is overridden by the first match from
-the <cite>first_match_via_mro</cite> helper.</p>
+the <cite>first_member_match</cite> helper.</p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
 <dl class="py method">
@@ -918,7 +919,7 @@ keyword arguments, and other things.</p>
 <p>Update view for a generic model.
 Access requires the <cite>&lt;model&gt;_change</cite> permission.
 The form class is overridden by the first match from
-the <cite>first_match_via_mro</cite> helper.</p>
+the <cite>first_member_match</cite> helper.</p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
 <dl class="py method">

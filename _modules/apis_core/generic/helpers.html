@@ -90,12 +90,11 @@
              
   <h1>Source code for apis_core.generic.helpers</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
-<span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">TextField</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Model</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">get_permission_codename</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">module_loading</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -161,54 +160,48 @@
 
 
 
-<div class="viewcode-block" id="class_from_path">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.helpers.class_from_path">[docs]</a>
-<span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span>
-<span class="k">def</span> <span class="nf">class_from_path</span><span class="p">(</span><span class="n">classpath</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Lookup if the class in `classpath` exists - if so return it,</span>
-<span class="sd">    otherwise return False</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">module</span><span class="p">,</span> <span class="bp">cls</span> <span class="o">=</span> <span class="n">classpath</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">members</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module</span><span class="p">))</span>
-        <span class="n">members</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">members</span><span class="p">))</span>
-    <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="n">members</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">members</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">return</span> <span class="kc">False</span></div>
-
-
-
-<div class="viewcode-block" id="first_match_via_mro">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.helpers.first_match_via_mro">[docs]</a>
-<span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span>
-<span class="k">def</span> <span class="nf">first_match_via_mro</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Based on the MRO of a Django model, look for classes based on a</span>
-<span class="sd">    lookup algorithm and return the first one that matches.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">paths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:],</span> <span class="n">mro_paths</span><span class="p">(</span><span class="n">model</span><span class="p">)))</span>
-    <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span> <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
-    <span class="n">name</span><span class="p">,</span> <span class="n">res</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="n">class_from_path</span><span class="p">,</span> <span class="n">classes</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;nothing&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-        <span class="s2">&quot;first_match_via_mro: found </span><span class="si">%s</span><span class="s2"> for </span><span class="si">%s</span><span class="s2">, path: `</span><span class="si">%s</span><span class="s2">`, suffix: `</span><span class="si">%s</span><span class="s2">`&quot;</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">,</span>
-        <span class="n">model</span><span class="p">,</span>
-        <span class="n">path</span><span class="p">,</span>
-        <span class="n">suffix</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">res</span></div>
-
-
-
 <div class="viewcode-block" id="permission_fullname">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.helpers.permission_fullname">[docs]</a>
 <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span>
 <span class="k">def</span> <span class="nf">permission_fullname</span><span class="p">(</span><span class="n">action</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">permission_codename</span> <span class="o">=</span> <span class="n">get_permission_codename</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="p">)</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">app_label</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">permission_codename</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="module_paths">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.helpers.module_paths">[docs]</a>
+<span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span>
+<span class="k">def</span> <span class="nf">module_paths</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="n">paths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:],</span> <span class="n">mro_paths</span><span class="p">(</span><span class="n">model</span><span class="p">)))</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span> <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">classes</span></div>
+
+
+
+<div class="viewcode-block" id="import_string">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.helpers.import_string">[docs]</a>
+<span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span>
+<span class="k">def</span> <span class="nf">import_string</span><span class="p">(</span><span class="n">dotted_path</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">module_loading</span><span class="o">.</span><span class="n">import_string</span><span class="p">(</span><span class="n">dotted_path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ModuleNotFoundError</span><span class="p">,</span> <span class="ne">ImportError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="first_member_match">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.helpers.first_member_match">[docs]</a>
+<span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span>
+<span class="k">def</span> <span class="nf">first_member_match</span><span class="p">(</span><span class="n">dotted_path_list</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Looking for matching class in </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">dotted_path_list</span><span class="p">)</span>
+    <span class="n">pathgen</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">import_string</span><span class="p">,</span> <span class="n">dotted_path_list</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">pathgen</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Found matching attribute/class in </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Found nothing, returning fallback: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fallback</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="ow">or</span> <span class="n">fallback</span></div>
 
 </pre></div>
 

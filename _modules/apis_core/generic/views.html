@@ -109,10 +109,11 @@
 <span class="kn">from</span> <span class="nn">.filtersets</span> <span class="kn">import</span> <span class="n">filterset_factory</span><span class="p">,</span> <span class="n">GenericFilterSet</span>
 <span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">GenericModelForm</span><span class="p">,</span> <span class="n">GenericImportForm</span>
 <span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">first_match_via_mro</span><span class="p">,</span>
     <span class="n">template_names_via_mro</span><span class="p">,</span>
     <span class="n">generate_search_filter</span><span class="p">,</span>
     <span class="n">permission_fullname</span><span class="p">,</span>
+    <span class="n">module_paths</span><span class="p">,</span>
+    <span class="n">first_member_match</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span>
 
@@ -193,11 +194,11 @@
 <span class="sd">    Access requires the `&lt;model&gt;_view` permission.</span>
 <span class="sd">    It is based on django-filters FilterView and django-tables SingleTableMixin.</span>
 <span class="sd">    The table class is overridden by the first match from</span>
-<span class="sd">    the `first_match_via_mro` helper.</span>
+<span class="sd">    the `first_member_match` helper.</span>
 <span class="sd">    The filterset class is overridden by the first match from</span>
-<span class="sd">    the `first_match_via_mro` helper.</span>
+<span class="sd">    the `first_member_match` helper.</span>
 <span class="sd">    The queryset is overridden by the first match from</span>
-<span class="sd">    the `first_match_via_mro` helper.</span>
+<span class="sd">    the `first_member_match` helper.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">template_name_suffix</span> <span class="o">=</span> <span class="s2">&quot;_list&quot;</span>
@@ -206,10 +207,8 @@
 <div class="viewcode-block" id="List.get_table_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_table_class">[docs]</a>
     <span class="k">def</span> <span class="nf">get_table_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">table_class</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">first_match_via_mro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;tables&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Table&quot;</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="n">GenericTable</span>
-        <span class="p">)</span>
+        <span class="n">table_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;tables&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Table&quot;</span><span class="p">)</span>
+        <span class="n">table_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">table_modules</span><span class="p">,</span> <span class="n">GenericTable</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">table_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">table_class</span><span class="p">)</span></div>
 
 
@@ -231,19 +230,20 @@
 <div class="viewcode-block" id="List.get_filterset_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_filterset_class">[docs]</a>
     <span class="k">def</span> <span class="nf">get_filterset_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">filterset_class</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">first_match_via_mro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;filtersets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;FilterSet&quot;</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="n">GenericFilterSet</span>
+        <span class="n">filterset_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;filtersets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;FilterSet&quot;</span>
         <span class="p">)</span>
+        <span class="n">filterset_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">filterset_modules</span><span class="p">,</span> <span class="n">GenericFilterSet</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">filterset_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="List.get_queryset">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_queryset">[docs]</a>
     <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">first_match_via_mro</span><span class="p">(</span>
+        <span class="n">queryset_methods</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ListViewQueryset&quot;</span>
-        <span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">queryset_methods</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_queryset</span><span class="p">(</span><span class="n">queryset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()))</span></div>
 </div>
 
@@ -268,7 +268,7 @@
 <span class="sd">    Create view for a generic model.</span>
 <span class="sd">    Access requires the `&lt;model&gt;_add` permission.</span>
 <span class="sd">    The form class is overridden by the first match from</span>
-<span class="sd">    the `first_match_via_mro` helper.</span>
+<span class="sd">    the `first_member_match` helper.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;generic/generic_form.html&quot;</span>
@@ -277,10 +277,8 @@
 <div class="viewcode-block" id="Create.get_form_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Create.get_form_class">[docs]</a>
     <span class="k">def</span> <span class="nf">get_form_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">form_class</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">first_match_via_mro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Form&quot;</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="n">GenericModelForm</span>
-        <span class="p">)</span>
+        <span class="n">form_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Form&quot;</span><span class="p">)</span>
+        <span class="n">form_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">form_modules</span><span class="p">,</span> <span class="n">GenericModelForm</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">modelform_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">form_class</span><span class="p">)</span></div>
 
 
@@ -333,7 +331,7 @@
 <span class="sd">    Update view for a generic model.</span>
 <span class="sd">    Access requires the `&lt;model&gt;_change` permission.</span>
 <span class="sd">    The form class is overridden by the first match from</span>
-<span class="sd">    the `first_match_via_mro` helper.</span>
+<span class="sd">    the `first_member_match` helper.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;change&quot;</span>
@@ -341,10 +339,8 @@
 <div class="viewcode-block" id="Update.get_form_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Update.get_form_class">[docs]</a>
     <span class="k">def</span> <span class="nf">get_form_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">form_class</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">first_match_via_mro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Form&quot;</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="n">GenericModelForm</span>
-        <span class="p">)</span>
+        <span class="n">form_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Form&quot;</span><span class="p">)</span>
+        <span class="n">form_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">form_modules</span><span class="p">,</span> <span class="n">GenericModelForm</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">modelform_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">form_class</span><span class="p">)</span></div>
 
 
@@ -365,7 +361,7 @@
 <span class="sd">    Autocomplete view for a generic model.</span>
 <span class="sd">    Access requires the `&lt;model&gt;_view` permission.</span>
 <span class="sd">    The queryset is overridden by the first match from</span>
-<span class="sd">    the `first_match_via_mro` helper.</span>
+<span class="sd">    the `first_member_match` helper.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;view&quot;</span>
@@ -386,9 +382,10 @@
 <div class="viewcode-block" id="Autocomplete.get_queryset">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.get_queryset">[docs]</a>
     <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">first_match_via_mro</span><span class="p">(</span>
+        <span class="n">queryset_methods</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;AutocompleteQueryset&quot;</span>
         <span class="p">)</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">queryset_methods</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">queryset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">generate_search_filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">))</span></div>
@@ -399,9 +396,10 @@
     <span class="k">def</span> <span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
         <span class="n">external_only</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_only&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">external_only</span> <span class="k">else</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-        <span class="n">ExternalAutocomplete</span> <span class="o">=</span> <span class="n">first_match_via_mro</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ExternalAutocomplete&quot;</span>
+        <span class="n">queryset_methods</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">paths</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ExternalAutocomplete&quot;</span>
         <span class="p">)</span>
+        <span class="n">ExternalAutocomplete</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">queryset_methods</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ExternalAutocomplete</span><span class="p">:</span>
             <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ExternalAutocomplete</span><span class="p">()</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">results</span></div>
@@ -425,10 +423,8 @@
 <div class="viewcode-block" id="Import.get_form_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Import.get_form_class">[docs]</a>
     <span class="k">def</span> <span class="nf">get_form_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">form_class</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">first_match_via_mro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ImportForm&quot;</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="n">GenericImportForm</span>
-        <span class="p">)</span>
+        <span class="n">form_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">paths</span><span class="o">=</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ImportForm&quot;</span><span class="p">)</span>
+        <span class="n">form_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">form_modules</span><span class="p">,</span> <span class="n">GenericImportForm</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">modelform_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">form_class</span><span class="p">)</span></div>
 
 

@@ -91,7 +91,7 @@
   <h1>Source code for apis_core.generic.api_views</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">viewsets</span>
 <span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">serializer_factory</span><span class="p">,</span> <span class="n">GenericHyperlinkedModelSerializer</span>
-<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="n">first_match_via_mro</span>
+<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="n">module_paths</span><span class="p">,</span> <span class="n">first_member_match</span>
 
 
 <div class="viewcode-block" id="ModelViewSet">
@@ -100,9 +100,9 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    API ViewSet for a generic model.</span>
 <span class="sd">    The queryset is overridden by the first match from</span>
-<span class="sd">    the `first_match_via_mro` helper.</span>
+<span class="sd">    the `first_member_match` helper.</span>
 <span class="sd">    The serializer class is overridden by the first match from</span>
-<span class="sd">    the `first_match_via_mro` helper.</span>
+<span class="sd">    the `first_member_match` helper.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ModelViewSet.dispatch">
@@ -115,9 +115,10 @@
 <div class="viewcode-block" id="ModelViewSet.get_queryset">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet.get_queryset">[docs]</a>
     <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">first_match_via_mro</span><span class="p">(</span>
+        <span class="n">queryset_methods</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ViewSetQueryset&quot;</span>
-        <span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">queryset_methods</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">queryset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
 
 
@@ -125,10 +126,12 @@
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet.get_serializer_class">[docs]</a>
     <span class="k">def</span> <span class="nf">get_serializer_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">renderer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">accepted_renderer</span>
-        <span class="n">serializer_class</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">first_match_via_mro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;serializers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Serializer&quot;</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="s2">&quot;serializer&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="n">GenericHyperlinkedModelSerializer</span>
+        <span class="n">serializer_class_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;serializers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Serializer&quot;</span>
+        <span class="p">)</span>
+        <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span>
+            <span class="n">serializer_class_modules</span><span class="p">,</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="s2">&quot;serializer&quot;</span><span class="p">,</span> <span class="n">GenericHyperlinkedModelSerializer</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">serializer_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="n">serializer_class</span><span class="p">)</span></div>
 </div>
