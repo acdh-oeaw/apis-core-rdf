@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.15.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.15.1...v0.15.2) (2024-03-19)
+
+
+### Bug Fixes
+
+* **apis_entities:** don't duplicate equal values when mergin charfield ([67f2aa5](https://github.com/acdh-oeaw/apis-core-rdf/commit/67f2aa5d5f6836bd5aa27fb0cace2f7784ea91a0))
+* **apis_metainfo:** use ContentType instead of custom caching ([58e6c25](https://github.com/acdh-oeaw/apis-core-rdf/commit/58e6c25a134ae3ef760d0e724c721d0ecb975cd3))
+* **core:** drop webpage remains from template ([6b3573e](https://github.com/acdh-oeaw/apis-core-rdf/commit/6b3573e4dff37a15dac33c54f9a9d3d3bd45e127)), closes [#410](https://github.com/acdh-oeaw/apis-core-rdf/issues/410)
+* **core:** remove hardcoded imprint pointing to 404 ([e8441d9](https://github.com/acdh-oeaw/apis-core-rdf/commit/e8441d965ecb87f6f9925889c1f4b88d3d8e5e1c)), closes [#415](https://github.com/acdh-oeaw/apis-core-rdf/issues/415)
+* **generic:** typo in `module_paths` argument ([3f3b71e](https://github.com/acdh-oeaw/apis-core-rdf/commit/3f3b71e125eafa47193f4285ea241830b80dfd63))
+* **generic:** use `import_string` instead of custom method ([591b1ca](https://github.com/acdh-oeaw/apis-core-rdf/commit/591b1ca9ccb1bd1cd0288fe48de2cdbc75599b89)), closes [#697](https://github.com/acdh-oeaw/apis-core-rdf/issues/697)
+
 ## [0.15.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.15.0...v0.15.1) (2024-03-11)
 
 
