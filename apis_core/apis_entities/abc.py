@@ -1,5 +1,4 @@
 from django.db import models
-from apis_core.core.abc import LabelBaseModel
 
 #########################
 # Abstract base classes #
@@ -11,7 +10,7 @@ from apis_core.core.abc import LabelBaseModel
 # trying to implement CIDOC CRM in Django.
 
 
-class E21_Person(LabelBaseModel, models.Model):
+class E21_Person(models.Model):
     forename = models.CharField(blank=True, default="")
     surname = models.CharField(blank=True, default="")
     gender = models.CharField(blank=True, default="")
@@ -22,7 +21,8 @@ class E21_Person(LabelBaseModel, models.Model):
         abstract = True
 
 
-class E53_Place(LabelBaseModel, models.Model):
+class E53_Place(models.Model):
+    label = models.CharField(blank=True, default="")
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
 
@@ -30,6 +30,8 @@ class E53_Place(LabelBaseModel, models.Model):
         abstract = True
 
 
-class E74_Group(LabelBaseModel, models.Model):
+class E74_Group(models.Model):
+    label = models.CharField(blank=True, default="")
+
     class Meta:
         abstract = True
