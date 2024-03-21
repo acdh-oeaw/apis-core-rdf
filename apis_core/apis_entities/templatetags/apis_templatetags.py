@@ -53,6 +53,4 @@ def entities_verbose_name_plural_listview_url():
 @register.simple_tag(takes_context=True)
 def object_relations(context, detail=True):
     obj = context["object"]
-    return triple_sidebar(
-        obj.pk, obj.__class__.__name__.lower(), context["request"], detail
-    )
+    return triple_sidebar(obj, context["request"], detail)

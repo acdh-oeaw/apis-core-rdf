@@ -10,9 +10,7 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def object_relations_history(context, detail=True):
     obj = context["object"]
-    return triple_sidebar_history(
-        obj.pk, obj.__class__.__name__.lower(), context["request"], detail
-    )
+    return triple_sidebar_history(obj, context["request"], detail)
 
 
 @register.filter
