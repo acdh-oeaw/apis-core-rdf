@@ -1,0 +1,12 @@
+{% for value in widget.value %}
+  <input type="{{ widget.type }}"
+         name="{{ widget.name }}"
+         value="{{ value }}"
+         {% include "django/forms/widgets/attrs.html" %}
+         multiple>
+{% endfor %}
+<input type="{{ widget.type }}"
+       name="{{ widget.name }}"
+       {% include "django/forms/widgets/attrs.html" %}
+       multiple>
+<a class="btn btn-success btn-sm btn-more" onclick="more(this)">+</a>
