@@ -1,6 +1,6 @@
 {% extends "apis_core/apis_entities/abstractentity.html" %}
 {% load django_tables2 %}
-{% load apis_templatetags %}
+{% load apis_relations %}
 
 {% block col-zero %}
   <div class="card">
@@ -11,14 +11,10 @@
 {% block col-one %}
   <div class="card">
     <div class="card-body">
-      {% object_relations as object_relations %}
-      {% for rel in object_relations %}
-
-        {% if rel.1.data|length > 0 %}
-          <h5>{{ rel.0|title }}</h5>
-          <div id="tab_{{ rel.2 }}">{% render_table rel.1 %}</div>
-        {% endif %}
-
+      {% triple_tables_related_detail object as tables %}
+      {% for objecttype, table in tables %}
+        <h5>{{ objecttype.name|title }}</h5>
+        <div id="tab_{{ objecttype }}">{% render_table table %}</div>
       {% endfor %}
     </div>
   </div>

@@ -4,7 +4,6 @@ from crispy_forms.helper import FormHelper
 from dal import autocomplete
 from django import forms
 from django.conf import settings
-from django.db.models import Q
 from django.urls import reverse
 
 from apis_core.apis_relations.models import TempTriple
@@ -13,10 +12,12 @@ from django.contrib.contenttypes.models import ContentType
 
 from apis_core.apis_metainfo.models import Uri
 
-from .tables import get_generic_triple_table
 from apis_core.apis_entities.autocomplete3 import (
     PropertyAutocomplete,
 )
+from apis_core.generic.helpers import first_member_match, module_paths
+from apis_core.apis_relations.tables import TempTripleEditTable
+from apis_core.utils.helpers import triples_related
 
 
 class GenericTripleForm(forms.ModelForm):
@@ -191,24 +192,13 @@ class GenericTripleForm(forms.ModelForm):
         return self.cleaned_data["HL_text_id"][5:]
 
     def get_html_table(self, entity_instance_self, entity_instance_other):
-        table_class = get_generic_triple_table(
-            other_entity_class_name=entity_instance_other.__class__.__name__.lower(),
-            entity_pk_self=entity_instance_self.pk,
-            detail=False,
+        table_class_paths = module_paths(
+            entity_instance_self._meta.model, path="table", suffix="TempTripleEditTable"
         )
+        table_class = first_member_match(table_class_paths, TempTripleEditTable)
+        entity_content_type = ContentType.objects.get_for_model(entity_instance_other)
+        triples = triples_related(entity_instance_self.pk, entity_content_type)
 
-        table_object = table_class(
-            data=TempTriple.objects.filter(
-                (
-                    Q(subj__self_contenttype=entity_instance_other.self_contenttype)
-                    & Q(obj=entity_instance_self)
-                )
-                | (
-                    Q(obj__self_contenttype=entity_instance_other.self_contenttype)
-                    & Q(subj=entity_instance_self)
-                )
-            ),
-            prefix=entity_instance_other.__class__.__name__,
-        )
+        table_object = table_class(data=triples, instance=entity_instance_self)
 
         return table_object

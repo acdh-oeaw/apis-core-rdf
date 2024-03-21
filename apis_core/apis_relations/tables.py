@@ -1,28 +1,67 @@
 import django_tables2 as tables
 from django.conf import settings
-from django.db.models import Case, When, F
+from django.db.models import F
 from django.utils.html import format_html
-from django_tables2.utils import A
+from apis_core.apis_relations.models import TempTriple
 
-from apis_core.apis_metainfo.tables import (
-    generic_order_start_date_written,
-    generic_order_end_date_written,
-    generic_render_start_date_written,
-    generic_render_end_date_written,
-)
-from apis_core.generic.tables import GenericTable
-
-empty_text_default = "There are currently no relations"
+from apis_core.generic.tables import GenericTable, CustomTemplateColumn
 
 
-class TripleTable(GenericTable):
-    subj = tables.Column(linkify=True)
-    obj = tables.Column(linkify=True)
+def helper_render_date(value, var_date, var_start_date, var_end_date):
+    """
+    helper function to avoid duplicated code. It checks the various sub-dates of a model's date field for them being None
+    or having values. If a field is None then check for the next, and if all are None, return '—' inditcating no value.
 
-    class Meta:
-        fields = ["id", "subj", "prop", "obj"]
-        exclude = ["desc"]
-        sequence = ("id", "subj", "prop", "obj", "...")
+    If there are values, use them as mouse overlay helptext to inform the user about the parsing result behind a written
+    date field.
+
+    :param value: str : the *_date_written (either start_date_written or end_date_written) field of an entity or relation
+    :param var_date: datetime : either the precisely parsed date or the average in between two dates when *_date_written is a range
+    :param var_start_date: datetime : The sub-date of var_date, indicating the start date of the range
+    :param var_end_date: datetime : The sub-date of var_date, indicating the end date of the range
+    :return: html string : which has the value of the written date and the parsed dates as mouse overlay helptext
+    """
+    if var_start_date is not None and var_end_date is not None:
+        overlay_help_text = str(var_start_date) + " - " + str(var_end_date)
+    elif var_date is not None:
+        overlay_help_text = str(var_date)
+    else:
+        return "—"
+    return format_html("<abbr title='" + overlay_help_text + "'>" + value + "</b>")
+
+
+class StartDateColumn(tables.Column):
+    def order(self, queryset, is_descending):
+        if is_descending:
+            queryset = queryset.order_by(F("start_date").desc(nulls_last=True))
+        else:
+            queryset = queryset.order_by(F("start_date").asc(nulls_last=True))
+        return (queryset, True)
+
+    def render(self, record, value):
+        return helper_render_date(
+            value=value,
+            var_date=record.start_date,
+            var_start_date=record.start_start_date,
+            var_end_date=record.start_end_date,
+        )
+
+
+class EndDateColumn(tables.Column):
+    def order(self, queryset, is_descending):
+        if is_descending:
+            queryset = queryset.order_by(F("end_date").desc(nulls_last=True))
+        else:
+            queryset = queryset.order_by(F("end_date").asc(nulls_last=True))
+        return (queryset, True)
+
+    def render(self, record, value):
+        return helper_render_date(
+            value=value,
+            var_date=record.end_date,
+            var_start_date=record.end_start_date,
+            var_end_date=record.end_end_date,
+        )
 
 
 class SubjObjColumn(tables.ManyToManyColumn):
@@ -36,6 +75,37 @@ class SubjObjColumn(tables.ManyToManyColumn):
             "args": [tables.A("model")],
         }
         super().__init__(*args, **kwargs)
+
+
+class AjaxEditColumn(CustomTemplateColumn):
+    orderable = False
+    exclude_from_export = True
+    verbose_name = ""
+    template_name = "apis_relations/edit_button_generic_ajax_form.html"
+
+
+class AjaxDeleteColumn(CustomTemplateColumn):
+    orderable = False
+    exclude_from_export = True
+    verbose_name = ""
+    template_name = "apis_relations/delete_button_generic_ajax_form.html"
+
+
+class AjaxBibsonomyColumn(CustomTemplateColumn):
+    orderable = False
+    exclude_from_export = True
+    verbose_name = ""
+    template_name = "apis_relations/references_button_generic_ajax_form.html"
+
+
+class TripleTable(GenericTable):
+    subj = tables.Column(linkify=True)
+    obj = tables.Column(linkify=True)
+
+    class Meta:
+        fields = ["id", "subj", "prop", "obj"]
+        exclude = ["desc"]
+        sequence = ("id", "subj", "prop", "obj", "...")
 
 
 class PropertyTable(GenericTable):
@@ -99,147 +169,63 @@ class PropertyTable(GenericTable):
         return (queryset, True)
 
 
-def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
+class TempTripleDetailTable(GenericTable):
+    start_date_written = StartDateColumn(attrs={"td": {"class": "col-md-1"}})
+    end_date_written = EndDateColumn(attrs={"td": {"class": "col-md-1"}})
+    prop = tables.Column(
+        verbose_name="Relation type", attrs={"td": {"class": "col-md-2"}}
+    )
+    subj = tables.Column(linkify=True, attrs={"td": {"class": "col-md-5"}})
+    obj = tables.Column(linkify=True, attrs={"td": {"class": "col-md-5"}})
+    forward = True
 
-    # TODO RDF : add code from before refactoring and comment it out
-    class TripleTableBase(tables.Table):
-        """
-        The base table from which detail or edit tables will inherit from in order to avoid redundant definitions
-        """
+    class Meta:
+        model = TempTriple
+        fields = [
+            "start_date_written",
+            "end_date_written",
+            "prop",
+            "obj",
+            "subj",
+            "notes",
+        ]
+        exclude = ["desc", "view", "delete", "edit"]
+        sequence = tuple(fields)
 
-        # reuse the logic for ordering and rendering *_date_written
-        # Important: The names of these class variables must correspond to the column field name,
-        # e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written
-        order_start_date_written = generic_order_start_date_written
-        order_end_date_written = generic_order_end_date_written
-        render_start_date_written = generic_render_start_date_written
-        render_end_date_written = generic_render_end_date_written
-
-        class Meta:
-            from apis_core.apis_relations.models import TempTriple
-
-            model = TempTriple
-
-            # the fields list also serves as the defining order of them, as to avoid duplicated definitions
-            fields = [
-                "start_date_written",
-                "end_date_written",
-                "other_prop",
-                "other_entity",
-                "notes",
-            ]
-            # reuse the list for ordering
-            sequence = tuple(fields)
-
-        def render_other_entity(self, record, value):
-            """
-            Custom render_FOO method for related entity linking. Since the 'other_related_entity' is a generated annotation
-            on the queryset, it does not return the related instance but only the foreign key as the integer it is.
-            Thus fetching the related instance is necessary.
-
-            :param record: The 'row' of a queryset, i.e. an entity instance
-            :param value: The current column of the row, i.e. the 'other_related_entity' annotation
-            :return: related instance
-            """
-
-            if value == record.subj.pk:
-                return record.subj
-
-            elif value == record.obj.pk:
-                return record.obj
-
-            else:
-                raise Exception(
-                    "Did not find the entity this relation is supposed to come from!"
-                    + "Something must have went wrong when annotating for the related instance."
-                )
-
-        def __init__(self, data, *args, **kwargs):
-            data = data.annotate(
-                other_entity=Case(
-                    # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
-                    When(**{"subj__pk": entity_pk_self, "then": "obj"}),
-                    When(**{"obj__pk": entity_pk_self, "then": "subj"}),
-                ),
-                other_prop=Case(
-                    # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
-                    When(**{"subj__pk": entity_pk_self, "then": "prop__name_forward"}),
-                    When(**{"obj__pk": entity_pk_self, "then": "prop__name_reverse"}),
-                ),
-            )
-
-            self.base_columns["other_prop"].verbose_name = "Other property"
+    def __init__(self, data, instance=None, *args, **kwargs):
+        if data:
+            subj = data.first().subj
             self.base_columns[
-                "other_entity"
-            ].verbose_name = f"Related {other_entity_class_name.title()}"
+                "subj"
+            ].verbose_name = f"Relation {subj._meta.verbose_name}"
+            obj = data.first().obj
+            self.base_columns["obj"].verbose_name = f"Related {obj._meta.verbose_name}"
+            if subj.id != getattr(instance, "id", None):
+                self.forward = False
+        super().__init__(data, *args, **kwargs)
 
-            super().__init__(data, *args, **kwargs)
+    def before_render(self, request):
+        if self.forward:
+            self.columns.hide("subj")
+        else:
+            self.columns.hide("obj")
 
-    if detail:
+    def render_prop(self, record):
+        if not self.forward:
+            return record.prop.name_reverse
+        return record.prop.name_forward
 
-        class TripleTableDetail(TripleTableBase):
-            """
-            Sublcass inheriting the bulk of logic from parent. This table is used for the 'detail' views.
-            """
 
-            def __init__(self, data, *args, **kwargs):
-                self.base_columns["other_entity"] = tables.LinkColumn(
-                    "apis:apis_entities:generic_entities_detail_view",
-                    args=[other_entity_class_name, A("other_entity")],
-                )
+TempTripleDetailTablePagination = {"per_page": 20}
 
-                # bibsonomy button
-                if "apis_bibsonomy" in settings.INSTALLED_APPS:
-                    self.base_columns["ref"] = tables.TemplateColumn(
-                        template_name="apis_relations/references_button_generic_ajax_form.html"
-                    )
 
-                super().__init__(data=data, *args, **kwargs)
+class TempTripleEditTable(TempTripleDetailTable):
+    ajedit = AjaxEditColumn()
+    ajdelete = AjaxDeleteColumn()
 
-        return TripleTableDetail
-
-    else:
-
-        class TripleTableEdit(TripleTableBase):
-            """
-            Sublcass inheriting the bulk of logic from parent. This table is used for the 'edit' view.
-            """
-
-            class Meta(TripleTableBase.Meta):
-                """
-                Additional Meta fields are necessary for editing functionalities
-                """
-
-                # This fields list also defines the order of the elements.
-                fields = ["delete"] + TripleTableBase.Meta.fields + ["edit"]
-
-                if "apis_bibsonomy" in settings.INSTALLED_APPS:
-                    fields = ["ref"] + fields
-
-                # again reuse the fields list for ordering
-                sequence = tuple(fields)
-
-            def __init__(self, *args, **kwargs):
-                self.base_columns["other_entity"] = tables.LinkColumn(
-                    "apis:apis_entities:generic_entities_edit_view",
-                    args=[other_entity_class_name, A("other_entity")],
-                )
-
-                # edit button
-                self.base_columns["edit"] = tables.TemplateColumn(
-                    template_name="apis_relations/edit_button_generic_ajax_form.html"
-                )
-
-                # delete button
-                self.base_columns["delete"] = tables.TemplateColumn(
-                    template_name="apis_relations/delete_button_generic_ajax_form.html"
-                )
-                # bibsonomy button
-                if "apis_bibsonomy" in settings.INSTALLED_APPS:
-                    self.base_columns["ref"] = tables.TemplateColumn(
-                        template_name="apis_relations/references_button_generic_ajax_form.html"
-                    )
-
-                super().__init__(*args, **kwargs)
-
-        return TripleTableEdit
+    class Meta(TempTripleDetailTable.Meta):
+        fields = TempTripleDetailTable.Meta.fields
+        exclude = ["edit", "delete", "view"]
+        if "apis_bibsonomy" in settings.INSTALLED_APPS:
+            fields = ["ref"] + fields
+        sequence = tuple(fields) + tuple(["..."])
