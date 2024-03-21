@@ -19,10 +19,10 @@ class TripleTable(GenericTable):
     subj = tables.Column(linkify=True)
     obj = tables.Column(linkify=True)
 
-    class Meta:
+    class Meta(GenericTable.Meta):
         fields = ["id", "subj", "prop", "obj"]
         exclude = ["desc"]
-        sequence = ("id", "subj", "prop", "obj", "...")
+        sequence = tuple(fields) + GenericTable.Meta.sequence
 
 
 class SubjObjColumn(tables.ManyToManyColumn):
@@ -63,21 +63,11 @@ class PropertyTable(GenericTable):
     subject = SubjObjColumn(accessor="subj_class", verbose_name="Subject")
     object = SubjObjColumn(accessor="obj_class", verbose_name="Object")
 
-    class Meta:
+    class Meta(GenericTable.Meta):
         fields = ["subject", "predicate", "object", "predicate_reverse"]
         order_by = "predicate"
         exclude = ["desc"]
-
-    def __init__(self, *args, **kwargs):
-        if "sequence" not in kwargs:
-            kwargs["sequence"] = [
-                "subject",
-                "predicate",
-                "object",
-                "predicate_reverse",
-                "...",
-            ]
-        super().__init__(*args, **kwargs)
+        sequence = tuple(fields) + GenericTable.Meta.sequence
 
     # Use order_ methods to define how individual columns should be sorted.
     # Method names are column names prefixed with "order_".
