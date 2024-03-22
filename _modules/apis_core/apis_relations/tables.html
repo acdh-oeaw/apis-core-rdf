@@ -114,10 +114,10 @@
 
 <div class="viewcode-block" id="TripleTable.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTable.Meta">[docs]</a>
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">GenericTable</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;subj&quot;</span><span class="p">,</span> <span class="s2">&quot;prop&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">]</span>
         <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
-        <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;subj&quot;</span><span class="p">,</span> <span class="s2">&quot;prop&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">,</span> <span class="s2">&quot;...&quot;</span><span class="p">)</span></div>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">+</span> <span class="n">GenericTable</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">sequence</span></div>
 </div>
 
 
@@ -167,22 +167,12 @@
 
 <div class="viewcode-block" id="PropertyTable.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.PropertyTable.Meta">[docs]</a>
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">GenericTable</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">,</span> <span class="s2">&quot;predicate&quot;</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;predicate_reverse&quot;</span><span class="p">]</span>
         <span class="n">order_by</span> <span class="o">=</span> <span class="s2">&quot;predicate&quot;</span>
-        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span></div>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">+</span> <span class="n">GenericTable</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">sequence</span></div>
 
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;sequence&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;subject&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;predicate&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;predicate_reverse&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;...&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Use order_ methods to define how individual columns should be sorted.</span>
     <span class="c1"># Method names are column names prefixed with &quot;order_&quot;.</span>
