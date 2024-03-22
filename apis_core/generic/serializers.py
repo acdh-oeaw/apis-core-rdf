@@ -1,7 +1,11 @@
+from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.serializers import (
     HyperlinkedModelSerializer,
     HyperlinkedRelatedField,
+    Serializer,
+    CharField,
+    IntegerField,
 )
 from rest_framework.reverse import reverse
 
@@ -48,3 +52,14 @@ def serializer_factory(
         {"Meta": meta},
     )
     return serializer
+
+
+class ContentTypeInstanceSerializer(Serializer):
+    id = IntegerField(required=True)
+    content_type = CharField(required=True)
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        app_label, model = data.get("content_type").split(".")
+        content_type = get_object_or_404(ContentType, app_label=app_label, model=model)
+        return get_object_or_404(content_type.model_class(), pk=data.get("id"))
