@@ -35,7 +35,7 @@ class ActionColumn(CustomTemplateColumn):
     orderable = False
     exclude_from_export = True
     verbose_name = ""
-    attrs = {"td": {"style": "width:1%;"}}
+    attrs = {"td": {"class": "action-container"}}
 
 
 class DeleteColumn(ActionColumn):

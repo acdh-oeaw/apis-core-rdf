@@ -2,5 +2,8 @@
 {% with record|opts as opts %}
   <a title="duplicate"
      href="{% url 'apis_core:apis_entities:generic_entities_duplicate_view' opts.verbose_name record.id %}"
-     style="color: blueviolet"><span class="material-symbols-outlined">content_copy</span></a>
+     class="action-duplicate d-inline-block">
+    <span class="material-symbols-outlined" role="img" aria-hidden="true">content_copy</span>
+    <span class="sr-only">duplicate</span>
+  </a>
 {% endwith %}
