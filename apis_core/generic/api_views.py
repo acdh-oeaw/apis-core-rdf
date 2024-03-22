@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from .serializers import serializer_factory, GenericHyperlinkedModelSerializer
 from .helpers import module_paths, first_member_match
+from .filterbackends import GenericFilterBackend
 
 
 class ModelViewSet(viewsets.ModelViewSet):
@@ -11,6 +12,8 @@ class ModelViewSet(viewsets.ModelViewSet):
     The serializer class is overridden by the first match from
     the `first_member_match` helper.
     """
+
+    filter_backends = [GenericFilterBackend]
 
     def dispatch(self, *args, **kwargs):
         self.model = kwargs.get("contenttype").model_class()
