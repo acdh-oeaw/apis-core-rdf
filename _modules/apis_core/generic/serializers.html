@@ -89,10 +89,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.generic.serializers</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">rest_framework.serializers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">HyperlinkedModelSerializer</span><span class="p">,</span>
     <span class="n">HyperlinkedRelatedField</span><span class="p">,</span>
+    <span class="n">Serializer</span><span class="p">,</span>
+    <span class="n">CharField</span><span class="p">,</span>
+    <span class="n">IntegerField</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">rest_framework.reverse</span> <span class="kn">import</span> <span class="n">reverse</span>
 
@@ -156,6 +160,23 @@
         <span class="p">{</span><span class="s2">&quot;Meta&quot;</span><span class="p">:</span> <span class="n">meta</span><span class="p">},</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">serializer</span></div>
+
+
+
+<div class="viewcode-block" id="ContentTypeInstanceSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.serializers.ContentTypeInstanceSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">ContentTypeInstanceSerializer</span><span class="p">(</span><span class="n">Serializer</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">content_type</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ContentTypeInstanceSerializer.to_internal_value">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.serializers.ContentTypeInstanceSerializer.to_internal_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_internal_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to_internal_value</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">app_label</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content_type&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">ContentType</span><span class="p">,</span> <span class="n">app_label</span><span class="o">=</span><span class="n">app_label</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">content_type</span><span class="o">.</span><span class="n">model_class</span><span class="p">(),</span> <span class="n">pk</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">))</span></div>
+</div>
 
 </pre></div>
 
