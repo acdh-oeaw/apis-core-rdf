@@ -35,8 +35,11 @@
           </div>
         {% endblock card-header-content %}
 
-        {% include "apis_entities/partials/entity_base_nav.html" %}
-        {% include "apis_entities/partials/entity_actions_nav.html" %}
+        {% block navigation %}
+          {% include "apis_entities/partials/entity_base_nav.html" %}
+          {% include "apis_entities/partials/entity_actions_nav.html" %}
+        {% endblock navigation %}
+
       </div>
       <div class="card-body">
 

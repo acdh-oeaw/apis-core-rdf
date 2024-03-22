@@ -1,41 +1,44 @@
 {% load apiscore %}
-{% with object|opts as opts %}
-  {% with opts.object_name|lower as modelname %}
-    {% with opts.app_label|add:"."|add:modelname|add:"_create" as object_create_perm %}
-      {% with opts.app_label|add:"."|add:modelname|add:"_delete" as object_delete_perm %}
 
-        {% if object_delete_perm in perms or object_create_perm in perms %}
-          <ul class="nav nav-tabs card-header-tabs float-right">
-            <li class="nav-item">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Actions</a>
-              <div class="dropdown-menu">
+{% block action-nav %}
+  {% with object|opts as opts %}
+    {% with opts.object_name|lower as modelname %}
+      {% with opts.app_label|add:"."|add:modelname|add:"_create" as object_create_perm %}
+        {% with opts.app_label|add:"."|add:modelname|add:"_delete" as object_delete_perm %}
 
-                {% if object_delete_perm in perms %}
-                  <a class="dropdown-item text-danger"
-                     href="{% url "apis_core:apis_entities:generic_entities_delete_view" modelname object.id %}">
-                    <span class="material-symbols-outlined material-symbols-align">delete</span> Delete
-                  </a>
-                {% endif %}
+          {% if object_delete_perm in perms or object_create_perm in perms %}
+            <ul class="nav nav-tabs card-header-tabs float-right">
+              <li class="nav-item">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Actions</a>
+                <div class="dropdown-menu">
 
-                {% if object_create_perm in perms %}
-                  <a class="dropdown-item"
-                     style="color: blueviolet"
-                     href="{% url "apis_core:apis_entities:generic_entities_duplicate_view" modelname object.id %}">
-                    <span class="material-symbols-outlined material-symbols-align">content_copy</span> Duplicate
-                  </a>
-                  <a class="dropdown-item"
-                     style="color: dodgerblue"
-                     href="{% url "apis_core:apis_entities:generic_entities_merge_view" modelname object.id %}">
-                    <span class="material-symbols-outlined material-symbols-align">cell_merge</span> Merge
-                  </a>
-                {% endif %}
+                  {% if object_delete_perm in perms %}
+                    <a class="dropdown-item text-danger"
+                       href="{% url "apis_core:apis_entities:generic_entities_delete_view" modelname object.id %}">
+                      <span class="material-symbols-outlined material-symbols-align">delete</span> Delete
+                    </a>
+                  {% endif %}
 
-              </div>
-            </li>
-          </ul>
-        {% endif %}
+                  {% if object_create_perm in perms %}
+                    <a class="dropdown-item"
+                       style="color: blueviolet"
+                       href="{% url "apis_core:apis_entities:generic_entities_duplicate_view" modelname object.id %}">
+                      <span class="material-symbols-outlined material-symbols-align">content_copy</span> Duplicate
+                    </a>
+                    <a class="dropdown-item"
+                       style="color: dodgerblue"
+                       href="{% url "apis_core:apis_entities:generic_entities_merge_view" modelname object.id %}">
+                      <span class="material-symbols-outlined material-symbols-align">cell_merge</span> Merge
+                    </a>
+                  {% endif %}
 
+                </div>
+              </li>
+            </ul>
+          {% endif %}
+
+        {% endwith %}
       {% endwith %}
     {% endwith %}
   {% endwith %}
-{% endwith %}
+{% endblock action-nav %}
