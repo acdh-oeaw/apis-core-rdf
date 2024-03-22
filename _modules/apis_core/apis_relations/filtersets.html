@@ -110,11 +110,26 @@
 
 
 
+<div class="viewcode-block" id="PropertySubjObjFilter">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.PropertySubjObjFilter">[docs]</a>
+<span class="k">class</span> <span class="nc">PropertySubjObjFilter</span><span class="p">(</span><span class="n">ModelMultipleChoiceFilter</span><span class="p">):</span>
+<div class="viewcode-block" id="PropertySubjObjFilter.get_queryset">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.PropertySubjObjFilter.get_queryset">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">pk__in</span><span class="o">=</span><span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_name</span><span class="p">)</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
 <div class="viewcode-block" id="PropertyFilterSet">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.PropertyFilterSet">[docs]</a>
 <span class="k">class</span> <span class="nc">PropertyFilterSet</span><span class="p">(</span><span class="n">GenericFilterSet</span><span class="p">):</span>
     <span class="n">name_forward</span> <span class="o">=</span> <span class="n">CharFilter</span><span class="p">(</span><span class="n">lookup_expr</span><span class="o">=</span><span class="s2">&quot;icontains&quot;</span><span class="p">)</span>
     <span class="n">name_reverse</span> <span class="o">=</span> <span class="n">CharFilter</span><span class="p">(</span><span class="n">lookup_expr</span><span class="o">=</span><span class="s2">&quot;icontains&quot;</span><span class="p">)</span>
+    <span class="n">subj_class</span> <span class="o">=</span> <span class="n">PropertySubjObjFilter</span><span class="p">()</span>
+    <span class="n">obj_class</span> <span class="o">=</span> <span class="n">PropertySubjObjFilter</span><span class="p">()</span>
 
 <div class="viewcode-block" id="PropertyFilterSet.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.PropertyFilterSet.Meta">[docs]</a>
@@ -130,18 +145,12 @@
 <span class="k">class</span> <span class="nc">TripleFilterSet</span><span class="p">(</span><span class="n">GenericFilterSet</span><span class="p">):</span>
     <span class="n">subj</span> <span class="o">=</span> <span class="n">CharFilter</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;subj_icontains&quot;</span><span class="p">)</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">CharFilter</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;obj_icontains&quot;</span><span class="p">)</span>
-    <span class="n">subj_class</span> <span class="o">=</span> <span class="n">ModelMultipleChoiceFilter</span><span class="p">(</span>
+    <span class="n">subj_class</span> <span class="o">=</span> <span class="n">PropertySubjObjFilter</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Subj class&quot;</span><span class="p">,</span>
-        <span class="n">queryset</span><span class="o">=</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-            <span class="n">pk__in</span><span class="o">=</span><span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;subj_class&quot;</span><span class="p">)</span>
-        <span class="p">),</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;class_in&quot;</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">obj_class</span> <span class="o">=</span> <span class="n">ModelMultipleChoiceFilter</span><span class="p">(</span>
+    <span class="n">obj_class</span> <span class="o">=</span> <span class="n">PropertySubjObjFilter</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Obj class&quot;</span><span class="p">,</span>
-        <span class="n">queryset</span><span class="o">=</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-            <span class="n">pk__in</span><span class="o">=</span><span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s2">&quot;obj_class&quot;</span><span class="p">)</span>
-        <span class="p">),</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;class_in&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
