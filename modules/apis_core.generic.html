@@ -230,6 +230,11 @@ keyword arguments, and other things.</p>
 but with extra hooks for startup, finalize, and exception handling.</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.filter_backends">
+<span class="sig-name descname"><span class="pre">filter_backends</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;class</span> <span class="pre">'apis_core.generic.filterbackends.GenericFilterBackend'&gt;]</span></em><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.filter_backends" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.get_queryset">
 <span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/api_views.html#ModelViewSet.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.get_queryset" title="Link to this definition"></a></dt>
@@ -263,6 +268,21 @@ serializations depending on the incoming request.</p>
 <dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.suffix">
 <span class="sig-name descname"><span class="pre">suffix</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.suffix" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-apis_core.generic.filterbackends">
+<span id="apis-core-generic-filterbackends-module"></span><h2>apis_core.generic.filterbackends module<a class="headerlink" href="#module-apis_core.generic.filterbackends" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.filterbackends.GenericFilterBackend">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.filterbackends.</span></span><span class="sig-name descname"><span class="pre">GenericFilterBackend</span></span><a class="reference internal" href="../_modules/apis_core/generic/filterbackends.html#GenericFilterBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filterbackends.GenericFilterBackend" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DjangoFilterBackend</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.filterbackends.GenericFilterBackend.get_filterset_class">
+<span class="sig-name descname"><span class="pre">get_filterset_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/filterbackends.html#GenericFilterBackend.get_filterset_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filterbackends.GenericFilterBackend.get_filterset_class" title="Link to this definition"></a></dt>
+<dd><p>Return the <cite>FilterSet</cite> class used to filter the queryset.</p>
+</dd></dl>
 
 </dd></dl>
 

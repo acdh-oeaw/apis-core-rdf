@@ -92,6 +92,7 @@
 <span></span><span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">viewsets</span>
 <span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">serializer_factory</span><span class="p">,</span> <span class="n">GenericHyperlinkedModelSerializer</span>
 <span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="n">module_paths</span><span class="p">,</span> <span class="n">first_member_match</span>
+<span class="kn">from</span> <span class="nn">.filterbackends</span> <span class="kn">import</span> <span class="n">GenericFilterBackend</span>
 
 
 <div class="viewcode-block" id="ModelViewSet">
@@ -104,6 +105,8 @@
 <span class="sd">    The serializer class is overridden by the first match from</span>
 <span class="sd">    the `first_member_match` helper.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">filter_backends</span> <span class="o">=</span> <span class="p">[</span><span class="n">GenericFilterBackend</span><span class="p">]</span>
 
 <div class="viewcode-block" id="ModelViewSet.dispatch">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet.dispatch">[docs]</a>
