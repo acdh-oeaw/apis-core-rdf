@@ -1,0 +1,27 @@
+{% for relation_content_type in relation_types %}
+  {% url "apis_core:relationform" relation_content_type source_content_type object.id target_content_type as hrefurl %}
+  {% with relation_content_type.model|add:"-"|add:target_content_type.model as relation_id %}
+
+  <a href="{{ hrefurl }}" data-toggle="collapse" data-target="#collapse-{{ relation_id }}" hx-get="{{ hrefurl }}?listonly=True" hx-target="#collapse-{{ relation_id }}" hx-select="form">
+    <button type="button" class="btn btn-sm">
+      {{ relation_content_type.model_class.name }}
+    </button>
+  </a>
+
+  {% if relation_content_type.model_class.name != relation_content_type.model_class.reverse_name %}
+
+  <a href="{{ hrefurl }}?reverse" data-toggle="collapse" data-target="#collapse-{{ relation_id }}-reverse" hx-get="{{ hrefurl }}?listonly=True&reverse=True" hx-target="#collapse-{{ relation_id }}-reverse" hx-select="form">
+    <button type="button" class="btn btn-sm">
+      {{ relation_content_type.model_class.reverse_name }}
+    </button>
+  </a>
+
+  {% endif %}
+  {% endwith %}
+{% endfor %}
+{% for relation_content_type in relation_types %}
+  {% with relation_content_type.model|add:"-"|add:target_content_type.model as relation_id %}
+  <div class="collapse" id="collapse-{{ relation_id }}"></div>
+  <div class="collapse" id="collapse-{{ relation_id }}-reverse"></div>
+  {% endwith %}
+{% endfor %}

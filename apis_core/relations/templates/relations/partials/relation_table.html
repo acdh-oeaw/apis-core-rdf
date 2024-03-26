@@ -1,0 +1,8 @@
+{% load relations %}
+{% load django_tables2 %}
+
+<div id="table_{{object.pk}}_{{tocontenttype.name}}" hx-swap-oob="true">
+{% relations_table instance=object to_content_type=tocontenttype as table %}
+{% render_table table %}
+{% relations_links target_content_type=tocontenttype %}
+</div>
