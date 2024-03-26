@@ -27,7 +27,7 @@ class ModelViewSet(viewsets.ModelViewSet):
         return queryset(self.model.objects.all())
 
     def get_serializer_class(self):
-        renderer = self.request.accepted_renderer
+        renderer = getattr(getattr(self, "request", {}), "accepted_renderer", None)
         serializer_class_modules = module_paths(
             self.model, path="serializers", suffix="Serializer"
         )
