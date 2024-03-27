@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.16.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.15.2...v0.16.0) (2024-03-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_metainfo:** drop RootObject.deprecated_name
+
+### Features
+
+* **apis_entities:** surround navigation elements with block ([6b2fb49](https://github.com/acdh-oeaw/apis-core-rdf/commit/6b2fb494131d1333f5ac04bf9ddef826aac7bdf8))
+* **apis_relations:** add and use PropertySubjObjFilter ([246b7f3](https://github.com/acdh-oeaw/apis-core-rdf/commit/246b7f3fa0f530c605f892bd6866719b4a9e427a))
+* **generic:** add ContentTypeInstanceSerializer ([3307074](https://github.com/acdh-oeaw/apis-core-rdf/commit/33070747df9aad9bb51424ec433a9f389aeeee9a))
+* **generic:** implement custom schema generator ([09a1d6d](https://github.com/acdh-oeaw/apis-core-rdf/commit/09a1d6d932028781a57b866397f0d94e6be5cd15))
+* **generic:** introduce GenericFilterBackend and use it ([dac1f6d](https://github.com/acdh-oeaw/apis-core-rdf/commit/dac1f6dc970d634e2f456ccbf46e4395949a9188))
+* **generic:** ship a JSON based and a newline based list widget ([8704d21](https://github.com/acdh-oeaw/apis-core-rdf/commit/8704d2154a936b18f4db7d0b68452ca74295fb88)), closes [#733](https://github.com/acdh-oeaw/apis-core-rdf/issues/733)
+
+
+### Bug Fixes
+
+* **apis_metainfo:** drop RootObject.deprecated_name ([5fc11d7](https://github.com/acdh-oeaw/apis-core-rdf/commit/5fc11d7750171ead51c9242cd0480f27b039d72b))
+* **apis_relations:** reuse GenericTable.Meta.sequence for tables ([b15e587](https://github.com/acdh-oeaw/apis-core-rdf/commit/b15e5875ae78e4dda28413856a67929a96a08bd3)), closes [#716](https://github.com/acdh-oeaw/apis-core-rdf/issues/716)
+* **generic:** fix typo in Import View ([b28de6e](https://github.com/acdh-oeaw/apis-core-rdf/commit/b28de6e430b874f96abdfa2b84b6551537a15b58))
+* **generic:** use fallback if ModelViewSet attributes don't exist ([11e097d](https://github.com/acdh-oeaw/apis-core-rdf/commit/11e097d64b949f8171f44d1f26238c2ba6aeaad0))
+
 ## [0.15.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.15.1...v0.15.2) (2024-03-19)
 
 
