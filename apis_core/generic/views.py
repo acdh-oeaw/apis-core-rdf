@@ -253,7 +253,7 @@ class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
     permission_action_required = "create"
 
     def get_form_class(self):
-        form_modules = module_paths(self.model, paths="forms", suffix="ImportForm")
+        form_modules = module_paths(self.model, path="forms", suffix="ImportForm")
         form_class = first_member_match(form_modules, GenericImportForm)
         return modelform_factory(self.model, form_class)
 
