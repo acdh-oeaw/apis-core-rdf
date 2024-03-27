@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.generic.generators &mdash; APIS 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation with Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html#installation-without-docker">Installation without Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../settings.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../customization.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../collections.html">Working with collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autocomplete.html">Extending autocomplete results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../importing.html">Importing data from external resources</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.generic.generators</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.generic.generators</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">resolve</span>
+<span class="kn">from</span> <span class="nn">drf_spectacular.generators</span> <span class="kn">import</span> <span class="n">SchemaGenerator</span>
+<span class="kn">from</span> <span class="nn">drf_spectacular.generators</span> <span class="kn">import</span> <span class="n">EndpointEnumerator</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.generic.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
+
+
+<span class="c1"># Custom Schema Generator</span>
+<span class="c1">#</span>
+<span class="c1"># The CustomSchemaGenerator is meant as a drop in replacement for the</span>
+<span class="c1"># &quot;DEFAULT_GENERATOR_CLASS&quot; of drf-spectacular. You can use it like this:</span>
+<span class="c1"># SPECTACULAR_SETTINGS[&quot;DEFAULT_GENERATOR_CLASS&quot;] = &#39;apis_core.generic.generators.CustomSchemaGenerator&#39;</span>
+<span class="c1">#</span>
+<span class="c1"># Reasons:</span>
+<span class="c1"># The first reason is, that we are using a custom converter</span>
+<span class="c1"># (`apis_core.generic.urls.ContenttypeConverter`) to provide access to views</span>
+<span class="c1"># and api views of different contenttypes. The default endpoint generator of</span>
+<span class="c1"># does not know about this converter and therefore sees the endpoints using</span>
+<span class="c1"># this converter as *one* endpoint with one parameter called `contenttype`.</span>
+<span class="c1"># Thats not what we want, so we have to do our own enumeration - we iterate</span>
+<span class="c1"># through all contenttypes that inherit from `GenericModel` and create</span>
+<span class="c1"># schema endpoints for those programatically.</span>
+<span class="c1"># The second reason is, that the autoapi schema generator of DRF Spectacular</span>
+<span class="c1"># and our `apis_core.generic.api_views.ModelViewSet` don&#39;t work well together.</span>
+<span class="c1"># Our ModelViewSet needs the dispatch method to set the model of the</span>
+<span class="c1"># `ModelViewSet`, but this method is not being called by the generator while</span>
+<span class="c1"># doing the inspection, which means the `ModelViewSet` does not know about the</span>
+<span class="c1"># model it should work with and can not provide the correct serializer and filter</span>
+<span class="c1"># classes. Therefore we create the callback for the endpoints by hand and set</span>
+<span class="c1"># the model from there.</span>
+
+
+<div class="viewcode-block" id="CustomEndpointEnumerator">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.generators.CustomEndpointEnumerator">[docs]</a>
+<span class="k">class</span> <span class="nc">CustomEndpointEnumerator</span><span class="p">(</span><span class="n">EndpointEnumerator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_generate_content_type_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content_type</span><span class="p">:</span> <span class="n">ContentType</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a endpoint tuple, usable by the SchemaGenerator of DRF spectacular&quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:genericmodelapi-list&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">content_type</span><span class="p">])</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="c1"># for now we only do &quot;GET&quot;</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">cls</span>
+        <span class="c1"># we have to add a attribute, so that the</span>
+        <span class="c1"># `initkwargs` argument to the `as_view`</span>
+        <span class="c1"># method can contain a `model` argument</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">callback</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">as_view</span><span class="p">({</span><span class="s2">&quot;get&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">},</span> <span class="n">model</span><span class="o">=</span><span class="n">content_type</span><span class="o">.</span><span class="n">model_class</span><span class="p">())</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CustomEndpointEnumerator.get_api_endpoints">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.generators.CustomEndpointEnumerator.get_api_endpoints">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_api_endpoints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Call the EndpointEnumerator&#39;s `get_api_endpoints` method to get all</span>
+<span class="sd">        the automatically found endpoints, remove the ones that we want to override</span>
+<span class="sd">        and the add our custom endpoints to this list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">api_endpoints</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_api_endpoints</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+        <span class="n">api_endpoints</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">endpoint</span>
+            <span class="k">for</span> <span class="n">endpoint</span> <span class="ow">in</span> <span class="n">api_endpoints</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">endpoint</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/apis/api/</span><span class="si">{contenttype}</span><span class="s2">/&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">content_type</span> <span class="ow">in</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">content_type</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span>
+                <span class="n">content_type</span><span class="o">.</span><span class="n">model_class</span><span class="p">(),</span> <span class="n">GenericModel</span>
+            <span class="p">):</span>
+                <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_content_type_endpoint</span><span class="p">(</span><span class="n">content_type</span><span class="p">)</span>
+                <span class="n">api_endpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">api_endpoints</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CustomSchemaGenerator">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.generators.CustomSchemaGenerator">[docs]</a>
+<span class="k">class</span> <span class="nc">CustomSchemaGenerator</span><span class="p">(</span><span class="n">SchemaGenerator</span><span class="p">):</span>
+    <span class="n">endpoint_inspector_cls</span> <span class="o">=</span> <span class="n">CustomEndpointEnumerator</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Matthias Schlögl.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
