@@ -13,6 +13,14 @@ In standard APIS those models are
 * :class:`apis_core.collections.models.SkosCollection`
 * :class:`apis_core.collections.models.SkosCollectionContentObject`
 
+The :py:mod:`apis_core.history` module also uses the generic views for
+its models. This means that you can use the generic views for the historical 
+models of your own ontology. E.g. if you have a model ``Person`` in your 
+`apis_ontology.models` module, you can use the generic views for it. 
+`/apis/apis_ontology.historicalperson/</apis/apis_ontology.historicalperson/>`_ 
+will be the URL for the list view of the historical model. 
+`/apis/api/apis_ontology.historicalperson/</apis/api/apis_ontology.historicalperson/>`_ for the API view.
+
 If you want to use the generic app for your own model, simple make your model
 inherit from :class:`apis_core.generic.abc.GenericModel`.
 
