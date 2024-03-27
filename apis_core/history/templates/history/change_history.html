@@ -1,0 +1,91 @@
+{% extends "apis_core/apis_entities/abstractentity.html" %}
+{% load django_tables2 %}
+{% load apis_history_templatetags %}
+{% load apiscore %}
+
+{% block card-body %}
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>Instance</th>
+        <th>Version</th>
+        <th>Fields changed</th>
+        <th>Change</th>
+        <th>When</th>
+        <th>By</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% with object|get_history_data as changelog %}
+        {% for change in changelog %}
+          <tr>
+            <td>{{ change.model }}</td>
+            <td>
+              <a href="/apis/{{ change.module }}.version{{ change.model|lower }}/{{ change.history_id }}">{{ change.instance }}</a>
+            </td>
+            <td>
+
+              {% if change.version_tag == None %}
+                -
+              {% else %}
+                {{ change.version_tag }}
+              {% endif %}
+
+            </td>
+            <td>
+              <details>
+                <summary>
+                  {% for c2 in change.diff.changed_fields %}
+                    {{ c2 }}
+
+                    {% if forloop.last %}
+                    {% else %}
+                      ,
+                    {% endif %}
+
+                  {% endfor %}
+                </summary>
+                <table class="table table-m0">
+                  <tr>
+                    <th>field</th>
+                    <th>old</th>
+                    <th>new</th>
+                  </tr>
+                  <tbody>
+                    {% for c2 in change.diff.changes %}
+                      <tr>
+                        <td>{{ c2.field }}</td>
+                        <td>
+
+                          {% if c2.old == None %}
+                            -
+                          {% else %}
+                            {{ c2.old }}
+                          {% endif %}
+
+                        </td>
+                        <td>
+
+                          {% if c2.new == None %}
+                            -
+                          {% else %}
+                            {{ c2.new }}
+                          {% endif %}
+
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </details>
+            </td>
+            <td>{{ change.action }}</td>
+            <td>{{ change.timestamp }}</td>
+            <td>{{ change.user }}</td>
+          </tr>
+        {% endfor %}
+      {% endwith %}
+    </tbody>
+  </table>
+{% endblock card-body %}

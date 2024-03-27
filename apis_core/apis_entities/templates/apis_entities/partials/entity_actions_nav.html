@@ -30,6 +30,10 @@
                        href="{% url "apis_core:apis_entities:generic_entities_merge_view" modelname object.id %}">
                       <span class="material-symbols-outlined material-symbols-align">cell_merge</span> Merge
                     </a>
+
+                    {% if object.history %}
+                      <a class="dropdown-item" href="{{ object.get_create_version_url }}"><span class="material-symbols-outlined material-symbols-align">add</span>Add Versiontag</a>
+                    {% endif %}
                   {% endif %}
 
                 </div>
