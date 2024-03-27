@@ -57,3 +57,11 @@ class TripleFilterSet(GenericFilterSet):
             name, _ = name.split("_")
             return queryset.filter(Q(**{f"{name}__self_contenttype__in": value}))
         return queryset
+
+
+class HistoricalTripleFilterSet(TripleFilterSet):
+    pass
+
+
+class HistoricalTempTripleFilterSet(TripleFilterSet):
+    pass

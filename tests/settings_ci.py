@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     "apis_core.apis_vocabularies",
     "apis_core.generic",
     "apis_core.collections",
-    "reversion",
+    "apis_core.history",
     # ui stuff
     "crispy_forms",
     "django_filters",
@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     # for swagger ui generation
     "drf_spectacular",
+    "simple_history",
 ]
 
 MIDDLEWARE = [

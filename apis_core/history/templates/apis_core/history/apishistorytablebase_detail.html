@@ -1,0 +1,30 @@
+{% extends "apis_core/apis_entities/abstractentity.html" %}
+{% load django_tables2 %}
+{% load apis_history_templatetags %}
+
+{% block navigation %}
+  {% load apiscore %}
+  {% include "apis_entities/partials/entity_base_nav.html" with object=object.instance %}
+{% endblock navigation %}
+
+{% block col-zero %}
+  <div class="card">
+    <div class="card-body">{% include "generic/partials/object_table.html" %}</div>
+  </div>
+{% endblock col-zero %}
+
+{% block col-one %}
+  <div class="card">
+    <div class="card-body">
+      {% object_relations_history as object_relations %}
+      {% for rel in object_relations %}
+
+        {% if rel.1.data|length > 0 %}
+          <h5>{{ rel.0|title }}</h5>
+          <div id="tab_{{ rel.2 }}">{% render_table rel.1 %}</div>
+        {% endif %}
+
+      {% endfor %}
+    </div>
+  </div>
+{% endblock col-one %}

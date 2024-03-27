@@ -8,7 +8,12 @@ all_class_modules_and_names = {
         "RootObject",
         "Uri",
     ],
-    "apis_relations": ["TempTriple", "Property", "Triple"],
+    "apis_relations": [
+        "TempTriple",
+        "Property",
+        "Triple",
+        "VersionTempTriple",
+    ],
     "contenttypes": ["ContentType"],
 }
 

@@ -5,6 +5,8 @@ from django.urls import path
 from django.views.static import serve
 from django.views.generic import TemplateView
 from rest_framework import routers
+from django.conf import settings
+
 
 from apis_core.api_routers import views
 
@@ -89,3 +91,7 @@ urlpatterns = [
     path("api/dumpdata", Dumpdata.as_view()),
     path("", include("apis_core.generic.urls", namespace="generic")),
 ]
+if "apis_core.history" in settings.INSTALLED_APPS:
+    urlpatterns.append(
+        path("history/", include("apis_core.history.urls", namespace="history"))
+    )

@@ -1,7 +1,6 @@
 import unicodedata
 import copy
 
-import reversion
 from crum import get_current_request
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -15,6 +14,7 @@ from apis_core.generic.abc import GenericModel
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.utils import DateParser
 from apis_core.apis_metainfo import signals
+from apis_core.history.models import VersionMixin
 
 
 def find_if_user_accepted():
@@ -46,7 +46,6 @@ class BaseRelationManager(models.Manager):
             return self.get_queryset()
 
 
-@reversion.register(follow=["rootobject_ptr"])
 class Property(RootObject):
     class Meta:
         verbose_name_plural = "Properties"
@@ -219,7 +218,7 @@ class InheritanceForeignKey(models.ForeignKey):
     forward_related_accessor_class = InheritanceForwardManyToOneDescriptor
 
 
-class Triple(GenericModel, models.Model):
+class Triple(models.Model, GenericModel):
     subj = InheritanceForeignKey(
         RootObject,
         blank=True,
@@ -322,7 +321,7 @@ class Triple(GenericModel, models.Model):
         return duplicate
 
 
-class TempTriple(Triple):
+class TempTriple(Triple, VersionMixin):
     review = models.BooleanField(
         default=False,
         help_text="Should be set to True, if the data record holds up quality standards.",
