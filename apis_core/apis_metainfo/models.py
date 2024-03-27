@@ -1,4 +1,3 @@
-import reversion
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
@@ -19,7 +18,6 @@ from apis_core.apis_metainfo import signals
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
 
-@reversion.register()
 class RootObject(GenericModel, models.Model):
     """
     The very root thing that can exist in a given ontology. Several classes inherit from it.
@@ -80,7 +78,6 @@ class RootObject(GenericModel, models.Model):
     duplicate.alters_data = True
 
 
-@reversion.register()
 class Collection(GenericModel, models.Model):
     """Allows to group entities and relation."""
 
@@ -138,7 +135,6 @@ class UriManager(models.Manager):
         return UriQuerySet(self.model)
 
 
-@reversion.register()
 class Uri(GenericModel, models.Model):
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
     domain = models.CharField(max_length=255, blank=True)
