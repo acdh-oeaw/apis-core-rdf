@@ -103,13 +103,20 @@ class List(
 
     def get_table_kwargs(self):
         kwargs = super().get_table_kwargs()
-        columns = self.request.GET.getlist("columns", [])
+        columns = self.request.GET.getlist(
+            "columns", self.filterset.form.fields["columns"].initial
+        )
         column_fields = [
             field for field in self.model._meta.fields if field.name in columns
         ]
+        table_class = self.get_table_class()
         kwargs["extra_columns"] = [
             (field.name, library.column_for_field(field, accessor=field.name))
             for field in column_fields
+            if field.name not in table_class.base_columns
+        ]
+        kwargs["exclude"] = [
+            field.name for field in self.model._meta.fields if field.name not in columns
         ]
         return kwargs
 

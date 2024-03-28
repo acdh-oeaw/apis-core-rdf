@@ -1,3 +1,5 @@
+from apis_core.generic.helpers import first_member_match, module_paths
+from apis_core.generic.tables import GenericTable
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
@@ -45,6 +47,14 @@ class GenericFilterSetForm(forms.Form):
             for field in model._meta.fields
             if field.name not in self.columns_exclude
         ]
+        if not self.is_bound:
+            table_modules = module_paths(model, path="tables", suffix="Table")
+            table_class = first_member_match(table_modules, GenericTable)
+            self.fields["columns"].initial = [
+                field
+                for field in table_class.Meta.fields
+                if field not in self.columns_exclude
+            ]
 
         self.helper = FormHelper()
         self.helper.form_method = "GET"
