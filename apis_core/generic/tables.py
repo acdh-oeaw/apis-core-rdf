@@ -37,6 +37,14 @@ class ActionColumn(CustomTemplateColumn):
     verbose_name = ""
     attrs = {"td": {"style": "width:1%;"}}
 
+    def render(self, record, table, *args, **kwargs):
+        if permission := getattr(self, "permission", False):
+            if not table.context.request.user.has_perm(
+                permission_fullname(permission, record)
+            ):
+                return ""
+        return super().render(record, table, *args, **kwargs)
+
 
 class DeleteColumn(ActionColumn):
     """
@@ -44,6 +52,7 @@ class DeleteColumn(ActionColumn):
     """
 
     template_name = "columns/delete.html"
+    permission = "delete"
 
 
 class EditColumn(ActionColumn):
@@ -52,6 +61,7 @@ class EditColumn(ActionColumn):
     """
 
     template_name = "columns/edit.html"
+    permission = "change"
 
 
 class ViewColumn(ActionColumn):
@@ -60,6 +70,7 @@ class ViewColumn(ActionColumn):
     """
 
     template_name = "columns/view.html"
+    permission = "view"
 
 
 class DescriptionColumn(CustomTemplateColumn):
@@ -85,12 +96,3 @@ class GenericTable(tables.Table):
     class Meta:
         fields = ["id", "desc"]
         sequence = ("...", "view", "edit", "delete")
-
-    def before_render(self, request):
-        if model := getattr(self.Meta, "model"):
-            if not request.user.has_perm(permission_fullname("delete", model)):
-                self.columns.hide("delete")
-            if not request.user.has_perm(permission_fullname("change", model)):
-                self.columns.hide("edit")
-            if not request.user.has_perm(permission_fullname("view", model)):
-                self.columns.hide("view")
