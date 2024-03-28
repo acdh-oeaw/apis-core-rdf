@@ -7,9 +7,12 @@ from apis_core.generic.helpers import generate_search_filter
 from apis_core.apis_entities.utils import get_entity_classes
 from apis_core.apis_metainfo.models import RootObject
 
-ABSTRACT_ENTITY_FILTERS_EXCLUDE = [
+ABSTRACT_ENTITY_COLUMNS_EXCLUDE = [
     "rootobject_ptr",
     "self_contenttype",
+]
+
+ABSTRACT_ENTITY_FILTERS_EXCLUDE = ABSTRACT_ENTITY_COLUMNS_EXCLUDE + [
     "review",
     "start_date",
     "start_start_date",
@@ -54,7 +57,7 @@ def related_entity(queryset, name, value):
 
 
 class AbstractEntityFilterSetForm(GenericFilterSetForm):
-    columns_exclude = ABSTRACT_ENTITY_FILTERS_EXCLUDE
+    columns_exclude = ABSTRACT_ENTITY_COLUMNS_EXCLUDE
 
 
 class AbstractEntityFilterSet(GenericFilterSet):
