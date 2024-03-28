@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.17.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.16.0...v0.17.0) (2024-03-28)
+
+
+### Features
+
+* **history:** add new history plugin ([1c8550d](https://github.com/acdh-oeaw/apis-core-rdf/commit/1c8550d42ec6bcdd0d7defe4c1303491a5c6f92c)), closes [#340](https://github.com/acdh-oeaw/apis-core-rdf/issues/340) [#242](https://github.com/acdh-oeaw/apis-core-rdf/issues/242)
+
+
+### Documentation
+
+* **history:** add basic doc for new history plugin ([f3ee6c8](https://github.com/acdh-oeaw/apis-core-rdf/commit/f3ee6c8bad8524a27525eb4c9d578d0bf47ae525))
+
 ## [0.16.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.15.2...v0.16.0) (2024-03-27)
 
 
