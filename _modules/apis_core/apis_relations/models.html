@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../settings.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../customization.html">Customization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History plugin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
@@ -92,7 +93,6 @@
 <span></span><span class="kn">import</span> <span class="nn">unicodedata</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 
-<span class="kn">import</span> <span class="nn">reversion</span>
 <span class="kn">from</span> <span class="nn">crum</span> <span class="kn">import</span> <span class="n">get_current_request</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
@@ -106,6 +106,7 @@
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">DateParser</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo</span> <span class="kn">import</span> <span class="n">signals</span>
+<span class="kn">from</span> <span class="nn">apis_core.history.models</span> <span class="kn">import</span> <span class="n">VersionMixin</span>
 
 
 <div class="viewcode-block" id="find_if_user_accepted">
@@ -154,7 +155,6 @@
 
 <div class="viewcode-block" id="Property">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms.Property">[docs]</a>
-<span class="nd">@reversion</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">follow</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rootobject_ptr&quot;</span><span class="p">])</span>
 <span class="k">class</span> <span class="nc">Property</span><span class="p">(</span><span class="n">RootObject</span><span class="p">):</span>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Properties&quot;</span>
@@ -360,7 +360,7 @@
 
 <div class="viewcode-block" id="Triple">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms.Triple">[docs]</a>
-<span class="k">class</span> <span class="nc">Triple</span><span class="p">(</span><span class="n">GenericModel</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Triple</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span> <span class="n">GenericModel</span><span class="p">):</span>
     <span class="n">subj</span> <span class="o">=</span> <span class="n">InheritanceForeignKey</span><span class="p">(</span>
         <span class="n">RootObject</span><span class="p">,</span>
         <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -475,7 +475,7 @@
 
 <div class="viewcode-block" id="TempTriple">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms.TempTriple">[docs]</a>
-<span class="k">class</span> <span class="nc">TempTriple</span><span class="p">(</span><span class="n">Triple</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">TempTriple</span><span class="p">(</span><span class="n">Triple</span><span class="p">,</span> <span class="n">VersionMixin</span><span class="p">):</span>
     <span class="n">review</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">help_text</span><span class="o">=</span><span class="s2">&quot;Should be set to True, if the data record holds up quality standards.&quot;</span><span class="p">,</span>

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customization.html">Customization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History plugin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -127,6 +128,10 @@
 </li>
         <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.Meta.abstract">(apis_core.apis_entities.models.AbstractEntity.Meta attribute)</a>
 </li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoryTableBase.Meta.abstract">(apis_core.history.models.APISHistoryTableBase.Meta attribute)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.models.VersionMixin.Meta.abstract">(apis_core.history.models.VersionMixin.Meta attribute)</a>
+</li>
       </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity">AbstractEntity (class in apis_core.apis_entities.models)</a>
 </li>
@@ -168,12 +173,6 @@
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_relations">add_relations() (apis_core.apis_entities.serializers_generic.EntitySerializer method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_revisions">add_revisions() (apis_core.apis_entities.serializers_generic.EntitySerializer method)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer.add_revisions">(apis_core.apis_entities.serializers_generic.RelationEntitySerializer method)</a>
-</li>
-      </ul></li>
       <li><a href="modules/apis_core.html#apis_core.api_routers.EntitySerializer.add_type">add_type() (apis_core.api_routers.EntitySerializer method)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.add_uri">add_uri() (apis_core.api_routers.ApisBaseSerializer method)</a>
@@ -453,8 +452,6 @@
         <li><a href="modules/apis_core.apis_relations.html#module-apis_core.apis_relations.apps">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     apis_core.apis_relations.filtersets
 
@@ -497,6 +494,8 @@
         <li><a href="modules/apis_core.apis_relations.templatetags.html#module-apis_core.apis_relations.templatetags">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     apis_core.apis_relations.templatetags.apis_helpers
 
@@ -687,6 +686,69 @@
 </li>
       </ul></li>
       <li>
+    apis_core.history
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.history.api_views
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.api_views">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.history.apps
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.apps">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.history.models
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.models">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.history.serializers
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.serializers">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.history.tables
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.tables">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.history.urls
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.urls">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.history.utils
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    apis_core.history.views
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.views">module</a>
+</li>
+      </ul></li>
+      <li>
     apis_core.testrunners
 
       <ul>
@@ -816,6 +878,16 @@
 </li>
       <li><a href="modules/apis_core.html#apis_core.api_routers.ApisBaseSerializer.Meta">ApisBaseSerializer.Meta (class in apis_core.api_routers)</a>
 </li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoricalRecords">APISHistoricalRecords (class in apis_core.history.models)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoryTableBase">APISHistoryTableBase (class in apis_core.history.models)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoryTableBase.Meta">APISHistoryTableBase.Meta (class in apis_core.history.models)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.tables.APISHistoryTableBaseTable">APISHistoryTableBaseTable (class in apis_core.history.tables)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.tables.APISHistoryTableBaseTable.Meta">APISHistoryTableBaseTable.Meta (class in apis_core.history.tables)</a>
+</li>
       <li><a href="modules/apis_core.html#apis_core.testrunners.APISTestRunner">APISTestRunner (class in apis_core.testrunners)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.tables.ActionColumn.attrs">attrs (apis_core.generic.tables.ActionColumn attribute)</a>
@@ -840,6 +912,8 @@
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTable.base_columns">(apis_core.apis_relations.tables.TripleTable attribute)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.tables.GenericTable.base_columns">(apis_core.generic.tables.GenericTable attribute)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.tables.APISHistoryTableBaseTable.base_columns">(apis_core.history.tables.APISHistoryTableBaseTable attribute)</a>
 </li>
       </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSetForm.base_fields">base_fields (apis_core.apis_entities.filtersets.AbstractEntityFilterSetForm attribute)</a>
@@ -868,6 +942,10 @@
 
       <ul>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filtersets.UriFilterSet.base_filters">(apis_core.apis_metainfo.filtersets.UriFilterSet attribute)</a>
+</li>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTempTripleFilterSet.base_filters">(apis_core.apis_relations.filtersets.HistoricalTempTripleFilterSet attribute)</a>
+</li>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTripleFilterSet.base_filters">(apis_core.apis_relations.filtersets.HistoricalTripleFilterSet attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.PropertyFilterSet.base_filters">(apis_core.apis_relations.filtersets.PropertyFilterSet attribute)</a>
 </li>
@@ -899,6 +977,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_caching.CachingTest">CachingTest (class in apis_core.utils.test_caching)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.views.ChangeHistoryView">ChangeHistoryView (class in apis_core.history.views)</a>
 </li>
       <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.children">children() (apis_core.collections.models.SkosCollection method)</a>
 </li>
@@ -962,8 +1042,6 @@
 </li>
       <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionToggle">CollectionToggle (class in apis_core.collections.views)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSetForm.columns_exclude">columns_exclude (apis_core.apis_entities.filtersets.AbstractEntityFilterSetForm attribute)</a>
 
       <ul>
@@ -972,6 +1050,10 @@
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm.columns_exclude">(apis_core.generic.forms.GenericFilterSetForm attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoryTableBase.Meta.constraints">constraints (apis_core.history.models.APISHistoryTableBase.Meta attribute)</a>
+</li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.filtermethods.construct_lookup">construct_lookup() (in module apis_core.utils.filtermethods)</a>
 </li>
       <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.content_object">content_object (apis_core.collections.models.SkosCollectionContentObject attribute)</a>
@@ -994,6 +1076,8 @@
 </li>
       <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.contributor">contributor (apis_core.collections.models.SkosCollection attribute)</a>
 </li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.views.convert_timestamps">convert_timestamps() (in module apis_core.history.views)</a>
+</li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.signals.copy_relations">copy_relations() (in module apis_core.apis_relations.signals)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Create">Create (class in apis_core.generic.views)</a>
@@ -1005,6 +1089,8 @@
       <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.create_field">create_field (apis_core.generic.views.Autocomplete attribute)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter.create_instance">create_instance() (apis_core.generic.importers.GenericImporter method)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.views.create_new_version">create_new_version() (in module apis_core.history.views)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.create_object">create_object() (apis_core.generic.views.Autocomplete method)</a>
 </li>
@@ -1075,6 +1161,10 @@
       <ul>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.filtersets.UriFilterSet.declared_filters">(apis_core.apis_metainfo.filtersets.UriFilterSet attribute)</a>
 </li>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTempTripleFilterSet.declared_filters">(apis_core.apis_relations.filtersets.HistoricalTempTripleFilterSet attribute)</a>
+</li>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTripleFilterSet.declared_filters">(apis_core.apis_relations.filtersets.HistoricalTripleFilterSet attribute)</a>
+</li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.PropertyFilterSet.declared_filters">(apis_core.apis_relations.filtersets.PropertyFilterSet attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.TripleFilterSet.declared_filters">(apis_core.apis_relations.filtersets.TripleFilterSet attribute)</a>
@@ -1109,7 +1199,11 @@
       <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Delete">Delete (class in apis_core.generic.views)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Delete.delete">delete() (apis_core.generic.views.Delete method)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#apis_core.history.models.VersionMixin.delete">(apis_core.history.models.VersionMixin method)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.tables.DeleteColumn">DeleteColumn (class in apis_core.generic.tables)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.description">description (apis_core.apis_metainfo.models.Collection attribute)</a>
@@ -1121,6 +1215,8 @@
 </li>
       </ul></li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.tables.DescriptionColumn">DescriptionColumn (class in apis_core.generic.tables)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.tables.DescriptionColumnHistory">DescriptionColumnHistory (class in apis_core.history.tables)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.viewsets.UriToObjectViewSet.detail">detail (apis_core.apis_metainfo.viewsets.UriToObjectViewSet attribute)</a>
 
@@ -1169,13 +1265,27 @@
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.end_date">(apis_core.apis_relations.models.TempTriple attribute)</a>
 </li>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.end_date">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
       </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.end_date_written">end_date_written (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.end_date_written">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.end_end_date">end_end_date (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.end_end_date">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.end_start_date">end_start_date (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.end_start_date">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.generators.CustomSchemaGenerator.endpoint_inspector_cls">endpoint_inspector_cls (apis_core.generic.generators.CustomSchemaGenerator attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.apps.EntitiesConfig">EntitiesConfig (class in apis_core.apis_entities.apps)</a>
@@ -1184,13 +1294,15 @@
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge">EntitiesMerge (class in apis_core.apis_entities.views)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.forms.EntitiesMergeForm">EntitiesMergeForm (class in apis_core.apis_entities.forms)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesUpdate">EntitiesUpdate (class in apis_core.apis_entities.views)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="glossary.html#term-Entity"><strong>Entity</strong></a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.api_views.EntityHistoryLogs">EntityHistoryLogs (class in apis_core.history.api_views)</a>
 </li>
       <li><a href="modules/apis_core.html#apis_core.api_routers.EntitySerializer">EntitySerializer (class in apis_core.api_routers)</a>
 
@@ -1270,6 +1382,8 @@
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.Meta.fields">(apis_core.generic.forms.GenericModelForm.Meta attribute)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.tables.GenericTable.Meta.fields">(apis_core.generic.tables.GenericTable.Meta attribute)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.tables.APISHistoryTableBaseTable.Meta.fields">(apis_core.history.tables.APISHistoryTableBaseTable.Meta attribute)</a>
 </li>
       </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.BaseRelationManager.filter_ann_proj">filter_ann_proj() (apis_core.apis_relations.models.BaseRelationManager method)</a>
@@ -1384,6 +1498,8 @@
 </li>
       <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm">GenericFilterSetForm (class in apis_core.generic.forms)</a>
 </li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.api_views.GenericHistoryLog">GenericHistoryLog (class in apis_core.history.api_views)</a>
+</li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.serializers.GenericHyperlinkedIdentityField">GenericHyperlinkedIdentityField (class in apis_core.generic.serializers)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.serializers.GenericHyperlinkedModelSerializer">GenericHyperlinkedModelSerializer (class in apis_core.generic.serializers)</a>
@@ -1435,8 +1551,12 @@
 </li>
         <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionToggle.get">(apis_core.collections.views.CollectionToggle method)</a>
 </li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.views.ChangeHistoryView.get">(apis_core.history.views.ChangeHistoryView method)</a>
+</li>
       </ul></li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_absolute_url">get_absolute_url() (apis_core.generic.abc.GenericModel method)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.HistoryLogSerializer.get_action">get_action() (apis_core.history.serializers.HistoryLogSerializer method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.caching.get_all_class_modules_and_names">get_all_class_modules_and_names() (in module apis_core.utils.caching)</a>
 </li>
@@ -1472,18 +1592,24 @@
         <li><a href="modules/apis_core.collections.html#apis_core.collections.views.ContentObjectMixin.get_context_data">(apis_core.collections.views.ContentObjectMixin method)</a>
 </li>
       </ul></li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.VersionMixin.get_create_version_url">get_create_version_url() (apis_core.history.models.VersionMixin method)</a>
+</li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_createview_url">get_createview_url() (apis_core.generic.abc.GenericModel class method)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer.get_data_for_m2m_field">get_data_for_m2m_field() (apis_core.history.serializers.ModelChangeSerializer method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.DateParser.get_date_help_text_default">get_date_help_text_default() (in module apis_core.utils.DateParser)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.DateParser.get_date_help_text_from_dates">get_date_help_text_from_dates() (in module apis_core.utils.DateParser)</a>
 </li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.get_default_history_user">get_default_history_user() (apis_core.apis_relations.models.VersionTempTriple static method)</a>
+</li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.rdf.get_definition_and_attributes_from_uri">get_definition_and_attributes_from_uri() (in module apis_core.utils.rdf)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_delete_url">get_delete_url() (apis_core.generic.abc.GenericModel method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.HistoryLogSerializer.get_diff">get_diff() (apis_core.history.serializers.HistoryLogSerializer method)</a>
+</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_duplicate_url">get_duplicate_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_edit_url">get_edit_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
@@ -1496,7 +1622,15 @@
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_entity_list_filter">get_entity_list_filter() (apis_core.apis_entities.models.AbstractEntity class method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.settings.get_entity_settings_by_modelname">get_entity_settings_by_modelname() (in module apis_core.utils.settings)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer.get_field_data">get_field_data() (apis_core.history.serializers.ModelChangeSerializer method)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer.get_field_data_new">get_field_data_new() (apis_core.history.serializers.ModelChangeSerializer method)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer.get_field_data_old">get_field_data_old() (apis_core.history.serializers.ModelChangeSerializer method)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.filterbackends.GenericFilterBackend.get_filterset_class">get_filterset_class() (apis_core.generic.filterbackends.GenericFilterBackend method)</a>
 
@@ -1518,15 +1652,29 @@
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.get_generic_triple_table">get_generic_triple_table() (in module apis_core.apis_relations.tables)</a>
 </li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.HistoryObjectSerializer.get_history">get_history() (apis_core.history.serializers.HistoryObjectSerializer method)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.VersionMixin.get_history_data">get_history_data() (apis_core.history.models.VersionMixin method)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.get_history_type_display">get_history_type_display() (apis_core.apis_relations.models.VersionTempTriple method)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.VersionMixin.get_history_url">get_history_url() (apis_core.history.models.VersionMixin method)</a>
+</li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.forms.GenericTripleForm.get_html_table">get_html_table() (apis_core.apis_relations.forms.GenericTripleForm method)</a>
 </li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.HistoryObjectSerializer.get_instance">get_instance() (apis_core.history.serializers.HistoryObjectSerializer method)</a>
+</li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_listview_url">get_listview_url() (apis_core.generic.abc.GenericModel class method)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoricalRecords.get_m2m_fields_from_model">get_m2m_fields_from_model() (apis_core.history.models.APISHistoricalRecords method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.helpers.get_member_for_entity">get_member_for_entity() (in module apis_core.utils.helpers)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.utils.get_module_path">get_module_path() (in module apis_core.utils.utils)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.CustomEntityAutocompletes.get_more">get_more() (apis_core.apis_entities.autocomplete3.CustomEntityAutocompletes method)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.get_next_by_history_date">get_next_by_history_date() (apis_core.apis_relations.models.VersionTempTriple method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_next_url">get_next_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
@@ -1544,7 +1692,11 @@
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.views.GenericModelMixin.get_permission_required">get_permission_required() (apis_core.generic.views.GenericModelMixin method)</a>
 </li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoricalRecords.get_prev_record">get_prev_record() (apis_core.history.models.APISHistoricalRecords method)</a>
+</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_prev_url">get_prev_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.get_previous_by_history_date">get_previous_by_history_date() (apis_core.apis_relations.models.VersionTempTriple method)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.utils.get_python_safe_module_path">get_python_safe_module_path() (in module apis_core.utils.utils)</a>
 </li>
@@ -1564,6 +1716,12 @@
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.get_queryset">(apis_core.generic.views.Autocomplete method)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.List.get_queryset">(apis_core.generic.views.List method)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.api_views.EntityHistoryLogs.get_queryset">(apis_core.history.api_views.EntityHistoryLogs method)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.api_views.GenericHistoryLog.get_queryset">(apis_core.history.api_views.GenericHistoryLog method)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.api_views.TempTripleHistoryLogs.get_queryset">(apis_core.history.api_views.TempTripleHistoryLogs method)</a>
 </li>
       </ul></li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.autocomplete.ExternalAutocompleteAdapter.get_result_label">get_result_label() (apis_core.utils.autocomplete.ExternalAutocompleteAdapter method)</a>
@@ -1602,6 +1760,8 @@
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.forms.GenericTripleForm.get_text_id">get_text_id() (apis_core.apis_relations.forms.GenericTripleForm method)</a>
 </li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoryTableBase.get_triples_for_version">get_triples_for_version() (apis_core.history.models.APISHistoryTableBase method)</a>
+</li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter.get_uri">get_uri (apis_core.generic.importers.GenericImporter property)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.serializers.GenericHyperlinkedRelatedField.get_url">get_url() (apis_core.generic.serializers.GenericHyperlinkedRelatedField method)</a>
@@ -1628,6 +1788,34 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.helper_render_date">helper_render_date() (in module apis_core.apis_metainfo.tables)</a>
 </li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTempTripleFilterSet">HistoricalTempTripleFilterSet (class in apis_core.apis_relations.filtersets)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTripleFilterSet">HistoricalTripleFilterSet (class in apis_core.apis_relations.filtersets)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.history">history (apis_core.apis_relations.models.TempTriple attribute)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_change_reason">history_change_reason (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_date">history_date (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_id">history_id (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_object">history_object (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_type">history_type (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_user">history_user (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_user_id">history_user_id (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.apps.HistoryConfig">HistoryConfig (class in apis_core.history.apps)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.HistoryLogSerializer">HistoryLogSerializer (class in apis_core.history.serializers)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.HistoryObjectSerializer">HistoryObjectSerializer (class in apis_core.history.serializers)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1643,6 +1831,8 @@
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.id">(apis_core.apis_relations.models.Triple attribute)</a>
 </li>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.id">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
         <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.id">(apis_core.collections.models.SkosCollection attribute)</a>
 </li>
         <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.id">(apis_core.collections.models.SkosCollectionContentObject attribute)</a>
@@ -1656,10 +1846,10 @@
       </ul></li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Import">Import (class in apis_core.generic.views)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.helpers.import_string">import_string() (in module apis_core.generic.helpers)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter.import_uri">import_uri (apis_core.generic.importers.GenericImporter attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.InheritanceForeignKey">InheritanceForeignKey (class in apis_core.apis_metainfo.models)</a>
@@ -1680,6 +1870,10 @@
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.widgets.NewlineSeparatedListWidget.input_type">(apis_core.generic.forms.widgets.NewlineSeparatedListWidget attribute)</a>
 </li>
       </ul></li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.instance">instance (apis_core.apis_relations.models.VersionTempTriple property)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.instance_type">instance_type (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.Institution">Institution (class in apis_core.utils.test_rdf)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.Institution.DoesNotExist">Institution.DoesNotExist</a>
@@ -1848,6 +2042,8 @@
         <li><a href="modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter.model">(apis_core.generic.importers.GenericImporter attribute)</a>
 </li>
       </ul></li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer">ModelChangeSerializer (class in apis_core.history.serializers)</a>
+</li>
       <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField">ModelImportChoiceField (class in apis_core.generic.forms.fields)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.ModelSelect2">ModelSelect2 (class in apis_core.apis_entities.fields)</a>
@@ -2006,6 +2202,24 @@
 </li>
         <li><a href="modules/apis_core.generic.html#module-apis_core.generic.views">apis_core.generic.views</a>
 </li>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history">apis_core.history</a>
+</li>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.api_views">apis_core.history.api_views</a>
+</li>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.apps">apis_core.history.apps</a>
+</li>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.models">apis_core.history.models</a>
+</li>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.serializers">apis_core.history.serializers</a>
+</li>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.tables">apis_core.history.tables</a>
+</li>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.urls">apis_core.history.urls</a>
+</li>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.utils">apis_core.history.utils</a>
+</li>
+        <li><a href="modules/apis_core.history.html#module-apis_core.history.views">apis_core.history.views</a>
+</li>
         <li><a href="modules/apis_core.html#module-apis_core.testrunners">apis_core.testrunners</a>
 </li>
         <li><a href="modules/apis_core.html#module-apis_core.urls">apis_core.urls</a>
@@ -2074,11 +2288,13 @@
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet.name">(apis_core.generic.api_views.ModelViewSet attribute)</a>
 </li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.apps.HistoryConfig.name">(apis_core.history.apps.HistoryConfig attribute)</a>
+</li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.name_forward">name_forward (apis_core.apis_relations.models.Property attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.filtermethods.name_label_filter">name_label_filter() (in module apis_core.utils.filtermethods)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.name_reverse">name_reverse (apis_core.apis_relations.models.Property attribute)</a>
@@ -2093,10 +2309,16 @@
 </li>
       <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.widgets.NewlineSeparatedListWidget.Media">NewlineSeparatedListWidget.Media (class in apis_core.generic.forms.widgets)</a>
 </li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.next_record">next_record (apis_core.apis_relations.models.VersionTempTriple property)</a>
+</li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_normalize.NormalizeTest">NormalizeTest (class in apis_core.utils.test_normalize)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.notes">notes (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.notes">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -2104,7 +2326,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.obj">obj (apis_core.apis_relations.models.Triple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.obj">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.obj_class">obj_class (apis_core.apis_relations.models.Property attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.obj_class_changed">obj_class_changed() (in module apis_core.apis_relations.models)</a>
@@ -2112,7 +2338,11 @@
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.TripleFilterSet.obj_icontains">obj_icontains() (apis_core.apis_relations.filtersets.TripleFilterSet method)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.obj_id">obj_id (apis_core.apis_relations.models.Triple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.obj_id">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject.object_id">object_id (apis_core.collections.models.SkosCollectionContentObject attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Collection.objects">objects (apis_core.apis_metainfo.models.Collection attribute)</a>
@@ -2125,6 +2355,8 @@
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.objects">(apis_core.apis_relations.models.Property attribute)</a>
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.objects">(apis_core.apis_relations.models.Triple attribute)</a>
+</li>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.objects">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
         <li><a href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection.objects">(apis_core.collections.models.SkosCollection attribute)</a>
 </li>
@@ -2158,7 +2390,13 @@
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.tables.DescriptionColumn.orderable">(apis_core.generic.tables.DescriptionColumn attribute)</a>
 </li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.tables.DescriptionColumnHistory.orderable">(apis_core.history.tables.DescriptionColumnHistory attribute)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.tables.OriginalIDColumn.orderable">(apis_core.history.tables.OriginalIDColumn attribute)</a>
+</li>
       </ul></li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.tables.OriginalIDColumn">OriginalIDColumn (class in apis_core.history.tables)</a>
+</li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Overview">Overview (class in apis_core.generic.views)</a>
 </li>
   </ul></td>
@@ -2213,10 +2451,10 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.Person">Person (class in apis_core.utils.test_rdf)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.Person.DoesNotExist">Person.DoesNotExist</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.Person.MultipleObjectsReturned">Person.MultipleObjectsReturned</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.Place">Place (class in apis_core.utils.test_rdf)</a>
@@ -2225,10 +2463,20 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_rdf.Place.MultipleObjectsReturned">Place.MultipleObjectsReturned</a>
 </li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.prev_record">prev_record (apis_core.apis_relations.models.VersionTempTriple property)</a>
+</li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.prop">prop (apis_core.apis_relations.models.Triple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.prop">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.prop_id">prop_id (apis_core.apis_relations.models.Triple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.prop_id">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="glossary.html#term-Property"><strong>Property</strong></a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.property">property (apis_core.apis_metainfo.models.RootObject attribute)</a>
@@ -2282,7 +2530,11 @@
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.apps.RelationsConfig.ready">ready() (apis_core.apis_relations.apps.RelationsConfig method)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.references">references (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.references">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.urls.EntityToContenttypeConverter.regex">regex (apis_core.apis_entities.urls.EntityToContenttypeConverter attribute)</a>
 
       <ul>
@@ -2309,8 +2561,6 @@
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.apps.RelationsConfig">RelationsConfig (class in apis_core.apis_relations.apps)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.html#apis_core.api_renderers.NetJsonRenderer.render">render() (apis_core.api_renderers.NetJsonRenderer method)</a>
 
       <ul>
@@ -2321,6 +2571,8 @@
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.render">(apis_core.apis_metainfo.api_renderers.TEIBaseRenderer method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.renderer_classes">renderer_classes (apis_core.apis_entities.api_views.GetEntityGeneric attribute)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter.request">request() (apis_core.generic.importers.GenericImporter method)</a>
@@ -2329,8 +2581,14 @@
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer.results_field">results_field (apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer attribute)</a>
 </li>
-      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.review">review (apis_core.apis_relations.models.TempTriple attribute)</a>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.revert_url">revert_url() (apis_core.apis_relations.models.VersionTempTriple method)</a>
 </li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.review">review (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.review">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.root_object">root_object (apis_core.apis_metainfo.models.Uri attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.root_object_id">root_object_id (apis_core.apis_metainfo.models.Uri attribute)</a>
@@ -2374,8 +2632,12 @@
 </li>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.save">(apis_core.apis_relations.models.Triple method)</a>
 </li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.models.VersionMixin.save">(apis_core.history.models.VersionMixin method)</a>
+</li>
       </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.views.save_ajax_form">save_ajax_form() (in module apis_core.apis_relations.views)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.VersionMixin.save_without_historical_record">save_without_historical_record() (apis_core.history.models.VersionMixin method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.fields.Select2">Select2 (class in apis_core.apis_entities.fields)</a>
 </li>
@@ -2402,7 +2664,15 @@
 </li>
       </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.serializer_class">serializer_class (apis_core.apis_entities.api_views.GetEntityGeneric attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#apis_core.history.api_views.EntityHistoryLogs.serializer_class">(apis_core.history.api_views.EntityHistoryLogs attribute)</a>
 </li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.api_views.GenericHistoryLog.serializer_class">(apis_core.history.api_views.GenericHistoryLog attribute)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.api_views.TempTripleHistoryLogs.serializer_class">(apis_core.history.api_views.TempTripleHistoryLogs attribute)</a>
+</li>
+      </ul></li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.serializers.serializer_factory">serializer_factory() (in module apis_core.generic.serializers)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.serializers.GenericHyperlinkedModelSerializer.serializer_related_field">serializer_related_field (apis_core.generic.serializers.GenericHyperlinkedModelSerializer attribute)</a>
@@ -2412,6 +2682,8 @@
       <li><a href="modules/apis_core.utils.html#apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.server">server (apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter attribute)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.autocomplete.ExternalAutocomplete.session">session (apis_core.utils.autocomplete.ExternalAutocomplete attribute)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoryTableBase.set_version_tag">set_version_tag() (apis_core.history.models.APISHistoryTableBase method)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.test_models.ModelTestCase.setUp">setUp() (apis_core.apis_metainfo.test_models.ModelTestCase method)</a>
 </li>
@@ -2460,17 +2732,39 @@
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.start_date">(apis_core.apis_relations.models.TempTriple attribute)</a>
 </li>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.start_date">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
       </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.start_date_written">start_date_written (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.start_date_written">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.start_end_date">start_end_date (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.start_end_date">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.start_start_date">start_start_date (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.start_start_date">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.status">status (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.status">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.subj">subj (apis_core.apis_relations.models.Triple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.subj">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.subj_class">subj_class (apis_core.apis_relations.models.Property attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.subj_class_changed">subj_class_changed() (in module apis_core.apis_relations.models)</a>
@@ -2478,7 +2772,11 @@
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.TripleFilterSet.subj_icontains">subj_icontains() (apis_core.apis_relations.filtersets.TripleFilterSet method)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.subj_id">subj_id (apis_core.apis_relations.models.Triple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.subj_id">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.subj_or_obj_class_changed">subj_or_obj_class_changed() (in module apis_core.apis_relations.models)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.SubjObjColumn">SubjObjColumn (class in apis_core.apis_relations.tables)</a>
@@ -2540,6 +2838,12 @@
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Overview.template_name">(apis_core.generic.views.Overview attribute)</a>
 </li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.tables.DescriptionColumnHistory.template_name">(apis_core.history.tables.DescriptionColumnHistory attribute)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.tables.OriginalIDColumn.template_name">(apis_core.history.tables.OriginalIDColumn attribute)</a>
+</li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.views.ChangeHistoryView.template_name">(apis_core.history.views.ChangeHistoryView attribute)</a>
+</li>
       </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge.template_name_suffix">template_name_suffix (apis_core.apis_entities.views.EntitiesMerge attribute)</a>
 
@@ -2562,6 +2866,8 @@
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.DoesNotExist">TempTriple.DoesNotExist</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.MultipleObjectsReturned">TempTriple.MultipleObjectsReturned</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.api_views.TempTripleHistoryLogs">TempTripleHistoryLogs (class in apis_core.history.api_views)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.test_normalize.NormalizeTest.test_clean_uri_dnb">test_clean_uri_dnb() (apis_core.utils.test_normalize.NormalizeTest method)</a>
 </li>
@@ -2623,6 +2929,8 @@
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.authentication.TokenAuthSupportQueryString">TokenAuthSupportQueryString (class in apis_core.utils.authentication)</a>
 </li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.tracked_fields">tracked_fields (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+</li>
       <li><a href="glossary.html#term-Triple"><strong>Triple</strong></a>
 
       <ul>
@@ -2634,9 +2942,17 @@
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.MultipleObjectsReturned">Triple.MultipleObjectsReturned</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.triple_ptr">triple_ptr (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.triple_ptr">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.triple_ptr_id">triple_ptr_id (apis_core.apis_relations.models.TempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.triple_ptr_id">(apis_core.apis_relations.models.VersionTempTriple attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.triple_set_from_obj">triple_set_from_obj (apis_core.apis_metainfo.models.RootObject attribute)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Property.triple_set_from_prop">triple_set_from_prop (apis_core.apis_relations.models.Property attribute)</a>
@@ -2644,6 +2960,8 @@
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.triple_set_from_subj">triple_set_from_subj (apis_core.apis_metainfo.models.RootObject attribute)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.helpers.triple_sidebar">triple_sidebar() (in module apis_core.utils.helpers)</a>
+</li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.utils.triple_sidebar_history">triple_sidebar_history() (in module apis_core.history.utils)</a>
 </li>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.filtersets.TripleFilterSet">TripleFilterSet (class in apis_core.apis_relations.filtersets)</a>
 </li>
@@ -2716,9 +3034,27 @@
       <ul>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.tables.CustomTemplateColumn.verbose_name">(apis_core.generic.tables.CustomTemplateColumn attribute)</a>
 </li>
+        <li><a href="modules/apis_core.history.html#apis_core.history.tables.OriginalIDColumn.verbose_name">(apis_core.history.tables.OriginalIDColumn attribute)</a>
+</li>
       </ul></li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.version_tag">version_tag (apis_core.apis_relations.models.VersionTempTriple attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoryTableBase.version_tag">(apis_core.history.models.APISHistoryTableBase attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.VersionMixin">VersionMixin (class in apis_core.history.models)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.history.html#apis_core.history.models.VersionMixin.Meta">VersionMixin.Meta (class in apis_core.history.models)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple">VersionTempTriple (class in apis_core.apis_relations.models)</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.DoesNotExist">VersionTempTriple.DoesNotExist</a>
+</li>
+      <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.MultipleObjectsReturned">VersionTempTriple.MultipleObjectsReturned</a>
+</li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.tables.ViewColumn">ViewColumn (class in apis_core.generic.tables)</a>
 </li>
       <li><a href="modules/apis_core.collections.html#apis_core.collections.apps.VocabsConfig">VocabsConfig (class in apis_core.collections.apps)</a>

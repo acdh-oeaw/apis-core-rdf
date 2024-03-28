@@ -16,6 +16,7 @@ Welcome to APIS's documentation!
    settings
    customization
    user_documentation
+   history
    data_model
    glossary
    development

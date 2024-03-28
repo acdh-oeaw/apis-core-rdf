@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../settings.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customization.html">Customization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History plugin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
@@ -287,7 +288,6 @@
 <li class="toctree-l3"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer"><code class="docutils literal notranslate"><span class="pre">EntitySerializer</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_entity_type"><code class="docutils literal notranslate"><span class="pre">EntitySerializer.add_entity_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_relations"><code class="docutils literal notranslate"><span class="pre">EntitySerializer.add_relations()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_revisions"><code class="docutils literal notranslate"><span class="pre">EntitySerializer.add_revisions()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_url"><code class="docutils literal notranslate"><span class="pre">EntitySerializer.add_url()</span></code></a></li>
 </ul>
 </li>
@@ -295,7 +295,6 @@
 <li class="toctree-l3"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer"><code class="docutils literal notranslate"><span class="pre">RelationEntitySerializer</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer.add_entity"><code class="docutils literal notranslate"><span class="pre">RelationEntitySerializer.add_entity()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer.add_relation_label"><code class="docutils literal notranslate"><span class="pre">RelationEntitySerializer.add_relation_label()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer.add_revisions"><code class="docutils literal notranslate"><span class="pre">RelationEntitySerializer.add_revisions()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.TextSerializer"><code class="docutils literal notranslate"><span class="pre">TextSerializer</span></code></a></li>
@@ -574,6 +573,16 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.apis_relations.html#module-apis_core.apis_relations.filtersets">apis_core.apis_relations.filtersets module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTempTripleFilterSet"><code class="docutils literal notranslate"><span class="pre">HistoricalTempTripleFilterSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTempTripleFilterSet.base_filters"><code class="docutils literal notranslate"><span class="pre">HistoricalTempTripleFilterSet.base_filters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTempTripleFilterSet.declared_filters"><code class="docutils literal notranslate"><span class="pre">HistoricalTempTripleFilterSet.declared_filters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTripleFilterSet"><code class="docutils literal notranslate"><span class="pre">HistoricalTripleFilterSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTripleFilterSet.base_filters"><code class="docutils literal notranslate"><span class="pre">HistoricalTripleFilterSet.base_filters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.filtersets.HistoricalTripleFilterSet.declared_filters"><code class="docutils literal notranslate"><span class="pre">HistoricalTripleFilterSet.declared_filters</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.filtersets.PropertyFilterSet"><code class="docutils literal notranslate"><span class="pre">PropertyFilterSet</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.filtersets.PropertyFilterSet.Meta"><code class="docutils literal notranslate"><span class="pre">PropertyFilterSet.Meta</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.filtersets.PropertyFilterSet.base_filters"><code class="docutils literal notranslate"><span class="pre">PropertyFilterSet.base_filters</span></code></a></li>
@@ -659,6 +668,7 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.end_date_written"><code class="docutils literal notranslate"><span class="pre">TempTriple.end_date_written</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.end_end_date"><code class="docutils literal notranslate"><span class="pre">TempTriple.end_end_date</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.end_start_date"><code class="docutils literal notranslate"><span class="pre">TempTriple.end_start_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.history"><code class="docutils literal notranslate"><span class="pre">TempTriple.history</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.notes"><code class="docutils literal notranslate"><span class="pre">TempTriple.notes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.references"><code class="docutils literal notranslate"><span class="pre">TempTriple.references</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple.review"><code class="docutils literal notranslate"><span class="pre">TempTriple.review</span></code></a></li>
@@ -688,6 +698,51 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.subj"><code class="docutils literal notranslate"><span class="pre">Triple.subj</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.subj_id"><code class="docutils literal notranslate"><span class="pre">Triple.subj_id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.Triple.temptriple"><code class="docutils literal notranslate"><span class="pre">Triple.temptriple</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.end_date"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.end_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.end_date_written"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.end_date_written</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.end_end_date"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.end_end_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.end_start_date"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.end_start_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.get_default_history_user"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.get_default_history_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.get_history_type_display"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.get_history_type_display()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.get_next_by_history_date"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.get_next_by_history_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.get_previous_by_history_date"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.get_previous_by_history_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_change_reason"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.history_change_reason</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_date"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.history_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_id"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.history_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_object"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.history_object</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_type"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.history_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_user"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.history_user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.history_user_id"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.history_user_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.id"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.instance"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.instance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.instance_type"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.instance_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.next_record"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.next_record</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.notes"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.notes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.obj"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.obj</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.obj_id"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.obj_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.objects"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.prev_record"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.prev_record</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.prop"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.prop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.prop_id"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.prop_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.references"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.references</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.revert_url"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.revert_url()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.review"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.review</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.start_date"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.start_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.start_date_written"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.start_date_written</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.start_end_date"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.start_end_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.start_start_date"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.start_start_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.status"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.subj"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.subj</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.subj_id"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.subj_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.tracked_fields"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.tracked_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.triple_ptr"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.triple_ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.triple_ptr_id"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.triple_ptr_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.VersionTempTriple.version_tag"><code class="docutils literal notranslate"><span class="pre">VersionTempTriple.version_tag</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.apis_relations.html#apis_core.apis_relations.models.find_if_user_accepted"><code class="docutils literal notranslate"><span class="pre">find_if_user_accepted()</span></code></a></li>
@@ -1027,6 +1082,114 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Update.permission_action_required"><code class="docutils literal notranslate"><span class="pre">Update.permission_action_required</span></code></a></li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apis_core.history.html">apis_core.history package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.html#module-apis_core.history.api_views">apis_core.history.api_views module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.api_views.EntityHistoryLogs"><code class="docutils literal notranslate"><span class="pre">EntityHistoryLogs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.api_views.EntityHistoryLogs.get_queryset"><code class="docutils literal notranslate"><span class="pre">EntityHistoryLogs.get_queryset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.api_views.EntityHistoryLogs.serializer_class"><code class="docutils literal notranslate"><span class="pre">EntityHistoryLogs.serializer_class</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.api_views.GenericHistoryLog"><code class="docutils literal notranslate"><span class="pre">GenericHistoryLog</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.api_views.GenericHistoryLog.get_queryset"><code class="docutils literal notranslate"><span class="pre">GenericHistoryLog.get_queryset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.api_views.GenericHistoryLog.serializer_class"><code class="docutils literal notranslate"><span class="pre">GenericHistoryLog.serializer_class</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.api_views.TempTripleHistoryLogs"><code class="docutils literal notranslate"><span class="pre">TempTripleHistoryLogs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.api_views.TempTripleHistoryLogs.get_queryset"><code class="docutils literal notranslate"><span class="pre">TempTripleHistoryLogs.get_queryset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.api_views.TempTripleHistoryLogs.serializer_class"><code class="docutils literal notranslate"><span class="pre">TempTripleHistoryLogs.serializer_class</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.html#module-apis_core.history.apps">apis_core.history.apps module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.apps.HistoryConfig"><code class="docutils literal notranslate"><span class="pre">HistoryConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.apps.HistoryConfig.name"><code class="docutils literal notranslate"><span class="pre">HistoryConfig.name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.html#module-apis_core.history.models">apis_core.history.models module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.APISHistoricalRecords"><code class="docutils literal notranslate"><span class="pre">APISHistoricalRecords</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.APISHistoricalRecords.get_m2m_fields_from_model"><code class="docutils literal notranslate"><span class="pre">APISHistoricalRecords.get_m2m_fields_from_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.APISHistoricalRecords.get_prev_record"><code class="docutils literal notranslate"><span class="pre">APISHistoricalRecords.get_prev_record()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.APISHistoryTableBase"><code class="docutils literal notranslate"><span class="pre">APISHistoryTableBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.APISHistoryTableBase.Meta"><code class="docutils literal notranslate"><span class="pre">APISHistoryTableBase.Meta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.APISHistoryTableBase.get_triples_for_version"><code class="docutils literal notranslate"><span class="pre">APISHistoryTableBase.get_triples_for_version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.APISHistoryTableBase.set_version_tag"><code class="docutils literal notranslate"><span class="pre">APISHistoryTableBase.set_version_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.APISHistoryTableBase.version_tag"><code class="docutils literal notranslate"><span class="pre">APISHistoryTableBase.version_tag</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.VersionMixin"><code class="docutils literal notranslate"><span class="pre">VersionMixin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.VersionMixin.Meta"><code class="docutils literal notranslate"><span class="pre">VersionMixin.Meta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.VersionMixin.delete"><code class="docutils literal notranslate"><span class="pre">VersionMixin.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.VersionMixin.get_create_version_url"><code class="docutils literal notranslate"><span class="pre">VersionMixin.get_create_version_url()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.VersionMixin.get_history_data"><code class="docutils literal notranslate"><span class="pre">VersionMixin.get_history_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.VersionMixin.get_history_url"><code class="docutils literal notranslate"><span class="pre">VersionMixin.get_history_url()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.VersionMixin.save"><code class="docutils literal notranslate"><span class="pre">VersionMixin.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.models.VersionMixin.save_without_historical_record"><code class="docutils literal notranslate"><span class="pre">VersionMixin.save_without_historical_record()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.html#module-apis_core.history.serializers">apis_core.history.serializers module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.HistoryLogSerializer"><code class="docutils literal notranslate"><span class="pre">HistoryLogSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.HistoryLogSerializer.get_action"><code class="docutils literal notranslate"><span class="pre">HistoryLogSerializer.get_action()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.HistoryLogSerializer.get_diff"><code class="docutils literal notranslate"><span class="pre">HistoryLogSerializer.get_diff()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.HistoryObjectSerializer"><code class="docutils literal notranslate"><span class="pre">HistoryObjectSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.HistoryObjectSerializer.get_history"><code class="docutils literal notranslate"><span class="pre">HistoryObjectSerializer.get_history()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.HistoryObjectSerializer.get_instance"><code class="docutils literal notranslate"><span class="pre">HistoryObjectSerializer.get_instance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer"><code class="docutils literal notranslate"><span class="pre">ModelChangeSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer.get_data_for_m2m_field"><code class="docutils literal notranslate"><span class="pre">ModelChangeSerializer.get_data_for_m2m_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer.get_field_data"><code class="docutils literal notranslate"><span class="pre">ModelChangeSerializer.get_field_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer.get_field_data_new"><code class="docutils literal notranslate"><span class="pre">ModelChangeSerializer.get_field_data_new()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer.get_field_data_old"><code class="docutils literal notranslate"><span class="pre">ModelChangeSerializer.get_field_data_old()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.html#module-apis_core.history.tables">apis_core.history.tables module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.APISHistoryTableBaseTable"><code class="docutils literal notranslate"><span class="pre">APISHistoryTableBaseTable</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.APISHistoryTableBaseTable.Meta"><code class="docutils literal notranslate"><span class="pre">APISHistoryTableBaseTable.Meta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.APISHistoryTableBaseTable.base_columns"><code class="docutils literal notranslate"><span class="pre">APISHistoryTableBaseTable.base_columns</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.DescriptionColumnHistory"><code class="docutils literal notranslate"><span class="pre">DescriptionColumnHistory</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.DescriptionColumnHistory.orderable"><code class="docutils literal notranslate"><span class="pre">DescriptionColumnHistory.orderable</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.DescriptionColumnHistory.template_name"><code class="docutils literal notranslate"><span class="pre">DescriptionColumnHistory.template_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.OriginalIDColumn"><code class="docutils literal notranslate"><span class="pre">OriginalIDColumn</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.OriginalIDColumn.orderable"><code class="docutils literal notranslate"><span class="pre">OriginalIDColumn.orderable</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.OriginalIDColumn.template_name"><code class="docutils literal notranslate"><span class="pre">OriginalIDColumn.template_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.tables.OriginalIDColumn.verbose_name"><code class="docutils literal notranslate"><span class="pre">OriginalIDColumn.verbose_name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.html#module-apis_core.history.urls">apis_core.history.urls module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.html#module-apis_core.history.utils">apis_core.history.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.utils.triple_sidebar_history"><code class="docutils literal notranslate"><span class="pre">triple_sidebar_history()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.html#module-apis_core.history.views">apis_core.history.views module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.views.ChangeHistoryView"><code class="docutils literal notranslate"><span class="pre">ChangeHistoryView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.views.ChangeHistoryView.get"><code class="docutils literal notranslate"><span class="pre">ChangeHistoryView.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.html#apis_core.history.views.ChangeHistoryView.template_name"><code class="docutils literal notranslate"><span class="pre">ChangeHistoryView.template_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.views.convert_timestamps"><code class="docutils literal notranslate"><span class="pre">convert_timestamps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.html#apis_core.history.views.create_new_version"><code class="docutils literal notranslate"><span class="pre">create_new_version()</span></code></a></li>
 </ul>
 </li>
 </ul>

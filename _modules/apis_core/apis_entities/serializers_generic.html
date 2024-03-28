@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../settings.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../customization.html">Customization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History plugin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
@@ -96,7 +97,6 @@
 <span class="kn">from</span> <span class="nn">django.db.models.query</span> <span class="kn">import</span> <span class="n">QuerySet</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
-<span class="kn">from</span> <span class="nn">reversion.models</span> <span class="kn">import</span> <span class="n">Version</span>
 
 
 <span class="n">base_uri</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_BASE_URI&quot;</span><span class="p">,</span> <span class="s2">&quot;http://apis.info&quot;</span><span class="p">)</span>
@@ -144,28 +144,6 @@
     <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_url&quot;</span><span class="p">)</span>
     <span class="n">uris</span> <span class="o">=</span> <span class="n">EntityUriSerializer</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;uri_set&quot;</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">revisions</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_revisions&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="EntitySerializer.add_revisions">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.EntitySerializer.add_revisions">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_revisions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="n">ver</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ver</span><span class="p">:</span>
-            <span class="n">usr_1</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">revision</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">usr_1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">usr_1</span> <span class="o">=</span> <span class="n">usr_1</span><span class="o">.</span><span class="n">username</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">usr_1</span> <span class="o">=</span> <span class="s2">&quot;Not specified&quot;</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-                    <span class="s2">&quot;date_created&quot;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">revision</span><span class="o">.</span><span class="n">date_created</span><span class="p">,</span>
-                    <span class="s2">&quot;user_created&quot;</span><span class="p">:</span> <span class="n">usr_1</span><span class="p">,</span>
-                <span class="p">}</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span></div>
-
 
 <div class="viewcode-block" id="EntitySerializer.add_relations">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.EntitySerializer.add_relations">[docs]</a>
@@ -283,28 +261,6 @@
     <span class="n">start_date_written</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
     <span class="n">end_date_written</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
     <span class="n">relation_type</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_relation_label&quot;</span><span class="p">)</span>
-    <span class="n">revisions</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_revisions&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="RelationEntitySerializer.add_revisions">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.RelationEntitySerializer.add_revisions">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_revisions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="n">ver</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ver</span><span class="p">:</span>
-            <span class="n">usr_1</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">revision</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">usr_1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">usr_1</span> <span class="o">=</span> <span class="n">usr_1</span><span class="o">.</span><span class="n">username</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">usr_1</span> <span class="o">=</span> <span class="s2">&quot;Not specified&quot;</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-                    <span class="s2">&quot;date_created&quot;</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">revision</span><span class="o">.</span><span class="n">date_created</span><span class="p">,</span>
-                    <span class="s2">&quot;user_created&quot;</span><span class="p">:</span> <span class="n">usr_1</span><span class="p">,</span>
-                <span class="p">}</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span></div>
-
 
 <div class="viewcode-block" id="RelationEntitySerializer.add_entity">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.RelationEntitySerializer.add_entity">[docs]</a>

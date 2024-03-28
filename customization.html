@@ -70,6 +70,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_documentation.html">User documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History plugin</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_model.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -121,6 +122,13 @@ In standard APIS those models are</p>
 <li><p><a class="reference internal" href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollection" title="apis_core.collections.models.SkosCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.collections.models.SkosCollection</span></code></a></p></li>
 <li><p><a class="reference internal" href="modules/apis_core.collections.html#apis_core.collections.models.SkosCollectionContentObject" title="apis_core.collections.models.SkosCollectionContentObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.collections.models.SkosCollectionContentObject</span></code></a></p></li>
 </ul>
+<p>The <a class="reference internal" href="modules/apis_core.history.html#module-apis_core.history" title="apis_core.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.history</span></code></a> module also uses the generic views for
+its models. This means that you can use the generic views for the historical
+models of your own ontology. E.g. if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
+<cite>apis_ontology.models</cite> module, you can use the generic views for it.
+<a href="#id1"><span class="problematic" id="id2">`/apis/apis_ontology.historicalperson/&lt;/apis/apis_ontology.historicalperson/&gt;`_</span></a>
+will be the URL for the list view of the historical model.
+<a href="#id3"><span class="problematic" id="id4">`/apis/api/apis_ontology.historicalperson/&lt;/apis/api/apis_ontology.historicalperson/&gt;`_</span></a> for the API view.</p>
 <p>If you want to use the generic app for your own model, simple make your model
 inherit from <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel" title="apis_core.generic.abc.GenericModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.abc.GenericModel</span></code></a>.</p>
 <section id="list-views">
