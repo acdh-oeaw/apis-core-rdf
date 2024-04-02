@@ -891,33 +891,6 @@ so that we can present a helpful representation of the object.</p>
 <span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'delete':</span> <span class="pre">&lt;apis_core.generic.tables.DeleteColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'desc':</span> <span class="pre">&lt;apis_core.generic.tables.DescriptionColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'edit':</span> <span class="pre">&lt;apis_core.generic.tables.EditColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'noduplicate':</span> <span class="pre">&lt;apis_core.apis_entities.tables.DuplicateColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'view':</span> <span class="pre">&lt;apis_core.generic.tables.ViewColumn</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_entities.tables.AbstractEntityTable.base_columns" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_entities.tables.AbstractEntityTable.before_render">
-<span class="sig-name descname"><span class="pre">before_render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/tables.html#AbstractEntityTable.before_render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.tables.AbstractEntityTable.before_render" title="Link to this definition"></a></dt>
-<dd><p>A way to hook into the moment just before rendering the template.</p>
-<p>Can be used to hide a column.</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><dl class="simple">
-<dt>request: contains the <cite>WGSIRequest</cite> instance, containing a <cite>user</cite> attribute if</dt><dd><p><cite>.django.contrib.auth.middleware.AuthenticationMiddleware</cite> is added to
-your <cite>MIDDLEWARE_CLASSES</cite>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Table</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">country</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">before_render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s1">&#39;foo.delete_bar&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">hide</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -925,6 +898,11 @@ your <cite>MIDDLEWARE_CLASSES</cite>.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_entities.tables.</span></span><span class="sig-name descname"><span class="pre">DuplicateColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/tables.html#DuplicateColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.tables.DuplicateColumn" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.tables.ActionColumn" title="apis_core.generic.tables.ActionColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionColumn</span></code></a></p>
 <p>A column showing a view button</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_entities.tables.DuplicateColumn.permission">
+<span class="sig-name descname"><span class="pre">permission</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'create'</span></em><a class="headerlink" href="#apis_core.apis_entities.tables.DuplicateColumn.permission" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_entities.tables.DuplicateColumn.template_name">
 <span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'columns/duplicate.html'</span></em><a class="headerlink" href="#apis_core.apis_entities.tables.DuplicateColumn.template_name" title="Link to this definition"></a></dt>

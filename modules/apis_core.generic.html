@@ -553,6 +553,18 @@ for actions.</p>
 <span class="sig-name descname"><span class="pre">orderable</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#apis_core.generic.tables.ActionColumn.orderable" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.tables.ActionColumn.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#ActionColumn.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.ActionColumn.render" title="Link to this definition"></a></dt>
+<dd><p>Return the content for a specific cell.</p>
+<p>This method can be overridden by <span class="xref std std-ref">table.render_FOO</span> methods on the
+table or by subclassing <cite>.Column</cite>.</p>
+<p>If the value for this cell is in <cite>.empty_values</cite>, this method is
+skipped and an appropriate default value is rendered instead.
+Subclasses should set <cite>.empty_values</cite> to <code class="docutils literal notranslate"><span class="pre">()</span></code> if they want to handle
+all values in <cite>.render</cite>.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.tables.ActionColumn.verbose_name">
 <span class="sig-name descname"><span class="pre">verbose_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#apis_core.generic.tables.ActionColumn.verbose_name" title="Link to this definition"></a></dt>
@@ -596,6 +608,11 @@ override the attributes in child classes.</p>
 <dd><p>Bases: <a class="reference internal" href="#apis_core.generic.tables.ActionColumn" title="apis_core.generic.tables.ActionColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionColumn</span></code></a></p>
 <p>A column showing a delete button</p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.DeleteColumn.permission">
+<span class="sig-name descname"><span class="pre">permission</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'delete'</span></em><a class="headerlink" href="#apis_core.generic.tables.DeleteColumn.permission" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.tables.DeleteColumn.template_name">
 <span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'columns/delete.html'</span></em><a class="headerlink" href="#apis_core.generic.tables.DeleteColumn.template_name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -624,6 +641,11 @@ override the attributes in child classes.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">EditColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#EditColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.EditColumn" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#apis_core.generic.tables.ActionColumn" title="apis_core.generic.tables.ActionColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionColumn</span></code></a></p>
 <p>A column showing an edit button</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.EditColumn.permission">
+<span class="sig-name descname"><span class="pre">permission</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'change'</span></em><a class="headerlink" href="#apis_core.generic.tables.EditColumn.permission" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.tables.EditColumn.template_name">
 <span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'columns/edit.html'</span></em><a class="headerlink" href="#apis_core.generic.tables.EditColumn.template_name" title="Link to this definition"></a></dt>
@@ -658,33 +680,6 @@ and a description column</p>
 <span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'delete':</span> <span class="pre">&lt;apis_core.generic.tables.DeleteColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'desc':</span> <span class="pre">&lt;apis_core.generic.tables.DescriptionColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'edit':</span> <span class="pre">&lt;apis_core.generic.tables.EditColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'view':</span> <span class="pre">&lt;apis_core.generic.tables.ViewColumn</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.generic.tables.GenericTable.base_columns" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.generic.tables.GenericTable.before_render">
-<span class="sig-name descname"><span class="pre">before_render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#GenericTable.before_render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.GenericTable.before_render" title="Link to this definition"></a></dt>
-<dd><p>A way to hook into the moment just before rendering the template.</p>
-<p>Can be used to hide a column.</p>
-<dl class="simple">
-<dt>Arguments:</dt><dd><dl class="simple">
-<dt>request: contains the <cite>WGSIRequest</cite> instance, containing a <cite>user</cite> attribute if</dt><dd><p><cite>.django.contrib.auth.middleware.AuthenticationMiddleware</cite> is added to
-your <cite>MIDDLEWARE_CLASSES</cite>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Table</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">country</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">before_render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">has_perm</span><span class="p">(</span><span class="s1">&#39;foo.delete_bar&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">hide</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -692,6 +687,11 @@ your <cite>MIDDLEWARE_CLASSES</cite>.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">ViewColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#ViewColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.ViewColumn" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#apis_core.generic.tables.ActionColumn" title="apis_core.generic.tables.ActionColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionColumn</span></code></a></p>
 <p>A column showing a view button</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.ViewColumn.permission">
+<span class="sig-name descname"><span class="pre">permission</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'view'</span></em><a class="headerlink" href="#apis_core.generic.tables.ViewColumn.permission" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.tables.ViewColumn.template_name">
 <span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'columns/view.html'</span></em><a class="headerlink" href="#apis_core.generic.tables.ViewColumn.template_name" title="Link to this definition"></a></dt>
