@@ -6,25 +6,22 @@ superclass = "apis_core.apis_entities.abc.E53_Place"
 regex = "https://sws.geonames.org.*|/.*achensee.rdf"
 [[attributes]]
 # name
+#FILTER (LANGMATCHES(LANG(?prefName), "de") || LANGMATCHES(LANG(?prefName), "en") || LANG(?prefName) = "")
 sparql = """
 PREFIX gn: <http://www.geonames.org/ontology#>
-SELECT ?name
+SELECT ?label
 WHERE
 {
-  ?subject gn:name|gn:officialName|gn:alternateName ?prefName
-  FILTER (LANGMATCHES(LANG(?prefName), "de") || LANGMATCHES(LANG(?prefName), "en") || LANG(?prefName) = "")
-  BIND(?prefName AS ?name)
-}
-ORDER BY ?lang
-"""
-[[attributes]]
-# alternative_label
-sparql = """
-PREFIX gn: <http://www.geonames.org/ontology#>
-SELECT ?altName (LANG(?altName) AS ?lang)
-WHERE {
-  ?subject gn:alternateName ?altName
-  FILTER (LANGMATCHES(LANG(?altName), "de") || LANGMATCHES(LANG(?altName), "en") || LANG(?prefName) = "")
+  OPTIONAL {
+    ?subject gn:name ?gnname .
+  }
+  OPTIONAL {
+   ?subject gn:officialName ?officialName
+  }
+  OPTIONAL {
+    ?subject gn:alternateName ?alternateName
+  }
+  BIND(COALESCE(?gnname, ?officialName, ?alternateName) AS ?label)
 }
 """
 [[attributes]]
@@ -40,20 +37,20 @@ WHERE {
 # lat
 sparql = """
 PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
-SELECT ?lat
+SELECT ?latitude
 WHERE {
-  ?subject wgs84_pos:lat ?lat.
-  ?subject wgs84_pos:long ?long
+  ?subject wgs84_pos:lat ?latitude.
+  ?subject wgs84_pos:long ?longitude
 }
 """
 [[attributes]]
 # long
 sparql = """
 PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
-SELECT ?long
+SELECT ?longitude
 WHERE {
-  ?subject wgs84_pos:lat ?lat.
-  ?subject wgs84_pos:long ?long
+  ?subject wgs84_pos:lat ?latitude.
+  ?subject wgs84_pos:long ?longitude
 }
 """
 [[attributes]]
