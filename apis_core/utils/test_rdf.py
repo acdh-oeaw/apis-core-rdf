@@ -32,9 +32,9 @@ class RdfTest(TestCase):
     def test_get_definition_from_dict_place_from_geonames(self):
         achensee = {
             "kind": "https://www.geonames.org/ontology#P.PPL",
-            "lat": "47.5",
-            "long": "11.7",
-            "name": "Achensee",
+            "latitude": "47.5",
+            "longitude": "11.7",
+            "label": "Achensee",
             "parent": "https://sws.geonames.org/2782113/",
         }
         # https://www.geonames.org/2783029/achensee.html

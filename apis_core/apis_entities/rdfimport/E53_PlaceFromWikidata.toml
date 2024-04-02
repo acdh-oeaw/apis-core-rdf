@@ -1,0 +1,38 @@
+####################################################
+# Create an E53_Place from a wikidata RDF endpoint #
+####################################################
+superclass = "apis_core.apis_entities.abc.E53_Place"
+regex = "http://www.wikidata.org.*"
+[[attributes]]
+# name
+sparql = """
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX schema: <http://schema.org/>
+SELECT ?label
+WHERE {
+  ?something schema:about ?subject .
+  ?subject rdfs:label ?label .
+  OPTIONAL { ?subject wdt:P1448/rdfs:label ?official_label }
+  BIND(COALESCE(?official_label, ?label) AS ?label)
+}
+"""
+[[attributes]]
+# longitude
+sparql = '''
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT ?longitude
+WHERE {
+  ?subject wdt:P625 ?geo1 .
+  BIND(REPLACE(str(?geo1), "Point\\((\\d+\\.\\d+).*$", "$1") as ?longitude)
+  }
+'''
+[[attributes]]
+# latitude
+sparql = '''
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT ?latitude
+WHERE {
+  ?subject wdt:P625 ?geo1 .
+  BIND(REPLACE(str(?geo1), "Point\\((\\d+\\.\\d+) (\\d+\\.\\d+).*$", "$2") as ?latitude)
+  }
+'''
