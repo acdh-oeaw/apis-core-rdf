@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
+from apis_core.generic.helpers import permission_fullname
 
 
 class GenericModel:
@@ -24,3 +25,15 @@ class GenericModel:
     def get_delete_url(self):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:delete", args=[ct, self.id])
+
+    @classmethod
+    def get_change_permission(self):
+        return permission_fullname("change", self)
+
+    @classmethod
+    def get_add_permission(self):
+        return permission_fullname("add", self)
+
+    @classmethod
+    def get_delete_permission(self):
+        return permission_fullname("delete", self)
