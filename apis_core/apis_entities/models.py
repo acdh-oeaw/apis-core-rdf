@@ -97,6 +97,13 @@ class AbstractEntity(RootObject):
             kwargs={"contenttype": entity, "pk": self.id},
         )
 
+    def get_merge_url(self):
+        entity = self.__class__.__name__.lower()
+        return reverse(
+            "apis_core:apis_entities:generic_entities_merge_view",
+            kwargs={"contenttype": entity, "pk": self.id},
+        )
+
     def merge_charfield(self, other, field):
         res = getattr(self, field.name)
         if not field.choices:
