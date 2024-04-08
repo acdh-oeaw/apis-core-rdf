@@ -92,6 +92,7 @@
   <h1>Source code for apis_core.generic.abc</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">permission_fullname</span>
 
 
 <div class="viewcode-block" id="GenericModel">
@@ -132,6 +133,27 @@
     <span class="k">def</span> <span class="nf">get_delete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:delete&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.get_change_permission">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_change_permission">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_change_permission</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">permission_fullname</span><span class="p">(</span><span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.get_add_permission">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_add_permission">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_add_permission</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">permission_fullname</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.get_delete_permission">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_delete_permission">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_delete_permission</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">permission_fullname</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
