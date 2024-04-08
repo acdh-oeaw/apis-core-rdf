@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.17.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.16.0...v0.17.0) (2024-04-08)
+
+
+### Features
+
+* **apis_entities:** add method for retrieving merge url of instance ([e4c0cd9](https://github.com/acdh-oeaw/apis-core-rdf/commit/e4c0cd9d03ed71949074e54ac7e63a383e2ea8cf))
+* **apis_entities:** import improvements for E53_Place imports ([bffebc7](https://github.com/acdh-oeaw/apis-core-rdf/commit/bffebc700ffd7b59d64b506f0502aa88d1ad9653))
+* **generic:** add methods for retrieving permssion names ([0a48a72](https://github.com/acdh-oeaw/apis-core-rdf/commit/0a48a72cf64b7d8aee41581c6bcb828788b6d737))
+* **history:** add new history plugin ([1c8550d](https://github.com/acdh-oeaw/apis-core-rdf/commit/1c8550d42ec6bcdd0d7defe4c1303491a5c6f92c)), closes [#340](https://github.com/acdh-oeaw/apis-core-rdf/issues/340) [#242](https://github.com/acdh-oeaw/apis-core-rdf/issues/242)
+
+
+### Bug Fixes
+
+* **apis_entities:** replace custom permission name logic ([3ff23cb](https://github.com/acdh-oeaw/apis-core-rdf/commit/3ff23cba1322ddb217692e7d621d276a297b2658))
+* **core:** fix css for select2 autocompletes ([805e336](https://github.com/acdh-oeaw/apis-core-rdf/commit/805e3360fb27cfdebf25ff79afa35c25fee267c4)), closes [#330](https://github.com/acdh-oeaw/apis-core-rdf/issues/330)
+* **generic:** let the importer give more meaningfull error messages ([f036445](https://github.com/acdh-oeaw/apis-core-rdf/commit/f0364453f8a9ebe1d069cf6498db5d59770e7fb4))
+* **generic:** move permission check to individual rows ([d3eb810](https://github.com/acdh-oeaw/apis-core-rdf/commit/d3eb810ad535bab3aad9bb6ba8f133765fe5a2f1))
+
+
+### Documentation
+
+* **history:** add basic doc for new history plugin ([f3ee6c8](https://github.com/acdh-oeaw/apis-core-rdf/commit/f3ee6c8bad8524a27525eb4c9d578d0bf47ae525))
+
 ## [0.16.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.15.2...v0.16.0) (2024-03-27)
 
 
