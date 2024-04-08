@@ -87,6 +87,12 @@ class Property(RootObject):
         self.name_forward = unicodedata.normalize("NFC", str(self.name_forward))
         self.name_reverse = unicodedata.normalize("NFC", str(self.name_reverse))
 
+        if (update_fields := kwargs.get("update_fields")) is not None:
+            if "name_forward" in update_fields and "name_reverse" not in update_fields:
+                modified_update_fields = set(update_fields)
+                modified_update_fields.add("name_reverse")
+                kwargs["update_fields"] = modified_update_fields
+
         super(Property, self).save(*args, **kwargs)
         return self
 
