@@ -168,7 +168,6 @@ class NetJsonNodeSerializer(serializers.BaseSerializer):
             "data": dict(),
         }
         r["data"]["uri"] = [x.uri for x in obj.uri_set.all()]
-        r["data"]["collections"] = [x.name for x in obj.collection.all()]
         r["data"]["notes"] = obj.notes
         r["data"]["references"] = obj.references
         r["data"]["start_date"] = obj.start_date_written

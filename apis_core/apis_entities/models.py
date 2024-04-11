@@ -174,12 +174,6 @@ class AbstractEntity(RootObject):
             e_b = type(ent).__name__
             if e_a != e_b:
                 continue
-            # TODO: if collections are removed, remove this as well
-            if hasattr(ent, "collection"):
-                col_list = list(self.collection.all())
-                for col2 in ent.collection.all():
-                    if col2 not in col_list:
-                        self.collection.add(col2)
             for f in ent._meta.local_many_to_many:
                 if not f.name.endswith("_set"):
                     sl = list(getattr(self, f.name).all())

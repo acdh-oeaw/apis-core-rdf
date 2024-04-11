@@ -12,11 +12,6 @@ if base_uri.endswith("/"):
     base_uri = base_uri[:-1]
 
 
-class CollectionSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-
-
 class VocabsSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
@@ -123,8 +118,6 @@ class EntitySerializer(serializers.Serializer):
         for f in inst._meta.many_to_many:
             if f.name.endswith("relationtype_set"):
                 continue
-            elif f.name == "collection":
-                self.fields["collection"] = CollectionSerializer(many=True)
         self.fields["entity_type"] = serializers.SerializerMethodField(
             method_name="add_entity_type"
         )

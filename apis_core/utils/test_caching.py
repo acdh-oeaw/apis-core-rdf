@@ -4,7 +4,6 @@ from apis_core.utils import caching
 
 all_class_modules_and_names = {
     "apis_metainfo": [
-        "Collection",
         "RootObject",
         "Uri",
     ],

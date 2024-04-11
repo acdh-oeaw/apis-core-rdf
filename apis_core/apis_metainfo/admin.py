@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .models import Collection, Uri
+from .models import Uri
 
-admin.site.register(Collection)
 admin.site.register(Uri)
