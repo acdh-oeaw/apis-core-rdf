@@ -5,6 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from dal import autocomplete
 from apis_core.generic.forms.fields import ModelImportChoiceField
+from apis_core.generic.abc import GenericModel
 
 
 class GenericImportForm(forms.Form):
@@ -85,8 +86,9 @@ class GenericModelForm(forms.ModelForm):
                 ct = ContentType.objects.get_for_model(
                     self.fields[field]._queryset.model
                 )
-                url = reverse("apis_core:generic:autocomplete", args=[ct])
-                self.fields[field].widget = override_fieldtypes[clsname](
-                    url, attrs={"data-html": True}
-                )
-                self.fields[field].widget.choices = self.fields[field].choices
+                if issubclass(ct.model_class(), GenericModel):
+                    url = reverse("apis_core:generic:autocomplete", args=[ct])
+                    self.fields[field].widget = override_fieldtypes[clsname](
+                        url, attrs={"data-html": True}
+                    )
+                    self.fields[field].widget.choices = self.fields[field].choices
