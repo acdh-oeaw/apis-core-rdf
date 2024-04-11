@@ -2,6 +2,8 @@ from operator import itemgetter
 from django import template
 from apis_core.utils import caching
 from apis_core.utils.helpers import triple_sidebar
+from django.contrib.contenttypes.models import ContentType
+from apis_core.apis_entities.models import AbstractEntity
 
 register = template.Library()
 
@@ -27,6 +29,26 @@ def entities_list_links():
     entities_links.sort(key=itemgetter(1))
 
     return entities_links
+
+
+def is_entity(content_type: ContentType):
+    model_class = content_type.model_class()
+    return model_class is not None and issubclass(model_class, AbstractEntity)
+
+
+@register.simple_tag
+def entities_content_types():
+    """
+    Retrieve all models which inherit from AbstractEntity class
+    and return their ContentType.
+    """
+    entities = list(
+        filter(
+            lambda content_type: is_entity(content_type),
+            ContentType.objects.all(),
+        )
+    )
+    return entities
 
 
 @register.simple_tag(takes_context=True)
