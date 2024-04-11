@@ -166,7 +166,7 @@ def triple_sidebar(pk: int, entity_name: str, request, detail=True):
         )
 
         prefix = f"{other_entity_class_name}"
-        title_card = prefix
+        title_card = entity_class._meta.verbose_name
         tb_object = table_class(data=triples_related_by_entity, prefix=prefix)
         tb_object_open = request.GET.get(prefix + "page", None)
         entity_settings = get_entity_settings_by_modelname(entity_class.__name__)
