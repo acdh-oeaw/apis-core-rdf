@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.fields.related import ForeignKey, ManyToManyField
@@ -76,35 +75,6 @@ class RootObject(GenericModel, models.Model):
         return duplicate
 
     duplicate.alters_data = True
-
-
-class Collection(GenericModel, models.Model):
-    """Allows to group entities and relation."""
-
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    groups_allowed = models.ManyToManyField(Group)
-    parent_class = models.ForeignKey(
-        "self", blank=True, null=True, on_delete=models.CASCADE
-    )
-    published = models.BooleanField(default=False)
-
-    @classmethod
-    def from_db(cls, db, field_names, values):
-        instance = super().from_db(db, field_names, values)
-        instance._loaded_values = dict(zip(field_names, values))
-        return instance
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if hasattr(self, "_loaded_values"):
-            if self.published != self._loaded_values["published"]:
-                for ent in self.tempentityclass_set.all():
-                    ent.published = self.published
-                    ent.save()
-        super().save(*args, **kwargs)
 
 
 class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):

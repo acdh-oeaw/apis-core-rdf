@@ -10,7 +10,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import FieldError
 from django.db.models import Q
 
-from apis_core.apis_metainfo.models import Collection
 from apis_core.utils.caching import get_autocomplete_property_choices
 from apis_core.utils.settings import get_entity_settings_by_modelname
 
@@ -76,10 +75,7 @@ class GenericNetworkEntitiesAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         entity = self.kwargs["entity"]
         q = self.q
-        if q.startswith("cl:"):
-            res = Collection.objects.filter(name__icontains=q[3:])
-            results = [{"id": "cl:" + str(x.pk), "text": x.name} for x in res]
-        elif q.startswith("reg:"):
+        if q.startswith("reg:"):
             results = []
             if entity.lower() == "person":
                 filen = "reg_persons.json"
