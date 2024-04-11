@@ -18,3 +18,8 @@ def page_range(paginator, number):
 @register.filter
 def opts(obj):
     return obj._meta
+
+
+@register.filter
+def model_meta(content_type, field):
+    return getattr(content_type.model_class()._meta, field)
