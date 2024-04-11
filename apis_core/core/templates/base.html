@@ -101,10 +101,10 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                       {% block entities-menu-items %}
-                        {% entities_list_links as entities_links %}
-                        {% for ent in entities_links %}
+                        {% entities_content_types as entities %}
+                        {% for content_type in entities %}
                           <a class="dropdown-item"
-                             href="{% url 'apis:apis_entities:generic_entities_list' ent.0 %}">{{ ent.1 }}</a>
+                             href="{% url 'apis:generic:list' content_type %}">{{ content_type|model_meta:"verbose_name_plural" }}</a>
                         {% endfor %}
                       {% endblock entities-menu-items %}
 
