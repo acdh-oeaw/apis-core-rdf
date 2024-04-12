@@ -275,7 +275,7 @@
         <span class="p">)</span>
 
         <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">other_entity_class_name</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="n">title_card</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="n">title_card</span> <span class="o">=</span> <span class="n">entity_class</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">verbose_name</span>
         <span class="n">tb_object</span> <span class="o">=</span> <span class="n">table_class</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">triples_related_by_entity</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
         <span class="n">tb_object_open</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;page&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">entity_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
