@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.17.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.17.0...v0.17.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* **core:** add a model_meta templatetag filter ([8b334c7](https://github.com/acdh-oeaw/apis-core-rdf/commit/8b334c75440e9b7da84cb90ccb2f8472c909b378))
+* **generic:** use dal widget only for models with autocomplete endpoint ([1de88f0](https://github.com/acdh-oeaw/apis-core-rdf/commit/1de88f05d74f95b93e476057f31cddfcb1cd05a2)), closes [#764](https://github.com/acdh-oeaw/apis-core-rdf/issues/764)
+* **relations:** Property fields unicode normalization ([f1dd3db](https://github.com/acdh-oeaw/apis-core-rdf/commit/f1dd3db7f9310de1c457e96f3fae00578e83e663))
+* **relations:** save with update_fields ([c4fe0e3](https://github.com/acdh-oeaw/apis-core-rdf/commit/c4fe0e3949cb1d062fa541b3b01c5f28848537f5))
+* **utils:** use verbose_name for relation card title ([7df428b](https://github.com/acdh-oeaw/apis-core-rdf/commit/7df428b95d08a0c37cf34103828e2cd413f62b7a))
+
 ## [0.17.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.16.0...v0.17.0) (2024-04-08)
 
 
