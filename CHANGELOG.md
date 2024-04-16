@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.17.1...v0.17.2) (2024-04-16)
+
+
+### Bug Fixes
+
+* **history:** sort history data directly in model, not in templatetag ([ace42ef](https://github.com/acdh-oeaw/apis-core-rdf/commit/ace42ef04a3a9379ba26e56ceb22862b88e7dd6f)), closes [#784](https://github.com/acdh-oeaw/apis-core-rdf/issues/784)
+
 ## [0.17.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.17.0...v0.17.1) (2024-04-15)
 
 
