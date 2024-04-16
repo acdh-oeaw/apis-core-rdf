@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime
 from django.views.generic.detail import SingleObjectMixin
+from django.utils import timezone
 
 
 def convert_timestamps(data):
@@ -51,7 +52,7 @@ def create_new_version(request, contenttype, pk):
         )
     ]
     history_latest.history_id = None
-    history_latest.history_date = datetime.now()
+    history_latest.history_date = timezone.now()
     history_latest.save()
     if latest_version_list:
         latest_version = max(latest_version_list)
