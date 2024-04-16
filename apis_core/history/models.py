@@ -11,6 +11,7 @@ from simple_history import utils
 from django.db.models import UniqueConstraint, Q
 from django.db.models.functions import Lower
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 
 
 class APISHistoricalRecords(HistoricalRecords, GenericModel):
@@ -122,7 +123,7 @@ class VersionMixin(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         if self._history_date is None:
-            self._history_date = datetime.now()
+            self._history_date = timezone.now()
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
