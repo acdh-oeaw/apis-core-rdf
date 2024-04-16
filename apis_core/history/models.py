@@ -160,6 +160,7 @@ class VersionMixin(models.Model):
             data.append(entry)
             prev_entry = entry
         data += [x for x in self.history.all()]
+        data = sorted(data, key=lambda x: x.history_date, reverse=True)
         return data
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
