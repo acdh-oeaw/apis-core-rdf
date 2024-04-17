@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.17.2...v0.17.3) (2024-04-17)
+
+
+### Bug Fixes
+
+* **history:** make history timezone aware ([c157479](https://github.com/acdh-oeaw/apis-core-rdf/commit/c157479fd84d1cd8d336b527d03cc107582fdc54)), closes [#789](https://github.com/acdh-oeaw/apis-core-rdf/issues/789)
+
 ## [0.17.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.17.1...v0.17.2) (2024-04-16)
 
 
