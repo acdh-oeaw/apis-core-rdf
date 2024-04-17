@@ -1,0 +1,9 @@
+{% if table %}
+  {% load render_table from django_tables2 %}
+  {% render_table table %}
+{% endif %}
+
+{% if form %}
+  {% load crispy_forms_tags %}
+  {% crispy form %}
+{% endif %}

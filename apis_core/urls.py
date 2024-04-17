@@ -91,6 +91,11 @@ urlpatterns = [
     path("api/dumpdata", Dumpdata.as_view()),
     path("", include("apis_core.generic.urls", namespace="generic")),
 ]
+
+from apis_core.relations.urls import urlpatterns as relurlpatterns
+
+urlpatterns = urlpatterns + relurlpatterns
+
 if "apis_core.history" in settings.INSTALLED_APPS:
     urlpatterns.append(
         path("history/", include("apis_core.history.urls", namespace="history"))
