@@ -3,26 +3,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 from django.contrib.contenttypes.models import ContentType
-from datetime import datetime
 from django.views.generic.detail import SingleObjectMixin
 from django.utils import timezone
-
-
-def convert_timestamps(data):
-    for key, value in data.items():
-        if isinstance(value, str):
-            try:
-                timestamp = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
-                data[key] = timestamp.strftime("%d.%m.%Y %H:%M")
-            except ValueError:
-                continue
-        elif isinstance(value, dict):
-            data[key] = convert_timestamps(value)
-        elif isinstance(value, list):
-            for i in range(len(value)):
-                if isinstance(value[i], dict):
-                    value[i] = convert_timestamps(value[i])
-    return data
 
 
 class ChangeHistoryView(GenericModelMixin, SingleObjectMixin, TemplateView):
@@ -35,13 +17,6 @@ class ChangeHistoryView(GenericModelMixin, SingleObjectMixin, TemplateView):
 
 def create_new_version(request, contenttype, pk):
     """Gets the version of the history instance and creates a new version."""
-    historytripel_ids = request.GET.getlist("historytripel_ids")
-    for ent in historytripel_ids:
-        if "," in ent:
-            historytripel_ids.remove(ent)
-            ent = ent.split(",")
-            historytripel_ids += ent
-    historytripel_ids = list(set(historytripel_ids))
     model = contenttype.model_class()
     instance = model.objects.get(id=pk)
     history_latest = instance.history.latest()
