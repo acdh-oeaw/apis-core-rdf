@@ -1,18 +1,13 @@
 from apis_core.generic.views import GenericModelMixin
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import TemplateView
 from django.contrib.contenttypes.models import ContentType
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import DetailView
 from django.utils import timezone
 
 
-class ChangeHistoryView(GenericModelMixin, SingleObjectMixin, TemplateView):
+class ChangeHistoryView(GenericModelMixin, DetailView):
     template_name = "history/change_history.html"
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().get(request, *args, **kwargs)
 
 
 def create_new_version(request, contenttype, pk):
