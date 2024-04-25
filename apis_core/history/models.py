@@ -100,6 +100,24 @@ class APISHistoryTableBase(models.Model, GenericModel):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:detail", args=[ct, self.history_id])
 
+    def get_diff(self, other_version=None):
+        if self.history_type == "-":
+            return None
+        version = other_version or self.prev_record
+        if version:
+            delta = self.diff_against(version)
+        else:
+            delta = self.diff_against(self.__class__())
+        changes = list(
+            filter(
+                lambda x: (x.new != "" or x.old is not None)
+                and x.field != "id"
+                and not x.field.endswith("_ptr"),
+                delta.changes,
+            )
+        )
+        return sorted(changes, key=lambda change: change.field)
+
 
 class VersionMixin(models.Model):
     history = APISHistoricalRecords(
