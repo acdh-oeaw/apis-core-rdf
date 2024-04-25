@@ -1,13 +1,25 @@
 from apis_core.generic.views import GenericModelMixin
+from apis_core.generic.helpers import module_paths, first_member_match
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic.detail import DetailView
 from django.utils import timezone
+from django_tables2 import SingleTableMixin
+from django_tables2.tables import table_factory
+from .tables import HistoryGenericTable
 
 
-class ChangeHistoryView(GenericModelMixin, DetailView):
+class ChangeHistoryView(GenericModelMixin, SingleTableMixin, DetailView):
     template_name = "history/change_history.html"
+
+    def get_table_class(self):
+        table_modules = module_paths(self.model, path="tables", suffix="HistoryTable")
+        table_class = first_member_match(table_modules, HistoryGenericTable)
+        return table_factory(self.model, table_class)
+
+    def get_table_data(self):
+        return self.get_object().get_history_data()
 
 
 def create_new_version(request, contenttype, pk):

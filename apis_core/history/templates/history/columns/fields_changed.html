@@ -1,0 +1,29 @@
+{% load apis_history_templatetags %}
+<details>
+  <summary>
+    {% for change in record.get_diff %}
+      {{ change.field }}
+
+      {% if not forloop.last %},{% endif %}
+
+    {% endfor %}
+  </summary>
+  <table class="table table-sm table-hover table-bordered difftable">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Old value</th>
+        <th>New value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for change in record.get_diff %}
+        <tr>
+          <th>{{ change.field }}</th>
+          <td>{{ change|get_diff_old }}</td>
+          <td>{{ change|get_diff_new }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</details>
