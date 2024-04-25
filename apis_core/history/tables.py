@@ -29,3 +29,26 @@ class APISHistoryTableBaseTable(tables.Table):
 
     class Meta:
         fields = ["history_id", "desc", "most_recent", "view"]
+
+
+class HistoryGenericTable(tables.Table):
+    model = tables.Column(empty_values=())
+    fields_changed = tables.Column(empty_values=())
+    instance = tables.Column(linkify=lambda record: record.get_absolute_url())
+    fields_changed = tables.TemplateColumn(
+        template_name="history/columns/fields_changed.html"
+    )
+
+    class Meta:
+        fields = [
+            "model",
+            "instance",
+            "tag",
+            "fields_changed",
+            "history_type",
+            "history_date",
+            "history_user",
+        ]
+
+    def render_model(self, record):
+        return record.instance.__class__.__name__
