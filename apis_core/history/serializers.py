@@ -59,19 +59,9 @@ class HistoryLogSerializer(serializers.Serializer):
     def get_diff(self, obj):
         if obj.history_type == "-":
             return None
-        if obj.prev_record is None:
-            diff = obj.diff_against(obj.__class__())
-        else:
-            diff = obj.diff_against(obj.prev_record)
         changed_fields = []
         changes = []
-        for change in diff.changes:
-            if (
-                (change.new == "" and change.old is None)
-                or change.field == "id"
-                or change.field.endswith("_ptr")
-            ):
-                continue
+        for change in obj.get_diff():
             changed_fields.append(change.field)
             changes.append(ModelChangeSerializer(change, obj).data)
         return {"changed_fields": changed_fields, "changes": changes}
