@@ -96,6 +96,10 @@ class APISHistoryTableBase(models.Model, GenericModel):
                 triple.save()
         self.save()
 
+    def get_absolute_url(self):
+        ct = ContentType.objects.get_for_model(self)
+        return reverse("apis_core:generic:detail", args=[ct, self.history_id])
+
 
 class VersionMixin(models.Model):
     history = APISHistoricalRecords(
