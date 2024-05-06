@@ -90,7 +90,8 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.utils.helpers</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span></span><span class="kn">import</span> <span class="nn">difflib</span>
+<span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
@@ -310,6 +311,53 @@
                 <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">importer</span><span class="o">.</span><span class="n">get_uri</span><span class="p">,</span> <span class="n">root_object</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">instance</span>
     <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_html_diff">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.helpers.get_html_diff">[docs]</a>
+<span class="k">def</span> <span class="nf">get_html_diff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">show_a</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_b</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shorten</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an colorized html represenation of the difference of two values a and b</span>
+<span class="sd">    If `show_a` is True, colorize deletions in `a`</span>
+<span class="sd">    If `show_b` is True, colorize insertions in `b`</span>
+<span class="sd">    The value of `shorten` defines if long parts of strings that contains no change should be shortened</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">style_remove</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;span class=&#39;diff-remove&#39;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&lt;/span&gt;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">style_insert</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;span class=&#39;diff-insert&#39;&gt;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&lt;/span&gt;&quot;</span>
+
+    <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">style_insert</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">if</span> <span class="n">show_b</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">elif</span> <span class="n">b</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">style_remove</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">if</span> <span class="n">show_a</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">codes</span> <span class="o">=</span> <span class="n">difflib</span><span class="o">.</span><span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">get_opcodes</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">opcode</span><span class="p">,</span> <span class="n">a_start</span><span class="p">,</span> <span class="n">a_end</span><span class="p">,</span> <span class="n">b_start</span><span class="p">,</span> <span class="n">b_end</span> <span class="ow">in</span> <span class="n">codes</span><span class="p">:</span>
+            <span class="k">match</span> <span class="n">opcode</span><span class="p">:</span>
+                <span class="k">case</span> <span class="s2">&quot;equal&quot;</span><span class="p">:</span>
+                    <span class="n">equal</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">a_start</span><span class="p">:</span><span class="n">a_end</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">shorten</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">equal</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">shorten</span><span class="p">:</span>
+                        <span class="n">equal</span> <span class="o">=</span> <span class="n">equal</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; ... &quot;</span> <span class="o">+</span> <span class="n">equal</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]</span>
+                    <span class="n">result</span> <span class="o">+=</span> <span class="n">equal</span>
+                <span class="k">case</span> <span class="s2">&quot;delete&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">show_a</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">+=</span> <span class="n">style_remove</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">a_start</span><span class="p">:</span><span class="n">a_end</span><span class="p">])</span>
+                <span class="k">case</span> <span class="s2">&quot;insert&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">show_b</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">+=</span> <span class="n">style_insert</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">b_start</span><span class="p">:</span><span class="n">b_end</span><span class="p">])</span>
+                <span class="k">case</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">show_b</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">+=</span> <span class="n">style_insert</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">b_start</span><span class="p">:</span><span class="n">b_end</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">show_a</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">+=</span> <span class="n">style_remove</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">a_start</span><span class="p">:</span><span class="n">a_end</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">result</span></div>
 
 </pre></div>
 
