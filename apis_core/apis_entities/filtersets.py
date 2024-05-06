@@ -1,8 +1,8 @@
 import django_filters
 from django.db import models
 from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
-from apis_core.utils.filtermethods import related_entity_name
 from apis_core.apis_relations.models import Property
+from apis_core.generic.helpers import generate_search_filter
 
 ABSTRACT_ENTITY_FILTERS_EXCLUDE = [
     "rootobject_ptr",
@@ -28,13 +28,18 @@ def related_property(queryset, name, value):
     return queryset
 
 
+def related_entity(queryset, name, value):
+    search_filter = generate_search_filter(queryset.model, value)
+    return queryset.filter(search_filter)
+
+
 class AbstractEntityFilterSetForm(GenericFilterSetForm):
     columns_exclude = ABSTRACT_ENTITY_FILTERS_EXCLUDE
 
 
 class AbstractEntityFilterSet(GenericFilterSet):
-    related_entity_name = django_filters.CharFilter(
-        method=related_entity_name, label="Related entity"
+    related_entity = django_filters.CharFilter(
+        method=related_entity, label="Related entity contains"
     )
     related_property = django_filters.ModelChoiceFilter(
         queryset=Property.objects.all().order_by("name_forward"),
