@@ -1,3 +1,4 @@
+import difflib
 import functools
 import importlib
 import inspect
@@ -198,3 +199,47 @@ def create_object_from_uri(uri: str, model: object) -> object:
                 uri = Uri.objects.create(uri=importer.get_uri, root_object=instance)
                 return instance
     return None
+
+
+def get_html_diff(a, b, show_a=True, show_b=True, shorten=0):
+    """
+    Create an colorized html represenation of the difference of two values a and b
+    If `show_a` is True, colorize deletions in `a`
+    If `show_b` is True, colorize insertions in `b`
+    The value of `shorten` defines if long parts of strings that contains no change should be shortened
+    """
+
+    def style_remove(text):
+        return f"<span class='diff-remove'>{text}</span>"
+
+    def style_insert(text):
+        return f"<span class='diff-insert'>{text}</span>"
+
+    if a in ["", None]:
+        result = style_insert(b) if show_b else ""
+    elif b in ["", None]:
+        result = style_remove(a) if show_a else ""
+    else:
+        result = ""
+        a = str(a)
+        b = str(b)
+        codes = difflib.SequenceMatcher(None, a, b).get_opcodes()
+        for opcode, a_start, a_end, b_start, b_end in codes:
+            match opcode:
+                case "equal":
+                    equal = a[a_start:a_end]
+                    if shorten and len(equal) > shorten:
+                        equal = equal[:5] + " ... " + equal[-10:]
+                    result += equal
+                case "delete":
+                    if show_a:
+                        result += style_remove(a[a_start:a_end])
+                case "insert":
+                    if show_b:
+                        result += style_insert(b[b_start:b_end])
+                case "replace":
+                    if show_b:
+                        result += style_insert(b[b_start:b_end])
+                    if show_a:
+                        result += style_remove(a[a_start:a_end])
+    return result
