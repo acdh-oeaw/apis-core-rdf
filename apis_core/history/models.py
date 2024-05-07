@@ -148,11 +148,6 @@ class VersionMixin(models.Model):
             self._history_date = timezone.now()
         return super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
-        if self._history_date is None:
-            self._history_date = datetime.now()
-        return super().delete(*args, **kwargs)
-
     def get_history_url(self):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:history:history", args=[ct, self.id])
