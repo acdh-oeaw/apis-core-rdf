@@ -133,6 +133,38 @@
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;history_id&quot;</span><span class="p">,</span> <span class="s2">&quot;desc&quot;</span><span class="p">,</span> <span class="s2">&quot;most_recent&quot;</span><span class="p">,</span> <span class="s2">&quot;view&quot;</span><span class="p">]</span></div>
 </div>
 
+
+
+<div class="viewcode-block" id="HistoryGenericTable">
+<a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.tables.HistoryGenericTable">[docs]</a>
+<span class="k">class</span> <span class="nc">HistoryGenericTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">empty_values</span><span class="o">=</span><span class="p">())</span>
+    <span class="n">fields_changed</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">empty_values</span><span class="o">=</span><span class="p">())</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">linkify</span><span class="o">=</span><span class="k">lambda</span> <span class="n">record</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">())</span>
+    <span class="n">fields_changed</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
+        <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;history/columns/fields_changed.html&quot;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="HistoryGenericTable.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.tables.HistoryGenericTable.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;instance&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tag&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fields_changed&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;history_type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;history_date&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;history_user&quot;</span><span class="p">,</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="HistoryGenericTable.render_model">
+<a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.tables.HistoryGenericTable.render_model">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span></div>
+</div>
+
 </pre></div>
 
            </div>
