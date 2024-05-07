@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.18.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.17.3...v0.18.0) (2024-05-07)
+
+
+### Features
+
+* **utils:** introduce `get_html_diff` helper ([4af4a60](https://github.com/acdh-oeaw/apis-core-rdf/commit/4af4a60c468a77b29f4deaacb15313d8566febbf))
+
+
+### Bug Fixes
+
+* **apis_entities:** fix wording of history links ([fd8f6d9](https://github.com/acdh-oeaw/apis-core-rdf/commit/fd8f6d994751ee72db9e64d154fb514d94b8d4a1))
+* **apis_entities:** use generic search filter for related entity search ([aa8515f](https://github.com/acdh-oeaw/apis-core-rdf/commit/aa8515fee79786bcaf7894588cfe40bd2d6cef0f))
+* **apis_relations:** catch missing RootObject in relation representation ([b9f277c](https://github.com/acdh-oeaw/apis-core-rdf/commit/b9f277ce779e523469942bed32bd4bf7557504d8))
+* **history:** add a get_absolute_url method to APISHistoryTableBase ([dc8eec5](https://github.com/acdh-oeaw/apis-core-rdf/commit/dc8eec5d1e8bb5ae0315d47c0a5de22a780229c7))
+* **history:** rename `change_history` to `history` ([592de1d](https://github.com/acdh-oeaw/apis-core-rdf/commit/592de1d454a77f0530ac2933e4a76cfbcfa9578d)), closes [#802](https://github.com/acdh-oeaw/apis-core-rdf/issues/802)
+* **history:** use signal instead of method for setting timestamp ([ca5bf94](https://github.com/acdh-oeaw/apis-core-rdf/commit/ca5bf940d0cf9959fde7b5dd3b00424b31bffa39)), closes [#814](https://github.com/acdh-oeaw/apis-core-rdf/issues/814)
+
 ## [0.17.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.17.2...v0.17.3) (2024-04-17)
 
 
