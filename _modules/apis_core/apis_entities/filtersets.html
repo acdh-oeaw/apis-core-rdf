@@ -93,8 +93,8 @@
 <span></span><span class="kn">import</span> <span class="nn">django_filters</span>
 <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span><span class="p">,</span> <span class="n">GenericFilterSetForm</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.filtermethods</span> <span class="kn">import</span> <span class="n">related_entity_name</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">generate_search_filter</span>
 
 <span class="n">ABSTRACT_ENTITY_FILTERS_EXCLUDE</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;rootobject_ptr&quot;</span><span class="p">,</span>
@@ -123,6 +123,14 @@
 
 
 
+<div class="viewcode-block" id="related_entity">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.related_entity">[docs]</a>
+<span class="k">def</span> <span class="nf">related_entity</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="n">search_filter</span> <span class="o">=</span> <span class="n">generate_search_filter</span><span class="p">(</span><span class="n">queryset</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">search_filter</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="AbstractEntityFilterSetForm">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSetForm">[docs]</a>
 <span class="k">class</span> <span class="nc">AbstractEntityFilterSetForm</span><span class="p">(</span><span class="n">GenericFilterSetForm</span><span class="p">):</span>
@@ -133,8 +141,8 @@
 <div class="viewcode-block" id="AbstractEntityFilterSet">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSet">[docs]</a>
 <span class="k">class</span> <span class="nc">AbstractEntityFilterSet</span><span class="p">(</span><span class="n">GenericFilterSet</span><span class="p">):</span>
-    <span class="n">related_entity_name</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="n">related_entity_name</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related entity&quot;</span>
+    <span class="n">related_entity</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">(</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">related_entity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related entity contains&quot;</span>
     <span class="p">)</span>
     <span class="n">related_property</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">ModelChoiceFilter</span><span class="p">(</span>
         <span class="n">queryset</span><span class="o">=</span><span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name_forward&quot;</span><span class="p">),</span>
