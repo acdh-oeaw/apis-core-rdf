@@ -256,9 +256,9 @@ class Triple(models.Model, GenericModel):
     objects_inheritance = InheritanceManager()
 
     def __repr__(self):
-        if self.subj is not None or self.obj is not None or self.prop is not None:
+        try:
             return f"<{self.__class__.__name__}: subj: {self.subj}, prop: {self.prop}, obj: {self.obj}>"
-        else:
+        except RootObject.DoesNotExist:
             return f"<{self.__class__.__name__}: None>"
 
     def __str__(self):
