@@ -155,7 +155,7 @@ class VersionMixin(models.Model):
 
     def get_history_url(self):
         ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:history:change_history", args=[ct, self.id])
+        return reverse("apis_core:history:history", args=[ct, self.id])
 
     def get_create_version_url(self):
         ct = ContentType.objects.get_for_model(self)

@@ -11,9 +11,9 @@ app_name = "history"
 
 urlpatterns = [
     path(
-        "change_history/<contenttype:contenttype>/<int:pk>/",
-        views.ChangeHistoryView.as_view(),
-        name="change_history",
+        "<contenttype:contenttype>/<int:pk>/history",
+        views.HistoryView.as_view(),
+        name="history",
     ),
     path(
         "add_new_version/<contenttype:contenttype>/<int:pk>/",

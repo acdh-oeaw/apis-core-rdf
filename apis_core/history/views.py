@@ -10,8 +10,8 @@ from django_tables2.tables import table_factory
 from .tables import HistoryGenericTable
 
 
-class ChangeHistoryView(GenericModelMixin, SingleTableMixin, DetailView):
-    template_name = "history/change_history.html"
+class HistoryView(GenericModelMixin, SingleTableMixin, DetailView):
+    template_name = "history/history.html"
 
     def get_table_class(self):
         table_modules = module_paths(self.model, path="tables", suffix="HistoryTable")
