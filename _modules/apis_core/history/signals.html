@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.history.apps &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.history.signals &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -80,7 +80,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.history.apps</li>
+      <li class="breadcrumb-item active">apis_core.history.signals</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -89,20 +89,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.history.apps</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">AppConfig</span>
+  <h1>Source code for apis_core.history.signals</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">pre_delete</span>
+<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
 
 
-<div class="viewcode-block" id="HistoryConfig">
-<a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.apps.HistoryConfig">[docs]</a>
-<span class="k">class</span> <span class="nc">HistoryConfig</span><span class="p">(</span><span class="n">AppConfig</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;apis_core.history&quot;</span>
-
-<div class="viewcode-block" id="HistoryConfig.ready">
-<a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.apps.HistoryConfig.ready">[docs]</a>
-    <span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">signals</span>  <span class="c1"># noqa: F401</span></div>
-</div>
+<div class="viewcode-block" id="set_history_date">
+<a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.signals.set_history_date">[docs]</a>
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">pre_delete</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">set_history_date</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">using</span><span class="p">,</span> <span class="n">origin</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s2">&quot;_history_date&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">_history_date</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span></div>
 
 </pre></div>
 

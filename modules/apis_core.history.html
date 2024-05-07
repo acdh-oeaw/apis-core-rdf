@@ -193,6 +193,12 @@ querysets depending on the incoming request.</p>
 <span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'apis_core.history'</span></em><a class="headerlink" href="#apis_core.history.apps.HistoryConfig.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.history.apps.HistoryConfig.ready">
+<span class="sig-name descname"><span class="pre">ready</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/history/apps.html#HistoryConfig.ready"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.history.apps.HistoryConfig.ready" title="Link to this definition"></a></dt>
+<dd><p>Override this method in subclasses to run code when Django starts.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -280,11 +286,6 @@ object the first time, the query is executed.</p>
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.history.models.VersionMixin.delete">
-<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/apis_core/history/models.html#VersionMixin.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.history.models.VersionMixin.delete" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.history.models.VersionMixin.get_create_version_url">
@@ -386,6 +387,14 @@ so that we can present a helpful representation of the object.</p>
 <dd></dd></dl>
 
 </dd></dl>
+
+</section>
+<section id="module-apis_core.history.signals">
+<span id="apis-core-history-signals-module"></span><h2>apis_core.history.signals module<a class="headerlink" href="#module-apis_core.history.signals" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.history.signals.set_history_date">
+<span class="sig-prename descclassname"><span class="pre">apis_core.history.signals.</span></span><span class="sig-name descname"><span class="pre">set_history_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">using</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/history/signals.html#set_history_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.history.signals.set_history_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-apis_core.history.tables">
