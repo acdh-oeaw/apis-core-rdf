@@ -104,7 +104,7 @@
                         {% entities_content_types as entities %}
                         {% for content_type in entities %}
                           <a class="dropdown-item"
-                             href="{% url 'apis:generic:list' content_type %}">{{ content_type|model_meta:"verbose_name_plural" }}</a>
+                             href="{% url 'apis:generic:list' content_type %}">{{ content_type|model_meta:"verbose_name_plural"|capfirst }}</a>
                         {% endfor %}
                       {% endblock entities-menu-items %}
 
