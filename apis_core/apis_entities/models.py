@@ -151,6 +151,8 @@ class AbstractEntity(RootObject):
         self.save()
 
     def merge_with(self, entities):
+        if self in entities:
+            entities.remove(self)
         origin = self.__class__
         signals.pre_merge_with.send(sender=origin, instance=self, entities=entities)
 
