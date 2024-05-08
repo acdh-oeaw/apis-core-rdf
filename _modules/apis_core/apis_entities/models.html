@@ -289,6 +289,8 @@
 <div class="viewcode-block" id="AbstractEntity.merge_with">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_with">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="n">entities</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
         <span class="n">signals</span><span class="o">.</span><span class="n">pre_merge_with</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="n">entities</span><span class="p">)</span>
 
