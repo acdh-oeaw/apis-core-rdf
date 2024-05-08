@@ -136,7 +136,6 @@
 
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_type_self_str</span><span class="p">,</span> <span class="n">entity_type_other_str</span><span class="p">):</span>
-
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
@@ -199,19 +198,16 @@
         <span class="c1"># triple and the property name_forward or name_reverse are loaded correctly here.</span>
 
         <span class="k">if</span> <span class="n">property_direction</span> <span class="o">==</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_SUBJ_OTHER_OBJ_STR</span><span class="p">:</span>
-
             <span class="n">triple_subj</span> <span class="o">=</span> <span class="n">entity_instance_self</span>
             <span class="n">triple_obj</span> <span class="o">=</span> <span class="n">entity_instance_other</span>
             <span class="n">property_direction_name</span> <span class="o">=</span> <span class="n">property_instance</span><span class="o">.</span><span class="n">name_forward</span>
 
         <span class="k">elif</span> <span class="n">property_direction</span> <span class="o">==</span> <span class="n">PropertyAutocomplete</span><span class="o">.</span><span class="n">SELF_OBJ_OTHER_SUBJ_STR</span><span class="p">:</span>
-
             <span class="n">triple_subj</span> <span class="o">=</span> <span class="n">entity_instance_other</span>
             <span class="n">triple_obj</span> <span class="o">=</span> <span class="n">entity_instance_self</span>
             <span class="n">property_direction_name</span> <span class="o">=</span> <span class="n">property_instance</span><span class="o">.</span><span class="n">name_reverse</span>
 
         <span class="k">else</span><span class="p">:</span>
-
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No valid property direction given.&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">triple_subj</span>
@@ -271,7 +267,6 @@
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms.GenericTripleForm.save">[docs]</a>
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">pk</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
                 <span class="n">subj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span><span class="p">,</span>
                 <span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span><span class="p">,</span>
@@ -279,7 +274,6 @@
             <span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">subj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">prop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;prop&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>

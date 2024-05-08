@@ -348,7 +348,6 @@
                 <span class="n">select_related</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="k">class</span> <span class="nc">TemplateSerializer</span><span class="p">(</span><span class="n">GenericHyperlinkedModelSerializer</span><span class="p">):</span>
-
             <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ReadOnlyField</span><span class="p">()</span>
             <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_API_ID_WRITABLE&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
                 <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
@@ -360,7 +359,6 @@
             <span class="n">_app_label</span> <span class="o">=</span> <span class="n">app_label</span>
 
             <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-
                 <span class="n">model</span> <span class="o">=</span> <span class="n">entity</span>
                 <span class="n">exclude</span> <span class="o">=</span> <span class="n">exclude_lst_fin</span>
 
@@ -390,9 +388,9 @@
                             <span class="n">many</span><span class="o">=</span><span class="n">ck_many</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span>
                         <span class="p">)</span>
 
-        <span class="n">TemplateSerializer</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">TemplateSerializer</span><span class="o">.</span><span class="vm">__qualname__</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entity_str</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">Serializer&quot;</span>
+        <span class="n">TemplateSerializer</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">TemplateSerializer</span><span class="o">.</span><span class="vm">__qualname__</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entity_str</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">Serializer&quot;</span>
+        <span class="p">)</span>
 
         <span class="k">class</span> <span class="nc">TemplateSerializerRetrieve</span><span class="p">(</span><span class="n">TemplateSerializer</span><span class="p">):</span>
             <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -463,9 +461,9 @@
                         <span class="s2">&quot;IntegerField&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;AutoField&quot;</span><span class="p">,</span>
                     <span class="p">]:</span>
-                        <span class="n">filter_fields</span><span class="p">[</span>
-                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">f2</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
-                        <span class="p">]</span> <span class="o">=</span> <span class="n">allowed_fields_filter</span><span class="p">[</span><span class="n">f2</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
+                        <span class="n">filter_fields</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">f2</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">allowed_fields_filter</span><span class="p">[</span><span class="n">f2</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
+                        <span class="p">)</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">allowed_fields_filter</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">filter_fields</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">allowed_fields_filter</span><span class="p">[</span>
@@ -481,14 +479,12 @@
                         <span class="n">filter_fields</span><span class="p">[</span><span class="n">f1</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">f1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">class</span> <span class="nc">MetaFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
             <span class="n">model</span> <span class="o">=</span> <span class="n">entity</span>
             <span class="n">fields</span> <span class="o">=</span> <span class="n">filter_fields</span>
 
         <span class="n">filterset_dict</span><span class="p">[</span><span class="s2">&quot;Meta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MetaFilter</span>
 
         <span class="k">class</span> <span class="nc">TemplateViewSet</span><span class="p">(</span><span class="n">ListViewObjectFilterMixin</span><span class="p">,</span> <span class="n">viewsets</span><span class="o">.</span><span class="n">ModelViewSet</span><span class="p">):</span>
-
             <span class="n">_select_related</span> <span class="o">=</span> <span class="n">select_related</span>
             <span class="n">_prefetch_rel</span> <span class="o">=</span> <span class="n">prefetch_rel</span>
             <span class="n">pagination_class</span> <span class="o">=</span> <span class="n">CustomPagination</span>
@@ -548,9 +544,9 @@
             <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
                 <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="n">TemplateViewSet</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">TemplateViewSet</span><span class="o">.</span><span class="vm">__qualname__</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Generic</span><span class="si">{</span><span class="n">entity_str</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">ViewSet&quot;</span>
+        <span class="n">TemplateViewSet</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">TemplateViewSet</span><span class="o">.</span><span class="vm">__qualname__</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Generic</span><span class="si">{</span><span class="n">entity_str</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">ViewSet&quot;</span>
+        <span class="p">)</span>
 
         <span class="n">serializers_dict</span><span class="p">[</span><span class="n">TemplateSerializer</span><span class="p">]</span> <span class="o">=</span> <span class="n">TemplateSerializer</span>
         <span class="n">views</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entity_str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TemplateViewSet</span></div>
