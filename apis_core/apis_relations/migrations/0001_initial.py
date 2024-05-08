@@ -7,7 +7,6 @@ import apis_core.apis_relations.models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

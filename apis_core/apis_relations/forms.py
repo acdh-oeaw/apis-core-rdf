@@ -39,7 +39,6 @@ class GenericTripleForm(forms.ModelForm):
         }
 
     def __init__(self, entity_type_self_str, entity_type_other_str):
-
         super().__init__()
 
         self.helper = FormHelper()
@@ -100,19 +99,16 @@ class GenericTripleForm(forms.ModelForm):
         # triple and the property name_forward or name_reverse are loaded correctly here.
 
         if property_direction == PropertyAutocomplete.SELF_SUBJ_OTHER_OBJ_STR:
-
             triple_subj = entity_instance_self
             triple_obj = entity_instance_other
             property_direction_name = property_instance.name_forward
 
         elif property_direction == PropertyAutocomplete.SELF_OBJ_OTHER_SUBJ_STR:
-
             triple_subj = entity_instance_other
             triple_obj = entity_instance_self
             property_direction_name = property_instance.name_reverse
 
         else:
-
             raise Exception("No valid property direction given.")
 
         self.fields["subj"].initial = triple_subj
@@ -163,7 +159,6 @@ class GenericTripleForm(forms.ModelForm):
 
     def save(self):
         if self.instance.pk is None:
-
             self.instance = TempTriple.objects.create(
                 subj=self.fields["subj"].initial,
                 obj=self.fields["obj"].initial,
@@ -171,7 +166,6 @@ class GenericTripleForm(forms.ModelForm):
             )
 
         else:
-
             self.instance.subj = self.fields["subj"].initial
             self.instance.obj = self.fields["obj"].initial
             self.instance.prop = self.fields["prop"].initial

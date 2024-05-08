@@ -7,7 +7,6 @@ import apis_core.apis_relations.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("apis_metainfo", "0003_auto_20220218_1530"),
         ("apis_relations", "0003_auto_20230123_1715"),

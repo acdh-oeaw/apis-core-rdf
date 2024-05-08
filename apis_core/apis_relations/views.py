@@ -79,7 +79,6 @@ def get_form_ajax(request):
         form.load_remaining_data_from_triple(triple)
 
     else:
-
         raise Exception("Missing necessary form data")
 
     param_dict = {
@@ -136,7 +135,6 @@ def save_ajax_form(
     )
 
     if ObjectID is not False:
-
         triple = TempTriple.objects.get(pk=ObjectID)
         form.load_remaining_data_from_triple(triple)
 

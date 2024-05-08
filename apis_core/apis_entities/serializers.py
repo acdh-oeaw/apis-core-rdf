@@ -159,9 +159,7 @@ class NetJsonNodeSerializer(serializers.BaseSerializer):
                 <tr><th>Entity</th> <td><a href='{}'>Link</a></td></tr>
             </table>
             <button class='small-button' onclick='expand_node("{}", {})'>expand</button>
-            </div>""".format(
-            str(obj), ent_obj, ent_url, ent_obj, obj.pk
-        )
+            </div>""".format(str(obj), ent_obj, ent_url, ent_obj, obj.pk)
         r = {
             "type": ent_obj.lower(),
             "label": str(obj),

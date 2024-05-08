@@ -65,15 +65,12 @@ def helper_render_date(value, var_date, var_start_date, var_end_date):
     # Various if-else branches checking which of the date fields are not None and should be used
 
     if var_start_date is not None and var_end_date is not None:
-
         overlay_help_text = str(var_start_date) + " - " + str(var_end_date)
 
     elif var_date is not None:
-
         overlay_help_text = str(var_date)
 
     else:
-
         return "—"
 
     return format_html("<abbr title='" + overlay_help_text + "'>" + value + "</b>")
@@ -82,7 +79,6 @@ def helper_render_date(value, var_date, var_start_date, var_end_date):
 # Again this function serves a generic purpose and must be assigned as class method to django-tables2 tables.Table class
 # The whole logic is very similare to the generic_order_* functions above, so see their comments for more details.
 def generic_render_start_date_written(self, record, value):
-
     return helper_render_date(
         value=value,
         var_date=record.start_date,
@@ -92,7 +88,6 @@ def generic_render_start_date_written(self, record, value):
 
 
 def generic_render_end_date_written(self, record, value):
-
     return helper_render_date(
         value=value,
         var_date=record.end_date,

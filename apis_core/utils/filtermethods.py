@@ -2,6 +2,7 @@
 This module contains filter functions that can be used by django-filter filters
 See https://django-filter.readthedocs.io/en/main/ref/filters.html#method
 """
+
 from django.db.models import Q
 
 
@@ -50,6 +51,7 @@ def flexible_string(queryset, name, value):
 
 
 # filtermethods for specific usecases:
+
 
 # TODO RDF: Check if this should be removed or adapted
 def related_entity_name(queryset, name, value):

@@ -348,5 +348,4 @@ def get_date_help_text_from_dates(
 
 
 def get_date_help_text_default():
-
     return "Dates are interpreted by defined rules. If this fails, an iso-date can be explicitly set with '&lt;YYYY-MM-DD&gt;'."
