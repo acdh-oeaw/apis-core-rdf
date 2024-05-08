@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("apis_vocabularies", "0002_remove_texttype_collections_and_more"),
     ]

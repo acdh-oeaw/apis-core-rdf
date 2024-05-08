@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("apis_metainfo", "0011_alter_rootobject_deprecated_name"),
     ]

@@ -197,7 +197,6 @@ def generic_serializer_creation_factory():
                 select_related.append(f.name)
 
         class TemplateSerializer(GenericHyperlinkedModelSerializer):
-
             id = serializers.ReadOnlyField()
             if getattr(settings, "APIS_API_ID_WRITABLE", False):
                 id = serializers.IntegerField()
@@ -209,7 +208,6 @@ def generic_serializer_creation_factory():
             _app_label = app_label
 
             class Meta:
-
                 model = entity
                 exclude = exclude_lst_fin
 
@@ -239,9 +237,9 @@ def generic_serializer_creation_factory():
                             many=ck_many, read_only=True
                         )
 
-        TemplateSerializer.__name__ = (
-            TemplateSerializer.__qualname__
-        ) = f"{entity_str.title().replace(' ', '')}Serializer"
+        TemplateSerializer.__name__ = TemplateSerializer.__qualname__ = (
+            f"{entity_str.title().replace(' ', '')}Serializer"
+        )
 
         class TemplateSerializerRetrieve(TemplateSerializer):
             def __init__(self, *args, **kwargs):
@@ -312,9 +310,9 @@ def generic_serializer_creation_factory():
                         "IntegerField",
                         "AutoField",
                     ]:
-                        filter_fields[
-                            f"{field.name}__{f2.name}"
-                        ] = allowed_fields_filter[f2.__class__.__name__]
+                        filter_fields[f"{field.name}__{f2.name}"] = (
+                            allowed_fields_filter[f2.__class__.__name__]
+                        )
                 continue
             if field.__class__.__name__ in allowed_fields_filter.keys():
                 filter_fields[field.name] = allowed_fields_filter[
@@ -330,14 +328,12 @@ def generic_serializer_creation_factory():
                         filter_fields[f1[0]] = f1[1]
 
         class MetaFilter(object):
-
             model = entity
             fields = filter_fields
 
         filterset_dict["Meta"] = MetaFilter
 
         class TemplateViewSet(ListViewObjectFilterMixin, viewsets.ModelViewSet):
-
             _select_related = select_related
             _prefetch_rel = prefetch_rel
             pagination_class = CustomPagination
@@ -397,9 +393,9 @@ def generic_serializer_creation_factory():
             def dispatch(self, request, *args, **kwargs):
                 return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
-        TemplateViewSet.__name__ = (
-            TemplateViewSet.__qualname__
-        ) = f"Generic{entity_str.title().replace(' ', '')}ViewSet"
+        TemplateViewSet.__name__ = TemplateViewSet.__qualname__ = (
+            f"Generic{entity_str.title().replace(' ', '')}ViewSet"
+        )
 
         serializers_dict[TemplateSerializer] = TemplateSerializer
         views[f"{entity_str.lower().replace(' ', '')}"] = TemplateViewSet

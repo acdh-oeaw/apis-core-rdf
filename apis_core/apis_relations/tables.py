@@ -90,7 +90,6 @@ class PropertyTable(GenericTable):
 
 
 def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
-
     # TODO RDF : add code from before refactoring and comment it out
     class TripleTableBase(tables.Table):
         """

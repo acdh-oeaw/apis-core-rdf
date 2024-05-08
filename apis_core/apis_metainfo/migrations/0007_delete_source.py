@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("apis_entities", "0003_remove_tempentityclass_source"),
         ("apis_metainfo", "0006_delete_text"),

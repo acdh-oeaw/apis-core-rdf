@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("apis_metainfo", "0008_alter_rootobject_self_contenttype"),
     ]

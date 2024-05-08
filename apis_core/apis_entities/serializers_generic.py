@@ -153,9 +153,9 @@ class RelationEntitySerializer(serializers.Serializer):
         cm = obj.__class__.__name__
         res_1 = dict()
         res_1["id"] = obj.relation_type.pk
-        res_1[
-            "url"
-        ] = f"{base_uri}{reverse('apis_core:apis_api:{}relation-detail'.format(cm).lower(), kwargs={'pk': obj.relation_type.pk},)}"
+        res_1["url"] = (
+            f"{base_uri}{reverse('apis_core:apis_api:{}relation-detail'.format(cm).lower(), kwargs={'pk': obj.relation_type.pk},)}"
+        )
         if self.reverse and len(obj.relation_type.label_reverse) > 0:
             res_1["label"] = obj.relation_type.label_reverse
         elif self.reverse:

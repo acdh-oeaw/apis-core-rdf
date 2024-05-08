@@ -34,7 +34,6 @@ if __name__ == "__main__":
                 lines = f.readlines()
 
             for i, line in enumerate(lines):
-
                 if (
                     line == "                processResults: function (data, page) {\n"
                     and lines[i + 1]
@@ -44,7 +43,6 @@ if __name__ == "__main__":
                     and lines[i + 3]
                     == "                            value.id = value.text;\n"
                 ):
-
                     lines[i + 3] = "                            value.id = value.id;\n"
 
             with open(file_to_fix, "w") as f:

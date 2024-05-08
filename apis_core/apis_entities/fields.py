@@ -7,6 +7,7 @@ from dal.autocomplete import TagSelect2 as DALTagSelect2
 from dal_select2.widgets import Select2WidgetMixin as DALSelect2WidgetMixin
 from django import forms
 
+
 # "Rewrite" select2 widgets from Django Autocomplete Light so
 # that they don't use Django's admin-provided jQuery, which
 # causes errors with jQuery provided by us.
