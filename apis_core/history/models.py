@@ -133,7 +133,7 @@ class VersionMixin(models.Model):
 
     @property
     def _history_date(self):
-        return self.__history_date
+        return self.__history_date or timezone.now()
 
     @_history_date.setter
     def _history_date(self, value):
@@ -142,11 +142,6 @@ class VersionMixin(models.Model):
 
     class Meta:
         abstract = True
-
-    def save(self, *args, **kwargs) -> None:
-        if self._history_date is None:
-            self._history_date = timezone.now()
-        return super().save(*args, **kwargs)
 
     def get_history_url(self):
         ct = ContentType.objects.get_for_model(self)
