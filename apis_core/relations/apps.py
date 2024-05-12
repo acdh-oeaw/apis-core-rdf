@@ -6,4 +6,4 @@ class ApisRelations2Config(AppConfig):
     name = "apis_core.relations"
 
     def ready(self):
-        from . import signals
+        pass

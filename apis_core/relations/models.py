@@ -46,13 +46,13 @@ class Relation(models.Model, metaclass=RelationModelBase):
     def save(self, *args, **kwargs):
         if self.subj:
             subj = RootObject.objects_inheritance.get_subclass(id=self.subj.id)
-            if not type(subj) in self.subj_list():
+            if type(subj) not in self.subj_list():
                 raise ValidationError(
                     f"{self.subj} is not of any type in {self.subj_model}"
                 )
         if self.obj:
             obj = RootObject.objects_inheritance.get_subclass(id=self.obj.id)
-            if not type(obj) in self.obj_list():
+            if type(obj) not in self.obj_list():
                 raise ValidationError(
                     f"{self.obj} is not of any type in {self.obj_model}"
                 )
@@ -92,13 +92,13 @@ class Relation(models.Model, metaclass=RelationModelBase):
     def clean(self):
         if self.subj:
             subj = RootObject.objects_inheritance.get_subclass(id=self.subj.id)
-            if not type(subj) in self.subj_list():
+            if type(subj) not in self.subj_list():
                 raise ValidationError(
                     f"{self.subj} is not of any type in {self.subj_model}"
                 )
         if self.obj:
             obj = RootObject.objects_inheritance.get_subclass(id=self.obj.id)
-            if not type(obj) in self.obj_list():
+            if type(obj) not in self.obj_list():
                 raise ValidationError(
                     f"{self.obj} is not of any type in {self.obj_model}"
                 )
