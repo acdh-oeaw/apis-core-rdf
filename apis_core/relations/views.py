@@ -102,7 +102,12 @@ class RelationUpdate(UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["embedded"] = False
+        relation = self.get_object()
+        kwargs["frominstance"] = relation.subj
+        kwargs["tocontenttype"] = ContentType.objects.get_for_model(relation.obj)
+        # TODO: set this as well_
+        # kwargs["inverted"] = True
+        kwargs["embedded"] = True
         return kwargs
 
     def get_form_class(self):
