@@ -8,12 +8,12 @@ from .models import Relation
 class RelationTable(tables.Table):
 
     id = tables.TemplateColumn(
-            "<a href='{% url 'apis:relationupdate' record.id %}'>{{ record.id }}</a>"
+        "<a href='{% url 'apis:relationupdate' record.id %}'>{{ record.id }}</a>"
     )
 
     description = tables.TemplateColumn("{{ record }}")
     edit = tables.TemplateColumn(
-            "<a href='{% url 'apis:relationupdate' record.id %}'>Edit</a>"
+        "<a href='{% url 'apis:relationupdate' record.id %}'>Edit</a>"
     )
     delete = tables.TemplateColumn(template_name="tables/delete.html")
 
