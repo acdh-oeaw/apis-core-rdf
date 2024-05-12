@@ -1,7 +1,5 @@
 import django_tables2 as tables
 
-from django.contrib.contenttypes.models import ContentType
-
 from .models import Relation
 
 
