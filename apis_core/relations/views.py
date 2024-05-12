@@ -118,7 +118,7 @@ class RelationUpdate(UpdateView):
 
 
 class RelationDelete(DeleteView):
-    template_name = "confirm_delete.html"
+    template_name = "generic/generic_confirm_delete.html"
 
     def delete(self, request, *args, **kwargs):
         res = super().delete(request, args, kwargs)
