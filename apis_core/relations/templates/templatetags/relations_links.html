@@ -16,7 +16,7 @@
   <a href="{{ hrefurl }}" 
     {% if htmx %} data-toggle="collapse" data-target="#collapse-{{ rel.model }}-{{ contenttype.name }}" hx-get="{{ hrefurl }}?partial&formonly" hx-target="#collapse-{{ rel.model }}-{{ contenttype.name }}" {% endif %}
     >
-    <button type="button" class="btn btn-sm">
+    <button type="button" class="btn btn-sm mt-1 btn-secondary">
 
       {% if rel in relation_types_reverse %}
         {{ model.reverse_name }}
