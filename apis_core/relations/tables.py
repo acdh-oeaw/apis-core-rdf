@@ -4,7 +4,6 @@ from .models import Relation
 
 
 class RelationTable(tables.Table):
-
     id = tables.TemplateColumn(
         "<a href='{% url 'apis:relationupdate' record.id %}'>{{ record.id }}</a>"
     )
