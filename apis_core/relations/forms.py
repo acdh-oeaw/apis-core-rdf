@@ -75,16 +75,17 @@ class RelationForm(ModelForm):
         # we have to explicetly add the rest of the fields
         fields = {k: v for k, v in self.fields.items() if k not in ["obj", "subj"]}
 
-        title = self._meta.model.__name__
+        self.heading = self._meta.model.__name__
+        self.inverted = inverted
         try:
-            title = self._meta.model.name
+            self.heading = self._meta.model.name
             if inverted:
-                title = self._meta.model.reverse_name
+                self.heading = self._meta.model.reverse_name
         except AttributeError:
             pass
 
         self.helper.layout = Layout(
-            HTML(f"<h3>{title}</h3>"),
+            HTML(f"<h3>{self.heading}</h3>"),
             div,
             *fields,
         )
