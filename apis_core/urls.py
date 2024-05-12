@@ -24,6 +24,7 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
     SpectacularRedocView,
 )
+from apis_core.relations.urls import urlpatterns as relurlpatterns
 
 app_name = "apis_core"
 
@@ -92,7 +93,6 @@ urlpatterns = [
     path("", include("apis_core.generic.urls", namespace="generic")),
 ]
 
-from apis_core.relations.urls import urlpatterns as relurlpatterns
 
 urlpatterns = urlpatterns + relurlpatterns
 
