@@ -1,3 +1,4 @@
+from apis_core.apis_metainfo.models import RootObject
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.contenttypes.models import ContentType
 from django.forms import modelform_factory
@@ -102,6 +103,17 @@ class RelationUpdate(UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        relation = self.get_object()
+        print(
+            relation, RootObject.objects_inheritance.get_subclass(pk=relation.subj.pk)
+        )
+        kwargs["frominstance"] = RootObject.objects_inheritance.get_subclass(
+            pk=relation.subj.pk
+        )
+        kwargs["tocontenttype"] = ContentType.objects.get_for_model(
+            RootObject.objects_inheritance.get_subclass(pk=relation.obj.pk)
+        )
+
         kwargs["embedded"] = False
         return kwargs
 

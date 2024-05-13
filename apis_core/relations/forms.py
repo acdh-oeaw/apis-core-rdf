@@ -1,10 +1,13 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, ModelChoiceField
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
+from django_select2.forms import ModelSelect2Widget
 
 
 from crispy_forms.layout import Submit, Layout, Div, HTML
 from crispy_forms.helper import FormHelper
+
+from apis_core.apis_metainfo.models import RootObject
 
 
 class RelationForm(ModelForm):
@@ -26,15 +29,38 @@ class RelationForm(ModelForm):
 
         if frominstance:
             self.fields[subj].disabled = True
-            self.fields[subj].initial = frominstance
+            self.fields[subj].initial = RootObject.objects_inheritance.get_subclass(
+                pk=frominstance.pk
+            )
             self.fields[subj].label = ContentType.objects.get_for_model(
                 frominstance
             ).name
 
         if tocontenttype:
-            self.fields[obj].queryset = tocontenttype.model_class().objects.all()
+            # self.fields[obj].queryset = tocontenttype.model_class().objects.all()
+            # self.fields[obj].label = tocontenttype.name
+            if hasattr(tocontenttype.model_class(), "name"):
+                self.fields[obj] = ModelChoiceField(
+                    queryset=tocontenttype.model_class().objects.all(),
+                    widget=ModelSelect2Widget(
+                        model=tocontenttype.model_class(),
+                        search_fields=["name__icontains", "id__icontains"],
+                    ),
+                )
+            else:
+                self.fields[obj] = ModelChoiceField(
+                    queryset=tocontenttype.model_class().objects.all(),
+                    widget=ModelSelect2Widget(
+                        model=tocontenttype.model_class(),
+                        search_fields=["label__icontains", "id__icontains"],
+                    ),
+                )
             self.fields[obj].label = tocontenttype.name
 
+        if kwargs.get("instance", None) is not None:
+            # allow subject also to be editable
+            #
+            pass
         self.helper = FormHelper(self)
 
         relcontenttype = ContentType.objects.get_for_model(self._meta.model)
@@ -45,8 +71,10 @@ class RelationForm(ModelForm):
         if frominstance:
             args.append(ContentType.objects.get_for_model(frominstance).pk)
             args.append(frominstance.pk)
+
         if tocontenttype:
             args.append(tocontenttype.pk)
+
         hx_post = reverse("apis:relation", args=args)
         if inverted:
             hx_post = reverse("apis:relationinverted", args=args)
