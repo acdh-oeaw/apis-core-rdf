@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.18.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.18.0...v0.18.1) (2024-05-13)
+
+
+### Bug Fixes
+
+* **apis_entities:** remove self from list of entities to merge with ([a4fdd63](https://github.com/acdh-oeaw/apis-core-rdf/commit/a4fdd634c0550541698c0e91ba7e0e7908cd5d86))
+* **core:** use the capfirst filter on entity menu entries ([4587783](https://github.com/acdh-oeaw/apis-core-rdf/commit/458778354a70a6836ab42a742b2e38f787391824)), closes [#799](https://github.com/acdh-oeaw/apis-core-rdf/issues/799)
+* **history:** implement history_date fallback directly in property ([fed77c8](https://github.com/acdh-oeaw/apis-core-rdf/commit/fed77c896e32d5bcc29a1bdef4a00ab68cd3c57d))
+
 ## [0.18.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.17.3...v0.18.0) (2024-05-07)
 
 
