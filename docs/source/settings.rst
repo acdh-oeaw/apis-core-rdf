@@ -27,6 +27,39 @@ Set ``"rest_framework.permissions.IsAuthenticated"`` if every logged in user sho
 Sets the default page size the APIS RestAPI should deliver.
 
 
+SPECTACULAR_SETTINGS
+--------------------
+
+We provide a custom schema generator for spectacular.
+It is meant as a drop in replacement for the
+"DEFAULT_GENERATOR_CLASS" of drf-spectacular. You can use it like this:
+
+.. code-block:: python
+
+    SPECTACULAR_SETTINGS["DEFAULT_GENERATOR_CLASS"] = 'apis_core.generic.generators.CustomSchemaGenerator'
+
+
+Background:
+
+The first reason is, that we are using a custom converter
+(:class:`apis_core.generic.urls.ContenttypeConverter`) to provide access to views
+and api views of different contenttypes. The default endpoint generator of the
+drf-spectacular does not know about this converter and therefore sees the
+endpoints using this converter as *one* endpoint with one parameter called
+``contenttype``. Thats not what we want, so we have to do our own enumeration -
+we iterate through all contenttypes that inherit from ``GenericModel`` and
+create schema endpoints for those programatically.
+
+The second reason is, that the autoapi schema generator of DRF Spectacular
+and our :class:`apis_core.generic.api_views.ModelViewSet` don't work well together.
+Our ModelViewSet needs the dispatch method to set the model of the
+``ModelViewSet``, but this method is not being called by the generator while
+doing the inspection, which means the ``ModelViewSet`` does not know about the
+model it should work with and can not provide the correct serializer and filter
+classes. Therefore we create the callback for the endpoints by hand and set
+the model from there.
+
+
 APIS_BASE_URI
 -------------
 
