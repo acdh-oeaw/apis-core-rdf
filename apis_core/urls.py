@@ -8,13 +8,6 @@ from rest_framework import routers
 from django.conf import settings
 
 
-from apis_core.api_routers import views
-
-# from apis_core.apis_entities.api_views import (
-#     NetJsonViewSet,
-#     PlaceGeoJsonViewSet,
-# )
-from apis_core.utils import caching
 from apis_core.apis_metainfo.viewsets import UriToObjectViewSet
 from apis_core.core.views import Dumpdata
 from apis_core.apis_entities.api_views import GetEntityGeneric
@@ -28,20 +21,6 @@ from drf_spectacular.views import (
 app_name = "apis_core"
 
 router = routers.DefaultRouter()
-for app_label, model_str in caching.get_all_class_modules_and_names():
-    if "_" in app_label:
-        route_prefix = app_label.split("_")[1]
-    else:
-        route_prefix = app_label
-    try:
-        router.register(
-            r"{}/{}".format(route_prefix, model_str.lower()),
-            views[model_str.lower()],
-            model_str.lower(),
-        )
-    except Exception:
-        print("{} not found, skipping".format(model_str.lower()))
-
 # inject the manually created UriToObjectViewSet into the api router
 router.register(r"metainfo/uritoobject", UriToObjectViewSet, basename="uritoobject")
 

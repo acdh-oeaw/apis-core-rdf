@@ -8,7 +8,6 @@ from .autocomplete3 import (
 )
 
 # from .views import ReversionCompareView TODO: add again when import is fixed
-from .api_views import GetOrCreateEntity
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.generic.views import List, Create, Delete, Detail
 from apis_core.apis_entities.views import (
@@ -90,10 +89,5 @@ urlpatterns = [
         "autocomplete-network/<slug:entity>/",
         GenericNetworkEntitiesAutocomplete.as_view(),
         name="generic_network_entities_autocomplete",
-    ),
-    path(
-        "getorcreateentity/",
-        GetOrCreateEntity.as_view(),
-        name="GetOrCreateEntity",
     ),
 ]
