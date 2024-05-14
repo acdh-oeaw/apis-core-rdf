@@ -12,16 +12,12 @@
         <div class="row">
           <div class="col">{{ object_list.model|contenttype }}</div>
           <div class="col">
-            {% with object_list.model|opts as opts %}
-              {% with opts.app_label|add:"."|add:opts.verbose_name|add:"_create" as object_create_perm %}
 
-                {% if object_create_perm in perms %}
-                  <a class="btn btn-outline-success float-right btn-sm"
-                     href="{% url 'apis_core:generic:create' object_list.model|contenttype %}">Create</a>
-                {% endif %}
+            {% if object_list.model.get_add_permission in perms %}
+              <a class="btn btn-outline-success float-right btn-sm"
+                 href="{{ object_list.model.get_createview_url }}">Create</a>
+            {% endif %}
 
-              {% endwith %}
-            {% endwith %}
           </div>
         </div>
       </div>
