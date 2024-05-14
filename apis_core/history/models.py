@@ -1,5 +1,6 @@
 from typing import Any
 from apis_core.generic.abc import GenericModel
+from apis_core.apis_metainfo.models import RootObject
 from django.urls import reverse
 from simple_history.models import HistoricalRecords
 from django.core.exceptions import AppRegistryNotReady
@@ -61,6 +62,9 @@ class APISHistoryTableBase(models.Model, GenericModel):
         """returns all triples for a specific version of a model instance.
         If only_latest is True, only the latest version of a triple is returned."""
         from apis_core.apis_relations.models import TempTriple
+
+        if not isinstance(self.instance, RootObject):
+            return TempTriple.objects.none()
 
         if history_date is None:
             filter_date = (
