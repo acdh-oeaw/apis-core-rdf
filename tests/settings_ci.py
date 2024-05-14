@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # for swagger ui generation
     "drf_spectacular",
     "simple_history",
+    "sample_project",
 ]
 
 MIDDLEWARE = [
