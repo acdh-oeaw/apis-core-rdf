@@ -154,7 +154,7 @@ class Create(GenericModelMixin, PermissionRequiredMixin, CreateView):
         return modelform_factory(self.model, form_class)
 
     def get_success_url(self):
-        return self.object.get_edit_url()
+        return self.object.get_create_success_url()
 
 
 class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
@@ -198,7 +198,7 @@ class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
         return modelform_factory(self.model, form_class)
 
     def get_success_url(self):
-        return self.object.get_edit_url()
+        return self.object.get_update_success_url()
 
 
 class Autocomplete(
