@@ -11,9 +11,9 @@ from django.db import models
 
 
 class E21_Person(models.Model):
-    forename = models.CharField(blank=True, default="")
-    surname = models.CharField(blank=True, default="")
-    gender = models.CharField(blank=True, default="")
+    forename = models.CharField(blank=True, default="", max_length=4096)
+    surname = models.CharField(blank=True, default="", max_length=4096)
+    gender = models.CharField(blank=True, default="", max_length=4096)
     date_of_birth = models.DateField(blank=True, null=True)
     date_of_death = models.DateField(blank=True, null=True)
 
@@ -22,7 +22,7 @@ class E21_Person(models.Model):
 
 
 class E53_Place(models.Model):
-    label = models.CharField(blank=True, default="")
+    label = models.CharField(blank=True, default="", max_length=4096)
     longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
 
@@ -31,7 +31,7 @@ class E53_Place(models.Model):
 
 
 class E74_Group(models.Model):
-    label = models.CharField(blank=True, default="")
+    label = models.CharField(blank=True, default="", max_length=4096)
 
     class Meta:
         abstract = True
