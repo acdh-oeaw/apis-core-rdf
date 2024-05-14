@@ -26,6 +26,12 @@ class GenericModel:
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:delete", args=[ct, self.id])
 
+    def get_create_success_url(self):
+        return self.get_absolute_url()
+
+    def get_update_success_url(self):
+        return self.get_edit_url()
+
     @classmethod
     def get_change_permission(self):
         return permission_fullname("change", self)
