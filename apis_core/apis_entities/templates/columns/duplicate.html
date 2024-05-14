@@ -1,6 +1,3 @@
-{% load apiscore %}
-{% with record|opts as opts %}
-  <a title="duplicate"
-     href="{% url 'apis_core:apis_entities:generic_entities_duplicate_view' opts.verbose_name record.id %}"
-     style="color: blueviolet"><span class="material-symbols-outlined">content_copy</span></a>
-{% endwith %}
+<a title="duplicate"
+   href="{{ record.get_duplicate_url }}"
+   style="color: blueviolet"><span class="material-symbols-outlined">content_copy</span></a>
