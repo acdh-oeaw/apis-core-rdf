@@ -102,7 +102,6 @@
 <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">FieldError</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Collection</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.caching</span> <span class="kn">import</span> <span class="n">get_autocomplete_property_choices</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
 
@@ -178,10 +177,7 @@
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity&quot;</span><span class="p">]</span>
         <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
-        <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cl:&quot;</span><span class="p">):</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">Collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name__icontains</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;cl:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">pk</span><span class="p">),</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">}</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="n">q</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;reg:&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;reg:&quot;</span><span class="p">):</span>
             <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;person&quot;</span><span class="p">:</span>
                 <span class="n">filen</span> <span class="o">=</span> <span class="s2">&quot;reg_persons.json&quot;</span>
