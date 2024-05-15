@@ -32,6 +32,10 @@ class GenericModel:
     def get_update_success_url(self):
         return self.get_edit_url()
 
+    def get_api_detail_endpoint(self):
+        ct = ContentType.objects.get_for_model(self)
+        return reverse("apis_core:generic:genericmodelapi-detail", args=[ct, self.id])
+
     @classmethod
     def get_change_permission(self):
         return permission_fullname("change", self)
