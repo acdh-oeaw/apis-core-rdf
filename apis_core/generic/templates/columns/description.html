@@ -1,2 +1,1 @@
-{% load apisgeneric %}
-<a href="{% url 'apis_core:generic:detail' record|contenttype record.id %}">{{ record }}</a>
+<a href="{{ record.get_absolute_url }}">{{ record }}</a>

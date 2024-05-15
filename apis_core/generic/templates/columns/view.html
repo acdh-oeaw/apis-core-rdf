@@ -1,4 +1,3 @@
-{% load apisgeneric %}
 <a title="view"
-   href="{% url 'apis_core:generic:detail' record|contenttype record.id %}"
+   href="{{ record.get_absolute_url }}"
    class="text-success"><span class="material-symbols-outlined">visibility</span></a>

@@ -1,4 +1,1 @@
-{% load apisgeneric %}
-<a title="edit"
-   href="{% url 'apis_core:generic:update' record|contenttype record.id %}"
-   class="text-warning"><span class="material-symbols-outlined">edit</span></a>
+<a title="edit" href="{{ record.get_edit_url }}" class="text-warning"><span class="material-symbols-outlined">edit</span></a>
