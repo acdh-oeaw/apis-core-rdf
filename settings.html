@@ -53,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html#installation-without-docker">Installation without Docker</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Settings</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#rest-framework">REST_FRAMEWORK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spectacular-settings">SPECTACULAR_SETTINGS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#apis-base-uri">APIS_BASE_URI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#apis-next-prev">APIS_NEXT_PREV</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#apis-api-id-writable">APIS_API_ID_WRITABLE</a></li>
@@ -121,6 +122,32 @@ Set <code class="docutils literal notranslate"><span class="pre">&quot;rest_fram
 </pre></div>
 </div>
 <p>Sets the default page size the APIS RestAPI should deliver.</p>
+</section>
+<section id="spectacular-settings">
+<h2>SPECTACULAR_SETTINGS<a class="headerlink" href="#spectacular-settings" title="Link to this heading"></a></h2>
+<p>We provide a custom schema generator for spectacular.
+It is meant as a drop in replacement for the
+“DEFAULT_GENERATOR_CLASS” of drf-spectacular. You can use it like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SPECTACULAR_SETTINGS</span><span class="p">[</span><span class="s2">&quot;DEFAULT_GENERATOR_CLASS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;apis_core.generic.generators.CustomSchemaGenerator&#39;</span>
+</pre></div>
+</div>
+<p>Background:</p>
+<p>The first reason is, that we are using a custom converter
+(<a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.urls.ContenttypeConverter" title="apis_core.generic.urls.ContenttypeConverter"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.urls.ContenttypeConverter</span></code></a>) to provide access to views
+and api views of different contenttypes. The default endpoint generator of the
+drf-spectacular does not know about this converter and therefore sees the
+endpoints using this converter as <em>one</em> endpoint with one parameter called
+<code class="docutils literal notranslate"><span class="pre">contenttype</span></code>. Thats not what we want, so we have to do our own enumeration -
+we iterate through all contenttypes that inherit from <code class="docutils literal notranslate"><span class="pre">GenericModel</span></code> and
+create schema endpoints for those programatically.</p>
+<p>The second reason is, that the autoapi schema generator of DRF Spectacular
+and our <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet" title="apis_core.generic.api_views.ModelViewSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.api_views.ModelViewSet</span></code></a> don’t work well together.
+Our ModelViewSet needs the dispatch method to set the model of the
+<code class="docutils literal notranslate"><span class="pre">ModelViewSet</span></code>, but this method is not being called by the generator while
+doing the inspection, which means the <code class="docutils literal notranslate"><span class="pre">ModelViewSet</span></code> does not know about the
+model it should work with and can not provide the correct serializer and filter
+classes. Therefore we create the callback for the endpoints by hand and set
+the model from there.</p>
 </section>
 <section id="apis-base-uri">
 <h2>APIS_BASE_URI<a class="headerlink" href="#apis-base-uri" title="Link to this heading"></a></h2>
