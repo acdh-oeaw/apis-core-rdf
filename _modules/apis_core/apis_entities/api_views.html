@@ -90,27 +90,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.apis_entities.api_views</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">re</span>
-
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
-<span class="kn">from</span> <span class="nn">rest_framework.pagination</span> <span class="kn">import</span> <span class="n">PageNumberPagination</span>
-<span class="kn">from</span> <span class="nn">rest_framework.parsers</span> <span class="kn">import</span> <span class="n">FileUploadParser</span>
-<span class="kn">from</span> <span class="nn">rest_framework.response</span> <span class="kn">import</span> <span class="n">Response</span>
-<span class="kn">from</span> <span class="nn">rest_framework.reverse</span> <span class="kn">import</span> <span class="n">reverse_lazy</span>
+<span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
 <span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
 <span class="kn">from</span> <span class="nn">rest_framework.exceptions</span> <span class="kn">import</span> <span class="n">NotFound</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span><span class="p">,</span> <span class="n">RootObject</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
-
-
-<div class="viewcode-block" id="StandardResultsSetPagination">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.StandardResultsSetPagination">[docs]</a>
-<span class="k">class</span> <span class="nc">StandardResultsSetPagination</span><span class="p">(</span><span class="n">PageNumberPagination</span><span class="p">):</span>
-    <span class="n">page_size</span> <span class="o">=</span> <span class="mi">25</span>
-    <span class="n">page_size_query_param</span> <span class="o">=</span> <span class="s2">&quot;page_size&quot;</span>
-    <span class="n">max_page_size</span> <span class="o">=</span> <span class="mi">1000</span></div>
-
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 
 
 <div class="viewcode-block" id="GetEntityGeneric">
@@ -124,58 +108,6 @@
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get_api_detail_endpoint</span><span class="p">())</span>
         <span class="k">except</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NotFound</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="ResolveAbbreviations">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.ResolveAbbreviations">[docs]</a>
-<span class="k">class</span> <span class="nc">ResolveAbbreviations</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
-    <span class="n">parser_classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">FileUploadParser</span><span class="p">,)</span>
-
-<div class="viewcode-block" id="ResolveAbbreviations.put">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.ResolveAbbreviations.put">[docs]</a>
-    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="mi">204</span><span class="p">)</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="GetOrCreateEntity">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetOrCreateEntity">[docs]</a>
-<span class="k">class</span> <span class="nc">GetOrCreateEntity</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
-<div class="viewcode-block" id="GetOrCreateEntity.get">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetOrCreateEntity.get">[docs]</a>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity2&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">uri</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">uri</span> <span class="ow">and</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">&quot;http:&quot;</span><span class="p">,</span> <span class="s2">&quot;https:&quot;</span><span class="p">)):</span>
-            <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">)</span>
-            <span class="n">ent</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">root_object</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">r1</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[^&lt;]+&quot;</span><span class="p">,</span> <span class="n">uri</span><span class="p">)</span>
-            <span class="n">r2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;([^&gt;]+)&gt;&quot;</span><span class="p">,</span> <span class="n">uri</span><span class="p">)</span>
-            <span class="n">q_d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-            <span class="n">q_d</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r1</span>
-            <span class="k">if</span> <span class="n">r2</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">r2</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">):</span>
-                    <span class="n">x2</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
-                    <span class="n">q_d</span><span class="p">[</span><span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">x2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">entity</span> <span class="o">==</span> <span class="s2">&quot;person&quot;</span><span class="p">:</span>
-                <span class="n">r1_2</span> <span class="o">=</span> <span class="n">r1</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">r1_2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                    <span class="n">q_d</span><span class="p">[</span><span class="s2">&quot;first_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r1_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="n">q_d</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r1_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="n">ent</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_ontology_class_of_name</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">q_d</span><span class="p">)</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">ent</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
-            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">reverse_lazy</span><span class="p">(</span>
-                <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
-                <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
-                <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">ent</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">},</span>
-            <span class="p">),</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
