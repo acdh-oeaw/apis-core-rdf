@@ -92,21 +92,16 @@
   <h1>Source code for apis_core.apis_entities.api_views</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
 
-<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
-<span class="kn">from</span> <span class="nn">rest_framework.generics</span> <span class="kn">import</span> <span class="n">GenericAPIView</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
 <span class="kn">from</span> <span class="nn">rest_framework.pagination</span> <span class="kn">import</span> <span class="n">PageNumberPagination</span>
 <span class="kn">from</span> <span class="nn">rest_framework.parsers</span> <span class="kn">import</span> <span class="n">FileUploadParser</span>
 <span class="kn">from</span> <span class="nn">rest_framework.response</span> <span class="kn">import</span> <span class="n">Response</span>
 <span class="kn">from</span> <span class="nn">rest_framework.reverse</span> <span class="kn">import</span> <span class="n">reverse_lazy</span>
-<span class="kn">from</span> <span class="nn">rest_framework.settings</span> <span class="kn">import</span> <span class="n">api_settings</span>
 <span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
+<span class="kn">from</span> <span class="nn">rest_framework.exceptions</span> <span class="kn">import</span> <span class="n">NotFound</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span><span class="p">,</span> <span class="n">RootObject</span>
-<span class="kn">from</span> <span class="nn">.api_renderers</span> <span class="kn">import</span> <span class="n">EntityToTEI</span>
-<span class="kn">from</span> <span class="nn">.serializers_generic</span> <span class="kn">import</span> <span class="n">EntitySerializer</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.utils</span> <span class="kn">import</span> <span class="n">get_python_safe_module_path</span>
 
 
 <div class="viewcode-block" id="StandardResultsSetPagination">
@@ -120,45 +115,15 @@
 
 <div class="viewcode-block" id="GetEntityGeneric">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric">[docs]</a>
-<span class="k">class</span> <span class="nc">GetEntityGeneric</span><span class="p">(</span><span class="n">GenericAPIView</span><span class="p">):</span>
-    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">EntitySerializer</span>
-    <span class="n">queryset</span> <span class="o">=</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="n">renderer_classes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">api_settings</span><span class="o">.</span><span class="n">DEFAULT_RENDERER_CLASSES</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">EntityToTEI</span><span class="p">,)</span>
-    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_RENDERERS&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rend_add</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">rd</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_RENDERERS</span><span class="p">:</span>
-            <span class="n">rend_mod</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">rd</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">rend_mod</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">rend_add</span> <span class="o">+</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,)</span>
-        <span class="n">renderer_classes</span> <span class="o">+=</span> <span class="n">rend_add</span>
-
-<div class="viewcode-block" id="GetEntityGeneric.get_object">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.get_object">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pk</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">get_subclass</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
-            <span class="n">uri2</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">build_absolute_uri</span><span class="p">())</span>
-            <span class="k">if</span> <span class="n">uri2</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">get_subclass</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">uri2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">entity_id</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">Http404</span></div>
-
-
+<span class="k">class</span> <span class="nc">GetEntityGeneric</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
 <div class="viewcode-block" id="GetEntityGeneric.get">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.get">[docs]</a>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
-        <span class="n">ent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">pk</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
-        <span class="c1"># we let users override the default serializer based on the chosen renderer</span>
-        <span class="c1"># the name of the method has to be the full path of the renderer, dots</span>
-        <span class="c1"># replaced with underscores</span>
-        <span class="c1"># i.e.: apis_core_apis_entities_api_renderers_EntityToTEI</span>
-        <span class="n">renderer_full_path</span> <span class="o">=</span> <span class="n">get_python_safe_module_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">accepted_renderer</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="n">renderer_full_path</span><span class="p">):</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="n">renderer_full_path</span><span class="p">)(</span><span class="n">ent</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="n">request</span><span class="p">})</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">EntitySerializer</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="n">request</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">get_subclass</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get_api_detail_endpoint</span><span class="p">())</span>
+        <span class="k">except</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotFound</span></div>
 </div>
 
 

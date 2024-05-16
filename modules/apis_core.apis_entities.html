@@ -236,38 +236,13 @@ object the first time, the query is executed.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_entities.api_views.GetEntityGeneric">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_entities.api_views.</span></span><span class="sig-name descname"><span class="pre">GetEntityGeneric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/api_views.html#GetEntityGeneric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.api_views.GetEntityGeneric" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericAPIView</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIView</span></code></p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.apis_entities.api_views.GetEntityGeneric.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/api_views.html#GetEntityGeneric.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.api_views.GetEntityGeneric.get" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_entities.api_views.GetEntityGeneric.get_object">
-<span class="sig-name descname"><span class="pre">get_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/api_views.html#GetEntityGeneric.get_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.api_views.GetEntityGeneric.get_object" title="Link to this definition"></a></dt>
-<dd><p>Returns the object the view is displaying.</p>
-<p>You may want to override this if you need to provide non-standard
-queryset lookups.  Eg if objects are referenced using multiple
-keyword arguments in the url conf.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_entities.api_views.GetEntityGeneric.queryset">
-<span class="sig-name descname"><span class="pre">queryset</span></span><a class="headerlink" href="#apis_core.apis_entities.api_views.GetEntityGeneric.queryset" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_entities.api_views.GetEntityGeneric.renderer_classes">
-<span class="sig-name descname"><span class="pre">renderer_classes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(&lt;class</span> <span class="pre">'rest_framework.renderers.JSONRenderer'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'rest_framework.renderers.BrowsableAPIRenderer'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'apis_core.apis_entities.api_renderers.EntityToTEI'&gt;)</span></em><a class="headerlink" href="#apis_core.apis_entities.api_views.GetEntityGeneric.renderer_classes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_entities.api_views.GetEntityGeneric.serializer_class">
-<span class="sig-name descname"><span class="pre">serializer_class</span></span><a class="headerlink" href="#apis_core.apis_entities.api_views.GetEntityGeneric.serializer_class" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#apis_core.apis_entities.serializers_generic.EntitySerializer" title="apis_core.apis_entities.serializers_generic.EntitySerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">EntitySerializer</span></code></a></p>
-</dd></dl>
 
 </dd></dl>
 

@@ -105,7 +105,7 @@
 
 
 <div class="viewcode-block" id="VocabsSerializer">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.VocabsSerializer">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.VocabsSerializer">[docs]</a>
 <span class="k">class</span> <span class="nc">VocabsSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">CharField</span><span class="p">()</span>
@@ -114,7 +114,7 @@
 
 
 <div class="viewcode-block" id="EntityUriSerializer">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.EntityUriSerializer">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntityUriSerializer">[docs]</a>
 <span class="k">class</span> <span class="nc">EntityUriSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">uri</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">URLField</span><span class="p">()</span></div>
@@ -122,7 +122,7 @@
 
 
 <div class="viewcode-block" id="TextSerializer">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.TextSerializer">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.TextSerializer">[docs]</a>
 <span class="k">class</span> <span class="nc">TextSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">kind</span> <span class="o">=</span> <span class="n">VocabsSerializer</span><span class="p">()</span>
@@ -131,14 +131,14 @@
 
 
 <div class="viewcode-block" id="EntitySerializer">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.EntitySerializer">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer">[docs]</a>
 <span class="k">class</span> <span class="nc">EntitySerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_url&quot;</span><span class="p">)</span>
     <span class="n">uris</span> <span class="o">=</span> <span class="n">EntityUriSerializer</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;uri_set&quot;</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EntitySerializer.add_relations">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.EntitySerializer.add_relations">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_relations">[docs]</a>
     <span class="k">def</span> <span class="nf">add_relations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">mk</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
@@ -194,13 +194,13 @@
 
 
 <div class="viewcode-block" id="EntitySerializer.add_entity_type">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.EntitySerializer.add_entity_type">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_entity_type">[docs]</a>
     <span class="k">def</span> <span class="nf">add_entity_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EntitySerializer.add_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.EntitySerializer.add_url">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.EntitySerializer.add_url">[docs]</a>
     <span class="k">def</span> <span class="nf">add_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_uri</span><span class="si">}{</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;GetEntityGenericRoot&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;pk&#39;</span><span class="p">:</span><span class="w"> </span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">url</span></div>
@@ -243,7 +243,7 @@
 
 
 <div class="viewcode-block" id="RelationEntitySerializer">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.RelationEntitySerializer">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer">[docs]</a>
 <span class="k">class</span> <span class="nc">RelationEntitySerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
     <span class="n">start_date</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
@@ -253,7 +253,7 @@
     <span class="n">relation_type</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">(</span><span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;add_relation_label&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RelationEntitySerializer.add_entity">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.RelationEntitySerializer.add_entity">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer.add_entity">[docs]</a>
     <span class="k">def</span> <span class="nf">add_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">EntitySerializer</span><span class="p">(</span>
             <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;related_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_type</span><span class="p">)),</span> <span class="n">depth_ent</span><span class="o">=</span><span class="mi">0</span>
@@ -261,7 +261,7 @@
 
 
 <div class="viewcode-block" id="RelationEntitySerializer.add_relation_label">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.RelationEntitySerializer.add_relation_label">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers_generic.RelationEntitySerializer.add_relation_label">[docs]</a>
     <span class="k">def</span> <span class="nf">add_relation_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="n">cm</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="n">res_1</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
