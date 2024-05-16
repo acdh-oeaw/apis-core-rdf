@@ -1,20 +1,15 @@
 import re
 
-from django.conf import settings
-from django.http import Http404
-from rest_framework.generics import GenericAPIView
+from django.shortcuts import redirect
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy
-from rest_framework.settings import api_settings
 from rest_framework.views import APIView
+from rest_framework.exceptions import NotFound
 
 from apis_core.apis_metainfo.models import Uri, RootObject
-from .api_renderers import EntityToTEI
-from .serializers_generic import EntitySerializer
 from apis_core.utils import caching
-from apis_core.utils.utils import get_python_safe_module_path
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -23,40 +18,13 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
-class GetEntityGeneric(GenericAPIView):
-    serializer_class = EntitySerializer
-    queryset = RootObject.objects.all()
-    renderer_classes = tuple(api_settings.DEFAULT_RENDERER_CLASSES) + (EntityToTEI,)
-    if getattr(settings, "APIS_RENDERERS", None) is not None:
-        rend_add = tuple()
-        for rd in settings.APIS_RENDERERS:
-            rend_mod = __import__(rd)
-            for name, cls in rend_mod.__dict__.items():
-                rend_add + (cls,)
-        renderer_classes += rend_add
-
-    def get_object(self, pk, request):
-        try:
-            return RootObject.objects_inheritance.get_subclass(pk=pk)
-        except RootObject.DoesNotExist:
-            uri2 = Uri.objects.filter(uri=request.build_absolute_uri())
-            if uri2.count() == 1:
-                return RootObject.objects_inheritance.get_subclass(pk=uri2[0].entity_id)
-            else:
-                raise Http404
-
+class GetEntityGeneric(APIView):
     def get(self, request, pk):
-        ent = self.get_object(pk, request)
-        # we let users override the default serializer based on the chosen renderer
-        # the name of the method has to be the full path of the renderer, dots
-        # replaced with underscores
-        # i.e.: apis_core_apis_entities_api_renderers_EntityToTEI
-        renderer_full_path = get_python_safe_module_path(self.request.accepted_renderer)
-        if hasattr(ent, renderer_full_path):
-            res = getattr(ent, renderer_full_path)(ent, context={"request": request})
-        else:
-            res = EntitySerializer(ent, context={"request": request})
-        return Response(res.data)
+        try:
+            obj = RootObject.objects_inheritance.get_subclass(id=pk)
+            return redirect(obj.get_api_detail_endpoint())
+        except RootObject.DoesNotExist:
+            raise NotFound
 
 
 class ResolveAbbreviations(APIView):
