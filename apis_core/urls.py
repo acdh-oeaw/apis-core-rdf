@@ -10,7 +10,7 @@ from django.conf import settings
 
 from apis_core.apis_metainfo.viewsets import UriToObjectViewSet
 from apis_core.core.views import Dumpdata
-from apis_core.apis_entities.api_views import GetEntityGeneric
+from apis_core.apis_entities.api_views import GetEntityGeneric, ListEntityGeneric
 
 from drf_spectacular.views import (
     SpectacularAPIView,
@@ -67,6 +67,7 @@ urlpatterns = [
         GetEntityGeneric.as_view(),
         name="GetEntityGeneric",
     ),
+    path("entities/", ListEntityGeneric.as_view()),
     path("api/dumpdata", Dumpdata.as_view()),
     path("", include("apis_core.generic.urls", namespace="generic")),
 ]
