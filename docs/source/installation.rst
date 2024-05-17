@@ -5,83 +5,57 @@ This is the recommended way to install APIS on local machines as well as on serv
 
 Docker Image
 ------------
-APIS docker images can be pulled from `docker hub <https://hub.docker.com/repository/docker/sennierer/apis>`_. Images are tagged
-from v0.9.1 onwards. Latest image is tagged with :latest.
-The images are automatically built and tagged and should be up-to-date with altest versions of code.
+For building and deploying APIS instances we use a `base image <https://github.com/acdh-oeaw/apis-base-container>`_. For deploying APIS instances in the `ACDH-CH <https://www.oeaw.ac.at/acdh/>`_ cluster there is a `GitHub action <https://github.com/acdh-oeaw/prosnet-workflows/blob/main/.github/workflows/deploy-apis-instance.yml>`_ that can be used as a basis for similar deployments in Kubernetes clusters via GitHub.
 
 Docker Compose
 --------------
 
-The following docker-compose file can be used as a starting point for deploying an APIS instance:
+For local development and or deployment on a single node/server there is a `APIS compose repo <https://github.com/acdh-oeaw/apis-core-rdf-compose>`_. It is setup with `OEBL ontology <https://github.com/acdh-oeaw/apis-instance-oebl-pnp/tree/abcfb7ee4708eded7428bc1a8e243233cf28e8b6>`_ as a basis, but the submodule can be exchanged for other APIS ontologies.
+The `docker-compose <https://github.com/acdh-oeaw/apis-core-rdf-compose/blob/main/docker-compose.yml>`_ file included can be used as a starting point for a deployment via docker-compose. What is missing in this setup is some kind of reverse proxy solution (such as Traefik or an Nginx container).
 
 .. code-block:: yaml
 
-    version: '2'
+  version: '3.8'
+
+  services:
+    app:
+      build:
+        context: .
+        dockerfile: apis-base-container/Dockerfile
+      depends_on:
+        db:
+          condition: service_healthy
+          restart: true
+
+      env_file:
+        - apis_settings.env
+      volumes:
+        - ${PWD}/apis_local_settings.py:/app/apis_local_settings.py
+        - ${PWD}/local_startup_scripts/060-createsuperuser:/startup/060-createsuperuser
+      ports:
+        - 5000:5000
+
+    db:
+      image: postgres:latest
+      restart: unless-stopped
+      volumes:
+        - postgres-data:/var/lib/postgresql/data
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_DB: postgres #use other passwords in production
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_EXTENSIONS: pg_trgm
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+        interval: 10s
+        timeout: 3s
+        retries: 3
+
+  volumes:
+    postgres-data:
 
 
-    services:
-            web:
-                image: sennierer/apis:latest
-                environment:
-                    - APIS_PROJECT=apis_test #as used in the apis-settings repo
-                    - APIS_DB_NAME=testdb 
-                    - APIS_DB_USER=testuser
-                    - APIS_DB_PASSWORD=testpwd
-                    - APIS_DB_HOST=database
-                    - APIS_DB_PORT=3306
-                    - APIS_AUTO_CREATE_DB=1
-                    - DJANGO_SUPERUSER_PASSWORD=adminpass123 #change that to admin password
-                    - DJANGO_SUPERUSER_USERNAME=admin #change that to admin username
-                    - DJANGO_SUPERUSER_EMAIL=my_user@domain.com #change that to email
-                    # and more e.g. APIS_DB_PORT >> apis-webpage-base/apis/settings/base.py
-                container_name: apis_core_apis_test #use apis_core_$APIS_PROJECT, e.g. apis_core_mpr
-                command: sh /start-apis/start-apis/start.sh 
-                volumes:           
-                        - config-volume:/config-apis    
-                        - staticfiles-volume:/apis/apis-webpage-base/staticfiles
-                networks:
-                - backend
-                depends_on:
-                - database
-            
-            database:
-                image: mysql:5.7
-                command: --default-authentication-plugin=mysql_native_password
-                restart: always
-                environment:
-                        - MYSQL_ROOT_PASSWORD=rootpwd
-                        - MYSQL_DATABASE=testdb
-                        - MYSQL_USER=testuser
-                        - MYSQL_PASSWORD=testpwd
-                networks:
-                        - backend
-            nginx:
-                image: nginx:latest
-                container_name: ngx_apis_apis_test #use ngx_apis_$PROJECT_NAME, e.g, ngx_apis_mpr
-                environment:
-                    - APIS_PROJECT=apis_test
-                    - APIS_SERVER_NAME=localhost #as used in the apis-settings repo >> needs to be present in both images
-                volumes:
-                    - config-volume:/config-apis    
-                    - staticfiles-volume:/staticfiles  
-                ports:
-                        - "8080:81"
-                depends_on:
-                        - web
-                networks:
-                    - backend
-                command: /bin/bash -c "envsubst '$${APIS_PROJECT},$${APIS_SERVER_NAME}' < /config-apis/start-apis/nginx/nginx.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
-    networks:
-    backend:
-        driver: bridge
-
-    volumes:
-    config-volume:
-            driver: local
-    staticfiles-volume:
-            driver: local
-
-After ``docker-compose up`` you should now have a default APIS installation accessible under http://localhost:8080.
+After ``docker-compose up`` you should now have a default APIS installation accessible under http://0.0.0.0:5000.
 
 
 Installation without Docker
@@ -90,53 +64,18 @@ Installation without Docker
 Prerequisites
 -------------
 
-APIS webapp needs Python 3.6+ and several python packages that can be easily installed by using `pip <https://pip.pypa.io/en/stable/>`_, 
-`pipenv <https://github.com/pypa/pipenv>`_, or `poetry <https://python-poetry.org/>`_.
-
-Create a new virtualenv and activate it:
-
-.. code-block:: console
-
-   virtualenv -p pyton3 your_virtualenv_name
-   source your_virtualenv_name/bin/activate
-
-To activate the virtualenv on Windows, go to the directory your_virtualenv_name/Scripts and run activate.bat from the command line.
-
+APIS webapp needs Python 3.11+ and `poetry <https://python-poetry.org/>`_ as a dependency manager.
 
 Installation on a linux box
 ----------------------------
 
-Change to the directory you have downloaded APIS to and install the needed Python packages:
+Change to the directory you have downloaded APIS to. Please note that a fully working APIS installation needs an ontology, a setting files and some other files alongside `apis-core-rdf <https://github.com/acdh-oeaw/apis-core-rdf>`_ library. Existing APIS instances such as `OEBL <>`_, `SiCProd <>`_, `Frischmuth <>`_ and `Tibschol <>`_ can serve as a starting point for developing your own instance. Clone one of these repos and install the dependencies:
 
 .. code-block:: console
+    poetry install
 
-    cd apis-core
-    pip install -r requirements.txt
-
-Next you need to create a file called copy the ``APIS_directory/apis-core/apis/settings/settings_test_ci.py`` file to another name.
-We suggest ``server.py``::
-
-    cp APIS_directory/apis-core/apis/settings/settings_test_ci.py APIS_directory/apis-core/apis/settings/server.py
-
-Edit ``server.py`` to your needs. E.g. if you intend to use Mysql it should look something like::
-
-    import os
-    from .base import *
-
-    SECRET_KEY = 'asdaaserffsdfi'
-    # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
-
-    DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'databsename',
-        'USER': 'dtabaseuser',
-        'PASSWORD': 'databasepassword',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
-        }
-    }
+Next you need to change the settings file of the instance you cloned. For most of them its in ``apis_ontology/server.py``.
+Especially you need to set the database connection to your needs. Alternatively you can set the environment variable ``DATABASE_URL`` to an appropriate string. See the documentation of `dj-database-url <https://github.com/jazzband/dj-database-url>`_ for details on how to do that.
 
 Dont forget to set ``DEBUG = False`` once you are in production.
 
@@ -144,37 +83,37 @@ Once the database connection is set run:
 
 .. code-block:: console
 
-    python manage.py migrate --settings=apis.settings.server
+    poetry run manage.py migrate --settings=apis_ontology.server
 
 For convenience we suggest you alter ``manage.py`` to::
 
     if __name__ == "__main__":
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "apis.settings.server")
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "apis_ontology.server")
 
         from django.core.management import execute_from_command_line
 
         execute_from_command_line(sys.argv)
 
-Once that is done you dont have to include ``--settings=apis.settings.server`` in your commands anymore.
+Once that is done you dont have to include ``--settings=apis_ontology.server`` in your commands anymore.
 
 Next we migrate the APIS internal tables:
 
 .. code-block:: console
 
-    python manage.py migrate
+    poetry run manage.py migrate
 
 and create a superuser:
 
 .. code-block:: console
 
-    python manage.py createsuperuser
+    poetry run manage.py createsuperuser
 
 answer the questions and hit enter.
 Now you can already proceed running the development server:
 
 .. code-block:: console
 
-    python manage.py runserver
+    poetry run manage.py runserver
 
 should bring up a development server window with your new apis instance.
 
@@ -187,7 +126,7 @@ In the command prompt that pops up after the activation of the virtualenv, chang
 
 .. code-block:: console
 
-    pip install -r requirements.txt
+    poetry install
 
 If you encounter problems while installing the packages in the requirements.txt file, remove the ones that cause the problem (from the requirements.txt file), and download the .whl file of the problematic module from the following site: http://www.lfd.uci.edu/~gohlke/pythonlibs/ (choosing the correct version: your python version must be equal to the number after cp in the name of the .whl file, and your operating system 32-bit/64-bit with the end of the file name.)
 
