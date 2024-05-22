@@ -1,7 +1,8 @@
 from django.forms import ModelForm, ModelChoiceField
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
-from django_select2.forms import ModelSelect2Widget
+
+# from django_select2.forms import ModelSelect2Widget
 
 
 from crispy_forms.layout import Submit, Layout, Div, HTML
