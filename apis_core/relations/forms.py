@@ -42,18 +42,18 @@ class RelationForm(ModelForm):
             if hasattr(tocontenttype.model_class(), "name"):
                 self.fields[obj] = ModelChoiceField(
                     queryset=tocontenttype.model_class().objects.all(),
-                    widget=ModelSelect2Widget(
-                        model=tocontenttype.model_class(),
-                        search_fields=["name__icontains", "id__icontains"],
-                    ),
+                    # widget=ModelSelect2Widget(
+                    #     model=tocontenttype.model_class(),
+                    #     search_fields=["name__icontains", "id__icontains"],
+                    # ),
                 )
             else:
                 self.fields[obj] = ModelChoiceField(
                     queryset=tocontenttype.model_class().objects.all(),
-                    widget=ModelSelect2Widget(
-                        model=tocontenttype.model_class(),
-                        search_fields=["label__icontains", "id__icontains"],
-                    ),
+                    # widget=ModelSelect2Widget(
+                    #     model=tocontenttype.model_class(),
+                    #     search_fields=["label__icontains", "id__icontains"],
+                    # ),
                 )
             self.fields[obj].label = tocontenttype.name
 
