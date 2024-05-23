@@ -48,6 +48,8 @@ class RelationForm(ModelForm):
                     #     search_fields=["name__icontains", "id__icontains"],
                     # ),
                 )
+                self.fields[obj].label = tocontenttype.name
+
             else:
                 self.fields[obj] = ModelChoiceField(
                     queryset=tocontenttype.model_class().objects.all(),
@@ -56,7 +58,6 @@ class RelationForm(ModelForm):
                     #     search_fields=["label__icontains", "id__icontains"],
                     # ),
                 )
-            self.fields[obj].label = tocontenttype.name
 
         if kwargs.get("instance", None) is not None:
             # allow subject also to be editable
