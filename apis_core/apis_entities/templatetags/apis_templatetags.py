@@ -5,6 +5,8 @@ from apis_core.utils.helpers import triple_sidebar
 from django.contrib.contenttypes.models import ContentType
 from apis_core.apis_entities.models import AbstractEntity
 
+from apis_core.apis_entities.utils import get_entity_classes
+
 register = template.Library()
 
 
@@ -49,6 +51,20 @@ def entities_content_types():
         )
     )
     return entities
+
+
+@register.simple_tag
+def entities_verbose_name_plural_listview_url():
+    """
+    Return all entities verbose names together with their list uri, sorted in alphabetical order
+    USED BY:
+    * `core/base.html`
+    """
+    ret = {
+        entity._meta.verbose_name_plural: entity.get_listview_url()
+        for entity in get_entity_classes()
+    }
+    return sorted(ret.items())
 
 
 @register.simple_tag(takes_context=True)
