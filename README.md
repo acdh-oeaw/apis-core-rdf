@@ -40,6 +40,9 @@ terms of Creative Commons Attribution-ShareAlike 4.0 International License. To
 view a copy of this license, visit
 http://creativecommons.org/licenses/by-sa/4.0/
 
+APIS contains the ["Material Symbols" font](https://fonts.google.com/icons)(commit ace1af0), which
+is licenced under the [Apache Licence Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+
 
 Installation
 ------------
