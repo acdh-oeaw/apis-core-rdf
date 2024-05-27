@@ -294,6 +294,19 @@ By having one overarching super class we gain the advantage of unique identifier
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.group">
+<span class="sig-name descname"><span class="pre">group</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.group" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.id">
 <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.id" title="Link to this definition"></a></dt>
 <dd><p>A wrapper for a deferred-loading field. When the value is read from this
@@ -309,6 +322,32 @@ object the first time, the query is executed.</p>
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.objects_inheritance">
 <span class="sig-name descname"><span class="pre">objects_inheritance</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;model_utils.managers.InheritanceManager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.objects_inheritance" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.person">
+<span class="sig-name descname"><span class="pre">person</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.person" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.place">
+<span class="sig-name descname"><span class="pre">place</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.place" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.property">
