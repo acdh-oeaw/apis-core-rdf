@@ -246,6 +246,34 @@ keyword arguments, and other things.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_entities.api_views.ListEntityGeneric">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_entities.api_views.</span></span><span class="sig-name descname"><span class="pre">ListEntityGeneric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/api_views.html#ListEntityGeneric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.api_views.ListEntityGeneric" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ListAPIView</span></code></p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_entities.api_views.ListEntityGeneric.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/api_views.html#ListEntityGeneric.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.api_views.ListEntityGeneric.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Get the list of items for this view.
+This must be an iterable, and may be a queryset.
+Defaults to using <cite>self.queryset</cite>.</p>
+<p>This method should always be used rather than accessing <cite>self.queryset</cite>
+directly, as <cite>self.queryset</cite> gets evaluated only once, and those results
+are cached for all subsequent requests.</p>
+<p>You may want to override this if you need to provide different
+querysets depending on the incoming request.</p>
+<p>(Eg. return a list of items that is specific to the user)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_entities.api_views.ListEntityGeneric.serializer_class">
+<span class="sig-name descname"><span class="pre">serializer_class</span></span><a class="headerlink" href="#apis_core.apis_entities.api_views.ListEntityGeneric.serializer_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#apis_core.apis_entities.serializers.MinimalEntitySerializer" title="apis_core.apis_entities.serializers.MinimalEntitySerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinimalEntitySerializer</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-apis_core.apis_entities.apps">
 <span id="apis-core-apis-entities-apps-module"></span><h2>apis_core.apis_entities.apps module<a class="headerlink" href="#module-apis_core.apis_entities.apps" title="Link to this heading"></a></h2>
@@ -656,6 +684,22 @@ It is called by the <cite>merge_with</cite> method.</p>
 <dd></dd></dl>
 
 </section>
+<section id="module-apis_core.apis_entities.serializers">
+<span id="apis-core-apis-entities-serializers-module"></span><h2>apis_core.apis_entities.serializers module<a class="headerlink" href="#module-apis_core.apis_entities.serializers" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_entities.serializers.MinimalEntitySerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_entities.serializers.</span></span><span class="sig-name descname"><span class="pre">MinimalEntitySerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/serializers.html#MinimalEntitySerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.serializers.MinimalEntitySerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Serializer</span></code></p>
+<p>When a field is instantiated, we store the arguments that were used,
+so that we can present a helpful representation of the object.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_entities.serializers.MinimalEntitySerializer.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/serializers.html#MinimalEntitySerializer.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.serializers.MinimalEntitySerializer.get_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-apis_core.apis_entities.signals">
 <span id="apis-core-apis-entities-signals-module"></span><h2>apis_core.apis_entities.signals module<a class="headerlink" href="#module-apis_core.apis_entities.signals" title="Link to this heading"></a></h2>
 </section>
@@ -789,6 +833,14 @@ not have a method with the specified name.</p>
 <dd></dd></dl>
 
 </dd></dl>
+
+</section>
+<section id="module-apis_core.apis_entities.utils">
+<span id="apis-core-apis-entities-utils-module"></span><h2>apis_core.apis_entities.utils module<a class="headerlink" href="#module-apis_core.apis_entities.utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.apis_entities.utils.get_entity_classes">
+<span class="sig-prename descclassname"><span class="pre">apis_core.apis_entities.utils.</span></span><span class="sig-name descname"><span class="pre">get_entity_classes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/utils.html#get_entity_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.utils.get_entity_classes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-apis_core.apis_entities.views">
