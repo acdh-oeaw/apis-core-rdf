@@ -32,19 +32,24 @@ from apis_core.generic.abc import GenericModel
 
 
 class CustomEndpointEnumerator(EndpointEnumerator):
-    def _generate_content_type_endpoint(self, content_type: ContentType):
+    def _generate_content_type_endpoint(
+        self, content_type: ContentType, method: str = "list"
+    ):
         """Create a endpoint tuple, usable by the SchemaGenerator of DRF spectacular"""
         path = reverse("apis_core:generic:genericmodelapi-list", args=[content_type])
+        cls = resolve(path).func.cls
+
+        if method == "detail":
+            path += "{id}/"
         regex = path
         # for now we only do "GET"
-        method = "GET"
-        cls = resolve(path).func.cls
+        httpmethod = "GET"
         # we have to add a attribute, so that the
         # `initkwargs` argument to the `as_view`
         # method can contain a `model` argument
         cls.model = None
-        callback = cls.as_view({"get": "list"}, model=content_type.model_class())
-        return (path, regex, method, callback)
+        callback = cls.as_view({"get": method}, model=content_type.model_class())
+        return (path, regex, httpmethod, callback)
 
     def get_api_endpoints(self, patterns=None, prefix=""):
         """
@@ -62,8 +67,10 @@ class CustomEndpointEnumerator(EndpointEnumerator):
             if content_type.model_class() is not None and issubclass(
                 content_type.model_class(), GenericModel
             ):
-                endpoint = self._generate_content_type_endpoint(content_type)
-                api_endpoints.append(endpoint)
+                api_endpoints.append(self._generate_content_type_endpoint(content_type))
+                api_endpoints.append(
+                    self._generate_content_type_endpoint(content_type, "detail")
+                )
         return api_endpoints
 
 
