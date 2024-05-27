@@ -1,4 +1,7 @@
-SECRET_KEY = "a+nkut46lzzg_=ul)zrs29$u_6^*)2by2mjmwn)tqlgw)_at&l"
+import os
+from django.core.management.utils import get_random_secret_key
+
+SECRET_KEY = os.environ.get("SECRET_KEY", get_random_secret_key())
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -28,10 +31,9 @@ INSTALLED_APPS = [
     "dal_select2",
     # api
     "rest_framework",
-    "rest_framework.authtoken",
     # for swagger ui generation
     "drf_spectacular",
-    "simple_history",
+    # our ontology
     "sample_project",
 ]
 
@@ -43,8 +45,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "allow_cidr.middleware.AllowCIDRMiddleware",
-    "reversion.middleware.RevisionMiddleware",
 ]
 
 ROOT_URLCONF = "apis_core.urls"
@@ -60,8 +60,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # we need this for accessing `basetemplate`
-                "apis_core.context_processors.custom_context_processors.list_apis_settings",
             ],
         },
     },
