@@ -126,19 +126,24 @@
 <div class="viewcode-block" id="CustomEndpointEnumerator">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.generators.CustomEndpointEnumerator">[docs]</a>
 <span class="k">class</span> <span class="nc">CustomEndpointEnumerator</span><span class="p">(</span><span class="n">EndpointEnumerator</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_generate_content_type_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content_type</span><span class="p">:</span> <span class="n">ContentType</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_generate_content_type_endpoint</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">content_type</span><span class="p">:</span> <span class="n">ContentType</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;list&quot;</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a endpoint tuple, usable by the SchemaGenerator of DRF spectacular&quot;&quot;&quot;</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:genericmodelapi-list&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">content_type</span><span class="p">])</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">cls</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;detail&quot;</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{id}</span><span class="s2">/&quot;</span>
         <span class="n">regex</span> <span class="o">=</span> <span class="n">path</span>
         <span class="c1"># for now we only do &quot;GET&quot;</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span>
-        <span class="bp">cls</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">cls</span>
+        <span class="n">httpmethod</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span>
         <span class="c1"># we have to add a attribute, so that the</span>
         <span class="c1"># `initkwargs` argument to the `as_view`</span>
         <span class="c1"># method can contain a `model` argument</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">callback</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">as_view</span><span class="p">({</span><span class="s2">&quot;get&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">},</span> <span class="n">model</span><span class="o">=</span><span class="n">content_type</span><span class="o">.</span><span class="n">model_class</span><span class="p">())</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
+        <span class="n">callback</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">as_view</span><span class="p">({</span><span class="s2">&quot;get&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">},</span> <span class="n">model</span><span class="o">=</span><span class="n">content_type</span><span class="o">.</span><span class="n">model_class</span><span class="p">())</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">regex</span><span class="p">,</span> <span class="n">httpmethod</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CustomEndpointEnumerator.get_api_endpoints">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.generators.CustomEndpointEnumerator.get_api_endpoints">[docs]</a>
@@ -158,8 +163,10 @@
             <span class="k">if</span> <span class="n">content_type</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span>
                 <span class="n">content_type</span><span class="o">.</span><span class="n">model_class</span><span class="p">(),</span> <span class="n">GenericModel</span>
             <span class="p">):</span>
-                <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_content_type_endpoint</span><span class="p">(</span><span class="n">content_type</span><span class="p">)</span>
-                <span class="n">api_endpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+                <span class="n">api_endpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_content_type_endpoint</span><span class="p">(</span><span class="n">content_type</span><span class="p">))</span>
+                <span class="n">api_endpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_generate_content_type_endpoint</span><span class="p">(</span><span class="n">content_type</span><span class="p">,</span> <span class="s2">&quot;detail&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
         <span class="k">return</span> <span class="n">api_endpoints</span></div>
 </div>
 
