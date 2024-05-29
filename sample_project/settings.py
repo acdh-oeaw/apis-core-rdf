@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "apis_core.core",
     "apis_core.apis_metainfo",
     "apis_core.apis_relations",
     "apis_core.apis_entities",
@@ -25,6 +26,7 @@ INSTALLED_APPS = [
     "apis_core.history",
     # ui stuff
     "crispy_forms",
+    "crispy_bootstrap4",
     "django_filters",
     "django_tables2",
     "dal",
@@ -47,7 +49,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "apis_core.urls"
+# ROOT_URLCONF = "apis_core.urls"
+ROOT_URLCONF = "sample_project.urls"
 
 TEMPLATES = [
     {
@@ -76,3 +79,5 @@ DATABASES = {
         "NAME": "/tmp/db.sqlite3",
     },
 }
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
