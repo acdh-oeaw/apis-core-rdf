@@ -28,8 +28,8 @@ class UriToObjectViewSet(viewsets.ViewSet):
         uri = params.pop("uri", None)
         if uri:
             u = get_object_or_404(Uri, uri=request.query_params.get("uri"))
-            model = u.root_object.self_contenttype.model
-            r = reverse(f"apis:apis_core:{model}-detail", args=[u.root_object.id])
+            ct = u.root_object.self_contenttype
+            r = reverse("apis_core:generic:detail", args=[ct, u.root_object.id])
             if params:
                 r += "?" + QueryDict.from_keys(params).urlencode()
             return HttpResponseRedirect(r)
