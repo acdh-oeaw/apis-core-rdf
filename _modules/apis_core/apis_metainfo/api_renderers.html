@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.apis_relations.signals &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.apis_metainfo.api_renderers &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -80,7 +80,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.apis_relations.signals</li>
+      <li class="breadcrumb-item active">apis_core.apis_metainfo.api_renderers</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -89,31 +89,43 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.apis_relations.signals</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.signals</span> <span class="kn">import</span> <span class="n">post_duplicate</span>
-<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
-
-<span class="kn">import</span> <span class="nn">logging</span>
-
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+  <h1>Source code for apis_core.apis_metainfo.api_renderers</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">render_to_string</span>
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">renderers</span>
+<span class="kn">from</span> <span class="nn">rest_framework_csv.renderers</span> <span class="kn">import</span> <span class="n">CSVRenderer</span>
 
 
-<div class="viewcode-block" id="copy_relations">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.signals.copy_relations">[docs]</a>
-<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_duplicate</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">copy_relations</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">duplicate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Copying relations from </span><span class="si">{</span><span class="n">instance</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">duplicate</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">RootObject</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">subj</span><span class="o">=</span><span class="n">instance</span><span class="p">):</span>
-            <span class="n">newrel</span> <span class="o">=</span> <span class="n">rel</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
-            <span class="n">newrel</span><span class="o">.</span><span class="n">subj</span> <span class="o">=</span> <span class="n">duplicate</span>
-            <span class="n">newrel</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">instance</span><span class="p">):</span>
-            <span class="n">newrel</span> <span class="o">=</span> <span class="n">rel</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
-            <span class="n">newrel</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="n">duplicate</span>
-            <span class="n">newrel</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+<div class="viewcode-block" id="TEIBaseRenderer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.TEIBaseRenderer">[docs]</a>
+<span class="k">class</span> <span class="nc">TEIBaseRenderer</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
+    <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;application/xml+tei&quot;</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;xml&quot;</span>
+
+<div class="viewcode-block" id="TEIBaseRenderer.render">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.render">[docs]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">render_to_string</span><span class="p">(</span>
+            <span class="s2">&quot;apis_metainfo/TEI_renderer.xml&quot;</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="s2">&quot;renderer_context&quot;</span><span class="p">:</span> <span class="n">renderer_context</span><span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PaginatedCSVRenderer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer">[docs]</a>
+<span class="k">class</span> <span class="nc">PaginatedCSVRenderer</span><span class="p">(</span><span class="n">CSVRenderer</span><span class="p">):</span>
+    <span class="n">results_field</span> <span class="o">=</span> <span class="s2">&quot;results&quot;</span>
+
+<div class="viewcode-block" id="PaginatedCSVRenderer.render">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer.render">[docs]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_field</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PaginatedCSVRenderer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
 
 </pre></div>
 

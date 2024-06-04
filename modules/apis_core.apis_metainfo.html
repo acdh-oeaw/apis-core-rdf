@@ -16,7 +16,7 @@
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../_static/documentation_options.js?v=f2a433a1"></script>
-        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -102,6 +102,47 @@
 </section>
 <section id="module-apis_core.apis_metainfo.admin">
 <span id="apis-core-apis-metainfo-admin-module"></span><h2>apis_core.apis_metainfo.admin module<a class="headerlink" href="#module-apis_core.apis_metainfo.admin" title="Link to this heading"></a></h2>
+</section>
+<section id="module-apis_core.apis_metainfo.api_renderers">
+<span id="apis-core-apis-metainfo-api-renderers-module"></span><h2>apis_core.apis_metainfo.api_renderers module<a class="headerlink" href="#module-apis_core.apis_metainfo.api_renderers" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.api_renderers.</span></span><span class="sig-name descname"><span class="pre">PaginatedCSVRenderer</span></span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/api_renderers.html#PaginatedCSVRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CSVRenderer</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/api_renderers.html#PaginatedCSVRenderer.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer.render" title="Link to this definition"></a></dt>
+<dd><p>Renders serialized <em>data</em> into CSV. For a dictionary:</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer.results_field">
+<span class="sig-name descname"><span class="pre">results_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'results'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.api_renderers.PaginatedCSVRenderer.results_field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.api_renderers.TEIBaseRenderer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.api_renderers.</span></span><span class="sig-name descname"><span class="pre">TEIBaseRenderer</span></span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/api_renderers.html#TEIBaseRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.api_renderers.TEIBaseRenderer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRenderer</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.format">
+<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'xml'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.format" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.media_type">
+<span class="sig-name descname"><span class="pre">media_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'application/xml+tei'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.media_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">media_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/api_renderers.html#TEIBaseRenderer.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.api_renderers.TEIBaseRenderer.render" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-apis_core.apis_metainfo.apps">
 <span id="apis-core-apis-metainfo-apps-module"></span><h2>apis_core.apis_metainfo.apps module<a class="headerlink" href="#module-apis_core.apis_metainfo.apps" title="Link to this heading"></a></h2>
@@ -522,33 +563,8 @@ keyword arguments.</p>
 </dd></dl>
 
 </section>
-<section id="module-apis_core.apis_metainfo.serializers">
-<span id="apis-core-apis-metainfo-serializers-module"></span><h2>apis_core.apis_metainfo.serializers module<a class="headerlink" href="#module-apis_core.apis_metainfo.serializers" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.serializers.UriSerializer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.serializers.</span></span><span class="sig-name descname"><span class="pre">UriSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/serializers.html#UriSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.serializers.UriSerializer" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.serializers.GenericHyperlinkedModelSerializer" title="apis_core.generic.serializers.GenericHyperlinkedModelSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericHyperlinkedModelSerializer</span></code></a></p>
-<p>When a field is instantiated, we store the arguments that were used,
-so that we can present a helpful representation of the object.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.serializers.UriSerializer.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/serializers.html#UriSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.serializers.UriSerializer.Meta" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.serializers.UriSerializer.Meta.fields">
-<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'__all__'</span></em><a class="headerlink" href="#apis_core.apis_metainfo.serializers.UriSerializer.Meta.fields" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.serializers.UriSerializer.Meta.model">
-<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#apis_core.apis_metainfo.serializers.UriSerializer.Meta.model" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#apis_core.apis_metainfo.models.Uri" title="apis_core.apis_metainfo.models.Uri"><code class="xref py py-class docutils literal notranslate"><span class="pre">Uri</span></code></a></p>
-</dd></dl>
-
-</dd></dl>
-
-</dd></dl>
-
+<section id="apis-core-apis-metainfo-serializers-module">
+<h2>apis_core.apis_metainfo.serializers module<a class="headerlink" href="#apis-core-apis-metainfo-serializers-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-apis_core.apis_metainfo.signals">
 <span id="apis-core-apis-metainfo-signals-module"></span><h2>apis_core.apis_metainfo.signals module<a class="headerlink" href="#module-apis_core.apis_metainfo.signals" title="Link to this heading"></a></h2>
