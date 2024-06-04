@@ -18,28 +18,16 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
 
     steps:
      - uses: actions/checkout@v3
-       with:
-         path: apis-core-rdf
-         ref: main
-     - name: Set up Python ${{ matrix.python-version }}
-       uses: actions/setup-python@v3
-       with:
-         python-version: ${{ matrix.python-version }}
+     - uses: actions/setup-python@v3
      - name: Install documentation dependencies
        run: |
-         cd apis-core-rdf
          pip install poetry
-         poetry config virtualenvs.create false
-         poetry lock
          poetry install --with docs
      - name: Build docs
-       run: make -C "$GITHUB_WORKSPACE/apis-core-rdf/docs" html
+       run: poetry run make -C "$GITHUB_WORKSPACE/docs" html
      - uses: actions/checkout@v3
        with:
          path: apis-core-rdf-pages
@@ -48,8 +36,7 @@ jobs:
        run: |
          cd apis-core-rdf-pages
          git rm -rf *
-         ls $GITHUB_WORKSPACE/apis-core-rdf/docs/_build/html/
-         cp -r $GITHUB_WORKSPACE/apis-core-rdf/docs/_build/html/* .
+         cp -r $GITHUB_WORKSPACE/docs/_build/html/* .
          touch .nojekyll
          git config user.name github-actions
          git config user.email github-actions@github.com
