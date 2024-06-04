@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.apis_entities.test_api &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.apis_metainfo.serializers &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -80,7 +80,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.apis_entities.test_api</li>
+      <li class="breadcrumb-item active">apis_core.apis_metainfo.serializers</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -89,26 +89,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.apis_entities.test_api</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
-<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
-<span class="kn">from</span> <span class="nn">rest_framework.authtoken.models</span> <span class="kn">import</span> <span class="n">Token</span>
-<span class="kn">from</span> <span class="nn">rest_framework.test</span> <span class="kn">import</span> <span class="n">APIClient</span>
+  <h1>Source code for apis_core.apis_metainfo.serializers</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Uri</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.generic.serializers</span> <span class="kn">import</span> <span class="n">GenericHyperlinkedModelSerializer</span>
 
 
-<div class="viewcode-block" id="GetTestCase">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.test_api.GetTestCase">[docs]</a>
-<span class="k">class</span> <span class="nc">GetTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
-<div class="viewcode-block" id="GetTestCase.setUpTestData">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.test_api.GetTestCase.setUpTestData">[docs]</a>
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">setUpTestData</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="c1"># Set up data for the whole TestCase</span>
-        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;lauren&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s2">&quot;pas_1234$&quot;</span><span class="p">)</span>
-        <span class="n">token</span> <span class="o">=</span> <span class="n">Token</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
-        <span class="n">client</span> <span class="o">=</span> <span class="n">APIClient</span><span class="p">()</span>
-        <span class="n">client</span><span class="o">.</span><span class="n">credentials</span><span class="p">(</span><span class="n">HTTP_AUTHORIZATION</span><span class="o">=</span><span class="s2">&quot;Token &quot;</span> <span class="o">+</span> <span class="n">token</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">client</span></div>
+<div class="viewcode-block" id="UriSerializer">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">UriSerializer</span><span class="p">(</span><span class="n">GenericHyperlinkedModelSerializer</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">HyperlinkedIdentityField</span><span class="p">(</span>
+        <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis:apis_api:uri-detail&quot;</span><span class="p">,</span> <span class="n">lookup_field</span><span class="o">=</span><span class="s2">&quot;pk&quot;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="UriSerializer.Meta">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.serializers.UriSerializer.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span></div>
 </div>
 
 </pre></div>

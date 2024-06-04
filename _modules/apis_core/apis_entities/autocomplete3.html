@@ -106,68 +106,6 @@
 <span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
 
 
-<div class="viewcode-block" id="CustomEntityAutocompletes">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.CustomEntityAutocompletes">[docs]</a>
-<span class="k">class</span> <span class="nc">CustomEntityAutocompletes</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for collecting all the custom autocomplete functions for one entity.</span>
-
-<span class="sd">    Attributes:</span>
-
-<span class="sd">    - self.entity: (string) entity types</span>
-<span class="sd">    - self.more: (boolean) if more results can be fetched (pagination)</span>
-<span class="sd">    - self.page_size: (integer) page size</span>
-<span class="sd">    - self.results: (list) results</span>
-<span class="sd">    - self.query: (string) query string</span>
-
-<span class="sd">    Methods:</span>
-<span class="sd">    - self.more(): fetch more results</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :param entity: (string) entity type to fetch additional autocompletes for</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">func_list</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">entity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">func_list</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">more</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="n">more_gen</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">func_list</span><span class="p">[</span><span class="n">entity</span><span class="p">]:</span>
-            <span class="n">res2</span> <span class="o">=</span> <span class="n">x</span><span class="p">()</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">page_size</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res2</span><span class="p">)</span> <span class="o">==</span> <span class="n">page_size</span><span class="p">:</span>
-                <span class="n">more</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="n">more_gen</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">res2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">res</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">page_size</span> <span class="o">=</span> <span class="n">page_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">more</span> <span class="o">=</span> <span class="n">more_gen</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_more_dict</span> <span class="o">=</span> <span class="n">more</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
-
-<div class="viewcode-block" id="CustomEntityAutocompletes.get_more">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.CustomEntityAutocompletes.get_more">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_more</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Function to retrieve more results.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">res4</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_more_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="n">res3</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">key</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_size</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res3</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_size</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_more_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_more_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">res3</span><span class="p">)</span>
-                <span class="n">res4</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">res3</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res4</span></div>
-</div>
-
-
-
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
 <div class="viewcode-block" id="GenericNetworkEntitiesAutocomplete">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.GenericNetworkEntitiesAutocomplete">[docs]</a>
