@@ -28,7 +28,11 @@ class EntityToContenttypeConverter:
     def to_python(self, value):
         candiates = get_list_or_404(ContentType, model=value)
         candiates = list(
-            filter(lambda ct: issubclass(ct.model_class(), AbstractEntity), candiates)
+            filter(
+                lambda ct: ct.model_class() is not None
+                and issubclass(ct.model_class(), AbstractEntity),
+                candiates,
+            )
         )
         if len(candiates) > 1:
             raise Http404("Multiple entities match the <%s> identifier" % value)
