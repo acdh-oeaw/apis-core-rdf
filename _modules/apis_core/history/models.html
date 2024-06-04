@@ -93,6 +93,7 @@
   <h1>Source code for apis_core.history.models</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 <span class="kn">from</span> <span class="nn">simple_history.models</span> <span class="kn">import</span> <span class="n">HistoricalRecords</span>
 <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">AppRegistryNotReady</span>
@@ -170,6 +171,9 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;returns all triples for a specific version of a model instance.</span>
 <span class="sd">        If only_latest is True, only the latest version of a triple is returned.&quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instance</span><span class="p">,</span> <span class="n">RootObject</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">none</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">history_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">filter_date</span> <span class="o">=</span> <span class="p">(</span>
