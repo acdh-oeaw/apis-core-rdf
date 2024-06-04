@@ -70,9 +70,9 @@ class RootObject(GenericModel, models.Model):
                 values = getattr(self, field.name).all()
                 objfield.set(values)
 
-        duplicate = newobj.save()
-        signals.post_duplicate.send(sender=origin, instance=self, duplicate=duplicate)
-        return duplicate
+        newobj.save()
+        signals.post_duplicate.send(sender=origin, instance=self, duplicate=newobj)
+        return newobj
 
     duplicate.alters_data = True
 
