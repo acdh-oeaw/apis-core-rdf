@@ -14,7 +14,6 @@ def access_for_all(self, viewtype="list"):
 
 def access_for_all_function(user):
     if user.is_anonymous:
-        print(getattr(settings, "APIS_DETAIL_VIEWS_ALLOWED", False))
         return getattr(settings, "APIS_DETAIL_VIEWS_ALLOWED", False)
     else:
         return True

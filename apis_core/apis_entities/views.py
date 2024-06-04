@@ -10,7 +10,6 @@ from apis_core.apis_entities.forms import EntitiesMergeForm
 
 class EntitiesUpdate(Update):
     def get_context_data(self, *args, **kwargs):
-        print(self.get_object())
         context = super().get_context_data(*args, **kwargs)
         context["mergeform"] = EntitiesMergeForm(instance=self.get_object())
         return context
