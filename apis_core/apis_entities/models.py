@@ -4,11 +4,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 from django.db.models.query import QuerySet
 
-from apis_core.utils import caching
-from apis_core.apis_metainfo.models import RootObject
+from apis_core.apis_metainfo.models import RootObject, Uri
 from apis_core.apis_relations.models import TempTriple
 from apis_core.apis_entities import signals
 
@@ -199,22 +198,15 @@ class AbstractEntity(RootObject):
 
 
 @receiver(post_save, dispatch_uid="create_default_uri")
-def create_default_uri(sender, instance, raw, **kwargs):
-    # with django reversion, browsing deleted entries in the admin interface
-    # leads to firing the `post_save` signal
-    # (https://github.com/etianen/django-reversion/issues/936) - a workaround
-    # is to check for the raw argument
-    if not raw:
-        from apis_core.apis_metainfo.models import Uri
-
-        if kwargs["created"] and sender in caching.get_all_ontology_classes():
-            if BASE_URI.endswith("/"):
-                base1 = BASE_URI[:-1]
-            else:
-                base1 = BASE_URI
-            uri_c = "{}{}".format(
-                base1,
-                reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk}),
-            )
-            uri2 = Uri(uri=uri_c, domain="apis default", root_object=instance)
-            uri2.save()
+def create_default_uri(sender, instance, created, raw, using, update_fields, **kwargs):
+    if getattr(settings, "CREATE_DEFAULT_URI", True):
+        if isinstance(instance, AbstractEntity) and created:
+            base = BASE_URI.strip("/")
+            try:
+                route = reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk})
+            except NoReverseMatch:
+                route = reverse(
+                    "apis_core:GetEntityGeneric", kwargs={"pk": instance.pk}
+                )
+            uri = f"{base}{route}"
+            Uri.objects.create(uri=uri, domain="apis default", root_object=instance)
