@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.19.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.18.1...v0.19.0) (2024-06-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** drop libre franklin font
+* drop old api views
+* **apis_metainfo:** drop Collection model
+
+### Features
+
+* **apis_entities:** add endpoint that lists all entities ([6d77a9d](https://github.com/acdh-oeaw/apis-core-rdf/commit/6d77a9d59225a152f7a0c1e773afaadb186c68e5)), closes [#850](https://github.com/acdh-oeaw/apis-core-rdf/issues/850)
+* **generic:** add getter for api detail endpoint ([3c80aef](https://github.com/acdh-oeaw/apis-core-rdf/commit/3c80aefefbab436ee294cbc0d6b27f9aa8176df2))
+* **generic:** introduce success_url getters for create and update ([eb870f5](https://github.com/acdh-oeaw/apis-core-rdf/commit/eb870f57ae62cefddcc6f23b48d031c244e605d7)), closes [#834](https://github.com/acdh-oeaw/apis-core-rdf/issues/834)
+* **generic:** make the form template title differ between create & edit ([ca6d8ef](https://github.com/acdh-oeaw/apis-core-rdf/commit/ca6d8efb24febbb7eed59e90efaa7a450c774804))
+
+
+### Bug Fixes
+
+* **apis_entities,core:** add templatetag for generating entitymenu ([481ded5](https://github.com/acdh-oeaw/apis-core-rdf/commit/481ded530e6ac06bdf0ea9ad7c3c56b3e15cf669)), closes [#860](https://github.com/acdh-oeaw/apis-core-rdf/issues/860)
+* **apis_entities:** set max_length for charfields in abstract classes ([6f7c3dc](https://github.com/acdh-oeaw/apis-core-rdf/commit/6f7c3dc52f64b31550fa3e679a975dbb45cc41eb))
+* **docs:** update settings file of doc config ([9774af2](https://github.com/acdh-oeaw/apis-core-rdf/commit/9774af2105c3e91b5e11e890eabb99b1df12a804))
+* **generic:** also add detail views to enumarated api_endpoints ([302b18e](https://github.com/acdh-oeaw/apis-core-rdf/commit/302b18e342872cc073eecac3969008a787be3871))
+* **history:** returning triples makes only sense for RootObjects ([b292d97](https://github.com/acdh-oeaw/apis-core-rdf/commit/b292d97a61ed2ccc2b84805cb8d90cdcbecf3423))
+* **sample_project:** add missing settings and provide urlconf wrapper ([782b5c8](https://github.com/acdh-oeaw/apis-core-rdf/commit/782b5c873da784b8d51eee0d32199d6b427c7e1d))
+
+
+### Documentation
+
+* add information about the custom schema generator setting ([3278ea1](https://github.com/acdh-oeaw/apis-core-rdf/commit/3278ea1a2a18b042a248181cec0a6c97be33bcc1))
+* Add test coverage information to documentation subfolder ([f6767d4](https://github.com/acdh-oeaw/apis-core-rdf/commit/f6767d4b3f0fe71ec3b68205951b28e0c2c93df3))
+
+
+### Code Refactoring
+
+* **apis_metainfo:** drop Collection model ([7a9aaf2](https://github.com/acdh-oeaw/apis-core-rdf/commit/7a9aaf2e114bc95546670c383b073ff11b54f234)), closes [#576](https://github.com/acdh-oeaw/apis-core-rdf/issues/576)
+* **core:** drop libre franklin font ([77929e3](https://github.com/acdh-oeaw/apis-core-rdf/commit/77929e34ea338685a1433b50fe58174d6c043cd9))
+* drop old api views ([8da1372](https://github.com/acdh-oeaw/apis-core-rdf/commit/8da1372b031279e4aa054c4f87d223b156d1b8e3))
+
 ## [0.18.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.18.0...v0.18.1) (2024-05-13)
 
 
