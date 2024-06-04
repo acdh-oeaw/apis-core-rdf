@@ -20,9 +20,7 @@ from apis_core.history.models import VersionMixin
 def find_if_user_accepted():
     request = get_current_request()
     if request is not None:
-        print("running through request")
         if request.user.is_authenticated:
-            print("authenticated")
             return {}
         else:
             return {"published": True}
