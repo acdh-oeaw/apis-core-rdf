@@ -1,6 +1,4 @@
-from operator import itemgetter
 from django import template
-from apis_core.utils import caching
 from apis_core.utils.helpers import triple_sidebar
 from django.contrib.contenttypes.models import ContentType
 from apis_core.apis_entities.models import AbstractEntity
@@ -16,21 +14,6 @@ def url_replace(request, field, value):
     dict_[field] = value
 
     return dict_.urlencode()
-
-
-@register.simple_tag
-def entities_list_links():
-    """
-    Retrieve all models which inherit from AbstractEntity class
-    and return their class name and verbose name.
-    """
-    entities_classes = caching.get_all_entity_classes() or []
-    entities_links = [
-        (e.__name__.lower(), e._meta.verbose_name.title()) for e in entities_classes
-    ]
-    entities_links.sort(key=itemgetter(1))
-
-    return entities_links
 
 
 def is_entity(content_type: ContentType):
