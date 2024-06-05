@@ -1,15 +1,15 @@
 import json
 
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
 
 from apis_core.apis_relations.forms import GenericTripleForm
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 
 from apis_core.apis_relations.models import Property, TempTriple, Triple
-
-from apis_core.utils import caching
 
 from apis_core.generic.views import List
 
@@ -111,8 +111,12 @@ def save_ajax_form(
     self_other = kind_form.split("triple_form_")[1].split("_to_")
     entity_type_self_str = self_other[0]
     entity_type_other_str = self_other[1]
-    entity_type_self_class = caching.get_entity_class_of_name(entity_type_self_str)
-    entity_type_other_class = caching.get_entity_class_of_name(entity_type_other_str)
+    entity_type_self_class = get_object_or_404(
+        ContentType, model=entity_type_self_str
+    ).model_class()
+    entity_type_other_class = get_object_or_404(
+        ContentType, model=entity_type_other_str
+    ).model_class()
     entity_instance_self = entity_type_self_class.objects.get(pk=SiteID)
     entity_instance_other = entity_type_other_class.get_or_create_uri(
         uri=request.POST["other_entity"]
