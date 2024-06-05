@@ -102,7 +102,7 @@
 <span class="kn">from</span> <span class="nn">django.db.models.fields.related_descriptors</span> <span class="kn">import</span> <span class="n">ForwardManyToOneDescriptor</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span><span class="p">,</span> <span class="n">rdf</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">rdf</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo</span> <span class="kn">import</span> <span class="n">signals</span>
 
@@ -157,8 +157,7 @@
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">related_fields</span><span class="p">:</span>
             <span class="n">objdict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-        <span class="n">entity_model</span> <span class="o">=</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_entity_class_of_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
-        <span class="n">newobj</span> <span class="o">=</span> <span class="n">entity_model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">objdict</span><span class="p">)</span>
+        <span class="n">newobj</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">objdict</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">related_fields</span><span class="p">:</span>
             <span class="c1"># we are not using `isinstance` because we want to</span>
