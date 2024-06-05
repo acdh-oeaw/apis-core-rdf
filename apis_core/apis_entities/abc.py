@@ -20,6 +20,9 @@ class E21_Person(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return f"{self.forename} {self.surname}"
+
 
 class E53_Place(models.Model):
     label = models.CharField(blank=True, default="", max_length=4096)
@@ -29,9 +32,15 @@ class E53_Place(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.label
+
 
 class E74_Group(models.Model):
     label = models.CharField(blank=True, default="", max_length=4096)
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return self.label
