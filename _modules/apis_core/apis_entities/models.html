@@ -97,11 +97,10 @@
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
 <span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">NoReverseMatch</span>
 <span class="kn">from</span> <span class="nn">django.db.models.query</span> <span class="kn">import</span> <span class="n">QuerySet</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">caching</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span><span class="p">,</span> <span class="n">Uri</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities</span> <span class="kn">import</span> <span class="n">signals</span>
 
@@ -345,25 +344,18 @@
 <div class="viewcode-block" id="create_default_uri">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.models.create_default_uri">[docs]</a>
 <span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">dispatch_uid</span><span class="o">=</span><span class="s2">&quot;create_default_uri&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_default_uri</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="c1"># with django reversion, browsing deleted entries in the admin interface</span>
-    <span class="c1"># leads to firing the `post_save` signal</span>
-    <span class="c1"># (https://github.com/etianen/django-reversion/issues/936) - a workaround</span>
-    <span class="c1"># is to check for the raw argument</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">raw</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;created&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">sender</span> <span class="ow">in</span> <span class="n">caching</span><span class="o">.</span><span class="n">get_all_ontology_classes</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">BASE_URI</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
-                <span class="n">base1</span> <span class="o">=</span> <span class="n">BASE_URI</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">base1</span> <span class="o">=</span> <span class="n">BASE_URI</span>
-            <span class="n">uri_c</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">base1</span><span class="p">,</span>
-                <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;GetEntityGenericRoot&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">instance</span><span class="o">.</span><span class="n">pk</span><span class="p">}),</span>
-            <span class="p">)</span>
-            <span class="n">uri2</span> <span class="o">=</span> <span class="n">Uri</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">uri_c</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;apis default&quot;</span><span class="p">,</span> <span class="n">root_object</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-            <span class="n">uri2</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+<span class="k">def</span> <span class="nf">create_default_uri</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">using</span><span class="p">,</span> <span class="n">update_fields</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;CREATE_DEFAULT_URI&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">AbstractEntity</span><span class="p">)</span> <span class="ow">and</span> <span class="n">created</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">BASE_URI</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">route</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;GetEntityGenericRoot&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">instance</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span>
+            <span class="k">except</span> <span class="n">NoReverseMatch</span><span class="p">:</span>
+                <span class="n">route</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span>
+                    <span class="s2">&quot;apis_core:GetEntityGeneric&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="n">instance</span><span class="o">.</span><span class="n">pk</span><span class="p">}</span>
+                <span class="p">)</span>
+            <span class="n">uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base</span><span class="si">}{</span><span class="n">route</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;apis default&quot;</span><span class="p">,</span> <span class="n">root_object</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span></div>
 
 </pre></div>
 
