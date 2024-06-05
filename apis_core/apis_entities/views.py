@@ -1,6 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.html import format_html
 from django.views import View
 from django.views.generic.edit import FormView
 
@@ -22,6 +24,14 @@ class EntitiesDuplicate(GenericModelMixin, PermissionRequiredMixin, View):
         source_obj = get_object_or_404(self.model, pk=kwargs["pk"])
         newobj = source_obj.duplicate()
 
+        messages.success(
+            request,
+            format_html(
+                "<a href={}>{}</a> was successfully duplicated to the current object:",
+                source_obj.get_absolute_url(),
+                source_obj,
+            ),
+        )
         return redirect(
             reverse(
                 "apis_core:apis_entities:generic_entities_edit_view",
