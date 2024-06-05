@@ -184,6 +184,25 @@
       <!-- Start main content block -->
       <div id="content">
 
+        {% block messages %}
+
+          {% if messages %}
+            <div class="messages container-fluid">
+              {% for message in messages %}
+                <div class="alert alert-dismissible fade show 
+                  {% if message.tags %}alert-{{ message.tags }}"{% endif %}
+                   role="alert">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+        {% endblock messages %}
+
         {% block content %}{% endblock %}
 
       </div>
