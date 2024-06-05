@@ -10,6 +10,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "apis_override_select2js",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
