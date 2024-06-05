@@ -99,12 +99,13 @@
 
 <span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">http</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">FieldError</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.utils.caching</span> <span class="kn">import</span> <span class="n">get_autocomplete_property_choices</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span>
 
 
 <span class="c1"># TODO RDF: Check if this should be removed or adapted</span>
@@ -171,11 +172,47 @@
     <span class="n">SELF_SUBJ_OTHER_OBJ_STR</span> <span class="o">=</span> <span class="s2">&quot;self_subj_other_obj&quot;</span>
     <span class="n">SELF_OBJ_OTHER_SUBJ_STR</span> <span class="o">=</span> <span class="s2">&quot;self_obj_other_subj&quot;</span>
 
+<div class="viewcode-block" id="PropertyAutocomplete.get_autocomplete_property_choices">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.PropertyAutocomplete.get_autocomplete_property_choices">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_autocomplete_property_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">self_model</span><span class="p">,</span> <span class="n">other_model</span><span class="p">,</span> <span class="n">search_str</span><span class="p">):</span>
+        <span class="n">self_contenttype</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">ContentType</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">self_model</span><span class="p">)</span>
+        <span class="n">other_contenttype</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">ContentType</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">other_model</span><span class="p">)</span>
+
+        <span class="n">rbc_self_subj_other_obj</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">subj_class</span><span class="o">=</span><span class="n">self_contenttype</span><span class="p">,</span>
+            <span class="n">obj_class</span><span class="o">=</span><span class="n">other_contenttype</span><span class="p">,</span>
+            <span class="n">name_forward__icontains</span><span class="o">=</span><span class="n">search_str</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">rbc_self_obj_other_subj</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">subj_class</span><span class="o">=</span><span class="n">other_contenttype</span><span class="p">,</span>
+            <span class="n">obj_class</span><span class="o">=</span><span class="n">self_contenttype</span><span class="p">,</span>
+            <span class="n">name_reverse__icontains</span><span class="o">=</span><span class="n">search_str</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">rbc</span> <span class="ow">in</span> <span class="n">rbc_self_subj_other_obj</span><span class="p">:</span>
+            <span class="n">choices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="c1"># misuse of the id item as explained above</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;id:</span><span class="si">{</span><span class="n">rbc</span><span class="o">.</span><span class="n">pk</span><span class="si">}</span><span class="s2">__direction:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">SELF_SUBJ_OTHER_OBJ_STR</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">rbc</span><span class="o">.</span><span class="n">name_forward</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">rbc</span> <span class="ow">in</span> <span class="n">rbc_self_obj_other_subj</span><span class="p">:</span>
+            <span class="n">choices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="c1"># misuse of the id item as explained above</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;id:</span><span class="si">{</span><span class="n">rbc</span><span class="o">.</span><span class="n">pk</span><span class="si">}</span><span class="s2">__direction:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">SELF_OBJ_OTHER_SUBJ_STR</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">rbc</span><span class="o">.</span><span class="n">name_reverse</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">choices</span></div>
+
+
 <div class="viewcode-block" id="PropertyAutocomplete.get">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.PropertyAutocomplete.get">[docs]</a>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">more</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">choices</span> <span class="o">=</span> <span class="n">get_autocomplete_property_choices</span><span class="p">(</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_autocomplete_property_choices</span><span class="p">(</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity_self&quot;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;entity_other&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="n">HttpResponse</span><span class="p">(</span>

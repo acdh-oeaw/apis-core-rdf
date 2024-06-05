@@ -324,26 +324,6 @@ endpoint.</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_autocomplete_property_choices">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_autocomplete_property_choices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_self_class_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_other_class_str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_name_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_autocomplete_property_choices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_autocomplete_property_choices" title="Link to this definition"></a></dt>
-<dd><p>A function to cache for user search string in property autocomplete fields.
-WARNING: This will not work when properties are edited during runtime!
-But since properties are part of the ontology they should not be changed during runtime anyway.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model_self_class_str</strong> – entity class from which side we are looking for</p></li>
-<li><p><strong>model_other_class_str</strong> – related entity class for which suitable properties are searched</p></li>
-<li><p><strong>search_name_str</strong> – search string provided by user</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a list of choices in the format which is used by the django-autocomplete field</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="apis_core.utils.caching.get_contenttype_of_class">
 <span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_contenttype_of_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_class</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_contenttype_of_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_contenttype_of_class" title="Link to this definition"></a></dt>
 <dd><p>Helper method which caches ContentType of a given model class. When first called on a model, it
