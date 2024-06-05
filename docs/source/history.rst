@@ -8,24 +8,27 @@ package.
 VersionMixin
 ------------
 
-The :py:class:`apis_core.history.models.VersionMixin` class is a mixin
+The :class:`apis_core.history.models.VersionMixin` class is a mixin
 that can be added to any model to enable versioning. It adds a `history`
 property to the model that returns a `HistoricalRecords` instance. Additionally
 it allows to override the date of the revision by setting the `_history_date`
 property of the model instance.
 To activate versioning for a model, simply inherit from `VersionMixin`:
-```python
-from django.db import models
-from apis_core.apis_history.models import VersionMixin
 
-class MyModel(VersionMixin, models.Model):
-    pass
-```
+.. code-block:: python
+
+    from django.db import models
+    from apis_core.apis_history.models import VersionMixin
+
+    class MyModel(VersionMixin, models.Model):
+        pass
+
+
 
 API endpoint
 ------------
 
-The :py:class:`apis_core.history.api_views.GenericHistoryLogs` class is a viewset
+The :class:`apis_core.history.api_views.GenericHistoryLog` class is a viewset
 that provides a REST API endpoint for the version history of a model. It can be
 used to retrieve the version history of a model instance.
 The viewset can be accessed under `/apis/api/history/entity/edit_log/`. It takes
