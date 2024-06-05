@@ -13,6 +13,10 @@ from apis_core.utils import caching, rdf
 
 from apis_core.apis_metainfo import signals
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
@@ -48,7 +52,12 @@ class RootObject(GenericModel, models.Model):
         # but we are working with abstract classes,
         # so we have to do it by hand  using model_to_dict:(
         objdict = model_to_dict(self)
-        objdict.pop("id")
+
+        # remove unique fields from dict representation
+        unique_fields = [field for field in self._meta.fields if field.unique]
+        for field in unique_fields:
+            logger.info(f"Duplicating {self}: ignoring unique field {field.name}")
+            objdict.pop(field.name, None)
 
         # remove related fields from dict representation
         related_fields = [
