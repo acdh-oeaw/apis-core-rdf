@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.19.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.19.0...v0.19.1) (2024-06-05)
+
+
+### Bug Fixes
+
+* **apis_entities:** fix typo in template (duplciate -&gt; duplicate) ([08f6904](https://github.com/acdh-oeaw/apis-core-rdf/commit/08f690435822074d373407f62fef9941703b3c5c))
+* **apis_entities:** remove None values before checking model_class ([05fca69](https://github.com/acdh-oeaw/apis-core-rdf/commit/05fca69c629ad9c2614f8149cc772614a6e56435))
+* **apis_metainfo:** fix object duplication ([b8e0e81](https://github.com/acdh-oeaw/apis-core-rdf/commit/b8e0e81fa60d95f17633801df4e7e95e08828c70)), closes [#889](https://github.com/acdh-oeaw/apis-core-rdf/issues/889)
+* **sample_project:** move apis root to / and include auth & admin urls ([b1383a6](https://github.com/acdh-oeaw/apis-core-rdf/commit/b1383a69f54af5d556c8ed607ed449f67370b066))
+
 ## [0.19.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.18.1...v0.19.0) (2024-06-04)
 
 
