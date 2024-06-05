@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 from apis_core.generic.abc import GenericModel
 
-from apis_core.utils import caching, rdf
+from apis_core.utils import rdf
 
 from apis_core.apis_metainfo import signals
 
@@ -57,8 +57,7 @@ class RootObject(GenericModel, models.Model):
         for field in related_fields:
             objdict.pop(field.name, None)
 
-        entity_model = caching.get_entity_class_of_name(self._meta.model_name)
-        newobj = entity_model.objects.create(**objdict)
+        newobj = type(self).objects.create(**objdict)
 
         for field in related_fields:
             # we are not using `isinstance` because we want to
