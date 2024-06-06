@@ -1,5 +1,4 @@
 import difflib
-import functools
 import importlib
 import inspect
 import itertools
@@ -20,7 +19,6 @@ from django.core import serializers
 from django_tables2 import RequestConfig
 
 
-@functools.lru_cache
 def get_classes_with_allowed_relation_from(
     entity_name: str,
 ) -> list[object]:
