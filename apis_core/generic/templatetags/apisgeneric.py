@@ -2,6 +2,7 @@ from itertools import chain
 
 from django import template
 from django.contrib.contenttypes.models import ContentType
+from apis_core.generic.abc import GenericModel
 
 
 register = template.Library()
@@ -39,3 +40,23 @@ def contenttypes(app_labels=None):
         app_labels = app_labels.split(",")
         return ContentType.objects.filter(app_label__in=app_labels)
     return ContentType.objects.all()
+
+
+def is_genericmodel(content_type: ContentType):
+    model_class = content_type.model_class()
+    return model_class is not None and issubclass(model_class, GenericModel)
+
+
+@register.simple_tag
+def genericmodel_content_types():
+    """
+    Retrieve all models which inherit from GenericModel class
+    and return their ContentType.
+    """
+    genericmodels = list(
+        filter(
+            lambda content_type: is_genericmodel(content_type),
+            ContentType.objects.all(),
+        )
+    )
+    return genericmodels
