@@ -99,12 +99,12 @@
 
 <span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">http</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">FieldError</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.utils</span> <span class="kn">import</span> <span class="n">get_entity_classes</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span>
 
 
@@ -175,8 +175,11 @@
 <div class="viewcode-block" id="PropertyAutocomplete.get_autocomplete_property_choices">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.autocomplete3.PropertyAutocomplete.get_autocomplete_property_choices">[docs]</a>
     <span class="k">def</span> <span class="nf">get_autocomplete_property_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">self_model</span><span class="p">,</span> <span class="n">other_model</span><span class="p">,</span> <span class="n">search_str</span><span class="p">):</span>
-        <span class="n">self_contenttype</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">ContentType</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">self_model</span><span class="p">)</span>
-        <span class="n">other_contenttype</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">ContentType</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">other_model</span><span class="p">)</span>
+        <span class="n">contenttypes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">get_entity_classes</span><span class="p">()</span>
+        <span class="p">]</span>
+        <span class="n">self_contenttype</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="n">self_model</span><span class="p">,</span> <span class="n">contenttypes</span><span class="p">))</span>
+        <span class="n">other_contenttype</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="n">other_model</span><span class="p">,</span> <span class="n">contenttypes</span><span class="p">))</span>
 
         <span class="n">rbc_self_subj_other_obj</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
             <span class="n">subj_class</span><span class="o">=</span><span class="n">self_contenttype</span><span class="p">,</span>
