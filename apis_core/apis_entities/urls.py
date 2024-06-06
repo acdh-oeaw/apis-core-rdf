@@ -3,10 +3,6 @@ from django.http import Http404
 from django.urls import include, path, register_converter
 from django.shortcuts import get_list_or_404
 
-from .autocomplete3 import (
-    GenericNetworkEntitiesAutocomplete,
-)
-
 # from .views import ReversionCompareView TODO: add again when import is fixed
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.generic.views import List, Create, Delete, Detail
@@ -88,10 +84,5 @@ urlpatterns = [
     path(
         "entity/<entitytocontenttype:contenttype>/",
         include(entity_patterns),
-    ),
-    path(
-        "autocomplete-network/<slug:entity>/",
-        GenericNetworkEntitiesAutocomplete.as_view(),
-        name="generic_network_entities_autocomplete",
     ),
 ]
