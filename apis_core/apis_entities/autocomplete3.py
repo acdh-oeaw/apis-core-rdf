@@ -6,12 +6,12 @@ from functools import reduce
 
 from dal import autocomplete
 from django import http
-from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import FieldError
 from django.db.models import Q
 
 from apis_core.utils.settings import get_entity_settings_by_modelname
+from apis_core.apis_entities.utils import get_entity_classes
 from apis_core.apis_relations.models import Property
 
 
@@ -72,8 +72,11 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
     SELF_OBJ_OTHER_SUBJ_STR = "self_obj_other_subj"
 
     def get_autocomplete_property_choices(self, self_model, other_model, search_str):
-        self_contenttype = get_object_or_404(ContentType, model=self_model)
-        other_contenttype = get_object_or_404(ContentType, model=other_model)
+        contenttypes = [
+            ContentType.objects.get_for_model(model) for model in get_entity_classes()
+        ]
+        self_contenttype = next(filter(lambda x: x.model == self_model, contenttypes))
+        other_contenttype = next(filter(lambda x: x.model == other_model, contenttypes))
 
         rbc_self_subj_other_obj = Property.objects.filter(
             subj_class=self_contenttype,

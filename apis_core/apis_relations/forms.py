@@ -10,6 +10,7 @@ from django.urls import reverse
 from apis_core.apis_relations.models import TempTriple
 from apis_core.apis_entities.fields import ListSelect2
 from django.contrib.contenttypes.models import ContentType
+from apis_core.apis_entities.utils import get_entity_classes
 
 from apis_core.apis_metainfo.models import Uri
 
@@ -56,7 +57,10 @@ class GenericTripleForm(forms.ModelForm):
         attrs_target = copy.deepcopy(attrs)
         attrs_target["data-tags"] = "1"
 
-        ct = ContentType.objects.get(model=entity_type_other_str.lower())
+        contenttypes = [
+            ContentType.objects.get_for_model(model) for model in get_entity_classes()
+        ]
+        ct = next(filter(lambda x: x.model == entity_type_other_str, contenttypes))
         url = reverse("apis:generic:autocomplete", args=[ct])
 
         self.fields["other_entity"] = autocomplete.Select2ListCreateChoiceField(
