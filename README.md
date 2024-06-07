@@ -77,56 +77,10 @@ poetry run ./manage.py runserver
 To use the APIS framework in your application, you will need to add the following dependencies to
 [`INSTALLED_APPS`](https://docs.djangoproject.com/en/4.2/ref/settings/#installed-apps):
 
-```python
-# `apis_override_select2js` is a workaround for APIS' handling of autocomplete
-# forms. It should be listed at the beginning of the list, to make sure the
-# files shipped with it are served in precedence.
-"apis_override_select2js",
+https://github.com/acdh-oeaw/apis-core-rdf/blob/9135728495be144d228adbdc77a392d75a617bdb/sample_project/settings.py#L17-L59
 
-# ui stuff used by APIS
-"crispy_forms",
-"crispy_bootstrap4",
-"django_filters",
-"django_tables2",
-"dal",
-"dal_select2",
+Finally, add the APIS urls to your applications [URL Dispatcher](https://docs.djangoproject.com/en/4.2/topics/http/urls/)
 
-# api
-"rest_framework",
-"rest_framework.authtoken",
-
-# for swagger ui generation
-"drf_spectacular",
-
-# Your ontology
-"apis_ontology",
-
-# The APIS apps
-"apis_core.core",
-"apis_core.apis_entities",
-"apis_core.apis_metainfo",
-"apis_core.apis_relations",
-"apis_core.generic",
-"apis_core.collections", # if you want to use collections
-
-```
-
-Finally, add the APIS urls to your applications [URL Dispatcher](https://docs.djangoproject.com/en/4.2/topics/http/urls/):
-```python
-from django.urls import include
-from apis_core.apis_entities.api_views import GetEntityGeneric
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
-urlpatterns = [
-    # The APIS views
-    path("apis/", include("apis_core.urls", namespace="apis")),
-    # It is common for APIS projects to have a shortcut for accessing entities
-    path(
-        "entity/<int:pk>/", GetEntityGeneric.as_view(), name="GetEntityGenericRoot"
-    ),
-]
-
-urlpatterns += staticfiles_urlpatterns()
-```
+https://github.com/acdh-oeaw/apis-core-rdf/blob/9135728495be144d228adbdc77a392d75a617bdb/sample_project/urls.py#L4-L10
 
 Now you should be ready to roll. Start creating your entities in you `apis_ontology/models.py`.
