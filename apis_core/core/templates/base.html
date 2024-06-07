@@ -127,9 +127,9 @@
 
                       {% block relations-menu-items %}
                         <a class="dropdown-item"
-                           href="{% url 'apis:apis_relations:generic_relations_list' "property" %}">Properties</a>
+                           href="{% url 'apis_core:apis_relations:generic_relations_list' "property" %}">Properties</a>
                         <a class="dropdown-item"
-                           href="{% url 'apis:apis_relations:generic_relations_list' "triple" %}">Triples</a>
+                           href="{% url 'apis_core:apis_relations:generic_relations_list' "triple" %}">Triples</a>
                       {% endblock relations-menu-items %}
 
                     </div>
@@ -155,7 +155,7 @@
                          aria-expanded="false">User: {{ user.get_username }}</a>
                       <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-item">
-                          <a class="nav-link p-0" href="{% url 'apis:logout' %}?next=/">
+                          <a class="nav-link p-0" href="{% url 'apis_core:logout' %}?next=/">
                             <span class="material-symbols-outlined">logout</span>
                             log out
                           </a>
@@ -165,7 +165,7 @@
                   {% else %}
                     <li class="nav-item dropdown ml-auto">
                       <a class="nav-link p-0"
-                         href="{% url 'apis:login' %}?next={{ request.path|urlencode }}">
+                         href="{% url 'apis_core:login' %}?next={{ request.path|urlencode }}">
                         <span class="material-symbols-outlined">login</span>
                       </a>
                     </li>

@@ -4,7 +4,6 @@ from apis_core.apis_metainfo.models import Uri
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, QueryDict
-from django.urls import reverse
 
 
 class UriToObjectViewSet(viewsets.ViewSet):
@@ -28,8 +27,7 @@ class UriToObjectViewSet(viewsets.ViewSet):
         uri = params.pop("uri", None)
         if uri:
             u = get_object_or_404(Uri, uri=request.query_params.get("uri"))
-            model = u.root_object.self_contenttype.model
-            r = reverse(f"apis:apis_core:{model}-detail", args=[u.root_object.id])
+            r = u.root_object.get_api_detail_endpoint()
             if params:
                 r += "?" + QueryDict.from_keys(params).urlencode()
             return HttpResponseRedirect(r)

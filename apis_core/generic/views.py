@@ -167,7 +167,7 @@ class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse(
-            "apis:generic:list",
+            "apis_core:generic:list",
             args=[self.request.resolver_match.kwargs["contenttype"]],
         )
 
@@ -175,7 +175,7 @@ class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
         if "HX-Request" in self.request.headers:
             return (
                 reverse_lazy(
-                    "apis:generic:list",
+                    "apis_core:generic:list",
                     args=[self.request.resolver_match.kwargs["contenttype"]],
                 ),
             )

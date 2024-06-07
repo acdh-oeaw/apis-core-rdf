@@ -79,7 +79,7 @@ function GetFormAjax(FormName , ObjectID , ButtonText) {
     return $.ajax(
         {
             type: 'POST',
-            url: '{% url 'apis:apis_relations:get_form_ajax' %}',
+            url: '{% url 'apis_core:apis_relations:get_form_ajax' %}',
             beforeSend: function(request) {
                 var csrftoken = getCookie('csrftoken');
                 request.setRequestHeader("X-CSRFToken", csrftoken);

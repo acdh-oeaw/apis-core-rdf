@@ -24,7 +24,7 @@ class EntitiesDuplicate(GenericModelMixin, PermissionRequiredMixin, View):
 
         return redirect(
             reverse(
-                "apis:apis_entities:generic_entities_edit_view",
+                "apis_core:apis_entities:generic_entities_edit_view",
                 kwargs={
                     "pk": newobj.id,
                     "contenttype": newobj.__class__.__name__.lower(),
@@ -60,6 +60,6 @@ class EntitiesMerge(GenericModelMixin, PermissionRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse(
-            "apis:apis_entities:generic_entities_edit_view",
+            "apis_core:apis_entities:generic_entities_edit_view",
             args=[self.get_object().__class__.__name__.lower(), self.get_object().id],
         )
