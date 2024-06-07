@@ -96,10 +96,6 @@
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">register_converter</span>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_list_or_404</span>
 
-<span class="kn">from</span> <span class="nn">.autocomplete3</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">GenericNetworkEntitiesAutocomplete</span><span class="p">,</span>
-<span class="p">)</span>
-
 <span class="c1"># from .views import ReversionCompareView TODO: add again when import is fixed</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.views</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Create</span><span class="p">,</span> <span class="n">Delete</span><span class="p">,</span> <span class="n">Detail</span>
@@ -190,11 +186,6 @@
     <span class="n">path</span><span class="p">(</span>
         <span class="s2">&quot;entity/&lt;entitytocontenttype:contenttype&gt;/&quot;</span><span class="p">,</span>
         <span class="n">include</span><span class="p">(</span><span class="n">entity_patterns</span><span class="p">),</span>
-    <span class="p">),</span>
-    <span class="n">path</span><span class="p">(</span>
-        <span class="s2">&quot;autocomplete-network/&lt;slug:entity&gt;/&quot;</span><span class="p">,</span>
-        <span class="n">GenericNetworkEntitiesAutocomplete</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;generic_network_entities_autocomplete&quot;</span><span class="p">,</span>
     <span class="p">),</span>
 <span class="p">]</span>
 </pre></div>
