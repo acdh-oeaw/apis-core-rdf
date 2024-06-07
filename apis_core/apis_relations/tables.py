@@ -180,7 +180,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
             def __init__(self, data, *args, **kwargs):
                 self.base_columns["other_entity"] = tables.LinkColumn(
-                    "apis:apis_entities:generic_entities_detail_view",
+                    "apis_core:apis_entities:generic_entities_detail_view",
                     args=[other_entity_class_name, A("other_entity")],
                 )
 
@@ -211,7 +211,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
 
             def __init__(self, *args, **kwargs):
                 self.base_columns["other_entity"] = tables.LinkColumn(
-                    "apis:apis_entities:generic_entities_edit_view",
+                    "apis_core:apis_entities:generic_entities_edit_view",
                     args=[other_entity_class_name, A("other_entity")],
                 )
 

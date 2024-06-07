@@ -7,7 +7,7 @@ from apis_core.generic.serializers import GenericHyperlinkedModelSerializer
 
 class UriSerializer(GenericHyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name="apis:apis_api:uri-detail", lookup_field="pk"
+        view_name="apis_core:apis_api:uri-detail", lookup_field="pk"
     )
 
     class Meta:
