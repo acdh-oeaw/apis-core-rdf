@@ -1,6 +1,0 @@
-{% load apis_helpers %}
-{# djlint:off #}
-<a id="tempEntity_{% if record.relation_pk %}{{ record.relation_pk }}{% else %}{{ record.pk }}{% endif %}" class="reldelete" aria-label="Left Align" onclick=DeleteTempEntity('{% if record.relation_pk %}{{ record.relation_pk }}{% else %}{{ record.pk }}{% endif %}',"relations/{{ record|content_type|lower }}")>
-{# djlint:on #}
-<span class="material-symbols-outlined">delete</span>
-</a>

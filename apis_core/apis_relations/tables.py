@@ -91,7 +91,7 @@ class PropertyTable(GenericTable):
 
 def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
     # TODO RDF : add code from before refactoring and comment it out
-    class TripleTableBase(tables.Table):
+    class TripleTableBase(GenericTable):
         """
         The base table from which detail or edit tables will inherit from in order to avoid redundant definitions
         """
@@ -117,6 +117,10 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                 "other_entity",
                 "notes",
             ]
+            exclude = (
+                "desc",
+                "view",
+            )
             # reuse the list for ordering
             sequence = tuple(fields)
 
@@ -171,6 +175,9 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
             Sublcass inheriting the bulk of logic from parent. This table is used for the 'detail' views.
             """
 
+            class Meta(TripleTableBase.Meta):
+                exclude = TripleTableBase.Meta.exclude + ("delete", "edit")
+
             def __init__(self, data, *args, **kwargs):
                 self.base_columns["other_entity"] = tables.LinkColumn(
                     "apis:apis_entities:generic_entities_detail_view",
@@ -195,15 +202,8 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
             """
 
             class Meta(TripleTableBase.Meta):
-                """
-                Additional Meta fields are necessary for editing functionalities
-                """
-
-                # This fields list also defines the order of the elements.
-                fields = ["delete"] + TripleTableBase.Meta.fields + ["edit"]
-
                 if "apis_bibsonomy" in settings.INSTALLED_APPS:
-                    fields = ["ref"] + fields
+                    fields = ["ref"] + TripleTableBase.Meta.fields
 
                 # again reuse the fields list for ordering
                 sequence = tuple(fields)
@@ -219,10 +219,6 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
                     template_name="apis_relations/edit_button_generic_ajax_form.html"
                 )
 
-                # delete button
-                self.base_columns["delete"] = tables.TemplateColumn(
-                    template_name="apis_relations/delete_button_generic_ajax_form.html"
-                )
                 # bibsonomy button
                 if "apis_bibsonomy" in settings.INSTALLED_APPS:
                     self.base_columns["ref"] = tables.TemplateColumn(
