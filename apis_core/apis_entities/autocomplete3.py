@@ -19,8 +19,12 @@ class PropertyAutocomplete(autocomplete.Select2ListView):
         contenttypes = [
             ContentType.objects.get_for_model(model) for model in get_entity_classes()
         ]
-        self_contenttype = next(filter(lambda x: x.model == self_model, contenttypes))
-        other_contenttype = next(filter(lambda x: x.model == other_model, contenttypes))
+        self_contenttype = next(
+            filter(lambda x: x.model == self_model.lower(), contenttypes)
+        )
+        other_contenttype = next(
+            filter(lambda x: x.model == other_model.lower(), contenttypes)
+        )
 
         rbc_self_subj_other_obj = Property.objects.filter(
             subj_class=self_contenttype,

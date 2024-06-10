@@ -60,7 +60,9 @@ class GenericTripleForm(forms.ModelForm):
         contenttypes = [
             ContentType.objects.get_for_model(model) for model in get_entity_classes()
         ]
-        ct = next(filter(lambda x: x.model == entity_type_other_str, contenttypes))
+        ct = next(
+            filter(lambda x: x.model == entity_type_other_str.lower(), contenttypes)
+        )
         url = reverse("apis:generic:autocomplete", args=[ct])
 
         self.fields["other_entity"] = autocomplete.Select2ListCreateChoiceField(

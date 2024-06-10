@@ -115,10 +115,10 @@ def save_ajax_form(
         ContentType.objects.get_for_model(model) for model in get_entity_classes()
     ]
     entity_type_self_class = next(
-        filter(lambda x: x.model == entity_type_self_str, contenttypes)
+        filter(lambda x: x.model == entity_type_self_str.lower(), contenttypes)
     ).model_class()
     entity_type_other_class = next(
-        filter(lambda x: x.model == entity_type_other_str, contenttypes)
+        filter(lambda x: x.model == entity_type_other_str.lower(), contenttypes)
     ).model_class()
     entity_instance_self = entity_type_self_class.objects.get(pk=SiteID)
     entity_instance_other = entity_type_other_class.get_or_create_uri(
