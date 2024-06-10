@@ -137,30 +137,6 @@ function EntityRelationForm_response(response){
   };
   unbind_compare_forms();
 }
-
-function DeleteTempEntity(pk, kind, app_name=false) {
-    if (app_name){
-        var url = '/apis/api/'+app_name+'/'+kind+'/'+pk.toString()
-    } else {
-    var url = '/apis/api/'+kind+'/'+pk.toString()}
-    $.ajax({
-        type: 'DELETE',
-        url: url,
-        beforeSend: function(request) {
-              var csrftoken = getCookie('csrftoken');
-                request.setRequestHeader("X-CSRFToken", csrftoken);
-              },
-        statusCode : {
-            204: function() {
-                if (kind=='HLAnnotation') {
-                    $('*[data-hl-ann-id="'+pk+'"]').contents().unwrap()
-                } else {
-                $('#tempEntity_'+pk).parents('tr').remove()
-            }
-            }
-        }
-    })
-}
   </script>
   {% object_relations as object_relations %}
   <script type="text/javascript">
