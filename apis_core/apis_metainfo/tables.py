@@ -62,10 +62,16 @@ class UriTable(GenericTable):
     )
     ent_type = tables.TemplateColumn(
         "{{ record.root_object.self_contenttype.model }}",
-        orderable=False,
         verbose_name="Entity Type",
     )
 
     class Meta(GenericTable.Meta):
         model = Uri
-        fields = ["id", "desc", "entity", "ent_type"]
+        fields = ["id", "uri", "entity", "ent_type"]
+        exclude = ("desc",)
+
+    def order_ent_type(self, queryset, is_descending):
+        queryset = queryset.annotate(
+            ent_type=F("root_object__self_contenttype__model")
+        ).order_by(("-" if is_descending else "") + "ent_type")
+        return (queryset, True)
