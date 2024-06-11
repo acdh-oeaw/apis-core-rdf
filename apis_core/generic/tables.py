@@ -39,9 +39,7 @@ class ActionColumn(CustomTemplateColumn):
 
     def render(self, record, table, *args, **kwargs):
         if permission := getattr(self, "permission", False):
-            if not table.context.request.user.has_perm(
-                permission_fullname(permission, record)
-            ):
+            if not table.request.user.has_perm(permission_fullname(permission, record)):
                 return ""
         return super().render(record, table, *args, **kwargs)
 
