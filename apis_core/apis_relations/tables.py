@@ -202,6 +202,7 @@ def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
             """
 
             class Meta(TripleTableBase.Meta):
+                fields = TripleTableBase.Meta.fields
                 if "apis_bibsonomy" in settings.INSTALLED_APPS:
                     fields = ["ref"] + TripleTableBase.Meta.fields
 
