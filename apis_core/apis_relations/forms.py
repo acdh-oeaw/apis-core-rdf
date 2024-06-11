@@ -190,7 +190,7 @@ class GenericTripleForm(forms.ModelForm):
         """
         return self.cleaned_data["HL_text_id"][5:]
 
-    def get_html_table(self, entity_instance_self, entity_instance_other):
+    def get_html_table(self, entity_instance_self, entity_instance_other, request):
         table_class = get_generic_triple_table(
             other_entity_class_name=entity_instance_other.__class__.__name__.lower(),
             entity_pk_self=entity_instance_self.pk,
@@ -209,6 +209,7 @@ class GenericTripleForm(forms.ModelForm):
                 )
             ),
             prefix=entity_instance_other.__class__.__name__,
+            request=request,
         )
 
         return table_object

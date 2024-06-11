@@ -158,7 +158,7 @@ def save_ajax_form(
         "call_function": "EntityRelationForm_response",
         "instance": form.instance.get_web_object(),
         "table_html": form.get_html_table(
-            entity_instance_self, entity_instance_other
+            entity_instance_self, entity_instance_other, request
         ).as_html(request),
         "text": None,
         "right_card": True,
