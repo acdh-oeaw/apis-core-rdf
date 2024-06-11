@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.20.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.20.0...v0.20.1) (2024-06-11)
+
+
+### Bug Fixes
+
+* **apis_relations:** pass the request to the table ([1340968](https://github.com/acdh-oeaw/apis-core-rdf/commit/13409683bb3e6d6bc742b81921b2bb82024cf4a8))
+* **apis_relations:** set default fields ([0f89e92](https://github.com/acdh-oeaw/apis-core-rdf/commit/0f89e9213c53113d7fcedb5871e05c94645e8d1c))
+* **generic:** use request intead of context for checking user ([b74158e](https://github.com/acdh-oeaw/apis-core-rdf/commit/b74158e816049d24a259710d7b52fa760526692d))
+
 ## [0.20.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.19.1...v0.20.0) (2024-06-11)
 
 
