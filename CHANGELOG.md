@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.20.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.19.1...v0.20.0) (2024-06-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_entities:** drop GenericNetworkEntitiesAutocomplete
+* **apis_entities:** drop obsolete templatetag
+
+### Features
+
+* add Docker image + sample_project entrypoint & setup ([7a5d265](https://github.com/acdh-oeaw/apis-core-rdf/commit/7a5d26559d9f9ba2ed586b8cc19e7ce6af2dbdf8))
+* **apis_entities:** add string methods to abstract base entities ([3f6cb9c](https://github.com/acdh-oeaw/apis-core-rdf/commit/3f6cb9c59c7f8e735bb92ee52471fabeeaaa6083))
+* **core:** use django messages framework in base template ([9fd8080](https://github.com/acdh-oeaw/apis-core-rdf/commit/9fd8080598bd89b00220b7406c678f04e1cca5b4))
+* **sample_project:** enable bootstrap4 table theme ([ced59f4](https://github.com/acdh-oeaw/apis-core-rdf/commit/ced59f45704b146d4a512bdef53c6b3df7c3f0f7))
+
+
+### Bug Fixes
+
+* **apis_entities:** allow to skip default uri creation ([8332a3d](https://github.com/acdh-oeaw/apis-core-rdf/commit/8332a3d0bd48b1afc3f202f802f7373d4a79d447)), closes [#436](https://github.com/acdh-oeaw/apis-core-rdf/issues/436)
+* **apis_relations, apis_entities:** use `lower` when comparing modelname ([db10fcb](https://github.com/acdh-oeaw/apis-core-rdf/commit/db10fcbc10b986846c3b2b86c174a16ff233ecac))
+* **apis_relations,apis_entities:** replace get_object_or_404 ([6785b80](https://github.com/acdh-oeaw/apis-core-rdf/commit/6785b802f3de88d2cd6d7202bbd88cf9320e1bed))
+* **core:** don't cache the possible relation entities ([8055f7b](https://github.com/acdh-oeaw/apis-core-rdf/commit/8055f7bcd07ac8de4aac14879c24caa7a048ad4b)), closes [#914](https://github.com/acdh-oeaw/apis-core-rdf/issues/914)
+* **sample_project:** add apis_override_select2js to INSTALLED_APPS ([dce75d9](https://github.com/acdh-oeaw/apis-core-rdf/commit/dce75d90793d14f2443cd3f59cd758c7b1487a1c))
+
+
+### Documentation
+
+* fix formatting issues in history documentation ([111abd4](https://github.com/acdh-oeaw/apis-core-rdf/commit/111abd4f51cd64d9b72a85615c475a744b04edcb)), closes [#843](https://github.com/acdh-oeaw/apis-core-rdf/issues/843)
+
+
+### Miscellaneous Chores
+
+* **apis_entities:** drop obsolete templatetag ([9e7965d](https://github.com/acdh-oeaw/apis-core-rdf/commit/9e7965d76dd857ea61d7532a05699b9eb7a37213))
+
+
+### Code Refactoring
+
+* **apis_entities:** drop GenericNetworkEntitiesAutocomplete ([c471255](https://github.com/acdh-oeaw/apis-core-rdf/commit/c471255fb8415dc2d910a4ea4b31ed79b2936136))
+
 ## [0.19.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.19.0...v0.19.1) (2024-06-05)
 
 
