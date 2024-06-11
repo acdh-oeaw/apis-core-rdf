@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_e42e1fb98877cc0c_0001_initial_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-07 06:04 +0000
+            created at 2024-06-11 06:55 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -197,10 +197,10 @@
     <p class="pln"><span class="n"><a id="t115" href="#t115">115</a></span><span class="t">        <span class="nam">ContentType</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">get_for_model</span><span class="op">(</span><span class="nam">model</span><span class="op">)</span> <span class="key">for</span> <span class="nam">model</span> <span class="key">in</span> <span class="nam">get_entity_classes</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t116" href="#t116">116</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t117" href="#t117">117</a></span><span class="t">    <span class="nam">entity_type_self_class</span> <span class="op">=</span> <span class="nam">next</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t118" href="#t118">118</a></span><span class="t">        <span class="nam">filter</span><span class="op">(</span><span class="key">lambda</span> <span class="nam">x</span><span class="op">:</span> <span class="nam">x</span><span class="op">.</span><span class="nam">model</span> <span class="op">==</span> <span class="nam">entity_type_self_str</span><span class="op">,</span> <span class="nam">contenttypes</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t118" href="#t118">118</a></span><span class="t">        <span class="nam">filter</span><span class="op">(</span><span class="key">lambda</span> <span class="nam">x</span><span class="op">:</span> <span class="nam">x</span><span class="op">.</span><span class="nam">model</span> <span class="op">==</span> <span class="nam">entity_type_self_str</span><span class="op">.</span><span class="nam">lower</span><span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="nam">contenttypes</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t119" href="#t119">119</a></span><span class="t">    <span class="op">)</span><span class="op">.</span><span class="nam">model_class</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t120" href="#t120">120</a></span><span class="t">    <span class="nam">entity_type_other_class</span> <span class="op">=</span> <span class="nam">next</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t121" href="#t121">121</a></span><span class="t">        <span class="nam">filter</span><span class="op">(</span><span class="key">lambda</span> <span class="nam">x</span><span class="op">:</span> <span class="nam">x</span><span class="op">.</span><span class="nam">model</span> <span class="op">==</span> <span class="nam">entity_type_other_str</span><span class="op">,</span> <span class="nam">contenttypes</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t121" href="#t121">121</a></span><span class="t">        <span class="nam">filter</span><span class="op">(</span><span class="key">lambda</span> <span class="nam">x</span><span class="op">:</span> <span class="nam">x</span><span class="op">.</span><span class="nam">model</span> <span class="op">==</span> <span class="nam">entity_type_other_str</span><span class="op">.</span><span class="nam">lower</span><span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="nam">contenttypes</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t122" href="#t122">122</a></span><span class="t">    <span class="op">)</span><span class="op">.</span><span class="nam">model_class</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t123" href="#t123">123</a></span><span class="t">    <span class="nam">entity_instance_self</span> <span class="op">=</span> <span class="nam">entity_type_self_class</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="nam">pk</span><span class="op">=</span><span class="nam">SiteID</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t124" href="#t124">124</a></span><span class="t">    <span class="nam">entity_instance_other</span> <span class="op">=</span> <span class="nam">entity_type_other_class</span><span class="op">.</span><span class="nam">get_or_create_uri</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
@@ -255,7 +255,7 @@
             <a class="nav" href="z_e42e1fb98877cc0c_0001_initial_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-07 06:04 +0000
+            created at 2024-06-11 06:55 +0000
         </p>
     </div>
 </footer>
