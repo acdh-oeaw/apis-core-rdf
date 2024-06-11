@@ -61,6 +61,9 @@ function GetFormAjax(FormName , ObjectID , ButtonText) {
         {% if apis_bibsonomy %}
         reinitialize_bibsonomy_tooltips()
         {% endif %}
+	$('#tab_'+data.tab).each(function() {
+	        htmx.process(this);
+	});
     };
     if (!$.ApisForms) {
         $.ApisForms = {}
