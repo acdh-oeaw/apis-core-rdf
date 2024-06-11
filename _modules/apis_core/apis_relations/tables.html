@@ -318,6 +318,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span>
                 <span class="k">if</span> <span class="s2">&quot;apis_bibsonomy&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
                     <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span>
 
