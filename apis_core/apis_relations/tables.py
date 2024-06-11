@@ -11,6 +11,7 @@ from apis_core.apis_metainfo.tables import (
     generic_render_end_date_written,
 )
 from apis_core.generic.tables import GenericTable
+from apis_core.apis_relations.models import TempTriple
 
 empty_text_default = "There are currently no relations"
 
@@ -89,143 +90,131 @@ class PropertyTable(GenericTable):
         return (queryset, True)
 
 
+class TripleTableBase(GenericTable):
+    """
+    The base table from which detail or edit tables will inherit from in order to avoid redundant definitions
+    """
+
+    # reuse the logic for ordering and rendering *_date_written
+    # Important: The names of these class variables must correspond to the column field name,
+    # e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written
+    order_start_date_written = generic_order_start_date_written
+    order_end_date_written = generic_order_end_date_written
+    render_start_date_written = generic_render_start_date_written
+    render_end_date_written = generic_render_end_date_written
+
+    class Meta:
+        model = TempTriple
+
+        # the fields list also serves as the defining order of them, as to avoid duplicated definitions
+        fields = [
+            "start_date_written",
+            "end_date_written",
+            "other_prop",
+            "other_entity",
+            "notes",
+        ]
+        exclude = (
+            "desc",
+            "view",
+        )
+        # reuse the list for ordering
+        sequence = tuple(fields)
+
+    def render_other_entity(self, record, value):
+        """
+        Custom render_FOO method for related entity linking. Since the 'other_related_entity' is a generated annotation
+        on the queryset, it does not return the related instance but only the foreign key as the integer it is.
+        Thus fetching the related instance is necessary.
+
+        :param record: The 'row' of a queryset, i.e. an entity instance
+        :param value: The current column of the row, i.e. the 'other_related_entity' annotation
+        :return: related instance
+        """
+
+        if value == record.subj.pk:
+            return record.subj
+
+        elif value == record.obj.pk:
+            return record.obj
+
+        else:
+            raise Exception(
+                "Did not find the entity this relation is supposed to come from!"
+                + "Something must have went wrong when annotating for the related instance."
+            )
+
+    def __init__(self, data, *args, **kwargs):
+        data = data.annotate(
+            other_entity=Case(
+                # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
+                When(**{"subj__pk": self.entity_pk_self, "then": "obj"}),
+                When(**{"obj__pk": self.entity_pk_self, "then": "subj"}),
+            ),
+            other_prop=Case(
+                # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
+                When(**{"subj__pk": self.entity_pk_self, "then": "prop__name_forward"}),
+                When(**{"obj__pk": self.entity_pk_self, "then": "prop__name_reverse"}),
+            ),
+        )
+
+        self.base_columns["other_prop"].verbose_name = "Other property"
+        self.base_columns[
+            "other_entity"
+        ].verbose_name = f"Related {self.other_entity_class_name.title()}"
+
+        super().__init__(data, *args, **kwargs)
+
+
+class TripleTableDetail(TripleTableBase):
+    class Meta(TripleTableBase.Meta):
+        exclude = TripleTableBase.Meta.exclude + ("delete", "edit")
+
+    def __init__(self, data, *args, **kwargs):
+        self.base_columns["other_entity"] = tables.LinkColumn(
+            "apis:apis_entities:generic_entities_detail_view",
+            args=[self.other_entity_class_name, A("other_entity")],
+        )
+
+        # bibsonomy button
+        if "apis_bibsonomy" in settings.INSTALLED_APPS:
+            self.base_columns["ref"] = tables.TemplateColumn(
+                template_name="apis_relations/references_button_generic_ajax_form.html"
+            )
+
+        super().__init__(data=data, *args, **kwargs)
+
+
+class TripleTableEdit(TripleTableBase):
+    class Meta(TripleTableBase.Meta):
+        fields = TripleTableBase.Meta.fields
+        if "apis_bibsonomy" in settings.INSTALLED_APPS:
+            fields = ["ref"] + TripleTableBase.Meta.fields
+        sequence = tuple(fields)
+
+    def __init__(self, *args, **kwargs):
+        self.base_columns["other_entity"] = tables.LinkColumn(
+            "apis:apis_entities:generic_entities_edit_view",
+            args=[self.other_entity_class_name, A("other_entity")],
+        )
+
+        self.base_columns["edit"] = tables.TemplateColumn(
+            template_name="apis_relations/edit_button_generic_ajax_form.html"
+        )
+
+        if "apis_bibsonomy" in settings.INSTALLED_APPS:
+            self.base_columns["ref"] = tables.TemplateColumn(
+                template_name="apis_relations/references_button_generic_ajax_form.html"
+            )
+
+        super().__init__(*args, **kwargs)
+
+
 def get_generic_triple_table(other_entity_class_name, entity_pk_self, detail):
-    # TODO RDF : add code from before refactoring and comment it out
-    class TripleTableBase(GenericTable):
-        """
-        The base table from which detail or edit tables will inherit from in order to avoid redundant definitions
-        """
-
-        # reuse the logic for ordering and rendering *_date_written
-        # Important: The names of these class variables must correspond to the column field name,
-        # e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written
-        order_start_date_written = generic_order_start_date_written
-        order_end_date_written = generic_order_end_date_written
-        render_start_date_written = generic_render_start_date_written
-        render_end_date_written = generic_render_end_date_written
-
-        class Meta:
-            from apis_core.apis_relations.models import TempTriple
-
-            model = TempTriple
-
-            # the fields list also serves as the defining order of them, as to avoid duplicated definitions
-            fields = [
-                "start_date_written",
-                "end_date_written",
-                "other_prop",
-                "other_entity",
-                "notes",
-            ]
-            exclude = (
-                "desc",
-                "view",
-            )
-            # reuse the list for ordering
-            sequence = tuple(fields)
-
-        def render_other_entity(self, record, value):
-            """
-            Custom render_FOO method for related entity linking. Since the 'other_related_entity' is a generated annotation
-            on the queryset, it does not return the related instance but only the foreign key as the integer it is.
-            Thus fetching the related instance is necessary.
-
-            :param record: The 'row' of a queryset, i.e. an entity instance
-            :param value: The current column of the row, i.e. the 'other_related_entity' annotation
-            :return: related instance
-            """
-
-            if value == record.subj.pk:
-                return record.subj
-
-            elif value == record.obj.pk:
-                return record.obj
-
-            else:
-                raise Exception(
-                    "Did not find the entity this relation is supposed to come from!"
-                    + "Something must have went wrong when annotating for the related instance."
-                )
-
-        def __init__(self, data, *args, **kwargs):
-            data = data.annotate(
-                other_entity=Case(
-                    # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
-                    When(**{"subj__pk": entity_pk_self, "then": "obj"}),
-                    When(**{"obj__pk": entity_pk_self, "then": "subj"}),
-                ),
-                other_prop=Case(
-                    # **kwargs pattern is needed here as the key-value pairs change with each relation class and entity instance.
-                    When(**{"subj__pk": entity_pk_self, "then": "prop__name_forward"}),
-                    When(**{"obj__pk": entity_pk_self, "then": "prop__name_reverse"}),
-                ),
-            )
-
-            self.base_columns["other_prop"].verbose_name = "Other property"
-            self.base_columns[
-                "other_entity"
-            ].verbose_name = f"Related {other_entity_class_name.title()}"
-
-            super().__init__(data, *args, **kwargs)
-
     if detail:
-
-        class TripleTableDetail(TripleTableBase):
-            """
-            Sublcass inheriting the bulk of logic from parent. This table is used for the 'detail' views.
-            """
-
-            class Meta(TripleTableBase.Meta):
-                exclude = TripleTableBase.Meta.exclude + ("delete", "edit")
-
-            def __init__(self, data, *args, **kwargs):
-                self.base_columns["other_entity"] = tables.LinkColumn(
-                    "apis_core:apis_entities:generic_entities_detail_view",
-                    args=[other_entity_class_name, A("other_entity")],
-                )
-
-                # bibsonomy button
-                if "apis_bibsonomy" in settings.INSTALLED_APPS:
-                    self.base_columns["ref"] = tables.TemplateColumn(
-                        template_name="apis_relations/references_button_generic_ajax_form.html"
-                    )
-
-                super().__init__(data=data, *args, **kwargs)
-
-        return TripleTableDetail
-
+        tt = TripleTableDetail
     else:
-
-        class TripleTableEdit(TripleTableBase):
-            """
-            Sublcass inheriting the bulk of logic from parent. This table is used for the 'edit' view.
-            """
-
-            class Meta(TripleTableBase.Meta):
-                fields = TripleTableBase.Meta.fields
-                if "apis_bibsonomy" in settings.INSTALLED_APPS:
-                    fields = ["ref"] + TripleTableBase.Meta.fields
-
-                # again reuse the fields list for ordering
-                sequence = tuple(fields)
-
-            def __init__(self, *args, **kwargs):
-                self.base_columns["other_entity"] = tables.LinkColumn(
-                    "apis_core:apis_entities:generic_entities_edit_view",
-                    args=[other_entity_class_name, A("other_entity")],
-                )
-
-                # edit button
-                self.base_columns["edit"] = tables.TemplateColumn(
-                    template_name="apis_relations/edit_button_generic_ajax_form.html"
-                )
-
-                # bibsonomy button
-                if "apis_bibsonomy" in settings.INSTALLED_APPS:
-                    self.base_columns["ref"] = tables.TemplateColumn(
-                        template_name="apis_relations/references_button_generic_ajax_form.html"
-                    )
-
-                super().__init__(*args, **kwargs)
-
-        return TripleTableEdit
+        tt = TripleTableEdit
+    tt.entity_pk_self = entity_pk_self
+    tt.other_entity_class_name = other_entity_class_name
+    return tt
