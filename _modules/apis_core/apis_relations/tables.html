@@ -207,7 +207,7 @@
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.get_generic_triple_table">[docs]</a>
 <span class="k">def</span> <span class="nf">get_generic_triple_table</span><span class="p">(</span><span class="n">other_entity_class_name</span><span class="p">,</span> <span class="n">entity_pk_self</span><span class="p">,</span> <span class="n">detail</span><span class="p">):</span>
     <span class="c1"># TODO RDF : add code from before refactoring and comment it out</span>
-    <span class="k">class</span> <span class="nc">TripleTableBase</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">TripleTableBase</span><span class="p">(</span><span class="n">GenericTable</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The base table from which detail or edit tables will inherit from in order to avoid redundant definitions</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -233,6 +233,10 @@
                 <span class="s2">&quot;other_entity&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;notes&quot;</span><span class="p">,</span>
             <span class="p">]</span>
+            <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;desc&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;view&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="c1"># reuse the list for ordering</span>
             <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
 
@@ -287,6 +291,9 @@
 <span class="sd">            Sublcass inheriting the bulk of logic from parent. This table is used for the &#39;detail&#39; views.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
+            <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+                <span class="n">exclude</span> <span class="o">=</span> <span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">exclude</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">)</span>
+
             <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
                     <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
@@ -311,15 +318,8 @@
 <span class="sd">            &quot;&quot;&quot;</span>
 
             <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
-<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">                Additional Meta fields are necessary for editing functionalities</span>
-<span class="sd">                &quot;&quot;&quot;</span>
-
-                <span class="c1"># This fields list also defines the order of the elements.</span>
-                <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;edit&quot;</span><span class="p">]</span>
-
                 <span class="k">if</span> <span class="s2">&quot;apis_bibsonomy&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
-                    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">fields</span>
+                    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">TripleTableBase</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span>
 
                 <span class="c1"># again reuse the fields list for ordering</span>
                 <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
@@ -335,10 +335,6 @@
                     <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/edit_button_generic_ajax_form.html&quot;</span>
                 <span class="p">)</span>
 
-                <span class="c1"># delete button</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;delete&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
-                    <span class="n">template_name</span><span class="o">=</span><span class="s2">&quot;apis_relations/delete_button_generic_ajax_form.html&quot;</span>
-                <span class="p">)</span>
                 <span class="c1"># bibsonomy button</span>
                 <span class="k">if</span> <span class="s2">&quot;apis_bibsonomy&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
