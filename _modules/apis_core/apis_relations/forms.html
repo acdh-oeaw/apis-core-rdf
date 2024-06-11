@@ -305,7 +305,7 @@
 
 <div class="viewcode-block" id="GenericTripleForm.get_html_table">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.forms.GenericTripleForm.get_html_table">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_html_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_instance_self</span><span class="p">,</span> <span class="n">entity_instance_other</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_html_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_instance_self</span><span class="p">,</span> <span class="n">entity_instance_other</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="n">table_class</span> <span class="o">=</span> <span class="n">get_generic_triple_table</span><span class="p">(</span>
             <span class="n">other_entity_class_name</span><span class="o">=</span><span class="n">entity_instance_other</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
             <span class="n">entity_pk_self</span><span class="o">=</span><span class="n">entity_instance_self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
@@ -324,6 +324,7 @@
                 <span class="p">)</span>
             <span class="p">),</span>
             <span class="n">prefix</span><span class="o">=</span><span class="n">entity_instance_other</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">table_object</span></div>
