@@ -17,7 +17,7 @@ COPY . /app
 
 RUN pip install /app
 
-EXPOSE 8000
+EXPOSE 5000
 
 USER nobody
 
