@@ -10,6 +10,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # our main app, containing the ontology (in the `models.py`)
+    # and our customizations
+    "sample_project",
     # `apis_override_select2js` is a workaround for APIS'
     # handling of autocomplete forms. It should be listed
     # at the beginning of the list, to make sure the
@@ -48,9 +51,6 @@ INSTALLED_APPS = [
     # APIS history modules tracks changes of instances over
     # time and lets you revert changes
     "apis_core.history",
-    # our main app, containing the ontology (in the `models.py`)
-    # and our customizations
-    "sample_project",
 ]
 
 MIDDLEWARE = [
