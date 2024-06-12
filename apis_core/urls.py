@@ -67,7 +67,7 @@ urlpatterns = [
         GetEntityGeneric.as_view(),
         name="GetEntityGeneric",
     ),
-    path("entities/", ListEntityGeneric.as_view()),
+    path("api/entities/", ListEntityGeneric.as_view()),
     path("api/dumpdata", Dumpdata.as_view()),
     path("", include("apis_core.generic.urls", namespace="generic")),
 ]
