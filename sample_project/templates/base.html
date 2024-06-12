@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load sample_project %}
+
+{% block content %}
+  <div class="container">
+    <div class="card card-index">
+      <div class="card-body">
+        <p class="text-center">Username:</p>
+        <pre class="text-center">admin</pre>
+        <hr class="hr-index" />
+        <p class="text-center">Current password:</p>
+        <pre class="text-center">{% password %}</pre>
+        <hr class="hr-index" />
+        <p class="text-center">Startup time:</p>
+        <pre class="text-center">{% startup %}</pre>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
