@@ -306,7 +306,7 @@
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Delete.get_success_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
-            <span class="s2">&quot;apis:generic:list&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;apis_core:generic:list&quot;</span><span class="p">,</span>
             <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">resolver_match</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;contenttype&quot;</span><span class="p">]],</span>
         <span class="p">)</span></div>
 
@@ -317,7 +317,7 @@
         <span class="k">if</span> <span class="s2">&quot;HX-Request&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span>
                 <span class="n">reverse_lazy</span><span class="p">(</span>
-                    <span class="s2">&quot;apis:generic:list&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;apis_core:generic:list&quot;</span><span class="p">,</span>
                     <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">resolver_match</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;contenttype&quot;</span><span class="p">]],</span>
                 <span class="p">),</span>
             <span class="p">)</span>
