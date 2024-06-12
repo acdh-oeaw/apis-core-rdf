@@ -6,6 +6,8 @@ on:
   release:
     types: [released]
   workflow_dispatch:
+  schedule:
+    - cron:  '30 6,12,18,0 * * *'
 
 
 jobs:
