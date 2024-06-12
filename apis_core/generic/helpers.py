@@ -12,7 +12,8 @@ def generate_search_filter(model, query, fields_to_search=None, prefix=""):
     """
     Generate a default search filter that searches for the `query`
     in all the CharFields and TextFields of a model (case-insensitive)
-    or in the fields listed in the `fields_to_search` argument.
+    or in the fields listed in the models `default_search_fields` attribute
+    or in the fields listed in the `fields_to_search` argument
     This helper can be used by autocomplete querysets if nothing
     fancier is needed.
     If the `prefix` is set, the field names will be prefixed with that string -
@@ -21,16 +22,20 @@ def generate_search_filter(model, query, fields_to_search=None, prefix=""):
     """
     query = query.split()
 
+    modelfields = model._meta.fields
+    # search all char and text fields by default
+    _fields_to_search = [
+        field.name for field in modelfields if isinstance(field, (CharField, TextField))
+    ]
+
+    # check if the model has a `_default_search_fields`
+    # list and use that as searchfields
+    if isinstance(getattr(model, "_default_search_fields", None), list):
+        _fields_to_search = model._default_search_fields
+
+    # if the method was passed a `fields_to_search` list, use that
     if isinstance(fields_to_search, list):
-        fields_to_search = [
-            field.name for field in model._meta.fields if field.name in fields_to_search
-        ]
-    else:
-        fields_to_search = [
-            field.name
-            for field in model._meta.fields
-            if isinstance(field, (CharField, TextField))
-        ]
+        _fields_to_search = fields_to_search
 
     q = Q()
 
@@ -38,7 +43,7 @@ def generate_search_filter(model, query, fields_to_search=None, prefix=""):
         q &= functools.reduce(
             lambda acc, field_name: acc
             | Q(**{f"{prefix}{field_name}__icontains": token}),
-            fields_to_search,
+            _fields_to_search,
             Q(),
         )
     return q
