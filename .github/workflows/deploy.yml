@@ -44,6 +44,9 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v3
+        with:
+          tags: ${{ steps.meta.outputs.tags }}
+          push: true
 
   deploy:
     needs: [setup_workflow_env, build_and_push_to_registry]
