@@ -1,6 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 import secrets
+import pathlib
+from datetime import datetime
 
 
 class Command(BaseCommand):
@@ -8,7 +10,8 @@ class Command(BaseCommand):
 
     def handle(self, *app_labels, **options):
         password = secrets.token_urlsafe(8)
-        print(f"Password for admin user is: {password}")
         User.objects.create_superuser(
             username="admin", email="admin@example.org", password=password
         )
+        pathlib.Path("/tmp/password.txt").write_text(password)
+        pathlib.Path("/tmp/startup.txt").write_text(str(datetime.utcnow()))
