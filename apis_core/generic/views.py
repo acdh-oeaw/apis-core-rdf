@@ -9,13 +9,14 @@ from django.template.loader import select_template
 from django.template.exceptions import TemplateDoesNotExist
 
 from django_filters.views import FilterView
+from django_filters.filterset import filterset_factory
 from django_tables2 import SingleTableMixin
 from django_tables2.tables import table_factory
 from django_tables2.columns import library
 from dal import autocomplete
 
 from .tables import GenericTable
-from .filtersets import filterset_factory, GenericFilterSet
+from .filtersets import GenericFilterSet
 from .forms import GenericModelForm, GenericImportForm
 from .helpers import (
     template_names_via_mro,
