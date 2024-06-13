@@ -90,6 +90,37 @@ class PropertyFilter(django_filters.ModelChoiceFilter):
         return queryset
 
 
+class ModelSearchFilter(django_filters.CharFilter):
+    """
+    This filter is a customized CharFilter that
+    uses the `generate_search_filter` method to
+    adapt the search filter to the model that is
+    searched.
+    It also extracts sets the help text based on
+    the fields searched.
+    """
+
+    def __init__(self, *args, **kwargs):
+        model = kwargs.pop("model", None)
+        super().__init__(*args, **kwargs)
+
+        if model is not None and "help_text" not in self.extra:
+            if hasattr(model, "_default_search_fields"):
+                fields = model._default_search_fields
+            else:
+                modelfields = model._meta.fields
+                fields = [
+                    field.name
+                    for field in modelfields
+                    if isinstance(field, (models.CharField, models.TextField))
+                ]
+            fields = ", ".join(fields)
+            self.extra["help_text"] = f"Search in fields: {fields}"
+
+    def filter(self, qs, value):
+        return qs.filter(generate_search_filter(qs.model, value))
+
+
 def related_entity(queryset, name, value):
     entities = get_entity_classes()
     q = Q()
@@ -144,6 +175,11 @@ class AbstractEntityFilterSet(GenericFilterSet):
         self.filters["related_property"] = PropertyFilter(
             label="Related Property", model=getattr(self.Meta, "model", None)
         )
+
+        if model := getattr(self.Meta, "model", False):
+            self.filters["search"] = ModelSearchFilter(model=model)
+            self.filters.move_to_end("search", False)
+
         if "apis_core.history" in settings.INSTALLED_APPS:
             self.filters["changed_since"] = django_filters.DateFilter(
                 label="Changed since",
