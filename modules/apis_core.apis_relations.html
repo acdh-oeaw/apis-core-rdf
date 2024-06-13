@@ -1193,6 +1193,133 @@ It uses the format of an RDF triple – Subject-Predicate-Object – plus
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.tables.</span></span><span class="sig-name descname"><span class="pre">TripleTableBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#TripleTableBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.tables.GenericTable" title="apis_core.generic.tables.GenericTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericTable</span></code></a></p>
+<p>The base table from which detail or edit tables will inherit from in order to avoid redundant definitions</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#TripleTableBase.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.Meta.exclude">
+<span class="sig-name descname"><span class="pre">exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('desc',</span> <span class="pre">'view')</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.Meta.exclude" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['start_date_written',</span> <span class="pre">'end_date_written',</span> <span class="pre">'other_prop',</span> <span class="pre">'other_entity',</span> <span class="pre">'notes']</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#apis_core.apis_relations.models.TempTriple" title="apis_core.apis_relations.models.TempTriple"><code class="xref py py-class docutils literal notranslate"><span class="pre">TempTriple</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.Meta.sequence">
+<span class="sig-name descname"><span class="pre">sequence</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('start_date_written',</span> <span class="pre">'end_date_written',</span> <span class="pre">'other_prop',</span> <span class="pre">'other_entity',</span> <span class="pre">'notes')</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.Meta.sequence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.base_columns">
+<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'delete':</span> <span class="pre">&lt;apis_core.generic.tables.DeleteColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'edit':</span> <span class="pre">&lt;apis_core.generic.tables.EditColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'end_date_written':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'notes':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'other_entity':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'other_prop':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'start_date_written':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.base_columns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.order_end_date_written">
+<span class="sig-name descname"><span class="pre">order_end_date_written</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_descending</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.order_end_date_written" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.order_start_date_written">
+<span class="sig-name descname"><span class="pre">order_start_date_written</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_descending</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.order_start_date_written" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.render_end_date_written">
+<span class="sig-name descname"><span class="pre">render_end_date_written</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.render_end_date_written" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.render_other_entity">
+<span class="sig-name descname"><span class="pre">render_other_entity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#TripleTableBase.render_other_entity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.render_other_entity" title="Link to this definition"></a></dt>
+<dd><p>Custom render_FOO method for related entity linking. Since the ‘other_related_entity’ is a generated annotation
+on the queryset, it does not return the related instance but only the foreign key as the integer it is.
+Thus fetching the related instance is necessary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>record</strong> – The ‘row’ of a queryset, i.e. an entity instance</p></li>
+<li><p><strong>value</strong> – The current column of the row, i.e. the ‘other_related_entity’ annotation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>related instance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableBase.render_start_date_written">
+<span class="sig-name descname"><span class="pre">render_start_date_written</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableBase.render_start_date_written" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableDetail">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.tables.</span></span><span class="sig-name descname"><span class="pre">TripleTableDetail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#TripleTableDetail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableDetail" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_relations.tables.TripleTableBase" title="apis_core.apis_relations.tables.TripleTableBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">TripleTableBase</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableDetail.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#TripleTableDetail.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableDetail.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_relations.tables.TripleTableBase.Meta" title="apis_core.apis_relations.tables.TripleTableBase.Meta"><code class="xref py py-class docutils literal notranslate"><span class="pre">Meta</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableDetail.Meta.exclude">
+<span class="sig-name descname"><span class="pre">exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('desc',</span> <span class="pre">'view',</span> <span class="pre">'delete',</span> <span class="pre">'edit')</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableDetail.Meta.exclude" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableDetail.base_columns">
+<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'end_date_written':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'notes':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'other_entity':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'other_prop':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'start_date_written':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableDetail.base_columns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableEdit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.tables.</span></span><span class="sig-name descname"><span class="pre">TripleTableEdit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#TripleTableEdit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableEdit" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_relations.tables.TripleTableBase" title="apis_core.apis_relations.tables.TripleTableBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">TripleTableBase</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableEdit.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#TripleTableEdit.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableEdit.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.apis_relations.tables.TripleTableBase.Meta" title="apis_core.apis_relations.tables.TripleTableBase.Meta"><code class="xref py py-class docutils literal notranslate"><span class="pre">Meta</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableEdit.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['start_date_written',</span> <span class="pre">'end_date_written',</span> <span class="pre">'other_prop',</span> <span class="pre">'other_entity',</span> <span class="pre">'notes']</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableEdit.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableEdit.Meta.sequence">
+<span class="sig-name descname"><span class="pre">sequence</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('start_date_written',</span> <span class="pre">'end_date_written',</span> <span class="pre">'other_prop',</span> <span class="pre">'other_entity',</span> <span class="pre">'notes')</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableEdit.Meta.sequence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.tables.TripleTableEdit.base_columns">
+<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'delete':</span> <span class="pre">&lt;apis_core.generic.tables.DeleteColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'edit':</span> <span class="pre">&lt;apis_core.generic.tables.EditColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'end_date_written':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'notes':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'other_entity':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'other_prop':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'start_date_written':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_relations.tables.TripleTableEdit.base_columns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="apis_core.apis_relations.tables.get_generic_triple_table">
 <span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.tables.</span></span><span class="sig-name descname"><span class="pre">get_generic_triple_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_entity_class_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity_pk_self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/tables.html#get_generic_triple_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.tables.get_generic_triple_table" title="Link to this definition"></a></dt>
