@@ -9,6 +9,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
+from django_filters.filterset import filterset_factory
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
 from django_tables2.columns import library
@@ -17,7 +18,7 @@ from django_tables2.tables import table_factory
 from apis_core.core.mixins import ListViewObjectFilterMixin
 from apis_core.utils.helpers import create_object_from_uri
 
-from .filtersets import GenericFilterSet, filterset_factory
+from .filtersets import GenericFilterSet
 from .forms import GenericImportForm, GenericModelForm
 from .helpers import (
     first_member_match,
