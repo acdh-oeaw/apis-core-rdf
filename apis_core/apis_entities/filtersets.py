@@ -1,11 +1,13 @@
 import django_filters
 from django.db import models
-from django.db.models import Q, Case, When
+from django.db.models import Q, Case, When, Value
+from django.db.models.functions import Concat
 from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
 from apis_core.apis_relations.models import Property, Triple
 from apis_core.generic.helpers import generate_search_filter
 from apis_core.apis_entities.utils import get_entity_classes
 from apis_core.apis_metainfo.models import RootObject
+from django.contrib.contenttypes.models import ContentType
 
 ABSTRACT_ENTITY_FILTERS_EXCLUDE = [
     "rootobject_ptr",
@@ -25,10 +27,58 @@ ABSTRACT_ENTITY_FILTERS_EXCLUDE = [
 ]
 
 
-def related_property(queryset, name, value):
-    p = Property.objects.get(name_forward=value)
-    queryset = queryset.filter(triple_set_from_subj__prop=p).distinct()
-    return queryset
+class PropertyChoiceField(django_filters.fields.ModelChoiceField):
+    def label_from_instance(self, obj):
+        if obj.forward:
+            targets = [ct.name for ct in obj.obj_class.all()]
+        else:
+            targets = [ct.name for ct in obj.subj_class.all()]
+        return obj.name + " | " + ", ".join(targets)
+
+
+class PropertyFilter(django_filters.ModelChoiceFilter):
+    """
+    A child of ModelChoiceFilter that only works with
+    Properties, but in return it filters those so that
+    only the Properties are listed that can be connected
+    to the `model` given as argument.
+    """
+
+    field_class = PropertyChoiceField
+
+    def __init__(self, *args, **kwargs):
+        model = kwargs.pop("model", None)
+        super().__init__(*args, **kwargs)
+
+        if model is not None:
+            ct = ContentType.objects.get_for_model(model)
+            self.queryset = (
+                Property.objects.all()
+                .filter(Q(subj_class=ct) | Q(obj_class=ct))
+                .annotate(
+                    name=Case(
+                        When(
+                            obj_class=ct,
+                            subj_class=ct,
+                            then=Concat("name_forward", Value(" / "), "name_reverse"),
+                        ),
+                        When(obj_class=ct, then="name_reverse"),
+                        When(subj_class=ct, then="name_forward"),
+                    ),
+                    forward=Case(
+                        When(obj_class=ct, then=Value(False)),
+                        When(subj_class=ct, then=Value(True)),
+                    ),
+                )
+                .order_by("name")
+                .distinct()
+            )
+
+    def filter(self, queryset, value):
+        if value:
+            p = Property.objects.get(name_forward=value)
+            queryset = queryset.filter(triple_set_from_subj__prop=p).distinct()
+        return queryset
 
 
 def related_entity(queryset, name, value):
@@ -61,11 +111,6 @@ class AbstractEntityFilterSet(GenericFilterSet):
     related_entity = django_filters.CharFilter(
         method=related_entity, label="Related entity contains"
     )
-    related_property = django_filters.ModelChoiceFilter(
-        queryset=Property.objects.all().order_by("name_forward"),
-        label="Related Property",
-        method=related_property,
-    )
 
     class Meta(GenericFilterSet.Meta):
         form = AbstractEntityFilterSetForm
@@ -78,3 +123,9 @@ class AbstractEntityFilterSet(GenericFilterSet):
                 },
             },
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.filters["related_property"] = PropertyFilter(
+            label="Related Property", model=getattr(self.Meta, "model", None)
+        )
