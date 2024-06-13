@@ -4,7 +4,12 @@ from django.core.management.utils import get_random_secret_key
 SECRET_KEY = os.environ.get("SECRET_KEY", get_random_secret_key())
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+# we look for values in the environment and fallback to the
+# Django defaults if there are none set
+env_ah = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = list(filter(None, env_ah))
+env_csrf = os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
+CSRF_TRUSTED_ORIGINS = list(filter(None, env_csrf))
 
 
 # Application definition
