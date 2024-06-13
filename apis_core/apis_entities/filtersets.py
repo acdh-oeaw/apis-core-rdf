@@ -1,8 +1,11 @@
 import django_filters
 from django.db import models
+from django.db.models import Q, Case, When
 from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
-from apis_core.apis_relations.models import Property
+from apis_core.apis_relations.models import Property, Triple
 from apis_core.generic.helpers import generate_search_filter
+from apis_core.apis_entities.utils import get_entity_classes
+from apis_core.apis_metainfo.models import RootObject
 
 ABSTRACT_ENTITY_FILTERS_EXCLUDE = [
     "rootobject_ptr",
@@ -29,8 +32,25 @@ def related_property(queryset, name, value):
 
 
 def related_entity(queryset, name, value):
-    search_filter = generate_search_filter(queryset.model, value)
-    return queryset.filter(search_filter)
+    entities = get_entity_classes()
+    q = Q()
+    for entity in entities:
+        name = entity._meta.model_name
+        q |= Q(**{f"{name}__isnull": False}) & generate_search_filter(
+            entity, value, prefix=f"{name}__"
+        )
+    all_entities = RootObject.objects_inheritance.filter(q).values_list("pk", flat=True)
+    t = (
+        Triple.objects.filter(Q(subj__in=all_entities) | Q(obj__in=all_entities))
+        .annotate(
+            related=Case(
+                When(subj__in=all_entities, then="obj"),
+                When(obj__in=all_entities, then="subj"),
+            )
+        )
+        .values_list("related", flat=True)
+    )
+    return queryset.filter(pk__in=t)
 
 
 class AbstractEntityFilterSetForm(GenericFilterSetForm):
