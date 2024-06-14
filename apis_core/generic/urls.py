@@ -26,7 +26,10 @@ class ContenttypeConverter:
         raise Http404
 
     def to_url(self, value):
-        return f"{value.app_label}.{value.model}"
+        if isinstance(value, ContentType):
+            return f"{value.app_label}.{value.model}"
+        if isinstance(value, str):
+            return value
 
 
 register_converter(ContenttypeConverter, "contenttype")
