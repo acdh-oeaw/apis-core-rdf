@@ -11,10 +11,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name="texttype",
-            name="collections",
-        ),
-        migrations.RemoveField(
-            model_name="texttype",
             name="vocabsbaseclass_ptr",
         ),
         migrations.RemoveField(

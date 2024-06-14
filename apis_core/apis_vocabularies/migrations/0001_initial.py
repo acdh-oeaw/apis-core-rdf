@@ -180,10 +180,6 @@ class Migration(migrations.Migration):
                         verbose_name="ISO Code",
                     ),
                 ),
-                (
-                    "collections",
-                    models.ManyToManyField(blank=True, to="apis_metainfo.Collection"),
-                ),
             ],
             bases=("apis_vocabularies.vocabsbaseclass",),
         ),
