@@ -1,4 +1,5 @@
 import re
+import functools
 
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -61,33 +62,41 @@ class AbstractEntity(RootObject):
             args=[ct.model, self.id],
         )
 
+    @functools.cached_property
     def get_prev_url(self):
-        entity = self.__class__.__name__.lower()
         if NEXT_PREV:
-            prev = self.__class__.objects.filter(id__lt=self.id).order_by("-id")
-        else:
-            return False
-        if prev:
-            return reverse(
-                "apis_core:apis_entities:generic_entities_detail_view",
-                kwargs={"contenttype": entity, "pk": prev.first().id},
+            ct = ContentType.objects.get_for_model(self)
+            prev_instance = (
+                type(self)
+                .objects.filter(id__lt=self.id)
+                .order_by("-id")
+                .only("id")
+                .first()
             )
-        else:
-            return False
+            if prev_instance is not None:
+                return reverse(
+                    "apis_core:apis_entities:generic_entities_detail_view",
+                    kwargs={"contenttype": ct.model, "pk": prev_instance.id},
+                )
+        return False
 
+    @functools.cached_property
     def get_next_url(self):
-        entity = self.__class__.__name__.lower()
         if NEXT_PREV:
-            next = self.__class__.objects.filter(id__gt=self.id)
-        else:
-            return False
-        if next:
-            return reverse(
-                "apis_core:apis_entities:generic_entities_detail_view",
-                kwargs={"contenttype": entity, "pk": next.first().id},
+            ct = ContentType.objects.get_for_model(self)
+            next_instance = (
+                type(self)
+                .objects.filter(id__gt=self.id)
+                .order_by("id")
+                .only("id")
+                .first()
             )
-        else:
-            return False
+            if next_instance is not None:
+                return reverse(
+                    "apis_core:apis_entities:generic_entities_detail_view",
+                    kwargs={"contenttype": ct.model, "pk": next_instance.id},
+                )
+        return False
 
     def get_duplicate_url(self):
         entity = self.__class__.__name__.lower()
