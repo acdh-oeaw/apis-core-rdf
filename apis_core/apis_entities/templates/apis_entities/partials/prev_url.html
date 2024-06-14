@@ -1,6 +1,7 @@
-{% if object.get_prev_url %}
+{% if object.get_prev_id %}
   <h2>
-    <a href="{{ object.get_prev_url }}" style="float:right">
+    <a href="{% url request.resolver_match.view_name request.resolver_match.kwargs.contenttype object.get_prev_id %}"
+       style="float:right">
       <span class="material-symbols-outlined">chevron_left</span>
     </a>
   </h2>
