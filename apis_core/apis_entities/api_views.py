@@ -7,6 +7,7 @@ from rest_framework.generics import ListAPIView
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.apis_entities.serializers import MinimalEntitySerializer
 from apis_core.apis_entities.utils import get_entity_classes
+from apis_core.utils.filters import CustomSearchFilter
 
 
 class GetEntityGeneric(APIView):
@@ -20,6 +21,7 @@ class GetEntityGeneric(APIView):
 
 class ListEntityGeneric(ListAPIView):
     serializer_class = MinimalEntitySerializer
+    filter_backends = [CustomSearchFilter]
 
     def get_queryset(self):
         entities = get_entity_classes()
