@@ -50,12 +50,8 @@ Installation
 Create a project using your favourite package manager:
 
 ```shell
-poetry new foobar-repository --name apis_ontology
+poetry new foobar-repository
 ```
-
-Currently (as of 2023-10) the name of the apis application **has** to be
-`apis_ontology` - this is considered a bug and is tracked in [this bug
-report](https://github.com/acdh-oeaw/apis-core-rdf/issues/100).
 
 In your project folder, add apis as a dependency (replace `RELEASE_VERSION`
 with the version you want to install):
@@ -64,9 +60,11 @@ with the version you want to install):
 poetry add git+https://github.com/acdh-oeaw/apis-core-rdf#RELEASE_VERSION
 ```
 
-Setup your Django project
+Now remove the generated `__init__.py` (because `django-admin` wants to be the
+one that creates that) and setup your Django project
 ```shell
-poetry run django-admin startproject foobar_django_project .
+rm -f foobar_repository/__init__.py
+poetry run django-admin startproject foobar_repository .
 ```
 
 Now start using your Django project
