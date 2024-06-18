@@ -11,6 +11,7 @@ from apis_core.apis_relations.models import TempTriple
 from apis_core.apis_entities.fields import ListSelect2
 from django.contrib.contenttypes.models import ContentType
 from apis_core.apis_entities.utils import get_entity_classes
+from apis_core.utils.settings import get_entity_settings_by_modelname
 
 from apis_core.apis_metainfo.models import Uri
 
@@ -18,6 +19,7 @@ from .tables import get_generic_triple_table
 from apis_core.apis_entities.autocomplete3 import (
     PropertyAutocomplete,
 )
+from django_tables2 import RequestConfig
 
 
 class GenericTripleForm(forms.ModelForm):
@@ -211,5 +213,10 @@ class GenericTripleForm(forms.ModelForm):
             prefix=entity_instance_other.__class__.__name__,
             request=request,
         )
+        entity_settings = get_entity_settings_by_modelname(
+            entity_instance_self.__class__.__name__
+        )
+        per_page = entity_settings.get("relations_per_page", 10)
+        RequestConfig(request, paginate={"per_page": per_page}).configure(table_object)
 
         return table_object
