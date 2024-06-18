@@ -5,8 +5,6 @@ from django.utils.html import format_html
 from django_tables2.utils import A
 
 from apis_core.apis_metainfo.tables import (
-    generic_order_start_date_written,
-    generic_order_end_date_written,
     generic_render_start_date_written,
     generic_render_end_date_written,
 )
@@ -95,11 +93,6 @@ class TripleTableBase(GenericTable):
     The base table from which detail or edit tables will inherit from in order to avoid redundant definitions
     """
 
-    # reuse the logic for ordering and rendering *_date_written
-    # Important: The names of these class variables must correspond to the column field name,
-    # e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written
-    order_start_date_written = generic_order_start_date_written
-    order_end_date_written = generic_order_end_date_written
     render_start_date_written = generic_render_start_date_written
     render_end_date_written = generic_render_end_date_written
 
@@ -120,6 +113,16 @@ class TripleTableBase(GenericTable):
         )
         # reuse the list for ordering
         sequence = tuple(fields)
+
+    def order_start_date_written(self, queryset, is_descending):
+        if is_descending:
+            return (queryset.order_by(F("start_date").desc(nulls_last=True)), True)
+        return (queryset.order_by(F("start_date").asc(nulls_last=True)), True)
+
+    def order_end_date_written(self, queryset, is_descending):
+        if is_descending:
+            return (queryset.order_by(F("end_date").desc(nulls_last=True)), True)
+        return (queryset.order_by(F("end_date").asc(nulls_last=True)), True)
 
     def render_other_entity(self, record, value):
         """
