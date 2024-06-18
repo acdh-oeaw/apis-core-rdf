@@ -4,13 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.views.static import serve
 from django.views.generic import TemplateView
-from rest_framework import routers
 from django.conf import settings
 
 
 from apis_core.apis_metainfo.viewsets import UriToObjectViewSet
 from apis_core.core.views import Dumpdata
 from apis_core.apis_entities.api_views import GetEntityGeneric, ListEntityGeneric
+from apis_core.generic.routers import CustomDefaultRouter
 
 from drf_spectacular.views import (
     SpectacularAPIView,
@@ -20,7 +20,7 @@ from drf_spectacular.views import (
 
 app_name = "apis_core"
 
-router = routers.DefaultRouter()
+router = CustomDefaultRouter()
 # inject the manually created UriToObjectViewSet into the api router
 router.register(r"metainfo/uritoobject", UriToObjectViewSet, basename="uritoobject")
 
