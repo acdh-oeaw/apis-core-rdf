@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.apis_entities.api_views &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.utils.filters &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -81,7 +81,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.apis_entities.api_views</li>
+      <li class="breadcrumb-item active">apis_core.utils.filters</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -90,49 +90,42 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.apis_entities.api_views</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
-<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
-<span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
-<span class="kn">from</span> <span class="nn">rest_framework.exceptions</span> <span class="kn">import</span> <span class="n">NotFound</span>
-<span class="kn">from</span> <span class="nn">rest_framework.generics</span> <span class="kn">import</span> <span class="n">ListAPIView</span>
-
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.serializers</span> <span class="kn">import</span> <span class="n">MinimalEntitySerializer</span>
+  <h1>Source code for apis_core.utils.filters</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">loader</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.utils</span> <span class="kn">import</span> <span class="n">get_entity_classes</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.filters</span> <span class="kn">import</span> <span class="n">CustomSearchFilter</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">generate_search_filter</span>
+<span class="kn">from</span> <span class="nn">rest_framework.filters</span> <span class="kn">import</span> <span class="n">SearchFilter</span>
 
 
-<div class="viewcode-block" id="GetEntityGeneric">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric">[docs]</a>
-<span class="k">class</span> <span class="nc">GetEntityGeneric</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
-<div class="viewcode-block" id="GetEntityGeneric.get">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.get">[docs]</a>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">obj</span> <span class="o">=</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">get_subclass</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get_api_detail_endpoint</span><span class="p">())</span>
-        <span class="k">except</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">NotFound</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="ListEntityGeneric">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.ListEntityGeneric">[docs]</a>
-<span class="k">class</span> <span class="nc">ListEntityGeneric</span><span class="p">(</span><span class="n">ListAPIView</span><span class="p">):</span>
-    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">MinimalEntitySerializer</span>
-    <span class="n">filter_backends</span> <span class="o">=</span> <span class="p">[</span><span class="n">CustomSearchFilter</span><span class="p">]</span>
-
-<div class="viewcode-block" id="ListEntityGeneric.get_queryset">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.ListEntityGeneric.get_queryset">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomSearchFilter">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.filters.CustomSearchFilter">[docs]</a>
+<span class="k">class</span> <span class="nc">CustomSearchFilter</span><span class="p">(</span><span class="n">SearchFilter</span><span class="p">):</span>
+<div class="viewcode-block" id="CustomSearchFilter.filter_queryset">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.filters.CustomSearchFilter.filter_queryset">[docs]</a>
+    <span class="k">def</span> <span class="nf">filter_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
+        <span class="n">search_terms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_search_terms</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">search_terms</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">queryset</span>
         <span class="n">entities</span> <span class="o">=</span> <span class="n">get_entity_classes</span><span class="p">()</span>
-        <span class="n">entities</span> <span class="o">=</span> <span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">model_name</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">]</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">Q</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
-            <span class="n">q</span> <span class="o">|=</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">__isnull&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">select_subclasses</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">q</span><span class="p">)</span></div>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">model_name</span>
+            <span class="n">q</span> <span class="o">|=</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">__isnull&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span> <span class="o">&amp;</span> <span class="n">generate_search_filter</span><span class="p">(</span>
+                <span class="n">entity</span><span class="p">,</span> <span class="n">search_terms</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">__&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">q</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CustomSearchFilter.to_html">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.filters.CustomSearchFilter.to_html">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;param&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_param</span><span class="p">,</span>
+            <span class="s2">&quot;term&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">query_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_param</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
