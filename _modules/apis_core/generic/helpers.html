@@ -103,13 +103,16 @@
 
 <div class="viewcode-block" id="generate_search_filter">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.helpers.generate_search_filter">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_search_filter</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">fields_to_search</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">generate_search_filter</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">fields_to_search</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a default search filter that searches for the `query`</span>
 <span class="sd">    in all the CharFields and TextFields of a model (case-insensitive)</span>
 <span class="sd">    or in the fields listed in the `fields_to_search` argument.</span>
 <span class="sd">    This helper can be used by autocomplete querysets if nothing</span>
 <span class="sd">    fancier is needed.</span>
+<span class="sd">    If the `prefix` is set, the field names will be prefixed with that string -</span>
+<span class="sd">    this can be useful if you want to use the `generate_search_filter` in a</span>
+<span class="sd">    `Q` combined query while searching over multiple models.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
 
@@ -128,7 +131,8 @@
 
     <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
         <span class="n">q</span> <span class="o">&amp;=</span> <span class="n">functools</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">acc</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="n">acc</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">__icontains&quot;</span><span class="p">:</span> <span class="n">token</span><span class="p">}),</span>
+            <span class="k">lambda</span> <span class="n">acc</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="n">acc</span>
+            <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">__icontains&quot;</span><span class="p">:</span> <span class="n">token</span><span class="p">}),</span>
             <span class="n">fields_to_search</span><span class="p">,</span>
             <span class="n">Q</span><span class="p">(),</span>
         <span class="p">)</span>
