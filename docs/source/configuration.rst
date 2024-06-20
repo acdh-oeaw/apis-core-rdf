@@ -3,7 +3,7 @@ Configuration
 
 
 ``APIS_BASE_URL`` and :class:`apis_core.apis_entities.api_views.GetEntityGeneric`
-------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
 
 When you create an instance of an Entity a signal
 :py:func:`apis_core.apis_entities.models.create_default_uri` is triggered that
