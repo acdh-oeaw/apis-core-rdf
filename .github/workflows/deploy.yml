@@ -16,8 +16,10 @@ jobs:
     outputs:
       image_tagged: ${{ vars.APP_NAME }}
       registry_root: ghcr.io/${{ github.repository }}/
+      datetime: ${{ steps.datetime.outputs.datetime }}
     steps:
-      - run: "/bin/true"
+      - id: datetime
+        run: echo "datetime=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
 
   build_and_push_to_registry:
     runs-on: ubuntu-latest
@@ -43,6 +45,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest
             type=raw,value={{sha}}
+            type=raw,value=${{ needs.setup_workflow_env.outputs.datetime }}
 
       - name: Build and push
         uses: docker/build-push-action@v3
@@ -55,7 +58,7 @@ jobs:
     uses: acdh-oeaw/gl-autodevops-minimal-port/.github/workflows/deploy-cluster-2.yml@main
     secrets: inherit
     with:
-      DOCKER_TAG: ${{ needs.setup_workflow_env.outputs.registry_root }}${{ needs.setup_workflow_env.outputs.image_tagged }}/${{ github.ref_name }}
+      DOCKER_TAG: ${{ needs.setup_workflow_env.outputs.registry_root }}${{ needs.setup_workflow_env.outputs.image_tagged }}/${{ github.ref_name }}:${{ needs.setup_workflow_env.outputs.datetime }}
       APP_NAME: ${{ vars.APP_NAME }}
       SERVICE_ID: ${{ vars.SERVICE_ID }}
       PUBLIC_URL: ${{ vars.PUBLIC_URL }}
