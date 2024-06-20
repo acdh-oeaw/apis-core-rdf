@@ -95,6 +95,69 @@
              
   <section id="welcome-to-apis-s-documentation">
 <h1>Welcome to APIS’s documentation!<a class="headerlink" href="#welcome-to-apis-s-documentation" title="Link to this heading"></a></h1>
+<section id="apis">
+<h2>APIS<a class="headerlink" href="#apis" title="Link to this heading"></a></h2>
+<p><img alt="Django Tests" src="https://github.com/acdh-oeaw/apis-core-rdf/actions/workflows/django-tests.yml/badge.svg" />
+<img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/acdh-oeaw/apis-core-rdf" /></p>
+<p>The <em>Austrian Prosophographic Information System</em> is a
+<a class="reference external" href="https://www.djangoproject.com/">Django</a> based prosopography framework. It
+allows to create web applications to manage both entities and relations between
+entities. It provides API access to the data in various formats and creates
+swagger defintions. A swagger-ui allows for comfortable access to the data.</p>
+<p>Data can also be imported from remote resources described in
+<a class="reference external" href="https://en.wikipedia.org/wiki/Resource_Description_Framework">RDF</a>.</p>
+<p>In addition to this configurable import of data via RDF, there is also an
+configurable serialization of data. The generic RestAPI of APIS provides data
+either in the internal JSON format, TEI or RDF (serialized with <em>CIDOC CRM</em>).</p>
+<p>APIS comes with a built in system of autocompletes that allows researchers to
+import meta-data of entities with just a single click. Out of the box APIS
+supports Stanbol as a backend for the autocompletes, but the system is rather
+easy to adapt to any Restfull API. APIS also supports the parsing of RDFs
+describing entities into an entity. The parsing is configured in a settings
+file.</p>
+<p><em>Entities</em></p>
+<p><em>Relations</em></p>
+<section id="licensing">
+<h3>Licensing<a class="headerlink" href="#licensing" title="Link to this heading"></a></h3>
+<p>All code unless otherwise noted is licensed under the terms of the MIT License
+(MIT). Please refer to the file LICENSE.txt in the root directory of this
+repository.</p>
+<p>All documentation and images unless otherwise noted are licensed under the
+terms of Creative Commons Attribution-ShareAlike 4.0 International License. To
+view a copy of this license, visit
+http://creativecommons.org/licenses/by-sa/4.0/</p>
+<p>APIS contains the <a class="reference external" href="https://fonts.google.com/icons">“Material Symbols” font</a>(commit ace1af0), which
+is licenced under the <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache Licence Version 2.0</a>.</p>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h3>
+<p>Create a project using your favourite package manager:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>new<span class="w"> </span>foobar-repository
+</pre></div>
+</div>
+<p>In your project folder, add apis as a dependency (replace <code class="docutils literal notranslate"><span class="pre">RELEASE_VERSION</span></code>
+with the version you want to install):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>add<span class="w"> </span>git+https://github.com/acdh-oeaw/apis-core-rdf#RELEASE_VERSION
+</pre></div>
+</div>
+<p>Now remove the generated <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> (because <code class="docutils literal notranslate"><span class="pre">django-admin</span></code> wants to be the
+one that creates that) and setup your Django project</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>-f<span class="w"> </span>foobar_repository/__init__.py
+poetry<span class="w"> </span>run<span class="w"> </span>django-admin<span class="w"> </span>startproject<span class="w"> </span>foobar_repository<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Now start using your Django project</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>./manage.py<span class="w"> </span>runserver
+</pre></div>
+</div>
+<p>To use the APIS framework in your application, you will need to add the following dependencies to
+<a class="reference external" href="https://docs.djangoproject.com/en/4.2/ref/settings/#installed-apps"><code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code></a>:</p>
+<p>https://github.com/acdh-oeaw/apis-core-rdf/blob/9135728495be144d228adbdc77a392d75a617bdb/sample_project/settings.py#L17-L59</p>
+<p>Finally, add the APIS urls to your applications <a class="reference external" href="https://docs.djangoproject.com/en/4.2/topics/http/urls/">URL Dispatcher</a></p>
+<p>https://github.com/acdh-oeaw/apis-core-rdf/blob/9135728495be144d228adbdc77a392d75a617bdb/sample_project/urls.py#L4-L10</p>
+<p>Now you should be ready to roll. Start creating your entities in you <code class="docutils literal notranslate"><span class="pre">apis_ontology/models.py</span></code>.</p>
+</section>
+</section>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
 <ul>
