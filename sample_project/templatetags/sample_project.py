@@ -1,3 +1,4 @@
+import datetime
 import pathlib
 from django import template
 
@@ -10,5 +11,7 @@ def password():
 
 
 @register.simple_tag
-def startup():
-    return pathlib.Path("/tmp/startup.txt").read_text()
+def teardown():
+    date = datetime.datetime.fromisoformat(pathlib.Path("/tmp/startup.txt").read_text())
+    until = date + datetime.timedelta(hours=6)
+    return until
