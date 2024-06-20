@@ -285,93 +285,6 @@ endpoint.</p>
 </dd></dl>
 
 </section>
-<section id="module-apis_core.utils.caching">
-<span id="apis-core-utils-caching-module"></span><h2>apis_core.utils.caching module<a class="headerlink" href="#module-apis_core.utils.caching" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_all_class_modules_and_names">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_all_class_modules_and_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_all_class_modules_and_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_all_class_modules_and_names" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a list of tuples where each contains a str for the app label and a str for the class</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_all_contenttype_classes">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_all_contenttype_classes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_all_contenttype_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_all_contenttype_classes" title="Link to this definition"></a></dt>
-<dd><p>Return a list of all Django Contenttype classes.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_all_entity_class_names">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_all_entity_class_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_all_entity_class_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_all_entity_class_names" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_all_entity_classes">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_all_entity_classes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_all_entity_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_all_entity_classes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_all_ontology_class_names">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_all_ontology_class_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_all_ontology_class_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_all_ontology_class_names" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_all_ontology_classes">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_all_ontology_classes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_all_ontology_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_all_ontology_classes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_contenttype_of_class">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_contenttype_of_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_class</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_contenttype_of_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_contenttype_of_class" title="Link to this definition"></a></dt>
-<dd><p>Helper method which caches ContentType of a given model class. When first called on a model, it
-fetches its respective ContentType from the DB and caches it in a class dictionary. Later, this
-dictionary is called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>model_class</strong> – django model class</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>ContentType class representing the model class</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_entity_class_of_name">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_entity_class_of_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_name_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_entity_class_of_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_entity_class_of_name" title="Link to this definition"></a></dt>
-<dd><p>Look up an entity class based on a given name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>entity_name_str</strong> – a string to compare against classes’ __name__
-values; need not be formatted (letter case does
-not matter)</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>an entity class – or raise exception</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.caching.get_ontology_class_of_name">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.caching.</span></span><span class="sig-name descname"><span class="pre">get_ontology_class_of_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ontology_name_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/caching.html#get_ontology_class_of_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.caching.get_ontology_class_of_name" title="Link to this definition"></a></dt>
-<dd><p>Look up an ontology class based on a given name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ontology_name_str</strong> – a string to compare against classes’ __name__
-values; need not be formatted (letter case does
-not matter)</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>an ontology class – or raise exception</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
 <section id="module-apis_core.utils.fields">
 <span id="apis-core-utils-fields-module"></span><h2>apis_core.utils.fields module<a class="headerlink" href="#module-apis_core.utils.fields" title="Link to this heading"></a></h2>
 <dl class="py class">
@@ -618,23 +531,6 @@ not have a method with the specified name.</p>
 <dt class="sig sig-object py" id="apis_core.utils.test_DateParser.fi">
 <span class="sig-prename descclassname"><span class="pre">apis_core.utils.test_DateParser.</span></span><span class="sig-name descname"><span class="pre">fi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datestring</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_DateParser.html#fi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_DateParser.fi" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-</section>
-<section id="module-apis_core.utils.test_caching">
-<span id="apis-core-utils-test-caching-module"></span><h2>apis_core.utils.test_caching module<a class="headerlink" href="#module-apis_core.utils.test_caching" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.utils.test_caching.CachingTest">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.utils.test_caching.</span></span><span class="sig-name descname"><span class="pre">CachingTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_caching.html#CachingTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_caching.CachingTest" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
-<p>Create an instance of the class that will use the named test
-method when executed. Raises a ValueError if the instance does
-not have a method with the specified name.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.utils.test_caching.CachingTest.test_get_all_class_modules_and_names">
-<span class="sig-name descname"><span class="pre">test_get_all_class_modules_and_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_caching.html#CachingTest.test_get_all_class_modules_and_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_caching.CachingTest.test_get_all_class_modules_and_names" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
 
 </section>
 <section id="module-apis_core.utils.test_filtermethods">
