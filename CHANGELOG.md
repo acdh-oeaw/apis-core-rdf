@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.21.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.20.1...v0.21.0) (2024-06-20)
+
+
+### Features
+
+* **apis_core:** use CustomDefaultRouter instead of DRF DefaultRouter ([9ced7a7](https://github.com/acdh-oeaw/apis-core-rdf/commit/9ced7a78d1d9ff8e9a713a07c319ecbc012a7b81))
+* **apis_entities:** introduce CustomSearchFilter and use it ([5c40bc0](https://github.com/acdh-oeaw/apis-core-rdf/commit/5c40bc0ddf9dbffc30bc483dcbd7c2c1ac830929)), closes [#855](https://github.com/acdh-oeaw/apis-core-rdf/issues/855)
+* **generic:** add CustomAPIRootView & CustomDefaultRouter ([d0428f0](https://github.com/acdh-oeaw/apis-core-rdf/commit/d0428f0c1719c0e7393a6c40f2dcc36bb58c07ce)), closes [#836](https://github.com/acdh-oeaw/apis-core-rdf/issues/836)
+* **generic:** allow passing a prefix to `generate_search_filter` ([335bb75](https://github.com/acdh-oeaw/apis-core-rdf/commit/335bb756d8edf801f7f1c42e1ea43a485a0e2b52))
+* **sample_project:** add password to login page ([0be54d2](https://github.com/acdh-oeaw/apis-core-rdf/commit/0be54d2e52c320962d4d2f6f2dceef4127daae9b))
+* **sample_project:** provide discworld sample data ([b1bb01f](https://github.com/acdh-oeaw/apis-core-rdf/commit/b1bb01f4600c19d3c86aee729f081a6d8911a769))
+* **utils:** add a NewlineSeparatedListField ([6211dc7](https://github.com/acdh-oeaw/apis-core-rdf/commit/6211dc73c90ce0933feaf283a2166aae6b0a0bf6))
+
+
+### Bug Fixes
+
+* **api:** move `/entities` endpoint to `/api/entities` ([638bc1b](https://github.com/acdh-oeaw/apis-core-rdf/commit/638bc1bbeeb4b0926938a7d43ec78a08ce1f91de))
+* **apis_entities:** implement correct related entity query ([13a8a08](https://github.com/acdh-oeaw/apis-core-rdf/commit/13a8a0861c864c0939832eab734d4f2f47f9fb3a)), closes [#943](https://github.com/acdh-oeaw/apis-core-rdf/issues/943)
+* **apis_entities:** trigger htmx process after form reloading ([7118205](https://github.com/acdh-oeaw/apis-core-rdf/commit/7118205e3edaa4451f6ad3bfbcc92572379b3159))
+* **apis_relations:** respect pagination setting in form table ([1e1c028](https://github.com/acdh-oeaw/apis-core-rdf/commit/1e1c0283de5b7d154ac22f4b0d0b3235116cae76))
+* **apis_vocabularies:** remove collections from migrations ([a72e6cd](https://github.com/acdh-oeaw/apis-core-rdf/commit/a72e6cdcf48db50ea2b36f44e566eb1af31c1a05))
+* **ci:** replace workflow_call with workflow_dispatch ([5ecf426](https://github.com/acdh-oeaw/apis-core-rdf/commit/5ecf4267879919983396a7dfdba037ce5e6dd072))
+* deactivate simple_history plugin for loaddata ([4f5742f](https://github.com/acdh-oeaw/apis-core-rdf/commit/4f5742f4bdebcd5305c0c3b9a3468d8909449631))
+* drop `apis` namespace for all url resolvers ([24f91f1](https://github.com/acdh-oeaw/apis-core-rdf/commit/24f91f1ae3e8f88a7cfbffcbc21de16e34246b97)), closes [#876](https://github.com/acdh-oeaw/apis-core-rdf/issues/876)
+* **generic:** let ContenttypeConverter also handle string arguments ([2d67cbe](https://github.com/acdh-oeaw/apis-core-rdf/commit/2d67cbe4c14681563714b6a34f81a0bad78816d8))
+* **readme:** clean up installation instructions ([5c6ad82](https://github.com/acdh-oeaw/apis-core-rdf/commit/5c6ad8272f8b42245cdaafa9887c3c3da439f4c5))
+* **sample_project:** allow all hosts ([37dd165](https://github.com/acdh-oeaw/apis-core-rdf/commit/37dd16529cd1781ef9ff8491a7e5a0f8ec167051))
+* **sample_project:** listen on port 5000 by default ([ec10764](https://github.com/acdh-oeaw/apis-core-rdf/commit/ec107644dcf8a9d3b9769a71ba647a3b917bcf50))
+* **sample_project:** move app to beginning of INSTALLED_APPS ([7ce3a05](https://github.com/acdh-oeaw/apis-core-rdf/commit/7ce3a0595a077ae2e99d6e386fb23d69444b5b62))
+* **sample_project:** show credentials only if not logged in ([d83a68f](https://github.com/acdh-oeaw/apis-core-rdf/commit/d83a68f18b5d6f4bd43e75b9a629e3848c3621da))
+* **sample_project:** use environment variables for Django settings ([7ddd8f2](https://github.com/acdh-oeaw/apis-core-rdf/commit/7ddd8f2b22073a02ae098c754ec26a826d83e117))
+* use loaddata specific settings in the entrypoint ([5cc2172](https://github.com/acdh-oeaw/apis-core-rdf/commit/5cc21728d79a64fcf1803a812f14f971b239a957))
+
+
+### Documentation
+
+* include `sample_project` configs instead duplicating them ([571b52e](https://github.com/acdh-oeaw/apis-core-rdf/commit/571b52e8bdabcad071e9a2e35e8d61808771a3f0))
+* **sample_project:** add comments to the sample projects settings ([9a7be81](https://github.com/acdh-oeaw/apis-core-rdf/commit/9a7be81a4eb80e6fa3c83cab2c3686a3958aded1))
+
 ## [0.20.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.20.0...v0.20.1) (2024-06-11)
 
 
