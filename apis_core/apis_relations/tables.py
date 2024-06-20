@@ -2,7 +2,6 @@ import django_tables2 as tables
 from django.conf import settings
 from django.db.models import Case, When, F
 from django.utils.html import format_html
-from django_tables2.utils import A
 
 from apis_core.apis_metainfo.tables import (
     generic_render_start_date_written,
@@ -174,9 +173,10 @@ class TripleTableDetail(TripleTableBase):
         exclude = TripleTableBase.Meta.exclude + ("delete", "edit")
 
     def __init__(self, data, *args, **kwargs):
-        self.base_columns["other_entity"] = tables.LinkColumn(
-            "apis:apis_entities:generic_entities_detail_view",
-            args=[self.other_entity_class_name, A("other_entity")],
+        self.base_columns["other_entity"] = tables.Column(
+            linkify=lambda record: record.obj.get_absolute_url()
+            if record.other_entity == record.obj.id
+            else record.subj.get_absolute_url()
         )
 
         # bibsonomy button
@@ -196,9 +196,10 @@ class TripleTableEdit(TripleTableBase):
         sequence = tuple(fields)
 
     def __init__(self, *args, **kwargs):
-        self.base_columns["other_entity"] = tables.LinkColumn(
-            "apis:apis_entities:generic_entities_edit_view",
-            args=[self.other_entity_class_name, A("other_entity")],
+        self.base_columns["other_entity"] = tables.Column(
+            linkify=lambda record: record.obj.get_edit_url()
+            if record.other_entity == record.obj.id
+            else record.subj.get_edit_url()
         )
 
         self.base_columns["edit"] = tables.TemplateColumn(
