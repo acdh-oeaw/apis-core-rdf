@@ -13,8 +13,8 @@ def helper_render_date(value, var_date, var_start_date, var_end_date):
     If there are values, use them as mouse overlay helptext to inform the user about the parsing result behind a written
     date field.
 
-    :param value: str : the *_date_written (either start_date_written or end_date_written) field of an entity or relation
-    :param var_date: datetime : either the precisely parsed date or the average in between two dates when *_date_written is a range
+    :param value: str : the \*_date_written (either start_date_written or end_date_written) field of an entity or relation
+    :param var_date: datetime : either the precisely parsed date or the average in between two dates when \*_date_written is a range
     :param var_start_date: datetime : The sub-date of var_date, indicating the start date of the range
     :param var_end_date: datetime : The sub-date of var_date, indicating the end date of the range
     :return: html string : which has the value of the written date and the parsed dates as mouse overlay helptext
