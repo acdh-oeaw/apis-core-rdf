@@ -13,6 +13,7 @@ Welcome to APIS's documentation!
    :caption: Documentation:
 
    installation
+   configuration
    settings
    customization
    user_documentation
