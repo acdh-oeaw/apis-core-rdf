@@ -14,11 +14,12 @@ def construct_lookup(value: str) -> tuple:
     Parses user input for wildcards and returns a tuple containing the
     interpreted django lookup string and the trimmed value
     E.g.
-        - ``example`` -> ``('__icontains', 'example')``
-        - ``*example*`` -> ``('__icontains', 'example')``
-        - ``*example`` -> ``('__iendswith', 'example')``
-        - ``example*``-> ``('__istartswith', 'example')``
-        - ``"example"`` -> ``('__iexact', 'example')``
+
+    - ``example`` -> ``('__icontains', 'example')``
+    - ``*example*`` -> ``('__icontains', 'example')``
+    - ``*example`` -> ``('__iendswith', 'example')``
+    - ``example*``-> ``('__istartswith', 'example')``
+    - ``"example"`` -> ``('__iexact', 'example')``
 
     :param str value: text to be parsed for ``*``
     :return: a tuple containing the lookup type and the value without modifiers
@@ -88,12 +89,13 @@ def related_arbitrary_model_name(queryset, name, value):
     """
     Searches through an arbitrarily related model on its name field using :func:`construct_lookup`.
     Note that this works only if
-        - the related model has a field 'name'
-        - the filter using this method has the same name as the field of the model on which the filter is applied.
 
-          (E.g. the field ``profession`` on a person relates to another model: the professiontype. Here the filter on a person
-          must also be called ``profession`` as the field ``profession`` exists within the person model and is then used to search in.
-          Using this example of professions, such a lookup would be generated: ``Person.objects.filter(profession__name__... )`` )
+    - the related model has a field 'name'
+    - the filter using this method has the same name as the field of the model on which the filter is applied.
+
+    (E.g. the field ``profession`` on a person relates to another model: the professiontype. Here the filter on a person
+    must also be called ``profession`` as the field ``profession`` exists within the person model and is then used to search in.
+    Using this example of professions, such a lookup would be generated: ``Person.objects.filter(profession__name__... )`` )
     """
 
     lookup, value = construct_lookup(value)

@@ -43,7 +43,7 @@ class PropertyTable(GenericTable):
     The table shows how entities connect with one another via properties (relations).
     It uses the format of an RDF triple – Subject-Predicate-Object – plus
     "Reverse Predicate" for the inverse relationship and is displayed on the frontend
-     on the Relations > Property page.
+    on the Relations > Property page.
     """
 
     # Note on constructing table columns / usage of variables:
