@@ -92,58 +92,10 @@
              
   <h1>Source code for apis_core.apis_metainfo.tables</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">django_tables2</span> <span class="k">as</span> <span class="nn">tables</span>
-<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">django.utils.html</span> <span class="kn">import</span> <span class="n">format_html</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.tables</span> <span class="kn">import</span> <span class="n">GenericTable</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-
-
-<span class="c1"># generic order_FOO methods for start_date_written and end_date_written to be used in all kinds of tables where a queryset is loaded</span>
-<span class="c1"># whose model has start_date_written and end_date_written. These methods order the *_date_written by their corresponding</span>
-<span class="c1"># parsed date objects.</span>
-<span class="c1">#</span>
-<span class="c1"># In order to use them in a table using django-tables2, the table class must be assigned *_date_written columns</span>
-<span class="c1"># (either through fields in Meta inner class or through custom Column() definitions).</span>
-<span class="c1"># Important however is that the names between the columns and the order methods are correlated to each other.</span>
-<span class="c1">#</span>
-<span class="c1"># The django-tables2 plugin searches for each column through the table class for corresponding order_* and render_* methods</span>
-<span class="c1"># E.g. to define custom ordering and rendering for a field column &#39;name&#39; the table class must have</span>
-<span class="c1"># &#39;order_name&#39; and &#39;render_name&#39; methods. This approach is called order_FOO and render_FOO by django-tables2.</span>
-<span class="c1">#</span>
-<span class="c1"># So in order to use these functions here, define within the table class</span>
-<span class="c1"># 1.) the respective column</span>
-<span class="c1"># 2.) a correspondingly named method for each column</span>
-<span class="c1"># 3.) assign to this method one of the two functions below</span>
-<span class="c1">#</span>
-<span class="c1"># In the case of e.g. start_date_written,</span>
-<span class="c1"># the table class thus must have a method / class variable &#39;order_start_date_written = generic_order_start_date_written&#39;</span>
-
-
-<div class="viewcode-block" id="generic_order_start_date_written">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_start_date_written">[docs]</a>
-<span class="k">def</span> <span class="nf">generic_order_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">is_descending</span><span class="p">:</span>
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
-            <span class="n">F</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="p">)</span>  <span class="c1"># nulls_last=True puts null values behind non-null values</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">asc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="generic_order_end_date_written">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_order_end_date_written">[docs]</a>
-<span class="k">def</span> <span class="nf">generic_order_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">is_descending</span><span class="p">:</span>
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">asc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="helper_render_date">

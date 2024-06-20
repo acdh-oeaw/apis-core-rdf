@@ -98,8 +98,6 @@
 <span class="kn">from</span> <span class="nn">django_tables2.utils</span> <span class="kn">import</span> <span class="n">A</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.tables</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">generic_order_start_date_written</span><span class="p">,</span>
-    <span class="n">generic_order_end_date_written</span><span class="p">,</span>
     <span class="n">generic_render_start_date_written</span><span class="p">,</span>
     <span class="n">generic_render_end_date_written</span><span class="p">,</span>
 <span class="p">)</span>
@@ -211,11 +209,6 @@
 <span class="sd">    The base table from which detail or edit tables will inherit from in order to avoid redundant definitions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># reuse the logic for ordering and rendering *_date_written</span>
-    <span class="c1"># Important: The names of these class variables must correspond to the column field name,</span>
-    <span class="c1"># e.g. for start_date_written, the methods must be named order_start_date_written and render_start_date_written</span>
-    <span class="n">order_start_date_written</span> <span class="o">=</span> <span class="n">generic_order_start_date_written</span>
-    <span class="n">order_end_date_written</span> <span class="o">=</span> <span class="n">generic_order_end_date_written</span>
     <span class="n">render_start_date_written</span> <span class="o">=</span> <span class="n">generic_render_start_date_written</span>
     <span class="n">render_end_date_written</span> <span class="o">=</span> <span class="n">generic_render_end_date_written</span>
 
@@ -238,6 +231,22 @@
         <span class="p">)</span>
         <span class="c1"># reuse the list for ordering</span>
         <span class="n">sequence</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TripleTableBase.order_start_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTableBase.order_start_date_written">[docs]</a>
+    <span class="k">def</span> <span class="nf">order_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_descending</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">asc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TripleTableBase.order_end_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTableBase.order_end_date_written">[docs]</a>
+    <span class="k">def</span> <span class="nf">order_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_descending</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;end_date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">asc</span><span class="p">(</span><span class="n">nulls_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span> <span class="kc">True</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="TripleTableBase.render_other_entity">
