@@ -317,15 +317,13 @@ See <a class="reference external" href="https://django-filter.readthedocs.io/en/
 Parses user input for wildcards and returns a tuple containing the
 interpreted django lookup string and the trimmed value
 E.g.</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">example</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__icontains',</span> <span class="pre">'example')</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">*example*</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__icontains',</span> <span class="pre">'example')</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">*example</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__iendswith',</span> <span class="pre">'example')</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">example*</span></code>-&gt; <code class="docutils literal notranslate"><span class="pre">('__istartswith',</span> <span class="pre">'example')</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;example&quot;</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__iexact',</span> <span class="pre">'example')</span></code></p></li>
 </ul>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – text to be parsed for <code class="docutils literal notranslate"><span class="pre">*</span></code></p>
@@ -352,16 +350,13 @@ E.g.</p>
 <span class="sig-prename descclassname"><span class="pre">apis_core.utils.filtermethods.</span></span><span class="sig-name descname"><span class="pre">related_arbitrary_model_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/filtermethods.html#related_arbitrary_model_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.filtermethods.related_arbitrary_model_name" title="Link to this definition"></a></dt>
 <dd><p>Searches through an arbitrarily related model on its name field using <a class="reference internal" href="#apis_core.utils.filtermethods.construct_lookup" title="apis_core.utils.filtermethods.construct_lookup"><code class="xref py py-func docutils literal notranslate"><span class="pre">construct_lookup()</span></code></a>.
 Note that this works only if</p>
-<blockquote>
-<div><ul>
+<ul class="simple">
 <li><p>the related model has a field ‘name’</p></li>
-<li><p>the filter using this method has the same name as the field of the model on which the filter is applied.</p>
+<li><p>the filter using this method has the same name as the field of the model on which the filter is applied.</p></li>
+</ul>
 <p>(E.g. the field <code class="docutils literal notranslate"><span class="pre">profession</span></code> on a person relates to another model: the professiontype. Here the filter on a person
 must also be called <code class="docutils literal notranslate"><span class="pre">profession</span></code> as the field <code class="docutils literal notranslate"><span class="pre">profession</span></code> exists within the person model and is then used to search in.
 Using this example of professions, such a lookup would be generated: <code class="docutils literal notranslate"><span class="pre">Person.objects.filter(profession__name__...</span> <span class="pre">)</span></code> )</p>
-</li>
-</ul>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py function">

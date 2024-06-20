@@ -110,11 +110,12 @@
 <span class="sd">    Parses user input for wildcards and returns a tuple containing the</span>
 <span class="sd">    interpreted django lookup string and the trimmed value</span>
 <span class="sd">    E.g.</span>
-<span class="sd">        - ``example`` -&gt; ``(&#39;__icontains&#39;, &#39;example&#39;)``</span>
-<span class="sd">        - ``*example*`` -&gt; ``(&#39;__icontains&#39;, &#39;example&#39;)``</span>
-<span class="sd">        - ``*example`` -&gt; ``(&#39;__iendswith&#39;, &#39;example&#39;)``</span>
-<span class="sd">        - ``example*``-&gt; ``(&#39;__istartswith&#39;, &#39;example&#39;)``</span>
-<span class="sd">        - ``&quot;example&quot;`` -&gt; ``(&#39;__iexact&#39;, &#39;example&#39;)``</span>
+
+<span class="sd">    - ``example`` -&gt; ``(&#39;__icontains&#39;, &#39;example&#39;)``</span>
+<span class="sd">    - ``*example*`` -&gt; ``(&#39;__icontains&#39;, &#39;example&#39;)``</span>
+<span class="sd">    - ``*example`` -&gt; ``(&#39;__iendswith&#39;, &#39;example&#39;)``</span>
+<span class="sd">    - ``example*``-&gt; ``(&#39;__istartswith&#39;, &#39;example&#39;)``</span>
+<span class="sd">    - ``&quot;example&quot;`` -&gt; ``(&#39;__iexact&#39;, &#39;example&#39;)``</span>
 
 <span class="sd">    :param str value: text to be parsed for ``*``</span>
 <span class="sd">    :return: a tuple containing the lookup type and the value without modifiers</span>
@@ -196,12 +197,13 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Searches through an arbitrarily related model on its name field using :func:`construct_lookup`.</span>
 <span class="sd">    Note that this works only if</span>
-<span class="sd">        - the related model has a field &#39;name&#39;</span>
-<span class="sd">        - the filter using this method has the same name as the field of the model on which the filter is applied.</span>
 
-<span class="sd">          (E.g. the field ``profession`` on a person relates to another model: the professiontype. Here the filter on a person</span>
-<span class="sd">          must also be called ``profession`` as the field ``profession`` exists within the person model and is then used to search in.</span>
-<span class="sd">          Using this example of professions, such a lookup would be generated: ``Person.objects.filter(profession__name__... )`` )</span>
+<span class="sd">    - the related model has a field &#39;name&#39;</span>
+<span class="sd">    - the filter using this method has the same name as the field of the model on which the filter is applied.</span>
+
+<span class="sd">    (E.g. the field ``profession`` on a person relates to another model: the professiontype. Here the filter on a person</span>
+<span class="sd">    must also be called ``profession`` as the field ``profession`` exists within the person model and is then used to search in.</span>
+<span class="sd">    Using this example of professions, such a lookup would be generated: ``Person.objects.filter(profession__name__... )`` )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">lookup</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
