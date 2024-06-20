@@ -4,17 +4,43 @@
 {% block content %}
 
   {% if not user.is_authenticated %}
+    <script>
+  /* copied from https://www.w3schools.com/howto/howto_js_countdown.asp */
+  // Set the date we're counting down to
+  var countDownDate = new Date("{% teardown %}");
+  
+  var x = setInterval(function() {
+  
+    // Get today's date and time
+    var now = new Date().getTime();
+  
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
+  
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  
+    // Display the result in the element with id="demo"
+    document.getElementById("demo").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+  
+    // If the count down is finished, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("demo").innerHTML = "EXPIRED";
+    }
+  }, 1000);
+    </script>
     <div class="container">
       <div class="card card-index">
         <div class="card-body">
-          <p class="text-center">Username:</p>
-          <pre class="text-center">admin</pre>
+          <p class="text-center">Login:</p>
+          <pre class="text-center">admin / {% password %}</pre>
           <hr class="hr-index" />
-          <p class="text-center">Current password:</p>
-          <pre class="text-center">{% password %}</pre>
-          <hr class="hr-index" />
-          <p class="text-center">Startup time:</p>
-          <pre class="text-center">{% startup %}</pre>
+          <p class="text-center">This instance will be redeployed in</p>
+          <pre id="demo" class="text-center"></pre>
         </div>
       </div>
     </div>
