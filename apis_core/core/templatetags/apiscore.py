@@ -1,5 +1,6 @@
 from django import template
 from django.conf import settings
+from apis_core import __version__
 
 
 register = template.Library()
@@ -23,3 +24,8 @@ def opts(obj):
 @register.filter
 def model_meta(content_type, field):
     return getattr(content_type.model_class()._meta, field)
+
+
+@register.simple_tag
+def apis_version():
+    return __version__
