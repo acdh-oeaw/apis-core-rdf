@@ -1,4 +1,5 @@
 import django_tables2 as tables
+from django.db.models import F
 from django.utils.html import format_html
 from apis_core.generic.tables import GenericTable
 
