@@ -96,7 +96,6 @@
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Case</span><span class="p">,</span> <span class="n">When</span><span class="p">,</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">django.utils.html</span> <span class="kn">import</span> <span class="n">format_html</span>
-<span class="kn">from</span> <span class="nn">django_tables2.utils</span> <span class="kn">import</span> <span class="n">A</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.tables</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">generic_render_start_date_written</span><span class="p">,</span>
@@ -309,9 +308,10 @@
 
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
-            <span class="s2">&quot;apis:apis_entities:generic_entities_detail_view&quot;</span><span class="p">,</span>
-            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">other_entity_class_name</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)],</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+            <span class="n">linkify</span><span class="o">=</span><span class="k">lambda</span> <span class="n">record</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">other_entity</span> <span class="o">==</span> <span class="n">record</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">else</span> <span class="n">record</span><span class="o">.</span><span class="n">subj</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span>
         <span class="p">)</span>
 
         <span class="c1"># bibsonomy button</span>
@@ -337,9 +337,10 @@
 
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">LinkColumn</span><span class="p">(</span>
-            <span class="s2">&quot;apis:apis_entities:generic_entities_edit_view&quot;</span><span class="p">,</span>
-            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">other_entity_class_name</span><span class="p">,</span> <span class="n">A</span><span class="p">(</span><span class="s2">&quot;other_entity&quot;</span><span class="p">)],</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;other_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+            <span class="n">linkify</span><span class="o">=</span><span class="k">lambda</span> <span class="n">record</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">get_edit_url</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">other_entity</span> <span class="o">==</span> <span class="n">record</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">else</span> <span class="n">record</span><span class="o">.</span><span class="n">subj</span><span class="o">.</span><span class="n">get_edit_url</span><span class="p">()</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">base_columns</span><span class="p">[</span><span class="s2">&quot;edit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
