@@ -2,12 +2,15 @@ import django_filters
 from django.db import models
 from django.db.models import Q, Case, When, Value
 from django.db.models.functions import Concat
+from django.conf import settings
+from django.forms import DateInput
 from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
 from apis_core.apis_relations.models import Property, Triple
 from apis_core.generic.helpers import generate_search_filter
 from apis_core.apis_entities.utils import get_entity_classes
 from apis_core.apis_metainfo.models import RootObject
 from django.contrib.contenttypes.models import ContentType
+from simple_history.utils import get_history_manager_for_model
 
 ABSTRACT_ENTITY_COLUMNS_EXCLUDE = [
     "rootobject_ptr",
@@ -109,6 +112,12 @@ def related_entity(queryset, name, value):
     return queryset.filter(pk__in=t)
 
 
+def changed_since(queryset, name, value):
+    history = get_history_manager_for_model(queryset.model)
+    ids = history.filter(history_date__gt=value).values_list("id", flat=True)
+    return queryset.filter(pk__in=ids)
+
+
 class AbstractEntityFilterSetForm(GenericFilterSetForm):
     columns_exclude = ABSTRACT_ENTITY_COLUMNS_EXCLUDE
 
@@ -135,3 +144,9 @@ class AbstractEntityFilterSet(GenericFilterSet):
         self.filters["related_property"] = PropertyFilter(
             label="Related Property", model=getattr(self.Meta, "model", None)
         )
+        if "apis_core.history" in settings.INSTALLED_APPS:
+            self.filters["changed_since"] = django_filters.DateFilter(
+                label="Changed since",
+                widget=DateInput(attrs={"type": "date"}),
+                method=changed_since,
+            )
