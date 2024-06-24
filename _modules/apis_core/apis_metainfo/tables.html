@@ -167,7 +167,6 @@
     <span class="p">)</span>
     <span class="n">ent_type</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
         <span class="s2">&quot;{{ record.root_object.self_contenttype.model }}&quot;</span><span class="p">,</span>
-        <span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Entity Type&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -175,7 +174,17 @@
 <a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">GenericTable</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;desc&quot;</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="s2">&quot;ent_type&quot;</span><span class="p">]</span></div>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="s2">&quot;ent_type&quot;</span><span class="p">]</span>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;desc&quot;</span><span class="p">,)</span></div>
+
+
+<div class="viewcode-block" id="UriTable.order_ent_type">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.order_ent_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">order_ent_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">is_descending</span><span class="p">):</span>
+        <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+            <span class="n">ent_type</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;root_object__self_contenttype__model&quot;</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">((</span><span class="s2">&quot;-&quot;</span> <span class="k">if</span> <span class="n">is_descending</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;ent_type&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
