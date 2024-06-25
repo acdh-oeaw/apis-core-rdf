@@ -1,3 +1,4 @@
+from django import http
 from django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import DetailView
@@ -245,6 +246,12 @@ class Autocomplete(
 
     def create_object(self, value):
         return create_object_from_uri(value, self.queryset.model)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            return super().post(request, *args, **kwargs)
+        except Exception as e:
+            return http.JsonResponse({"error": str(e)})
 
 
 class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
