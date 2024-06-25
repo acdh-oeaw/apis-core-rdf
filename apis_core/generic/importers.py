@@ -4,9 +4,9 @@ from django.core.exceptions import ImproperlyConfigured
 from apis_core.utils.normalize import clean_uri
 
 
-class GenericImporter:
+class GenericModelImporter:
     """
-    A skeleton importer class
+    A generic importer class
     It provides the standard methods for importing data from
     an URI and creating a model instance of it.
     By default it fetches a resource, tries to parse it using json and
