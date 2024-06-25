@@ -14,6 +14,7 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django_tables2 import RequestConfig
+from django.core.exceptions import ImproperlyConfigured
 
 
 def get_content_types_with_allowed_relation_from(
@@ -154,6 +155,8 @@ def create_object_from_uri(uri: str, model: object) -> object:
                 instance = importer.create_instance()
                 uri = Uri.objects.create(uri=importer.get_uri, root_object=instance)
                 return instance
+            else:
+                raise ImproperlyConfigured(f"No suitable importer found for {model}")
     return None
 
 
