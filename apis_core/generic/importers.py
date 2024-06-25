@@ -43,7 +43,9 @@ class GenericModelImporter:
         data = self.mangle_data(data)
         # we are dropping all fields that are not part of the model
         modelfields = [field.name for field in self.model._meta.fields]
-        data = {key: data[key] for key in data if key in modelfields}
-        if data:
-            return self.model.objects.create(**data)
-        raise ImproperlyConfigured(f"Could not extract data from {self.import_uri}")
+        fielddata = {key: data[key] for key in data if key in modelfields}
+        if fielddata:
+            return self.model.objects.create(**fielddata)
+        raise ImproperlyConfigured(
+            f"Could not import {self.import_uri}. Data fetched was: {data}"
+        )
