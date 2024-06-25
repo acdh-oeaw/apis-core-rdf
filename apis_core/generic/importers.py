@@ -2,6 +2,7 @@ import json
 import urllib
 from django.core.exceptions import ImproperlyConfigured
 from apis_core.utils.normalize import clean_uri
+from apis_core.utils.rdf import get_definition_and_attributes_from_uri
 
 
 class GenericModelImporter:
@@ -9,7 +10,8 @@ class GenericModelImporter:
     A generic importer class
     It provides the standard methods for importing data from
     an URI and creating a model instance of it.
-    By default it fetches a resource, tries to parse it using json and
+    By default it fetches a resource, first tries to parse it using
+    our rdf parser, if that fails tries to parse it using json and
     then extracts the fields whose keys match the model field names.
     Projects can inherit from this class and override the default
     methods or simple write their own from scratch.
@@ -30,6 +32,14 @@ class GenericModelImporter:
         return clean_uri(uri)
 
     def request(self, uri):
+        # we first try to use the RDF parser
+        try:
+            defn, data = get_definition_and_attributes_from_uri(uri, self.model)
+            return data
+        except Exception:
+            pass
+        # if everything else fails, try parsing json
+        # if even that does not help, return an empty dict
         try:
             return json.loads(urllib.request.urlopen(uri).read())
         except Exception:
