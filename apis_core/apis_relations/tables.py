@@ -3,10 +3,6 @@ from django.conf import settings
 from django.db.models import Case, When, F
 from django.utils.html import format_html
 
-from apis_core.apis_metainfo.tables import (
-    generic_render_start_date_written,
-    generic_render_end_date_written,
-)
 from apis_core.generic.tables import GenericTable
 from apis_core.apis_relations.models import TempTriple
 
@@ -92,9 +88,6 @@ class TripleTableBase(GenericTable):
     The base table from which detail or edit tables will inherit from in order to avoid redundant definitions
     """
 
-    render_start_date_written = generic_render_start_date_written
-    render_end_date_written = generic_render_end_date_written
-
     class Meta:
         model = TempTriple
 
@@ -166,6 +159,24 @@ class TripleTableBase(GenericTable):
         ].verbose_name = f"Related {self.other_entity_class_name.title()}"
 
         super().__init__(data, *args, **kwargs)
+
+    def render_start_date_written(self, record, value):
+        if record.start_start_date is not None and record.start_end_date is not None:
+            title_text = f"{record.start_start_date} - {record.start_end_date}"
+        elif record.start_date is not None:
+            title_text = record.start_date
+        else:
+            return "—"
+        return format_html(f"<abbr title='{title_text}'>{value}</b>")
+
+    def render_end_date_written(self, record, value):
+        if record.end_start_date is not None and record.end_end_date is not None:
+            title_text = f"{record.end_start_date} - {record.end_end_date}"
+        elif record.start_date is not None:
+            title_text = record.end_date
+        else:
+            return "—"
+        return format_html(f"<abbr title='{title_text}'>{value}</b>")
 
 
 class TripleTableDetail(TripleTableBase):
