@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.22.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.21.0...v0.22.0) (2024-06-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* **utils:** drop caching module
+
+### Features
+
+* **apis_entities:** add info message to duplicated object ([77a50fa](https://github.com/acdh-oeaw/apis-core-rdf/commit/77a50fa4aa5de093dce85fbf4dee694ce73c5276)), closes [#893](https://github.com/acdh-oeaw/apis-core-rdf/issues/893)
+* **generic:** list all generic models on overview page ([eb53743](https://github.com/acdh-oeaw/apis-core-rdf/commit/eb53743decd2cac8a1363ee312f291803f8bccc9)), closes [#912](https://github.com/acdh-oeaw/apis-core-rdf/issues/912)
+
+
+### Bug Fixes
+
+* **apis_metainfo:** add missing import ([a4ecc61](https://github.com/acdh-oeaw/apis-core-rdf/commit/a4ecc617babc94f7cd49c62a22caf87f4b8aa1e3))
+* **apis_metainfo:** handle unique fields in the duplication logic ([3e66876](https://github.com/acdh-oeaw/apis-core-rdf/commit/3e66876786f64427e86b147206d32b43c10ceca8))
+* **apis_metainfo:** make entity_type orderable in the UriTable ([02452ec](https://github.com/acdh-oeaw/apis-core-rdf/commit/02452ec838aba95b49ac091dcce0e47e519c9a51)), closes [#874](https://github.com/acdh-oeaw/apis-core-rdf/issues/874)
+* **apis_relations:** replace LinkColumn with Column in TripleTables ([2bdd812](https://github.com/acdh-oeaw/apis-core-rdf/commit/2bdd81249060b373e015f7a804a4f1eb8da8537a)), closes [#676](https://github.com/acdh-oeaw/apis-core-rdf/issues/676)
+* **docs:** add documentation regarding GetEntityGeneric ([d883896](https://github.com/acdh-oeaw/apis-core-rdf/commit/d883896b5cfd6b983c7fc342bfeecd96ac8267ce)), closes [#381](https://github.com/acdh-oeaw/apis-core-rdf/issues/381)
+* **docs:** fix underline to make sphinx happy ([2a05361](https://github.com/acdh-oeaw/apis-core-rdf/commit/2a0536187cbc539023480f6acfa3dc9acb791363))
+* **docs:** remove migrations from the exclude_patterns ([75be82a](https://github.com/acdh-oeaw/apis-core-rdf/commit/75be82a262de55efbe6744eacb9111ae9f0e7335))
+* **docs:** repair some docstring formatting issues ([fa88195](https://github.com/acdh-oeaw/apis-core-rdf/commit/fa8819595e2e35360656ba2a7d21d168989897ef))
+* **docs:** replace broken README.rst include with README.md ([719931c](https://github.com/acdh-oeaw/apis-core-rdf/commit/719931c8688ba303cd8de5956cd6f219fe563708))
+* **docs:** set the language to make sphinx happy ([761367b](https://github.com/acdh-oeaw/apis-core-rdf/commit/761367bd5f9d1953d8029696e503a9fd521195de))
+* **sample_project:** fix countdown ([31b05b0](https://github.com/acdh-oeaw/apis-core-rdf/commit/31b05b0d26466d85d456da7da816370038261325)), closes [#992](https://github.com/acdh-oeaw/apis-core-rdf/issues/992)
+* **sample_project:** show countdown until redeployment ([f061b0a](https://github.com/acdh-oeaw/apis-core-rdf/commit/f061b0a1f7e649f9440095da60ce915cb7b60bab)), closes [#976](https://github.com/acdh-oeaw/apis-core-rdf/issues/976)
+* **utils:** drop caching module ([04f1c9f](https://github.com/acdh-oeaw/apis-core-rdf/commit/04f1c9f7ed214176d235ad23789dad1947e82b00)), closes [#884](https://github.com/acdh-oeaw/apis-core-rdf/issues/884)
+
 ## [0.21.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.20.1...v0.21.0) (2024-06-20)
 
 
