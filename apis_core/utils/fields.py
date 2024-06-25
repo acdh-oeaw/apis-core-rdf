@@ -11,7 +11,7 @@ class NewlineSeparatedListField(models.TextField):
     """
 
     def formfield(self, form_class=None, choices_form_class=None, **kwargs):
-        kwargs["widget"] = NewlineSeparatedListWidget
+        kwargs["widget"] = NewlineSeparatedListWidget(attrs={"class": "mb-1"})
         return super().formfield(
             form_class=form_class, choices_form_class=choices_form_class, **kwargs
         )
