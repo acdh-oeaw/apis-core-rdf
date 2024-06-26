@@ -1,4 +1,5 @@
 from django import http
+from django import forms
 from django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import DetailView
@@ -104,14 +105,20 @@ class List(
 
     def get_table_kwargs(self):
         kwargs = super().get_table_kwargs()
-        columns = self.request.GET.getlist("columns", [])
+        columns = self.request.GET.getlist("columns", self.filterset.form.fields["columns"].initial)
         column_fields = [
             field for field in self.model._meta.fields if field.name in columns
         ]
+        for key, val in self.object_list.query.annotations.items():
+            if key in columns:
+                field_pre = getattr(val, "field", val.output_field)
+                setattr(field_pre, "name", key)
+                column_fields.append(field_pre)
         kwargs["extra_columns"] = [
             (field.name, library.column_for_field(field, accessor=field.name))
             for field in column_fields
         ]
+        kwargs["exclude"] = [field.name for field in self.model._meta.fields if field.name not in columns]
         return kwargs
 
     def get_filterset_class(self):
@@ -120,6 +127,20 @@ class List(
         )
         filterset_class = first_member_match(filterset_modules, GenericFilterSet)
         return filterset_factory(self.model, filterset_class)
+
+    def get_filterset(self, filterset_class):
+        filterset = super().get_filterset(filterset_class)
+        columns_exclude = getattr(filterset, "columns_exclude", [])
+        initial = [field for field in self.get_table_class().Meta.fields if field not in columns_exclude]
+        choices = [
+            (field.name, field.verbose_name)
+            for field in self.model._meta.fields
+            if field.name not in columns_exclude
+        ]
+        choices += [(key, key) for key in self.get_queryset().query.annotations.keys() if key not in columns_exclude]
+        filterset.form.fields["columns"] = forms.MultipleChoiceField(required=False, choices=choices, initial=initial)
+
+        return filterset
 
     def get_queryset(self):
         queryset_methods = module_paths(

@@ -15,18 +15,6 @@ class GenericFilterSet(FilterSet):
     class Meta:
         form = GenericFilterSetForm
 
-    @property
-    def form(self):
-        if not hasattr(self, "_form"):
-            Form = self.get_form_class()
-            if self.is_bound:
-                self._form = Form(
-                    self.data, prefix=self.form_prefix, model=self._meta.model
-                )
-            else:
-                self._form = Form(prefix=self.form_prefix, model=self._meta.model)
-        return self._form
-
 
 # This is a backport from https://github.com/carltongibson/django-filter/pull/1636
 # It can be removed once that is merged and released
