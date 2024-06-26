@@ -2,25 +2,21 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-
   {% if object %}
     Edit {{ object }}
   {% else %}
     Create
   {% endif %}
-
 {% endblock title %}
 
 {% block col %}
   <div class="card">
     <div class="card-header">
-
       {% if object %}
         Edit {{ object }}
       {% else %}
         Create
       {% endif %}
-
     </div>
     <div class="card-body">{% crispy form form.helper %}</div>
   </div>

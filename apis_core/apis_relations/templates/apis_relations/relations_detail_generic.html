@@ -13,7 +13,6 @@
       <div class="card-header">
         <div class="row">
           <div class="col-md-2">
-
             {% if object.get_prev %}
               <h2>
                 <a href="{{ object.get_prev }}">
@@ -21,11 +20,9 @@
                 </a>
               </h2>
             {% endif %}
-
           </div>
           <div class="col-md-8">
             <h2 style="text-align: center;">
-
               {% if object.get_listview_url %}
                 <a href="{{ object.get_listview_url }}">
                   <small>{{ entity_type }}s</small>
@@ -33,9 +30,7 @@
               {% else %}
                 <small>{{ entity_type }}s</small>
               {% endif %}
-
               {{ object }}
-
               {% if user.is_authenticated %}
                 {% if object.get_edit_url %}
                   <small>
@@ -44,7 +39,6 @@
                     </a>
                   </small>
                 {% endif %}
-
                 {% if object.get_delete_url %}
                   |
                   <small>
@@ -54,19 +48,16 @@
                   </small>
                 {% endif %}
               {% endif %}
-
             </h2>
           </div>
           <div class="col-md-2">
             <h2>
-
               {% if object.get_next %}
                 <a href="{{ object.get_next }}" style="float:right">
                   <i class="fas fa-chevron-right" title="next"></i>
                 </a>
               </h2>
             {% endif %}
-
           </div>
         </div>
       </div>
@@ -89,20 +80,15 @@
                       <th>Type</th>
                       <td>{{ object.kind }}</td>
                     </tr>
-
                     {% if object.start_date or object.end_date %}
                       <tr>
                         <th>Date</th>
                         <td>
-
                           {% if object.start_date %}<abbr title="{{ object.start_date_written }}">{{ object.start_date }}</abbr>{% endif %}
-
                           {% if object.end_date %}- <abbr title="{{ object.end_date_written }}">{{ object.end_date }}</abbr>{% endif %}
-
                         </td>
                       </tr>
                     {% endif %}
-
                   </table>
                 {% endblock info-table %}
 

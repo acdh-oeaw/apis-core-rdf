@@ -8,9 +8,8 @@
         <a data-toggle="collapse" href="#collapse{{ forloop.counter }}">{{ obj.0|title }} ({{ obj.1.data|length }})</a>
       </div>
     </div>
-    <div id="collapse{{ forloop.counter }}" class="card-collapse collapse 
-      {% if obj.3 %}in{% endif %}
-       ">
+    <div id="collapse{{ forloop.counter }}"
+         class="card-collapse collapse {% if obj.3 %}in{% endif %} ">
       <div id="tab_{{ obj.2 }}" class="card-body">{% render_table obj.1 %}</div>
     </div>
   </div>

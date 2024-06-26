@@ -3,9 +3,7 @@
   <summary>
     {% for change in record.get_diff %}
       {{ change.field }}
-
       {% if not forloop.last %},{% endif %}
-
     {% endfor %}
   </summary>
   <table class="table table-sm table-hover table-bordered difftable">
