@@ -109,6 +109,11 @@ class List(
         column_fields = [
             field for field in self.model._meta.fields if field.name in columns
         ]
+        for key, val in self.object_list.query.annotations.items():
+            if key in columns:
+                field_pre = val.field if hasattr(val, "field") else val.output_field
+                setattr(field_pre, "name", key)
+                column_fields.append(field_pre)
         table_class = self.get_table_class()
         kwargs["extra_columns"] = [
             (field.name, library.column_for_field(field, accessor=field.name))

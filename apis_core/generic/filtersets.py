@@ -21,10 +21,17 @@ class GenericFilterSet(FilterSet):
             Form = self.get_form_class()
             if self.is_bound:
                 self._form = Form(
-                    self.data, prefix=self.form_prefix, model=self._meta.model
+                    self.data,
+                    prefix=self.form_prefix,
+                    model=self._meta.model,
+                    annotations=self.queryset.query.annotations,
                 )
             else:
-                self._form = Form(prefix=self.form_prefix, model=self._meta.model)
+                self._form = Form(
+                    prefix=self.form_prefix,
+                    model=self._meta.model,
+                    annotations=self.queryset.query.annotations,
+                )
         return self._form
 
 

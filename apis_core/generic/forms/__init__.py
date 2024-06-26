@@ -42,11 +42,14 @@ class GenericFilterSetForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         model = kwargs.pop("model")
+        annotations = kwargs.pop("annotations", {})
         super().__init__(*args, **kwargs)
         self.fields["columns"].choices = [
             (field.name, field.verbose_name)
             for field in model._meta.fields
             if field.name not in self.columns_exclude
+        ] + [
+            (key, key) for key in annotations.keys() if key not in self.columns_exclude
         ]
         if not self.is_bound:
             table_modules = module_paths(model, path="tables", suffix="Table")
