@@ -94,7 +94,7 @@
   <h1>Source code for apis_core.generic.api_views</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">viewsets</span>
 <span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">serializer_factory</span><span class="p">,</span> <span class="n">GenericHyperlinkedModelSerializer</span>
-<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="n">module_paths</span><span class="p">,</span> <span class="n">first_member_match</span>
+<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="n">module_paths</span><span class="p">,</span> <span class="n">first_member_match</span><span class="p">,</span> <span class="n">makeclassprefix</span>
 <span class="kn">from</span> <span class="nn">.filterbackends</span> <span class="kn">import</span> <span class="n">GenericFilterBackend</span>
 
 
@@ -135,6 +135,12 @@
         <span class="n">serializer_class_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;serializers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Serializer&quot;</span>
         <span class="p">)</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">makeclassprefix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">accepted_renderer</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+        <span class="n">serializer_class_modules</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;serializers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">Serializer&quot;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">serializer_class_modules</span>
+        <span class="p">)</span>
+
         <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span>
             <span class="n">serializer_class_modules</span><span class="p">,</span>
             <span class="nb">getattr</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span> <span class="s2">&quot;serializer&quot;</span><span class="p">,</span> <span class="n">GenericHyperlinkedModelSerializer</span><span class="p">),</span>
