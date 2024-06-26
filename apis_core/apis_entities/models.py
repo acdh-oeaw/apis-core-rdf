@@ -63,9 +63,8 @@ class AbstractEntity(RootObject):
         )
 
     @functools.cached_property
-    def get_prev_url(self):
+    def get_prev_id(self):
         if NEXT_PREV:
-            ct = ContentType.objects.get_for_model(self)
             prev_instance = (
                 type(self)
                 .objects.filter(id__lt=self.id)
@@ -74,16 +73,12 @@ class AbstractEntity(RootObject):
                 .first()
             )
             if prev_instance is not None:
-                return reverse(
-                    "apis_core:apis_entities:generic_entities_detail_view",
-                    kwargs={"contenttype": ct.model, "pk": prev_instance.id},
-                )
+                return prev_instance.id
         return False
 
     @functools.cached_property
-    def get_next_url(self):
+    def get_next_id(self):
         if NEXT_PREV:
-            ct = ContentType.objects.get_for_model(self)
             next_instance = (
                 type(self)
                 .objects.filter(id__gt=self.id)
@@ -92,10 +87,7 @@ class AbstractEntity(RootObject):
                 .first()
             )
             if next_instance is not None:
-                return reverse(
-                    "apis_core:apis_entities:generic_entities_detail_view",
-                    kwargs={"contenttype": ct.model, "pk": next_instance.id},
-                )
+                return next_instance.id
         return False
 
     def get_duplicate_url(self):
@@ -123,12 +115,14 @@ class AbstractEntity(RootObject):
     def merge_textfield(self, other, field):
         res = getattr(self, field.name)
         if getattr(other, field.name):
-            res += "\n" + f"Merged from {other}:\n" + getattr(other, field.name)
+            res += "\n" + f"Merged from {other}:\n" + \
+                getattr(other, field.name)
         setattr(self, field.name, res)
 
     def merge_booleanfield(self, other, field):
         setattr(
-            self, field.name, getattr(self, field.name) and getattr(other, field.name)
+            self, field.name, getattr(
+                self, field.name) and getattr(other, field.name)
         )
 
     def merge_start_date_written(self, other):
@@ -162,20 +156,23 @@ class AbstractEntity(RootObject):
         if self in entities:
             entities.remove(self)
         origin = self.__class__
-        signals.pre_merge_with.send(sender=origin, instance=self, entities=entities)
+        signals.pre_merge_with.send(
+            sender=origin, instance=self, entities=entities)
 
         # TODO: check if these imports can be put to top of module without
         #  causing circular import issues.
         from apis_core.apis_metainfo.models import Uri
 
         e_a = type(self).__name__
-        self_model_class = ContentType.objects.get(model__iexact=e_a).model_class()
+        self_model_class = ContentType.objects.get(
+            model__iexact=e_a).model_class()
         if isinstance(entities, int):
             entities = self_model_class.objects.get(pk=entities)
         if not isinstance(entities, list) and not isinstance(entities, QuerySet):
             entities = [entities]
             entities = [
-                self_model_class.objects.get(pk=ent) if isinstance(ent, int) else ent
+                self_model_class.objects.get(
+                    pk=ent) if isinstance(ent, int) else ent
                 for ent in entities
             ]
         for ent in entities:
@@ -195,7 +192,8 @@ class AbstractEntity(RootObject):
         for ent in entities:
             self.merge_fields(ent)
 
-        signals.post_merge_with.send(sender=origin, instance=self, entities=entities)
+        signals.post_merge_with.send(
+            sender=origin, instance=self, entities=entities)
 
         for ent in entities:
             ent.delete()
@@ -214,10 +212,12 @@ def create_default_uri(sender, instance, created, raw, using, update_fields, **k
         if isinstance(instance, AbstractEntity) and created:
             base = BASE_URI.strip("/")
             try:
-                route = reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk})
+                route = reverse("GetEntityGenericRoot",
+                                kwargs={"pk": instance.pk})
             except NoReverseMatch:
                 route = reverse(
                     "apis_core:GetEntityGeneric", kwargs={"pk": instance.pk}
                 )
             uri = f"{base}{route}"
-            Uri.objects.create(uri=uri, domain="apis default", root_object=instance)
+            Uri.objects.create(
+                uri=uri, domain="apis default", root_object=instance)

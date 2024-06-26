@@ -1,6 +1,7 @@
-{% if object.get_next_url %}
+{% if object.get_next_id %}
+{% load apis_templatetags %}
   <h2>
-    <a href="{{ object.get_next_url }}" style="float:left">
+    <a href="{% get_next_prev_url_by_id object 'next' %}" style="float:left">
       <span class="material-symbols-outlined">chevron_right</span>
     </a>
   </h2>

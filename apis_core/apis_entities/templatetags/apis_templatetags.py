@@ -1,3 +1,4 @@
+import re
 from django import template
 from apis_core.utils.helpers import triple_sidebar
 from django.contrib.contenttypes.models import ContentType
@@ -56,3 +57,13 @@ def object_relations(context, detail=True):
     return triple_sidebar(
         obj.pk, obj.__class__.__name__.lower(), context["request"], detail
     )
+
+
+@register.simple_tag(takes_context=True)
+def get_next_prev_url_by_id(context, obj, kind="next"):
+    path = context["request"].path
+    obj_id = getattr(obj, f"get_{kind}_id")
+    if obj_id:
+        new_path = re.sub(r"\d+", str(obj_id), path)
+        return new_path
+    return ""
