@@ -407,7 +407,8 @@ and the add our custom endpoints to this list.</p>
 <span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">generate_search_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields_to_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#generate_search_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.generate_search_filter" title="Link to this definition"></a></dt>
 <dd><p>Generate a default search filter that searches for the <cite>query</cite>
 in all the CharFields and TextFields of a model (case-insensitive)
-or in the fields listed in the <cite>fields_to_search</cite> argument.
+or in the fields listed in the models <cite>default_search_fields</cite> attribute
+or in the fields listed in the <cite>fields_to_search</cite> argument
 This helper can be used by autocomplete querysets if nothing
 fancier is needed.
 If the <cite>prefix</cite> is set, the field names will be prefixed with that string -
