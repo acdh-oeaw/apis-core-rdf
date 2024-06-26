@@ -1,6 +1,6 @@
 {% load apis_helpers %}
-<a class="bibsonomy-anker" data-bibs-contenttype="{{ record|content_type|lower }}" data-bibs-object_pk=" 
-  {% if record.relation_pk %}{{ record.relation_pk }}{% else %}{{ record.pk }}{% endif %}
-   ">
+<a class="bibsonomy-anker"
+   data-bibs-contenttype="{{ record|content_type|lower }}"
+   data-bibs-object_pk=" {% if record.relation_pk %}{{ record.relation_pk }}{% else %}{{ record.pk }}{% endif %} ">
   <span class="material-symbols-outlined">import_contacts</span>
 </a>

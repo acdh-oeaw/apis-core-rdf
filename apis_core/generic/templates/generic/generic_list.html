@@ -3,7 +3,6 @@
 {% load crispy_forms_tags %}
 {% load apisgeneric %}
 {% load apiscore %}
-
 {% if filter %}
 
   {% block col %}
@@ -12,12 +11,10 @@
         <div class="row">
           <div class="col">{{ object_list.model|contenttype }}</div>
           <div class="col">
-
             {% if object_list.model.get_add_permission in perms %}
               <a class="btn btn-outline-success float-right btn-sm"
                  href="{{ object_list.model.get_createview_url }}">Create</a>
             {% endif %}
-
           </div>
         </div>
       </div>
@@ -35,7 +32,6 @@
   {% endblock col %}
 
 {% endif %}
-
 {% if table %}
 
   {% block additionalcols %}
