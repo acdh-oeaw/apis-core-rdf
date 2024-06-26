@@ -97,10 +97,6 @@
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Case</span><span class="p">,</span> <span class="n">When</span><span class="p">,</span> <span class="n">F</span>
 <span class="kn">from</span> <span class="nn">django.utils.html</span> <span class="kn">import</span> <span class="n">format_html</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.tables</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">generic_render_start_date_written</span><span class="p">,</span>
-    <span class="n">generic_render_end_date_written</span><span class="p">,</span>
-<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.tables</span> <span class="kn">import</span> <span class="n">GenericTable</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
 
@@ -209,9 +205,6 @@
 <span class="sd">    The base table from which detail or edit tables will inherit from in order to avoid redundant definitions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">render_start_date_written</span> <span class="o">=</span> <span class="n">generic_render_start_date_written</span>
-    <span class="n">render_end_date_written</span> <span class="o">=</span> <span class="n">generic_render_end_date_written</span>
-
 <div class="viewcode-block" id="TripleTableBase.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTableBase.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
@@ -294,7 +287,31 @@
             <span class="s2">&quot;other_entity&quot;</span>
         <span class="p">]</span><span class="o">.</span><span class="n">verbose_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Related </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">other_entity_class_name</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TripleTableBase.render_start_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTableBase.render_start_date_written">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">start_start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">start_end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">title_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">record</span><span class="o">.</span><span class="n">start_start_date</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">record</span><span class="o">.</span><span class="n">start_end_date</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">elif</span> <span class="n">record</span><span class="o">.</span><span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">title_text</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">start_date</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;—&quot;</span>
+        <span class="k">return</span> <span class="n">format_html</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;abbr title=&#39;</span><span class="si">{</span><span class="n">title_text</span><span class="si">}</span><span class="s2">&#39;&gt;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&lt;/b&gt;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TripleTableBase.render_end_date_written">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.tables.TripleTableBase.render_end_date_written">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">end_start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">end_end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">title_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">record</span><span class="o">.</span><span class="n">end_start_date</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">record</span><span class="o">.</span><span class="n">end_end_date</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">elif</span> <span class="n">record</span><span class="o">.</span><span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">title_text</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">end_date</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;—&quot;</span>
+        <span class="k">return</span> <span class="n">format_html</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;abbr title=&#39;</span><span class="si">{</span><span class="n">title_text</span><span class="si">}</span><span class="s2">&#39;&gt;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&lt;/b&gt;&quot;</span><span class="p">)</span></div>
+</div>
 
 
 

@@ -707,38 +707,6 @@ so that we can present a helpful representation of the object.</p>
 
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.tables.generic_render_end_date_written">
-<span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.tables.</span></span><span class="sig-name descname"><span class="pre">generic_render_end_date_written</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/tables.html#generic_render_end_date_written"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.tables.generic_render_end_date_written" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.tables.generic_render_start_date_written">
-<span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.tables.</span></span><span class="sig-name descname"><span class="pre">generic_render_start_date_written</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/tables.html#generic_render_start_date_written"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.tables.generic_render_start_date_written" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.tables.helper_render_date">
-<span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.tables.</span></span><span class="sig-name descname"><span class="pre">helper_render_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_end_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/tables.html#helper_render_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.tables.helper_render_date" title="Link to this definition"></a></dt>
-<dd><p>helper function to avoid duplicated code. It checks the various sub-dates of a model’s date field for them being None
-or having values. If a field is None then check for the next, and if all are None, return ‘—’ inditcating no value.</p>
-<p>If there are values, use them as mouse overlay helptext to inform the user about the parsing result behind a written
-date field.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>value</strong> – str : the *_date_written (either start_date_written or end_date_written) field of an entity or relation</p></li>
-<li><p><strong>var_date</strong> – datetime : either the precisely parsed date or the average in between two dates when *_date_written is a range</p></li>
-<li><p><strong>var_start_date</strong> – datetime : The sub-date of var_date, indicating the start date of the range</p></li>
-<li><p><strong>var_end_date</strong> – datetime : The sub-date of var_date, indicating the end date of the range</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>html string : which has the value of the written date and the parsed dates as mouse overlay helptext</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="module-apis_core.apis_metainfo.urls">
 <span id="apis-core-apis-metainfo-urls-module"></span><h2>apis_core.apis_metainfo.urls module<a class="headerlink" href="#module-apis_core.apis_metainfo.urls" title="Link to this heading"></a></h2>

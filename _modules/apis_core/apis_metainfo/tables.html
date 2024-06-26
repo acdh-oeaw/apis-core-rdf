@@ -94,68 +94,9 @@
   <h1>Source code for apis_core.apis_metainfo.tables</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">django_tables2</span> <span class="k">as</span> <span class="nn">tables</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">F</span>
-<span class="kn">from</span> <span class="nn">django.utils.html</span> <span class="kn">import</span> <span class="n">format_html</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.tables</span> <span class="kn">import</span> <span class="n">GenericTable</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-
-
-<div class="viewcode-block" id="helper_render_date">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.helper_render_date">[docs]</a>
-<span class="k">def</span> <span class="nf">helper_render_date</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">var_date</span><span class="p">,</span> <span class="n">var_start_date</span><span class="p">,</span> <span class="n">var_end_date</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    helper function to avoid duplicated code. It checks the various sub-dates of a model&#39;s date field for them being None</span>
-<span class="sd">    or having values. If a field is None then check for the next, and if all are None, return &#39;—&#39; inditcating no value.</span>
-
-<span class="sd">    If there are values, use them as mouse overlay helptext to inform the user about the parsing result behind a written</span>
-<span class="sd">    date field.</span>
-
-<span class="sd">    :param value: str : the \*_date_written (either start_date_written or end_date_written) field of an entity or relation</span>
-<span class="sd">    :param var_date: datetime : either the precisely parsed date or the average in between two dates when \*_date_written is a range</span>
-<span class="sd">    :param var_start_date: datetime : The sub-date of var_date, indicating the start date of the range</span>
-<span class="sd">    :param var_end_date: datetime : The sub-date of var_date, indicating the end date of the range</span>
-<span class="sd">    :return: html string : which has the value of the written date and the parsed dates as mouse overlay helptext</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Various if-else branches checking which of the date fields are not None and should be used</span>
-
-    <span class="k">if</span> <span class="n">var_start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">var_end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">overlay_help_text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">var_start_date</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">var_end_date</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">var_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">overlay_help_text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">var_date</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;—&quot;</span>
-
-    <span class="k">return</span> <span class="n">format_html</span><span class="p">(</span><span class="s2">&quot;&lt;abbr title=&#39;&quot;</span> <span class="o">+</span> <span class="n">overlay_help_text</span> <span class="o">+</span> <span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt;&quot;</span><span class="p">)</span></div>
-
-
-
-<span class="c1"># Again this function serves a generic purpose and must be assigned as class method to django-tables2 tables.Table class</span>
-<span class="c1"># The whole logic is very similare to the generic_order_* functions above, so see their comments for more details.</span>
-<div class="viewcode-block" id="generic_render_start_date_written">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_render_start_date_written">[docs]</a>
-<span class="k">def</span> <span class="nf">generic_render_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">helper_render_date</span><span class="p">(</span>
-        <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-        <span class="n">var_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">start_date</span><span class="p">,</span>
-        <span class="n">var_start_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">start_start_date</span><span class="p">,</span>
-        <span class="n">var_end_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">start_end_date</span><span class="p">,</span>
-    <span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="generic_render_end_date_written">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.generic_render_end_date_written">[docs]</a>
-<span class="k">def</span> <span class="nf">generic_render_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">helper_render_date</span><span class="p">(</span>
-        <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-        <span class="n">var_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">end_date</span><span class="p">,</span>
-        <span class="n">var_start_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">end_start_date</span><span class="p">,</span>
-        <span class="n">var_end_date</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">end_end_date</span><span class="p">,</span>
-    <span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="UriTable">
