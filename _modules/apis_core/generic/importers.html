@@ -96,16 +96,18 @@
 <span class="kn">import</span> <span class="nn">urllib</span>
 <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ImproperlyConfigured</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.normalize</span> <span class="kn">import</span> <span class="n">clean_uri</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.rdf</span> <span class="kn">import</span> <span class="n">get_definition_and_attributes_from_uri</span>
 
 
-<div class="viewcode-block" id="GenericImporter">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter">[docs]</a>
-<span class="k">class</span> <span class="nc">GenericImporter</span><span class="p">:</span>
+<div class="viewcode-block" id="GenericModelImporter">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericModelImporter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A skeleton importer class</span>
+<span class="sd">    A generic importer class</span>
 <span class="sd">    It provides the standard methods for importing data from</span>
 <span class="sd">    an URI and creating a model instance of it.</span>
-<span class="sd">    By default it fetches a resource, tries to parse it using json and</span>
+<span class="sd">    By default it fetches a resource, first tries to parse it using</span>
+<span class="sd">    our rdf parser, if that fails tries to parse it using json and</span>
 <span class="sd">    then extracts the fields whose keys match the model field names.</span>
 <span class="sd">    Projects can inherit from this class and override the default</span>
 <span class="sd">    methods or simple write their own from scratch.</span>
@@ -122,38 +124,48 @@
     <span class="k">def</span> <span class="nf">get_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span>
 
-<div class="viewcode-block" id="GenericImporter.clean_uri">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter.clean_uri">[docs]</a>
+<div class="viewcode-block" id="GenericModelImporter.clean_uri">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter.clean_uri">[docs]</a>
     <span class="k">def</span> <span class="nf">clean_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">clean_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GenericImporter.request">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter.request">[docs]</a>
+<div class="viewcode-block" id="GenericModelImporter.request">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter.request">[docs]</a>
     <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">):</span>
+        <span class="c1"># we first try to use the RDF parser</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">defn</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="c1"># if everything else fails, try parsing json</span>
+        <span class="c1"># if even that does not help, return an empty dict</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{}</span></div>
 
 
-<div class="viewcode-block" id="GenericImporter.mangle_data">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter.mangle_data">[docs]</a>
+<div class="viewcode-block" id="GenericModelImporter.mangle_data">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter.mangle_data">[docs]</a>
     <span class="k">def</span> <span class="nf">mangle_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
 
-<div class="viewcode-block" id="GenericImporter.create_instance">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericImporter.create_instance">[docs]</a>
+<div class="viewcode-block" id="GenericModelImporter.create_instance">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter.create_instance">[docs]</a>
     <span class="k">def</span> <span class="nf">create_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mangle_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="c1"># we are dropping all fields that are not part of the model</span>
         <span class="n">modelfields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">modelfields</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not extract data from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="n">fielddata</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">modelfields</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">fielddata</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">fielddata</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Could not import </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="si">}</span><span class="s2">. Data fetched was: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
 </div>
 
 </pre></div>
