@@ -1,4 +1,5 @@
 from django import http
+from django import forms
 from django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import DetailView
@@ -120,6 +121,26 @@ class List(
         )
         filterset_class = first_member_match(filterset_modules, GenericFilterSet)
         return filterset_factory(self.model, filterset_class)
+
+    def get_filterset(self, filterset_class):
+        """
+        We override the `get_filterset` method, so we can inject a
+        `columns` selector into the form
+        """
+        filterset = super().get_filterset(filterset_class)
+
+        # we inject a `columns` selector in the beginning of the form
+        columns = forms.MultipleChoiceField(
+            required=False,
+            choices=[
+                (field.name, field.verbose_name)
+                for field in self.model._meta.fields
+                if field.name not in filterset.form.columns_exclude
+            ]
+        )
+        filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
+
+        return filterset
 
     def get_queryset(self):
         queryset_methods = module_paths(

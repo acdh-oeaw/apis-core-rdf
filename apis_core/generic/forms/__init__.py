@@ -35,17 +35,10 @@ class GenericFilterSetForm(forms.Form):
     the model
     """
 
-    columns = forms.MultipleChoiceField(required=False)
     columns_exclude = []
 
     def __init__(self, *args, **kwargs):
-        model = kwargs.pop("model")
         super().__init__(*args, **kwargs)
-        self.fields["columns"].choices = [
-            (field.name, field.verbose_name)
-            for field in model._meta.fields
-            if field.name not in self.columns_exclude
-        ]
 
         self.helper = FormHelper()
         self.helper.form_method = "GET"
