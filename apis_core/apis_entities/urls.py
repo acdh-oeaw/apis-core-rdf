@@ -35,7 +35,10 @@ class EntityToContenttypeConverter:
         return candiates[0]
 
     def to_url(self, value):
-        return value
+        if isinstance(value, ContentType):
+            return value.model
+        if isinstance(value, str):
+            return value
 
 
 register_converter(EntityToContenttypeConverter, "entitytocontenttype")
