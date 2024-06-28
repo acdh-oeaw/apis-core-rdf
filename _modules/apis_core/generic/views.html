@@ -93,6 +93,7 @@
              
   <h1>Source code for apis_core.generic.views</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">http</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">PermissionRequiredMixin</span>
 <span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">DetailView</span>
@@ -220,14 +221,39 @@
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_table_kwargs">[docs]</a>
     <span class="k">def</span> <span class="nf">get_table_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_table_kwargs</span><span class="p">()</span>
-        <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="p">[])</span>
-        <span class="n">column_fields</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">columns</span>
+
+        <span class="c1"># we look at the selected columns and exclude</span>
+        <span class="c1"># all modelfields that are not part of that list</span>
+        <span class="n">selected_columns</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span>
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_filterset_class</span><span class="p">())</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>
+        <span class="p">)</span>
+        <span class="n">modelfields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;exclude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">modelfields</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_columns</span>
         <span class="p">]</span>
+
+        <span class="c1"># now we look at the selected columns and</span>
+        <span class="c1"># add all modelfields and annotated fields that</span>
+        <span class="c1"># are part of the selected columns to the extra_columns</span>
+        <span class="n">annotationfields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">fake_field</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">output_field</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">fake_field</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="n">annotationfields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fake_field</span><span class="p">)</span>
+        <span class="n">extra_fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">filter</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">selected_columns</span><span class="p">,</span>
+                <span class="n">modelfields</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">annotationfields</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;extra_columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">library</span><span class="o">.</span><span class="n">column_for_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">accessor</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">column_fields</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">extra_fields</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table_class</span><span class="p">()</span><span class="o">.</span><span class="n">base_columns</span>
         <span class="p">]</span>
+
         <span class="k">return</span> <span class="n">kwargs</span></div>
 
 
@@ -239,6 +265,45 @@
         <span class="p">)</span>
         <span class="n">filterset_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">filterset_modules</span><span class="p">,</span> <span class="n">GenericFilterSet</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">filterset_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_get_columns_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns_exclude</span><span class="p">):</span>
+        <span class="c1"># we start with the model fields</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">verbose_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span>
+        <span class="p">]</span>
+        <span class="c1"># we add any annotated fields to that</span>
+        <span class="n">choices</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="c1"># now we drop all the choices that are listed in columns_exclude</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns_exclude</span><span class="p">,</span> <span class="n">choices</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">choices</span>
+
+    <span class="k">def</span> <span class="nf">_get_columns_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns_exclude</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">field</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">names</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns_exclude</span>
+        <span class="p">]</span>
+
+<div class="viewcode-block" id="List.get_filterset">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_filterset">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        We override the `get_filterset` method, so we can inject a</span>
+<span class="sd">        `columns` selector into the form</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filterset</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_filterset</span><span class="p">(</span><span class="n">filterset_class</span><span class="p">)</span>
+        <span class="n">columns_exclude</span> <span class="o">=</span> <span class="n">filterset</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">columns_exclude</span>
+
+        <span class="c1"># we inject a `columns` selector in the beginning of the form</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">MultipleChoiceField</span><span class="p">(</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">choices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_columns_choices</span><span class="p">(</span><span class="n">columns_exclude</span><span class="p">),</span>
+            <span class="n">initial</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_columns_initial</span><span class="p">(</span><span class="n">columns_exclude</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">filterset</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="n">columns</span><span class="p">},</span> <span class="o">**</span><span class="n">filterset</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">fields</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">filterset</span></div>
 
 
 <div class="viewcode-block" id="List.get_queryset">

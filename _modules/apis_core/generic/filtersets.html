@@ -101,30 +101,16 @@
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet">[docs]</a>
 <span class="k">class</span> <span class="nc">GenericFilterSet</span><span class="p">(</span><span class="n">FilterSet</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This is a workaround because the FilterSet class of django-filters</span>
-<span class="sd">    does not allow passing form arguments to the form - but we want to</span>
-<span class="sd">    pass the `model` to the form, so we can create the `columns` form</span>
-<span class="sd">    field.</span>
-<span class="sd">    See also: https://github.com/carltongibson/django-filter/issues/1630</span>
+<span class="sd">    Our GenericFilterSet sets the default `form` to be our</span>
+<span class="sd">    GenericFilterSetForm, which is set up to ignore the `columns` field</span>
+<span class="sd">    of the form.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="GenericFilterSet.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">GenericFilterSetForm</span></div>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_form&quot;</span><span class="p">):</span>
-            <span class="n">Form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_form_class</span><span class="p">()</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_bound</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_form</span> <span class="o">=</span> <span class="n">Form</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">form_prefix</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">model</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_form</span> <span class="o">=</span> <span class="n">Form</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">form_prefix</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_form</span></div>
+</div>
 
 
 

@@ -326,11 +326,9 @@ serializations depending on the incoming request.</p>
 <dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.filtersets.</span></span><span class="sig-name descname"><span class="pre">GenericFilterSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/filtersets.html#GenericFilterSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterSet</span></code></p>
-<p>This is a workaround because the FilterSet class of django-filters
-does not allow passing form arguments to the form - but we want to
-pass the <cite>model</cite> to the form, so we can create the <cite>columns</cite> form
-field.
-See also: <a class="reference external" href="https://github.com/carltongibson/django-filter/issues/1630">https://github.com/carltongibson/django-filter/issues/1630</a></p>
+<p>Our GenericFilterSet sets the default <cite>form</cite> to be our
+GenericFilterSetForm, which is set up to ignore the <cite>columns</cite> field
+of the form.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet.Meta">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/generic/filtersets.html#GenericFilterSet.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet.Meta" title="Link to this definition"></a></dt>
@@ -351,11 +349,6 @@ See also: <a class="reference external" href="https://github.com/carltongibson/d
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet.declared_filters">
 <span class="sig-name descname"><span class="pre">declared_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet.declared_filters" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet.form">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">form</span></span><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet.form" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1085,6 +1078,13 @@ The queryset is overridden by the first match from
 the <cite>first_member_match</cite> helper.</p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.get_filterset">
+<span class="sig-name descname"><span class="pre">get_filterset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filterset_class</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_filterset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_filterset" title="Link to this definition"></a></dt>
+<dd><p>We override the <cite>get_filterset</cite> method, so we can inject a
+<cite>columns</cite> selector into the form</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.views.List.get_filterset_class">
 <span class="sig-name descname"><span class="pre">get_filterset_class</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_filterset_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_filterset_class" title="Link to this definition"></a></dt>
