@@ -1,5 +1,43 @@
 # Changelog
 
+## [0.23.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.22.0...v0.23.0) (2024-07-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** rename `GenericImporter` to `GenericModelImporter`
+
+### Features
+
+* **generic:** add data received to importer error message ([9570bbd](https://github.com/acdh-oeaw/apis-core-rdf/commit/9570bbddb9a9844abc6c99a457074c61bce66572))
+* **generic:** allow apiview to use custom serializers ([0bcd61b](https://github.com/acdh-oeaw/apis-core-rdf/commit/0bcd61bc29cc9c571a3b01319477b5a80bb54f48))
+* **generic:** allow to set default search fields in the model ([763a866](https://github.com/acdh-oeaw/apis-core-rdf/commit/763a86600936bc3e5d7719110ca9167e76aedbf4))
+* **generic:** fix and extend the columns selector ([eaef405](https://github.com/acdh-oeaw/apis-core-rdf/commit/eaef4055b60accbf4c691cf9a2642cf47989af40)), closes [#735](https://github.com/acdh-oeaw/apis-core-rdf/issues/735)
+* **generic:** let the importer try rdf before the json fallback ([97dba9d](https://github.com/acdh-oeaw/apis-core-rdf/commit/97dba9d82310e94bea789b9313ab460808891bc1))
+* **generic:** make importer return a message on error ([c60ad36](https://github.com/acdh-oeaw/apis-core-rdf/commit/c60ad36a732403893bc1d1dd432e71bfde8bf341))
+* **generic:** ship generic RDF renderers ([b60a0e5](https://github.com/acdh-oeaw/apis-core-rdf/commit/b60a0e5ac7d86186eb4e8cf2b533e4dc69fb9d04))
+
+
+### Bug Fixes
+
+* **apis_entities:** let EntityToContenttypeConverter handle ContentType ([16534ad](https://github.com/acdh-oeaw/apis-core-rdf/commit/16534add460c4c9a2936f5de8a6f9cbe62bdebeb))
+* **apis_entities:** only list possible properties in filterset form ([a156cb4](https://github.com/acdh-oeaw/apis-core-rdf/commit/a156cb45921b1025300e84e1a3ec114b38be0c0f)), closes [#949](https://github.com/acdh-oeaw/apis-core-rdf/issues/949)
+* **apis_entities:** split excluded filters and excluded columns ([d8649d7](https://github.com/acdh-oeaw/apis-core-rdf/commit/d8649d7d907d07f2ef6b3e0def374d52645d46cc))
+* **apis_relations:** make relation edit link change color on hover ([bbdf4c7](https://github.com/acdh-oeaw/apis-core-rdf/commit/bbdf4c7c538ca1ca81e45abe5a55ab3ca7e807ec))
+* **core:** add version to base template if debug is turned on ([c8f293e](https://github.com/acdh-oeaw/apis-core-rdf/commit/c8f293e45d8eab2c661a602836dc93051700e571)), closes [#981](https://github.com/acdh-oeaw/apis-core-rdf/issues/981)
+* **utils:** add a margin class to the NewlineSeparatedListField's widget ([59c4402](https://github.com/acdh-oeaw/apis-core-rdf/commit/59c44023494a40aadd432b2f96d64b4f616465f8))
+* **utils:** create_object_from_uri: raise error if no importer found ([89b119a](https://github.com/acdh-oeaw/apis-core-rdf/commit/89b119a71caa423da2dfbc89149d40a0a5a10f41))
+
+
+### Performance Improvements
+
+* **apis_entities:** refactor and cache the prev and next url methods ([c7ae953](https://github.com/acdh-oeaw/apis-core-rdf/commit/c7ae9530a228b607cfff3b7a29cdf0b9ab0669c4))
+
+
+### Code Refactoring
+
+* **generic:** rename `GenericImporter` to `GenericModelImporter` ([2784acb](https://github.com/acdh-oeaw/apis-core-rdf/commit/2784acb16b494c45773f45365c311b958b27656e))
+
 ## [0.22.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.21.0...v0.22.0) (2024-06-25)
 
 
