@@ -3,6 +3,7 @@ import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema, OpenApiParameter, inline_serializer
 
 from apis_core.utils.helpers import datadump_serializer
 
@@ -19,6 +20,10 @@ class Dumpdata(APIView):
 
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        parameters=[OpenApiParameter(name="app_labels", type=str, many=True)],
+        responses={200: inline_serializer(name="DumpDataResponse", fields={})},
+    )
     def get(self, request, *args, **kwargs):
         params = request.query_params.dict()
         app_labels = params.pop("app_labels", [])
