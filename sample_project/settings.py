@@ -10,6 +10,8 @@ env_ah = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
 ALLOWED_HOSTS = list(filter(None, env_ah))
 env_csrf = os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
 CSRF_TRUSTED_ORIGINS = list(filter(None, env_csrf))
+env_internal_ips = os.environ.get("DJANGO_INTERNAL_IPS", "").split(",")
+INTERNAL_IPS = list(filter(None, env_internal_ips))
 
 
 # Application definition
@@ -66,6 +68,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "sample_project.middleware.XRealIPMiddleware"
 ]
 
 # ROOT_URLCONF = "apis_core.urls"
