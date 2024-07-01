@@ -3,7 +3,7 @@
 
 from django.test import TestCase
 
-from .filtermethods import construct_lookup
+from .helpers import construct_lookup
 
 lookups = {
     "*foo*": ("__icontains", "foo"),
