@@ -113,7 +113,7 @@ class List(
             if self.request.GET
             else self.get_filterset(self.get_filterset_class()).form["columns"].initial
         )
-        modelfields = self.model._meta.fields
+        modelfields = self.model._meta.get_fields()
         kwargs["exclude"] = [
             field.name for field in modelfields if field.name not in selected_columns
         ]
@@ -150,7 +150,8 @@ class List(
     def _get_columns_choices(self, columns_exclude):
         # we start with the model fields
         choices = [
-            (field.name, field.verbose_name) for field in self.model._meta.fields
+            (field.name, getattr(field, "verbose_name", field.name))
+            for field in self.model._meta.get_fields()
         ]
         # we add any annotated fields to that
         choices += [(key, key) for key in self.get_queryset().query.annotations.keys()]
