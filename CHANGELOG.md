@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.23.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.23.0...v0.23.1) (2024-07-02)
+
+
+### Bug Fixes
+
+* **generic:** include ManyToManyFields in list view ([2763e0e](https://github.com/acdh-oeaw/apis-core-rdf/commit/2763e0e77ad60feea233c6a57a918528d2516cbb)), closes [#1020](https://github.com/acdh-oeaw/apis-core-rdf/issues/1020)
+* **generic:** repair table columns ordering ([6762a17](https://github.com/acdh-oeaw/apis-core-rdf/commit/6762a175ae87fb9b1b592a5f47c7406c81b3ad52)), closes [#1022](https://github.com/acdh-oeaw/apis-core-rdf/issues/1022)
+
 ## [0.23.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.22.0...v0.23.0) (2024-07-01)
 
 
