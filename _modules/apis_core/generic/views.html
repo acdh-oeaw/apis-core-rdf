@@ -224,10 +224,9 @@
 
         <span class="c1"># we look at the selected columns and exclude</span>
         <span class="c1"># all modelfields that are not part of that list</span>
-        <span class="n">selected_columns</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_filterset_class</span><span class="p">())</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span>
+        <span class="n">selected_columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span>
+            <span class="s2">&quot;columns&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_filterset_class</span><span class="p">())</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">modelfields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">()</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;exclude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
