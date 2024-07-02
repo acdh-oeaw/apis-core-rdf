@@ -108,10 +108,9 @@ class List(
 
         # we look at the selected columns and exclude
         # all modelfields that are not part of that list
-        selected_columns = (
-            self.request.GET.getlist("columns")
-            if self.request.GET
-            else self.get_filterset(self.get_filterset_class()).form["columns"].initial
+        selected_columns = self.request.GET.getlist(
+            "columns",
+            self.get_filterset(self.get_filterset_class()).form["columns"].initial,
         )
         modelfields = self.model._meta.get_fields()
         kwargs["exclude"] = [
