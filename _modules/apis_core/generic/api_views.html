@@ -135,11 +135,14 @@
         <span class="n">serializer_class_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;serializers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Serializer&quot;</span>
         <span class="p">)</span>
-        <span class="n">prefix</span> <span class="o">=</span> <span class="n">makeclassprefix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">accepted_renderer</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
-        <span class="n">serializer_class_modules</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;serializers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">Serializer&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="n">serializer_class_modules</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">renderer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="n">makeclassprefix</span><span class="p">(</span><span class="n">renderer</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+            <span class="n">serializer_class_modules</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">module_paths</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;serializers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">Serializer&quot;</span>
+                <span class="p">)</span>
+                <span class="o">+</span> <span class="n">serializer_class_modules</span>
+            <span class="p">)</span>
 
         <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span>
             <span class="n">serializer_class_modules</span><span class="p">,</span>
