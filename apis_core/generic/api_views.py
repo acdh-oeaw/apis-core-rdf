@@ -31,11 +31,14 @@ class ModelViewSet(viewsets.ModelViewSet):
         serializer_class_modules = module_paths(
             self.model, path="serializers", suffix="Serializer"
         )
-        prefix = makeclassprefix(self.request.accepted_renderer.format)
-        serializer_class_modules = (
-            module_paths(self.model, path="serializers", suffix=f"{prefix}Serializer")
-            + serializer_class_modules
-        )
+        if renderer is not None:
+            prefix = makeclassprefix(renderer.format)
+            serializer_class_modules = (
+                module_paths(
+                    self.model, path="serializers", suffix=f"{prefix}Serializer"
+                )
+                + serializer_class_modules
+            )
 
         serializer_class = first_member_match(
             serializer_class_modules,
