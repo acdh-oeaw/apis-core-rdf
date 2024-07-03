@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.23.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.23.1...v0.23.2) (2024-07-03)
+
+
+### Bug Fixes
+
+* **apis_entities:** remove inherited related fields from column list ([44a983d](https://github.com/acdh-oeaw/apis-core-rdf/commit/44a983de4a07d629dc31c3443e87fa9ba5257ce5)), closes [#1029](https://github.com/acdh-oeaw/apis-core-rdf/issues/1029)
+* **core:** add schema information to the dumpdata api endpoint ([e622977](https://github.com/acdh-oeaw/apis-core-rdf/commit/e62297774a97efcc0e445fb627b25df503240fc5))
+* **generic:** ModelViewSet: check if renderer exists before using it ([dd21e84](https://github.com/acdh-oeaw/apis-core-rdf/commit/dd21e84b1bb7ff28349b5e0354b51148b158b283))
+
 ## [0.23.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.23.0...v0.23.1) (2024-07-02)
 
 
