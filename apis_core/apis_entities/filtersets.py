@@ -12,6 +12,9 @@ from django.contrib.contenttypes.models import ContentType
 ABSTRACT_ENTITY_COLUMNS_EXCLUDE = [
     "rootobject_ptr",
     "self_contenttype",
+    "triple_set_from_subj",
+    "triple_set_from_obj",
+    "uri",
 ]
 
 ABSTRACT_ENTITY_FILTERS_EXCLUDE = ABSTRACT_ENTITY_COLUMNS_EXCLUDE + [
