@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
 
 
 class ModelChangeSerializer(serializers.Serializer):
@@ -56,6 +58,7 @@ class HistoryLogSerializer(serializers.Serializer):
     object_id = serializers.IntegerField(source="id")
     history_id = serializers.IntegerField()
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_diff(self, obj):
         if obj.history_type == "-":
             return None
@@ -66,7 +69,7 @@ class HistoryLogSerializer(serializers.Serializer):
             changes.append(ModelChangeSerializer(change, obj).data)
         return {"changed_fields": changed_fields, "changes": changes}
 
-    def get_action(self, obj):
+    def get_action(self, obj) -> str:
         match obj.history_type:
             case "+":
                 return "created"
@@ -83,8 +86,9 @@ class HistoryObjectSerializer(serializers.Serializer):
     instance = serializers.SerializerMethodField()
     object_id = serializers.IntegerField(source="id")
 
-    def get_instance(self, obj):
+    def get_instance(self, obj) -> str:
         return str(obj)
 
+    @extend_schema_field(HistoryLogSerializer(many=True))
     def get_history(self, obj):
         return HistoryLogSerializer(obj.get_history_data(), many=True).data
