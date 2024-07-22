@@ -5,8 +5,7 @@ superclass = "apis_core.apis_entities.abc.E53_Place"
 # the second regex is for the test data
 regex = "https://sws.geonames.org.*|/.*achensee.rdf"
 [[attributes]]
-# name
-#FILTER (LANGMATCHES(LANG(?prefName), "de") || LANGMATCHES(LANG(?prefName), "en") || LANG(?prefName) = "")
+# label
 sparql = """
 PREFIX gn: <http://www.geonames.org/ontology#>
 SELECT ?label
@@ -25,16 +24,7 @@ WHERE
 }
 """
 [[attributes]]
-# kind
-sparql = """
-PREFIX gn: <http://www.geonames.org/ontology#>
-SELECT ?kind
-WHERE {
-  ?subject gn:featureCode ?kind
-}
-"""
-[[attributes]]
-# lat
+# latitude
 sparql = """
 PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 SELECT ?latitude
@@ -44,7 +34,7 @@ WHERE {
 }
 """
 [[attributes]]
-# long
+# longitude
 sparql = """
 PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 SELECT ?longitude
@@ -53,13 +43,3 @@ WHERE {
   ?subject wgs84_pos:long ?longitude
 }
 """
-[[attributes]]
-# parent
-sparql = """
-PREFIX gn: <http://www.geonames.org/ontology#>
-SELECT ?parent
-WHERE {
-  ?subject gn:parentCountry ?parent
-}
-"""
-

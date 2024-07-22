@@ -31,11 +31,9 @@ class Institution(E74_Group):
 class RdfTest(TestCase):
     def test_get_definition_from_dict_place_from_geonames(self):
         achensee = {
-            "kind": "https://www.geonames.org/ontology#P.PPL",
             "latitude": "47.5",
             "longitude": "11.7",
             "label": "Achensee",
-            "parent": "https://sws.geonames.org/2782113/",
         }
         # https://www.geonames.org/2783029/achensee.html
         uri = str(testdata / "achensee.rdf")
@@ -55,11 +53,10 @@ class RdfTest(TestCase):
 
     def test_get_definition_from_dict_person_from_dnb(self):
         pierre = {
-            "name": "Ramus,Pierre",
-            "profession": "https://d-nb.info/gnd/4053309-8",
+            "forename": "Pierre",
+            "surname": "Ramus",
             "date_of_birth": "1882-04-15",
             "date_of_death": "1942",
-            "place_of_birth": "https://d-nb.info/gnd/4066009-6",
         }
         # https://d-nb.info/gnd/118833197
         uri = str(testdata / "ramus.rdf")
@@ -70,9 +67,7 @@ class RdfTest(TestCase):
 
     def test_get_definition_from_dict_institution_from_dnb(self):
         pierre_ges = {
-            "name": "Pierre-Ramus-Gesellschaft",
-            "altName": "Pierre Ramus-Gesellschaft",
-            "place": "https://d-nb.info/gnd/4066009-6",
+            "label": "Pierre-Ramus-Gesellschaft",
         }
         # https://d-nb.info/gnd/415006-5
         uri = str(testdata / "ramus_gesellschaft.rdf")
@@ -85,11 +80,7 @@ class RdfTest(TestCase):
 
     def test_get_definition_from_dict_institution_from_dnb2(self):
         pierre_ges = {
-            "name": "Akademie der Wissenschaften in Wien",
-            "altName": "Akademie der Wissenschaften (Wien)",
-            "place": "https://d-nb.info/gnd/4066009-6",
-            "start_date_written": "1919",
-            "end_date_written": "1947",
+            "label": "Akademie der Wissenschaften in Wien",
         }
         # https://d-nb.info/gnd/35077-1
         uri = str(testdata / "oeaw.rdf")

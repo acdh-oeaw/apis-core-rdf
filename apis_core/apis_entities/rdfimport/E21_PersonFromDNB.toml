@@ -4,28 +4,31 @@
 superclass = "apis_core.apis_entities.abc.E21_Person"
 regex = "https://d-nb.info.*|/.*ramus.rdf"
 [[attributes]]
-# name
+# forename
 sparql = """
 PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
-SELECT ?name
+SELECT ?forename
 WHERE {
-  ?subject gndo:preferredNameForThePerson ?name .
-  OPTIONAL {
-    ?subject gndo:preferredNameEntityForThePerson ?med .
-    ?med gndo:forename ?first_name.
-    ?med gndo:surname ?name2 .
-    BIND(?name2 as ?name)
+  ?subject gndo:forename ?default_forename .
+   OPTIONAL {
+    ?subject2 gndo:preferredNameEntityForThePerson ?med .
+    ?med gndo:forename ?preferred_forename .
   }
-  BIND(CONCAT(?name, ",", ?first_name) AS ?name)
+  BIND(COALESCE(?preferred_forename, ?default_forename) AS ?forename)
 }
 """
 [[attributes]]
-# profession
+# surname
 sparql = """
 PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
-SELECT ?profession
+SELECT ?surname
 WHERE {
-  ?subject gndo:professionOrOccupation ?profession
+  ?subject gndo:surname ?default_surname .
+  OPTIONAL {
+    ?subject2 gndo:preferredNameEntityForThePerson ?med .
+    ?med gndo:surname ?preferred_surname .
+  }
+  BIND(COALESCE(?preferred_surname, ?default_surname) AS ?surname)
 }
 """
 [[attributes]]
@@ -48,13 +51,3 @@ WHERE {
   BIND(?end_date_written AS ?date_of_death)
 }
 """
-[[attributes]]
-# place_of_birth
-sparql = """
-PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
-SELECT ?place_of_birth
-WHERE {
-  ?subject gndo:placeOfBirth ?place_of_birth
-}
-"""
-
