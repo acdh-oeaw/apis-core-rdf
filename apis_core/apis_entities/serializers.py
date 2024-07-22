@@ -8,5 +8,5 @@ class MinimalEntitySerializer(serializers.Serializer):
     )
     name = serializers.SerializerMethodField(method_name="get_name")
 
-    def get_name(self, object):
+    def get_name(self, object) -> str:
         return str(object)
