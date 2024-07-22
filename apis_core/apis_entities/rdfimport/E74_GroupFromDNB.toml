@@ -5,47 +5,15 @@ superclass = "apis_core.apis_entities.abc.E74_Group"
 # the second regex is for testing
 regex = "https://d-nb.info.*|/.*ramus_gesellschaft.rdf|/.*oeaw.rdf"
 [[attributes]]
-# name
+# label
 sparql = """
 PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
-SELECT ?name
+SELECT ?label
 WHERE {
   ?subject gndo:preferredNameForTheCorporateBody ?name
-}
-"""
-[[attributes]]
-# altName
-sparql = """
-PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
-SELECT ?altName
-WHERE {
-  ?subject gndo:variantNameForTheCorporateBody ?altName
-}
-"""
-[[attributes]]
-# place
-sparql = """
-PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
-SELECT ?place
-WHERE {
-  ?subject gndo:placeOfBusiness ?place
-}
-"""
-[[attributes]]
-# start_date_written
-sparql = """
-PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
-SELECT ?start_date_written
-WHERE {
-  ?subject gndo:dateOfEstablishment ?start_date_written
-}
-"""
-[[attributes]]
-# end_date_written
-sparql = """
-PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
-SELECT ?end_date_written
-WHERE {
-  ?subject gndo:dateOfTermination ?end_date_written
+  OPTIONAL {
+    ?subject gndo:variantNameForTheCorporateBody ?altName
+  }
+  BIND(COALESCE(?name, ?altName) AS ?label)
 }
 """
