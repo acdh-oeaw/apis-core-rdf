@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.utils.test_filtermethods &mdash; APIS 1.0 documentation</title>
+  <title>apis_core.utils.test_helpers &mdash; APIS 1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -82,7 +82,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.utils.test_filtermethods</li>
+      <li class="breadcrumb-item active">apis_core.utils.test_helpers</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -91,13 +91,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.utils.test_filtermethods</h1><div class="highlight"><pre>
+  <h1>Source code for apis_core.utils.test_helpers</h1><div class="highlight"><pre>
 <span></span><span class="c1"># SPDX-FileCopyrightText: 2023 Birger Schacht</span>
 <span class="c1"># SPDX-License-Identifier: MIT</span>
 
 <span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
 
-<span class="kn">from</span> <span class="nn">.filtermethods</span> <span class="kn">import</span> <span class="n">construct_lookup</span>
+<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="n">construct_lookup</span>
 
 <span class="n">lookups</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;*foo*&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;__icontains&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">),</span>
@@ -109,10 +109,10 @@
 
 
 <div class="viewcode-block" id="FilterMethodstest">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_filtermethods.FilterMethodstest">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_helpers.FilterMethodstest">[docs]</a>
 <span class="k">class</span> <span class="nc">FilterMethodstest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="FilterMethodstest.test_lookup">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_filtermethods.FilterMethodstest.test_lookup">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_helpers.FilterMethodstest.test_lookup">[docs]</a>
     <span class="k">def</span> <span class="nf">test_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">lookup</span> <span class="ow">in</span> <span class="n">lookups</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">construct_lookup</span><span class="p">(</span><span class="n">lookup</span><span class="p">),</span> <span class="n">lookups</span><span class="p">[</span><span class="n">lookup</span><span class="p">])</span></div>

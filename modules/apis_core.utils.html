@@ -305,73 +305,6 @@ the separator.</p>
 </dd></dl>
 
 </section>
-<section id="module-apis_core.utils.filtermethods">
-<span id="apis-core-utils-filtermethods-module"></span><h2>apis_core.utils.filtermethods module<a class="headerlink" href="#module-apis_core.utils.filtermethods" title="Link to this heading"></a></h2>
-<p>This module contains filter functions that can be used by django-filter filters
-See <a class="reference external" href="https://django-filter.readthedocs.io/en/main/ref/filters.html#method">https://django-filter.readthedocs.io/en/main/ref/filters.html#method</a></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.filtermethods.construct_lookup">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.filtermethods.</span></span><span class="sig-name descname"><span class="pre">construct_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../_modules/apis_core/utils/filtermethods.html#construct_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.filtermethods.construct_lookup" title="Link to this definition"></a></dt>
-<dd><p>Helper method to parse input values and construct field lookups
-(<a class="reference external" href="https://docs.djangoproject.com/en/4.2/ref/models/querysets/#field-lookups">https://docs.djangoproject.com/en/4.2/ref/models/querysets/#field-lookups</a>)
-Parses user input for wildcards and returns a tuple containing the
-interpreted django lookup string and the trimmed value
-E.g.</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">example</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__icontains',</span> <span class="pre">'example')</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">*example*</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__icontains',</span> <span class="pre">'example')</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">*example</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__iendswith',</span> <span class="pre">'example')</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">example*</span></code>-&gt; <code class="docutils literal notranslate"><span class="pre">('__istartswith',</span> <span class="pre">'example')</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;example&quot;</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__iexact',</span> <span class="pre">'example')</span></code></p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – text to be parsed for <code class="docutils literal notranslate"><span class="pre">*</span></code></p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a tuple containing the lookup type and the value without modifiers</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.filtermethods.flexible_string">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.filtermethods.</span></span><span class="sig-name descname"><span class="pre">flexible_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/filtermethods.html#flexible_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.filtermethods.flexible_string" title="Link to this definition"></a></dt>
-<dd><p>filter method for filtering arbitrary fields using <a class="reference internal" href="#apis_core.utils.filtermethods.construct_lookup" title="apis_core.utils.filtermethods.construct_lookup"><code class="xref py py-func docutils literal notranslate"><span class="pre">construct_lookup()</span></code></a></p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.filtermethods.name_label_filter">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.filtermethods.</span></span><span class="sig-name descname"><span class="pre">name_label_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/filtermethods.html#name_label_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.filtermethods.name_label_filter" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.filtermethods.related_arbitrary_model_name">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.filtermethods.</span></span><span class="sig-name descname"><span class="pre">related_arbitrary_model_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/filtermethods.html#related_arbitrary_model_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.filtermethods.related_arbitrary_model_name" title="Link to this definition"></a></dt>
-<dd><p>Searches through an arbitrarily related model on its name field using <a class="reference internal" href="#apis_core.utils.filtermethods.construct_lookup" title="apis_core.utils.filtermethods.construct_lookup"><code class="xref py py-func docutils literal notranslate"><span class="pre">construct_lookup()</span></code></a>.
-Note that this works only if</p>
-<ul class="simple">
-<li><p>the related model has a field ‘name’</p></li>
-<li><p>the filter using this method has the same name as the field of the model on which the filter is applied.</p></li>
-</ul>
-<p>(E.g. the field <code class="docutils literal notranslate"><span class="pre">profession</span></code> on a person relates to another model: the professiontype. Here the filter on a person
-must also be called <code class="docutils literal notranslate"><span class="pre">profession</span></code> as the field <code class="docutils literal notranslate"><span class="pre">profession</span></code> exists within the person model and is then used to search in.
-Using this example of professions, such a lookup would be generated: <code class="docutils literal notranslate"><span class="pre">Person.objects.filter(profession__name__...</span> <span class="pre">)</span></code> )</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.filtermethods.related_entity_name">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.filtermethods.</span></span><span class="sig-name descname"><span class="pre">related_entity_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/filtermethods.html#related_entity_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.filtermethods.related_entity_name" title="Link to this definition"></a></dt>
-<dd><p>filter on the name of a related entity using <a class="reference internal" href="#apis_core.utils.filtermethods.construct_lookup" title="apis_core.utils.filtermethods.construct_lookup"><code class="xref py py-func docutils literal notranslate"><span class="pre">construct_lookup()</span></code></a></p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.utils.filtermethods.related_property_name">
-<span class="sig-prename descclassname"><span class="pre">apis_core.utils.filtermethods.</span></span><span class="sig-name descname"><span class="pre">related_property_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/filtermethods.html#related_property_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.filtermethods.related_property_name" title="Link to this definition"></a></dt>
-<dd><p>filter on the name of a related property using <a class="reference internal" href="#apis_core.utils.filtermethods.construct_lookup" title="apis_core.utils.filtermethods.construct_lookup"><code class="xref py py-func docutils literal notranslate"><span class="pre">construct_lookup()</span></code></a></p>
-</dd></dl>
-
-</section>
 <section id="module-apis_core.utils.filters">
 <span id="apis-core-utils-filters-module"></span><h2>apis_core.utils.filters module<a class="headerlink" href="#module-apis_core.utils.filters" title="Link to this heading"></a></h2>
 <dl class="py class">
@@ -394,6 +327,31 @@ Using this example of professions, such a lookup would be generated: <code class
 </section>
 <section id="module-apis_core.utils.helpers">
 <span id="apis-core-utils-helpers-module"></span><h2>apis_core.utils.helpers module<a class="headerlink" href="#module-apis_core.utils.helpers" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.utils.helpers.construct_lookup">
+<span class="sig-prename descclassname"><span class="pre">apis_core.utils.helpers.</span></span><span class="sig-name descname"><span class="pre">construct_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/apis_core/utils/helpers.html#construct_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.helpers.construct_lookup" title="Link to this definition"></a></dt>
+<dd><p>Helper method to parse input values and construct field lookups
+(<a class="reference external" href="https://docs.djangoproject.com/en/4.2/ref/models/querysets/#field-lookups">https://docs.djangoproject.com/en/4.2/ref/models/querysets/#field-lookups</a>)
+Parses user input for wildcards and returns a tuple containing the
+interpreted django lookup string and the trimmed value
+E.g.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">example</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__icontains',</span> <span class="pre">'example')</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*example*</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__icontains',</span> <span class="pre">'example')</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*example</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__iendswith',</span> <span class="pre">'example')</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">example*</span></code>-&gt; <code class="docutils literal notranslate"><span class="pre">('__istartswith',</span> <span class="pre">'example')</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;example&quot;</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">('__iexact',</span> <span class="pre">'example')</span></code></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – text to be parsed for <code class="docutils literal notranslate"><span class="pre">*</span></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a tuple containing the lookup type and the value without modifiers</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="apis_core.utils.helpers.create_object_from_uri">
 <span class="sig-prename descclassname"><span class="pre">apis_core.utils.helpers.</span></span><span class="sig-name descname"><span class="pre">create_object_from_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="../_modules/apis_core/utils/helpers.html#create_object_from_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.helpers.create_object_from_uri" title="Link to this definition"></a></dt>
@@ -529,18 +487,18 @@ not have a method with the specified name.</p>
 <dd></dd></dl>
 
 </section>
-<section id="module-apis_core.utils.test_filtermethods">
-<span id="apis-core-utils-test-filtermethods-module"></span><h2>apis_core.utils.test_filtermethods module<a class="headerlink" href="#module-apis_core.utils.test_filtermethods" title="Link to this heading"></a></h2>
+<section id="module-apis_core.utils.test_helpers">
+<span id="apis-core-utils-test-helpers-module"></span><h2>apis_core.utils.test_helpers module<a class="headerlink" href="#module-apis_core.utils.test_helpers" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="apis_core.utils.test_filtermethods.FilterMethodstest">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.utils.test_filtermethods.</span></span><span class="sig-name descname"><span class="pre">FilterMethodstest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_filtermethods.html#FilterMethodstest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_filtermethods.FilterMethodstest" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.utils.test_helpers.FilterMethodstest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.utils.test_helpers.</span></span><span class="sig-name descname"><span class="pre">FilterMethodstest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_helpers.html#FilterMethodstest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_helpers.FilterMethodstest" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
 <p>Create an instance of the class that will use the named test
 method when executed. Raises a ValueError if the instance does
 not have a method with the specified name.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.utils.test_filtermethods.FilterMethodstest.test_lookup">
-<span class="sig-name descname"><span class="pre">test_lookup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_filtermethods.html#FilterMethodstest.test_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_filtermethods.FilterMethodstest.test_lookup" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.utils.test_helpers.FilterMethodstest.test_lookup">
+<span class="sig-name descname"><span class="pre">test_lookup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/utils/test_helpers.html#FilterMethodstest.test_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.utils.test_helpers.FilterMethodstest.test_lookup" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
