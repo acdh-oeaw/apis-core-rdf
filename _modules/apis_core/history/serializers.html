@@ -93,6 +93,8 @@
              
   <h1>Source code for apis_core.history.serializers</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+<span class="kn">from</span> <span class="nn">drf_spectacular.utils</span> <span class="kn">import</span> <span class="n">extend_schema_field</span>
+<span class="kn">from</span> <span class="nn">drf_spectacular.types</span> <span class="kn">import</span> <span class="n">OpenApiTypes</span>
 
 
 <div class="viewcode-block" id="ModelChangeSerializer">
@@ -169,6 +171,7 @@
 
 <div class="viewcode-block" id="HistoryLogSerializer.get_diff">
 <a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.api_views.HistoryLogSerializer.get_diff">[docs]</a>
+    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">OpenApiTypes</span><span class="o">.</span><span class="n">OBJECT</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">get_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">history_type</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -182,7 +185,7 @@
 
 <div class="viewcode-block" id="HistoryLogSerializer.get_action">
 <a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.api_views.HistoryLogSerializer.get_action">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">match</span> <span class="n">obj</span><span class="o">.</span><span class="n">history_type</span><span class="p">:</span>
             <span class="k">case</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
                 <span class="k">return</span> <span class="s2">&quot;created&quot;</span>
@@ -205,12 +208,13 @@
 
 <div class="viewcode-block" id="HistoryObjectSerializer.get_instance">
 <a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.api_views.HistoryObjectSerializer.get_instance">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="HistoryObjectSerializer.get_history">
 <a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.api_views.HistoryObjectSerializer.get_history">[docs]</a>
+    <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">HistoryLogSerializer</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
     <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">HistoryLogSerializer</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get_history_data</span><span class="p">(),</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">data</span></div>
 </div>
