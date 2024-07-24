@@ -1,4 +1,4 @@
-APIS
+APIS bar
 ====
 
 ![Django Tests](https://github.com/acdh-oeaw/apis-core-rdf/actions/workflows/django-tests.yml/badge.svg)
