@@ -138,11 +138,9 @@
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_place_from_geonames">[docs]</a>
     <span class="k">def</span> <span class="nf">test_get_definition_from_dict_place_from_geonames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">achensee</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.geonames.org/ontology#P.PPL&quot;</span><span class="p">,</span>
             <span class="s2">&quot;latitude&quot;</span><span class="p">:</span> <span class="s2">&quot;47.5&quot;</span><span class="p">,</span>
             <span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="s2">&quot;11.7&quot;</span><span class="p">,</span>
             <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Achensee&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="s2">&quot;https://sws.geonames.org/2782113/&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="c1"># https://www.geonames.org/2783029/achensee.html</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">testdata</span> <span class="o">/</span> <span class="s2">&quot;achensee.rdf&quot;</span><span class="p">)</span>
@@ -168,11 +166,10 @@
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_person_from_dnb">[docs]</a>
     <span class="k">def</span> <span class="nf">test_get_definition_from_dict_person_from_dnb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">pierre</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ramus,Pierre&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;profession&quot;</span><span class="p">:</span> <span class="s2">&quot;https://d-nb.info/gnd/4053309-8&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;forename&quot;</span><span class="p">:</span> <span class="s2">&quot;Pierre&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;surname&quot;</span><span class="p">:</span> <span class="s2">&quot;Ramus&quot;</span><span class="p">,</span>
             <span class="s2">&quot;date_of_birth&quot;</span><span class="p">:</span> <span class="s2">&quot;1882-04-15&quot;</span><span class="p">,</span>
             <span class="s2">&quot;date_of_death&quot;</span><span class="p">:</span> <span class="s2">&quot;1942&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;place_of_birth&quot;</span><span class="p">:</span> <span class="s2">&quot;https://d-nb.info/gnd/4066009-6&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="c1"># https://d-nb.info/gnd/118833197</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">testdata</span> <span class="o">/</span> <span class="s2">&quot;ramus.rdf&quot;</span><span class="p">)</span>
@@ -186,9 +183,7 @@
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_institution_from_dnb">[docs]</a>
     <span class="k">def</span> <span class="nf">test_get_definition_from_dict_institution_from_dnb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">pierre_ges</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Pierre-Ramus-Gesellschaft&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;altName&quot;</span><span class="p">:</span> <span class="s2">&quot;Pierre Ramus-Gesellschaft&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;place&quot;</span><span class="p">:</span> <span class="s2">&quot;https://d-nb.info/gnd/4066009-6&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Pierre-Ramus-Gesellschaft&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="c1"># https://d-nb.info/gnd/415006-5</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">testdata</span> <span class="o">/</span> <span class="s2">&quot;ramus_gesellschaft.rdf&quot;</span><span class="p">)</span>
@@ -204,11 +199,7 @@
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_rdf.RdfTest.test_get_definition_from_dict_institution_from_dnb2">[docs]</a>
     <span class="k">def</span> <span class="nf">test_get_definition_from_dict_institution_from_dnb2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">pierre_ges</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Akademie der Wissenschaften in Wien&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;altName&quot;</span><span class="p">:</span> <span class="s2">&quot;Akademie der Wissenschaften (Wien)&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;place&quot;</span><span class="p">:</span> <span class="s2">&quot;https://d-nb.info/gnd/4066009-6&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;start_date_written&quot;</span><span class="p">:</span> <span class="s2">&quot;1919&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;end_date_written&quot;</span><span class="p">:</span> <span class="s2">&quot;1947&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Akademie der Wissenschaften in Wien&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="c1"># https://d-nb.info/gnd/35077-1</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">testdata</span> <span class="o">/</span> <span class="s2">&quot;oeaw.rdf&quot;</span><span class="p">)</span>
