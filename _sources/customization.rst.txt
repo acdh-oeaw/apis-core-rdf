@@ -1,6 +1,9 @@
 Customization
 =============
 
+APIS is designed to be easily customizable. This section describes how you can
+customize the views and the templates of the views that are shipped with
+APIS by injecting classes and methods that are then automatically used by the generic views.
 The core of the logic described here is based on the :mod:`apis_core.generic`.
 It provides generic CRUD views and API views for all models that are configured
 to use it. To make a model use the generic functionality, it has to inherit from
@@ -16,10 +19,10 @@ In standard APIS those models are
 The :py:mod:`apis_core.history` module also uses the generic views for
 its models. This means that you can use the generic views for the historical 
 models of your own ontology. E.g. if you have a model ``Person`` in your 
-`apis_ontology.models` module, you can use the generic views for it. 
-`/apis/apis_ontology.historicalperson/</apis/apis_ontology.historicalperson/>`_ 
+``apis_ontology.models`` module, you can use the generic views for it. 
+``/apis/apis_ontology.historicalperson/`` 
 will be the URL for the list view of the historical model. 
-`/apis/api/apis_ontology.historicalperson/</apis/api/apis_ontology.historicalperson/>`_ for the API view.
+``/apis/api/apis_ontology.historicalperson/`` for the API view.
 
 If you want to use the generic app for your own model, simple make your model
 inherit from :class:`apis_core.generic.abc.GenericModel`.
@@ -112,9 +115,37 @@ the ``myproject/person_autocomplete_result.html`` template.
 The results of the autocomplete view can be extended with additional results
 coming from another source (an external API or another queryset). The view
 looks for this function in ``your_app.querysets`` and it has to be named
-``<Modelname>ExternalAutocomplete``, so if you have a model ``Person`` in yoru
+``<Modelname>ExternalAutocomplete``, so if you have a model ``Person`` in your
 app ``myproject``, the view looks for the function in
 ``myproject.querysets.PersonExternalAutocomplete``.
+
+Lets say you have an app called ``myapp`` with a
+``models.py``
+
+.. code-block:: python
+
+   class Person(models.Model):
+        name = models.CharField(max_length=255)
+
+then the respective autocomplete class should reside in ``myapp.querysets`` and
+has to be called ``PersonExternalAutocomplete``.
+
+.. code-block:: python
+
+    class PersonExternalAutocomplete:
+        def extract_results(data):
+            ... do something with the data
+            return data
+
+        def get_results(self, q):
+            with urllib.request.urlopen(f"https://some.uri.tld/search?q={q}") as f:
+                data = extract_results(json.loads(f.read()))
+                return results
+            return {}
+
+The class has to have a ``get_results`` method that receives a query as the first
+parameter and returns a result in the format, the `django-autocomplete-light <https://django-autocomplete-light.readthedocs.io/>`_
+module uses- this is a dict with the keys "id", "text" and "selected_text".
 
 Import view
 -----------
@@ -145,3 +176,33 @@ look for possible overrides using the name of the model itself, but also using
 all the parent models following the full inheritance chain. So if all your models
 inherit from ``MyAbstractModel``, you can for example create an override table
 for all your models by creating a ``myproject.tables.MyAbstractModelTable``.
+
+Importing data from external resources
+--------------------------------------
+
+APIS provides the structure for easily importing data from external resources.
+One main component for this are ``Importer`` classes. They always belong to a
+Django model, reside in the same app as the Django model in the ``importers``
+module and are named after the Django model. So if you have an app called
+``myapp`` with a ``models.py``
+
+.. code-block:: python
+
+   class Person(models.Model):
+        name = models.CharField(max_length=255)
+
+then the respective importer should reside in ``myapp.importers`` and has to be
+called ``PersonImporter``.
+
+An importer takes two arguments to instantiate: an ``uri`` and a ``model``. The
+importers task is then to create a model instance from this URI, usually by
+fetching data from the URI, parsing it and extracting the needed fields.
+The instance should then be returned by the ``create_instance`` method of the
+importer. There is :py:class:`apis_core.generic.importers.GenericModelImporter`
+which you can inherit from. It is used by default of no other importer is defined for the model and it tries to do the right thing out of the box: it first looks if there is an RDF configuration for the URI and if that fails tries to parse the URI response as json.
+
+To use this logic in forms, there is
+:py:class:`apis_core.generic.forms.fields.ModelImportChoiceField` which is
+based on `django.forms.ModelChoiceField <https://docs.djangoproject.com/en/5.0/ref/forms/fields/#modelchoicefield>`_. It checks if the passed value starts
+with ``http`` and if so, it uses the importer that fits the model and uses it to
+create the model instance.

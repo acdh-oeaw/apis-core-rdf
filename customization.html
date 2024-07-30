@@ -68,6 +68,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#class-method-and-template-lookup">Class, method and template lookup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#importing-data-from-external-resources">Importing data from external resources</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_documentation.html">User documentation</a></li>
@@ -112,7 +113,10 @@
              
   <section id="customization">
 <h1>Customization<a class="headerlink" href="#customization" title="Link to this heading"></a></h1>
-<p>The core of the logic described here is based on the <a class="reference internal" href="modules/apis_core.generic.html#module-apis_core.generic" title="apis_core.generic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.generic</span></code></a>.
+<p>APIS is designed to be easily customizable. This section describes how you can
+customize the views and the templates of the views that are shipped with
+APIS by injecting classes and methods that are then automatically used by the generic views.
+The core of the logic described here is based on the <a class="reference internal" href="modules/apis_core.generic.html#module-apis_core.generic" title="apis_core.generic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.generic</span></code></a>.
 It provides generic CRUD views and API views for all models that are configured
 to use it. To make a model use the generic functionality, it has to inherit from
 <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel" title="apis_core.generic.abc.GenericModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.abc.GenericModel</span></code></a>.
@@ -127,10 +131,10 @@ In standard APIS those models are</p>
 <p>The <a class="reference internal" href="modules/apis_core.history.html#module-apis_core.history" title="apis_core.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.history</span></code></a> module also uses the generic views for
 its models. This means that you can use the generic views for the historical
 models of your own ontology. E.g. if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
-<cite>apis_ontology.models</cite> module, you can use the generic views for it.
-<a href="#id1"><span class="problematic" id="id2">`/apis/apis_ontology.historicalperson/&lt;/apis/apis_ontology.historicalperson/&gt;`_</span></a>
+<code class="docutils literal notranslate"><span class="pre">apis_ontology.models</span></code> module, you can use the generic views for it.
+<code class="docutils literal notranslate"><span class="pre">/apis/apis_ontology.historicalperson/</span></code>
 will be the URL for the list view of the historical model.
-<a href="#id3"><span class="problematic" id="id4">`/apis/api/apis_ontology.historicalperson/&lt;/apis/api/apis_ontology.historicalperson/&gt;`_</span></a> for the API view.</p>
+<code class="docutils literal notranslate"><span class="pre">/apis/api/apis_ontology.historicalperson/</span></code> for the API view.</p>
 <p>If you want to use the generic app for your own model, simple make your model
 inherit from <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel" title="apis_core.generic.abc.GenericModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.abc.GenericModel</span></code></a>.</p>
 <section id="list-views">
@@ -207,9 +211,32 @@ the <code class="docutils literal notranslate"><span class="pre">myproject/perso
 <p>The results of the autocomplete view can be extended with additional results
 coming from another source (an external API or another queryset). The view
 looks for this function in <code class="docutils literal notranslate"><span class="pre">your_app.querysets</span></code> and it has to be named
-<code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;ExternalAutocomplete</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in yoru
+<code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;ExternalAutocomplete</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
 app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the function in
 <code class="docutils literal notranslate"><span class="pre">myproject.querysets.PersonExternalAutocomplete</span></code>.</p>
+<p>Lets say you have an app called <code class="docutils literal notranslate"><span class="pre">myapp</span></code> with a
+<code class="docutils literal notranslate"><span class="pre">models.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>then the respective autocomplete class should reside in <code class="docutils literal notranslate"><span class="pre">myapp.querysets</span></code> and
+has to be called <code class="docutils literal notranslate"><span class="pre">PersonExternalAutocomplete</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">PersonExternalAutocomplete</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">extract_results</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="o">...</span> <span class="n">do</span> <span class="n">something</span> <span class="k">with</span> <span class="n">the</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://some.uri.tld/search?q=</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">extract_results</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span>
+            <span class="k">return</span> <span class="n">results</span>
+        <span class="k">return</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>The class has to have a <code class="docutils literal notranslate"><span class="pre">get_results</span></code> method that receives a query as the first
+parameter and returns a result in the format, the <a class="reference external" href="https://django-autocomplete-light.readthedocs.io/">django-autocomplete-light</a>
+module uses- this is a dict with the keys “id”, “text” and “selected_text”.</p>
 </section>
 <section id="import-view">
 <h2>Import view<a class="headerlink" href="#import-view" title="Link to this heading"></a></h2>
@@ -237,6 +264,31 @@ look for possible overrides using the name of the model itself, but also using
 all the parent models following the full inheritance chain. So if all your models
 inherit from <code class="docutils literal notranslate"><span class="pre">MyAbstractModel</span></code>, you can for example create an override table
 for all your models by creating a <code class="docutils literal notranslate"><span class="pre">myproject.tables.MyAbstractModelTable</span></code>.</p>
+</section>
+<section id="importing-data-from-external-resources">
+<h2>Importing data from external resources<a class="headerlink" href="#importing-data-from-external-resources" title="Link to this heading"></a></h2>
+<p>APIS provides the structure for easily importing data from external resources.
+One main component for this are <code class="docutils literal notranslate"><span class="pre">Importer</span></code> classes. They always belong to a
+Django model, reside in the same app as the Django model in the <code class="docutils literal notranslate"><span class="pre">importers</span></code>
+module and are named after the Django model. So if you have an app called
+<code class="docutils literal notranslate"><span class="pre">myapp</span></code> with a <code class="docutils literal notranslate"><span class="pre">models.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>then the respective importer should reside in <code class="docutils literal notranslate"><span class="pre">myapp.importers</span></code> and has to be
+called <code class="docutils literal notranslate"><span class="pre">PersonImporter</span></code>.</p>
+<p>An importer takes two arguments to instantiate: an <code class="docutils literal notranslate"><span class="pre">uri</span></code> and a <code class="docutils literal notranslate"><span class="pre">model</span></code>. The
+importers task is then to create a model instance from this URI, usually by
+fetching data from the URI, parsing it and extracting the needed fields.
+The instance should then be returned by the <code class="docutils literal notranslate"><span class="pre">create_instance</span></code> method of the
+importer. There is <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter" title="apis_core.generic.importers.GenericModelImporter"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.importers.GenericModelImporter</span></code></a>
+which you can inherit from. It is used by default of no other importer is defined for the model and it tries to do the right thing out of the box: it first looks if there is an RDF configuration for the URI and if that fails tries to parse the URI response as json.</p>
+<p>To use this logic in forms, there is
+<a class="reference internal" href="modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField" title="apis_core.generic.forms.fields.ModelImportChoiceField"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.fields.ModelImportChoiceField</span></code></a> which is
+based on <a class="reference external" href="https://docs.djangoproject.com/en/5.0/ref/forms/fields/#modelchoicefield">django.forms.ModelChoiceField</a>. It checks if the passed value starts
+with <code class="docutils literal notranslate"><span class="pre">http</span></code> and if so, it uses the importer that fits the model and uses it to
+create the model instance.</p>
 </section>
 </section>
 
