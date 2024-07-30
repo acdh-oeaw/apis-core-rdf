@@ -6,7 +6,10 @@
 Welcome to APIS's documentation!
 ================================
 
+
 .. include:: ../../README.md
+   :start-after: <!-- introduction -->
+   :end-before: <!-- end-introduction -->
    :parser: myst_parser.sphinx_
 
 .. toctree::
@@ -15,16 +18,9 @@ Welcome to APIS's documentation!
 
    installation
    configuration
-   settings
    customization
-   user_documentation
-   history
-   data_model
+   plugins
    glossary
-   development
-   collections
-   autocomplete
-   importing
 
 .. toctree::
    :maxdepth: 2
