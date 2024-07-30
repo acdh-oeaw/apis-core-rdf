@@ -14,6 +14,7 @@ Welcome to APIS's documentation!
    :caption: Documentation:
 
    installation
+   ontology
    configuration
    customization
    features
