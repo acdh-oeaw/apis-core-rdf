@@ -1,13 +1,18 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.html import format_html
 from django.views import View
 from django.views.generic.edit import FormView
+from dal import autocomplete
 
 from apis_core.generic.views import GenericModelMixin, Update
 from apis_core.apis_entities.forms import EntitiesMergeForm
+from apis_core.apis_metainfo.models import RootObject
+from apis_core.generic.helpers import generate_search_filter
 
 
 class EntitiesUpdate(Update):
@@ -73,3 +78,41 @@ class EntitiesMerge(GenericModelMixin, PermissionRequiredMixin, FormView):
             "apis_core:apis_entities:generic_entities_edit_view",
             args=[self.get_object().__class__.__name__.lower(), self.get_object().id],
         )
+
+
+class EntitiesAutocomplete(autocomplete.Select2QuerySetView):
+    """
+    This endpoint allows us to use autocomplete over multiple model classes.
+    It takes a parameter `entities` which is a list of ContentType natural
+    keys and searches for the query in all instances of those entities
+    (using `generate_search_filter`, which means it uses a different search
+    approach for every model).
+    The return values of the endpoint are then prefixed with the id of the
+    contenttype of the results, separated by an underscore.
+
+    Example:
+    Using this endpoint with the parameters:
+
+        ?entities=apis_ontology.person&entities=apis_ontology.place&q=ammer
+
+    gives you all the persons and places that have `ammer` in their names
+    and labels.
+    """
+
+    def get_result_value(self, result) -> str:
+        content_type = ContentType.objects.get_for_model(result)
+        return f"{content_type.id}_" + super().get_result_value(result)
+
+    def get_queryset(self):
+        q = Q()
+        if entities := self.request.GET.getlist("entities"):
+            for entity in entities:
+                app_label, model = entity.split(".")
+                content_type = get_object_or_404(
+                    ContentType, app_label=app_label, model=model
+                )
+                name = content_type.model_class()._meta.model_name
+                q |= Q(**{f"{name}__isnull": False}) & generate_search_filter(
+                    content_type.model_class(), self.q, prefix=f"{name}__"
+                )
+        return RootObject.objects_inheritance.select_subclasses().filter(q)

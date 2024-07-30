@@ -10,6 +10,7 @@ from apis_core.apis_entities.views import (
     EntitiesDuplicate,
     EntitiesUpdate,
     EntitiesMerge,
+    EntitiesAutocomplete,
 )
 
 
@@ -88,4 +89,5 @@ urlpatterns = [
         "entity/<entitytocontenttype:contenttype>/",
         include(entity_patterns),
     ),
+    path("autocomplete/", EntitiesAutocomplete.as_view(), name="autocomplete"),
 ]
