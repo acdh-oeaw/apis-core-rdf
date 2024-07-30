@@ -1,0 +1,28 @@
+{% extends "apis_core/apis_entities/abstractentity_form.html" %}
+
+{% block col-one %}
+  {% include "relations/list_relations_include.html" with edit=True %}
+  {{ block.super }}
+{% endblock col-one %}
+
+{% block scripts %}
+  <script>
+  document.body.addEventListener("dismissModal", function(evt){
+    console.log("triggered dismissModal");
+    $('#modal').modal('hide');
+  });
+  document.body.addEventListener("reinit_select2", function(evt) {
+    form = document.getElementById(evt.detail.value);
+    form.querySelectorAll("select").forEach(element => {
+      $(element).select2({
+        ajax: {
+          url: $(element).data("autocomplete-light-url"),
+        },
+        dropdownParent: $("div.modal-content"),
+      });
+    });
+    $('.select2-selection').addClass("form-control");
+  });
+  </script>
+  {{ block.super }}
+{% endblock scripts %}

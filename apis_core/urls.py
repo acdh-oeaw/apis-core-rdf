@@ -75,3 +75,6 @@ if "apis_core.history" in settings.INSTALLED_APPS:
     urlpatterns.append(
         path("history/", include("apis_core.history.urls", namespace="history"))
     )
+
+if "apis_core.relations" in settings.INSTALLED_APPS:
+    urlpatterns.append(path("relations/", include("apis_core.relations.urls")))

@@ -1,0 +1,10 @@
+{% if record.forward %}
+  {{ record.name }}
+{% else %}
+  {{ record.reverse_name }}
+{% endif %}
+{% if record.forward %}
+  <a href="{{ record.obj.get_absolute_url }}">{{ record.obj }}</a>
+{% else %}
+  <a href="{{ record.subj.get_absolute_url }}">{{ record.subj }}</a>
+{% endif %}
