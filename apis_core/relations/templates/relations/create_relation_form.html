@@ -1,0 +1,8 @@
+{% load crispy_forms_tags %}
+<div class="m-2" id="{{ form.helper.form_id }}">
+  <b>
+    {% if form.subj_instance %}{{ form.subj_instance }}{% endif %}
+    {% if form.obj_instance %}{{ form.obj_instance }}{% endif %}
+  {{ form.relation_name }}</b>
+  {% crispy form form.helper %}
+</div>
