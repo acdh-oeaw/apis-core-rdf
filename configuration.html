@@ -53,6 +53,17 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html#installation-without-docker">Installation without Docker</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#apis-base-url-and-apis-core-apis-entities-api-views-getentitygeneric"><code class="docutils literal notranslate"><span class="pre">APIS_BASE_URL</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_entities.api_views.GetEntityGeneric</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#django-settings">Django Settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rest-framework">REST_FRAMEWORK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectacular-settings">SPECTACULAR_SETTINGS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apis-base-uri">APIS_BASE_URI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apis-next-prev">APIS_NEXT_PREV</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apis-list-views-allowed">APIS_LIST_VIEWS_ALLOWED</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apis-detail-views-allowed">APIS_DETAIL_VIEWS_ALLOWED</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apis-view-passes-test">APIS_VIEW_PASSES_TEST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apis-list-view-object-filter">APIS_LIST_VIEW_OBJECT_FILTER</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a></li>
@@ -110,6 +121,97 @@ comes from the <code class="docutils literal notranslate"><span class="pre">APIS
 route of <code class="docutils literal notranslate"><span class="pre">GetEntityGenericRoot</span></code> if that exists. If not, it uses the
 the reverse route of <code class="docutils literal notranslate"><span class="pre">apis_core:GetEntityGeneric</span></code>, which is defined in
 <a class="reference internal" href="modules/apis_core.html#module-apis_core.urls" title="apis_core.urls"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.urls</span></code></a> and defaults to <code class="docutils literal notranslate"><span class="pre">/entity/{pk}</span></code>.</p>
+</section>
+<section id="django-settings">
+<h2>Django Settings<a class="headerlink" href="#django-settings" title="Link to this heading"></a></h2>
+<p>This section deals with the internal configuration of APIS. For instructions on how to set it up please refer
+to <a class="reference internal" href="installation.html"><span class="doc">Installation with Docker</span></a>.
+All the settings described here are part of the Django settings and can be set in the <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> file of your Django project.</p>
+<section id="rest-framework">
+<h3>REST_FRAMEWORK<a class="headerlink" href="#rest-framework" title="Link to this heading"></a></h3>
+<p>APIS uses the <a class="reference external" href="https://www.django-rest-framework.org/">Django Restframework</a> for API provisioning. Restframework specific settings like the default page size can be set here.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">REST_FRAMEWORK</span><span class="p">[</span><span class="s2">&quot;DEFAULT_AUTHENTICATION_CLASSES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;rest_framework.permissions.DjangoModelPermissions&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Use the above default for allowing every user with permissions on a model to change all model instances.
+Set <code class="docutils literal notranslate"><span class="pre">&quot;rest_framework.permissions.IsAuthenticated&quot;</span></code> if every logged in user should have all permissions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">REST_FRAMEWORK</span><span class="p">[</span><span class="s2">&quot;PAGE_SIZE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
+</pre></div>
+</div>
+<p>Sets the default page size the APIS RestAPI should deliver.</p>
+</section>
+<section id="spectacular-settings">
+<h3>SPECTACULAR_SETTINGS<a class="headerlink" href="#spectacular-settings" title="Link to this heading"></a></h3>
+<p>We provide a custom schema generator for spectacular.
+It is meant as a drop in replacement for the
+<code class="docutils literal notranslate"><span class="pre">DEFAULT_GENERATOR_CLASS</span></code> of drf-spectacular. You can use it like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SPECTACULAR_SETTINGS</span><span class="p">[</span><span class="s2">&quot;DEFAULT_GENERATOR_CLASS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;apis_core.generic.generators.CustomSchemaGenerator&#39;</span>
+</pre></div>
+</div>
+<p>Background:</p>
+<p>The first reason is, that we are using a custom converter
+(<a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.urls.ContenttypeConverter" title="apis_core.generic.urls.ContenttypeConverter"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.urls.ContenttypeConverter</span></code></a>) to provide access to views
+and api views of different contenttypes. The default endpoint generator of the
+drf-spectacular does not know about this converter and therefore sees the
+endpoints using this converter as <em>one</em> endpoint with one parameter called
+<code class="docutils literal notranslate"><span class="pre">contenttype</span></code>. Thats not what we want, so we have to do our own enumeration -
+we iterate through all contenttypes that inherit from <code class="docutils literal notranslate"><span class="pre">GenericModel</span></code> and
+create schema endpoints for those programatically.</p>
+<p>The second reason is, that the autoapi schema generator of DRF Spectacular
+and our <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet" title="apis_core.generic.api_views.ModelViewSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.api_views.ModelViewSet</span></code></a> don’t work well together.
+Our ModelViewSet needs the dispatch method to set the model of the
+<code class="docutils literal notranslate"><span class="pre">ModelViewSet</span></code>, but this method is not being called by the generator while
+doing the inspection, which means the <code class="docutils literal notranslate"><span class="pre">ModelViewSet</span></code> does not know about the
+model it should work with and can not provide the correct serializer and filter
+classes. Therefore we create the callback for the endpoints by hand and set
+the model from there.</p>
+</section>
+<section id="apis-base-uri">
+<h3>APIS_BASE_URI<a class="headerlink" href="#apis-base-uri" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_BASE_URI</span> <span class="o">=</span> <span class="s2">&quot;https://your-url-goes-here.com&quot;</span>
+</pre></div>
+</div>
+<p>Sets the base URI your instance should use. This is important as APIS uses mainly URIs instead of IDs.
+This setting is used to generate the canonical URI of an entity. It is included in the serializations
+of entities (eg the JSON returned by the API) and therefore should be set to the URL your production app
+is running on.</p>
+</section>
+<section id="apis-next-prev">
+<h3>APIS_NEXT_PREV<a class="headerlink" href="#apis-next-prev" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_NEXT_PREV</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="apis-list-views-allowed">
+<h3>APIS_LIST_VIEWS_ALLOWED<a class="headerlink" href="#apis-list-views-allowed" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_LIST_VIEWS_ALLOWED</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Sets whether list views are accessible for anonymous (not logged in) users.</p>
+</section>
+<section id="apis-detail-views-allowed">
+<h3>APIS_DETAIL_VIEWS_ALLOWED<a class="headerlink" href="#apis-detail-views-allowed" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">APIS_DETAIL_VIEWS_ALLOWED</span> <span class="o">-</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Sets whether detail views are accessible for anonymous (note logged in) users.</p>
+</section>
+<section id="apis-view-passes-test">
+<h3>APIS_VIEW_PASSES_TEST<a class="headerlink" href="#apis-view-passes-test" title="Link to this heading"></a></h3>
+<p>Allows to define a function that receives the view as an argument - including
+e.g. the <cite>request</cite> object - and can perform checks on any of the views
+attributes. The function can, based on these checks, return a boolean which
+decides if the request is successful or leads to a 403 permission denied.</p>
+</section>
+<section id="apis-list-view-object-filter">
+<h3>APIS_LIST_VIEW_OBJECT_FILTER<a class="headerlink" href="#apis-list-view-object-filter" title="Link to this heading"></a></h3>
+<p>Allows to define a function that receives the view - including e.g. the
+<cite>request</cite> object - and a queryset and can do custom filtering on that queryset.
+This can be used to set the listviews to public using the
+<cite>APIS_LIST_VIEWS_ALLOWED</cite> setting, but still only list specific entities.</p>
+</section>
 </section>
 </section>
 
