@@ -11,6 +11,7 @@
 {% endblock col-zero %}
 
 {% block col-one %}
+  {% include "relations/list_relations_include.html" with edit=True %}
   <div class="card">
     <div class="card-body">{% include "apis_entities/partials/entity_relations_multiple_cards.html" %}</div>
   </div>
@@ -148,5 +149,11 @@ function activate_editing(){
        {% endfor %}
 };
 activate_editing();
+  </script>
+  <script>
+  document.body.addEventListener("dismissModal", function(evt){
+    console.log("triggered dismissModal");
+    $('#modal').modal('hide');
+  });
   </script>
 {% endblock scripts %}
