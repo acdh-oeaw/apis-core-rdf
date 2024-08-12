@@ -15,16 +15,10 @@ Welcome to APIS's documentation!
 
    installation
    configuration
-   settings
    customization
-   user_documentation
    history
-   data_model
    glossary
-   development
    collections
-   autocomplete
-   importing
 
 .. toctree::
    :maxdepth: 2
