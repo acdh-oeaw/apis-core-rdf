@@ -1,0 +1,8 @@
+{% if user.is_authenticated %}
+  <a href="{% url "apis_core:collections:collectionsessiontoggle" collection.id %}?to={{ request.get_full_path }}"
+     hx-get="{% url "apis_core:collections:collectionsessiontoggle" collection.id %}"
+     hx-swap="outerHTML"
+     class="col-{{ collection.name|slugify }}">
+    <input type="checkbox" {% if enabled %}checked{% endif %}>
+  {{ collection.name }}</a>
+{% endif %}
