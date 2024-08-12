@@ -93,3 +93,17 @@ def collection_content_objects(context, obj, collectionids=None):
         ids = collectionids.split(",")
         sccos = sccos.filter(collection__id__in=ids)
     return sccos
+
+
+@register.inclusion_tag(
+    "collections/collection_session_toggle.html", takes_context=True
+)
+def collection_session_toggle_by_id(context, collection_id):
+    """
+    Provide a checkbox to toggle if a session collection is active.
+    The checkbox calls the CollectionSessionToggle view.
+    """
+    session_collections = context.request.session.get("session_collections", [])
+    context["collection"] = SkosCollection.objects.get(pk=collection_id)
+    context["enabled"] = collection_id in session_collections
+    return context

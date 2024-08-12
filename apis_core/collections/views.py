@@ -75,3 +75,36 @@ class CollectionObjectParent(LoginRequiredMixin, ContentObjectMixin, TemplateVie
         context = super().get_context_data(*args, **kwargs)
         context["collectionobject"] = collectionobject
         return context
+
+
+class CollectionSessionToggle(LoginRequiredMixin, TemplateView):
+    """
+    Toggle the existence of an SkosCollection in the `session_collections`
+    session variable.
+    This can be used in combination with the
+    `collections.signals.add_to_session_collection` signal, to add objects
+    to a collection if the collections id is listed in the session variable.
+    The equivalent templateatag that calls this view is
+    `collections.templatetags.apis_collections.collection_session_toggle_by_id`
+    """
+
+    template_name = "collections/collection_session_toggle.html"
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["collection"] = self.skoscollection
+        ctx["enabled"] = self.skoscollection.id in self.session_collections
+        return ctx
+
+    def get(self, *args, **kwargs):
+        self.skoscollection = get_object_or_404(
+            SkosCollection, pk=kwargs["skoscollection"]
+        )
+        self.session_collections = set(
+            self.request.session.get("session_collections", [])
+        )
+        self.session_collections ^= {self.skoscollection.id}
+        self.request.session["session_collections"] = list(self.session_collections)
+        if redirect_to := self.request.GET.get("to", False):
+            return redirect(redirect_to)
+        return super().get(*args, **kwargs)

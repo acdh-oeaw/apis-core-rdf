@@ -15,4 +15,9 @@ urlpatterns = [
         views.CollectionObjectParent.as_view(),
         name="collectionobjectparent",
     ),
+    path(
+        "collectionsessiontoggle/<int:skoscollection>",
+        views.CollectionSessionToggle.as_view(),
+        name="collectionsessiontoggle",
+    ),
 ]
