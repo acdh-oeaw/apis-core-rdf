@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation with Docker &mdash; APIS 0.23.2 documentation</title>
+  <title>Installation &mdash; APIS 0.23.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -49,16 +49,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation with Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#docker-image">Docker Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#docker-compose">Docker Compose</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-with-docker">Installation with Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#docker-compose">Docker Compose</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#installation-without-docker">Installation without Docker</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-on-a-linux-box">Installation on a linux box</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-on-windows">Installation on Windows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#serving-apis-via-apache-wsgi">Serving APIS via Apache WSGI</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
@@ -88,7 +85,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Installation with Docker</li>
+      <li class="breadcrumb-item active">Installation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -98,282 +95,87 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="installation-with-docker">
-<h1>Installation with Docker<a class="headerlink" href="#installation-with-docker" title="Link to this heading"></a></h1>
-<p>This is the recommended way to install APIS on local machines as well as on server infrastructure.</p>
-<section id="docker-image">
-<h2>Docker Image<a class="headerlink" href="#docker-image" title="Link to this heading"></a></h2>
-<p>APIS docker images can be pulled from <a class="reference external" href="https://hub.docker.com/repository/docker/sennierer/apis">docker hub</a>. Images are tagged
-from v0.9.1 onwards. Latest image is tagged with :latest.
-The images are automatically built and tagged and should be up-to-date with altest versions of code.</p>
-</section>
-<section id="docker-compose">
-<h2>Docker Compose<a class="headerlink" href="#docker-compose" title="Link to this heading"></a></h2>
-<p>The following docker-compose file can be used as a starting point for deploying an APIS instance:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;2&#39;</span>
-
-
-<span class="nt">services</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">web</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sennierer/apis:latest</span>
-<span class="w">            </span><span class="nt">environment</span><span class="p">:</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APIS_PROJECT=apis_test</span><span class="w"> </span><span class="c1">#as used in the apis-settings repo</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APIS_DB_NAME=testdb</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APIS_DB_USER=testuser</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APIS_DB_PASSWORD=testpwd</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APIS_DB_HOST=database</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APIS_DB_PORT=3306</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APIS_AUTO_CREATE_DB=1</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DJANGO_SUPERUSER_PASSWORD=adminpass123</span><span class="w"> </span><span class="c1">#change that to admin password</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DJANGO_SUPERUSER_USERNAME=admin</span><span class="w"> </span><span class="c1">#change that to admin username</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DJANGO_SUPERUSER_EMAIL=my_user@domain.com</span><span class="w"> </span><span class="c1">#change that to email</span>
-<span class="w">                </span><span class="c1"># and more e.g. APIS_DB_PORT &gt;&gt; apis-webpage-base/apis/settings/base.py</span>
-<span class="w">            </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apis_core_apis_test</span><span class="w"> </span><span class="c1">#use apis_core_$APIS_PROJECT, e.g. apis_core_mpr</span>
-<span class="w">            </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sh /start-apis/start-apis/start.sh</span>
-<span class="w">            </span><span class="nt">volumes</span><span class="p">:</span>
-<span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config-volume:/config-apis</span>
-<span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staticfiles-volume:/apis/apis-webpage-base/staticfiles</span>
-<span class="w">            </span><span class="nt">networks</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
-<span class="w">            </span><span class="nt">depends_on</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">database</span>
-
-<span class="w">        </span><span class="nt">database</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql:5.7</span>
-<span class="w">            </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--default-authentication-plugin=mysql_native_password</span>
-<span class="w">            </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
-<span class="w">            </span><span class="nt">environment</span><span class="p">:</span>
-<span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MYSQL_ROOT_PASSWORD=rootpwd</span>
-<span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MYSQL_DATABASE=testdb</span>
-<span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MYSQL_USER=testuser</span>
-<span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MYSQL_PASSWORD=testpwd</span>
-<span class="w">            </span><span class="nt">networks</span><span class="p">:</span>
-<span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
-<span class="w">        </span><span class="nt">nginx</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx:latest</span>
-<span class="w">            </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngx_apis_apis_test</span><span class="w"> </span><span class="c1">#use ngx_apis_$PROJECT_NAME, e.g, ngx_apis_mpr</span>
-<span class="w">            </span><span class="nt">environment</span><span class="p">:</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APIS_PROJECT=apis_test</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">APIS_SERVER_NAME=localhost</span><span class="w"> </span><span class="c1">#as used in the apis-settings repo &gt;&gt; needs to be present in both images</span>
-<span class="w">            </span><span class="nt">volumes</span><span class="p">:</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config-volume:/config-apis</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staticfiles-volume:/staticfiles</span>
-<span class="w">            </span><span class="nt">ports</span><span class="p">:</span>
-<span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8080:81&quot;</span>
-<span class="w">            </span><span class="nt">depends_on</span><span class="p">:</span>
-<span class="w">                    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">web</span>
-<span class="w">            </span><span class="nt">networks</span><span class="p">:</span>
-<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
-<span class="w">            </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/bash -c &quot;envsubst &#39;$${APIS_PROJECT},$${APIS_SERVER_NAME}&#39; &lt; /config-apis/start-apis/nginx/nginx.template &gt; /etc/nginx/conf.d/default.conf &amp;&amp; exec nginx -g &#39;daemon off;&#39;&quot;</span>
-<span class="nt">networks</span><span class="p">:</span>
-<span class="nt">backend</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span>
-
-<span class="nt">volumes</span><span class="p">:</span>
-<span class="nt">config-volume</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
-<span class="nt">staticfiles-volume</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
-</pre></div>
-</div>
-<p>After <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">up</span></code> you should now have a default APIS installation accessible under <a class="reference external" href="http://localhost:8080">http://localhost:8080</a>.</p>
-</section>
-</section>
-<section id="installation-without-docker">
-<h1>Installation without Docker<a class="headerlink" href="#installation-without-docker" title="Link to this heading"></a></h1>
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<p>APIS-core is a library that allows you to easily build tools to manage prosopographical data. It is not a ready-made software solution
+that you just deploy and start working. The typical workflow for starting an APIS project is as follows: set up the project, create an
+<a class="reference internal" href="glossary.html#term-ontology"><span class="xref std std-term">ontology</span></a> customize the functionalities and views, and finally add your data. This section will guide you through the first step.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
-<p>APIS webapp needs Python 3.6+ and several python packages that can be easily installed by using <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a>,
-<a class="reference external" href="https://github.com/pypa/pipenv">pipenv</a>, or <a class="reference external" href="https://python-poetry.org/">poetry</a>.</p>
-<p>Create a new virtualenv and activate it:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">virtualenv -p pyton3 your_virtualenv_name</span>
-<span class="go">source your_virtualenv_name/bin/activate</span>
-</pre></div>
-</div>
-<p>To activate the virtualenv on Windows, go to the directory your_virtualenv_name/Scripts and run activate.bat from the command line.</p>
+<p>APIS needs Python 3.11+.</p>
 </section>
-<section id="installation-on-a-linux-box">
-<h2>Installation on a linux box<a class="headerlink" href="#installation-on-a-linux-box" title="Link to this heading"></a></h2>
-<p>Change to the directory you have downloaded APIS to and install the needed Python packages:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd apis-core</span>
-<span class="go">pip install -r requirements.txt</span>
-</pre></div>
-</div>
-<p>Next you need to create a file called copy the <code class="docutils literal notranslate"><span class="pre">APIS_directory/apis-core/apis/settings/settings_test_ci.py</span></code> file to another name.
-We suggest <code class="docutils literal notranslate"><span class="pre">server.py</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="n">APIS_directory</span><span class="o">/</span><span class="n">apis</span><span class="o">-</span><span class="n">core</span><span class="o">/</span><span class="n">apis</span><span class="o">/</span><span class="n">settings</span><span class="o">/</span><span class="n">settings_test_ci</span><span class="o">.</span><span class="n">py</span> <span class="n">APIS_directory</span><span class="o">/</span><span class="n">apis</span><span class="o">-</span><span class="n">core</span><span class="o">/</span><span class="n">apis</span><span class="o">/</span><span class="n">settings</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>Edit <code class="docutils literal notranslate"><span class="pre">server.py</span></code> to your needs. E.g. if you intend to use Mysql it should look something like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s1">&#39;asdaaserffsdfi&#39;</span>
-<span class="c1"># SECURITY WARNING: don&#39;t run with debug turned on in production!</span>
-<span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
-<span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;django.db.backends.mysql&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;databsename&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;USER&#39;</span><span class="p">:</span> <span class="s1">&#39;dtabaseuser&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="s1">&#39;databasepassword&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;HOST&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>   <span class="c1"># Or an IP Address that your DB is hosted on</span>
-    <span class="s1">&#39;PORT&#39;</span><span class="p">:</span> <span class="s1">&#39;3306&#39;</span><span class="p">,</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>Dont forget to set <code class="docutils literal notranslate"><span class="pre">DEBUG</span> <span class="pre">=</span> <span class="pre">False</span></code> once you are in production.</p>
-<p>Once the database connection is set run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python manage.py migrate --settings=apis.settings.server</span>
-</pre></div>
-</div>
-<p>For convenience we suggest you alter <code class="docutils literal notranslate"><span class="pre">manage.py</span></code> to:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span> <span class="s2">&quot;apis.settings.server&quot;</span><span class="p">)</span>
-
-    <span class="kn">from</span> <span class="nn">django.core.management</span> <span class="kn">import</span> <span class="n">execute_from_command_line</span>
-
-    <span class="n">execute_from_command_line</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Once that is done you dont have to include <code class="docutils literal notranslate"><span class="pre">--settings=apis.settings.server</span></code> in your commands anymore.</p>
-<p>Next we migrate the APIS internal tables:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python manage.py migrate</span>
-</pre></div>
-</div>
-<p>and create a superuser:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python manage.py createsuperuser</span>
-</pre></div>
-</div>
-<p>answer the questions and hit enter.
-Now you can already proceed running the development server:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python manage.py runserver</span>
-</pre></div>
-</div>
-<p>should bring up a development server window with your new apis instance.</p>
+<section id="id1">
+<h2>Installation<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 </section>
-<section id="installation-on-windows">
-<h2>Installation on Windows<a class="headerlink" href="#installation-on-windows" title="Link to this heading"></a></h2>
-<p>Change to the directory you have downloaded APIS to and install the needed Python packages
-In the command prompt that pops up after the activation of the virtualenv, change directory to where you have downloaded apis (eg. to apis-core) and install the modules in requirements.txt</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install -r requirements.txt</span>
-</pre></div>
-</div>
-<p>If you encounter problems while installing the packages in the requirements.txt file, remove the ones that cause the problem (from the requirements.txt file), and download the .whl file of the problematic module from the following site: <a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">http://www.lfd.uci.edu/~gohlke/pythonlibs/</a> (choosing the correct version: your python version must be equal to the number after cp in the name of the .whl file, and your operating system 32-bit/64-bit with the end of the file name.)</p>
-<p>Install the missing module by running the following command in the prompt from where your .whl file resides:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install name_of_the_whl_file</span>
-</pre></div>
-</div>
-<p>Install numpy+mkl, download the wheel file from the link above and install with the command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install name_of_the_whl_file</span>
-</pre></div>
-</div>
-<p>Download and install SQLite (www.sqlite.org).</p>
-<p>Next copy the dummpysettings.py file and rename it to server.py with the following command:
-copy apisappapissettingsdummysettings.py apisappapissettingsserver.py
-Now edit <code class="docutils literal notranslate"><span class="pre">server.py</span></code> to your needs.</p>
-<p>If you installed sqlite, it should look like below:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
+<section id="installation-with-docker">
+<h2>Installation with Docker<a class="headerlink" href="#installation-with-docker" title="Link to this heading"></a></h2>
+<p>This is the recommended way to install APIS on local machines as well as on server infrastructure.
+For experimenting with APIS you can use the <a class="reference external" href="https://github.com/acdh-oeaw/apis-core-rdf/blob/main/Dockerfile">Dockerfile</a> provided in the
+APIS core library. It allows you to spin up an APIS instance using the sample-project shipped with the APIS core library.
+To start it fire up a terminal and run</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">path/to/apis-core-rdf</span></code> to change to the directory where the Dockerfile is located.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">-t</span> <span class="pre">apis</span> <span class="pre">.</span></code> to build the APIS image.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-p</span> <span class="pre">5000:5000</span> <span class="pre">apis</span></code> to start the container.</p></li>
+</ul>
+<p>The APIS instance should now be accessible under <a class="reference external" href="http://localhost:5000">http://localhost:5000</a>.</p>
+<p>Alternatively you can also use the docker image built for our demo-project. To do so run:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-p</span> <span class="pre">5000:5000</span> <span class="pre">ghcr.io/acdh-oeaw/apis-core-rdf/discworld/main:latest</span></code> to start the container.</p></li>
+</ul>
+<p>To use the image for local development you can mount your local APIS instance directory into the container, using the following command:
+To do so you can use the following command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-p</span> <span class="pre">5000:5000</span> <span class="pre">-v</span> <span class="pre">/path/to/your/apis_instance:/app</span> <span class="pre">apis</span></code></p>
+<p>Please note that you might need to install custom dependencies for the APIS instance in your local docker container.</p>
+<p>This container uses the Django development server and is not suitable for production use. Please see the next section for deploying APIS in production.</p>
+<section id="docker-compose">
+<h3>Docker Compose<a class="headerlink" href="#docker-compose" title="Link to this heading"></a></h3>
+<p>In production APIS should be used together with an SQL database. The simplest way to set that up is by using <a class="reference external" href="https://docs.docker.com/compose/">Docker Compose</a>.
+Below is an example of a <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file that sets up an APIS instance with a PostgreSQL database.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.8&#39;</span>
 
-<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s1">&#39;d3j@zlckxkw73c3*ud2-11$)d6i)^my(60*o1psh*&amp;-u35#ayi&#39;</span>
-<span class="c1"># SECURITY WARNING: don&#39;t run with debug turned on in production!</span>
-<span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">      </span><span class="nt">dockerfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Dockerfile</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">service_healthy</span>
+<span class="w">        </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
-   <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
-       <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;django.db.backends.sqlite3&#39;</span><span class="p">,</span>
-       <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;path</span><span class="se">\\</span><span class="s1">to</span><span class="se">\\</span><span class="s1">your</span><span class="se">\\</span><span class="s1">sqlite</span><span class="se">\\</span><span class="s1">installation&#39;</span><span class="p">,</span> <span class="s1">&#39;db.sqlite3&#39;</span><span class="p">),</span>
-   <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>If you intend to use Mysql it should look something like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="c1"># some settings can be overwritten with env variables</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DJANGO_SETTINGS_MODULE=apis.settings</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DJANGO_SECRET_KEY=your_secret_key</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DJANGO_DEBUG=True</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DATABASE_URL=postgres://postgres:postgres@db:5432/postgres</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${PWD}/local_apis_instance:/app</span><span class="w"> </span><span class="c1">#mount your local APIS instance to the container if needed</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000:5000</span>
 
-<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s1">&#39;asdaaserffsdfi&#39;</span>
-<span class="c1"># SECURITY WARNING: don&#39;t run with debug turned on in production!</span>
-<span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:latest</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unless-stopped</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-data:/var/lib/postgresql/data</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">      </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span><span class="w"> </span><span class="c1">#use other passwords in production</span>
+<span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">      </span><span class="nt">POSTGRES_EXTENSIONS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pg_trgm</span>
+<span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;CMD-SHELL&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;pg_isready</span><span class="nv"> </span><span class="s">-d</span><span class="nv"> </span><span class="s">$${POSTGRES_DB}</span><span class="nv"> </span><span class="s">-U</span><span class="nv"> </span><span class="s">$${POSTGRES_USER}&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
+<span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3s</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
 
-<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
-<span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;django.db.backends.mysql&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;databsename&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;USER&#39;</span><span class="p">:</span> <span class="s1">&#39;dtabaseuser&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="s1">&#39;databasepassword&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;HOST&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>   <span class="c1"># Or an IP Address that your DB is hosted on</span>
-    <span class="s1">&#39;PORT&#39;</span><span class="p">:</span> <span class="s1">&#39;3306&#39;</span><span class="p">,</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">postgres-data</span><span class="p">:</span>
 </pre></div>
 </div>
-<p>Dont forget to set <code class="docutils literal notranslate"><span class="pre">DEBUG</span> <span class="pre">=</span> <span class="pre">False</span></code> once you are in production.</p>
-<p>Once the database connection is set, run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python manage.py migrate --settings=apis.settings.server</span>
-</pre></div>
-</div>
-<p>For convenience we suggest you alter <code class="docutils literal notranslate"><span class="pre">manage.py</span></code> to:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span> <span class="s2">&quot;apis.settings.server&quot;</span><span class="p">)</span>
-
-    <span class="kn">from</span> <span class="nn">django.core.management</span> <span class="kn">import</span> <span class="n">execute_from_command_line</span>
-
-    <span class="n">execute_from_command_line</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Once that is done you dont have to include <code class="docutils literal notranslate"><span class="pre">--settings=apis.settings.server</span></code> in your commands anymore.</p>
-<p>Next we migrate the APIS internal tables:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python manage.py makemigrations metainfo entities relations vocabularies highlighter labels webpage</span>
-<span class="go">python manage.py migrate</span>
-</pre></div>
-</div>
-<p>and create a superuser:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python manage.py createsuperuser</span>
-</pre></div>
-</div>
-<p>answer the questions and change to the static directory to download javascript libraries:</p>
-<p>If you havent installed NPM and bower yet, install NodeJS, and bower with npm. Bower depends on Node.js and NPM, download the installation package from the Node.js site and click through it. You can now install Bower with npm. You might need to restart Windows to get all the path variables setup.
-Open the Git Bash or Command Prompt and install bower with the following command.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">npm install -g bower</span>
-</pre></div>
-</div>
-<p>If you have already installed bower you can proceed with installing the javascript libraries directly. In the command line or git bash go to the directory apis-webpagestaticwebpagelibraries and run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">bower install</span>
-</pre></div>
-</div>
-<p>Finally the below command brings up a development server window with your new apis instance.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python manage.py runserver</span>
-</pre></div>
-</div>
+<p>After <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">up</span></code> you should now have a default APIS installation accessible under <a class="reference external" href="http://127.0.0.1:5000">http://127.0.0.1:5000</a>.</p>
 </section>
-<section id="serving-apis-via-apache-wsgi">
-<h2>Serving APIS via Apache WSGI<a class="headerlink" href="#serving-apis-via-apache-wsgi" title="Link to this heading"></a></h2>
-<p>If you plan to use APIS in production you should deploy it via a proper webserver. We use <a class="reference external" href="https://httpd.apache.org/">Apache</a> and <code class="docutils literal notranslate"><span class="pre">mod_wsgi</span></code> to
-do so. Our apche virtualhost config looks something like:</p>
-<div class="highlight-aconf notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;VirtualHost</span><span class="w"> </span><span class="s">*:80</span><span class="nt">&gt;</span>
-<span class="w">   </span><span class="nb">ServerName</span><span class="w"> </span>server_name
-<span class="w">   </span><span class="nb">ServerAlias</span><span class="w"> </span>server_alias<span class="w"> </span>#alias<span class="w"> </span>names<span class="w"> </span>if<span class="w"> </span>needed
-<span class="w">   </span><span class="nb">DocumentRoot</span><span class="w"> </span><span class="sx">/var/www/html</span><span class="w"> </span>#document<span class="w"> </span>root<span class="w"> </span>of<span class="w"> </span>your<span class="w"> </span>installation
-<span class="w">   </span><span class="nb">WSGIDaemonProcess</span><span class="w"> </span>YOUR_URL<span class="w"> </span><span class="k">user</span>=#1025<span class="w"> </span><span class="k">group</span>=#1025<span class="w"> </span>python-path=/var/www/html/
-<span class="w">   </span><span class="nb">WSGIProcessGroup</span><span class="w"> </span>YOUR_URL<span class="w"> </span><span class="k">user</span>=#1025<span class="w"> </span><span class="k">group</span>=#1025<span class="w"> </span>python-path=/var/www/html/
-<span class="w">   </span><span class="nb">WSGIScriptAlias</span><span class="w"> </span>/<span class="w"> </span><span class="sx">/var/www/html/apis-core/apis/wsgi.py</span>
-<span class="w">   </span><span class="nt">&lt;Directory</span><span class="w"> </span><span class="s">/var/www/html</span><span class="nt">&gt;</span>
-<span class="w">     </span><span class="nb">Require</span><span class="w"> </span><span class="k">all</span><span class="w"> </span>granted
-<span class="w">     </span><span class="nb">AllowOverride</span><span class="w"> </span><span class="k">All</span>
-<span class="w">     </span><span class="nb">Options</span><span class="w"> </span><span class="k">All</span><span class="w"> </span>granted
-<span class="w">   </span><span class="nt">&lt;/Directory&gt;</span>
-<span class="w">   </span><span class="nb">Alias</span><span class="w"> </span><span class="sx">/static</span><span class="w"> </span><span class="sx">/var/www/html/apis-core/static_dir</span><span class="w"> </span>#static<span class="w"> </span>directories<span class="w"> </span>to<span class="w"> </span>server<span class="w"> </span>via<span class="w"> </span>Apache
-<span class="w">   </span><span class="nb">Alias</span><span class="w"> </span><span class="sx">/downloads</span><span class="w"> </span><span class="sx">/var/www/html/apis-core/downloads</span>
-<span class="nt">&lt;/VirtualHost&gt;</span>
-</pre></div>
-</div>
-<p>If the database is connected and the virtualhost is configured you are good to go:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service<span class="w"> </span>apache2<span class="w"> </span>reload
-</pre></div>
-</div>
 </section>
 </section>
 
