@@ -41,13 +41,13 @@ view a copy of this license, visit
 http://creativecommons.org/licenses/by-sa/4.0/
 
 APIS contains the ["Material Symbols" font](https://fonts.google.com/icons)(commit ace1af0), which
-is licenced under the [Apache Licence Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+is licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
 
 
 Installation
 ------------
-
-Create a project using your favourite package manager:
+<!-- Installation -->
+Create a project using your favorite package manager:
 
 ```shell
 poetry new foobar-repository
@@ -75,10 +75,62 @@ poetry run ./manage.py runserver
 To use the APIS framework in your application, you will need to add the following dependencies to
 [`INSTALLED_APPS`](https://docs.djangoproject.com/en/4.2/ref/settings/#installed-apps):
 
-https://github.com/acdh-oeaw/apis-core-rdf/blob/9135728495be144d228adbdc77a392d75a617bdb/sample_project/settings.py#L17-L59
+```python
+INSTALLED_APPS = [
+    # our main app, containing the ontology (in the `models.py`)
+    # and our customizations
+    "sample_project",
+    # `apis_override_select2js` is a workaround for APIS'
+    # handling of autocomplete forms. It should be listed
+    # at the beginning of the list, to make sure the
+    # files shipped with it are served in precedence.
+    "apis_override_select2js",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # ui stuff used by APIS
+    "crispy_forms",
+    "crispy_bootstrap4",
+    "django_filters",
+    "django_tables2",
+    "dal",
+    "dal_select2",
+    # REST API
+    "rest_framework",
+    # swagger ui generation
+    "drf_spectacular",
+    # The APIS apps
+    "apis_core.core",
+    "apis_core.generic",
+    "apis_core.apis_metainfo",
+    "apis_core.apis_relations",
+    "apis_core.apis_entities",
+    # apis_vocabularies is deprecated, but there are
+    # still migrations depending on it - it will be dropped
+    # at some point
+    "apis_core.apis_vocabularies",
+    # APIS collections provide a collection model similar to
+    # SKOS collections and allow tagging of content
+    "apis_core.collections",
+    # APIS history modules tracks changes of instances over
+    # time and lets you revert changes
+    "apis_core.history",
+]
+```
 
 Finally, add the APIS urls to your applications [URL Dispatcher](https://docs.djangoproject.com/en/4.2/topics/http/urls/)
 
-https://github.com/acdh-oeaw/apis-core-rdf/blob/9135728495be144d228adbdc77a392d75a617bdb/sample_project/urls.py#L4-L10
+```python
+urlpatterns = [
+    path("", include("apis_core.urls", namespace="apis")),
+    # https://docs.djangoproject.com/en/5.0/topics/auth/default/#module-django.contrib.auth.views
+    path("accounts/", include("django.contrib.auth.urls")),
+    # https://docs.djangoproject.com/en/5.0/ref/contrib/admin/#hooking-adminsite-to-urlconf
+    path("admin/", admin.site.urls),
+]
+```
 
 Now you should be ready to roll. Start creating your entities in you `apis_ontology/models.py`.
