@@ -18,9 +18,7 @@ Welcome to APIS's documentation!
    configuration
    customization
    features
-   history
    glossary
-   collections
 
 .. toctree::
    :maxdepth: 2
