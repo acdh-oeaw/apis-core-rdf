@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Working with collections &mdash; APIS 0.23.2 documentation</title>
+  <title>Additional Features &mdash; APIS 0.23.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -21,7 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Glossary" href="glossary.html" /> 
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="Customization" href="customization.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,9 +52,16 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customization.html">Customization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="history.html">History plugin</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Additional Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#history-plugin">History plugin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#versionmixin">VersionMixin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-endpoint">API endpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#collections-plugin">Collections plugin</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Working with collections</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -76,9 +84,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Working with collections</li>
+      <li class="breadcrumb-item active">Additional Features</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/collections.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/features.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -86,8 +94,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="working-with-collections">
-<h1>Working with collections<a class="headerlink" href="#working-with-collections" title="Link to this heading"></a></h1>
+  <section id="additional-features">
+<h1>Additional Features<a class="headerlink" href="#additional-features" title="Link to this heading"></a></h1>
+<p>APIS is designed to be extensible and customizable. This section describes some
+additional features that are shipped with APIS and how to use them.</p>
+<section id="history-plugin">
+<h2>History plugin<a class="headerlink" href="#history-plugin" title="Link to this heading"></a></h2>
+<p>The <a class="reference internal" href="modules/apis_core.history.html#module-apis_core.history" title="apis_core.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.history</span></code></a> module provides versioning
+for APIS. It is based on the <a class="reference external" href="https://django-simple-history.readthedocs.io/en/latest/">django-simple-history</a>
+package.</p>
+<section id="versionmixin">
+<h3>VersionMixin<a class="headerlink" href="#versionmixin" title="Link to this heading"></a></h3>
+<p>The <a class="reference internal" href="modules/apis_core.history.html#apis_core.history.models.VersionMixin" title="apis_core.history.models.VersionMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.history.models.VersionMixin</span></code></a> class is a mixin
+that can be added to any model to enable versioning. It adds a <cite>history</cite>
+property to the model that returns a <cite>HistoricalRecords</cite> instance. Additionally
+it allows to override the date of the revision by setting the <cite>_history_date</cite>
+property of the model instance.
+To activate versioning for a model, simply inherit from <cite>VersionMixin</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_history.models</span> <span class="kn">import</span> <span class="n">VersionMixin</span>
+
+<span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">VersionMixin</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="api-endpoint">
+<h3>API endpoint<a class="headerlink" href="#api-endpoint" title="Link to this heading"></a></h3>
+<p>The <a class="reference internal" href="modules/apis_core.history.html#apis_core.history.api_views.GenericHistoryLog" title="apis_core.history.api_views.GenericHistoryLog"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.history.api_views.GenericHistoryLog</span></code></a> class is a viewset
+that provides a REST API endpoint for the version history of a model. It can be
+used to retrieve the version history of a model instance.
+The viewset can be accessed under <cite>/apis/api/entity_combined/&lt;contenttype:contenttype&gt;/&lt;int:pk&gt;/</cite>.
+It takes two mandatory url parameters: <cite>pk</cite> and <cite>contenttype</cite>. The <cite>pk</cite> parameter is the
+primary key of the model instance and the <cite>contenttype</cite> parameter is the name of
+the model class. The viewset returns a list of historical revisions of the model
+instance. It is also included in the <cite>apis_core</cite> API schema. The swagger documentation
+can be accessed under <cite>/apis/swagger/schema/swagger-ui/#/apis/apis_api_history_entity_edit_log_list</cite>.</p>
+</section>
+</section>
+<section id="collections-plugin">
+<h2>Collections plugin<a class="headerlink" href="#collections-plugin" title="Link to this heading"></a></h2>
 <p>APIS comes with models to make working with collections easier. These can be
 used to build vocabularies or a tagging solution or even a workflow solution.
 To use it, you have to add <cite>apis_core.collections</cite> to your <cite>INSTALLED_APPS</cite>.</p>
@@ -111,6 +157,7 @@ templatetag library. If you use them, you have to include
     <span class="o">...</span>
     <span class="n">path</span><span class="p">(</span><span class="s2">&quot;apis/collections/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.collections.urls&quot;</span><span class="p">)),</span>
     <span class="o">...</span>
+<span class="p">]</span>
 </pre></div>
 </div>
 <p>The templatetags are:</p>
@@ -143,12 +190,14 @@ process</cite> with <cite>done</cite> as parent and <cite>todo</cite> with <cite
 user can then on the click of a button change an the collection an instance is
 connected to)</p>
 </section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="glossary.html" class="btn btn-neutral float-left" title="Glossary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="customization.html" class="btn btn-neutral float-left" title="Customization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
