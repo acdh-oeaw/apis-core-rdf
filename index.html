@@ -120,11 +120,12 @@ terms of Creative Commons Attribution-ShareAlike 4.0 International License. To
 view a copy of this license, visit
 http://creativecommons.org/licenses/by-sa/4.0/</p>
 <p>APIS contains the <a class="reference external" href="https://fonts.google.com/icons">“Material Symbols” font</a>(commit ace1af0), which
-is licenced under the <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache Licence Version 2.0</a>.</p>
+is licensed under the <a class="reference external" href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License Version 2.0</a>.</p>
 </section>
 <section id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h3>
-<p>Create a project using your favourite package manager:</p>
+<!-- Installation -->
+<p>Create a project using your favorite package manager:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>new<span class="w"> </span>foobar-repository
 </pre></div>
 </div>
@@ -145,9 +146,61 @@ poetry<span class="w"> </span>run<span class="w"> </span>django-admin<span class
 </div>
 <p>To use the APIS framework in your application, you will need to add the following dependencies to
 <a class="reference external" href="https://docs.djangoproject.com/en/4.2/ref/settings/#installed-apps"><code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code></a>:</p>
-<p>https://github.com/acdh-oeaw/apis-core-rdf/blob/9135728495be144d228adbdc77a392d75a617bdb/sample_project/settings.py#L17-L59</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># our main app, containing the ontology (in the `models.py`)</span>
+    <span class="c1"># and our customizations</span>
+    <span class="s2">&quot;sample_project&quot;</span><span class="p">,</span>
+    <span class="c1"># `apis_override_select2js` is a workaround for APIS&#39;</span>
+    <span class="c1"># handling of autocomplete forms. It should be listed</span>
+    <span class="c1"># at the beginning of the list, to make sure the</span>
+    <span class="c1"># files shipped with it are served in precedence.</span>
+    <span class="s2">&quot;apis_override_select2js&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.admin&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.auth&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.contenttypes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.sessions&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.messages&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.staticfiles&quot;</span><span class="p">,</span>
+    <span class="c1"># ui stuff used by APIS</span>
+    <span class="s2">&quot;crispy_forms&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;crispy_bootstrap4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django_filters&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django_tables2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dal_select2&quot;</span><span class="p">,</span>
+    <span class="c1"># REST API</span>
+    <span class="s2">&quot;rest_framework&quot;</span><span class="p">,</span>
+    <span class="c1"># swagger ui generation</span>
+    <span class="s2">&quot;drf_spectacular&quot;</span><span class="p">,</span>
+    <span class="c1"># The APIS apps</span>
+    <span class="s2">&quot;apis_core.core&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;apis_core.generic&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;apis_core.apis_metainfo&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;apis_core.apis_relations&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;apis_core.apis_entities&quot;</span><span class="p">,</span>
+    <span class="c1"># apis_vocabularies is deprecated, but there are</span>
+    <span class="c1"># still migrations depending on it - it will be dropped</span>
+    <span class="c1"># at some point</span>
+    <span class="s2">&quot;apis_core.apis_vocabularies&quot;</span><span class="p">,</span>
+    <span class="c1"># APIS collections provide a collection model similar to</span>
+    <span class="c1"># SKOS collections and allow tagging of content</span>
+    <span class="s2">&quot;apis_core.collections&quot;</span><span class="p">,</span>
+    <span class="c1"># APIS history modules tracks changes of instances over</span>
+    <span class="c1"># time and lets you revert changes</span>
+    <span class="s2">&quot;apis_core.history&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
 <p>Finally, add the APIS urls to your applications <a class="reference external" href="https://docs.djangoproject.com/en/4.2/topics/http/urls/">URL Dispatcher</a></p>
-<p>https://github.com/acdh-oeaw/apis-core-rdf/blob/9135728495be144d228adbdc77a392d75a617bdb/sample_project/urls.py#L4-L10</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis&quot;</span><span class="p">)),</span>
+    <span class="c1"># https://docs.djangoproject.com/en/5.0/topics/auth/default/#module-django.contrib.auth.views</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;accounts/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;django.contrib.auth.urls&quot;</span><span class="p">)),</span>
+    <span class="c1"># https://docs.djangoproject.com/en/5.0/ref/contrib/admin/#hooking-adminsite-to-urlconf</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;admin/&quot;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
 <p>Now you should be ready to roll. Start creating your entities in you <code class="docutils literal notranslate"><span class="pre">apis_ontology/models.py</span></code>.</p>
 </section>
 </section>
