@@ -189,6 +189,43 @@
 
 
 
+<div class="viewcode-block" id="ModelSearchFilter">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.ModelSearchFilter">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelSearchFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This filter is a customized CharFilter that</span>
+<span class="sd">    uses the `generate_search_filter` method to</span>
+<span class="sd">    adapt the search filter to the model that is</span>
+<span class="sd">    searched.</span>
+<span class="sd">    It also extracts sets the help text based on</span>
+<span class="sd">    the fields searched.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;help_text&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;_default_search_fields&quot;</span><span class="p">):</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_default_search_fields</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">modelfields</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span>
+                <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">field</span><span class="o">.</span><span class="n">name</span>
+                    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">modelfields</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">))</span>
+                <span class="p">]</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">[</span><span class="s2">&quot;help_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Search in fields: </span><span class="si">{</span><span class="n">fields</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="ModelSearchFilter.filter">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.ModelSearchFilter.filter">[docs]</a>
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qs</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">generate_search_filter</span><span class="p">(</span><span class="n">qs</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span></div>
+</div>
+
+
+
 <div class="viewcode-block" id="related_entity">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.related_entity">[docs]</a>
 <span class="k">def</span> <span class="nf">related_entity</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -257,6 +294,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s2">&quot;related_property&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PropertyFilter</span><span class="p">(</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related Property&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">model</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s2">&quot;search&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ModelSearchFilter</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">move_to_end</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="s2">&quot;apis_core.history&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s2">&quot;changed_since&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">DateFilter</span><span class="p">(</span>
                 <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Changed since&quot;</span><span class="p">,</span>
