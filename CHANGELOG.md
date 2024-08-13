@@ -1,5 +1,45 @@
 # Changelog
 
+## [0.24.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.23.2...v0.24.0) (2024-08-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **utils:** drop `filtermethods`
+
+### Features
+
+* **apis_entities:** add `changed since` filter to entity filterset ([fde59c7](https://github.com/acdh-oeaw/apis-core-rdf/commit/fde59c777a2888ef7037506d2148a6766ca19f68)), closes [#335](https://github.com/acdh-oeaw/apis-core-rdf/issues/335)
+* **apis_entities:** add a default search field to the entity filtersets ([7cd7906](https://github.com/acdh-oeaw/apis-core-rdf/commit/7cd79063d763a1f91c28a0b77feced219b209213))
+* **apis_entities:** add external Uris to detail view ([69fe3ba](https://github.com/acdh-oeaw/apis-core-rdf/commit/69fe3ba581291f6c4acd44bfd48a22248116b238)), closes [#861](https://github.com/acdh-oeaw/apis-core-rdf/issues/861)
+
+
+### Bug Fixes
+
+* **apis_entities:** fix sparql queries for abstract base classes ([6ac2373](https://github.com/acdh-oeaw/apis-core-rdf/commit/6ac23730d13fe7c40726db15d5206a8fd8b29730))
+* **apis_entities:** set return type of serializer method ([900eb3a](https://github.com/acdh-oeaw/apis-core-rdf/commit/900eb3a0fa4e389f03ee526cd84abeec21f633d5))
+* **history:** set return types of serialzers methods ([667503a](https://github.com/acdh-oeaw/apis-core-rdf/commit/667503adcdfba96e733e0802d15bbde3f4e301d8))
+* **sample_project:** add autocomplete querysets for person and place ([8d6d8dd](https://github.com/acdh-oeaw/apis-core-rdf/commit/8d6d8ddcd5c7def101b471d13f767e2ccf90bfaf)), closes [#900](https://github.com/acdh-oeaw/apis-core-rdf/issues/900)
+
+
+### Documentation
+
+* add anker to README to allow for partial include in docs ([e0bbaa6](https://github.com/acdh-oeaw/apis-core-rdf/commit/e0bbaa68cf347768b5a58798980a66294f0aa26d)), closes [#1075](https://github.com/acdh-oeaw/apis-core-rdf/issues/1075)
+* add section `ontology` and describe how to add entities ([0603e34](https://github.com/acdh-oeaw/apis-core-rdf/commit/0603e3442668e7520cfa3b08d8fb042c9c986ebe))
+* improve configuration chapter ([7e24ec2](https://github.com/acdh-oeaw/apis-core-rdf/commit/7e24ec276afed46f4290145ae8189e8dee3dea4d))
+* improve customization chapter ([adb1eb0](https://github.com/acdh-oeaw/apis-core-rdf/commit/adb1eb0bb335d244d1a720f6373f6e1f934addf7))
+* improve glossary chapter ([356f3db](https://github.com/acdh-oeaw/apis-core-rdf/commit/356f3db8ea9fb8a854bf67a31781080726a573bd))
+* improve installation chapter of the docs ([454090a](https://github.com/acdh-oeaw/apis-core-rdf/commit/454090aa317d18828902812034b366b33488ef31))
+* move history and collections features to dedicated page ([4d8c1f2](https://github.com/acdh-oeaw/apis-core-rdf/commit/4d8c1f2fbc70d5d93ef2b38455d0825d610de65a))
+* remove not used and outdated doc sections ([5b107cc](https://github.com/acdh-oeaw/apis-core-rdf/commit/5b107cc08732ca78c6ea2f55e126f3c2b23f2706))
+* remove not used entries from index.rst ([e348c53](https://github.com/acdh-oeaw/apis-core-rdf/commit/e348c53b10dc7ca6174add7529f87e63dc24fc96))
+* reuse the pyproject metadata in sphinx docs ([e8de605](https://github.com/acdh-oeaw/apis-core-rdf/commit/e8de6050c65c0b720ff618eea795aad94abb8e27))
+
+
+### Code Refactoring
+
+* **utils:** drop `filtermethods` ([032c1be](https://github.com/acdh-oeaw/apis-core-rdf/commit/032c1be425fbc0afef1fb345dd1e76102e2de303)), closes [#790](https://github.com/acdh-oeaw/apis-core-rdf/issues/790)
+
 ## [0.23.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.23.1...v0.23.2) (2024-07-03)
 
 
