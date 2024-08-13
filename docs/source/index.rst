@@ -16,6 +16,7 @@ Welcome to APIS's documentation!
    installation
    configuration
    customization
+   features
    history
    glossary
    collections
