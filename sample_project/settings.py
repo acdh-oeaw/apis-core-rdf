@@ -101,3 +101,10 @@ DATABASES = {
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
+
+# for django spectacular to be able to generate the schema, we have to use its view inspector
+REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"}
+# we use our custom schema generator to make it pick up our custom routes
+SPECTACULAR_SETTINGS = {
+    "DEFAULT_GENERATOR_CLASS": "apis_core.generic.generators.CustomSchemaGenerator"
+}
