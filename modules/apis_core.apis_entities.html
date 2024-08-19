@@ -822,6 +822,40 @@ so that we can present a helpful representation of the object.</p>
 <section id="module-apis_core.apis_entities.views">
 <span id="apis-core-apis-entities-views-module"></span><h2>apis_core.apis_entities.views module<a class="headerlink" href="#module-apis_core.apis_entities.views" title="Link to this heading"></a></h2>
 <dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_entities.views.EntitiesAutocomplete">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_entities.views.</span></span><span class="sig-name descname"><span class="pre">EntitiesAutocomplete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/views.html#EntitiesAutocomplete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.views.EntitiesAutocomplete" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Select2QuerySetView</span></code></p>
+<p>This endpoint allows us to use autocomplete over multiple model classes.
+It takes a parameter <cite>entities</cite> which is a list of ContentType natural
+keys and searches for the query in all instances of those entities
+(using <cite>generate_search_filter</cite>, which means it uses a different search
+approach for every model).
+The return values of the endpoint are then prefixed with the id of the
+contenttype of the results, separated by an underscore.</p>
+<p>Example:
+Using this endpoint with the parameters:</p>
+<blockquote>
+<div><p>?entities=apis_ontology.person&amp;entities=apis_ontology.place&amp;q=ammer</p>
+</div></blockquote>
+<p>gives you all the persons and places that have <cite>ammer</cite> in their names
+and labels.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_entities.views.EntitiesAutocomplete.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/views.html#EntitiesAutocomplete.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.views.EntitiesAutocomplete.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Filter the queryset with GET[‘q’].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_entities.views.EntitiesAutocomplete.get_result_value">
+<span class="sig-name descname"><span class="pre">get_result_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/apis_entities/views.html#EntitiesAutocomplete.get_result_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.views.EntitiesAutocomplete.get_result_value" title="Link to this definition"></a></dt>
+<dd><p>Return the value of a result.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_entities.views.EntitiesDuplicate">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_entities.views.</span></span><span class="sig-name descname"><span class="pre">EntitiesDuplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/views.html#EntitiesDuplicate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.views.EntitiesDuplicate" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">View</span></code></p>
