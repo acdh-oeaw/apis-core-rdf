@@ -1,0 +1,26 @@
+<select id="selectcontainer-{{ widget.name }}"
+        name="{{ widget.name }}"
+        onclick="toggleAutocomplete('{{ widget.name }}');"
+        {% include "django/forms/widgets/attrs.html" %}></select>
+<span id="autocomplete-{{ widget.name }}"
+      style="display: none"
+      class="absolute autocomplete-container">
+  <div class="autocomplete-search-container">
+    <input type="search"
+           class="autocomplete-search"
+           autocomplete="off"
+           name="q"
+           placeholder="Type to search..."
+           id="search-{{ widget.name }}"
+           hx-get="{{ url }}"
+           hx-trigger="keyup changed, search, click, intersect"
+           hx-target="#scratchpad-{{ widget.name }}"
+           hx-on::after-request="parseresults('{{ widget.name }}')">
+  </div>
+  <div id="search-results-container-{{ widget.name }}"
+       class="search-results-container">
+    <ul id="search-results-{{ widget.name }}" class="resultlist">
+    </ul>
+  </div>
+</span>
+<div id="scratchpad-{{ widget.name }}" class="hidden"></div>
