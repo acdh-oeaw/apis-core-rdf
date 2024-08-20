@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # The APIS apps
     "apis_core.core",
+    "apis_core.relations",
     "apis_core.generic",
     "apis_core.apis_metainfo",
     "apis_core.apis_relations",
