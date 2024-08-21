@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.history.tests.test_simple_history &mdash; APIS 0.24.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=a9084e48"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                0.24.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ontology.html">Create your <span class="xref std std-term">ontology</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../customization.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../features.html">Additional Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://acdh-oeaw.github.io/apis-core-rdf/htmlcov/">Coverage</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.history.tests.test_simple_history</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.history.tests.test_simple_history</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">TempTriple</span>
+<span class="kn">from</span> <span class="nn">sample_project.models</span> <span class="kn">import</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Place</span><span class="p">,</span> <span class="n">Profession</span>
+
+
+<div class="viewcode-block" id="SimpleHistoryTestCase">
+<a class="viewcode-back" href="../../../../modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase">[docs]</a>
+<span class="k">class</span> <span class="nc">SimpleHistoryTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test of the simple_history package using the demo project&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SimpleHistoryTestCase.setUp">
+<a class="viewcode-back" href="../../../../modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.setUp">[docs]</a>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Person</span> <span class="o">=</span> <span class="n">Person</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Place</span> <span class="o">=</span> <span class="n">Place</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Profession</span> <span class="o">=</span> <span class="n">Profession</span>
+
+        <span class="n">prop</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">name_forward</span><span class="o">=</span><span class="s2">&quot;geboren in&quot;</span><span class="p">,</span> <span class="n">name_reverse</span><span class="o">=</span><span class="s2">&quot;Geburtsort von&quot;</span>
+        <span class="p">)</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">subj_class</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;person&quot;</span><span class="p">))</span>
+        <span class="n">prop</span><span class="o">.</span><span class="n">obj_class</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;place&quot;</span><span class="p">))</span>
+        <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="n">surname</span><span class="o">=</span><span class="s2">&quot;Doe&quot;</span><span class="p">)</span>
+        <span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Steyr&quot;</span><span class="p">,</span> <span class="n">_history_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SimpleHistoryTestCase.test_history">
+<a class="viewcode-back" href="../../../../modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests the simple version of attributes changed on a models instance.&quot;&quot;&quot;</span>
+        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">)</span>
+        <span class="n">pers</span><span class="o">.</span><span class="n">forename</span> <span class="o">=</span> <span class="s2">&quot;Jane&quot;</span>
+        <span class="n">pers</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">forename</span><span class="p">,</span> <span class="s2">&quot;Jane&quot;</span><span class="p">)</span>
+        <span class="n">pers_history</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s2">&quot;Jane&quot;</span><span class="p">,</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">most_recent</span><span class="p">()</span><span class="o">.</span><span class="n">forename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">forename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SimpleHistoryTestCase.test_history_through_triples">
+<a class="viewcode-back" href="../../../../modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_through_triples">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_history_through_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests the newly introduced function for retrieving triples for a specific version of a model instance.&quot;&quot;&quot;</span>
+        <span class="c1"># first entity</span>
+        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">)</span>
+        <span class="c1"># second entity</span>
+        <span class="n">place</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="c1"># create a triple</span>
+        <span class="n">tt1</span> <span class="o">=</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">subj</span><span class="o">=</span><span class="n">pers</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">(),</span> <span class="n">obj</span><span class="o">=</span><span class="n">place</span>
+        <span class="p">)</span>
+        <span class="c1"># test that we get one triple version for both entities</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">get_triples_for_version</span><span class="p">()),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">place</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">get_triples_for_version</span><span class="p">()),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># change the triple and test again</span>
+        <span class="n">tt1</span><span class="o">.</span><span class="n">start_date_written</span> <span class="o">=</span> <span class="s2">&quot;2020-01-01&quot;</span>
+        <span class="n">tt1</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">triples</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">get_triples_for_version</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">triples</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">triples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">start_date_written</span><span class="p">,</span> <span class="s2">&quot;2020-01-01&quot;</span><span class="p">)</span>
+        <span class="c1"># change the place and test again</span>
+        <span class="n">place2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;testplace&quot;</span><span class="p">)</span>
+        <span class="n">tt1</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="n">place2</span>
+        <span class="n">tt1</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">triples</span> <span class="o">=</span> <span class="n">place</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">get_triples_for_version</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">triples</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">triples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
+        <span class="n">triples</span> <span class="o">=</span> <span class="n">place2</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">get_triples_for_version</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">triples</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">triples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">place2</span><span class="p">)</span>
+        <span class="c1"># given that the function should return the latest version of a triple, we should get the new place</span>
+        <span class="n">triples</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">get_triples_for_version</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">triples</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">triples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">place2</span><span class="p">)</span>
+        <span class="c1"># test retrieving triples for a specific datetime</span>
+        <span class="n">triples</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">get_triples_for_version</span><span class="p">(</span>
+            <span class="n">history_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">triples</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SimpleHistoryTestCase.test_history_tag">
+<a class="viewcode-back" href="../../../../modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_tag">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_history_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests the version tag function.&quot;&quot;&quot;</span>
+        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">)</span>
+        <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">set_version_tag</span><span class="p">(</span><span class="s2">&quot;test_tag&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">version_tag</span><span class="p">,</span> <span class="s2">&quot;test_tag&quot;</span><span class="p">)</span>
+        <span class="n">pers_history</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers_history</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers_history</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">version_tag</span><span class="p">,</span> <span class="s2">&quot;test_tag&quot;</span><span class="p">)</span>
+        <span class="c1"># test with TemTriple</span>
+        <span class="n">pers2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;Jane&quot;</span><span class="p">,</span> <span class="n">surname</span><span class="o">=</span><span class="s2">&quot;Doe&quot;</span><span class="p">)</span>
+        <span class="n">place</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">subj</span><span class="o">=</span><span class="n">pers2</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">(),</span> <span class="n">obj</span><span class="o">=</span><span class="n">place</span><span class="p">)</span>
+        <span class="n">pers2</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">set_version_tag</span><span class="p">(</span><span class="s2">&quot;test_tag&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers2</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">version_tag</span><span class="p">,</span> <span class="s2">&quot;test_tag&quot;</span><span class="p">)</span>
+        <span class="n">triples</span> <span class="o">=</span> <span class="n">pers2</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">get_triples_for_version</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">triples</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">version_tag</span><span class="p">,</span> <span class="s2">&quot;test_tag&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SimpleHistoryTestCase.test_history_delete_entry">
+<a class="viewcode-back" href="../../../../modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_delete_entry">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_history_delete_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests the deletion of an entry.&quot;&quot;&quot;</span>
+        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">)</span>
+        <span class="n">pers</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="SimpleHistoryTestCase.test_history_merge">
+<a class="viewcode-back" href="../../../../modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_merge">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_history_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests the merge function of the Place model. This is still expected to fail.&quot;&quot;&quot;</span>
+        <span class="n">pl1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="n">pl2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="n">_history_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">pl1</span><span class="o">.</span><span class="n">merge_with</span><span class="p">([</span><span class="n">pl2</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;save()&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SimpleHistoryTestCase.test_m2m_save">
+<a class="viewcode-back" href="../../../../modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_m2m_save">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_m2m_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test if m2m profession is saved correctly.&quot;&quot;&quot;</span>
+        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">,</span>
+            <span class="n">_history_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">forename</span><span class="p">,</span> <span class="s2">&quot;John&quot;</span><span class="p">)</span>
+        <span class="n">pers_history</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Profession</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">)</span>
+        <span class="n">pers</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prof</span><span class="p">)</span>
+        <span class="n">pers</span><span class="o">.</span><span class="n">forename</span> <span class="o">=</span> <span class="s2">&quot;Jane&quot;</span>
+        <span class="n">pers</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="SimpleHistoryTestCase.test_history_date">
+<a class="viewcode-back" href="../../../../modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_date">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_history_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test that history is set correctly when not manually set.&quot;&quot;&quot;</span>
+        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="n">pers</span><span class="o">.</span><span class="n">forename</span> <span class="o">=</span> <span class="s2">&quot;Jane&quot;</span>
+        <span class="n">pers</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span> <span class="o">&lt;</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016-2024, Matthias Schlögl, Birger Schacht, K Kollmann, Saranya Balasubramanian.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
