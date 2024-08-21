@@ -172,7 +172,7 @@ class TripleTableBase(GenericTable):
     def render_end_date_written(self, record, value):
         if record.end_start_date is not None and record.end_end_date is not None:
             title_text = f"{record.end_start_date} - {record.end_end_date}"
-        elif record.start_date is not None:
+        elif record.end_date is not None:
             title_text = record.end_date
         else:
             return "—"
