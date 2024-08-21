@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Create your <span class="xref std std-term">ontology</span></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relations">Relations</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
@@ -121,6 +122,51 @@ For every <a class="reference internal" href="glossary.html#term-entity"><span c
 lists all instances for that <a class="reference internal" href="glossary.html#term-entity"><span class="xref std std-term">entity</span></a>, as well as a form for creating,
 updating, merging and deleting entities.</p>
 <img alt="Image showing the APIS Entity menu with one item labelled Persons" src="_images/ontology_entity_menu.png" />
+</section>
+<section id="relations">
+<h2>Relations<a class="headerlink" href="#relations" title="Link to this heading"></a></h2>
+<p>To use the relations module, you have to add it to your <code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code>. The module
+ships with templates that add the relation listing to templates from other <code class="docutils literal notranslate"><span class="pre">apis_core</span></code>
+modules, so we recommend to put the Relations module at the top of the apps list:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;apis_core.relations&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">INSTALLED_APPS</span>
+</pre></div>
+</div>
+<p>Relations have to inherit from <a class="reference internal" href="modules/apis_core.relations.html#apis_core.relations.models.Relation" title="apis_core.relations.models.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.relations.models.Relation</span></code></a>. You will
+have to set the attribute <cite>subj_model</cite> and <cite>obj_model</cite> which point
+to some Django model (can also be a list of Django models). A simple Relation between
+a person and a place could look like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apis_core.relations.models</span> <span class="kn">import</span> <span class="n">Relation</span>
+
+<span class="k">class</span> <span class="nc">PersonLivedInPlace</span><span class="p">(</span><span class="n">Relation</span><span class="p">):</span>
+     <span class="n">subj_model</span> <span class="o">=</span> <span class="n">Person</span>
+     <span class="n">obj_model</span> <span class="o">=</span> <span class="n">Place</span>
+</pre></div>
+</div>
+<p>You can define the class methods <cite>name</cite> and <cite>reverse_name</cite> to provide human readable
+strings for your relation model. They default to the <cite>verbose_name</cite> (<cite>name</cite>) and the
+<cite>verbose_name</cite> with the string ` reverse` appended (<cite>reverse_name</cite>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apis_core.relations.models</span> <span class="kn">import</span> <span class="n">Relation</span>
+
+<span class="k">class</span> <span class="nc">PersonLivedInPlace</span><span class="p">(</span><span class="n">Relation</span><span class="p">):</span>
+     <span class="n">subj_model</span> <span class="o">=</span> <span class="n">Person</span>
+     <span class="n">obj_model</span> <span class="o">=</span> <span class="n">Place</span>
+
+     <span class="nd">@classmethod</span>
+     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+         <span class="k">return</span> <span class="s2">&quot;lived in&quot;</span>
+
+     <span class="nd">@classmethod</span>
+     <span class="k">def</span> <span class="nf">reverse_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+         <span class="k">return</span> <span class="s2">&quot;had inhabitant&quot;</span>
+</pre></div>
+</div>
+<p>Now you can create instances of that relation on your entity pages.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This new module does not change any code in the existing datamodel or codebase. This
+prevents existing projects that use the legacy Triple or TempTriple implementation
+to break.</p>
+</div>
 </section>
 </section>
 

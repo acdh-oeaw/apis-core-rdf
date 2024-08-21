@@ -40,3 +40,55 @@ updating, merging and deleting entities.
 
 .. image:: img/ontology_entity_menu.png
    :alt: Image showing the APIS Entity menu with one item labelled Persons
+
+
+Relations
+^^^^^^^^^
+
+To use the relations module, you have to add it to your ``INSTALLED_APPS``. The module
+ships with templates that add the relation listing to templates from other ``apis_core``
+modules, so we recommend to put the Relations module at the top of the apps list:
+
+.. code-block:: python
+
+   INSTALLED_APPS = ["apis_core.relations"] + INSTALLED_APPS
+
+Relations have to inherit from :class:`apis_core.relations.models.Relation`. You will
+have to set the attribute `subj_model` and `obj_model` which point
+to some Django model (can also be a list of Django models). A simple Relation between
+a person and a place could look like this:
+
+.. code-block:: python
+
+   from apis_core.relations.models import Relation
+
+   class PersonLivedInPlace(Relation):
+        subj_model = Person
+        obj_model = Place
+
+You can define the class methods `name` and `reverse_name` to provide human readable
+strings for your relation model. They default to the `verbose_name` (`name`) and the
+`verbose_name` with the string ` reverse` appended (`reverse_name`).
+
+.. code-block:: python
+
+   from apis_core.relations.models import Relation
+
+   class PersonLivedInPlace(Relation):
+        subj_model = Person
+        obj_model = Place
+
+        @classmethod
+        def name(self) -> str:
+            return "lived in"
+
+        @classmethod
+        def reverse_name(self) -> str:
+            return "had inhabitant"
+
+Now you can create instances of that relation on your entity pages.
+
+.. note::
+   This new module does not change any code in the existing datamodel or codebase. This
+   prevents existing projects that use the legacy Triple or TempTriple implementation
+   to break.
