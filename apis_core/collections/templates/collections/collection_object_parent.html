@@ -1,6 +1,6 @@
 {% if collectionobject.collection.parent %}
-  <a href="{% url "collectionobjectparent" content_type.id object.id collectionobject.id %}?to={{ request.get_full_path }}"
-     hx-get="{% url "collectionobjectparent" content_type.id object.id collectionobject.id %}"
+  <a href="{% url "apis_core:collections:collectionobjectparent" content_type.id object.id collectionobject.id %}?to={{ request.get_full_path }}"
+     hx-get="{% url "apis_core:collections:collectionobjectparent" content_type.id object.id collectionobject.id %}"
      hx-swap="outerHTML"
      class="btn btn-sm btn-outline-dark col-{{ collectionobject.collection.name|slugify }}"
      title="Click to change to {{ collectionobject.collection.parent }}"

@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+app_name = "collections"
+
 urlpatterns = [
     path(
         "collectionobjecttoggle/<int:content_type_id>/<int:object_id>/<int:collection>",
