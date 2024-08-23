@@ -92,3 +92,20 @@ Now you can create instances of that relation on your entity pages.
    This new module does not change any code in the existing datamodel or codebase. This
    prevents existing projects that use the legacy Triple or TempTriple implementation
    to break.
+
+
+Upgrade from Triple to Relations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you have an existing project that uses the legacy Triple or TempTriple implementation
+you can upgrade to the new Relations module. The upgrade is not automatic, but we provide
+a management command that will add new relation classes to your `models.py`.
+
+.. code-block:: bash
+
+   python manage.py upgrade_triples_to_relations --file=MODELS_FILE_TO_UPGRADE --auto_format
+
+The `--file` argument is required and should point to the `models.py` file that you want
+to upgrade. The `--auto_format` argument is optional and will automatically format the
+`models.py` file after the upgrade using ruff. If you don't provide this argument or dont 
+have ruff installed you will have to format the file yourself.
