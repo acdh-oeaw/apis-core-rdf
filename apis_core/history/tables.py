@@ -18,12 +18,12 @@ class OriginalIDColumn(CustomTemplateColumn):
 
     template_name = "history/columns/original_id.html"
     orderable = False
-    verbose_name = "most recent"
+    verbose_name = "Original ID"
 
 
 class APISHistoryTableBaseTable(tables.Table):
     history_id = tables.Column(verbose_name="ID")
-    most_recent = OriginalIDColumn()
+    original_id = OriginalIDColumn()
     desc = DescriptionColumnHistory()
     view = ViewColumn()
 
