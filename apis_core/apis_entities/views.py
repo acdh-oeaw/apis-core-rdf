@@ -111,7 +111,11 @@ class EntitiesAutocomplete(autocomplete.Select2QuerySetView):
                 content_type = get_object_or_404(
                     ContentType, app_label=app_label, model=model
                 )
-                name = content_type.model_class()._meta.model_name
+                name = (
+                    RootObject.objects_inheritance.get_queryset()._get_ancestors_path(
+                        content_type.model_class()
+                    )
+                )
                 q |= Q(**{f"{name}__isnull": False}) & generate_search_filter(
                     content_type.model_class(), self.q, prefix=f"{name}__"
                 )
