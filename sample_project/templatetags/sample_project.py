@@ -7,7 +7,10 @@ register = template.Library()
 
 @register.simple_tag
 def password():
-    return pathlib.Path("/tmp/password.txt").read_text()
+    passwordfile = pathlib.Path("/tmp/password.txt")
+    if passwordfile.exists():
+        return passwordfile.read_text()
+    return None
 
 
 @register.simple_tag
