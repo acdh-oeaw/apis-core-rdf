@@ -130,8 +130,6 @@ class VersionMixin(models.Model):
             APISHistoryTableBase,
         ],
         custom_model_name=lambda x: f"Version{x}",
-        verbose_name="Version",
-        verbose_name_plural="Versions",
     )
     __history_date = None
 
