@@ -15,11 +15,14 @@ def possible_relation_types_from(obj) -> list[ContentType]:
 
 
 @register.simple_tag
-def get_relation_targets_from(relations) -> list[ContentType]:
+def get_relation_targets_from(obj) -> list[ContentType]:
+    relations = relation_content_types(any_model=type(obj))
     types = set()
-    for relation in relations:
-        types.update(relation.model_class().obj_list())
-        types.update(relation.model_class().subj_list())
+    for model in [relation.model_class() for relation in relations]:
+        if type(obj) in model.obj_list():
+            types.update(model.subj_list())
+        if type(obj) in model.subj_list():
+            types.update(model.obj_list())
     return sorted(
         list(map(ContentType.objects.get_for_model, types)), key=lambda x: x.name
     )

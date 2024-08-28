@@ -1,7 +1,7 @@
 {% load relations %}
 {% relations_from from_obj=object as relations %}
 {% possible_relation_types_from object as possible_relations %}
-{% get_relation_targets_from possible_relations as possible_targets %}
+{% get_relation_targets_from object as possible_targets %}
 {% for target in possible_targets %}
   <div class="card mb-2">
     <div class="card-header">{{ target.name }}</div>
