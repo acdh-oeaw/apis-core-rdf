@@ -55,8 +55,11 @@ modules, so we recommend to put the Relations module at the top of the apps list
 
 Relations have to inherit from :class:`apis_core.relations.models.Relation`. You will
 have to set the attribute `subj_model` and `obj_model` which point
-to some Django model (can also be a list of Django models). A simple Relation between
-a person and a place could look like this:
+to some Django model (can also be a list of Django models). The Django models can be
+specified by their class name or using the natural key of the model
+(`"APP_NAME.MODEL_CLASS"`).
+
+A simple Relation between a person and a place could look like this:
 
 .. code-block:: python
 
@@ -64,7 +67,7 @@ a person and a place could look like this:
 
    class PersonLivedInPlace(Relation):
         subj_model = Person
-        obj_model = Place
+        obj_model = "other_app.place" # defining the obj_model using the natural key notation
 
 You can define the class methods `name` and `reverse_name` to provide human readable
 strings for your relation model. They default to the `verbose_name` (`name`) and the
