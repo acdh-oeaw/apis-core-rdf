@@ -1,3 +1,4 @@
+import functools
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -27,6 +28,12 @@ class RelationModelBase(ModelBase):
                 )
 
             return new_class
+
+
+@functools.cache
+def get_by_natural_key(natural_key: str):
+    app_label, name = natural_key.lower().split(".")
+    return ContentType.objects.get_by_natural_key(app_label, name).model_class()
 
 
 class Relation(models.Model, GenericModel, metaclass=RelationModelBase):
@@ -72,12 +79,20 @@ class Relation(models.Model, GenericModel, metaclass=RelationModelBase):
         return self.subj_to_obj_text
 
     @classmethod
+    def _get_models(cls, model):
+        models = model if isinstance(model, list) else [model]
+        return [
+            get_by_natural_key(model) if isinstance(model, str) else model
+            for model in models
+        ]
+
+    @classmethod
     def subj_list(cls) -> list[models.Model]:
-        return cls.subj_model if isinstance(cls.subj_model, list) else [cls.subj_model]
+        return cls._get_models(cls.subj_model)
 
     @classmethod
     def obj_list(cls) -> list[models.Model]:
-        return cls.obj_model if isinstance(cls.obj_model, list) else [cls.obj_model]
+        return cls._get_models(cls.obj_model)
 
     @classmethod
     def name(cls) -> str:
