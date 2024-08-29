@@ -19,6 +19,22 @@ class SkosCollection(GenericModel, models.Model):
 
     class Meta:
         ordering = ["name"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=(
+                    "name",
+                    "parent",
+                ),
+                name="unique_name_parent",
+                nulls_distinct=False,
+                violation_error_message="The combination of name and parent collection must be unique",
+            ),
+            models.CheckConstraint(
+                check=~models.Q(name__contains="|"),
+                name="check_name_pipe",
+                violation_error_message="The name must not contain the pipe symbol: |",
+            ),
+        ]
 
     parent = models.ForeignKey("self", null=True, on_delete=models.CASCADE, blank=True)
     name = models.CharField(
