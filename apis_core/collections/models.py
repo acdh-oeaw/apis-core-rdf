@@ -5,6 +5,21 @@ from django.db import models
 from apis_core.generic.abc import GenericModel
 
 
+class SkosCollectionManager(models.Manager):
+    def get_by_full_path(self, name: str):
+        """
+        Return a collection specified by its full path, from the root colletion
+        to the leaf collection, delimited by `|`. I.e. if there is a collection
+        named `foo` and it has a parent named `bar` and `bar` does not have a
+        parent, then you can use the string "bar|foo" to get the `foo` collection.
+        """
+        names = name.split("|")
+        parent = None
+        while names:
+            parent = self.get(parent=parent, name=names.pop(0))
+        return parent
+
+
 class SkosCollection(GenericModel, models.Model):
     """
     SKOS collections are labeled and/or ordered groups of SKOS concepts.
@@ -61,6 +76,7 @@ class SkosCollection(GenericModel, models.Model):
         help_text="Person or organisation that made contributions to the collection"
         "If more than one list all using a semicolon ;",
     )
+    objects = SkosCollectionManager()
 
     def __str__(self):
         return self.name
