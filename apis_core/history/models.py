@@ -1,4 +1,6 @@
 from typing import Any
+
+from django.conf import settings
 from apis_core.generic.abc import GenericModel
 from apis_core.apis_metainfo.models import RootObject
 from django.urls import reverse
@@ -153,16 +155,49 @@ class VersionMixin(models.Model):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:history:add_new_history_version", args=[ct, self.id])
 
-    def get_history_data(self):
-        from apis_core.apis_relations.models import TempTriple
+    def _get_historical_relations(self):
+        ret = []
+        if "apis_core.relations" in settings.INSTALLED_APPS:
+            from apis_core.relations.utils import relation_content_types
 
-        data = []
-        prev_entry = None
+            ct = ContentType.objects.get_for_model(self)
+
+            rel_content_types = relation_content_types(any_model=type(self))
+            rel_models = [ct.model_class() for ct in rel_content_types]
+            rel_history_models = [
+                model for model in rel_models if issubclass(model, VersionMixin)
+            ]
+
+            for model in rel_history_models:
+                ret.append(
+                    model.history.filter(
+                        Q(subj_object_id=self.id, subj_content_type=ct)
+                        | Q(obj_object_id=self.id, obj_content_type=ct)
+                    ).order_by("history_id")
+                )
+        return ret
+
+    def _get_historical_triples(self):
         # TODO: this is a workaround to filter out Triple history entries and leave
         # TempTriple entries only. Fix when we switch to new relations model.
-        for entry in TempTriple.history.filter(
-            Q(subj_id=self.id) | Q(obj_id=self.id)
-        ).order_by("history_id"):
+        ret = []
+        if "apis_core.apis_relations" in settings.INSTALLED_APPS:
+            from apis_core.apis_relations.models import TempTriple
+
+            ret.append(
+                TempTriple.history.filter(Q(subj=self) | Q(obj=self)).order_by(
+                    "history_id"
+                )
+            )
+        return ret
+
+    def get_history_data(self):
+        data = []
+        prev_entry = None
+        queries = self._get_historical_relations() + self._get_historical_triples()
+        flatten_queries = [entry for query in queries for entry in query]
+
+        for entry in flatten_queries:
             if prev_entry is not None:
                 if (
                     entry.history_date == prev_entry.history_date
