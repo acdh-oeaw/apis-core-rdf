@@ -201,6 +201,23 @@
         <span class="n">sccos</span> <span class="o">=</span> <span class="n">sccos</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">collection__id__in</span><span class="o">=</span><span class="n">ids</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">sccos</span></div>
 
+
+
+<div class="viewcode-block" id="collection_session_toggle_by_id">
+<a class="viewcode-back" href="../../../../modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id">[docs]</a>
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span>
+    <span class="s2">&quot;collections/collection_session_toggle.html&quot;</span><span class="p">,</span> <span class="n">takes_context</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">collection_session_toggle_by_id</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provide a checkbox to toggle if a session collection is active.</span>
+<span class="sd">    The checkbox calls the CollectionSessionToggle view.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">session_collections</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;session_collections&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">context</span><span class="p">[</span><span class="s2">&quot;collection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">collection_id</span><span class="p">)</span>
+    <span class="n">context</span><span class="p">[</span><span class="s2">&quot;enabled&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">collection_id</span> <span class="ow">in</span> <span class="n">session_collections</span>
+    <span class="k">return</span> <span class="n">context</span></div>
+
 </pre></div>
 
            </div>

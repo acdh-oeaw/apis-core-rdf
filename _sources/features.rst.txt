@@ -112,3 +112,11 @@ implement a workflow (i.e. three collections: `done` as the root one, `in
 process` with `done` as parent and `todo` with `in process` as parent - the
 user can then on the click of a button change an the collection an instance is
 connected to)
+
+* :py:func:`apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id`
+
+This templatetag provides a checkbox that enables a collection as "session collection" - this
+means that if enabled, all new versions of instances will be added to this collection. This is
+implemented in :py:func:`apis_core.collections.signals.add_to_session_collection`. To use this
+feature, :py:mod:`apis_core.history` has to be enabled and the
+:py:class:`crum.CurrentRequestUserMiddleware` has to be added to the ``MIDDLEWARE``

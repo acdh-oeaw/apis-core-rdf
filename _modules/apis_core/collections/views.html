@@ -189,6 +189,48 @@
         <span class="k">return</span> <span class="n">context</span></div>
 </div>
 
+
+
+<div class="viewcode-block" id="CollectionSessionToggle">
+<a class="viewcode-back" href="../../../modules/apis_core.collections.html#apis_core.collections.views.CollectionSessionToggle">[docs]</a>
+<span class="k">class</span> <span class="nc">CollectionSessionToggle</span><span class="p">(</span><span class="n">LoginRequiredMixin</span><span class="p">,</span> <span class="n">TemplateView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Toggle the existence of an SkosCollection in the `session_collections`</span>
+<span class="sd">    session variable.</span>
+<span class="sd">    This can be used in combination with the</span>
+<span class="sd">    `collections.signals.add_to_session_collection` signal, to add objects</span>
+<span class="sd">    to a collection if the collections id is listed in the session variable.</span>
+<span class="sd">    The equivalent templateatag that calls this view is</span>
+<span class="sd">    `collections.templatetags.apis_collections.collection_session_toggle_by_id`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;collections/collection_session_toggle.html&quot;</span>
+
+<div class="viewcode-block" id="CollectionSessionToggle.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.collections.html#apis_core.collections.views.CollectionSessionToggle.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;collection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skoscollection</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;enabled&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skoscollection</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_collections</span>
+        <span class="k">return</span> <span class="n">ctx</span></div>
+
+
+<div class="viewcode-block" id="CollectionSessionToggle.get">
+<a class="viewcode-back" href="../../../modules/apis_core.collections.html#apis_core.collections.views.CollectionSessionToggle.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skoscollection</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span>
+            <span class="n">SkosCollection</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;skoscollection&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_collections</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;session_collections&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_collections</span> <span class="o">^=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">skoscollection</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;session_collections&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session_collections</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">redirect_to</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;to&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">redirect_to</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>
