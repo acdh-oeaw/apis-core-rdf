@@ -133,13 +133,15 @@ modules, so we recommend to put the Relations module at the top of the apps list
 </div>
 <p>Relations have to inherit from <a class="reference internal" href="modules/apis_core.relations.html#apis_core.relations.models.Relation" title="apis_core.relations.models.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.relations.models.Relation</span></code></a>. You will
 have to set the attribute <cite>subj_model</cite> and <cite>obj_model</cite> which point
-to some Django model (can also be a list of Django models). A simple Relation between
-a person and a place could look like this:</p>
+to some Django model (can also be a list of Django models). The Django models can be
+specified by their class name or using the natural key of the model
+(<cite>“APP_NAME.MODEL_CLASS”</cite>).</p>
+<p>A simple Relation between a person and a place could look like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">apis_core.relations.models</span> <span class="kn">import</span> <span class="n">Relation</span>
 
 <span class="k">class</span> <span class="nc">PersonLivedInPlace</span><span class="p">(</span><span class="n">Relation</span><span class="p">):</span>
      <span class="n">subj_model</span> <span class="o">=</span> <span class="n">Person</span>
-     <span class="n">obj_model</span> <span class="o">=</span> <span class="n">Place</span>
+     <span class="n">obj_model</span> <span class="o">=</span> <span class="s2">&quot;other_app.place&quot;</span> <span class="c1"># defining the obj_model using the natural key notation</span>
 </pre></div>
 </div>
 <p>You can define the class methods <cite>name</cite> and <cite>reverse_name</cite> to provide human readable
