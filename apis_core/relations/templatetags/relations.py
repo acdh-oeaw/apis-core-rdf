@@ -87,11 +87,16 @@ def relations_links(instance=None, tocontenttype=None, htmx=False):
     return {
         "relation_types": [
             (ct, ct.model_class())
-            for ct in utils.relation_content_types(combination=(frommodel, tomodel))
+            for ct in utils.relation_content_types(
+                subj_model=frommodel, obj_model=tomodel
+            )
         ],
-        "relation_types_reverse": utils.relation_content_types(
-            subj_model=tomodel, obj_model=frommodel
-        ),
+        "relation_types_reverse": [
+            (ct, ct.model_class())
+            for ct in utils.relation_content_types(
+                obj_model=frommodel, subj_model=tomodel
+            )
+        ],
         "instance": instance,
         "instancect": instancect,
         "contenttype": tocontenttype,
