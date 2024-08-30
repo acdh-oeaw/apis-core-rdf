@@ -86,6 +86,8 @@
              
   <h1>Source code for apis_core.history.models</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
@@ -278,18 +280,51 @@
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:history:add_new_history_version&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span></div>
 
 
+    <span class="k">def</span> <span class="nf">_get_historical_relations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="s2">&quot;apis_core.relations&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">apis_core.relations.utils</span> <span class="kn">import</span> <span class="n">relation_content_types</span>
+
+            <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+            <span class="n">rel_content_types</span> <span class="o">=</span> <span class="n">relation_content_types</span><span class="p">(</span><span class="n">any_model</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="n">rel_models</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span> <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">rel_content_types</span><span class="p">]</span>
+            <span class="n">rel_history_models</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">model</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">rel_models</span> <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">VersionMixin</span><span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">rel_history_models</span><span class="p">:</span>
+                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">model</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                        <span class="n">Q</span><span class="p">(</span><span class="n">subj_object_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">subj_content_type</span><span class="o">=</span><span class="n">ct</span><span class="p">)</span>
+                        <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj_object_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">obj_content_type</span><span class="o">=</span><span class="n">ct</span><span class="p">)</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;history_id&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
+    <span class="k">def</span> <span class="nf">_get_historical_triples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO: this is a workaround to filter out Triple history entries and leave</span>
+        <span class="c1"># TempTriple entries only. Fix when we switch to new relations model.</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="s2">&quot;apis_core.apis_relations&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
+
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">TempTriple</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="p">))</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+                    <span class="s2">&quot;history_id&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
 <div class="viewcode-block" id="VersionMixin.get_history_data">
 <a class="viewcode-back" href="../../../modules/apis_core.history.html#apis_core.history.models.VersionMixin.get_history_data">[docs]</a>
     <span class="k">def</span> <span class="nf">get_history_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">TempTriple</span>
-
         <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">prev_entry</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1"># TODO: this is a workaround to filter out Triple history entries and leave</span>
-        <span class="c1"># TempTriple entries only. Fix when we switch to new relations model.</span>
-        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">TempTriple</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
-            <span class="n">Q</span><span class="p">(</span><span class="n">subj_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;history_id&quot;</span><span class="p">):</span>
+        <span class="n">queries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_historical_relations</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_historical_triples</span><span class="p">()</span>
+        <span class="n">flatten_queries</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span> <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">query</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">flatten_queries</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">prev_entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="p">(</span>
                     <span class="n">entry</span><span class="o">.</span><span class="n">history_date</span> <span class="o">==</span> <span class="n">prev_entry</span><span class="o">.</span><span class="n">history_date</span>
