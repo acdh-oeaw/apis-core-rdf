@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load relations %}
+{% load static %}
+
+{% block relations-menu-items %}
+  {{ block.super }}
+  <a class="dropdown-item"
+     href="{% url "apis_core:generic:list" "relations.relation" %}">All relations</a>
+  <div class="dropdown-divider"></div>
+  <form class="mx-2">
+    <input type="text"
+           id="relationFilter"
+           class="form-control mb-2 form-control-sm"
+           placeholder="Filter relations...">
+  </form>
+  <div id="relationList">
+    {% relations_verbose_name_listview_url as relations %}
+    {% for verbose_name, list_url in relations %}
+      <a class="dropdown-item relation-item" href="{{ list_url }}">{{ verbose_name|capfirst }}</a>
+    {% endfor %}
+  </div>
+{% endblock relations-menu-items %}
+
+{% block scriptHeader %}
+  {{ block.super }}
+  <script src="{% static '/js/filter_relations_menu.js' %}"></script>
+{% endblock scriptHeader %}
+
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static '/css/relations.css' %}">
+{% endblock styles %}
