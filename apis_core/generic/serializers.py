@@ -6,6 +6,7 @@ from rest_framework.serializers import (
     Serializer,
     CharField,
     IntegerField,
+    SerializerMethodField,
 )
 from rest_framework.reverse import reverse
 
@@ -63,3 +64,23 @@ class ContentTypeInstanceSerializer(Serializer):
         app_label, model = data.get("content_type").split(".")
         content_type = get_object_or_404(ContentType, app_label=app_label, model=model)
         return get_object_or_404(content_type.model_class(), pk=data.get("id"))
+
+
+class SimpleObjectSerializer(GenericHyperlinkedModelSerializer):
+    label = SerializerMethodField()
+    content_type_key = SerializerMethodField()
+    content_type_name = SerializerMethodField()
+
+    class Meta:
+        fields = ["url", "label", "content_type_key", "content_type_name"]
+
+    def get_label(self, obj) -> str:
+        return str(obj)
+
+    def get_content_type_key(self, obj) -> str:
+        content_type = ContentType.objects.get_for_model(obj)
+        return f"{content_type.app_label}.{content_type.model}"
+
+    def get_content_type_name(self, obj) -> str:
+        content_type = ContentType.objects.get_for_model(obj)
+        return content_type.name
