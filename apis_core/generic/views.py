@@ -1,4 +1,5 @@
 from collections import namedtuple
+from typing import Optional
 
 from dal import autocomplete
 from django import forms, http
@@ -192,6 +193,13 @@ class List(
         )
         queryset = first_member_match(queryset_methods) or (lambda x: x)
         return self.filter_queryset(queryset(self.model.objects.all()))
+
+    def get_paginate_by(self, table_data) -> Optional[int]:
+        """
+        Override `get_paginate_by` from the tables2 TableMixinBase,
+        so we can set the paginate_by value as attribute of the table.
+        """
+        return getattr(self.get_table_class(), "paginate_by", None)
 
 
 class Detail(GenericModelMixin, PermissionRequiredMixin, DetailView):
