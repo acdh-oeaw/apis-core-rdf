@@ -74,3 +74,19 @@ def relation_match_target(relation, target: ContentType) -> bool:
     if not relation.forward and relation.subj_content_type == target:
         return True
     return False
+
+
+@functools.cache
+def get_all_relation_subj_and_obj() -> list[ContentType]:
+    """
+    Return the model classes of any model that is in some way
+    connected to a relation - either as obj or as subj
+
+    Returns:
+    list[ContentType]: A list of unique ContentTypes for related models.
+    """
+    related_models = set()
+    for rel in relation_content_types():
+        related_models.update(rel.model_class().subj_list())
+        related_models.update(rel.model_class().obj_list())
+    return [ContentType.objects.get_for_model(item) for item in related_models]
