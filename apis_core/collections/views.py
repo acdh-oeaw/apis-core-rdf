@@ -85,7 +85,7 @@ class CollectionSessionToggle(LoginRequiredMixin, TemplateView):
     `collections.signals.add_to_session_collection` signal, to add objects
     to a collection if the collections id is listed in the session variable.
     The equivalent templateatag that calls this view is
-    `collections.templatetags.apis_collections.collection_session_toggle_by_id`
+    `collections.templatetags.collections.collection_session_toggle_by_id`
     """
 
     template_name = "collections/collection_session_toggle.html"
