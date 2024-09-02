@@ -65,3 +65,11 @@ def genericmodel_content_types():
 @register.filter
 def get_attribute(obj, attribute):
     return getattr(obj, attribute, None)
+
+
+@register.filter
+def content_type_count(content_type):
+    """
+    Return the number of objects having a specific content type
+    """
+    return content_type.model_class().objects.count()
