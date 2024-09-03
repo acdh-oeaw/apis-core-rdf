@@ -10,6 +10,9 @@ from apis_core.relations.models import Relation
 class Profession(GenericModel, models.Model):
     name = models.CharField(blank=True, default="", max_length=1024)
 
+    def __str__(self):
+        return self.name
+
 
 class Person(VersionMixin, E21_Person, AbstractEntity):
     profession = models.ManyToManyField(Profession, blank=True)
