@@ -48,14 +48,26 @@ class GenericModelImporter:
     def mangle_data(self, data):
         return data
 
-    def create_instance(self):
+    def get_data(self, drop_unknown_fields=True):
+        """
+        fetch the data using the `request` method and
+        mangle the data using the `mangle_data` method.
+        If the `drop_unknown_fields` argument is true,
+        remove all fields from the data dict that do not
+        have an equivalent field in the model.
+        """
         data = self.request(self.import_uri)
         data = self.mangle_data(data)
-        # we are dropping all fields that are not part of the model
-        modelfields = [field.name for field in self.model._meta.fields]
-        fielddata = {key: data[key] for key in data if key in modelfields}
-        if fielddata:
-            return self.model.objects.create(**fielddata)
+        if drop_unknown_fields:
+            # we are dropping all fields that are not part of the model
+            modelfields = [field.name for field in self.model._meta.fields]
+            data = {key: data[key] for key in data if key in modelfields}
+        return data
+
+    def create_instance(self):
+        data = self.get_data()
+        if data:
+            return self.model.objects.create(**data)
         raise ImproperlyConfigured(
             f"Could not import {self.import_uri}. Data fetched was: {data}"
         )
