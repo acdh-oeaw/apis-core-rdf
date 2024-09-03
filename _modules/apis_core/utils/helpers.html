@@ -244,6 +244,16 @@
 
 
 
+<div class="viewcode-block" id="get_importer_for_model">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.helpers.get_importer_for_model">[docs]</a>
+<span class="k">def</span> <span class="nf">get_importer_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">object</span><span class="p">):</span>
+    <span class="n">importer_paths</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;importers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Importer&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">importer</span> <span class="o">:=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">importer_paths</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">importer</span>
+    <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No suitable importer found for </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="create_object_from_uri">
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.helpers.create_object_from_uri">[docs]</a>
 <span class="k">def</span> <span class="nf">create_object_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
@@ -252,15 +262,11 @@
             <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">uri</span><span class="o">.</span><span class="n">root_object</span>
         <span class="k">except</span> <span class="n">Uri</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
-            <span class="n">importer_paths</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;importers&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Importer&quot;</span><span class="p">)</span>
-            <span class="n">Importer</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">importer_paths</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">Importer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">importer</span> <span class="o">=</span> <span class="n">Importer</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-                <span class="n">instance</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">create_instance</span><span class="p">()</span>
-                <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">importer</span><span class="o">.</span><span class="n">get_uri</span><span class="p">,</span> <span class="n">root_object</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">instance</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No suitable importer found for </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">Importer</span> <span class="o">=</span> <span class="n">get_importer_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="n">importer</span> <span class="o">=</span> <span class="n">Importer</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">create_instance</span><span class="p">()</span>
+            <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">importer</span><span class="o">.</span><span class="n">get_uri</span><span class="p">,</span> <span class="n">root_object</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">instance</span>
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
