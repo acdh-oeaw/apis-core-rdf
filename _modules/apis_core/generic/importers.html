@@ -146,16 +146,31 @@
         <span class="k">return</span> <span class="n">data</span></div>
 
 
+<div class="viewcode-block" id="GenericModelImporter.get_data">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter.get_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drop_unknown_fields</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        fetch the data using the `request` method and</span>
+<span class="sd">        mangle the data using the `mangle_data` method.</span>
+<span class="sd">        If the `drop_unknown_fields` argument is true,</span>
+<span class="sd">        remove all fields from the data dict that do not</span>
+<span class="sd">        have an equivalent field in the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mangle_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">drop_unknown_fields</span><span class="p">:</span>
+            <span class="c1"># we are dropping all fields that are not part of the model</span>
+            <span class="n">modelfields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">modelfields</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
 <div class="viewcode-block" id="GenericModelImporter.create_instance">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter.create_instance">[docs]</a>
     <span class="k">def</span> <span class="nf">create_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mangle_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="c1"># we are dropping all fields that are not part of the model</span>
-        <span class="n">modelfields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
-        <span class="n">fielddata</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">modelfields</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">fielddata</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">fielddata</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
         <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Could not import </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="si">}</span><span class="s2">. Data fetched was: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span></div>
