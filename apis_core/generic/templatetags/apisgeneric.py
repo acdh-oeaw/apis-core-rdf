@@ -60,3 +60,8 @@ def genericmodel_content_types():
         )
     )
     return genericmodels
+
+
+@register.filter
+def get_attribute(obj, attribute):
+    return getattr(obj, attribute, None)
