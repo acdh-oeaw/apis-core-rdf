@@ -142,21 +142,24 @@ def triple_sidebar(obj: object, request, detail=True):
     return side_bar
 
 
+def get_importer_for_model(model: object):
+    importer_paths = module_paths(model, path="importers", suffix="Importer")
+    if importer := first_member_match(importer_paths):
+        return importer
+    raise ImproperlyConfigured(f"No suitable importer found for {model}")
+
+
 def create_object_from_uri(uri: str, model: object) -> object:
     if uri.startswith("http"):
         try:
             uri = Uri.objects.get(uri=uri)
             return uri.root_object
         except Uri.DoesNotExist:
-            importer_paths = module_paths(model, path="importers", suffix="Importer")
-            Importer = first_member_match(importer_paths)
-            if Importer is not None:
-                importer = Importer(uri, model)
-                instance = importer.create_instance()
-                uri = Uri.objects.create(uri=importer.get_uri, root_object=instance)
-                return instance
-            else:
-                raise ImproperlyConfigured(f"No suitable importer found for {model}")
+            Importer = get_importer_for_model(model)
+            importer = Importer(uri, model)
+            instance = importer.create_instance()
+            uri = Uri.objects.create(uri=importer.get_uri, root_object=instance)
+            return instance
     return None
 
 
