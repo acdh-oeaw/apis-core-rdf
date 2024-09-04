@@ -92,49 +92,11 @@ class AbstractEntity(RootObject):
             kwargs={"contenttype": entity, "pk": self.id},
         )
 
-    def merge_charfield(self, other, field):
-        res = getattr(self, field.name)
-        if not field.choices:
-            otherres = getattr(other, field.name, res)
-            if otherres != res:
-                res += f" ({otherres})"
-        setattr(self, field.name, res)
-
-    def merge_textfield(self, other, field):
-        res = getattr(self, field.name)
-        if getattr(other, field.name):
-            res += "\n" + f"Merged from {other}:\n" + getattr(other, field.name)
-        setattr(self, field.name, res)
-
-    def merge_booleanfield(self, other, field):
-        setattr(self, field.name, getattr(other, field.name))
-
     def merge_start_date_written(self, other):
         self.start_date_written = self.start_date_written or other.start_date_written
 
     def merge_end_date_written(self, other):
         self.end_date_written = self.end_date_written or other.end_date_written
-
-    def merge_fields(self, other):
-        """
-        This method iterates through the model fields and copies
-        data from other to self. It first tries to find a merge method
-        that is specific to that field (merge_{fieldname}) and then tries
-        to find a method that is specific to the type of the field (merge_{fieldtype})
-        It is called by the `merge_with` method.
-        """
-        for field in self._meta.fields:
-            fieldtype = field.get_internal_type().lower()
-            # if there is a `merge_{fieldname}` method in this model, use that one
-            if callable(getattr(self, f"merge_{field.name}", None)):
-                getattr(self, f"merge_{field.name}")(other)
-            # otherwise we check if there is a method for the field type and use that one
-            elif callable(getattr(self, f"merge_{fieldtype}", None)):
-                getattr(self, f"merge_{fieldtype}")(other, field)
-            else:
-                if not getattr(self, field.name):
-                    setattr(self, field.name, getattr(other, field.name))
-        self.save()
 
     def merge_with(self, entities):
         if self in entities:
