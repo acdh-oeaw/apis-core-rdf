@@ -6,8 +6,9 @@ from django import forms, http
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.exceptions import ImproperlyConfigured
 from django.forms import modelform_factory
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
 from django.urls import reverse, reverse_lazy
@@ -20,11 +21,17 @@ from django_tables2 import SingleTableMixin
 from django_tables2.columns import library
 from django_tables2.tables import table_factory
 
+from apis_core.apis_metainfo.models import Uri
 from apis_core.core.mixins import ListViewObjectFilterMixin
-from apis_core.utils.helpers import create_object_from_uri
+from apis_core.utils.helpers import create_object_from_uri, get_importer_for_model
 
 from .filtersets import GenericFilterSet
-from .forms import GenericImportForm, GenericMergeForm, GenericModelForm
+from .forms import (
+    GenericEnrichForm,
+    GenericImportForm,
+    GenericMergeForm,
+    GenericModelForm,
+)
 from .helpers import (
     first_member_match,
     generate_search_filter,
@@ -380,6 +387,79 @@ class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
     def form_valid(self, form):
         self.object.merge_with([self.other])
         messages.info(self.request, f"Merged values of {self.other} into {self.object}")
+        return super().form_valid(form)
+
+
+class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
+    """
+    Enrich an entity with data from an external source
+    If so, it uses the proper Importer to get the data from the Uri and
+    provides the user with a form to select the fields that should be updated.
+    """
+
+    permission_action_required = "change"
+    template_name = "generic/generic_enrich.html"
+    form_class = GenericEnrichForm
+    importer_class = None
+
+    def setup(self, *args, **kwargs):
+        super().setup(*args, **kwargs)
+        self.object = get_object_or_404(self.model, pk=self.kwargs["pk"])
+        self.uri = self.request.GET.get("uri")
+        if not self.uri:
+            messages.error(self.request, "No uri parameter specified.")
+        self.importer_class = get_importer_for_model(self.model)
+
+    def get(self, *args, **kwargs):
+        if self.uri.isdigit():
+            return redirect(self.object.get_merge_url(self.uri))
+        try:
+            uriobj = Uri.objects.get(uri=self.uri)
+            if uriobj.root_object.id != self.object.id:
+                messages.info(
+                    self.request,
+                    f"Object with URI {self.uri} already exists, you were redirected to the merge form.",
+                )
+                return redirect(self.object.get_merge_url(uriobj.root_object.id))
+        except Uri.DoesNotExist:
+            pass
+        return super().get(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["object"] = self.object
+        ctx["uri"] = self.uri
+        return ctx
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs["instance"] = self.object
+        try:
+            importer = self.importer_class(self.uri, self.model)
+            kwargs["data"] = importer.get_data()
+        except ImproperlyConfigured as e:
+            messages.error(self.request, e)
+        return kwargs
+
+    def form_valid(self, form):
+        """
+        Go through all the form fields and extract the ones that
+        start with `update_` and that are set (those are the checkboxes that
+        select which fields to update).
+        Then use the importers `import_into_instance` method to set those
+        fields values on the model instance.
+        """
+        update_fields = [
+            key.removeprefix("update_")
+            for (key, value) in self.request.POST.items()
+            if key.startswith("update_") and value
+        ]
+        importer = self.importer_class(self.uri, self.model)
+        importer.import_into_instance(self.object, fields=update_fields)
+        messages.info(self.request, f"Updated fields {update_fields}")
+        uri, created = Uri.objects.get_or_create(uri=self.uri, root_object=self.object)
+        if created:
+            messages.info(self.request, f"Added uri {self.uri} to {self.object}")
         return super().form_valid(form)
 
     def get_success_url(self):

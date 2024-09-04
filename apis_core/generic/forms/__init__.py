@@ -93,3 +93,21 @@ class GenericMergeForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit("submit", "Merge"))
+
+
+class GenericEnrichForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        data = kwargs.pop("data", {})
+        instance = kwargs.pop("instance", None)
+        super().__init__(*args, **kwargs)
+        for key, value in data.items():
+            update_key = f"update_{key}"
+            self.fields[update_key] = forms.BooleanField(
+                required=False,
+                label=f"Update {key} from {getattr(instance, key)} to {value}",
+            )
+
+            self.fields[key] = forms.CharField(initial=value, required=False)
+            self.fields[key].widget = self.fields[key].hidden_widget()
+        self.helper = FormHelper()
+        self.helper.add_input(Submit("submit", "Submit"))

@@ -1,0 +1,14 @@
+{% extends basetemplate|default:"base.html" %}
+{% load generic %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="container">
+    {% if form.fields %}
+      <h4 class="mb-4">
+        Updating <a href="{{ object.get_absolute_url }}">{{ object }}</a> using the data from <a href="{{ uri }}">{{ uri }}</a>
+      </h4>
+      {% crispy form form.helper %}
+    {% endif %}
+  </div>
+{% endblock %}

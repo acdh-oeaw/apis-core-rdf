@@ -54,6 +54,7 @@ urlpatterns = [
                     views.MergeWith.as_view(),
                     name="merge",
                 ),
+                path("enrich/<int:pk>", views.Enrich.as_view(), name="enrich"),
                 path("autocomplete", views.Autocomplete.as_view(), name="autocomplete"),
                 path("import", views.Import.as_view(), name="import"),
                 path(
