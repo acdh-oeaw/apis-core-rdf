@@ -1,3 +1,4 @@
+from functools import cache
 import json
 import urllib
 from django.core.exceptions import ImproperlyConfigured
@@ -5,6 +6,7 @@ from apis_core.utils.normalize import clean_uri
 from apis_core.utils.rdf import get_definition_and_attributes_from_uri
 
 
+@cache
 class GenericModelImporter:
     """
     A generic importer class
@@ -31,6 +33,7 @@ class GenericModelImporter:
     def clean_uri(self, uri):
         return clean_uri(uri)
 
+    @cache
     def request(self, uri):
         # we first try to use the RDF parser
         try:
