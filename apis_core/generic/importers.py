@@ -62,12 +62,20 @@ class GenericModelImporter:
             # we are dropping all fields that are not part of the model
             modelfields = [field.name for field in self.model._meta.fields]
             data = {key: data[key] for key in data if key in modelfields}
+        if not data:
+            raise ImproperlyConfigured(
+                f"Could not import {self.import_uri}. Data fetched was: {data}"
+            )
         return data
 
-    def create_instance(self):
+    def import_into_instance(self, instance, fields="__all__"):
         data = self.get_data()
-        if data:
-            return self.model.objects.create(**data)
-        raise ImproperlyConfigured(
-            f"Could not import {self.import_uri}. Data fetched was: {data}"
-        )
+        if fields == "__all__":
+            fields = data.keys()
+        for field in fields:
+            if hasattr(instance, field) and field in data.keys():
+                setattr(instance, field, data[field])
+        instance.save()
+
+    def create_instance(self):
+        return self.model.objects.create(**self.get_data(drop_unknown_fields=True))
