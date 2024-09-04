@@ -86,3 +86,10 @@ class GenericModelForm(forms.ModelForm):
                         url, attrs={"data-html": True}
                     )
                     self.fields[field].widget.choices = self.fields[field].choices
+
+
+class GenericMergeForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit("submit", "Merge"))

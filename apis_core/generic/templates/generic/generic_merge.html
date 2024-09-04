@@ -1,0 +1,42 @@
+{% extends basetemplate|default:"base.html" %}
+{% load apisgeneric %}
+{% load apis_history_templatetags %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/history.css' %}" />
+{% endblock styles %}
+
+{% block content %}
+  <div class="container">
+    <h4 class="mb-4">
+      Merging values of <a href="{{ other.get_absolute_url }}">{{ other }}</a> into <a href="{{ object.get_absolute_url }}">{{ object }}</a>
+    </h4>
+    <div class="alert alert-warning" role="alert">
+      After the merge <a href="{{ other.get_absolute_url }}">{{ other }}</a> will be deleted!
+    </div>
+    <table class="table table-sm table-hover table-bordered difftable">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Old value</th>
+          <th>New value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for change in changes %}
+          <tr>
+            <th>{{ change.field }}</th>
+            <td>{{ change|get_diff_old }}</td>
+            <td>{{ change|get_diff_new }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if form %}
+      {% crispy form form.helper %}
+    {% endif %}
+  </div>
+{% endblock %}

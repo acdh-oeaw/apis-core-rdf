@@ -49,6 +49,11 @@ urlpatterns = [
                 path("create", views.Create.as_view(), name="create"),
                 path("delete/<int:pk>", views.Delete.as_view(), name="delete"),
                 path("update/<int:pk>", views.Update.as_view(), name="update"),
+                path(
+                    "merge/<int:pk>/<int:otherpk>",
+                    views.MergeWith.as_view(),
+                    name="merge",
+                ),
                 path("autocomplete", views.Autocomplete.as_view(), name="autocomplete"),
                 path("import", views.Import.as_view(), name="import"),
                 path(

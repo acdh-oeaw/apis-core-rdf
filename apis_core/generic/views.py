@@ -1,8 +1,12 @@
+from collections import namedtuple
+
 from dal import autocomplete
 from django import forms, http
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.forms import modelform_factory
+from django.shortcuts import get_object_or_404
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
 from django.urls import reverse, reverse_lazy
@@ -19,7 +23,7 @@ from apis_core.core.mixins import ListViewObjectFilterMixin
 from apis_core.utils.helpers import create_object_from_uri
 
 from .filtersets import GenericFilterSet
-from .forms import GenericImportForm, GenericModelForm
+from .forms import GenericImportForm, GenericMergeForm, GenericModelForm
 from .helpers import (
     first_member_match,
     generate_search_filter,
@@ -327,6 +331,47 @@ class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
 
     def form_valid(self, form):
         self.object = form.cleaned_data["url"]
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
+class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
+    """
+    Generic merge view.
+    """
+
+    permission_action_required = "change"
+    form_class = GenericMergeForm
+    template_name = "generic/generic_merge.html"
+
+    def setup(self, *args, **kwargs):
+        super().setup(*args, **kwargs)
+        self.object = get_object_or_404(self.model, pk=self.kwargs["pk"])
+        self.other = get_object_or_404(self.model, pk=self.kwargs["otherpk"])
+
+    def get_context_data(self, **kwargs):
+        """
+        The context consists of the two objects that are merged as well
+        as a list of changes. Those changes are presented in the view as
+        a table with diffs
+        """
+        Change = namedtuple("Change", "field old new")
+        ctx = super().get_context_data(**kwargs)
+        ctx["changes"] = []
+        for field in self.object._meta.fields:
+            newval = self.object.get_field_value_after_merge(self.other, field)
+            ctx["changes"].append(
+                Change(field.verbose_name, getattr(self.object, field.name), newval)
+            )
+        ctx["object"] = self.object
+        ctx["other"] = self.other
+        return ctx
+
+    def form_valid(self, form):
+        self.object.merge_with([self.other])
+        messages.info(self.request, f"Merged values of {self.other} into {self.object}")
         return super().form_valid(form)
 
     def get_success_url(self):
