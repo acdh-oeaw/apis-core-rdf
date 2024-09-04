@@ -5,6 +5,10 @@ from django.core.exceptions import ImproperlyConfigured
 from apis_core.utils.normalize import clean_uri
 from apis_core.utils.rdf import get_definition_and_attributes_from_uri
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 @cache
 class GenericModelImporter:
@@ -39,14 +43,15 @@ class GenericModelImporter:
         try:
             defn, data = get_definition_and_attributes_from_uri(uri, self.model)
             return data
-        except Exception:
-            pass
+        except Exception as e:
+            logging.debug(e)
         # if everything else fails, try parsing json
         # if even that does not help, return an empty dict
         try:
             return json.loads(urllib.request.urlopen(uri).read())
-        except Exception:
-            return {}
+        except Exception as e:
+            logging.debug(e)
+        return {}
 
     def mangle_data(self, data):
         return data
