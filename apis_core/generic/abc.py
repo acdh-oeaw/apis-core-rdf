@@ -20,6 +20,10 @@ class GenericModel:
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:update", args=[ct, self.id])
 
+    def get_enrich_url(self):
+        ct = ContentType.objects.get_for_model(self)
+        return reverse("apis_core:generic:enrich", args=[ct, self.id])
+
     def get_absolute_url(self):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:detail", args=[ct, self.id])
