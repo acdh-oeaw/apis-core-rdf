@@ -1,6 +1,13 @@
 <h5 class="card-title">Linked Open Data</h5>
 {% if object.uri_set %}
   <ul>
-    {% for uri in object.uri_set.all %}<li>{{ uri.uri | urlize }}</li>{% endfor %}
+    {% for uri in object.uri_set.all %}
+      <li>
+        {{ uri.uri | urlize }}
+        {% if object.get_change_permission in perms %}
+          <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}"><span class="material-symbols-outlined">update</span></a>
+        {% endif %}
+      </li>
+    {% endfor %}
   </ul>
 {% endif %}
