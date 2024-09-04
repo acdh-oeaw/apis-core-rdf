@@ -28,6 +28,10 @@ class GenericModel:
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:delete", args=[ct, self.id])
 
+    def get_merge_url(self, other_id):
+        ct = ContentType.objects.get_for_model(self)
+        return reverse("apis_core:generic:merge", args=[ct, self.id, other_id])
+
     def get_create_success_url(self):
         return self.get_absolute_url()
 
