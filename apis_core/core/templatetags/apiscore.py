@@ -1,6 +1,7 @@
 from django import template
 from django.conf import settings
 from apis_core import __version__
+from django.urls import reverse
 
 
 register = template.Library()
@@ -29,3 +30,8 @@ def model_meta(content_type, field):
 @register.simple_tag
 def apis_version():
     return __version__
+
+
+@register.inclusion_tag("partials/api.html")
+def api():
+    return {"api_root": reverse("apis_core:apis_api:api-root")}
