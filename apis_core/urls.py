@@ -48,10 +48,6 @@ urlpatterns = [
         include("apis_core.apis_relations.urls", namespace="apis_relations"),
     ),
     path(
-        "metainfo/",
-        include("apis_core.apis_metainfo.urls", namespace="apis_metainfo"),
-    ),
-    path(
         "api/", include((router.urls, "apis_core"), namespace="apis_api")
     ),  # routers do not support namespaces out of the box
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
