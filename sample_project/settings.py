@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # The APIS apps
     "apis_core.relations",
-    "apis_core.core",
-    "apis_core.generic",
     "apis_core.apis_metainfo",
     "apis_core.apis_relations",
     "apis_core.apis_entities",
@@ -57,6 +55,10 @@ INSTALLED_APPS = [
     # APIS history modules tracks changes of instances over
     # time and lets you revert changes
     "apis_core.history",
+    # The core APIS apps come last, so other apps can override
+    # and extend their templates
+    "apis_core.generic",
+    "apis_core.core",
 ]
 
 MIDDLEWARE = [
