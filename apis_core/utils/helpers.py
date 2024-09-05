@@ -176,9 +176,12 @@ def get_html_diff(a, b, show_a=True, show_b=True, shorten=0):
     def style_insert(text):
         return f"<span class='diff-insert'>{text}</span>"
 
-    if a in ["", None]:
+    nones = ["", None]
+    if a in nones and b in nones:
+        result = ""
+    elif a in nones:
         result = style_insert(b) if show_b else ""
-    elif b in ["", None]:
+    elif b in nones:
         result = style_remove(a) if show_a else ""
     else:
         result = ""
