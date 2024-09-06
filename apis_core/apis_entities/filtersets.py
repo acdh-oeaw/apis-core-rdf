@@ -1,16 +1,17 @@
 import django_filters
-from django.db import models
-from django.db.models import Q, Case, When, Value
-from django.db.models.functions import Concat
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from django.db.models import Case, Q, Value, When
+from django.db.models.functions import Concat
 from django.forms import DateInput
-from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
-from apis_core.apis_relations.models import Property, Triple
-from apis_core.generic.helpers import generate_search_filter
+from simple_history.utils import get_history_manager_for_model
+
 from apis_core.apis_entities.utils import get_entity_classes
 from apis_core.apis_metainfo.models import RootObject
-from django.contrib.contenttypes.models import ContentType
-from simple_history.utils import get_history_manager_for_model
+from apis_core.apis_relations.models import Property, Triple
+from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
+from apis_core.generic.helpers import generate_search_filter
 
 ABSTRACT_ENTITY_COLUMNS_EXCLUDE = [
     "rootobject_ptr",

@@ -1,3 +1,4 @@
+from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
@@ -7,12 +8,11 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.views import View
 from django.views.generic.edit import FormView
-from dal import autocomplete
 
-from apis_core.generic.views import GenericModelMixin, Update
 from apis_core.apis_entities.forms import EntitiesMergeForm
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.helpers import generate_search_filter
+from apis_core.generic.views import GenericModelMixin, Update
 
 
 class EntitiesUpdate(Update):

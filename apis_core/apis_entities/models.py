@@ -1,16 +1,16 @@
-import re
 import functools
+import re
 
-from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+from django.db.models.query import QuerySet
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.urls import reverse, NoReverseMatch
-from django.db.models.query import QuerySet
+from django.urls import NoReverseMatch, reverse
 
+from apis_core.apis_entities import signals
 from apis_core.apis_metainfo.models import RootObject, Uri
 from apis_core.apis_relations.models import TempTriple
-from apis_core.apis_entities import signals
 
 BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from apis_core.generic.serializers import GenericHyperlinkedIdentityField
 
 
