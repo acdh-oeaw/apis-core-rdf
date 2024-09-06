@@ -1,4 +1,5 @@
 import django_tables2 as tables
+
 from apis_core.generic.helpers import permission_fullname
 
 

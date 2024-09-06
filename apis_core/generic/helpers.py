@@ -1,8 +1,8 @@
 import functools
 import logging
 
-from django.db.models import CharField, TextField, Q, Model
 from django.contrib.auth import get_permission_codename
+from django.db.models import CharField, Model, Q, TextField
 from django.utils import module_loading
 
 logger = logging.getLogger(__name__)

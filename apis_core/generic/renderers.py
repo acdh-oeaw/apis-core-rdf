@@ -1,6 +1,7 @@
-from rest_framework import renderers
-from rdflib import Graph
 import logging
+
+from rdflib import Graph
+from rest_framework import renderers
 
 logger = logging.getLogger(__name__)
 

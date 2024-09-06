@@ -1,34 +1,32 @@
-from django import http
-from django import forms
+from dal import autocomplete
+from django import forms, http
 from django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.forms import modelform_factory
+from django.template.exceptions import TemplateDoesNotExist
+from django.template.loader import select_template
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
-from django.urls import reverse, reverse_lazy
-from django.forms import modelform_factory
-from django.template.loader import select_template
-from django.template.exceptions import TemplateDoesNotExist
-
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
-from django_tables2.tables import table_factory
 from django_tables2.columns import library
-from dal import autocomplete
-
-from .tables import GenericTable
-from .filtersets import filterset_factory, GenericFilterSet
-from .forms import GenericModelForm, GenericImportForm
-from .helpers import (
-    template_names_via_mro,
-    generate_search_filter,
-    permission_fullname,
-    module_paths,
-    first_member_match,
-)
-from apis_core.utils.helpers import create_object_from_uri
+from django_tables2.tables import table_factory
 
 from apis_core.core.mixins import ListViewObjectFilterMixin
+from apis_core.utils.helpers import create_object_from_uri
+
+from .filtersets import GenericFilterSet, filterset_factory
+from .forms import GenericImportForm, GenericModelForm
+from .helpers import (
+    first_member_match,
+    generate_search_filter,
+    module_paths,
+    permission_fullname,
+    template_names_via_mro,
+)
+from .tables import GenericTable
 
 
 class Overview(TemplateView):

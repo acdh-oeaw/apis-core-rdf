@@ -1,11 +1,12 @@
-from functools import cache
 import json
+import logging
 import urllib
+from functools import cache
+
 from django.core.exceptions import ImproperlyConfigured
+
 from apis_core.utils.normalize import clean_uri
 from apis_core.utils.rdf import get_definition_and_attributes_from_uri
-
-import logging
 
 logger = logging.getLogger(__name__)
 

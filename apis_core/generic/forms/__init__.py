@@ -1,11 +1,12 @@
-from django import forms
-from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from dal import autocomplete
-from apis_core.generic.forms.fields import ModelImportChoiceField
+from django import forms
+from django.contrib.contenttypes.models import ContentType
+from django.urls import reverse
+
 from apis_core.generic.abc import GenericModel
+from apis_core.generic.forms.fields import ModelImportChoiceField
 
 
 class GenericImportForm(forms.Form):

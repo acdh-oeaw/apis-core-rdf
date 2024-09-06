@@ -1,8 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
-from rest_framework.routers import DefaultRouter, APIRootView
+from rest_framework.reverse import reverse
+from rest_framework.routers import APIRootView, DefaultRouter
 
 from apis_core.generic.abc import GenericModel
-from rest_framework.reverse import reverse
 
 
 class CustomAPIRootView(APIRootView):

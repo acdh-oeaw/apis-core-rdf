@@ -1,11 +1,12 @@
 from django.contrib.contenttypes.models import ContentType
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.urls import include, path, register_converter
-from django.http import Http404
 from rest_framework import routers
-from .abc import GenericModel
 
-from apis_core.generic import views, api_views
+from apis_core.generic import api_views, views
+
+from .abc import GenericModel
 
 app_name = "generic"
 

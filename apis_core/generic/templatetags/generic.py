@@ -2,8 +2,8 @@ from itertools import chain
 
 from django import template
 from django.contrib.contenttypes.models import ContentType
-from apis_core.generic.abc import GenericModel
 
+from apis_core.generic.abc import GenericModel
 
 register = template.Library()
 
