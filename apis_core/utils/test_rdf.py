@@ -5,8 +5,8 @@ from pathlib import Path
 
 from django.test import TestCase
 
-from apis_core.utils import rdf
 from apis_core.apis_entities.abc import E21_Person, E53_Place, E74_Group
+from apis_core.utils import rdf
 
 # use `curl -H "Accept: application/rdf+xml" -L $URI` to fetch data
 

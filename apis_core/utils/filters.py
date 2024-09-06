@@ -1,8 +1,9 @@
 from django.db.models import Q
 from django.template import loader
+from rest_framework.filters import SearchFilter
+
 from apis_core.apis_entities.utils import get_entity_classes
 from apis_core.generic.helpers import generate_search_filter
-from rest_framework.filters import SearchFilter
 
 
 class CustomSearchFilter(SearchFilter):

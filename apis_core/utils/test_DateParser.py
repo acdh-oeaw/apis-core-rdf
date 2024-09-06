@@ -5,7 +5,7 @@ from datetime import datetime
 
 from django.test import TestCase
 
-from .DateParser import parse_date, get_date_help_text_from_dates
+from .DateParser import get_date_help_text_from_dates, parse_date
 
 help_text_default = "Dates are interpreted by defined rules. If this fails, an iso-date can be explicitly set with '&lt;YYYY-MM-DD&gt;'."
 

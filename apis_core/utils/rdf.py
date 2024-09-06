@@ -1,12 +1,12 @@
 # SPDX-FileCopyrightText: 2023 Birger Schacht
 # SPDX-License-Identifier: MIT
 
-import logging
 import importlib
+import logging
 import re
+from typing import Tuple
 
 from rdflib import Graph
-from typing import Tuple
 
 from apis_core.utils.normalize import clean_uri
 from apis_core.utils.settings import dict_from_toml_directory

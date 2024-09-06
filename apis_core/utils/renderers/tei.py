@@ -1,5 +1,5 @@
-from django.template import loader
 from django.core.exceptions import ImproperlyConfigured
+from django.template import loader
 from rest_framework import renderers
 
 
