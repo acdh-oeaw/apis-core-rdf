@@ -1,4 +1,5 @@
 import django_filters
+
 from apis_core.generic.filtersets import GenericFilterSet
 
 

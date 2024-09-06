@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from .models import Uri
-
 from apis_core.generic.serializers import GenericHyperlinkedModelSerializer
+
+from .models import Uri
 
 
 class UriSerializer(GenericHyperlinkedModelSerializer):

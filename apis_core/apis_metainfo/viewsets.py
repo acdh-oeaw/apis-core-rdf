@@ -1,9 +1,10 @@
+from django.http import HttpResponseRedirect, QueryDict
+from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import OpenApiParameter, OpenApiTypes, extend_schema
 from rest_framework import viewsets
 from rest_framework.response import Response
+
 from apis_core.apis_metainfo.models import Uri
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect, QueryDict
 
 
 class UriToObjectViewSet(viewsets.ViewSet):
