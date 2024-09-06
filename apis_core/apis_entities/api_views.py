@@ -1,12 +1,12 @@
-from django.shortcuts import redirect
 from django.db.models import Q
-from rest_framework.views import APIView
+from django.shortcuts import redirect
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
 
-from apis_core.apis_metainfo.models import RootObject
 from apis_core.apis_entities.serializers import MinimalEntitySerializer
 from apis_core.apis_entities.utils import get_entity_classes
+from apis_core.apis_metainfo.models import RootObject
 from apis_core.utils.filters import CustomSearchFilter
 
 

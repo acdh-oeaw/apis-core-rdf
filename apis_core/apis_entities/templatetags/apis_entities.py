@@ -1,9 +1,9 @@
 from django import template
-from apis_core.utils.helpers import triple_sidebar
 from django.contrib.contenttypes.models import ContentType
-from apis_core.apis_entities.models import AbstractEntity
 
+from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.utils import get_entity_classes
+from apis_core.utils.helpers import triple_sidebar
 
 register = template.Library()
 

@@ -1,4 +1,4 @@
-from apis_core.generic.tables import GenericTable, ActionColumn
+from apis_core.generic.tables import ActionColumn, GenericTable
 
 
 class DuplicateColumn(ActionColumn):

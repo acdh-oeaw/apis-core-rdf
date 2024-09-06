@@ -1,17 +1,17 @@
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
-from django.urls import include, path, register_converter
 from django.shortcuts import get_list_or_404
+from django.urls import include, path, register_converter
 
 # from .views import ReversionCompareView TODO: add again when import is fixed
 from apis_core.apis_entities.models import AbstractEntity
-from apis_core.generic.views import List, Create, Delete, Detail
 from apis_core.apis_entities.views import (
-    EntitiesDuplicate,
-    EntitiesUpdate,
-    EntitiesMerge,
     EntitiesAutocomplete,
+    EntitiesDuplicate,
+    EntitiesMerge,
+    EntitiesUpdate,
 )
+from apis_core.generic.views import Create, Delete, Detail, List
 
 
 class EntityToContenttypeConverter:
