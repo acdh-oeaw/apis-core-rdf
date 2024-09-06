@@ -1,12 +1,14 @@
-from apis_core.generic.views import GenericModelMixin
-from apis_core.generic.helpers import module_paths, first_member_match
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.contrib.contenttypes.models import ContentType
-from django.views.generic.detail import DetailView
 from django.utils import timezone
+from django.views.generic.detail import DetailView
 from django_tables2 import SingleTableMixin
 from django_tables2.tables import table_factory
+
+from apis_core.generic.helpers import first_member_match, module_paths
+from apis_core.generic.views import GenericModelMixin
+
 from .tables import HistoryGenericTable
 
 

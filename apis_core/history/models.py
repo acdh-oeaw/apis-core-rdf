@@ -1,20 +1,21 @@
+import inspect
+from datetime import datetime
 from typing import Any
 
-from django.conf import settings
-from apis_core.generic.abc import GenericModel
-from apis_core.apis_metainfo.models import RootObject
-from django.urls import reverse
-from simple_history.models import HistoricalRecords
-from django.core.exceptions import AppRegistryNotReady
-import inspect
 import django
-from django.db import models
-from datetime import datetime
-from simple_history import utils
-from django.db.models import UniqueConstraint, Q
-from django.db.models.functions import Lower
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import AppRegistryNotReady
+from django.db import models
+from django.db.models import Q, UniqueConstraint
+from django.db.models.functions import Lower
+from django.urls import reverse
 from django.utils import timezone
+from simple_history import utils
+from simple_history.models import HistoricalRecords
+
+from apis_core.apis_metainfo.models import RootObject
+from apis_core.generic.abc import GenericModel
 
 
 class APISHistoricalRecords(HistoricalRecords, GenericModel):
