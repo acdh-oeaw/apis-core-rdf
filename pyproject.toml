@@ -1,7 +1,8 @@
-[tool.poetry]
+[project]
 name = "apis-core"
 version = "0.24.0"
 description = "Base package for the APIS framework"
+readme = "README.md"
 authors = [
     "Matthias Schlögl <matthias.schloegl@oeaw.ac.at>",
     "Birger Schacht <birger.schacht@oeaw.ac.at>",
@@ -9,55 +10,28 @@ authors = [
     "Saranya Balasubramanian <saranya.balasubramanian@oeaw.ac.at>"
 ]
 license = "MIT"
-packages = [{include = "apis_core"}]
-include = [{path = "LICENSE.txt", format = "sdist"}, {path = "README.rst", format = "sdist"}]
-exclude = ["manage.py", "__pycache__"]
-
-[tool.poetry.dependencies]
-python = "^3.11"
-Django = ">=4.1,<6.0"
-djangorestframework = "^3.14.0"
-django-filter = ">=23.5,<25.0"
-django-autocomplete-light = ">=3.9.4,<3.12.0"
-django-crum = "^0.7.9"
-django-crispy-forms = "^2"
-django-tables2 = "^2.3.3"
-djangorestframework-csv = ">=2.1,<4.0"
-djangorestframework-xml = "^2.0.0"
-rdflib = ">=6.0.2,<8.0.0"
-drf-spectacular = ">=0.26.1,<0.28.0"
-requests = "^2.25.0"
-django-model-utils = "^4.1.1"
-django-admin-csvexport = "^2.2"
-tablib = "^3.5.0"
-apis-override-select2js = "^0.1.0"
-crispy-bootstrap4 = ">=2023.1,<2025.0"
-python-dateutil = "^2.8.2"
-django-simple-history = ">=3.6"
-
-[tool.poetry.group.docs]
-optional = true
-[tool.poetry.group.docs.dependencies]
-sphinx = "*"
-sphinx-rtd-theme = "*"
-myst-parser = "^3.0.1"
-
-[tool.poetry.group.tests]
-optional = true
-[tool.poetry.group.tests.dependencies]
-faker = "*"
-coverage = "^7.5.3"
-
-[tool.poetry.group.dev]
-optional = true
-[tool.poetry.group.dev.dependencies]
-djlint = "^1.31.1"
-ruff = ">=0.5.0,<0.6.0"
-deptry = ">=0.12,<0.20"
-
-[build-system]
-requires = ["poetry-core>=1.2.0"]
-build-backend = "poetry.core.masonry.api"
+requires-python = ">=3.11"
+dependencies = [
+    "apis-override-select2js>=0.1.0",
+    "crispy-bootstrap4>=2023.1,<2025.0",
+    "django-admin-csvexport>=2.2",
+    "django-autocomplete-light>=3.9.4,<3.12.0",
+    "django-crispy-forms>=2",
+    "django-crum>=0.7.9",
+    "django-filter>=23.5,<25.0",
+    "django-model-utils>=4.1.1",
+    "django-simple-history>=3.6",
+    "django-tables2>=2.3.3",
+    "django>=4.1,<6.0",
+    "djangorestframework-csv>=2.1,<4.0",
+    "djangorestframework-xml>=2.0.0",
+    "djangorestframework>=3.14.0",
+    "drf-spectacular>=0.26.1,<0.28.0",
+    "python-dateutil>=2.8.2",
+    "rdflib>=6.0.2,<8.0.0",
+    "requests>=2.25.0",
+    "tablib>=3.5.0",
+]
 
 [tool.djlint]
 indent=2
@@ -87,3 +61,15 @@ django-model-utils = "model_utils"
 djangorestframework-csv = "rest_framework_csv"
 django-crum = "crum"
 django-simple-history = "simple_history"
+
+[tool.uv]
+dev-dependencies = [
+    "coverage>=7.6.1",
+    "deptry>=0.12,<0.20",
+    "djlint>=1.31.1",
+    "faker>=28.4.1",
+    "myst-parser>=4.0.0",
+    "ruff>=0.5.0,<0.6.0",
+    "sphinx-rtd-theme>=0.5.1",
+    "sphinx>=8.0.2",
+]
