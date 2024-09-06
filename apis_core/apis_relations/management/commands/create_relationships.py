@@ -1,6 +1,7 @@
-from django.core.management.base import BaseCommand, CommandError
-from apis_core.apis_relations.models import Property
 from apis_ontology.models import construct_properties
+from django.core.management.base import BaseCommand, CommandError
+
+from apis_core.apis_relations.models import Property
 
 
 class Command(BaseCommand):

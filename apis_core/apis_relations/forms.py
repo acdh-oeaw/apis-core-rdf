@@ -4,22 +4,21 @@ from crispy_forms.helper import FormHelper
 from dal import autocomplete
 from django import forms
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.urls import reverse
+from django_tables2 import RequestConfig
 
-from apis_core.apis_relations.models import TempTriple
-from apis_core.apis_entities.fields import ListSelect2
-from django.contrib.contenttypes.models import ContentType
-from apis_core.apis_entities.utils import get_entity_classes
-from apis_core.utils.settings import get_entity_settings_by_modelname
-
-from apis_core.apis_metainfo.models import Uri
-
-from .tables import get_generic_triple_table
 from apis_core.apis_entities.autocomplete3 import (
     PropertyAutocomplete,
 )
-from django_tables2 import RequestConfig
+from apis_core.apis_entities.fields import ListSelect2
+from apis_core.apis_entities.utils import get_entity_classes
+from apis_core.apis_metainfo.models import Uri
+from apis_core.apis_relations.models import TempTriple
+from apis_core.utils.settings import get_entity_settings_by_modelname
+
+from .tables import get_generic_triple_table
 
 
 class GenericTripleForm(forms.ModelForm):

@@ -1,8 +1,9 @@
-from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
-from django_filters import CharFilter, ModelMultipleChoiceFilter
 from django.contrib.contenttypes.models import ContentType
-from apis_core.apis_relations.models import Property
 from django.db.models import Q
+from django_filters import CharFilter, ModelMultipleChoiceFilter
+
+from apis_core.apis_relations.models import Property
+from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
 
 PROPERTY_EXCLUDES = [
     "self_contenttype",

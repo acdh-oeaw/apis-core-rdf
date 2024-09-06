@@ -1,20 +1,20 @@
-import unicodedata
 import copy
+import unicodedata
 
 from crum import get_current_request
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Q
+from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 from django.db.models.signals import m2m_changed
 from model_utils.managers import InheritanceManager
-from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
-from apis_core.generic.abc import GenericModel
 
-from apis_core.apis_metainfo.models import RootObject
-from apis_core.utils import DateParser
 from apis_core.apis_metainfo import signals
+from apis_core.apis_metainfo.models import RootObject
+from apis_core.generic.abc import GenericModel
 from apis_core.history.models import VersionMixin
+from apis_core.utils import DateParser
 
 
 def find_if_user_accepted():

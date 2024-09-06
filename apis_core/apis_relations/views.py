@@ -1,16 +1,14 @@
 import json
 
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
-from apis_core.apis_relations.forms import GenericTripleForm
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
 from apis_core.apis_entities.utils import get_entity_classes
-
+from apis_core.apis_relations.forms import GenericTripleForm
 from apis_core.apis_relations.models import Property, TempTriple, Triple
-
 from apis_core.generic.views import List
 
 
