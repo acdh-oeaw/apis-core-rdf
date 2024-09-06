@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.25.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.24.0...v0.25.0) (2024-09-06)
+
+
+### Features
+
+* **apis_entites:** add a generic entites autocomplete endpoint ([c1a76e0](https://github.com/acdh-oeaw/apis-core-rdf/commit/c1a76e09fbcc9ff49e5a205372fd11c140fc2604))
+* **collections:** allow add all changes in a session to a collection ([27f7e8d](https://github.com/acdh-oeaw/apis-core-rdf/commit/27f7e8d2300fe819508bd992293d5d84376dcbfc)), closes [#1066](https://github.com/acdh-oeaw/apis-core-rdf/issues/1066)
+* **collections:** introduce custom collections table ([fd250c7](https://github.com/acdh-oeaw/apis-core-rdf/commit/fd250c7f52a3703b8d222481eef557bc1aaf029e))
+* **generic:** add `import_into_instance` method to GenericModelImporter ([2e12b76](https://github.com/acdh-oeaw/apis-core-rdf/commit/2e12b7665d4ad717958e3d9f3a03d61caddc4fbf))
+* **generic:** add caching to GenericModelImporter ([b20fd4e](https://github.com/acdh-oeaw/apis-core-rdf/commit/b20fd4e5d5cd4b34cdc237bfad6e65f7932b4104))
+* **generic:** add the number of objects to the buttons in the overview ([a48d172](https://github.com/acdh-oeaw/apis-core-rdf/commit/a48d172b23bc3325e9e873496b0d04517363b36a))
+* **generic:** introduce a `get_attribute` templatetag ([8654d1b](https://github.com/acdh-oeaw/apis-core-rdf/commit/8654d1bcd0ddcc0c55cb3a70cdc40bb20fb8e56f))
+* **generic:** introduce filter that counts contenttype instances ([052f8de](https://github.com/acdh-oeaw/apis-core-rdf/commit/052f8deb69a01a119e31e4d14bc74dc7e2763d74))
+* **generic:** introduce SimpleObjectSerializer ([d03be68](https://github.com/acdh-oeaw/apis-core-rdf/commit/d03be688131a6ac50ca8ed3a4f12b74155bf8831))
+* **history:** add ng relations to history view ([36b02ab](https://github.com/acdh-oeaw/apis-core-rdf/commit/36b02ab13c8e2d663420f9c47df67fc81729433e)), closes [#1112](https://github.com/acdh-oeaw/apis-core-rdf/issues/1112)
+* **relations:** add a relations_verbose_name_listview_url templatetag ([3e39858](https://github.com/acdh-oeaw/apis-core-rdf/commit/3e398589f5c3ea1c7d8d776d9379df7965591449))
+* **relations:** allow to specify obj or subj types using natural keys ([c0d92f8](https://github.com/acdh-oeaw/apis-core-rdf/commit/c0d92f8ecbef53edd2acc09eb9ccbf9661d8dd76))
+* **relations:** extend the base template to include relation menu items ([74feebb](https://github.com/acdh-oeaw/apis-core-rdf/commit/74feebb9ed5276e4355fb4ea47d60ed4ecbd066d)), closes [#1083](https://github.com/acdh-oeaw/apis-core-rdf/issues/1083)
+* **relations:** introduce get_all_relation_subj_and_obj helper function ([ed19960](https://github.com/acdh-oeaw/apis-core-rdf/commit/ed19960c9cba87da9d2c9a3ce1d86bf7d1939143))
+* **relations:** introduce new relations implementation ([1799ea6](https://github.com/acdh-oeaw/apis-core-rdf/commit/1799ea63c3c222c075a2006495675dbdc7651315))
+* **relations:** override default queryset to include subclasses ([7ef2959](https://github.com/acdh-oeaw/apis-core-rdf/commit/7ef29594c89f39371636de487f6dc0a503125951))
+* **relations:** override the default filterset for relations ([1f908de](https://github.com/acdh-oeaw/apis-core-rdf/commit/1f908dea0afd2363dfba936dc03870696290cd0b))
+* **relations:** override the default serializer for relations ([9bb30c3](https://github.com/acdh-oeaw/apis-core-rdf/commit/9bb30c3ffd63a25f7f1cacb6fba653595047735e))
+* **relations:** override the viewset queryset to include subclasses ([2378dce](https://github.com/acdh-oeaw/apis-core-rdf/commit/2378dcec97636fd00018874426f5c2c0bf311178))
+
+
+### Bug Fixes
+
+* **apis_entities:** make autocomplete work with multilevel inheritance ([50a2af1](https://github.com/acdh-oeaw/apis-core-rdf/commit/50a2af19d6739a08c4db9a0fac4ff17b5f6c9133)), closes [#1109](https://github.com/acdh-oeaw/apis-core-rdf/issues/1109)
+* **apis_relations:** fix relations table date render method ([3f41633](https://github.com/acdh-oeaw/apis-core-rdf/commit/3f41633dab2f09aeae6a4e84d3e6dbf22420863c))
+* **collections:** fix typo in template url argument ([8559c49](https://github.com/acdh-oeaw/apis-core-rdf/commit/8559c4947948e890c9694a09eeaf5110bed96b27))
+* **collections:** use an app_name and include urls in apis_core.urls ([1c70aa5](https://github.com/acdh-oeaw/apis-core-rdf/commit/1c70aa5ea6ffc27c3369c0bbf2a80da431a17589))
+* **history:** change column name in table to a more accurate term ([368b19c](https://github.com/acdh-oeaw/apis-core-rdf/commit/368b19ce0857d99db55cb65056415e948f806342)), closes [#878](https://github.com/acdh-oeaw/apis-core-rdf/issues/878)
+* **history:** remove verbose name from APISHistoricalRecord ([0c62e85](https://github.com/acdh-oeaw/apis-core-rdf/commit/0c62e850d7403e98e59a1601efc1261cdc8e69b8)), closes [#920](https://github.com/acdh-oeaw/apis-core-rdf/issues/920)
+* **relations:** make `get_relation_targets_from` method more targeted ([35b6709](https://github.com/acdh-oeaw/apis-core-rdf/commit/35b670918d42148d2fe99b940d0895998b4e6efa))
+* **sample_project:** move generic and core to end of INSTALLED_APPS ([d029ed3](https://github.com/acdh-oeaw/apis-core-rdf/commit/d029ed3abf46c27b657be88e132b89b382b7ac45))
+* **sample_project:** set the string repr for the Profession model ([9c4a87e](https://github.com/acdh-oeaw/apis-core-rdf/commit/9c4a87eb2108f52de264a68dbfb7917a843c7791))
+* **sample_project:** show password only if passwordfile exists ([b9aa308](https://github.com/acdh-oeaw/apis-core-rdf/commit/b9aa30825f89af0ff0183fe29eabb2aa7d04b580))
+
+
+### Documentation
+
+* **collections:** add documentation about new session toggle ([bdfde27](https://github.com/acdh-oeaw/apis-core-rdf/commit/bdfde27d1a1f94bac2d7e411d0cf14056c4ab073))
+* **ontology:** update ontology docs regarding the natural key notation ([d205399](https://github.com/acdh-oeaw/apis-core-rdf/commit/d2053993c1217c726b1479aad394bc5322859bc3))
+* **relations:** add documentation about Relations to ontology chapter ([7f16ace](https://github.com/acdh-oeaw/apis-core-rdf/commit/7f16ace3c1f01063f20665823a4ff01e25913a7c))
+
 ## [0.24.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.23.2...v0.24.0) (2024-08-13)
 
 
