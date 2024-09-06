@@ -1,5 +1,5 @@
-from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
+from django.test import TestCase
 
 from .models import RootObject, Uri
 

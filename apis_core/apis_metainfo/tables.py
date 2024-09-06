@@ -1,5 +1,6 @@
 import django_tables2 as tables
 from django.db.models import F
+
 from apis_core.generic.tables import GenericTable
 
 from .models import Uri
