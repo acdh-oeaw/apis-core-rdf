@@ -1,7 +1,7 @@
 from django import template
 from django.conf import settings
-from apis_core import __version__
 
+from apis_core import __version__
 
 register = template.Library()
 

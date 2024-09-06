@@ -1,5 +1,6 @@
-from django.contrib.auth.mixins import AccessMixin
 from django.conf import settings
+from django.contrib.auth.mixins import AccessMixin
+
 from apis_core.utils.utils import access_for_all
 
 
