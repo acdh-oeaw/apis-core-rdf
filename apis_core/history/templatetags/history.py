@@ -1,7 +1,8 @@
-from apis_core.history.serializers import HistoryLogSerializer
 from django import template
-from apis_core.history.utils import triple_sidebar_history
 from django.utils.safestring import mark_safe
+
+from apis_core.history.serializers import HistoryLogSerializer
+from apis_core.history.utils import triple_sidebar_history
 from apis_core.utils.helpers import get_html_diff
 
 register = template.Library()

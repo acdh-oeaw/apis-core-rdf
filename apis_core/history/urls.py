@@ -1,10 +1,11 @@
+from django.urls import path
+
 from apis_core.history import views
 from apis_core.history.api_views import (
     EntityHistoryLogs,
     GenericHistoryLog,
     TempTripleHistoryLogs,
 )
-from django.urls import path
 
 app_name = "history"
 

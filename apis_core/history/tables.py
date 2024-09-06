@@ -1,5 +1,6 @@
-from apis_core.generic.tables import CustomTemplateColumn, ViewColumn
 import django_tables2 as tables
+
+from apis_core.generic.tables import CustomTemplateColumn, ViewColumn
 
 
 class DescriptionColumnHistory(CustomTemplateColumn):

@@ -1,9 +1,10 @@
-from apis_core.apis_relations.tables import get_generic_triple_table
-from apis_core.utils.helpers import get_content_types_with_allowed_relation_from
-from apis_core.utils.settings import get_entity_settings_by_modelname
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django_tables2 import RequestConfig
+
+from apis_core.apis_relations.tables import get_generic_triple_table
+from apis_core.utils.helpers import get_content_types_with_allowed_relation_from
+from apis_core.utils.settings import get_entity_settings_by_modelname
 
 
 def triple_sidebar_history(obj: object, request, detail=True):
