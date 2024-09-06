@@ -1,8 +1,9 @@
 import os
+
 from apis_core.utils.autocomplete import (
     ExternalAutocomplete,
-    TypeSenseAutocompleteAdapter,
     LobidAutocompleteAdapter,
+    TypeSenseAutocompleteAdapter,
 )
 
 
