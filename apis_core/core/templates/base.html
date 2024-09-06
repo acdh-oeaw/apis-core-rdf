@@ -4,7 +4,6 @@
 {% load apis_entities %}
 <html lang="en">
   <head>
-    <meta charset="utf-8">
     <title>
 
       {% block title %}
@@ -16,217 +15,216 @@
       {% endblock %}
 
     </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator"
-          content="APIS Core{% if debug %} {% apis_version %}{% endif %}">
 
-    {% block metaDescription %}
+    {% block meta %}
+      <meta charset="utf-8">
       <meta name="description" content="Description">
       <meta name="author" content="Author">
-    {% endblock %}
+      <meta name="theme-color" content="#ffffff" />
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="generator"
+            content="APIS Core{% if debug %} {% apis_version %}{% endif %}">
+    {% endblock meta %}
 
-    <!-- Start favicons -->
-    <link rel="apple-touch-icon"
-          sizes="180x180"
-          href="{% shared_url %}favicon/apple-touch-icon.png" />
-    <link rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="{% shared_url %}favicon/favicon-32x32.png" />
-    <link rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="{% shared_url %}favicon/favicon-16x16.png" />
-    <link rel="manifest" href="{% shared_url %}favicon/manifest.json" />
-    <link rel="mask-icon"
-          href="{% shared_url %}favicon/safari-pinned-tab.svg"
-          color="#00aba9" />
-    <link href="{% static 'css/material-symbols.css' %}" rel="stylesheet" />
+    {% block favicons %}
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="{% shared_url %}favicon/apple-touch-icon.png" />
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="{% shared_url %}favicon/favicon-32x32.png" />
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="{% shared_url %}favicon/favicon-16x16.png" />
+      <link rel="manifest" href="{% shared_url %}favicon/manifest.json" />
+      <link rel="mask-icon"
+            href="{% shared_url %}favicon/safari-pinned-tab.svg"
+            color="#00aba9" />
+    {% endblock favicons %}
 
     {% block styles %}
+      <link href="{% static 'css/material-symbols.css' %}" rel="stylesheet" />
+      <link href="{% static 'css/core.css' %}" rel="stylesheet" />
+      <link rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css" />
       {% include "partials/bootstrap4_css.html" %}
     {% endblock styles %}
 
-    <link rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css" />
-    <meta name="theme-color" content="#ffffff" />
-    <!-- End favicons -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    {% include "apis_entities/apis_templatetag.html" %}
-
-    {% block scriptHeader %}{% endblock %}
+    {% block scriptHeader %}
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      {% include "apis_entities/apis_templatetag.html" %}
+    {% endblock %}
 
   </head>
   <body role="document"
-        class="home contained fixed-nav"
-        id="body"
-        style="height: unset!important"
+        class="d-flex flex-column min-vh-100"
         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-    <div class="hfeed site" id="page">
-      <div class="wrapper-fluid wrapper-navbar sticky-navbar"
-           id="wrapper-navbar"
-           itemscope=""
-           itemtype="http://schema.org/WebSite">
-        <a class="skip-link screen-reader-text sr-only" href="#content">Skip to content</a>
-        <!-- Start site navigation -->
-        <nav class=" 
-          {% block nav-class %}navbar navbar-expand-lg navbar-light bg-light border-bottom mb-2 p-0{% endblock nav-class %}
-           ">
-          <div class="container-fluid">
+    <header>
+      <!-- Start site navigation -->
+      <nav class=" 
+        {% block nav-class %}navbar navbar-expand-lg navbar-light bg-light border-bottom mb-2 p-0{% endblock nav-class %}
+         ">
+        <div class="container-fluid">
 
-            {% block navbar-before %}
-            {% endblock navbar-before %}
+          {% block navbar-before %}
+          {% endblock navbar-before %}
 
-            <button class="navbar-toggler"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarNavDropdown"
-                    aria-controls="navbarNavDropdown"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon" />
-            </button>
-            <!-- Start main menu -->
-            <div class="collapse navbar-collapse justify-content-end"
-                 id="navbarNavDropdown">
-              <ul id="main-menu" class="navbar-nav mr-auto">
+          <button class="navbar-toggler"
+                  type="button"
+                  data-toggle="collapse"
+                  data-target="#navbarNavDropdown"
+                  aria-controls="navbarNavDropdown"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" />
+          </button>
+          <!-- Start main menu -->
+          <div class="collapse navbar-collapse justify-content-end"
+               id="navbarNavDropdown">
+            <ul id="main-menu" class="navbar-nav mr-auto">
 
-                {% block main-menu %}
-                  <li class="nav-item dropdown">
-                    <a href="#"
-                       class="nav-link dropdown-toggle"
-                       data-toggle="dropdown"
-                       role="button"
-                       aria-haspopup="true"
-                       aria-expanded="false">
-                      Entities
-                      <span class="caret" />
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                      {% block entities-menu-items %}
-                        {% entities_verbose_name_plural_listview_url as entities %}
-                        {% for verbose_name_plural, list_url in entities %}
-                          <a class="dropdown-item" href="{{ list_url }}">{{ verbose_name_plural|capfirst }}</a>
-                        {% endfor %}
-                      {% endblock entities-menu-items %}
-
-                    </div>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a href="#"
-                       class="nav-link dropdown-toggle"
-                       data-toggle="dropdown"
-                       role="button"
-                       aria-haspopup="true"
-                       aria-expanded="false">Relations
-                      <span class="caret" />
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                      {% block relations-menu-items %}
-                      {% endblock relations-menu-items %}
-
-                    </div>
-                  </li>
-                {% endblock main-menu %}
-
-                {% block main-menu-extra %}
-                {% endblock main-menu-extra %}
-
-              </ul>
-
-              {% block userlogin-menu %}
-                <!-- Start user login submenu -->
-                <ul class="navbar-nav">
-                  {% if user.is_authenticated %}
-                    <li class="nav-item dropdown ml-auto">
-                      <a href=""
-                         class="nav-link dropdown-toggle"
-                         data-toggle="dropdown"
-                         role="button"
-                         aria-haspopup="true"
-                         aria-expanded="false">User: {{ user.get_username }}</a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-item">
-                          <a class="nav-link p-0" href="{% url 'apis_core:logout' %}?next=/">
-                            <span class="material-symbols-outlined">logout</span>
-                            log out
-                          </a>
-                        </div>
-                      </div>
-                    </li>
-                  {% else %}
-                    <li class="nav-item dropdown ml-auto">
-                      <a class="nav-link p-0"
-                         href="{% url 'apis_core:login' %}?next={{ request.path|urlencode }}">
-                        <span class="material-symbols-outlined">login</span>
-                      </a>
-                    </li>
-                  {% endif %}
-                </ul>
-                <!-- End user login submenu -->
-              {% endblock userlogin-menu %}
-
-            </div>
-            <!-- End main menu -->
-          </div>
-        </nav>
-        <!-- End site navigation -->
-      </div>
-      <!-- Start main content block -->
-      <div id="content">
-
-        {% block messages %}
-          {% if messages %}
-            <div class="messages container-fluid">
-              {% for message in messages %}
-                <div class="alert alert-dismissible fade show {% if message.tags %}alert-{{ message.tags }}"{% endif %} role="
-                     alert
-                     ">
-                  {{ message }}
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-              {% endfor %}
-            </div>
-          {% endif %}
-        {% endblock messages %}
-
-        {% block content %}{% endblock %}
-
-      </div>
-      <!-- End main content block -->
-      <div class="d-flex footer-separator justify-content-center p-2"></div>
-
-      {% block footer %}
-        <div id="wrapper-footer-full" class="fundament-default-footer">
-          <div class="d-flex flex-column container-fluid p-4"
-               id="footer-full-content"
-               tabindex="-1">
-            <div class="d-flex flex-column align-self-center justify-content-center">
-              <div class="d-flex flex-column">
-                <div class="align-self-center p-1">
-                  <a href="https://www.oeaw.ac.at/acdh/">
-                    <img class="w-75"
-                         alt="ACDH website"
-                         src="https://fundament.acdh.oeaw.ac.at/common-assets/images/acdh_logo.svg" />
+              {% block main-menu %}
+                <li class="nav-item dropdown">
+                  <a href="#"
+                     class="nav-link dropdown-toggle"
+                     data-toggle="dropdown"
+                     role="button"
+                     aria-haspopup="true"
+                     aria-expanded="false">
+                    Entities
+                    <span class="caret" />
                   </a>
-                </div>
-                <div class="align-self-center w-50 p-1 text-center">
-                  Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences
-                </div>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                    {% block entities-menu-items %}
+                      {% entities_verbose_name_plural_listview_url as entities %}
+                      {% for verbose_name_plural, list_url in entities %}
+                        <a class="dropdown-item" href="{{ list_url }}">{{ verbose_name_plural|capfirst }}</a>
+                      {% endfor %}
+                    {% endblock entities-menu-items %}
+
+                  </div>
+                </li>
+                <li class="nav-item dropdown">
+                  <a href="#"
+                     class="nav-link dropdown-toggle"
+                     data-toggle="dropdown"
+                     role="button"
+                     aria-haspopup="true"
+                     aria-expanded="false">Relations
+                    <span class="caret" />
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                    {% block relations-menu-items %}
+                    {% endblock relations-menu-items %}
+
+                  </div>
+                </li>
+              {% endblock main-menu %}
+
+              {% block main-menu-extra %}
+              {% endblock main-menu-extra %}
+
+            </ul>
+
+            {% block userlogin-menu %}
+              <!-- Start user login submenu -->
+              <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                  <li class="nav-item dropdown ml-auto">
+                    <a href=""
+                       class="nav-link dropdown-toggle"
+                       data-toggle="dropdown"
+                       role="button"
+                       aria-haspopup="true"
+                       aria-expanded="false">User: {{ user.get_username }}</a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <div class="dropdown-item">
+                        <a class="nav-link p-0" href="{% url 'apis_core:logout' %}?next=/">
+                          <span class="material-symbols-outlined">logout</span>
+                          log out
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                {% else %}
+                  <li class="nav-item dropdown ml-auto">
+                    <a class="nav-link p-0"
+                       href="{% url 'apis_core:login' %}?next={{ request.path|urlencode }}">
+                      <span class="material-symbols-outlined">login</span>
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+              <!-- End user login submenu -->
+            {% endblock userlogin-menu %}
+
+          </div>
+          <!-- End main menu -->
+        </div>
+      </nav>
+      <!-- End site navigation -->
+    </header>
+    <!-- Start main content block -->
+    <main id="content" role="main" class="wrapper flex-grow-1 mb-3">
+
+      {% block messages %}
+        {% if messages %}
+          <div class="messages container-fluid">
+            {% for message in messages %}
+              <div class="alert alert-dismissible fade show {% if message.tags %}alert-{{ message.tags }}"{% endif %} role="
+                   alert
+                   ">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
-            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endblock messages %}
+
+      {% block content %}{% endblock %}
+
+    </main>
+    <!-- End main content block -->
+
+    {% block footer %}
+      <footer class="border-top p-2 bg-light">
+        <div class="row m-0">
+          <div class="col text-left">
+
+            {% block footer-left %}
+            {% endblock footer-left %}
+
+          </div>
+          <div class="col text-center">
+
+            {% block footer-center %}
+              <a href="https://www.oeaw.ac.at/acdh/">
+                <img id="logo"
+                     alt="ACDH Logo"
+                     title="Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences"
+                     src="https://fundament.acdh.oeaw.ac.at/common-assets/images/acdh_logo.svg" />
+              </a>
+            {% endblock footer-center %}
+
+          </div>
+          <div class="col text-right">
+
+            {% block footer-right %}
+              {% block imprint %}
+              {% endblock imprint %}
+            {% endblock footer-right %}
+
           </div>
         </div>
-      {% endblock footer %}
-
-      {% block imprint %}
-      {% endblock imprint %}
-
-    </div>
+      </footer>
+    {% endblock footer %}
 
     {% block scripts %}
       {% include "partials/bootstrap4_js.html" %}
@@ -243,9 +241,6 @@
       </script>
     {% endblock %}
 
-    {% block scripts2 %}
-    {% endblock scripts2 %}
-
     {% block modal %}
       <!-- Modal -->
       <div class="modal fade"
@@ -259,9 +254,6 @@
       </div>
     {% endblock modal %}
 
-    {% block backtotopbtn %}
-      {% include "partials/backtotopbtn.html" %}
-    {% endblock backtotopbtn %}
-
+    {% include "partials/backtotopbtn.html" %}
   </body>
 </html>
