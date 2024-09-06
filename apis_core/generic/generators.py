@@ -1,10 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse, resolve
-from drf_spectacular.generators import SchemaGenerator
-from drf_spectacular.generators import EndpointEnumerator
+from django.urls import resolve, reverse
+from drf_spectacular.generators import EndpointEnumerator, SchemaGenerator
 
 from apis_core.generic.abc import GenericModel
-
 
 # Custom Schema Generator
 #

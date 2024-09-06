@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from .filtersets import filterset_factory, GenericFilterSet
-from .helpers import module_paths, first_member_match
+
+from .filtersets import GenericFilterSet, filterset_factory
+from .helpers import first_member_match, module_paths
 
 
 class GenericFilterBackend(DjangoFilterBackend):

@@ -1,7 +1,8 @@
 from rest_framework import viewsets
-from .serializers import serializer_factory, GenericHyperlinkedModelSerializer
-from .helpers import module_paths, first_member_match, makeclassprefix
+
 from .filterbackends import GenericFilterBackend
+from .helpers import first_member_match, makeclassprefix, module_paths
+from .serializers import GenericHyperlinkedModelSerializer, serializer_factory
 
 
 class ModelViewSet(viewsets.ModelViewSet):

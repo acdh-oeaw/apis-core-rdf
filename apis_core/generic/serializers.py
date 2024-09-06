@@ -1,14 +1,14 @@
-from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import get_object_or_404
+from rest_framework.reverse import reverse
 from rest_framework.serializers import (
+    CharField,
     HyperlinkedModelSerializer,
     HyperlinkedRelatedField,
-    Serializer,
-    CharField,
     IntegerField,
+    Serializer,
     SerializerMethodField,
 )
-from rest_framework.reverse import reverse
 
 
 class GenericHyperlinkedRelatedField(HyperlinkedRelatedField):

@@ -1,5 +1,6 @@
-from django_filters.filterset import FilterSet
 from django_filters.constants import ALL_FIELDS
+from django_filters.filterset import FilterSet
+
 from .forms import GenericFilterSetForm
 
 
