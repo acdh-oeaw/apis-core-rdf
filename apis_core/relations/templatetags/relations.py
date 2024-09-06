@@ -1,10 +1,11 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
-from apis_core.relations.utils import relation_content_types, relation_match_target
+from django.db.models import Case, Q, Value, When
+
+from apis_core.generic.helpers import first_member_match, module_paths
 from apis_core.relations.models import Relation
-from django.db.models import Value, Q, Case, When
 from apis_core.relations.tables import RelationsListTable
-from apis_core.generic.helpers import module_paths, first_member_match
+from apis_core.relations.utils import relation_content_types, relation_match_target
 
 register = template.Library()
 

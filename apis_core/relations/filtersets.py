@@ -1,8 +1,9 @@
-from apis_core.generic.filtersets import GenericFilterSet
-from django_filters import MultipleChoiceFilter, CharFilter
 from django.db.models import Q
-from apis_core.generic.helpers import generate_search_filter
+from django_filters import CharFilter, MultipleChoiceFilter
+
 from apis_core.apis_metainfo.models import RootObject
+from apis_core.generic.filtersets import GenericFilterSet
+from apis_core.generic.helpers import generate_search_filter
 from apis_core.relations.utils import get_all_relation_subj_and_obj
 
 

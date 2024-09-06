@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework.serializers import SerializerMethodField
+
 from apis_core.generic.serializers import SimpleObjectSerializer, serializer_factory
 
 
