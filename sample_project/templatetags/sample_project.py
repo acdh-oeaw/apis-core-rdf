@@ -1,5 +1,6 @@
-from datetime import datetime, time, date, timedelta, UTC
 import pathlib
+from datetime import UTC, date, datetime, time, timedelta
+
 from django import template
 
 register = template.Library()
