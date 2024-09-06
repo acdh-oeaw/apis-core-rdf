@@ -1,15 +1,15 @@
-from apis_core.generic.views import Create
-from django.views.generic.base import TemplateView
+from django.contrib.contenttypes.models import ContentType
+from django.forms import modelform_factory
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.forms import modelform_factory
-from django.contrib.contenttypes.models import ContentType
+from django.views.generic.base import TemplateView
 
-from apis_core.relations.templatetags.relations import (
-    relations_from,
-    possible_relation_types_from,
-)
+from apis_core.generic.views import Create
 from apis_core.relations.forms import RelationFormHX
+from apis_core.relations.templatetags.relations import (
+    possible_relation_types_from,
+    relations_from,
+)
 
 
 class CreateRelation(Create):

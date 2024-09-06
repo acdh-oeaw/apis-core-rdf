@@ -1,4 +1,4 @@
-from apis_core.generic.tables import GenericTable, CustomTemplateColumn
+from apis_core.generic.tables import CustomTemplateColumn, GenericTable
 
 
 class RelationColumn(CustomTemplateColumn):

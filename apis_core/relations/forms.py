@@ -1,12 +1,13 @@
-from django import forms
-from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError
-from django.urls import reverse
-from django.utils.http import urlencode
-from django.shortcuts import get_object_or_404
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from dal import autocomplete
+from django import forms
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.utils.http import urlencode
+
 from apis_core.generic.forms import GenericModelForm
 
 

@@ -1,5 +1,7 @@
 import functools
+
 from django.contrib.contenttypes.models import ContentType
+
 from apis_core.relations.models import Relation
 
 
