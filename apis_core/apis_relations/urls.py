@@ -1,7 +1,8 @@
 from django.urls import path, re_path
 
-from . import views
 from apis_core.apis_entities.autocomplete3 import PropertyAutocomplete
+
+from . import views
 
 app_name = "apis_relations"
 

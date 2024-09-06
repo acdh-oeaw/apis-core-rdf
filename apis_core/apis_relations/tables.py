@@ -1,10 +1,10 @@
 import django_tables2 as tables
 from django.conf import settings
-from django.db.models import Case, When, F
+from django.db.models import Case, F, When
 from django.utils.html import format_html
 
-from apis_core.generic.tables import GenericTable
 from apis_core.apis_relations.models import TempTriple
+from apis_core.generic.tables import GenericTable
 
 empty_text_default = "There are currently no relations"
 
