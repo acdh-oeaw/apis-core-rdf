@@ -1,8 +1,9 @@
+from crum import get_current_request
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from crum import get_current_request
+
 from apis_core.collections.models import SkosCollection, SkosCollectionContentObject
 from apis_core.history.models import APISHistoryTableBase
 

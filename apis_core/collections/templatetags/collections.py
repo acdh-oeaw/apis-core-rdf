@@ -1,8 +1,7 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
 
-from apis_core.collections.models import SkosCollectionContentObject, SkosCollection
-
+from apis_core.collections.models import SkosCollection, SkosCollectionContentObject
 
 register = template.Library()
 
