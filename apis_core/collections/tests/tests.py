@@ -1,8 +1,8 @@
-from django.test import TestCase
 from django.contrib.auth.models import User
-from apis_core.collections.models import SkosCollection, SkosCollectionContentObject
-
+from django.test import TestCase
 from faker import Faker
+
+from apis_core.collections.models import SkosCollection, SkosCollectionContentObject
 
 fake = Faker()
 

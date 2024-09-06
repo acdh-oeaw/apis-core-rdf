@@ -1,4 +1,5 @@
 from django_tables2 import TemplateColumn
+
 from apis_core.generic.tables import GenericTable
 
 
