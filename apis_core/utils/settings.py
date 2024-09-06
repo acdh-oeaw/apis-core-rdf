@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 import logging
-import tomllib
 from pathlib import Path
+
+import tomllib
 from django.conf import settings
 from django.template.utils import get_app_template_dirs
 

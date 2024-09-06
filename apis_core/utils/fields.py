@@ -1,4 +1,5 @@
 from django.db import models
+
 from apis_core.generic.forms.widgets import NewlineSeparatedListWidget
 
 
