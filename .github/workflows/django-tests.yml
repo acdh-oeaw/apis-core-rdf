@@ -48,3 +48,5 @@ jobs:
       run: poetry run ./manage.py migrate
     - name: Test
       run: poetry run ./manage.py test
+    - name: Schema generation test
+      run: poetry run ./manage.py spectacular --fail-on-warn
