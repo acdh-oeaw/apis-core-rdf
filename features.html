@@ -151,7 +151,7 @@ use a <code class="xref py py-class docutils literal notranslate"><span class="p
 <code class="xref py py-class docutils literal notranslate"><span class="pre">django.models.CharField</span></code> and you customize the model form to use the
 collection as choices for this field. Both approaches have pros and cons.</p>
 <p>There are a couple of templatetags that make working with collection easier, they
-all reside in the <a class="reference internal" href="modules/apis_core.collections.templatetags.html#module-apis_core.collections.templatetags.apis_collections" title="apis_core.collections.templatetags.apis_collections"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections</span></code></a>
+all reside in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections</span></code>
 templatetag library. If you use them, you have to include
 <a class="reference internal" href="modules/apis_core.collections.html#module-apis_core.collections.urls" title="apis_core.collections.urls"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.collections.urls</span></code></a> into your urls.py, for example like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
@@ -163,26 +163,26 @@ templatetag library. If you use them, you have to include
 </div>
 <p>The templatetags are:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_toggle" title="apis_core.collections.templatetags.apis_collections.collection_toggle"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_toggle()</span></code></a>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_toggle()</span></code>
 and
-<a class="reference internal" href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_toggle_by_id" title="apis_core.collections.templatetags.apis_collections.collection_toggle_by_id"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_toggle_by_id()</span></code></a></p></li>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_toggle_by_id()</span></code></p></li>
 </ul>
 <p>This templatetag takes the instance of an object and a collection (or, in the
 case of <cite>_by_id</cite> the id of a collection) and lets the user create and remove
 the connection between this instance and the collection.</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_children_toggle" title="apis_core.collections.templatetags.apis_collections.collection_children_toggle"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_children_toggle()</span></code></a>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_children_toggle()</span></code>
 and
-<a class="reference internal" href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_children_toggle_by_id" title="apis_core.collections.templatetags.apis_collections.collection_children_toggle_by_id"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_children_toggle_by_id()</span></code></a></p></li>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_children_toggle_by_id()</span></code></p></li>
 </ul>
 <p>This is a helper templatetag that creates toggle buttons for all the child
 collections of a collection. This way you can use one collections a parent for
 a couple of tags and simply add the parent of a new tag collection to the
 parent collection and it automatically shows up in this toggle button list.</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_object_parent" title="apis_core.collections.templatetags.apis_collections.collection_object_parent"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_object_parent()</span></code></a>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_object_parent()</span></code>
 and
-<a class="reference internal" href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_object_parent_by_id" title="apis_core.collections.templatetags.apis_collections.collection_object_parent_by_id"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_object_parent_by_id()</span></code></a></p></li>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_object_parent_by_id()</span></code></p></li>
 </ul>
 <p>This templatetag provides a button to change the connection from an instance to
 a collection to point to the collections parent. This is useful if you want to
@@ -191,7 +191,7 @@ process</cite> with <cite>done</cite> as parent and <cite>todo</cite> with <cite
 user can then on the click of a button change an the collection an instance is
 connected to)</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="modules/apis_core.collections.templatetags.html#apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id" title="apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id()</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id()</span></code></p></li>
 </ul>
 <p>This templatetag provides a checkbox that enables a collection as “session collection” - this
 means that if enabled, all new versions of instances will be added to this collection. This is
