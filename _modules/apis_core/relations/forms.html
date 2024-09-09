@@ -85,15 +85,16 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.relations.forms</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
-<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
-<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
-<span class="kn">from</span> <span class="nn">django.utils.http</span> <span class="kn">import</span> <span class="n">urlencode</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
-<span class="kn">from</span> <span class="nn">crispy_forms.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
+<span></span><span class="kn">from</span> <span class="nn">crispy_forms.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
 <span class="kn">from</span> <span class="nn">crispy_forms.layout</span> <span class="kn">import</span> <span class="n">Submit</span>
 <span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.utils.http</span> <span class="kn">import</span> <span class="n">urlencode</span>
+
 <span class="kn">from</span> <span class="nn">apis_core.generic.forms</span> <span class="kn">import</span> <span class="n">GenericModelForm</span>
 
 

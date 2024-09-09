@@ -85,15 +85,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.apis_entities.api_views</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
-<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
-<span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
+<span></span><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
 <span class="kn">from</span> <span class="nn">rest_framework.exceptions</span> <span class="kn">import</span> <span class="n">NotFound</span>
 <span class="kn">from</span> <span class="nn">rest_framework.generics</span> <span class="kn">import</span> <span class="n">ListAPIView</span>
+<span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.serializers</span> <span class="kn">import</span> <span class="n">MinimalEntitySerializer</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.utils</span> <span class="kn">import</span> <span class="n">get_entity_classes</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.filters</span> <span class="kn">import</span> <span class="n">CustomSearchFilter</span>
 
 

@@ -86,10 +86,10 @@
              
   <h1>Source code for apis_core.generic.routers</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
-<span class="kn">from</span> <span class="nn">rest_framework.routers</span> <span class="kn">import</span> <span class="n">DefaultRouter</span><span class="p">,</span> <span class="n">APIRootView</span>
+<span class="kn">from</span> <span class="nn">rest_framework.reverse</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">rest_framework.routers</span> <span class="kn">import</span> <span class="n">APIRootView</span><span class="p">,</span> <span class="n">DefaultRouter</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.generic.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
-<span class="kn">from</span> <span class="nn">rest_framework.reverse</span> <span class="kn">import</span> <span class="n">reverse</span>
 
 
 <div class="viewcode-block" id="CustomAPIRootView">

@@ -87,18 +87,18 @@
   <h1>Source code for apis_core.apis_entities.urls</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">register_converter</span>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_list_or_404</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">register_converter</span>
 
 <span class="c1"># from .views import ReversionCompareView TODO: add again when import is fixed</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span>
-<span class="kn">from</span> <span class="nn">apis_core.generic.views</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Create</span><span class="p">,</span> <span class="n">Delete</span><span class="p">,</span> <span class="n">Detail</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.views</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">EntitiesDuplicate</span><span class="p">,</span>
-    <span class="n">EntitiesUpdate</span><span class="p">,</span>
-    <span class="n">EntitiesMerge</span><span class="p">,</span>
     <span class="n">EntitiesAutocomplete</span><span class="p">,</span>
+    <span class="n">EntitiesDuplicate</span><span class="p">,</span>
+    <span class="n">EntitiesMerge</span><span class="p">,</span>
+    <span class="n">EntitiesUpdate</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.views</span> <span class="kn">import</span> <span class="n">Create</span><span class="p">,</span> <span class="n">Delete</span><span class="p">,</span> <span class="n">Detail</span><span class="p">,</span> <span class="n">List</span>
 
 
 <div class="viewcode-block" id="EntityToContenttypeConverter">

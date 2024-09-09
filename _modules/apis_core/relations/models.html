@@ -86,12 +86,14 @@
              
   <h1>Source code for apis_core.relations.models</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
+
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.fields</span> <span class="kn">import</span> <span class="n">GenericForeignKey</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
 <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">django.db.models.base</span> <span class="kn">import</span> <span class="n">ModelBase</span>
-<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
 <span class="kn">from</span> <span class="nn">model_utils.managers</span> <span class="kn">import</span> <span class="n">InheritanceManager</span>
+
 <span class="kn">from</span> <span class="nn">apis_core.generic.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
 
 

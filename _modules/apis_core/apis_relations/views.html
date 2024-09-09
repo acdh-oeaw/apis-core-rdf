@@ -87,17 +87,15 @@
   <h1>Source code for apis_core.apis_relations.views</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
 
-<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
 <span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">render_to_string</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_relations.forms</span> <span class="kn">import</span> <span class="n">GenericTripleForm</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.autocomplete3</span> <span class="kn">import</span> <span class="n">PropertyAutocomplete</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.utils</span> <span class="kn">import</span> <span class="n">get_entity_classes</span>
-
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.forms</span> <span class="kn">import</span> <span class="n">GenericTripleForm</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">TempTriple</span><span class="p">,</span> <span class="n">Triple</span>
-
 <span class="kn">from</span> <span class="nn">apis_core.generic.views</span> <span class="kn">import</span> <span class="n">List</span>
 
 

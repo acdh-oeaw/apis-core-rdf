@@ -85,37 +85,35 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.generic.views</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">http</span>
-<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span></span><span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span><span class="p">,</span> <span class="n">http</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">PermissionRequiredMixin</span>
+<span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">modelform_factory</span>
+<span class="kn">from</span> <span class="nn">django.template.exceptions</span> <span class="kn">import</span> <span class="n">TemplateDoesNotExist</span>
+<span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">select_template</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">reverse_lazy</span>
 <span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">DetailView</span>
 <span class="kn">from</span> <span class="nn">django.views.generic.base</span> <span class="kn">import</span> <span class="n">TemplateView</span>
-<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="kn">import</span> <span class="n">CreateView</span><span class="p">,</span> <span class="n">UpdateView</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">,</span> <span class="n">FormView</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">reverse_lazy</span>
-<span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">modelform_factory</span>
-<span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">select_template</span>
-<span class="kn">from</span> <span class="nn">django.template.exceptions</span> <span class="kn">import</span> <span class="n">TemplateDoesNotExist</span>
-
+<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="kn">import</span> <span class="n">CreateView</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">,</span> <span class="n">FormView</span><span class="p">,</span> <span class="n">UpdateView</span>
 <span class="kn">from</span> <span class="nn">django_filters.views</span> <span class="kn">import</span> <span class="n">FilterView</span>
 <span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">SingleTableMixin</span>
-<span class="kn">from</span> <span class="nn">django_tables2.tables</span> <span class="kn">import</span> <span class="n">table_factory</span>
 <span class="kn">from</span> <span class="nn">django_tables2.columns</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
-
-<span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">GenericTable</span>
-<span class="kn">from</span> <span class="nn">.filtersets</span> <span class="kn">import</span> <span class="n">filterset_factory</span><span class="p">,</span> <span class="n">GenericFilterSet</span>
-<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">GenericModelForm</span><span class="p">,</span> <span class="n">GenericImportForm</span>
-<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">template_names_via_mro</span><span class="p">,</span>
-    <span class="n">generate_search_filter</span><span class="p">,</span>
-    <span class="n">permission_fullname</span><span class="p">,</span>
-    <span class="n">module_paths</span><span class="p">,</span>
-    <span class="n">first_member_match</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span>
+<span class="kn">from</span> <span class="nn">django_tables2.tables</span> <span class="kn">import</span> <span class="n">table_factory</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.core.mixins</span> <span class="kn">import</span> <span class="n">ListViewObjectFilterMixin</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span>
+
+<span class="kn">from</span> <span class="nn">.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span><span class="p">,</span> <span class="n">filterset_factory</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">GenericImportForm</span><span class="p">,</span> <span class="n">GenericModelForm</span>
+<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">first_member_match</span><span class="p">,</span>
+    <span class="n">generate_search_filter</span><span class="p">,</span>
+    <span class="n">module_paths</span><span class="p">,</span>
+    <span class="n">permission_fullname</span><span class="p">,</span>
+    <span class="n">template_names_via_mro</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">GenericTable</span>
 
 
 <div class="viewcode-block" id="Overview">

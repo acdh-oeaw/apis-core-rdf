@@ -86,13 +86,14 @@
              
   <h1>Source code for apis_core.generic.urls</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">register_converter</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">routers</span>
-<span class="kn">from</span> <span class="nn">.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.generic</span> <span class="kn">import</span> <span class="n">views</span><span class="p">,</span> <span class="n">api_views</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic</span> <span class="kn">import</span> <span class="n">api_views</span><span class="p">,</span> <span class="n">views</span>
+
+<span class="kn">from</span> <span class="nn">.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
 
 <span class="n">app_name</span> <span class="o">=</span> <span class="s2">&quot;generic&quot;</span>
 
