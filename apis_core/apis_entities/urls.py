@@ -3,6 +3,8 @@ from django.http import Http404
 from django.shortcuts import get_list_or_404
 from django.urls import include, path, register_converter
 
+from apis_core.apis_entities.api_views import GetEntityGeneric, ListEntityGeneric
+
 # from .views import ReversionCompareView TODO: add again when import is fixed
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.views import (
@@ -10,6 +12,15 @@ from apis_core.apis_entities.views import (
     EntitiesDuplicate,
     EntitiesMerge,
 )
+
+api_routes = [
+    path("entities/", ListEntityGeneric.as_view()),
+    path(
+        "entity/<int:pk>/",
+        GetEntityGeneric.as_view(),
+        name="GetEntityGeneric",
+    ),
+]
 
 
 class EntityToContenttypeConverter:
