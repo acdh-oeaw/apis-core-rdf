@@ -42,6 +42,10 @@ http://creativecommons.org/licenses/by-sa/4.0/
 
 APIS contains the ["Material Symbols" font](https://fonts.google.com/icons)(commit ace1af0), which
 is licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+The Swagger Logo in `core/static/img` comes from [wikimedia
+commons](https://commons.wikimedia.org/wiki/File:Swagger-logo.png) and is
+licensed under the [Creative Commons Attribution-Share Alike 4.0 International
+license](https://creativecommons.org/licenses/by-sa/4.0/deed.en)
 
 
 Installation
