@@ -39,41 +39,5 @@
             includeSelectAllOption: true,
             enableFiltering: true
         });
-        initiate_compare_tooltip();
     })
-</script>
-<script type="application/javascript">
-        function initiate_compare_tooltip() {
-          //TODO: correctly detach the tooltips before reinitializing them
-        $('.compare_tooltip').tooltipster({
-    content: 'Loading...',
-            contentAsHTML: true,
-    interactive: true,
-    theme: 'tooltipster-light',
-            updateAnimation: null,
-            zIndex: 999,
-    functionBefore: function(instance, helper) {
-        var $origin = $(helper.origin);
-        dataOptions = $origin.attr('data-tooltip');
-        if(dataOptions) {
-
-            dataOptions = JSON.parse(dataOptions);
-            console.log(dataOptions);
-        } else {
-            console.log('didnt read out')
-        }
-        if (typeof $.ApisRev == 'undefined') {
-            $.ApisRev = {}; }
-        $.ApisRev.url = '/apis/entities/compare/'+dataOptions['app']+'/'+dataOptions['kind']+'/'+dataOptions['pk']
-        if ($origin.data('loaded') !== true) {
-            $.get($.ApisRev.url, function(data) {
-                instance.content(data);
-                $origin.data('loaded', true);
-            });
-        }
-    },
-    functionReady: function (instance, helper) {
-        $.ApisRev.instance = instance;
-    }
-});};
 </script>
