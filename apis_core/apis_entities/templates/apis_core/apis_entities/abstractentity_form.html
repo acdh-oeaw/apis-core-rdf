@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load apis_entities %}
 {% load core %}
+{% load static %}
 
 {% block col-zero %}
   <div class="card">
@@ -26,6 +27,7 @@
 
 {% block scripts %}
   {{ block.super }}
+  <script src="{% static "js/apis_entities.js" %}"></script>
   <script type="text/javascript">
 {% with object|opts as opts %}
 {% with opts.object_name|lower as modelname %}
