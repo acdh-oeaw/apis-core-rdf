@@ -89,6 +89,7 @@
 <span class="kn">from</span> <span class="nn">rest_framework.serializers</span> <span class="kn">import</span> <span class="n">SerializerMethodField</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.generic.serializers</span> <span class="kn">import</span> <span class="n">SimpleObjectSerializer</span><span class="p">,</span> <span class="n">serializer_factory</span>
+<span class="kn">from</span> <span class="nn">apis_core.relations.models</span> <span class="kn">import</span> <span class="n">Relation</span>
 
 
 <div class="viewcode-block" id="RelationSerializer">
@@ -100,7 +101,8 @@
 <div class="viewcode-block" id="RelationSerializer.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.serializers.RelationSerializer.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="n">SimpleObjectSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">]</span></div>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">SimpleObjectSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">]</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Relation</span></div>
 
 
 <div class="viewcode-block" id="RelationSerializer.get_subj">
