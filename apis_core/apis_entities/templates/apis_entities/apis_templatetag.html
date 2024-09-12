@@ -89,37 +89,12 @@
         if ($origin.data('loaded') !== true) {
             $.get($.ApisRev.url, function(data) {
                 instance.content(data);
-                unbind_compare_forms();
                 $origin.data('loaded', true);
             });
         }
     },
     functionReady: function (instance, helper) {
         $.ApisRev.instance = instance;
-        unbind_compare_forms();
     }
 });};
-</script>
-<script type="text/javascript">
-      function unbind_compare_forms(){
-      $("#change-history").parents('form').submit(function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            var formData = $(this).serialize();
-          if ($.ApisRev.url == 'undefined'){
-              var url = '/'
-          } else {
-              var url = $.ApisRev.url
-          };
-          $.ajax({
-          type: 'GET',
-          url: url,
-          data: formData,
-          //data:formData,
-            })
-          .done(function(response) {
-              $.ApisRev.instance.content(response);
-              unbind_compare_forms();
-          }
-      )})}
 </script>
