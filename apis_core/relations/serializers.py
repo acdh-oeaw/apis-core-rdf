@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework.serializers import SerializerMethodField
 from apis_core.generic.serializers import SimpleObjectSerializer, serializer_factory
+from apis_core.relations.models import Relation
 
 
 class RelationSerializer(SimpleObjectSerializer):
@@ -9,6 +10,7 @@ class RelationSerializer(SimpleObjectSerializer):
 
     class Meta:
         fields = SimpleObjectSerializer.Meta.fields + ["subj", "obj"]
+        model = Relation
 
     @extend_schema_field(SimpleObjectSerializer())
     def get_subj(self, obj):
