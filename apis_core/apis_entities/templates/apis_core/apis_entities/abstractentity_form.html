@@ -125,7 +125,6 @@ function EntityRelationForm_response(response){
       console.log('test did not fail');
        $('#tab_'+response.tab).find('div').remove();
        $('#tab_'+response.tab).append(response.table_html);
-       initiate_compare_tooltip();
        {% if object %}
        if (response.right_card) {
          GetFormAjax(response.tab);
