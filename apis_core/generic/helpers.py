@@ -10,30 +10,43 @@ logger = logging.getLogger(__name__)
 
 def generate_search_filter(model, query, fields_to_search=None, prefix=""):
     """
-    Generate a default search filter that searches for the `query`
-    in all the CharFields and TextFields of a model (case-insensitive)
-    or in the fields listed in the models `default_search_fields` attribute
-    or in the fields listed in the `fields_to_search` argument
-    This helper can be used by autocomplete querysets if nothing
-    fancier is needed.
-    If the `prefix` is set, the field names will be prefixed with that string -
-    this can be useful if you want to use the `generate_search_filter` in a
-    `Q` combined query while searching over multiple models.
+    Generate a default search filter to look for a string in a number of
+    a model's fields.
+
+    Can be used by e.g. autocomplete QuerySets if nothing fancier is needed.
+
+    The fields whose values are searched are (in order of precedence):
+        * all of a model's CharFields and TextFields (excluding
+          ArrayField base_fields),
+        * defined on the model using the attribute `_default_search_fields`,
+        * passed in via `fields_to_search`.
+    When set explicitly, a list of (string-formatted) field names is expected.
+
+    :param model: name of the model to run the filter on
+    :type model: str
+    :param query: the search string
+    :type query: str
+    :param fields_to_search: a list of field names (strings)
+    :type fields_to_search: list
+    :param prefix: optional prefix for field names; may be helpful for
+                   searching over multiple models using `Q`-combined queries
+    :type prefix: str
+    :return: a Q() object
+    :rtype: django.db.models.query_utils.Q
     """
     query = query.split()
 
     modelfields = model._meta.fields
-    # search all char and text fields by default
+    # search all model fields of type CharField, TextField
     _fields_to_search = [
         field.name for field in modelfields if isinstance(field, (CharField, TextField))
     ]
 
-    # check if the model has a `_default_search_fields`
-    # list and use that as searchfields
+    # ... unless model attribute `_default_search_fields` of type list is set
     if isinstance(getattr(model, "_default_search_fields", None), list):
         _fields_to_search = model._default_search_fields
 
-    # if the method was passed a `fields_to_search` list, use that
+    # ... unless method is called with argument `fields_to_search` of type list
     if isinstance(fields_to_search, list):
         _fields_to_search = fields_to_search
 

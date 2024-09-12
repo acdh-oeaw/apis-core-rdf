@@ -93,12 +93,12 @@ class PropertyFilter(django_filters.ModelChoiceFilter):
 
 class ModelSearchFilter(django_filters.CharFilter):
     """
-    This filter is a customized CharFilter that
-    uses the `generate_search_filter` method to
-    adapt the search filter to the model that is
-    searched.
-    It also extracts sets the help text based on
-    the fields searched.
+    Search across a model's string fields using the `generate_search_filter`
+    helper.
+
+    Looks through all of a model's CharFields and TextFields unless the model
+    has an attribute `_default_search_fields` set (field names in form of a
+    list of strings).
     """
 
     def __init__(self, *args, **kwargs):
