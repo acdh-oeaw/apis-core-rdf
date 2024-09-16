@@ -109,10 +109,10 @@ class ModelSearchFilter(django_filters.CharFilter):
             if hasattr(model, "_default_search_fields"):
                 fields = model._default_search_fields
             else:
-                modelfields = model._meta.fields
+                model_fields = model._meta.fields
                 fields = [
                     field.name
-                    for field in modelfields
+                    for field in model_fields
                     if isinstance(field, (models.CharField, models.TextField))
                 ]
             fields = ", ".join(fields)
