@@ -1,6 +1,9 @@
+import logging
+
 import django_filters
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 from django.db.models import Case, Q, Value, When
 from django.db.models.functions import Concat
@@ -12,6 +15,8 @@ from apis_core.apis_metainfo.models import RootObject
 from apis_core.apis_relations.models import Property, Triple
 from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
 from apis_core.generic.helpers import generate_search_filter
+
+logger = logging.getLogger(__name__)
 
 ABSTRACT_ENTITY_COLUMNS_EXCLUDE = [
     "rootobject_ptr",
@@ -106,12 +111,19 @@ class ModelSearchFilter(django_filters.CharFilter):
         super().__init__(*args, **kwargs)
 
         if model is not None and "help_text" not in self.extra:
+            model_fields = []
             if default_fields := getattr(model, "_default_search_fields", False):
-                model_fields = [
-                    model._meta.get_field(field) for field in default_fields
-                ]
-            else:
-                model_fields = model._meta.fields
+                for field in default_fields:
+                    try:
+                        model_fields.append(model._meta.get_field(field))
+                    except FieldDoesNotExist as e:
+                        logger.debug(
+                            f"{e} – review '_default_search_fields' "
+                            f"list of fields for filtering"
+                        )
+
+            if not model_fields:
+                model_fields = model._meta.get_fields()
 
             fields = [
                 field.verbose_name
