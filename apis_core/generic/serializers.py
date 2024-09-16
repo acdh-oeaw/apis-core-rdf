@@ -66,7 +66,10 @@ class ContentTypeInstanceSerializer(Serializer):
         return get_object_or_404(content_type.model_class(), pk=data.get("id"))
 
 
-class SimpleObjectSerializer(GenericHyperlinkedModelSerializer):
+class SimpleObjectSerializer(Serializer):
+    url = GenericHyperlinkedIdentityField(
+        view_name="apis_core:generic:genericmodelapi-detail"
+    )
     label = SerializerMethodField()
     content_type_key = SerializerMethodField()
     content_type_name = SerializerMethodField()
