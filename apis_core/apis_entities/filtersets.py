@@ -106,16 +106,19 @@ class ModelSearchFilter(django_filters.CharFilter):
         super().__init__(*args, **kwargs)
 
         if model is not None and "help_text" not in self.extra:
-            if hasattr(model, "_default_search_fields"):
-                fields = model._default_search_fields
+            if default_fields := getattr(model, "_default_search_fields", False):
+                model_fields = [
+                    model._meta.get_field(field) for field in default_fields
+                ]
             else:
                 model_fields = model._meta.fields
-                fields = [
-                    field.name
-                    for field in model_fields
-                    if isinstance(field, (models.CharField, models.TextField))
-                ]
-            fields = ", ".join(fields)
+
+            fields = [
+                field.verbose_name
+                for field in model_fields
+                if isinstance(field, (models.CharField, models.TextField))
+            ]
+            fields = ", ".join(map(str, fields))
             self.extra["help_text"] = f"Search in fields: {fields}"
 
     def filter(self, qs, value):
