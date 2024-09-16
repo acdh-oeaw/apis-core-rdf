@@ -179,7 +179,10 @@
 
 <div class="viewcode-block" id="SimpleObjectSerializer">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.serializers.SimpleObjectSerializer">[docs]</a>
-<span class="k">class</span> <span class="nc">SimpleObjectSerializer</span><span class="p">(</span><span class="n">GenericHyperlinkedModelSerializer</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SimpleObjectSerializer</span><span class="p">(</span><span class="n">Serializer</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">GenericHyperlinkedIdentityField</span><span class="p">(</span>
+        <span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;apis_core:generic:genericmodelapi-detail&quot;</span>
+    <span class="p">)</span>
     <span class="n">label</span> <span class="o">=</span> <span class="n">SerializerMethodField</span><span class="p">()</span>
     <span class="n">content_type_key</span> <span class="o">=</span> <span class="n">SerializerMethodField</span><span class="p">()</span>
     <span class="n">content_type_name</span> <span class="o">=</span> <span class="n">SerializerMethodField</span><span class="p">()</span>
