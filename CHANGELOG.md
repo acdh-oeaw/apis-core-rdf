@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.26.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.25.0...v0.26.0) (2024-09-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** cleanup the base.html template
+* **core:** rename templatetags module to `core`
+* **history:** rename templatetags module to `history`
+* **generic:** rename templatetags module to `generic`
+* **apis_metainfo:** drop `apis_metainfo_extras` templatetag module
+* **collections:** rename templatetags module to `collections`
+* **apis_entities:** rename templatetags module to `apis_entities`
+
+### Features
+
+* **apis_relations:** use the base template to override relations menu ([5f27f04](https://github.com/acdh-oeaw/apis-core-rdf/commit/5f27f04146228d255a9e46dd53bb36e9947542a2)), closes [#1144](https://github.com/acdh-oeaw/apis-core-rdf/issues/1144)
+* **core:** introduce a `footer-left.html` template with API links ([d2d3891](https://github.com/acdh-oeaw/apis-core-rdf/commit/d2d3891462af685acf8375119fe4337aa4100394))
+* **generic:** add logging to GenericModelImporter ([8d282cd](https://github.com/acdh-oeaw/apis-core-rdf/commit/8d282cd582a39bd0e970847ccff58d3e5814b87a))
+
+
+### Bug Fixes
+
+* **apis_metainfo:** drop UriGetOrCreate view and related stuff ([57a7b87](https://github.com/acdh-oeaw/apis-core-rdf/commit/57a7b8769ce007ec9a48173f2c7a67231f403519)), closes [#1135](https://github.com/acdh-oeaw/apis-core-rdf/issues/1135)
+* **apis_relations:** drop unused templatetag loading in template ([46b5ac9](https://github.com/acdh-oeaw/apis-core-rdf/commit/46b5ac9ca194f386c6271e5e4afa999162c6039b))
+* **core:** readd login.html template that was accidently dropped ([9166e86](https://github.com/acdh-oeaw/apis-core-rdf/commit/9166e86188f5a5197d98a4e86dc08c14533c0fa7))
+* **generic:** replace `create` with `add` for required permission ([dc9b42c](https://github.com/acdh-oeaw/apis-core-rdf/commit/dc9b42cca203d0fa31df1daf041f39d10b3075d2)), closes [#1173](https://github.com/acdh-oeaw/apis-core-rdf/issues/1173)
+* **generic:** replace custom filterset factory with upstream one ([a4d171b](https://github.com/acdh-oeaw/apis-core-rdf/commit/a4d171b330daa2c3a4fe7af44c1c0cca6e1808e6)), closes [#952](https://github.com/acdh-oeaw/apis-core-rdf/issues/952)
+* **generic:** use Serializer as base for SimpleObjectSerializer ([e0eaebb](https://github.com/acdh-oeaw/apis-core-rdf/commit/e0eaebba0a40ef0fee7d65fe4f95c6e9d7141495))
+* **relations:** drop the model field from the RelationSerializer ([2f1e549](https://github.com/acdh-oeaw/apis-core-rdf/commit/2f1e5491815e2518d421c692856330d156551985))
+* **relations:** set model of RelationSerializer ([9192e97](https://github.com/acdh-oeaw/apis-core-rdf/commit/9192e97653735e8033efb9c1425bbde69c5bed2c)), closes [#1178](https://github.com/acdh-oeaw/apis-core-rdf/issues/1178)
+* **utils:** make value detection in get_html_diff more reliable ([eed28c0](https://github.com/acdh-oeaw/apis-core-rdf/commit/eed28c020feaa107aae6fc063d40a19445b822b3))
+
+
+### Code Refactoring
+
+* **apis_entities:** rename templatetags module to `apis_entities` ([c9fe20f](https://github.com/acdh-oeaw/apis-core-rdf/commit/c9fe20fee4bbfe5708a069a6aeb1652a47aaf662))
+* **apis_metainfo:** drop `apis_metainfo_extras` templatetag module ([ed1c38d](https://github.com/acdh-oeaw/apis-core-rdf/commit/ed1c38dff77d2c0951336a00f5dae1c41cbd8bb6))
+* **collections:** rename templatetags module to `collections` ([a78bb84](https://github.com/acdh-oeaw/apis-core-rdf/commit/a78bb8494d5a453c275c628e4e5d0c05a546f618))
+* **core:** cleanup the base.html template ([f1f7f73](https://github.com/acdh-oeaw/apis-core-rdf/commit/f1f7f7363153fa3507d3eb4df93433aacceda1bf))
+* **core:** rename templatetags module to `core` ([3714227](https://github.com/acdh-oeaw/apis-core-rdf/commit/371422755d7ca4028bf24a763cae93477eac12db))
+* **generic:** rename templatetags module to `generic` ([1d9c159](https://github.com/acdh-oeaw/apis-core-rdf/commit/1d9c15912f104f030e3c2a9d2534870aea397a9e))
+* **history:** rename templatetags module to `history` ([ffa1d14](https://github.com/acdh-oeaw/apis-core-rdf/commit/ffa1d14244ab912e3671ea6b1e13dc17a83c231d))
+
 ## [0.25.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.24.0...v0.25.0) (2024-09-06)
 
 
