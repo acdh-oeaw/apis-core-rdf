@@ -8,10 +8,14 @@ from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.views import (
     EntitiesAutocomplete,
     EntitiesDuplicate,
+    EntitiesMap,
     EntitiesMerge,
     EntitiesUpdate,
 )
+from apis_core.generic.urls import ContenttypeConverter
 from apis_core.generic.views import Create, Delete, Detail, List
+
+register_converter(ContenttypeConverter, "contenttype")
 
 
 class EntityToContenttypeConverter:
@@ -90,4 +94,5 @@ urlpatterns = [
         include(entity_patterns),
     ),
     path("autocomplete/", EntitiesAutocomplete.as_view(), name="autocomplete"),
+    path("<contenttype:contenttype>/map/", EntitiesMap.as_view(), name="map"),
 ]

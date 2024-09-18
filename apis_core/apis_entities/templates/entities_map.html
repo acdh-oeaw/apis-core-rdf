@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block scripts %}
+  <script src="{% static "js/entities_map.js" %}"></script>
+  {{ block.super }}
+{% endblock scripts %}
+
+{% block content %}
+  <datalist id="markers">
+    {% for object in object_list %}
+      {% if object.longitude and object.latitude %}
+        <option value="{{ object.label | slugify }}"
+                data-longitude="{{ object.longitude|floatformat:"4u" }}"
+                data-latitude="{{ object.latitude|floatformat:"4u" }}">
+          <p>
+            <b>{{ object.label }}</b>
+            <p>
+              <a href="{{ object.get_absolute_url }}">link</a>
+            </p>
+          </option>
+        {% endif %}
+      {% endfor %}
+    </datalist>
+    <div id="map" class="m-3" style="height: 80vh;"></div>
+  {% endblock content %}

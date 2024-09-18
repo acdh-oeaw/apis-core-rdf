@@ -12,7 +12,7 @@ from django.views.generic.edit import FormView
 from apis_core.apis_entities.forms import EntitiesMergeForm
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.helpers import generate_search_filter
-from apis_core.generic.views import GenericModelMixin, Update
+from apis_core.generic.views import GenericModelMixin, List, Update
 
 
 class EntitiesUpdate(Update):
@@ -120,3 +120,7 @@ class EntitiesAutocomplete(autocomplete.Select2QuerySetView):
                     content_type.model_class(), self.q, prefix=f"{name}__"
                 )
         return RootObject.objects_inheritance.select_subclasses().filter(q)
+
+
+class EntitiesMap(List):
+    template_name = "entities_map.html"
