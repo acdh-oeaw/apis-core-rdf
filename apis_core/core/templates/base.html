@@ -143,10 +143,13 @@
                        aria-expanded="false">User: {{ user.get_username }}</a>
                     <div class="dropdown-menu dropdown-menu-right">
                       <div class="dropdown-item">
-                        <a class="nav-link p-0" href="{% url 'apis_core:logout' %}?next=/">
-                          <span class="material-symbols-outlined">logout</span>
-                          log out
-                        </a>
+                        <form action="{% url 'apis_core:logout' %}" method="post">
+                          {% csrf_token %}
+                          <button type="submit" class="btn">
+                            <span class="material-symbols-outlined material-symbols-align">logout</span>
+                            log out
+                          </button>
+                        </form>
                       </div>
                     </div>
                   </li>
