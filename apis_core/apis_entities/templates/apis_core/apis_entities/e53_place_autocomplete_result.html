@@ -1,0 +1,10 @@
+{% if result.longitude and result.latitude %}
+  <a data-latitude="{{ result.latitude|floatformat:"4u" }}"
+     data-longitude="{{ result.longitude|floatformat:"4u" }}"
+     title="Map"
+     onmouseenter="showMap(this);"
+     onmouseout="delMap(this);"><span class="material-symbols-outlined material-symbols-align">location_on</span></a>
+{% endif %}
+{{ result }}
+{% if result.kind %}<i>({{ result.kind }})</i>{% endif %}
+<a href="{{ result.uri }}">local result</a>
