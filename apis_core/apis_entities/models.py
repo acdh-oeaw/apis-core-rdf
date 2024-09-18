@@ -118,9 +118,7 @@ class AbstractEntity(RootObject):
         setattr(self, field.name, res)
 
     def merge_booleanfield(self, other, field):
-        setattr(
-            self, field.name, getattr(self, field.name) and getattr(other, field.name)
-        )
+        setattr(self, field.name, getattr(other, field.name))
 
     def merge_start_date_written(self, other):
         self.start_date_written = self.start_date_written or other.start_date_written
