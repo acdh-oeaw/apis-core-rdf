@@ -11,14 +11,7 @@ from django.views.generic.edit import FormView
 from apis_core.apis_entities.forms import EntitiesMergeForm
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.helpers import generate_search_filter
-from apis_core.generic.views import GenericModelMixin, Update
-
-
-class EntitiesUpdate(Update):
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["mergeform"] = EntitiesMergeForm(instance=self.get_object())
-        return context
+from apis_core.generic.views import GenericModelMixin
 
 
 class EntitiesDuplicate(GenericModelMixin, PermissionRequiredMixin, View):
