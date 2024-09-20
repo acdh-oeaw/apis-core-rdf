@@ -50,17 +50,6 @@ class AbstractEntity(RootObject):
     def get_entity_list_filter(cls):
         return None
 
-    def get_edit_url(self):
-        """
-        We override the edit url, because entities have a
-        custom view that includes the relations
-        """
-        ct = ContentType.objects.get_for_model(self)
-        return reverse(
-            "apis_core:apis_entities:generic_entities_edit_view",
-            args=[ct.model, self.id],
-        )
-
     @functools.cached_property
     def get_prev_id(self):
         if NEXT_PREV:

@@ -9,7 +9,6 @@ from apis_core.apis_entities.views import (
     EntitiesAutocomplete,
     EntitiesDuplicate,
     EntitiesMerge,
-    EntitiesUpdate,
 )
 from apis_core.generic.views import Create, Delete, Detail, List
 
@@ -61,11 +60,6 @@ entity_patterns = [
         "<int:pk>/detail/",
         Detail.as_view(),
         name="generic_entities_detail_view",
-    ),
-    path(
-        "<int:pk>/edit/",
-        EntitiesUpdate.as_view(),
-        name="generic_entities_edit_view",
     ),
     path(
         "<int:pk>/delete/",
