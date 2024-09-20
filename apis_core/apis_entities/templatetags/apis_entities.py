@@ -1,6 +1,7 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
 
+from apis_core.apis_entities.forms import EntitiesMergeForm
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.utils import get_entity_classes
 from apis_core.utils.helpers import triple_sidebar
@@ -54,3 +55,9 @@ def entities_verbose_name_plural_listview_url():
 def object_relations(context, detail=True):
     obj = context["object"]
     return triple_sidebar(obj, context["request"], detail)
+
+
+@register.simple_tag(takes_context=True)
+def mergeform(context):
+    obj = context["object"]
+    return EntitiesMergeForm(instance=obj)
