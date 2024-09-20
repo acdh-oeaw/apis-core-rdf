@@ -4,7 +4,6 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
 from django.utils.html import format_html
 from django.views import View
 from django.views.generic.edit import FormView
@@ -37,15 +36,7 @@ class EntitiesDuplicate(GenericModelMixin, PermissionRequiredMixin, View):
                 source_obj,
             ),
         )
-        return redirect(
-            reverse(
-                "apis_core:apis_entities:generic_entities_edit_view",
-                kwargs={
-                    "pk": newobj.id,
-                    "contenttype": newobj.__class__.__name__.lower(),
-                },
-            )
-        )
+        return redirect(newobj.get_edit_url())
 
 
 class EntitiesMerge(GenericModelMixin, PermissionRequiredMixin, FormView):
@@ -74,10 +65,7 @@ class EntitiesMerge(GenericModelMixin, PermissionRequiredMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse(
-            "apis_core:apis_entities:generic_entities_edit_view",
-            args=[self.get_object().__class__.__name__.lower(), self.get_object().id],
-        )
+        return self.get_object().get_edit_url()
 
 
 class EntitiesAutocomplete(autocomplete.Select2QuerySetView):
