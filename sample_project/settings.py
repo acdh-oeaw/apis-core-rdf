@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     # and extend their templates
     "apis_core.generic",
     "apis_core.core",
+    "apis_core.documentation",
 ]
 
 MIDDLEWARE = [
