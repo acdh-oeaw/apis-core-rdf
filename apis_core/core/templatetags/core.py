@@ -36,3 +36,21 @@ def git_repository_url():
     return getattr(
         settings, "GIT_REPOSITORY_URL", "https://github.com/acdh-oeaw/apis-core-rdf/"
     )
+
+
+@register.simple_tag
+def fields(
+    content_type, include_parents=True, include_hidden=False, exclude_parent_links=True
+):
+    """
+    Return all fields from a Content Type.
+    This uses the Django built in `get_fields` method but also allows to exlude parent links.
+    Parent links are the `_ptr` fields that point to a parent class.
+    """
+    fields = content_type.model_class()._meta.get_fields(
+        include_parents, include_hidden
+    )
+    if exclude_parent_links:
+        parent_links = content_type.model_class()._meta.parents.values()
+        fields = [field for field in fields if field not in parent_links]
+    return fields
