@@ -96,7 +96,6 @@
     <span class="n">EntitiesAutocomplete</span><span class="p">,</span>
     <span class="n">EntitiesDuplicate</span><span class="p">,</span>
     <span class="n">EntitiesMerge</span><span class="p">,</span>
-    <span class="n">EntitiesUpdate</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.views</span> <span class="kn">import</span> <span class="n">Create</span><span class="p">,</span> <span class="n">Delete</span><span class="p">,</span> <span class="n">Detail</span><span class="p">,</span> <span class="n">List</span>
 
@@ -157,11 +156,6 @@
         <span class="s2">&quot;&lt;int:pk&gt;/detail/&quot;</span><span class="p">,</span>
         <span class="n">Detail</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;generic_entities_detail_view&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="n">path</span><span class="p">(</span>
-        <span class="s2">&quot;&lt;int:pk&gt;/edit/&quot;</span><span class="p">,</span>
-        <span class="n">EntitiesUpdate</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;generic_entities_edit_view&quot;</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="n">path</span><span class="p">(</span>
         <span class="s2">&quot;&lt;int:pk&gt;/delete/&quot;</span><span class="p">,</span>
