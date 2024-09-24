@@ -432,10 +432,11 @@ this can be useful if you want to use the <cite>generate_search_filter</cite> in
 </section>
 <section id="module-apis_core.generic.importers">
 <span id="apis-core-generic-importers-module"></span><h2>apis_core.generic.importers module<a class="headerlink" href="#module-apis_core.generic.importers" title="Link to this heading"></a></h2>
-<dl class="py function">
+<dl class="py class">
 <dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter">
-<span class="sig-prename descclassname"><span class="pre">apis_core.generic.importers.</span></span><span class="sig-name descname"><span class="pre">GenericModelImporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericModelImporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter" title="Link to this definition"></a></dt>
-<dd><p>A generic importer class
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.importers.</span></span><span class="sig-name descname"><span class="pre">GenericModelImporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericModelImporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A generic importer class
 It provides the standard methods for importing data from
 an URI and creating a model instance of it.
 By default it fetches a resource, first tries to parse it using
@@ -443,6 +444,56 @@ our rdf parser, if that fails tries to parse it using json and
 then extracts the fields whose keys match the model field names.
 Projects can inherit from this class and override the default
 methods or simple write their own from scratch.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter.clean_uri">
+<span class="sig-name descname"><span class="pre">clean_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericModelImporter.clean_uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter.clean_uri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter.create_instance">
+<span class="sig-name descname"><span class="pre">create_instance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericModelImporter.create_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter.create_instance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drop_unknown_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericModelImporter.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter.get_data" title="Link to this definition"></a></dt>
+<dd><p>fetch the data using the <cite>request</cite> method and
+mangle the data using the <cite>mangle_data</cite> method.
+If the <cite>drop_unknown_fields</cite> argument is true,
+remove all fields from the data dict that do not
+have an equivalent field in the model.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter.get_uri">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_uri</span></span><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter.get_uri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter.import_into_instance">
+<span class="sig-name descname"><span class="pre">import_into_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'__all__'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericModelImporter.import_into_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter.import_into_instance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter.import_uri">
+<span class="sig-name descname"><span class="pre">import_uri</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter.import_uri" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter.mangle_data">
+<span class="sig-name descname"><span class="pre">mangle_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericModelImporter.mangle_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter.mangle_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter.model" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.importers.GenericModelImporter.request">
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/importers.html#GenericModelImporter.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.importers.GenericModelImporter.request" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
