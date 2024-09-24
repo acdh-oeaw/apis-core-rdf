@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.27.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.26.0...v0.27.0) (2024-09-24)
+
+
+### Features
+
+* **apis_entites:** introduce js and css for showing a popover map ([1e56ad1](https://github.com/acdh-oeaw/apis-core-rdf/commit/1e56ad1865ead6895e517ae0947f9f9d1217c33b))
+* **apis_entities:** introduce a e53_place autocomplete template ([ac358a7](https://github.com/acdh-oeaw/apis-core-rdf/commit/ac358a7e7d915e756f2de776d5ba95854bb5bd5e))
+* **apis_entities:** introduce a mergeform template tag ([f7c5677](https://github.com/acdh-oeaw/apis-core-rdf/commit/f7c56773bb8d5386bb4eaef4926fcaf0a8fc2ad0))
+* **apis_metainfo:** print warning when APIS_BASE_URI is not set ([1727387](https://github.com/acdh-oeaw/apis-core-rdf/commit/1727387fc002726a0f673197659ca371162d2d35))
+* **apis_relations:** add missing migrations ([39a1dcd](https://github.com/acdh-oeaw/apis-core-rdf/commit/39a1dcdfbbd47e8ccb4923f50f524b9431225187))
+* **generic:** introduce a generic merge view ([5f21c4d](https://github.com/acdh-oeaw/apis-core-rdf/commit/5f21c4dfb1a428ff076006029f6474c569c9fa1a))
+* **generic:** refactor the merge logic and move parts to generic ([b0e5294](https://github.com/acdh-oeaw/apis-core-rdf/commit/b0e529494a574775ffd366c43293a2da0f80b129))
+* **sample_project:** add missing migrations ([49c21bc](https://github.com/acdh-oeaw/apis-core-rdf/commit/49c21bc37e38b5ba99e9749b9e6a3ba24da28010))
+
+
+### Bug Fixes
+
+* **apis_entities:** merge - use src obj's bool val ([c73203e](https://github.com/acdh-oeaw/apis-core-rdf/commit/c73203edb04a512b0e0510de6cc8c4aa3f9c8811)), closes [#818](https://github.com/acdh-oeaw/apis-core-rdf/issues/818)
+* **apis_entities:** use example.org as fallback and drop global ([217ca90](https://github.com/acdh-oeaw/apis-core-rdf/commit/217ca90e5127d657d23af702d802d0ea5df63537))
+* **core:** replace logout link with a logout form ([a8789a6](https://github.com/acdh-oeaw/apis-core-rdf/commit/a8789a6c41c3908651266daf0366b501c5df2934)), closes [#910](https://github.com/acdh-oeaw/apis-core-rdf/issues/910)
+* **generic:** fix templatetag loading in merge template ([3812512](https://github.com/acdh-oeaw/apis-core-rdf/commit/3812512ad2f27ec0dc9e54f51dfc933872994942))
+* **generic:** remove cache decorator from GenericModelImporter ([5b44c8a](https://github.com/acdh-oeaw/apis-core-rdf/commit/5b44c8aab1c2d09481659690d6ddcaef6b3f7c90)), closes [#1204](https://github.com/acdh-oeaw/apis-core-rdf/issues/1204)
+* **relations:** display choices in create form ([bb66d57](https://github.com/acdh-oeaw/apis-core-rdf/commit/bb66d572d5283937ec296a85ba11c0f522db3d1b)), closes [#1193](https://github.com/acdh-oeaw/apis-core-rdf/issues/1193)
+
 ## [0.26.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.25.0...v0.26.0) (2024-09-17)
 
 
