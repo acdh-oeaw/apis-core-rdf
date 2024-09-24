@@ -69,8 +69,14 @@ def relation_content_types(
     return set(relationcts)
 
 
-@functools.cache
 def relation_match_target(relation, target: ContentType) -> bool:
+    """
+    test if a relation points to a target
+    this function should not be cached, because the `forward` attribute
+    is an annotation that does not seem to be part of the relation, so
+    if cached, method could be called with another `forward` value and
+    return the wrong result
+    """
     if relation.forward and relation.obj_content_type == target:
         return True
     if not relation.forward and relation.subj_content_type == target:
