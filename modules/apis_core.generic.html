@@ -110,6 +110,12 @@
 <li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.media"><code class="docutils literal notranslate"><span class="pre">GenericImportForm.media</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm"><code class="docutils literal notranslate"><span class="pre">GenericMergeForm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm.base_fields"><code class="docutils literal notranslate"><span class="pre">GenericMergeForm.base_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm.declared_fields"><code class="docutils literal notranslate"><span class="pre">GenericMergeForm.declared_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm.media"><code class="docutils literal notranslate"><span class="pre">GenericMergeForm.media</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm"><code class="docutils literal notranslate"><span class="pre">GenericModelForm</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.Meta"><code class="docutils literal notranslate"><span class="pre">GenericModelForm.Meta</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.Meta.fields"><code class="docutils literal notranslate"><span class="pre">GenericModelForm.Meta.fields</span></code></a></li>
@@ -209,14 +215,53 @@
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_field_value_after_merge">
+<span class="sig-name descname"><span class="pre">get_field_value_after_merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_field_value_after_merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_field_value_after_merge" title="Link to this definition"></a></dt>
+<dd><p>This method finds the value of a field after merging <cite>other</cite> into <cite>self</cite>.
+It first tries to find a merge method that is specific to that field
+(merge_{fieldname}) and then tries to find a method that is specific to
+the type of the field (merge_{fieldtype})
+If neither of those exist, it uses the others field value if the field
+in self is not set, otherwise it keeps the value in self.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_listview_url">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_listview_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_listview_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_listview_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_merge_booleanfield">
+<span class="sig-name descname"><span class="pre">get_merge_booleanfield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BooleanField</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BooleanField</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_merge_booleanfield"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_merge_booleanfield" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_merge_charfield_value">
+<span class="sig-name descname"><span class="pre">get_merge_charfield_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CharField</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CharField</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_merge_charfield_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_merge_charfield_value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_merge_textfield_value">
+<span class="sig-name descname"><span class="pre">get_merge_textfield_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TextField</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TextField</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_merge_textfield_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_merge_textfield_value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_merge_url">
+<span class="sig-name descname"><span class="pre">get_merge_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_merge_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_merge_url" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_update_success_url">
 <span class="sig-name descname"><span class="pre">get_update_success_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_update_success_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_update_success_url" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.merge_fields">
+<span class="sig-name descname"><span class="pre">merge_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.merge_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.merge_fields" title="Link to this definition"></a></dt>
+<dd><p>This method iterates through the model fields and uses the
+<cite>get_field_value_after_merge</cite> method to copy values from <cite>other</cite> to <cite>self</cite>.
+It is called by the <cite>merge_with</cite> method.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -1164,6 +1209,57 @@ to remove the buttons column, you could define this method in your View:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.views.List.template_name_suffix">
 <span class="sig-name descname"><span class="pre">template_name_suffix</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'_list'</span></em><a class="headerlink" href="#apis_core.generic.views.List.template_name_suffix" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.MergeWith">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">MergeWith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#MergeWith"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.MergeWith" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FormView</span></code></p>
+<p>Generic merge view.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.MergeWith.form_class">
+<span class="sig-name descname"><span class="pre">form_class</span></span><a class="headerlink" href="#apis_core.generic.views.MergeWith.form_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm" title="apis_core.generic.forms.GenericMergeForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericMergeForm</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.MergeWith.form_valid">
+<span class="sig-name descname"><span class="pre">form_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#MergeWith.form_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.MergeWith.form_valid" title="Link to this definition"></a></dt>
+<dd><p>If the form is valid, redirect to the supplied URL.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.MergeWith.get_context_data">
+<span class="sig-name descname"><span class="pre">get_context_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#MergeWith.get_context_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.MergeWith.get_context_data" title="Link to this definition"></a></dt>
+<dd><p>The context consists of the two objects that are merged as well
+as a list of changes. Those changes are presented in the view as
+a table with diffs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.MergeWith.get_success_url">
+<span class="sig-name descname"><span class="pre">get_success_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#MergeWith.get_success_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.MergeWith.get_success_url" title="Link to this definition"></a></dt>
+<dd><p>Return the URL to redirect to after processing a valid form.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.MergeWith.permission_action_required">
+<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'change'</span></em><a class="headerlink" href="#apis_core.generic.views.MergeWith.permission_action_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.MergeWith.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#MergeWith.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.MergeWith.setup" title="Link to this definition"></a></dt>
+<dd><p>Initialize attributes shared by all view methods.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.MergeWith.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'generic/generic_merge.html'</span></em><a class="headerlink" href="#apis_core.generic.views.MergeWith.template_name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

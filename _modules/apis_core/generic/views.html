@@ -85,11 +85,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.generic.views</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+<span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span><span class="p">,</span> <span class="n">http</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">messages</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">PermissionRequiredMixin</span>
 <span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">modelform_factory</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
 <span class="kn">from</span> <span class="nn">django.template.exceptions</span> <span class="kn">import</span> <span class="n">TemplateDoesNotExist</span>
 <span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">select_template</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">reverse_lazy</span>
@@ -106,7 +110,7 @@
 <span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span>
 
 <span class="kn">from</span> <span class="nn">.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span>
-<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">GenericImportForm</span><span class="p">,</span> <span class="n">GenericModelForm</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">GenericImportForm</span><span class="p">,</span> <span class="n">GenericMergeForm</span><span class="p">,</span> <span class="n">GenericModelForm</span>
 <span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">first_member_match</span><span class="p">,</span>
     <span class="n">generate_search_filter</span><span class="p">,</span>
@@ -507,6 +511,62 @@
 
 <div class="viewcode-block" id="Import.get_success_url">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Import.get_success_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MergeWith">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith">[docs]</a>
+<span class="k">class</span> <span class="nc">MergeWith</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generic merge view.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;change&quot;</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">GenericMergeForm</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;generic/generic_merge.html&quot;</span>
+
+<div class="viewcode-block" id="MergeWith.setup">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.setup">[docs]</a>
+    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">other</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;otherpk&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="MergeWith.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The context consists of the two objects that are merged as well</span>
+<span class="sd">        as a list of changes. Those changes are presented in the view as</span>
+<span class="sd">        a table with diffs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Change</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Change&quot;</span><span class="p">,</span> <span class="s2">&quot;field old new&quot;</span><span class="p">)</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;changes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="n">newval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_field_value_after_merge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+            <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;changes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Change</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">verbose_name</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">newval</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;other&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">other</span>
+        <span class="k">return</span> <span class="n">ctx</span></div>
+
+
+<div class="viewcode-block" id="MergeWith.form_valid">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.form_valid">[docs]</a>
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">merge_with</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="p">])</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Merged values of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MergeWith.get_success_url">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.get_success_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span></div>
 </div>

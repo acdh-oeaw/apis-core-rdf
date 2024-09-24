@@ -1167,6 +1167,8 @@
 </li>
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.base_fields">(apis_core.generic.forms.GenericImportForm attribute)</a>
 </li>
+        <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm.base_fields">(apis_core.generic.forms.GenericMergeForm attribute)</a>
+</li>
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.base_fields">(apis_core.generic.forms.GenericModelForm attribute)</a>
 </li>
         <li><a href="modules/apis_core.relations.html#apis_core.relations.forms.RelationForm.base_fields">(apis_core.relations.forms.RelationForm attribute)</a>
@@ -1360,6 +1362,8 @@
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm.declared_fields">(apis_core.generic.forms.GenericFilterSetForm attribute)</a>
 </li>
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.declared_fields">(apis_core.generic.forms.GenericImportForm attribute)</a>
+</li>
+        <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm.declared_fields">(apis_core.generic.forms.GenericMergeForm attribute)</a>
 </li>
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.declared_fields">(apis_core.generic.forms.GenericModelForm attribute)</a>
 </li>
@@ -1662,14 +1666,14 @@
         <li><a href="modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet.filter_backends">(apis_core.generic.api_views.ModelViewSet attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.BaseRelationManager.filter_for_user">filter_for_user() (apis_core.apis_relations.models.BaseRelationManager method)</a>
 
       <ul>
         <li><a href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.RelationPublishedQueryset.filter_for_user">(apis_core.apis_relations.models.RelationPublishedQueryset method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSet.Meta.filter_overrides">filter_overrides (apis_core.apis_entities.filtersets.AbstractEntityFilterSet.Meta attribute)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.filters.CustomSearchFilter.filter_queryset">filter_queryset() (apis_core.utils.filters.CustomSearchFilter method)</a>
@@ -1695,11 +1699,17 @@
 </li>
       </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge.form_class">form_class (apis_core.apis_entities.views.EntitiesMerge attribute)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.MergeWith.form_class">(apis_core.generic.views.MergeWith attribute)</a>
 </li>
+      </ul></li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesMerge.form_valid">form_valid() (apis_core.apis_entities.views.EntitiesMerge method)</a>
 
       <ul>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Import.form_valid">(apis_core.generic.views.Import method)</a>
+</li>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.MergeWith.form_valid">(apis_core.generic.views.MergeWith method)</a>
 </li>
       </ul></li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.renderers.GenericRDFN3Renderer.format">format (apis_core.generic.renderers.GenericRDFN3Renderer attribute)</a>
@@ -1757,6 +1767,8 @@
       <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm">GenericImportForm (class in apis_core.generic.forms)</a>
 </li>
       <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.Meta">GenericImportForm.Meta (class in apis_core.generic.forms)</a>
+</li>
+      <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm">GenericMergeForm (class in apis_core.generic.forms)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel">GenericModel (class in apis_core.generic.abc)</a>
 </li>
@@ -1847,6 +1859,8 @@
 </li>
         <li><a href="modules/apis_core.collections.html#apis_core.collections.views.ContentObjectMixin.get_context_data">(apis_core.collections.views.ContentObjectMixin method)</a>
 </li>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.MergeWith.get_context_data">(apis_core.generic.views.MergeWith method)</a>
+</li>
         <li><a href="modules/apis_core.relations.html#apis_core.relations.views.ListRelations.get_context_data">(apis_core.relations.views.ListRelations method)</a>
 </li>
       </ul></li>
@@ -1894,10 +1908,12 @@
 </li>
       <li><a href="modules/apis_core.history.html#apis_core.history.serializers.ModelChangeSerializer.get_field_data_old">get_field_data_old() (apis_core.history.serializers.ModelChangeSerializer method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_field_value_after_merge">get_field_value_after_merge() (apis_core.generic.abc.GenericModel method)</a>
+</li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.views.List.get_filterset">get_filterset() (apis_core.generic.views.List method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.filterbackends.GenericFilterBackend.get_filterset_class">get_filterset_class() (apis_core.generic.filterbackends.GenericFilterBackend method)</a>
 
       <ul>
@@ -1948,8 +1964,18 @@
 </li>
       <li><a href="modules/apis_core.history.html#apis_core.history.models.APISHistoricalRecords.get_m2m_fields_from_model">get_m2m_fields_from_model() (apis_core.history.models.APISHistoricalRecords method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_merge_url">get_merge_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_merge_booleanfield">get_merge_booleanfield() (apis_core.generic.abc.GenericModel method)</a>
 </li>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_merge_charfield_value">get_merge_charfield_value() (apis_core.generic.abc.GenericModel method)</a>
+</li>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_merge_textfield_value">get_merge_textfield_value() (apis_core.generic.abc.GenericModel method)</a>
+</li>
+      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_merge_url">get_merge_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
+
+      <ul>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_merge_url">(apis_core.generic.abc.GenericModel method)</a>
+</li>
+      </ul></li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.utils.get_module_path">get_module_path() (in module apis_core.utils.utils)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.serializers.MinimalEntitySerializer.get_name">get_name() (apis_core.apis_entities.serializers.MinimalEntitySerializer method)</a>
@@ -2030,6 +2056,8 @@
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Delete.get_success_url">(apis_core.generic.views.Delete method)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Import.get_success_url">(apis_core.generic.views.Import method)</a>
+</li>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.MergeWith.get_success_url">(apis_core.generic.views.MergeWith method)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Update.get_success_url">(apis_core.generic.views.Update method)</a>
 </li>
@@ -2313,6 +2341,8 @@
 </li>
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm.media">(apis_core.generic.forms.GenericImportForm property)</a>
 </li>
+        <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm.media">(apis_core.generic.forms.GenericMergeForm property)</a>
+</li>
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.media">(apis_core.generic.forms.GenericModelForm property)</a>
 </li>
         <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.widgets.JSONListWidget.media">(apis_core.generic.forms.widgets.JSONListWidget property)</a>
@@ -2332,19 +2362,15 @@
         <li><a href="modules/apis_core.generic.html#apis_core.generic.renderers.GenericRDFXMLRenderer.media_type">(apis_core.generic.renderers.GenericRDFXMLRenderer attribute)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_booleanfield">merge_booleanfield() (apis_core.apis_entities.models.AbstractEntity method)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_charfield">merge_charfield() (apis_core.apis_entities.models.AbstractEntity method)</a>
-</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_end_date_written">merge_end_date_written() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_fields">merge_fields() (apis_core.apis_entities.models.AbstractEntity method)</a>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.merge_fields">merge_fields() (apis_core.generic.abc.GenericModel method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_start_date_written">merge_start_date_written() (apis_core.apis_entities.models.AbstractEntity method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_textfield">merge_textfield() (apis_core.apis_entities.models.AbstractEntity method)</a>
-</li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_with">merge_with() (apis_core.apis_entities.models.AbstractEntity method)</a>
+</li>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.views.MergeWith">MergeWith (class in apis_core.generic.views)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.apps.MetainfoConfig">MetainfoConfig (class in apis_core.apis_metainfo.apps)</a>
 </li>
@@ -2958,6 +2984,8 @@
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.List.permission_action_required">(apis_core.generic.views.List attribute)</a>
 </li>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.MergeWith.permission_action_required">(apis_core.generic.views.MergeWith attribute)</a>
+</li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Update.permission_action_required">(apis_core.generic.views.Update attribute)</a>
 </li>
       </ul></li>
@@ -3246,15 +3274,17 @@
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.GenericModelMixin.setup">(apis_core.generic.views.GenericModelMixin method)</a>
 </li>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.MergeWith.setup">(apis_core.generic.views.MergeWith method)</a>
+</li>
       </ul></li>
       <li><a href="modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.setUp">setUp() (apis_core.history.tests.test_simple_history.SimpleHistoryTestCase method)</a>
 </li>
       <li><a href="modules/apis_core.relations.html#apis_core.relations.views.CreateRelationForm.setup">setup() (apis_core.relations.views.CreateRelationForm method)</a>
 </li>
-      <li><a href="modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase">SimpleHistoryTestCase (class in apis_core.history.tests.test_simple_history)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase">SimpleHistoryTestCase (class in apis_core.history.tests.test_simple_history)</a>
+</li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.serializers.SimpleObjectSerializer">SimpleObjectSerializer (class in apis_core.generic.serializers)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.serializers.SimpleObjectSerializer.Meta">SimpleObjectSerializer.Meta (class in apis_core.generic.serializers)</a>
@@ -3397,6 +3427,8 @@
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Create.template_name">(apis_core.generic.views.Create attribute)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Import.template_name">(apis_core.generic.views.Import attribute)</a>
+</li>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.MergeWith.template_name">(apis_core.generic.views.MergeWith attribute)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Overview.template_name">(apis_core.generic.views.Overview attribute)</a>
 </li>

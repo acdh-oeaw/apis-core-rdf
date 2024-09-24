@@ -86,6 +86,7 @@
              
   <h1>Source code for apis_core.generic.abc</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">BooleanField</span><span class="p">,</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">TextField</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">permission_fullname</span>
@@ -131,6 +132,13 @@
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:delete&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span></div>
 
 
+<div class="viewcode-block" id="GenericModel.get_merge_url">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_merge_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_merge_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_id</span><span class="p">):</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:merge&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">other_id</span><span class="p">])</span></div>
+
+
 <div class="viewcode-block" id="GenericModel.get_create_success_url">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_create_success_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_create_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -169,6 +177,71 @@
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_delete_permission</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">permission_fullname</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.get_merge_charfield_value">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_merge_charfield_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_merge_charfield_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="n">CharField</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">choices</span><span class="p">:</span>
+            <span class="n">otherres</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">otherres</span> <span class="o">!=</span> <span class="n">res</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="n">otherres</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.get_merge_textfield_value">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_merge_textfield_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_merge_textfield_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">TextField</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="n">TextField</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;Merged from </span><span class="si">{</span><span class="n">other</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.get_merge_booleanfield">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_merge_booleanfield">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_merge_booleanfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">BooleanField</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="n">BooleanField</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.get_field_value_after_merge">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_field_value_after_merge">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_field_value_after_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method finds the value of a field after merging `other` into `self`.</span>
+<span class="sd">        It first tries to find a merge method that is specific to that field</span>
+<span class="sd">        (merge_{fieldname}) and then tries to find a method that is specific to</span>
+<span class="sd">        the type of the field (merge_{fieldtype})</span>
+<span class="sd">        If neither of those exist, it uses the others field value if the field</span>
+<span class="sd">        in self is not set, otherwise it keeps the value in self.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fieldtype</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get_internal_type</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="c1"># if there is a `get_merge_{fieldname}` method in this model, use that one</span>
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;get_merge_</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_value&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;get_merge_</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_value&quot;</span><span class="p">)(</span><span class="n">other</span><span class="p">)</span>
+        <span class="c1"># otherwise we check if there is a method for the field type and use that one</span>
+        <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;get_merge_</span><span class="si">{</span><span class="n">fieldtype</span><span class="si">}</span><span class="s2">_value&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;get_merge_</span><span class="si">{</span><span class="n">fieldtype</span><span class="si">}</span><span class="s2">_value&quot;</span><span class="p">)(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.merge_fields">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.merge_fields">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method iterates through the model fields and uses the</span>
+<span class="sd">        `get_field_value_after_merge` method to copy values from `other` to `self`.</span>
+<span class="sd">        It is called by the `merge_with` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="n">newval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_field_value_after_merge</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">newval</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">newval</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
 </div>
 
 </pre></div>
