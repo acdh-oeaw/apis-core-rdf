@@ -11,7 +11,6 @@ from apis_core.utils.rdf import get_definition_and_attributes_from_uri
 logger = logging.getLogger(__name__)
 
 
-@cache
 class GenericModelImporter:
     """
     A generic importer class
