@@ -25,10 +25,7 @@ class SubjObjColumn(tables.ManyToManyColumn):
         kwargs["orderable"] = True
         kwargs["filter"] = lambda qs: qs.order_by("model")
         kwargs["transform"] = lambda ent: f"{ent.name.capitalize()}"
-        kwargs["linkify_item"] = {
-            "viewname": "apis_core:apis_entities:generic_entities_list",
-            "args": [tables.A("model")],
-        }
+        kwargs["linkify_item"] = lambda record: record.model_class().get_listview_url()
         super().__init__(*args, **kwargs)
 
 
