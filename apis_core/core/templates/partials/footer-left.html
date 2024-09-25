@@ -1,3 +1,4 @@
+{% load core %}
 {% load static %}
 {% url "apis_core:apis_api:api-root" as api_root %}
 {% if api_root %}
@@ -9,5 +10,11 @@
 {% if swagger_ui %}
   <a href="{{ swagger_ui }}" title="Swagger UI">
     <img src="{% static "/img/Swagger-logo.png" %}" height="24px">
+  </a>
+{% endif %}
+{% git_repository_url as repository_url %}
+{% if repository_url %}
+  <a href="{{ repository_url }}" title="Git repository">
+    <img src="{% static "/img/Git-Icon-1788C.png" %}" height="24px">
   </a>
 {% endif %}

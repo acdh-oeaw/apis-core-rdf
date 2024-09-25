@@ -1,3 +1,5 @@
+import os
+
 from django import template
 from django.conf import settings
 
@@ -29,3 +31,10 @@ def model_meta(content_type, field):
 @register.simple_tag
 def apis_version():
     return __version__
+
+
+@register.simple_tag
+def git_repository_url():
+    return os.getenv(
+        "GITLAB_ENVIRONMENT_URL", "https://github.org/acdh-oeaw/apis-core-rdf/"
+    )
