@@ -10,7 +10,6 @@ from apis_core.apis_entities.views import (
     EntitiesDuplicate,
     EntitiesMerge,
 )
-from apis_core.generic.views import Create, Delete, Detail, List
 
 
 class EntityToContenttypeConverter:
@@ -46,26 +45,6 @@ register_converter(EntityToContenttypeConverter, "entitytocontenttype")
 app_name = "apis_entities"
 
 entity_patterns = [
-    path(
-        "list/",
-        List.as_view(),
-        name="generic_entities_list",
-    ),
-    path(
-        "create/",
-        Create.as_view(),
-        name="generic_entities_create_view",
-    ),
-    path(
-        "<int:pk>/detail/",
-        Detail.as_view(),
-        name="generic_entities_detail_view",
-    ),
-    path(
-        "<int:pk>/delete/",
-        Delete.as_view(),
-        name="generic_entities_delete_view",
-    ),
     path(
         "<int:pk>/duplicate/",
         EntitiesDuplicate.as_view(),
