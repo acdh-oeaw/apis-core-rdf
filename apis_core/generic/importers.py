@@ -44,13 +44,13 @@ class GenericModelImporter:
             defn, data = get_definition_and_attributes_from_uri(uri, self.model)
             return data
         except Exception as e:
-            logging.debug(e)
+            logger.debug(e)
         # if everything else fails, try parsing json
         # if even that does not help, return an empty dict
         try:
             return json.loads(urllib.request.urlopen(uri).read())
         except Exception as e:
-            logging.debug(e)
+            logger.debug(e)
         return {}
 
     def mangle_data(self, data):
