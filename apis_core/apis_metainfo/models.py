@@ -114,15 +114,9 @@ class UriManager(models.Manager):
 
 class Uri(GenericModel, models.Model):
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
-    domain = models.CharField(max_length=255, blank=True)
-    rdf_link = models.URLField(blank=True)
     root_object = InheritanceForeignKey(
         RootObject, blank=True, null=True, on_delete=models.CASCADE
     )
-    # loaded set to True when RDF was loaded and parsed into the data model
-    loaded = models.BooleanField(default=False)
-    # Timestamp when file was loaded and parsed
-    loaded_time = models.DateTimeField(blank=True, null=True)
 
     objects = UriManager()
 

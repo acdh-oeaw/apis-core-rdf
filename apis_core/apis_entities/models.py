@@ -153,4 +153,4 @@ def create_default_uri(sender, instance, created, raw, using, update_fields, **k
                     "apis_core:GetEntityGeneric", kwargs={"pk": instance.pk}
                 )
             uri = f"{base}{route}"
-            Uri.objects.create(uri=uri, domain="apis default", root_object=instance)
+            Uri.objects.create(uri=uri, root_object=instance)
