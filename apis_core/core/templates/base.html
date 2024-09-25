@@ -145,7 +145,7 @@
                        aria-expanded="false">User: {{ user.get_username }}</a>
                     <div class="dropdown-menu dropdown-menu-right">
                       <div class="dropdown-item">
-                        <form action="{% url 'apis_core:logout' %}" method="post">
+                        <form action="{% url 'apis_core:logout' %}?next=/" method="post">
                           {% csrf_token %}
                           <button type="submit" class="btn">
                             <span class="material-symbols-outlined material-symbols-align">logout</span>
