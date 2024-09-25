@@ -16,6 +16,11 @@ class GenericModel:
         ct = ContentType.objects.get_for_model(cls)
         return reverse("apis_core:generic:create", args=[ct])
 
+    @classmethod
+    def get_importview_url(cls):
+        ct = ContentType.objects.get_for_model(cls)
+        return reverse("apis_core:generic:import", args=[ct])
+
     def get_edit_url(self):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:update", args=[ct, self.id])
