@@ -14,6 +14,8 @@
             {% if object_list.model.get_add_permission in perms %}
               <a class="btn btn-outline-success float-right btn-sm"
                  href="{{ object_list.model.get_createview_url }}">Create</a>
+              <a class="btn btn-outline-success float-right btn-sm mr-1"
+                 href="{{ object_list.model.get_importview_url }}">Import</a>
             {% endif %}
           </div>
         </div>
