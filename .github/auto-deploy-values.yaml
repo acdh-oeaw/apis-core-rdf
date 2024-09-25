@@ -1,0 +1,47 @@
+# defaults extracted from https://github.com/acdh-oeaw/gl-autodevops-minimal-port/blob/main/.github/workflows/deploy-cluster-2.yml
+replicaCount: 1
+image:
+  repository: $repository
+  tag: "$tag"
+  pullPolicy: Always
+extraLabels:
+  "ID": "$service_id"
+gitlab:
+  app: "$app_name"
+  envURL: "$repo_url"
+service:
+  enabled: true
+  name: "web"
+  url: "$public_url"
+  additionalHosts:
+    - ${app_name_in_url}-${ref_name}.${kube_ingress_base_domain}
+  type: ClusterIP
+  externalPort: 5000
+  internalPort: 5000
+ingress:
+  enabled: true
+  path: "/"
+  annotations:
+    kubernetes.io/ingressClassName: "nginx"
+livenessProbe:
+  path: "/"
+  initialDelaySeconds: 15
+  timeoutSeconds: 15
+  scheme: "HTTP"
+  probeType: "httpGet"
+readinessProbe:
+  path: "/"
+  initialDelaySeconds: 5
+  timeoutSeconds: 3
+  scheme: "HTTP"
+  probeType: "httpGet"
+# customizations
+persistence:
+  enabled: false
+  volumes:
+    - name: data
+      mount:
+        path: "/pvc-mount"
+      claim:
+        accessMode: ReadWriteOnce
+        size: 8Gi
