@@ -164,8 +164,14 @@
 
 <div class="viewcode-block" id="relation_match_target">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.utils.relation_match_target">[docs]</a>
-<span class="nd">@functools</span><span class="o">.</span><span class="n">cache</span>
 <span class="k">def</span> <span class="nf">relation_match_target</span><span class="p">(</span><span class="n">relation</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">ContentType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    test if a relation points to a target</span>
+<span class="sd">    this function should not be cached, because the `forward` attribute</span>
+<span class="sd">    is an annotation that does not seem to be part of the relation, so</span>
+<span class="sd">    if cached, method could be called with another `forward` value and</span>
+<span class="sd">    return the wrong result</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">relation</span><span class="o">.</span><span class="n">forward</span> <span class="ow">and</span> <span class="n">relation</span><span class="o">.</span><span class="n">obj_content_type</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">relation</span><span class="o">.</span><span class="n">forward</span> <span class="ow">and</span> <span class="n">relation</span><span class="o">.</span><span class="n">subj_content_type</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>

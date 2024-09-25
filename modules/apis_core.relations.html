@@ -571,7 +571,12 @@ list[ContentType]: A list of unique ContentTypes for related models.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="apis_core.relations.utils.relation_match_target">
 <span class="sig-prename descclassname"><span class="pre">apis_core.relations.utils.</span></span><span class="sig-name descname"><span class="pre">relation_match_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ContentType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/utils.html#relation_match_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.utils.relation_match_target" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>test if a relation points to a target
+this function should not be cached, because the <cite>forward</cite> attribute
+is an annotation that does not seem to be part of the relation, so
+if cached, method could be called with another <cite>forward</cite> value and
+return the wrong result</p>
+</dd></dl>
 
 </section>
 <section id="module-apis_core.relations.views">
