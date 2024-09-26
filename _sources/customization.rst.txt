@@ -57,6 +57,10 @@ useful `django table columns
 <https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#columns>`_
 that you might want to use.
 
+Your table can also contain a ``paginate_by`` attribute, which is then used
+by the list view to determines the number of items per page, or ``None`` for no
+pagination (which is the default).
+
 The base queryset that is used in the listview, which is then filtered using
 the django-filters filter, is ``model.objects.all()`` - but you can override
 the queryset by creating a custom queryset for your model in
