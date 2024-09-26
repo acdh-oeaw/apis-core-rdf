@@ -1,0 +1,38 @@
+#####################################################
+# Create an E21_Person from a wikidata RDF endpoint #
+#####################################################
+superclass = "apis_core.apis_entities.abc.E21_Person"
+regex = "http://www.wikidata.org.*"
+[[attributes]]
+# forename
+sparql = """
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT ?forename
+WHERE {
+  ?person wdt:P735/rdfs:label ?first_name .
+  BIND(?first_name AS ?forename)
+}
+"""
+[[attributes]]
+# surname
+sparql = """
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT ?surname
+WHERE {
+  ?subject wdt:P734/rdfs:label ?name
+  BIND(?name as ?surname)
+}
+"""
+[[attributes]]
+# date_of_birth, date_of_death
+sparql = """
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT ?date_of_birth ?date_of_death
+WHERE {
+  ?subject wdt:P569 ?birth_date .
+  ?subject wdt:P570 ?death
+  BIND(CONCAT(STR(YEAR(?birth_date)),"-",STR(MONTH(?birth_date)),"-",STR(DAY(?birth_date))) AS ?date_of_birth)
+  BIND(CONCAT(STR(YEAR(?death)),"-",STR(MONTH(?death)),"-",STR(DAY(?death))) AS ?date_of_death)
+}
+"""
