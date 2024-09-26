@@ -138,13 +138,13 @@
             <span class="n">defn</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">data</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="c1"># if everything else fails, try parsing json</span>
         <span class="c1"># if even that does not help, return an empty dict</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">{}</span></div>
 
 
