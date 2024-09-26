@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Glossary &mdash; APIS 0.27.0 documentation</title>
+  <title>Development &mdash; APIS 0.27.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -21,7 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Development" href="development.html" /> 
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="Additional Features" href="features.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,8 +54,11 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customization.html">Customization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">Additional Features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Glossary</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
 <ul>
@@ -77,9 +81,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Glossary</li>
+      <li class="breadcrumb-item active">Development</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/glossary.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/development.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -87,33 +91,55 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="glossary">
-<h1>Glossary<a class="headerlink" href="#glossary" title="Link to this heading"></a></h1>
-<dl class="simple glossary">
-<dt id="term-entity">entity<a class="headerlink" href="#term-entity" title="Link to this term"></a></dt><dd><p>An entity is a thing or object that is identifiable and distinct from other things. In the context of APIS, an entity is a Django data model instance.</p>
-</dd>
-<dt id="term-ontology">ontology<a class="headerlink" href="#term-ontology" title="Link to this term"></a></dt><dd><p>An ontology is a formal representation of knowledge as a set of concepts within a domain, and the relationships between those concepts. In the context of APIS it is a specialized form of a Django data model and therefore refers to classes rather than instances.</p>
-</dd>
-<dt id="term-property">property<a class="headerlink" href="#term-property" title="Link to this term"></a></dt><dd><p>An attribute of an entity. In the context of APIS, a property is a field of a Django data model.</p>
-</dd>
-<dt id="term-RDF">RDF<a class="headerlink" href="#term-RDF" title="Link to this term"></a></dt><dd><p><a class="reference external" href="https://www.w3.org/RDF/">Resource Description Framework</a> is a standard model for data interchange on the Web. In the context of APIS, RDF is used to provide data in a machine-readable format via the API.</p>
-</dd>
-<dt id="term-relation">relation<a class="headerlink" href="#term-relation" title="Link to this term"></a></dt><dd><p>A relation is a connection between two entities. In the context of APIS, this is realized via the <a class="reference internal" href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple" title="apis_core.apis_relations.models.Triple"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_relations.models.Triple</span></code></a> class.</p>
-</dd>
-<dt id="term-TEI">TEI<a class="headerlink" href="#term-TEI" title="Link to this term"></a></dt><dd><p><a class="reference external" href="https://tei-c.org/">Text encoding Initiative</a> is a consortium which collectively develops and maintains a standard for the representation of texts in digital form. In the context of APIS, TEI refers to the XML schema used for the representation of texts.</p>
-</dd>
-<dt id="term-TempTriple">TempTriple<a class="headerlink" href="#term-TempTriple" title="Link to this term"></a></dt><dd><p><a class="reference internal" href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.TempTriple" title="apis_core.apis_relations.models.TempTriple"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_relations.models.TempTriple</span></code></a> is a subclass of the more generic <a class="reference internal" href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple" title="apis_core.apis_relations.models.Triple"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_relations.models.Triple</span></code></a> that allows to define dates directly on the relation.</p>
-</dd>
-<dt id="term-Triple">Triple<a class="headerlink" href="#term-Triple" title="Link to this term"></a></dt><dd><p>In RDF, a triple is a statement that consists of three parts: a subject, a predicate, and an object. In the context of APIS, a triple is a relation between two entities realized via the <a class="reference internal" href="modules/apis_core.apis_relations.html#apis_core.apis_relations.models.Triple" title="apis_core.apis_relations.models.Triple"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_relations.models.Triple</span></code></a>.</p>
-</dd>
-</dl>
+  <section id="development">
+<h1>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h1>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>
+<ul>
+<li><p>Django</p></li>
+<li><p>djangorestframework</p></li>
+<li><p>django-filter</p></li>
+<li><p>django-autocomplete-light</p></li>
+<li><p>django-cors-headers</p></li>
+<li><p>django-crum</p></li>
+<li><p>django-crispy-forms</p></li>
+<li><p>django-gm2m</p></li>
+<li><p>django-leaflet</p></li>
+<li><p>django-reversion</p></li>
+<li><p>django-tables2</p></li>
+<li><p>djangorestframework-csv</p></li>
+<li><p>djangorestframework-xml</p></li>
+<li><p>rdflib</p></li>
+<li><p>drf-spectacular</p></li>
+<li><p>requests</p></li>
+<li><p>SPARQLWrapper</p></li>
+<li><p>django-model-utils</p></li>
+<li><p>django-admin-csvexport</p>
+<p>Used in the <code class="docutils literal notranslate"><span class="pre">apis_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">apis_vocabularies</span></code> admin apps</p>
+</li>
+<li><p>tablib</p>
+<p><cite>You must have tablib installed in order to use the django-tables2 export functionality</cite> -
+the export functionality is used in the entities list view.</p>
+</li>
+<li><p>apis-override-select2js</p>
+<p>APIS overrides select2js to be able to provide autocomplete fields that also
+integrate external sources. This package provides the patched Javascript
+files - it has to be listed in <code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code> <em>before</em>
+<code class="docutils literal notranslate"><span class="pre">django-autocomplete-light</span></code> packages.</p>
+</li>
+<li><p>python-dateutil</p>
+<p>Used in <code class="docutils literal notranslate"><span class="pre">apis_entities.autocomplete3</span></code></p>
+</li>
+</ul>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="development.html" class="btn btn-neutral float-left" title="Development" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="features.html" class="btn btn-neutral float-left" title="Additional Features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

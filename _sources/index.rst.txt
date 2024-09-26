@@ -18,6 +18,7 @@ Welcome to APIS's documentation!
    configuration
    customization
    features
+   development
    glossary
 
 .. toctree::
