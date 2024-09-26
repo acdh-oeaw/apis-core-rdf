@@ -98,7 +98,6 @@
     <span class="n">EntitiesDuplicate</span><span class="p">,</span>
     <span class="n">EntitiesMerge</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">apis_core.generic.views</span> <span class="kn">import</span> <span class="n">Create</span><span class="p">,</span> <span class="n">Delete</span><span class="p">,</span> <span class="n">Detail</span><span class="p">,</span> <span class="n">List</span>
 
 
 <div class="viewcode-block" id="EntityToContenttypeConverter">
@@ -143,26 +142,6 @@
 <span class="n">app_name</span> <span class="o">=</span> <span class="s2">&quot;apis_entities&quot;</span>
 
 <span class="n">entity_patterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">path</span><span class="p">(</span>
-        <span class="s2">&quot;list/&quot;</span><span class="p">,</span>
-        <span class="n">List</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;generic_entities_list&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="n">path</span><span class="p">(</span>
-        <span class="s2">&quot;create/&quot;</span><span class="p">,</span>
-        <span class="n">Create</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;generic_entities_create_view&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="n">path</span><span class="p">(</span>
-        <span class="s2">&quot;&lt;int:pk&gt;/detail/&quot;</span><span class="p">,</span>
-        <span class="n">Detail</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;generic_entities_detail_view&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="n">path</span><span class="p">(</span>
-        <span class="s2">&quot;&lt;int:pk&gt;/delete/&quot;</span><span class="p">,</span>
-        <span class="n">Delete</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;generic_entities_delete_view&quot;</span><span class="p">,</span>
-    <span class="p">),</span>
     <span class="n">path</span><span class="p">(</span>
         <span class="s2">&quot;&lt;int:pk&gt;/duplicate/&quot;</span><span class="p">,</span>
         <span class="n">EntitiesDuplicate</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
