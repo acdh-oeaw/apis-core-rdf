@@ -1,5 +1,3 @@
-import os
-
 from django import template
 from django.conf import settings
 
@@ -35,6 +33,6 @@ def apis_version():
 
 @register.simple_tag
 def git_repository_url():
-    return os.getenv(
-        "GITLAB_ENVIRONMENT_URL", "https://github.org/acdh-oeaw/apis-core-rdf/"
+    return getattr(
+        settings, "GIT_REPOSITORY_URL", "https://github.com/acdh-oeaw/apis-core-rdf/"
     )
