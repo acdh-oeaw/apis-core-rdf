@@ -8,28 +8,16 @@ Dependencies
 * djangorestframework
 * django-filter
 * django-autocomplete-light
-* django-cors-headers
 * django-crum
 * django-crispy-forms
-* django-gm2m
-* django-leaflet
-* django-reversion
 * django-tables2
-* djangorestframework-csv
-* djangorestframework-xml
 * rdflib
 * drf-spectacular
 * requests
-* SPARQLWrapper
 * django-model-utils
 * django-admin-csvexport
 
   Used in the ``apis_labels`` and ``apis_vocabularies`` admin apps
-
-* tablib
-
-  `You must have tablib installed in order to use the django-tables2 export functionality` - 
-  the export functionality is used in the entities list view.
 
 * apis-override-select2js
 
@@ -38,6 +26,15 @@ Dependencies
   files - it has to be listed in ``INSTALLED_APPS`` *before*
   ``django-autocomplete-light`` packages.
 
-* python-dateutil
-  
-  Used in ``apis_entities.autocomplete3``
+* crispy-bootstrap4
+
+  The default theme used for the crispy forms
+
+* django-simple-history
+
+  Used by ``apis_core.history`` to implement version tracking.
+
+* pydot
+
+  Used in ``apis_core.documentation`` to create a dot representation of the
+  datamodel.
