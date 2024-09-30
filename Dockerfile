@@ -1,5 +1,7 @@
 FROM python:3.11
 
+RUN apt-get update && apt-get install -y graphviz
+
 # https://docs.python.org/3/using/cmdline.html#envvar-PYTHONDONTWRITEBYTECODE
 # Prevents Python from writing .pyc files to disk
 ENV PYTHONDONTWRITEBYTECODE 1
