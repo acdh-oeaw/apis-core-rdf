@@ -6,7 +6,7 @@ from apis_core.apis_entities.utils import get_entity_content_types
 
 class Datamodel:
     entities: [object]
-    relations: [object]
+    relations: [object] = []
     graph: dict() = {}
 
     def __init__(self):
