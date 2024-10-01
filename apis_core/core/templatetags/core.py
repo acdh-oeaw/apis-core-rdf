@@ -39,18 +39,16 @@ def git_repository_url():
 
 
 @register.simple_tag
-def fields(
-    content_type, include_parents=True, include_hidden=False, exclude_parent_links=True
+def get_model_fields(
+    model, include_parents=True, include_hidden=False, exclude_parent_links=True
 ):
     """
-    Return all fields from a Content Type.
+    Return all fields from a model.
     This uses the Django built in `get_fields` method but also allows to exlude parent links.
     Parent links are the `_ptr` fields that point to a parent class.
     """
-    fields = content_type.model_class()._meta.get_fields(
-        include_parents, include_hidden
-    )
+    fields = model._meta.get_fields(include_parents, include_hidden)
     if exclude_parent_links:
-        parent_links = content_type.model_class()._meta.parents.values()
+        parent_links = model._meta.parents.values()
         fields = [field for field in fields if field not in parent_links]
     return fields
