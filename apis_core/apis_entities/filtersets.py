@@ -5,13 +5,14 @@ from django.db import models
 from django.db.models import Case, Q, Value, When
 from django.db.models.functions import Concat
 from django.forms import DateInput
+from django.utils.encoding import force_str
 from simple_history.utils import get_history_manager_for_model
 
 from apis_core.apis_entities.utils import get_entity_classes
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.apis_relations.models import Property, Triple
 from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
-from apis_core.generic.helpers import generate_search_filter
+from apis_core.generic.helpers import default_search_fields, generate_search_filter
 
 ABSTRACT_ENTITY_COLUMNS_EXCLUDE = [
     "rootobject_ptr",
@@ -106,16 +107,10 @@ class ModelSearchFilter(django_filters.CharFilter):
         super().__init__(*args, **kwargs)
 
         if model is not None and "help_text" not in self.extra:
-            if hasattr(model, "_default_search_fields"):
-                fields = model._default_search_fields
-            else:
-                modelfields = model._meta.fields
-                fields = [
-                    field.name
-                    for field in modelfields
-                    if isinstance(field, (models.CharField, models.TextField))
-                ]
-            fields = ", ".join(fields)
+            field_names = [field.verbose_name for field in default_search_fields(model)]
+            # use force_str on the fields verbose names to convert
+            # lazy instances to string and join the results
+            fields = ", ".join(map(force_str, field_names))
             self.extra["help_text"] = f"Search in fields: {fields}"
 
     def filter(self, qs, value):
