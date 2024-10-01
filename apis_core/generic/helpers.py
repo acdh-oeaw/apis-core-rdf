@@ -8,6 +8,31 @@ from django.utils import module_loading
 logger = logging.getLogger(__name__)
 
 
+def default_search_fields(model, field_names=None):
+    """
+    Retrieve the default model fields to use for a search operation
+    By default those are all the CharFields and TextFields of a model.
+    It is also possible to define those fields on the model using the
+    `_default_search_fields` attribute.
+    The method also takes a `field_names` argument to override the list
+    of fields.
+    """
+    default_types = (CharField, TextField)
+    fields = [
+        field for field in model._meta.get_fields() if isinstance(field, default_types)
+    ]
+    # check if the model has a `_default_search_fields`
+    # list and use that as searchfields
+    if isinstance(getattr(model, "_default_search_fields", None), list):
+        fields = [
+            model._meta.get_field(field) for field in model._default_search_fields
+        ]
+    # if `fields_to_search` is a list, use that
+    if isinstance(field_names, list):
+        fields = [model._meta.get_field(field) for field in field_names]
+    return fields
+
+
 def generate_search_filter(model, query, fields_to_search=None, prefix=""):
     """
     Generate a default search filter that searches for the `query`
