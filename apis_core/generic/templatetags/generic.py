@@ -1,8 +1,7 @@
-from itertools import chain
-
 from django import template
 from django.contrib.contenttypes.models import ContentType
 
+from apis_core.core.templatetags.core import get_model_fields
 from apis_core.generic.abc import GenericModel
 
 register = template.Library()
@@ -15,9 +14,8 @@ def contenttype(model):
 
 @register.simple_tag
 def modeldict(instance, fields=None, exclude=None):
-    opts = instance._meta
     data = {}
-    for f in chain(opts.concrete_fields, opts.private_fields, opts.many_to_many):
+    for f in get_model_fields(instance):
         if not getattr(f, "editable", False):
             continue
         if fields is not None and f.name not in fields:
