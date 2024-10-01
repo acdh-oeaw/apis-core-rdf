@@ -9,7 +9,7 @@
     <div class="card">
       <div class="card-header">
         <div class="row">
-          <div class="col">{{ object_list.model|contenttype }}</div>
+          <div class="col">{{ object_list.model|contenttype|model_meta:"verbose_name_plural"|title }}</div>
           <div class="col">
             {% if object_list.model.get_add_permission in perms %}
               <a class="btn btn-outline-success float-right btn-sm"
