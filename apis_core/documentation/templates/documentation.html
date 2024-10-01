@@ -43,7 +43,7 @@
             </tr>
           </thead>
           <tbody>
-            {% fields entity False as entity_fields %}
+            {% get_model_fields entity.model_class False as entity_fields %}
             {% for field in entity_fields %}
               <tr>
                 <td>{{ field.verbose_name }}</td>
