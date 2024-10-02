@@ -202,6 +202,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;submit&quot;</span><span class="p">,</span> <span class="s2">&quot;Merge&quot;</span><span class="p">))</span></div>
 
+
+
+<div class="viewcode-block" id="GenericEnrichForm">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericEnrichForm">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericEnrichForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;instance&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">update_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;update_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">update_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span>
+                <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Update </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">initial</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">hidden_widget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;submit&quot;</span><span class="p">,</span> <span class="s2">&quot;Submit&quot;</span><span class="p">))</span></div>
+
 </pre></div>
 
            </div>

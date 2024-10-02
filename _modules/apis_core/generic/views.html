@@ -94,8 +94,9 @@
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">messages</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">PermissionRequiredMixin</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ImproperlyConfigured</span>
 <span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">modelform_factory</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
 <span class="kn">from</span> <span class="nn">django.template.exceptions</span> <span class="kn">import</span> <span class="n">TemplateDoesNotExist</span>
 <span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">select_template</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">reverse_lazy</span>
@@ -108,11 +109,17 @@
 <span class="kn">from</span> <span class="nn">django_tables2.columns</span> <span class="kn">import</span> <span class="n">library</span>
 <span class="kn">from</span> <span class="nn">django_tables2.tables</span> <span class="kn">import</span> <span class="n">table_factory</span>
 
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
 <span class="kn">from</span> <span class="nn">apis_core.core.mixins</span> <span class="kn">import</span> <span class="n">ListViewObjectFilterMixin</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span><span class="p">,</span> <span class="n">get_importer_for_model</span>
 
 <span class="kn">from</span> <span class="nn">.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span>
-<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">GenericImportForm</span><span class="p">,</span> <span class="n">GenericMergeForm</span><span class="p">,</span> <span class="n">GenericModelForm</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GenericEnrichForm</span><span class="p">,</span>
+    <span class="n">GenericImportForm</span><span class="p">,</span>
+    <span class="n">GenericMergeForm</span><span class="p">,</span>
+    <span class="n">GenericModelForm</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">first_member_match</span><span class="p">,</span>
     <span class="n">generate_search_filter</span><span class="p">,</span>
@@ -575,10 +582,101 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">merge_with</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="p">])</span>
         <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Merged values of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MergeWith.get_success_url">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.get_success_url">[docs]</a>
+
+<div class="viewcode-block" id="Enrich">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich">[docs]</a>
+<span class="k">class</span> <span class="nc">Enrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enrich an entity with data from an external source</span>
+<span class="sd">    If so, it uses the proper Importer to get the data from the Uri and</span>
+<span class="sd">    provides the user with a form to select the fields that should be updated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;change&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;generic/generic_enrich.html&quot;</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">GenericEnrichForm</span>
+    <span class="n">importer_class</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Enrich.setup">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.setup">[docs]</a>
+    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No uri parameter specified.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">importer_class</span> <span class="o">=</span> <span class="n">get_importer_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Enrich.get">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_merge_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">uriobj</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">uriobj</span><span class="o">.</span><span class="n">root_object</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;Object with URI </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2"> already exists, you were redirected to the merge form.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_merge_url</span><span class="p">(</span><span class="n">uriobj</span><span class="o">.</span><span class="n">root_object</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">Uri</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Enrich.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+        <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span>
+        <span class="k">return</span> <span class="n">ctx</span></div>
+
+
+<div class="viewcode-block" id="Enrich.get_form_kwargs">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.get_form_kwargs">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_form_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_form_kwargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;instance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">importer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">importer_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">ImproperlyConfigured</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">kwargs</span></div>
+
+
+<div class="viewcode-block" id="Enrich.form_valid">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.form_valid">[docs]</a>
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Go through all the form fields and extract the ones that</span>
+<span class="sd">        start with `update_` and that are set (those are the checkboxes that</span>
+<span class="sd">        select which fields to update).</span>
+<span class="sd">        Then use the importers `import_into_instance` method to set those</span>
+<span class="sd">        fields values on the model instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">update_fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">key</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;update_&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;update_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">value</span>
+        <span class="p">]</span>
+        <span class="n">importer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">importer_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">importer</span><span class="o">.</span><span class="n">import_into_instance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">update_fields</span><span class="p">)</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Updated fields </span><span class="si">{</span><span class="n">update_fields</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">uri</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="n">root_object</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Added uri </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Enrich.get_success_url">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.get_success_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span></div>
 </div>

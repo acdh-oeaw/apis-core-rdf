@@ -235,7 +235,6 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.Meta"><code class="docutils literal notranslate"><span class="pre">AbstractEntity.Meta</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_duplicate_url"><code class="docutils literal notranslate"><span class="pre">AbstractEntity.get_duplicate_url()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_entity_list_filter"><code class="docutils literal notranslate"><span class="pre">AbstractEntity.get_entity_list_filter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_merge_url"><code class="docutils literal notranslate"><span class="pre">AbstractEntity.get_merge_url()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_next_id"><code class="docutils literal notranslate"><span class="pre">AbstractEntity.get_next_id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_or_create_uri"><code class="docutils literal notranslate"><span class="pre">AbstractEntity.get_or_create_uri()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_prev_id"><code class="docutils literal notranslate"><span class="pre">AbstractEntity.get_prev_id</span></code></a></li>
@@ -813,6 +812,7 @@
 <li class="toctree-l1"><a class="reference internal" href="apis_core.generic.html">apis_core.generic package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.generic.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html">apis_core.generic.forms package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericEnrichForm"><code class="docutils literal notranslate"><span class="pre">GenericEnrichForm</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm"><code class="docutils literal notranslate"><span class="pre">GenericFilterSetForm</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericImportForm"><code class="docutils literal notranslate"><span class="pre">GenericImportForm</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeForm"><code class="docutils literal notranslate"><span class="pre">GenericMergeForm</span></code></a></li>
@@ -836,6 +836,7 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.abc.GenericModel.get_delete_permission"><code class="docutils literal notranslate"><span class="pre">GenericModel.get_delete_permission()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.abc.GenericModel.get_delete_url"><code class="docutils literal notranslate"><span class="pre">GenericModel.get_delete_url()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.abc.GenericModel.get_edit_url"><code class="docutils literal notranslate"><span class="pre">GenericModel.get_edit_url()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.abc.GenericModel.get_enrich_url"><code class="docutils literal notranslate"><span class="pre">GenericModel.get_enrich_url()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.abc.GenericModel.get_field_value_after_merge"><code class="docutils literal notranslate"><span class="pre">GenericModel.get_field_value_after_merge()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.abc.GenericModel.get_importview_url"><code class="docutils literal notranslate"><span class="pre">GenericModel.get_importview_url()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.abc.GenericModel.get_listview_url"><code class="docutils literal notranslate"><span class="pre">GenericModel.get_listview_url()</span></code></a></li>
@@ -1057,6 +1058,19 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Detail.permission_action_required"><code class="docutils literal notranslate"><span class="pre">Detail.permission_action_required</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich"><code class="docutils literal notranslate"><span class="pre">Enrich</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.form_class"><code class="docutils literal notranslate"><span class="pre">Enrich.form_class</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.form_valid"><code class="docutils literal notranslate"><span class="pre">Enrich.form_valid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.get"><code class="docutils literal notranslate"><span class="pre">Enrich.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.get_context_data"><code class="docutils literal notranslate"><span class="pre">Enrich.get_context_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.get_form_kwargs"><code class="docutils literal notranslate"><span class="pre">Enrich.get_form_kwargs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.get_success_url"><code class="docutils literal notranslate"><span class="pre">Enrich.get_success_url()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.importer_class"><code class="docutils literal notranslate"><span class="pre">Enrich.importer_class</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.permission_action_required"><code class="docutils literal notranslate"><span class="pre">Enrich.permission_action_required</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.setup"><code class="docutils literal notranslate"><span class="pre">Enrich.setup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.Enrich.template_name"><code class="docutils literal notranslate"><span class="pre">Enrich.template_name</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.GenericModelMixin"><code class="docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.GenericModelMixin.get_permission_required"><code class="docutils literal notranslate"><span class="pre">GenericModelMixin.get_permission_required()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.GenericModelMixin.get_template_names"><code class="docutils literal notranslate"><span class="pre">GenericModelMixin.get_template_names()</span></code></a></li>
@@ -1087,7 +1101,6 @@
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.MergeWith.form_class"><code class="docutils literal notranslate"><span class="pre">MergeWith.form_class</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.MergeWith.form_valid"><code class="docutils literal notranslate"><span class="pre">MergeWith.form_valid()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.MergeWith.get_context_data"><code class="docutils literal notranslate"><span class="pre">MergeWith.get_context_data()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.MergeWith.get_success_url"><code class="docutils literal notranslate"><span class="pre">MergeWith.get_success_url()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.MergeWith.permission_action_required"><code class="docutils literal notranslate"><span class="pre">MergeWith.permission_action_required</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.MergeWith.setup"><code class="docutils literal notranslate"><span class="pre">MergeWith.setup()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.MergeWith.template_name"><code class="docutils literal notranslate"><span class="pre">MergeWith.template_name</span></code></a></li>
