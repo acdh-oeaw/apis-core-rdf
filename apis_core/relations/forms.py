@@ -31,6 +31,12 @@ class RelationForm(GenericModelForm):
     Relations have generic relations to subj and obj, but we
     hide those ForeignKey form fields and instead show
     autocomplete choices fields.
+    In addition, one can pass a hx_post_route argument to the
+    form to make the form set the `hx-post` attribute to the
+    given value.
+    We also pass a `reverse` boolean, wich gets passed on
+    to the htmx POST endpoint using url parameters (the endpoint
+    can then select the success_url based on the `reverse` state).
     """
 
     class Meta:
@@ -80,6 +86,8 @@ class RelationForm(GenericModelForm):
         generic apis_entities autocomplete with the correct parameters.
         """
 
+        self.is_reverse = kwargs.pop("reverse", False)
+        hx_post_route = kwargs.pop("hx_post_route", False)
         super().__init__(*args, **kwargs)
         subj_content_type = kwargs["initial"].get("subj_content_type", None)
         subj_object_id = kwargs["initial"].get("subj_object_id", None)
@@ -133,6 +141,16 @@ class RelationForm(GenericModelForm):
         self.helper.form_id = f"relation_{model_ct.model}_form"
         self.helper.add_input(Submit("submit", "Submit"))
 
+        if hx_post_route:
+            urlparams = kwargs["initial"]
+            urlparams["reverse"] = self.is_reverse
+            urlparams = {k: v for k, v in urlparams.items() if v}
+            self.helper.attrs = {
+                "hx-post": hx_post_route + "?" + urlencode(urlparams),
+                "hx-swap": "outerHTML",
+                "hx-target": f"#{self.helper.form_id}",
+            }
+
     def clean(self) -> dict:
         """
         We check if there are `subj` or `obj` fields in the form data
@@ -156,39 +174,9 @@ class RelationForm(GenericModelForm):
             del cleaned_data["obj"]
         return cleaned_data
 
-
-class RelationFormHX(RelationForm):
-    """
-    A Relation form that sets a hx-post attribute to the
-    form to make the htmx POST request use another route.
-    We also pass a `reverse` boolean, wich gets passed on
-    to the POST endpoint using url parameters. The POST
-    endpoint then calculates the success_url based on the
-    `reverse` state.
-    """
-
-    def __init__(self, *args, **kwargs):
-        self.is_reverse = kwargs.pop("reverse", False)
-        super().__init__(*args, **kwargs)
-        urlparams = kwargs["initial"]
-        urlparams["reverse"] = self.is_reverse
-        urlparams = {k: v for k, v in urlparams.items() if v}
-        relation_content_type = ContentType.objects.get_for_model(self.Meta.model)
-        hx_post = (
-            reverse(
-                "apis_core:relations:create_relation_form", args=[relation_content_type]
-            )
-            + "?"
-            + urlencode(urlparams)
-        )
-        self.helper.attrs = {
-            "hx-post": hx_post,
-            "hx-swap": "outerHTML",
-            "hx-target": f"#{self.helper.form_id}",
-        }
-
     @property
     def relation_name(self) -> str:
+        """A helper method to access the correct name of the relation"""
         if self.is_reverse:
             return self._meta.model.reverse_name
         return self._meta.model.name

@@ -1,11 +1,9 @@
 from django.contrib.contenttypes.models import ContentType
-from django.forms import modelform_factory
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic.base import TemplateView
 
 from apis_core.generic.views import Create
-from apis_core.relations.forms import RelationFormHX
 from apis_core.relations.templatetags.relations import (
     possible_relation_types_from,
     relations_from,
@@ -42,6 +40,10 @@ class CreateRelationForm(CreateRelation):
     def get_form_kwargs(self, *args, **kwargs) -> dict:
         kwargs = super().get_form_kwargs(*args, **kwargs)
         kwargs["reverse"] = self.reverse
+        content_type = ContentType.objects.get_for_model(self.model)
+        kwargs["hx_post_route"] = reverse(
+            "apis_core:relations:create_relation_form", args=[content_type]
+        )
         return kwargs
 
     def get_success_url(self) -> str:
@@ -57,9 +59,6 @@ class CreateRelationForm(CreateRelation):
                 self.object.obj_object_id,
             ]
         return reverse("apis_core:relations:list_relations", args=args)
-
-    def get_form_class(self, *args, **kwargs):
-        return modelform_factory(self.model, RelationFormHX)
 
 
 class ListRelations(TemplateView):
