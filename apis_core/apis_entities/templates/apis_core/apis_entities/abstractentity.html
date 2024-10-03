@@ -1,4 +1,10 @@
 {% extends "generic/generic_content.html" %}
+{% load static %}
+
+{% block styles %}
+  {{ block.super }}
+  <link href="{% static 'css/apis_entities.css' %}" rel="stylesheet" />
+{% endblock styles %}
 
 {% block content %}
   <div class="container-fluid">
@@ -6,10 +12,10 @@
       <div class="card-header">
 
         {% block card-header-content %}
-          <div class="row">
+          <div id="single-object-header" class="row">
             <div class="col-md-2">{% include "apis_entities/partials/prev_url.html" %}</div>
             <div class="col-md-8">
-              <h2 style="text-align: center;">
+              <h2>
                 {% include "apis_entities/partials/listview_url.html" %}
                 {{ object }}
 
