@@ -3,6 +3,11 @@
 
 {% block title %}{{ object }}{% endblock %}
 
+{% block styles %}
+  {{ block.super }}
+  <link href="{% static 'css/apis_relations.css' %}" rel="stylesheet" />
+{% endblock styles %}
+
 {% block scriptHeader %}
   {{ block.super }}
 {% endblock scriptHeader %}
@@ -11,7 +16,7 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-header">
-        <div class="row">
+        <div id="single-object-header" class="row">
           <div class="col-md-2">
             {% if object.get_prev %}
               <h2>
@@ -22,7 +27,7 @@
             {% endif %}
           </div>
           <div class="col-md-8">
-            <h2 style="text-align: center;">
+            <h2>
               {% if object.get_listview_url %}
                 <a href="{{ object.get_listview_url }}">
                   <small>{{ entity_type }}s</small>
@@ -53,7 +58,7 @@
           <div class="col-md-2">
             <h2>
               {% if object.get_next %}
-                <a href="{{ object.get_next }}" style="float:right">
+                <a class="next-in-list" href="{{ object.get_next }}">
                   <i class="fas fa-chevron-right" title="next"></i>
                 </a>
               </h2>
