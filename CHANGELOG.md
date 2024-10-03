@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.28.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.27.0...v0.28.0) (2024-10-03)
+
+
+### Features
+
+* **apis_entities:** adapt merge form to use new enrich view ([ba7ad4c](https://github.com/acdh-oeaw/apis-core-rdf/commit/ba7ad4c2b450e83069b960d012ff4e3f544306e8))
+* **apis_entities:** add a E21_PersonFromWikidata RDF configuration ([d249d99](https://github.com/acdh-oeaw/apis-core-rdf/commit/d249d9972914152fada5163b9cba9dbb2be95932))
+* **apis_entities:** add a link to the enrich uri to all linked URIs ([c0b459d](https://github.com/acdh-oeaw/apis-core-rdf/commit/c0b459d1e0b8af5acdc67b8e0319ba2c666e44bd))
+* **apis_entities:** add a util method to get all entity conten types ([0be8476](https://github.com/acdh-oeaw/apis-core-rdf/commit/0be8476979ac8a55c0bc520619d97f771b48e2e3))
+* **apis_entities:** drop old version style urls ([2f85686](https://github.com/acdh-oeaw/apis-core-rdf/commit/2f85686947f31ba28e5807b02ee2fc81cedc62cc)), closes [#1196](https://github.com/acdh-oeaw/apis-core-rdf/issues/1196)
+* **apis_entities:** introduce a map view for E53_Place entities ([ba68493](https://github.com/acdh-oeaw/apis-core-rdf/commit/ba6849377bc90e81a16ef13fcaa43c9ebebfdf66))
+* **core:** add a templatetag that returns the url to the git repo ([82fa96d](https://github.com/acdh-oeaw/apis-core-rdf/commit/82fa96d27557f2d46619c657e14de822a5068b3c)), closes [#1217](https://github.com/acdh-oeaw/apis-core-rdf/issues/1217)
+* **core:** allow to skip dateparsing in LegacyDateMixin ([0925fc0](https://github.com/acdh-oeaw/apis-core-rdf/commit/0925fc0c7202c01bfa309ca3db444a48d2f29621)), closes [#1208](https://github.com/acdh-oeaw/apis-core-rdf/issues/1208)
+* **core:** introduce templatetag to list fields for a contenttype ([2c02a94](https://github.com/acdh-oeaw/apis-core-rdf/commit/2c02a94118540f8de6fcff2d40b85e42fa8bfa53))
+* **documentation:** add a new `apis_core.documentation` app ([5e44520](https://github.com/acdh-oeaw/apis-core-rdf/commit/5e44520c3256207a33393a6219024f194edd92c0))
+* **generic:** add a view for enriching entities with external data ([9e8fe5c](https://github.com/acdh-oeaw/apis-core-rdf/commit/9e8fe5cc5c8bf9bde7daf3379d9d9b10727a9e70))
+* **generic:** add an import button to the list views ([7c0c5f4](https://github.com/acdh-oeaw/apis-core-rdf/commit/7c0c5f43fba3a09fa535ae70996998cafa020f17)), closes [#1171](https://github.com/acdh-oeaw/apis-core-rdf/issues/1171)
+* **generic:** allow to set paginate_by using a table attribute ([1cc3792](https://github.com/acdh-oeaw/apis-core-rdf/commit/1cc379216278672181e08f556bf798182560389d))
+* **relations:** replace bootstrap modal with html dialog ([a2e80fa](https://github.com/acdh-oeaw/apis-core-rdf/commit/a2e80fad3fcfc2903067a072de13af4d0406b6e6))
+* **sample_project:** enable debug logging ([20ace0e](https://github.com/acdh-oeaw/apis-core-rdf/commit/20ace0e8dc6e13a78680746850e2e47831984df2)), closes [#1252](https://github.com/acdh-oeaw/apis-core-rdf/issues/1252)
+* **sample_project:** enable the `apis_core.documentation` app ([48ab3bf](https://github.com/acdh-oeaw/apis-core-rdf/commit/48ab3bfde3ffb0c9dc4a315a010a17113b2ed00a))
+
+
+### Bug Fixes
+
+* **core:** redirect to root after logout ([b74b6e7](https://github.com/acdh-oeaw/apis-core-rdf/commit/b74b6e76885bf021883f4e7f2eafc4e99b8f7c12))
+* **core:** use a generic setting instead of an environment variable ([2eb364d](https://github.com/acdh-oeaw/apis-core-rdf/commit/2eb364d126796f681f89fb8aa6b155861e054744))
+* **documentation:** add initial value ([af447ce](https://github.com/acdh-oeaw/apis-core-rdf/commit/af447ceac71c70be31251cdde37d83bc502ff85f))
+* **generic:** fix typo logging -&gt; logger ([86ee0a2](https://github.com/acdh-oeaw/apis-core-rdf/commit/86ee0a2a3b9d4210952c3baca31f45fb61c1c532))
+* **generic:** reuse `get_model_fields` templatetag in `modeldict` ([9376df7](https://github.com/acdh-oeaw/apis-core-rdf/commit/9376df70705afdf0c382751ea4433a7a1a8a8b12)), closes [#1249](https://github.com/acdh-oeaw/apis-core-rdf/issues/1249)
+* **generic:** show verbose name instead of contenttype name in list view ([3232ea6](https://github.com/acdh-oeaw/apis-core-rdf/commit/3232ea6e69ea8ce6a8b8eaed35753a457ec3479e)), closes [#1246](https://github.com/acdh-oeaw/apis-core-rdf/issues/1246)
+* **relations:** disable cache on the relation_match_target function ([e9a3111](https://github.com/acdh-oeaw/apis-core-rdf/commit/e9a31116fa6278da038637b89cd6cb1acaa000d5)), closes [#1207](https://github.com/acdh-oeaw/apis-core-rdf/issues/1207)
+
+
+### Documentation
+
+* **customization:** add documentation regarding paginate_by ([5c4da6f](https://github.com/acdh-oeaw/apis-core-rdf/commit/5c4da6fe32fd76114eaf7eebee42a0b471861332))
+* readd the development chapter, that was accidently removed ([005f975](https://github.com/acdh-oeaw/apis-core-rdf/commit/005f975f4712cdc9597fded1ae99a1ad15be717f))
+* update development section ([8eb0447](https://github.com/acdh-oeaw/apis-core-rdf/commit/8eb044773b4b620c244329ca516233c5e9067bfc))
+* update the CONTRIBUTING file ([e09bc43](https://github.com/acdh-oeaw/apis-core-rdf/commit/e09bc43257a44156686754523f47c4448c0464fd)), closes [#852](https://github.com/acdh-oeaw/apis-core-rdf/issues/852)
+
 ## [0.27.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.26.0...v0.27.0) (2024-09-24)
 
 
