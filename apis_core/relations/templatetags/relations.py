@@ -2,7 +2,7 @@ from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Case, Q, Value, When
 
-from apis_core.generic.helpers import first_member_match, module_paths
+from apis_core.generic.helpers import first_member_match, module_paths, mro_paths
 from apis_core.relations.models import Relation
 from apis_core.relations.tables import RelationsListTable
 from apis_core.relations.utils import relation_content_types, relation_match_target
@@ -58,11 +58,16 @@ def relations_from(from_obj, relation_type: ContentType = None):
 
 @register.simple_tag(takes_context=True)
 def relations_list_table(context, relations, target=None):
-    table_modules = module_paths(
-        type(context["object"]),
-        path="tables",
-        suffix=f"{target.name.capitalize()}RelationsTable",
-    )
+    suffixes = ["RelationsTable"]
+    if target:
+        suffixes.extend(
+            f"{module[-1]}RelationsTable" for module in mro_paths(target.model_class())
+        )
+    table_modules = ()
+    for suffix in suffixes:
+        table_modules += module_paths(
+            type(context["object"]), path="tables", suffix=suffix
+        )
     table_class = first_member_match(table_modules, RelationsListTable)
     if target:
         relations = [
