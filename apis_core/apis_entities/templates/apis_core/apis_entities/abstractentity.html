@@ -13,7 +13,9 @@
 
         {% block card-header-content %}
           <div id="single-object-header" class="row">
-            <div class="col-md-2">{% include "apis_entities/partials/prev_url.html" %}</div>
+            <div class="col-md-2">
+              {% include "apis_entities/partials/navigate_objects.html" with neighbour=object.get_prev_id css_class="prev-in-list" icon_name="chevron_left" title="previous in list" %}
+            </div>
             <div class="col-md-8">
               <h2>
                 {% include "apis_entities/partials/listview_url.html" %}
@@ -24,7 +26,9 @@
 
               </h2>
             </div>
-            <div class="col-md-2">{% include "apis_entities/partials/next_url.html" %}</div>
+            <div class="col-md-2">
+              {% include "apis_entities/partials/navigate_objects.html" with neighbour=object.get_next_id css_class="next-in-list" icon_name="chevron_right" title="next in list" %}
+            </div>
           </div>
         {% endblock card-header-content %}
 

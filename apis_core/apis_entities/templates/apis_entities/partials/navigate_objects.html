@@ -1,0 +1,9 @@
+{% if neighbour %}
+  <h2>
+    <a class="{{ css_class }}"
+       title="{{ title }}"
+       href="{% url request.resolver_match.view_name request.resolver_match.kwargs.contenttype neighbour %}">
+      <span class="material-symbols-outlined">{{ icon_name }}</span>
+    </a>
+  </h2>
+{% endif %}
