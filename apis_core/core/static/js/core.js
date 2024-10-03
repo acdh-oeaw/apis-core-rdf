@@ -8,6 +8,18 @@ function configMultiSelect() {
   });
 }
 
+/* config HTMX events,
+* see also https://htmx.org/events/
+*/
+function configHtmx() {
+  document.body.addEventListener('htmx:beforeSwap', function(event) {
+    if (event.detail.xhr.status === 204) {
+      // Swap content even when the response is empty.
+      event.detail.shouldSwap = true;
+    }
+  });
+}
+
 document.addEventListener("readystatechange", (event) => {
   if (event.target.readyState === "interactive") {
     // equivalent to DOMContentLoaded; document has loaded, defered scripts
@@ -16,5 +28,6 @@ document.addEventListener("readystatechange", (event) => {
     // fired when fully loaded, incl. sub-resources and async scripts
 
     configMultiSelect();
+    configHtmx();
   }
 });

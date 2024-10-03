@@ -247,16 +247,7 @@
       </footer>
     {% endblock footer %}
 
-    {% block scripts %}
-      <script>
-        document.body.addEventListener('htmx:beforeSwap', function(event) {
-          if (event.detail.xhr.status === 204) {
-            // Swap content even when the response is empty.
-            event.detail.shouldSwap = true;
-          }
-        });
-      </script>
-    {% endblock %}
+    {% block scripts %}{% endblock %}
 
     {% block modal %}
       <!-- Modal -->
