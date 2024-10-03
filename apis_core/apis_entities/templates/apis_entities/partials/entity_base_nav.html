@@ -10,9 +10,8 @@
            href="{{ object.get_edit_url }}"><span class="material-symbols-outlined material-symbols-align">edit</span>Edit</a>
       </li>
       {% if object.history %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path == object.get_history_url %}active{% endif %} "
-             style="color: #007bff"
+        <li class="object-history nav-item">
+          <a class="nav-link {% if request.path == object.get_history_url %}active{% endif %}"
              href="{{ object.get_history_url }}"><span class="material-symbols-outlined material-symbols-align">history</span>History</a>
         </li>
       {% endif %}
