@@ -48,6 +48,32 @@ can be accessed under `/apis/swagger/schema/swagger-ui/#/apis/apis_api_history_e
 .. _django-simple-history: https://django-simple-history.readthedocs.io/en/latest/
 
 
+Management Commands
+^^^^^^^^^^^^^^^^^^^
+
+The APIS history plugin is based on the `django-simple-history` package. It comes with 
+management commands provided by `django-simple-history`. Some of the more useful commands are:
+
+.. code-block:: bash
+
+  python manage.py populate_history --auto
+
+This command will populate the history tables with the current state of the models. This is useful 
+if you have added the `VersionMixin` to an existing model.
+
+.. code-block:: bash
+
+  python manage.py clean_duplicate_history --auto
+
+This command will clean up duplicate history entries.
+
+.. code-block:: bash
+
+  python manage.py clean_old_history --days 60 --auto
+
+This command will clean up history entries older than 60 days.
+
+
 Collections plugin
 ------------------
 
