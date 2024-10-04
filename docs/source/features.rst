@@ -48,6 +48,41 @@ can be accessed under `/apis/swagger/schema/swagger-ui/#/apis/apis_api_history_e
 .. _django-simple-history: https://django-simple-history.readthedocs.io/en/latest/
 
 
+Management Commands
+^^^^^^^^^^^^^^^^^^^
+
+The APIS history plugin, based on `django-simple-history`, provides several management commands to help curate history objects. Here are some of the most useful commands:
+
+1. Populate History Tables
+--------------------------
+
+.. code-block:: bash
+
+  python manage.py populate_history --auto
+
+This command populates history tables with the current state of the models. It's particularly useful when you've added `VersionMixin` to an existing model. The `--auto` flag applies the command to all tracked models, or you can specify a list of models instead.
+
+2. Clean Duplicate History Entries
+----------------------------------
+
+.. code-block:: bash
+
+  python manage.py clean_duplicate_history --auto
+
+This command removes duplicate history entries. `django-simple-history` creates a history object every time `save()` is called on an object, regardless of whether any changes were made. This command deletes history objects that are identical to the previous entry.
+
+3. Remove Old History Entries
+-----------------------------
+
+.. code-block:: bash
+
+  python manage.py clean_old_history --days 60 --auto
+
+This command deletes history entries older than the specified number of days (60 in this example).
+
+For more information on these and other management commands, refer to the `django-simple-history documentation <https://django-simple-history.readthedocs.io/en/latest/utils.html>`_.
+
+
 Collections plugin
 ------------------
 
@@ -110,8 +145,8 @@ This templatetag provides a button to change the connection from an instance to
 a collection to point to the collections parent. This is useful if you want to
 implement a workflow (i.e. three collections: `done` as the root one, `in
 process` with `done` as parent and `todo` with `in process` as parent - the
-user can then on the click of a button change an the collection an instance is
-connected to)
+user can then on the click of a button change the collection an instance is
+connected to from `todo` to `in process` and finally `done`.)
 
 * :py:func:`apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id`
 
