@@ -111,6 +111,14 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.collections.migrations.html#module-apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more">apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.collections.migrations.html#apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.Migration"><code class="docutils literal notranslate"><span class="pre">Migration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.collections.migrations.html#apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.Migration.dependencies"><code class="docutils literal notranslate"><span class="pre">Migration.dependencies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.collections.migrations.html#apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.Migration.operations"><code class="docutils literal notranslate"><span class="pre">Migration.operations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="apis_core.collections.templatetags.html">apis_core.collections.templatetags package</a><ul>
@@ -252,7 +260,7 @@ object the first time, the query is executed.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.collections.models.SkosCollection.objects">
-<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#apis_core.collections.models.SkosCollection.objects" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;apis_core.collections.models.SkosCollectionManager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#apis_core.collections.models.SkosCollection.objects" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -385,6 +393,21 @@ object the first time, the query is executed.</p>
 <dt class="sig sig-object py" id="apis_core.collections.models.SkosCollectionContentObject.objects">
 <span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#apis_core.collections.models.SkosCollectionContentObject.objects" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.collections.models.SkosCollectionManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.collections.models.</span></span><span class="sig-name descname"><span class="pre">SkosCollectionManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/collections/models.html#SkosCollectionManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.collections.models.SkosCollectionManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Manager</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.collections.models.SkosCollectionManager.get_by_full_path">
+<span class="sig-name descname"><span class="pre">get_by_full_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/collections/models.html#SkosCollectionManager.get_by_full_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.collections.models.SkosCollectionManager.get_by_full_path" title="Link to this definition"></a></dt>
+<dd><p>Return a collection specified by its full path, from the root colletion
+to the leaf collection, delimited by <cite>|</cite>. I.e. if there is a collection
+named <cite>foo</cite> and it has a parent named <cite>bar</cite> and <cite>bar</cite> does not have a
+parent, then you can use the string “bar|foo” to get the <cite>foo</cite> collection.</p>
+</dd></dl>
 
 </dd></dl>
 

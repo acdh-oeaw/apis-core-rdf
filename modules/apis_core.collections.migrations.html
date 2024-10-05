@@ -134,6 +134,25 @@
 </dd></dl>
 
 </section>
+<section id="module-apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more">
+<span id="apis-core-collections-migrations-0003-skoscollection-unique-name-parent-and-more-module"></span><h2>apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more module<a class="headerlink" href="#module-apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.Migration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.</span></span><span class="sig-name descname"><span class="pre">Migration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/collections/migrations/0003_skoscollection_unique_name_parent_and_more.html#Migration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.Migration" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Migration</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.Migration.dependencies">
+<span class="sig-name descname"><span class="pre">dependencies</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[('collections',</span> <span class="pre">'0002_alter_skoscollection_options')]</span></em><a class="headerlink" href="#apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.Migration.dependencies" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.Migration.operations">
+<span class="sig-name descname"><span class="pre">operations</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;AddConstraint</span>&#160; <span class="pre">model_name='skoscollection',</span> <span class="pre">constraint=&lt;UniqueConstraint:</span> <span class="pre">fields=('name',</span> <span class="pre">'parent')</span> <span class="pre">name='unique_name_parent'</span> <span class="pre">nulls_distinct=False</span> <span class="pre">violation_error_message='The</span> <span class="pre">combination</span> <span class="pre">of</span> <span class="pre">name</span> <span class="pre">and</span> <span class="pre">parent</span> <span class="pre">collection</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">unique'&gt;&gt;,</span> <span class="pre">&lt;AddConstraint</span>&#160; <span class="pre">model_name='skoscollection',</span> <span class="pre">constraint=&lt;CheckConstraint:</span> <span class="pre">condition=(NOT</span> <span class="pre">(AND:</span> <span class="pre">('name__contains',</span> <span class="pre">'|')))</span> <span class="pre">name='check_name_pipe'</span> <span class="pre">violation_error_message='The</span> <span class="pre">name</span> <span class="pre">must</span> <span class="pre">not</span> <span class="pre">contain</span> <span class="pre">the</span> <span class="pre">pipe</span> <span class="pre">symbol:</span> <span class="pre">|'&gt;&gt;]</span></em><a class="headerlink" href="#apis_core.collections.migrations.0003_skoscollection_unique_name_parent_and_more.Migration.operations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
 
