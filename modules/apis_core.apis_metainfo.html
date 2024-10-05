@@ -200,6 +200,14 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#module-apis_core.apis_metainfo.migrations.0014_remove_uri_domain_remove_uri_loaded_and_more">apis_core.apis_metainfo.migrations.0014_remove_uri_domain_remove_uri_loaded_and_more module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#apis_core.apis_metainfo.migrations.0014_remove_uri_domain_remove_uri_loaded_and_more.Migration"><code class="docutils literal notranslate"><span class="pre">Migration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#apis_core.apis_metainfo.migrations.0014_remove_uri_domain_remove_uri_loaded_and_more.Migration.dependencies"><code class="docutils literal notranslate"><span class="pre">Migration.dependencies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#apis_core.apis_metainfo.migrations.0014_remove_uri_domain_remove_uri_loaded_and_more.Migration.operations"><code class="docutils literal notranslate"><span class="pre">Migration.operations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -485,7 +493,7 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.models.</span></span><span class="sig-name descname"><span class="pre">Uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdf_link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loaded</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loaded_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/models.html#Uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.models.</span></span><span class="sig-name descname"><span class="pre">Uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/models.html#Uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.abc.GenericModel" title="apis_core.generic.abc.GenericModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.DoesNotExist">
@@ -508,13 +516,6 @@ by this method will not be associated with a particular field; it will
 have a special-case association with the field defined by NON_FIELD_ERRORS.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.domain">
-<span class="sig-name descname"><span class="pre">domain</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.domain" title="Link to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.get_web_object">
 <span class="sig-name descname"><span class="pre">get_web_object</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/models.html#Uri.get_web_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.get_web_object" title="Link to this definition"></a></dt>
@@ -528,30 +529,9 @@ object the first time, the query is executed.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.loaded">
-<span class="sig-name descname"><span class="pre">loaded</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.loaded" title="Link to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.loaded_time">
-<span class="sig-name descname"><span class="pre">loaded_time</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.loaded_time" title="Link to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.objects">
 <span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;apis_core.apis_metainfo.models.UriManager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.objects" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.rdf_link">
-<span class="sig-name descname"><span class="pre">rdf_link</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.rdf_link" title="Link to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.root_object">
