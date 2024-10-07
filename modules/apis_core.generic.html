@@ -441,6 +441,17 @@ and the add our custom endpoints to this list.</p>
 <section id="module-apis_core.generic.helpers">
 <span id="apis-core-generic-helpers-module"></span><h2>apis_core.generic.helpers module<a class="headerlink" href="#module-apis_core.generic.helpers" title="Link to this heading"></a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.default_search_fields">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">default_search_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#default_search_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.default_search_fields" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the default model fields to use for a search operation
+By default those are all the CharFields and TextFields of a model.
+It is also possible to define those fields on the model using the
+<cite>_default_search_fields</cite> attribute.
+The method also takes a <cite>field_names</cite> argument to override the list
+of fields.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="apis_core.generic.helpers.first_member_match">
 <span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">first_member_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dotted_path_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#first_member_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.first_member_match" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -449,9 +460,6 @@ and the add our custom endpoints to this list.</p>
 <dt class="sig sig-object py" id="apis_core.generic.helpers.generate_search_filter">
 <span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">generate_search_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields_to_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#generate_search_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.generate_search_filter" title="Link to this definition"></a></dt>
 <dd><p>Generate a default search filter that searches for the <cite>query</cite>
-in all the CharFields and TextFields of a model (case-insensitive)
-or in the fields listed in the models <cite>default_search_fields</cite> attribute
-or in the fields listed in the <cite>fields_to_search</cite> argument
 This helper can be used by autocomplete querysets if nothing
 fancier is needed.
 If the <cite>prefix</cite> is set, the field names will be prefixed with that string -

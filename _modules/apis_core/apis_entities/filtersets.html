@@ -93,13 +93,14 @@
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Case</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Value</span><span class="p">,</span> <span class="n">When</span>
 <span class="kn">from</span> <span class="nn">django.db.models.functions</span> <span class="kn">import</span> <span class="n">Concat</span>
 <span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">DateInput</span>
+<span class="kn">from</span> <span class="nn">django.utils.encoding</span> <span class="kn">import</span> <span class="n">force_str</span>
 <span class="kn">from</span> <span class="nn">simple_history.utils</span> <span class="kn">import</span> <span class="n">get_history_manager_for_model</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.utils</span> <span class="kn">import</span> <span class="n">get_entity_classes</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">Triple</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span><span class="p">,</span> <span class="n">GenericFilterSetForm</span>
-<span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">generate_search_filter</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">default_search_fields</span><span class="p">,</span> <span class="n">generate_search_filter</span>
 
 <span class="n">ABSTRACT_ENTITY_COLUMNS_EXCLUDE</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;rootobject_ptr&quot;</span><span class="p">,</span>
@@ -208,16 +209,10 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;help_text&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;_default_search_fields&quot;</span><span class="p">):</span>
-                <span class="n">fields</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_default_search_fields</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">modelfields</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span>
-                <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">field</span><span class="o">.</span><span class="n">name</span>
-                    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">modelfields</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">))</span>
-                <span class="p">]</span>
-            <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+            <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">verbose_name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">default_search_fields</span><span class="p">(</span><span class="n">model</span><span class="p">)]</span>
+            <span class="c1"># use force_str on the fields verbose names to convert</span>
+            <span class="c1"># lazy instances to string and join the results</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">force_str</span><span class="p">,</span> <span class="n">field_names</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">[</span><span class="s2">&quot;help_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Search in fields: </span><span class="si">{</span><span class="n">fields</span><span class="si">}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="ModelSearchFilter.filter">
