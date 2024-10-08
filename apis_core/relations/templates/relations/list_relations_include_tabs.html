@@ -1,0 +1,28 @@
+{% load relations %}
+{% relations_from from_obj=object as relations %}
+{% possible_relation_types_from object as possible_relations %}
+{% get_relation_targets_from object as possible_targets %}
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active"
+       data-toggle="tab"
+       href="#reltab_{{ object.id }}_ALL">All</a>
+  </li>
+  {% for target in possible_targets %}
+    <li class="nav-item">
+      <a class="nav-link"
+         data-toggle="tab"
+         href="#reltab_{{ object.id }}_{{ target.name }}">{{ target.name | title }}</a>
+    </li>
+  {% endfor %}
+</ul>
+<div class="tab-content">
+  <div class="tab-pane container active"
+       id="reltab_{{ object.id }}_ALL"
+       hx-swap-oob="true">{% include "relations/list_relations.html" %}</div>
+  {% for target in possible_targets %}
+    <div class="tab-pane container"
+         id="reltab_{{ object.id }}_{{ target.name }}"
+         hx-swap-oob="true">{% include "relations/list_relations.html" %}</div>
+  {% endfor %}
+</div>

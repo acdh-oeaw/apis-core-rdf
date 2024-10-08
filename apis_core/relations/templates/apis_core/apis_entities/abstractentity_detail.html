@@ -1,6 +1,9 @@
 {% extends "apis_core/apis_entities/abstractentity_detail.html" %}
 
 {% block col-one %}
-  {% include "relations/list_relations_include.html" %}
+  {% block relations-include %}
+    {% include "relations/list_relations_include.html" %}
+  {% endblock relations-include %}
+
   {{ block.super }}
 {% endblock col-one %}
