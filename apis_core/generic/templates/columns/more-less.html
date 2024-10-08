@@ -1,0 +1,10 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/more-less-column.css' %}">
+{% if preview != "" and fulltext != preview %}
+  <details class="more-less-column">
+    <summary class="more-less-column">{{ preview }}</summary>
+    {{ fulltext }}
+  </details>
+{% else %}
+  {{ fulltext }}
+{% endif %}

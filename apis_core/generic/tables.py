@@ -95,3 +95,23 @@ class GenericTable(tables.Table):
     class Meta:
         fields = ["id", "desc"]
         sequence = ("...", "view", "edit", "delete")
+
+
+class MoreLessColumn(tables.TemplateColumn):
+    """
+    Useful for displaying long fields.
+    A preview is shown initially with a "Show more" link
+    which is replaced with a "Show less" link when expanded.
+    """
+
+    template_name = "columns/more-less.html"
+
+    def __init__(self, preview, fulltext, *args, **kwargs):
+        self.preview = preview
+        self.fulltext = fulltext
+        super().__init__(template_name=self.template_name, *args, **kwargs)
+
+    def render(self, record, **kwargs):
+        self.extra_context["preview"] = self.preview(record)
+        self.extra_context["fulltext"] = self.fulltext(record)
+        return super().render(record, **kwargs)
