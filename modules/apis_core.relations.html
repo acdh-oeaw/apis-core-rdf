@@ -164,7 +164,13 @@ validate (some validation happens in the <cite>clean</cite> method anyway).</p>
 <p>This form overrides generic form for relation editing.
 Relations have generic relations to subj and obj, but we
 hide those ForeignKey form fields and instead show
-autocomplete choices fields.</p>
+autocomplete choices fields.
+In addition, one can pass a hx_post_route argument to the
+form to make the form set the <cite>hx-post</cite> attribute to the
+given value.
+We also pass a <cite>reverse</cite> boolean, wich gets passed on
+to the htmx POST endpoint using url parameters (the endpoint
+can then select the success_url based on the <cite>reverse</cite> state).</p>
 <p>Initialize the form and add the <cite>subj</cite> and <cite>obj</cite> fields using the
 generic apis_entities autocomplete with the correct parameters.</p>
 <dl class="py class">
@@ -207,40 +213,11 @@ the Relation</p>
 <dd><p>Return all media required to render the widgets on this form.</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.relations.forms.RelationFormHX">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.relations.forms.</span></span><span class="sig-name descname"><span class="pre">RelationFormHX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/forms.html#RelationFormHX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.forms.RelationFormHX" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.forms.RelationForm" title="apis_core.relations.forms.RelationForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">RelationForm</span></code></a></p>
-<p>A Relation form that sets a hx-post attribute to the
-form to make the htmx POST request use another route.
-We also pass a <cite>reverse</cite> boolean, wich gets passed on
-to the POST endpoint using url parameters. The POST
-endpoint then calculates the success_url based on the
-<cite>reverse</cite> state.</p>
-<p>Initialize the form and add the <cite>subj</cite> and <cite>obj</cite> fields using the
-generic apis_entities autocomplete with the correct parameters.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.relations.forms.RelationFormHX.base_fields">
-<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.relations.forms.RelationFormHX.base_fields" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.relations.forms.RelationFormHX.declared_fields">
-<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#apis_core.relations.forms.RelationFormHX.declared_fields" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py property">
-<dt class="sig sig-object py" id="apis_core.relations.forms.RelationFormHX.media">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#apis_core.relations.forms.RelationFormHX.media" title="Link to this definition"></a></dt>
-<dd><p>Return all media required to render the widgets on this form.</p>
+<dt class="sig sig-object py" id="apis_core.relations.forms.RelationForm.relation_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">relation_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#apis_core.relations.forms.RelationForm.relation_name" title="Link to this definition"></a></dt>
+<dd><p>A helper method to access the correct name of the relation</p>
 </dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="apis_core.relations.forms.RelationFormHX.relation_name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">relation_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#apis_core.relations.forms.RelationFormHX.relation_name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -606,12 +583,6 @@ keyword arguments, and other things.</p>
 <dt class="sig sig-object py" id="apis_core.relations.views.CreateRelationForm.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/views.html#CreateRelationForm.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.views.CreateRelationForm.get" title="Link to this definition"></a></dt>
 <dd><p>Handle GET requests: instantiate a blank version of the form.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.relations.views.CreateRelationForm.get_form_class">
-<span class="sig-name descname"><span class="pre">get_form_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/views.html#CreateRelationForm.get_form_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.views.CreateRelationForm.get_form_class" title="Link to this definition"></a></dt>
-<dd><p>Return the form class to use in this view.</p>
 </dd></dl>
 
 <dl class="py method">

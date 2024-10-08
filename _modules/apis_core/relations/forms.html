@@ -127,6 +127,12 @@
 <span class="sd">    Relations have generic relations to subj and obj, but we</span>
 <span class="sd">    hide those ForeignKey form fields and instead show</span>
 <span class="sd">    autocomplete choices fields.</span>
+<span class="sd">    In addition, one can pass a hx_post_route argument to the</span>
+<span class="sd">    form to make the form set the `hx-post` attribute to the</span>
+<span class="sd">    given value.</span>
+<span class="sd">    We also pass a `reverse` boolean, wich gets passed on</span>
+<span class="sd">    to the htmx POST endpoint using url parameters (the endpoint</span>
+<span class="sd">    can then select the success_url based on the `reverse` state).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RelationForm.Meta">
@@ -179,6 +185,8 @@
 <span class="sd">        generic apis_entities autocomplete with the correct parameters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_reverse</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;reverse&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">hx_post_route</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;hx_post_route&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">subj_content_type</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;initial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subj_content_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">subj_object_id</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;initial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subj_object_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -232,6 +240,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;relation_</span><span class="si">{</span><span class="n">model_ct</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">_form&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;submit&quot;</span><span class="p">,</span> <span class="s2">&quot;Submit&quot;</span><span class="p">))</span>
 
+        <span class="k">if</span> <span class="n">hx_post_route</span><span class="p">:</span>
+            <span class="n">urlparams</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;initial&quot;</span><span class="p">]</span>
+            <span class="n">urlparams</span><span class="p">[</span><span class="s2">&quot;reverse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_reverse</span>
+            <span class="n">urlparams</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">urlparams</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;hx-post&quot;</span><span class="p">:</span> <span class="n">hx_post_route</span> <span class="o">+</span> <span class="s2">&quot;?&quot;</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">urlparams</span><span class="p">),</span>
+                <span class="s2">&quot;hx-swap&quot;</span><span class="p">:</span> <span class="s2">&quot;outerHTML&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;hx-target&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+
 <div class="viewcode-block" id="RelationForm.clean">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.forms.RelationForm.clean">[docs]</a>
     <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -256,44 +274,11 @@
             <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;obj_object_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj_object_id</span>
             <span class="k">del</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">cleaned_data</span></div>
-</div>
 
-
-
-<div class="viewcode-block" id="RelationFormHX">
-<a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.forms.RelationFormHX">[docs]</a>
-<span class="k">class</span> <span class="nc">RelationFormHX</span><span class="p">(</span><span class="n">RelationForm</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A Relation form that sets a hx-post attribute to the</span>
-<span class="sd">    form to make the htmx POST request use another route.</span>
-<span class="sd">    We also pass a `reverse` boolean, wich gets passed on</span>
-<span class="sd">    to the POST endpoint using url parameters. The POST</span>
-<span class="sd">    endpoint then calculates the success_url based on the</span>
-<span class="sd">    `reverse` state.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_reverse</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;reverse&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">urlparams</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;initial&quot;</span><span class="p">]</span>
-        <span class="n">urlparams</span><span class="p">[</span><span class="s2">&quot;reverse&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_reverse</span>
-        <span class="n">urlparams</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">urlparams</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">}</span>
-        <span class="n">relation_content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
-        <span class="n">hx_post</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">reverse</span><span class="p">(</span>
-                <span class="s2">&quot;apis_core:relations:create_relation_form&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">relation_content_type</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;?&quot;</span>
-            <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">urlparams</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;hx-post&quot;</span><span class="p">:</span> <span class="n">hx_post</span><span class="p">,</span>
-            <span class="s2">&quot;hx-swap&quot;</span><span class="p">:</span> <span class="s2">&quot;outerHTML&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;hx-target&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="p">}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">relation_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A helper method to access the correct name of the relation&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_reverse</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">reverse_name</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">name</span></div>
