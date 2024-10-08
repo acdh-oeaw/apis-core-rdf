@@ -1,0 +1,30 @@
+{% load relations %}
+{% relations_from from_obj=object as relations %}
+{% possible_relation_types_from object as possible_relations %}
+{% get_relation_targets_from object as possible_targets %}
+<div class="card mb-2">
+  <div class="card-header pb-0 border-bottom-0">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active"
+           data-toggle="tab"
+           href="#reltab_{{ object.id }}_ALL">All</a>
+      </li>
+      {% for target in possible_targets %}
+        <li class="nav-item">
+          <a class="nav-link"
+             data-toggle="tab"
+             href="#reltab_{{ object.id }}_{{ target.name }}">{{ target.name | title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="card-body">
+    <div class="tab-content">
+      <div class="tab-pane active" id="reltab_{{ object.id }}_ALL">{% include "relations/list_relations.html" %}</div>
+      {% for target in possible_targets %}
+        <div class="tab-pane" id="reltab_{{ object.id }}_{{ target.name }}">{% include "relations/list_relations.html" %}</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
