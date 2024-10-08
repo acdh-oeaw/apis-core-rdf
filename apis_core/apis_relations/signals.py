@@ -2,6 +2,7 @@ import logging
 
 from django.dispatch import receiver
 
+from apis_core.apis_entities.signals import post_merge_with
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.apis_metainfo.signals import post_duplicate
 from apis_core.apis_relations.models import TempTriple
@@ -21,3 +22,11 @@ def copy_relations(sender, instance, duplicate, **kwargs):
             newrel = rel.duplicate()
             newrel.obj = duplicate
             newrel.save()
+
+
+@receiver(post_merge_with)
+def merge_relations(sender, instance, entities, **kwargs):
+    for ent in entities:
+        logger.info(f"Merging relations from {ent!r} into {instance!r}")
+        TempTriple.objects.filter(obj__id=ent.id).update(obj=instance)
+        TempTriple.objects.filter(subj__id=ent.id).update(subj=instance)

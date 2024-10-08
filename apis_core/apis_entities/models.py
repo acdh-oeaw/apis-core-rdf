@@ -10,7 +10,6 @@ from django.urls import NoReverseMatch, reverse
 
 from apis_core.apis_entities import signals
 from apis_core.apis_metainfo.models import RootObject, Uri
-from apis_core.apis_relations.models import TempTriple
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
@@ -122,8 +121,6 @@ class AbstractEntity(RootObject):
                         if s not in sl:
                             getattr(self, f.name).add(s)
             Uri.objects.filter(root_object=ent).update(root_object=self)
-            TempTriple.objects.filter(obj__id=ent.id).update(obj=self)
-            TempTriple.objects.filter(subj__id=ent.id).update(subj=self)
 
         for ent in entities:
             self.merge_fields(ent)
