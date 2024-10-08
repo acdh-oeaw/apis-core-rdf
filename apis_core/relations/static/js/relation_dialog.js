@@ -5,7 +5,7 @@ document.body.addEventListener("reinit_select2", function(evt) {
             ajax: {
                 url: $(element).data("autocomplete-light-url"),
             },
-            dropdownParent: $("#relationdialog"),
+            dropdownParent: $(form),
         });
     });
     $('.select2-selection').addClass("form-control");
