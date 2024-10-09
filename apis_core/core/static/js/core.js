@@ -24,14 +24,14 @@ function configHtmx() {
 /* scroll-to-top button */
 function scrollButton() {
 
-  //Get the button
+  // get the button
   let mybutton = document.getElementById("btn-back-to-top");
 
-  // When the user scrolls down 20px from the top of the document, show the button
   window.onscroll = function () {
     scrollFunction();
   };
 
+  // show button when user has scrolled down 20px from top of document
   function scrollFunction() {
     if (
       document.body.scrollTop > 20 ||
@@ -42,7 +42,8 @@ function scrollButton() {
       mybutton.style.display = "none";
     }
   }
-  // When the user clicks on the button, scroll to the top of the document
+
+  // scroll back up on click on button
   mybutton.addEventListener("click", backToTop);
 
   function backToTop() {
