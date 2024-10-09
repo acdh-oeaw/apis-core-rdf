@@ -12,9 +12,10 @@ function configMultiSelect() {
 * see also https://htmx.org/events/
 */
 function configHtmx() {
+  // DOM content swapping behaviour
   document.body.addEventListener('htmx:beforeSwap', function(event) {
     if (event.detail.xhr.status === 204) {
-      // Swap content even when the response is empty.
+      // swap even when the response is empty
       event.detail.shouldSwap = true;
     }
   });
