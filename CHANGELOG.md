@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.29.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.28.0...v0.29.0) (2024-10-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_metainfo:** drop unused attributes from Uri model
+
+### Features
+
+* **collections:** add constraints to collections ([818e998](https://github.com/acdh-oeaw/apis-core-rdf/commit/818e998935b67ee6396714fe0395f86d6807cdf9))
+* **collections:** add custom collection manager ([3e19e49](https://github.com/acdh-oeaw/apis-core-rdf/commit/3e19e49a8e71496fe6000a76843b3cbf6bca71bd))
+* **generic:** introduce `default_search_fields` method ([494ee61](https://github.com/acdh-oeaw/apis-core-rdf/commit/494ee618ffaf9575058c05e2c5257deef2022f7a))
+* **generic:** use the `default_search_fields` method ([c3ff714](https://github.com/acdh-oeaw/apis-core-rdf/commit/c3ff7147dbf51f485b548386f06079f1ed3d9fa2))
+* **generic:** use the `default_search_fields` method ([2279283](https://github.com/acdh-oeaw/apis-core-rdf/commit/22792833e40f98e4f42aa74ac90b862d9d1c7864))
+* **relations:** allow more generic relation tables ([6142910](https://github.com/acdh-oeaw/apis-core-rdf/commit/6142910458a58e46cf8ea46f3d70e35a8b3d0260))
+
+
+### Bug Fixes
+
+* **apis_relations:** call block.super in the col-one block ([720b637](https://github.com/acdh-oeaw/apis-core-rdf/commit/720b637b4eaf22276ed897962cf5a680dbdee0df))
+* **apis_relations:** edit button appearance ([510d0ed](https://github.com/acdh-oeaw/apis-core-rdf/commit/510d0edeaef9cff73205839168bbc835a42eb886))
+* **relations:** use form instead of hardcoding the id ([08abeba](https://github.com/acdh-oeaw/apis-core-rdf/commit/08abebadf6d949b018463c09589a02af5ff51315))
+* **relations:** use javascript onclick instead of htmx on:click ([db2b008](https://github.com/acdh-oeaw/apis-core-rdf/commit/db2b008568e6d5854f263a7e8d7e3d7ab2265b46)), closes [#1265](https://github.com/acdh-oeaw/apis-core-rdf/issues/1265)
+
+
+### Code Refactoring
+
+* **apis_metainfo:** drop unused attributes from Uri model ([5c0156e](https://github.com/acdh-oeaw/apis-core-rdf/commit/5c0156e8444a69eea984a5217586ae94ebb929a9))
+
 ## [0.28.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.27.0...v0.28.0) (2024-10-03)
 
 
