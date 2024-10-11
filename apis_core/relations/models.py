@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.base import ModelBase
 from django.core.exceptions import ValidationError
 from model_utils.managers import InheritanceManager
+from django.contrib.contenttypes.models import ContentType
 
 
 # This ModelBase is simply there to check if the needed attributes
@@ -28,12 +29,20 @@ class RelationModelBase(ModelBase):
 
 
 class Relation(models.Model, metaclass=RelationModelBase):
+    subj_content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, related_name="relation_subj_set"
+    )
+    subj_object_id = models.PositiveIntegerField()
     subj = models.ForeignKey(
         RootObject,
         on_delete=models.SET_NULL,
         null=True,
         related_name="relations_as_subj",
     )
+    obj_content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, related_name="relation_obj_set"
+    )
+    obj_object_id = models.PositiveIntegerField()
     obj = models.ForeignKey(
         RootObject,
         on_delete=models.SET_NULL,
