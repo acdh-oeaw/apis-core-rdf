@@ -389,6 +389,9 @@ class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
         messages.info(self.request, f"Merged values of {self.other} into {self.object}")
         return super().form_valid(form)
 
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
 
 class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
     """
