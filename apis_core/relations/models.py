@@ -30,9 +30,12 @@ class RelationModelBase(ModelBase):
 
 class Relation(models.Model, metaclass=RelationModelBase):
     subj_content_type = models.ForeignKey(
-        ContentType, on_delete=models.CASCADE, related_name="relation_subj_set"
+        ContentType,
+        on_delete=models.CASCADE,
+        related_name="relation_subj_set",
+        editable=False,
     )
-    subj_object_id = models.PositiveIntegerField()
+    subj_object_id = models.PositiveIntegerField(editable=False)
     subj = models.ForeignKey(
         RootObject,
         on_delete=models.SET_NULL,
@@ -40,9 +43,12 @@ class Relation(models.Model, metaclass=RelationModelBase):
         related_name="relations_as_subj",
     )
     obj_content_type = models.ForeignKey(
-        ContentType, on_delete=models.CASCADE, related_name="relation_obj_set"
+        ContentType,
+        on_delete=models.CASCADE,
+        related_name="relation_obj_set",
+        editable=False,
     )
-    obj_object_id = models.PositiveIntegerField()
+    obj_object_id = models.PositiveIntegerField(editable=False)
     obj = models.ForeignKey(
         RootObject,
         on_delete=models.SET_NULL,
