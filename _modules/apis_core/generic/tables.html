@@ -210,6 +210,32 @@
         <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;view&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">)</span></div>
 </div>
 
+
+
+<div class="viewcode-block" id="MoreLessColumn">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.tables.MoreLessColumn">[docs]</a>
+<span class="k">class</span> <span class="nc">MoreLessColumn</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Useful for displaying long fields.</span>
+<span class="sd">    A preview is shown initially with a &quot;Show more&quot; link</span>
+<span class="sd">    which is replaced with a &quot;Show less&quot; link when expanded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;columns/more-less.html&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preview</span><span class="p">,</span> <span class="n">fulltext</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preview</span> <span class="o">=</span> <span class="n">preview</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fulltext</span> <span class="o">=</span> <span class="n">fulltext</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">template_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">template_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MoreLessColumn.render">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.tables.MoreLessColumn.render">[docs]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_context</span><span class="p">[</span><span class="s2">&quot;preview&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_context</span><span class="p">[</span><span class="s2">&quot;fulltext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fulltext</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>

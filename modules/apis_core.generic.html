@@ -921,6 +921,32 @@ and a description column</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.tables.MoreLessColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">MoreLessColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preview</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fulltext</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#MoreLessColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.MoreLessColumn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TemplateColumn</span></code></p>
+<p>Useful for displaying long fields.
+A preview is shown initially with a “Show more” link
+which is replaced with a “Show less” link when expanded.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.tables.MoreLessColumn.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#MoreLessColumn.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.MoreLessColumn.render" title="Link to this definition"></a></dt>
+<dd><p>Return the content for a specific cell.</p>
+<p>This method can be overridden by <span class="xref std std-ref">table.render_FOO</span> methods on the
+table or by subclassing <cite>.Column</cite>.</p>
+<p>If the value for this cell is in <cite>.empty_values</cite>, this method is
+skipped and an appropriate default value is rendered instead.
+Subclasses should set <cite>.empty_values</cite> to <code class="docutils literal notranslate"><span class="pre">()</span></code> if they want to handle
+all values in <cite>.render</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.tables.MoreLessColumn.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'columns/more-less.html'</span></em><a class="headerlink" href="#apis_core.generic.tables.MoreLessColumn.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="apis_core.generic.tables.ViewColumn">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.tables.</span></span><span class="sig-name descname"><span class="pre">ViewColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/tables.html#ViewColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.tables.ViewColumn" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#apis_core.generic.tables.ActionColumn" title="apis_core.generic.tables.ActionColumn"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionColumn</span></code></a></p>
