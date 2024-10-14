@@ -96,8 +96,6 @@ TEMPLATES = [
 STATIC_URL = "/static/"
 STATIC_ROOT = "/tmp/staticfiles"
 
-PROJECT_DEFAULT_MD = {}
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
