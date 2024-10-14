@@ -582,6 +582,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">merge_with</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="p">])</span>
         <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Merged values of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MergeWith.get_success_url">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.get_success_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span></div>
 </div>
 
 
