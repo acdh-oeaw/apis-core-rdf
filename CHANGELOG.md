@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.29.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.28.0...v0.29.0) (2024-10-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_metainfo:** drop unused attributes from Uri model
+
+### Features
+
+* **collections:** add constraints to collections ([818e998](https://github.com/acdh-oeaw/apis-core-rdf/commit/818e998935b67ee6396714fe0395f86d6807cdf9))
+* **collections:** add custom collection manager ([3e19e49](https://github.com/acdh-oeaw/apis-core-rdf/commit/3e19e49a8e71496fe6000a76843b3cbf6bca71bd))
+* **generic:** introduce `default_search_fields` method ([494ee61](https://github.com/acdh-oeaw/apis-core-rdf/commit/494ee618ffaf9575058c05e2c5257deef2022f7a))
+* **generic:** introduce MoreLessColumn ([3d8ebc7](https://github.com/acdh-oeaw/apis-core-rdf/commit/3d8ebc7c1e95351bbb08046a3ed4e7561175e445))
+* **generic:** use the `default_search_fields` method ([c3ff714](https://github.com/acdh-oeaw/apis-core-rdf/commit/c3ff7147dbf51f485b548386f06079f1ed3d9fa2))
+* **generic:** use the `default_search_fields` method ([2279283](https://github.com/acdh-oeaw/apis-core-rdf/commit/22792833e40f98e4f42aa74ac90b862d9d1c7864))
+* **relations:** allow more generic relation tables ([6142910](https://github.com/acdh-oeaw/apis-core-rdf/commit/6142910458a58e46cf8ea46f3d70e35a8b3d0260))
+* **sample_project:** example for MoreLessColumn ([8b0d40e](https://github.com/acdh-oeaw/apis-core-rdf/commit/8b0d40ea4b44b35d61395739a709eaf65234be98))
+
+
+### Bug Fixes
+
+* **apis_entities,apis_relations:** move TempTriple update code to signal ([ad25547](https://github.com/acdh-oeaw/apis-core-rdf/commit/ad2554771fa7f660cdfb80c353bf05b0ffed0291)), closes [#1288](https://github.com/acdh-oeaw/apis-core-rdf/issues/1288)
+* **apis_entities:** correct merge link ([0088fc6](https://github.com/acdh-oeaw/apis-core-rdf/commit/0088fc6ff4d4b1541c258c23c85a8027b4a3e141)), closes [#1278](https://github.com/acdh-oeaw/apis-core-rdf/issues/1278)
+* **apis_relations:** call block.super in the col-one block ([720b637](https://github.com/acdh-oeaw/apis-core-rdf/commit/720b637b4eaf22276ed897962cf5a680dbdee0df))
+* **apis_relations:** edit button appearance ([510d0ed](https://github.com/acdh-oeaw/apis-core-rdf/commit/510d0edeaef9cff73205839168bbc835a42eb886))
+* **generic:** redirect to detail page after merge ([86d04a3](https://github.com/acdh-oeaw/apis-core-rdf/commit/86d04a35b781cefda075981d00eb453cf43c12bc)), closes [#1282](https://github.com/acdh-oeaw/apis-core-rdf/issues/1282)
+* **relations:** use form instead of hardcoding the id ([08abeba](https://github.com/acdh-oeaw/apis-core-rdf/commit/08abebadf6d949b018463c09589a02af5ff51315))
+* **relations:** use javascript onclick instead of htmx on:click ([db2b008](https://github.com/acdh-oeaw/apis-core-rdf/commit/db2b008568e6d5854f263a7e8d7e3d7ab2265b46)), closes [#1265](https://github.com/acdh-oeaw/apis-core-rdf/issues/1265)
+
+
+### Code Refactoring
+
+* **apis_metainfo:** drop unused attributes from Uri model ([5c0156e](https://github.com/acdh-oeaw/apis-core-rdf/commit/5c0156e8444a69eea984a5217586ae94ebb929a9))
+
 ## [0.28.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.27.0...v0.28.0) (2024-10-03)
 
 
