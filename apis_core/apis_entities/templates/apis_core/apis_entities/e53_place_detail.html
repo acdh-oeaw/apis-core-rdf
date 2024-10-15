@@ -13,7 +13,6 @@
       <table class="table table-hover table-bordered">
         {% if object.latitude and object.longitude %}
           <td id="map"
-              style="height: 300px"
               data-longitude="{{ object.longitude|floatformat:"4u" }}"
               data-latitude="{{ object.latitude|floatformat:"4u" }}">{{ object }}</td>
         {% endif %}
