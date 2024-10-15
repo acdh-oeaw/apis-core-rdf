@@ -34,8 +34,9 @@ class Relation(models.Model, metaclass=RelationModelBase):
         on_delete=models.CASCADE,
         related_name="relation_subj_set",
         editable=False,
+        null=True,
     )
-    subj_object_id = models.PositiveIntegerField(editable=False)
+    subj_object_id = models.PositiveIntegerField(editable=False, null=True)
     subj = models.ForeignKey(
         RootObject,
         on_delete=models.SET_NULL,
@@ -47,8 +48,9 @@ class Relation(models.Model, metaclass=RelationModelBase):
         on_delete=models.CASCADE,
         related_name="relation_obj_set",
         editable=False,
+        null=True,
     )
-    obj_object_id = models.PositiveIntegerField(editable=False)
+    obj_object_id = models.PositiveIntegerField(editable=False, null=True)
     obj = models.ForeignKey(
         RootObject,
         on_delete=models.SET_NULL,
