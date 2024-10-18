@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.urls import resolve, reverse
 from drf_spectacular.generators import EndpointEnumerator, SchemaGenerator
+from .helpers import first_member_match, module_paths
 
 from apis_core.generic.abc import GenericModel
 
@@ -34,9 +35,15 @@ class CustomEndpointEnumerator(EndpointEnumerator):
         self, content_type: ContentType, method: str = "list"
     ):
         """Create a endpoint tuple, usable by the SchemaGenerator of DRF spectacular"""
+        api_viewsets = module_paths(
+            content_type.model_class(), path="api_views", suffix="APIViewSet"
+        )
+        cls = first_member_match(api_viewsets)
         path = reverse("apis_core:generic:genericmodelapi-list", args=[content_type])
-        cls = resolve(path).func.cls
-
+        if cls is None:
+            cls = resolve(path).func.cls
+        else:
+            pass
         if method == "detail":
             path += "{id}/"
         regex = path
