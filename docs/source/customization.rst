@@ -210,3 +210,47 @@ To use this logic in forms, there is
 based on `django.forms.ModelChoiceField <https://docs.djangoproject.com/en/5.0/ref/forms/fields/#modelchoicefield>`_. It checks if the passed value starts
 with ``http`` and if so, it uses the importer that fits the model and uses it to
 create the model instance.
+
+API specific customizations
+---------------------------
+
+The API can be configured in a similar way as the website itself. However, 
+there are some special cases.
+
+Renderers
+^^^^^^^^^
+
+Users can request data via the API in various shapes. The selection of 
+the shape that is returned is done via `content negotiation <https://www.django-rest-framework.org/api-guide/content-negotiation/>`_.
+Based on the configured renderers and the accept header of the clients 
+request a renderer is selected. In APIS in addition to the default 
+functionalities of renderers a `get_serializer_class` and a `get_queryset`
+function can be defined to overwrite default behaviour:
+
+.. code-block:: python
+
+        class Renderer(renderers.BaseRenderer):
+            media_type = "ACCEPT HEADER" # set here the accept header in the clients request
+            format = "FILE EXTENSION"
+
+            def get_serializer_class(self):
+                pass # return a serializer class used to serialize data passed to the renderer
+
+            def get_queryset(self):
+                pass # return the queryset used in the serializer. Allows to filter objects and/or use annotations
+
+            def render(self, data, accepted_media_type=None, renderer_context=None):
+                pass # function called to before returning the data. Gets the serialized data rather than the queryset objects.
+
+
+When the renderer is defined it still needs to be configured. This can 
+either be done globally by setting it in the settings.py:
+
+.. code-block:: python
+   REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] += [
+    "YOUR_MODULE.Renderer",
+   ]
+
+or by overwriting API views and setting the renderer on a per view basis.
+
+
