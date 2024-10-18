@@ -21,6 +21,10 @@ class ModelViewSet(viewsets.ModelViewSet):
         return super().dispatch(*args, **kwargs)
 
     def get_queryset(self):
+        renderer = getattr(getattr(self, "request", {}), "accepted_renderer", None)
+        if renderer is not None:
+            if hasattr(renderer, "get_queryset"):
+                return renderer.get_queryset()
         queryset_methods = module_paths(
             self.model, path="querysets", suffix="ViewSetQueryset"
         )
@@ -33,6 +37,8 @@ class ModelViewSet(viewsets.ModelViewSet):
             self.model, path="serializers", suffix="Serializer"
         )
         if renderer is not None:
+            if hasattr(renderer, "get_serializer_class"):
+                return renderer.get_serializer_class()
             prefix = makeclassprefix(renderer.format)
             serializer_class_modules = (
                 module_paths(
