@@ -1,6 +1,7 @@
 {% load relations %}
 {% load django_tables2 %}
-<div id="rel_{{ object.id }}_{{ target.name }}" hx-swap-oob="true">
+<div id="rel_{{ object.id }}_{% if target is None %}all{% else %}{{ target.name }}{% endif %}"
+     hx-swap-oob="true">
 
   {% block relations_list %}
     {% relations_list_table relations target as table %}
