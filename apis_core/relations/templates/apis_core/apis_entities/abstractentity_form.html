@@ -14,7 +14,11 @@
 {% endblock content %}
 
 {% block col-one %}
-  {% include "relations/list_relations_include.html" with edit=True %}
+
+  {% block relations-include %}
+    {% include "relations/list_relations_include.html" with edit=True %}
+  {% endblock relations-include %}
+
   {{ block.super }}
 {% endblock col-one %}
 
