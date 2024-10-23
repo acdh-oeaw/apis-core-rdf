@@ -90,21 +90,12 @@
 <span class="c1"># SPDX-License-Identifier: MIT</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">tomllib</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.template.utils</span> <span class="kn">import</span> <span class="n">get_app_template_dirs</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="default_settings">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.default_settings">[docs]</a>
-<span class="k">def</span> <span class="nf">default_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="n">curpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
-    <span class="k">return</span> <span class="n">curpath</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;default_settings&quot;</span></div>
-
 
 
 <div class="viewcode-block" id="get_entity_settings_by_modelname">
@@ -119,13 +110,6 @@
         <span class="c1"># lookup entity settings by name and by capitalized name</span>
         <span class="k">return</span> <span class="n">apis_entities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">apis_entities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="p">{}))</span>
     <span class="k">return</span> <span class="n">apis_entities</span></div>
-
-
-
-<div class="viewcode-block" id="list_links_to_edit">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.list_links_to_edit">[docs]</a>
-<span class="k">def</span> <span class="nf">list_links_to_edit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_LIST_LINKS_TO_EDIT&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
 
 
 
