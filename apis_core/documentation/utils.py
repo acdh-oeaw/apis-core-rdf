@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 
@@ -18,7 +20,7 @@ class Datamodel:
         self.make_graph()
 
     def edges(self):
-        edges = {}
+        edges = defaultdict(list)
         if "apis_core.apis_relations" in settings.INSTALLED_APPS:
             from apis_core.apis_relations.models import Property
 
@@ -29,10 +31,7 @@ class Datamodel:
                             subj_class.name,
                             obj_class.name,
                         )
-                        if key in edges:
-                            edges[key].append(prop.name_forward)
-                        else:
-                            edges[key] = [prop.name_forward]
+                        edges[key].append(prop.name_forward)
 
         for rel in self.relations:
             for subj_class in rel.model_class().subj_list():
@@ -41,10 +40,7 @@ class Datamodel:
                         ContentType.objects.get_for_model(subj_class).name,
                         ContentType.objects.get_for_model(obj_class).name,
                     )
-                    if key in edges:
-                        edges[key].append(rel.model_class().name())
-                    else:
-                        edges[key] = [rel.model_class().name()]
+                    edges[key].append(rel.model_class().name())
         return edges
 
     def make_graph(self):
