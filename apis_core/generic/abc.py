@@ -6,6 +6,9 @@ from apis_core.generic.helpers import permission_fullname
 
 
 class GenericModel:
+    def __repr__(self):
+        return super().__repr__() + f" (ID: {self.id})"
+
     @classmethod
     def get_listview_url(cls):
         ct = ContentType.objects.get_for_model(cls)
