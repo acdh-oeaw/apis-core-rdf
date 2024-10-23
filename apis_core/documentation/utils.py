@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.utils.encoding import force_str
 
 from apis_core.apis_entities.utils import get_entity_content_types
 
@@ -40,7 +41,7 @@ class Datamodel:
                         ContentType.objects.get_for_model(subj_class).name,
                         ContentType.objects.get_for_model(obj_class).name,
                     )
-                    edges[key].append(rel.model_class().name())
+                    edges[key].append(force_str(rel.model_class().name()))
         return edges
 
     def make_graph(self):
@@ -52,7 +53,9 @@ class Datamodel:
             graph.set_graph_defaults(nodesep="1", ranksep="1", TBbalance="max")
             for content_type in self.entities:
                 model_class = content_type.model_class()
-                node = Node(content_type.name, label=model_class._meta.verbose_name)
+                node = Node(
+                    content_type.name, label=force_str(model_class._meta.verbose_name)
+                )
                 node.set_URL(model_class.get_listview_url())
                 node.set_fillcolor("#3399ff")
                 node.set_style("filled")
