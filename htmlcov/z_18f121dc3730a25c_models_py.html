@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_18f121dc3730a25c_serializers_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2024-10-24 07:20 +0000
+            created at 2024-11-04 08:53 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -163,7 +163,7 @@
     <p class="run"><span class="n"><a id="t81" href="#t81">81</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">version_tag</span> <span class="key">and</span> <span class="nam">filter_for_triples</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">            <span class="nam">triples</span> <span class="op">=</span> <span class="nam">triples</span><span class="op">.</span><span class="nam">filter</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t83" href="#t83">83</a></span><span class="t">                <span class="nam">Q</span><span class="op">(</span><span class="nam">version_tag</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">version_tag</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t">                <span class="op">|</span> <span class="nam">Q</span><span class="op">(</span><span class="nam">version_tag__contains</span><span class="op">=</span><span class="fst">f"</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">version_tag</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t">                <span class="op">|</span> <span class="nam">Q</span><span class="op">(</span><span class="nam">version_tag__contains</span><span class="op">=</span><span class="str">f"{self.version_tag},"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t85" href="#t85">85</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t86" href="#t86">86</a></span><span class="t">        <span class="key">if</span> <span class="nam">only_latest</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t87" href="#t87">87</a></span><span class="t">            <span class="nam">triples</span> <span class="op">=</span> <span class="nam">triples</span><span class="op">.</span><span class="nam">latest_of_each</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -179,7 +179,7 @@
     <p class="run"><span class="n"><a id="t97" href="#t97">97</a></span><span class="t">                <span class="key">if</span> <span class="nam">triple</span><span class="op">.</span><span class="nam">version_tag</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t98" href="#t98">98</a></span><span class="t">                    <span class="nam">triple</span><span class="op">.</span><span class="nam">version_tag</span> <span class="op">=</span> <span class="nam">tag</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t99" href="#t99">99</a></span><span class="t">                <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">                    <span class="nam">triple</span><span class="op">.</span><span class="nam">version_tag</span> <span class="op">=</span> <span class="fst">f"</span><span class="op">{</span><span class="nam">triple</span><span class="op">.</span><span class="nam">version_tag</span><span class="op">}</span><span class="fst">,</span><span class="op">{</span><span class="nam">tag</span><span class="op">}</span><span class="fst">,</span><span class="fst">"</span><span class="op">.</span><span class="nam">replace</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">                    <span class="nam">triple</span><span class="op">.</span><span class="nam">version_tag</span> <span class="op">=</span> <span class="str">f"{triple.version_tag},{tag},"</span><span class="op">.</span><span class="nam">replace</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">                        <span class="str">",,"</span><span class="op">,</span> <span class="str">","</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t102" href="#t102">102</a></span><span class="t">                    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">                <span class="nam">triple</span><span class="op">.</span><span class="nam">save</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -214,7 +214,7 @@
     <p class="pln"><span class="n"><a id="t132" href="#t132">132</a></span><span class="t">        <span class="nam">bases</span><span class="op">=</span><span class="op">[</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t133" href="#t133">133</a></span><span class="t">            <span class="nam">APISHistoryTableBase</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t134" href="#t134">134</a></span><span class="t">        <span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t135" href="#t135">135</a></span><span class="t">        <span class="nam">custom_model_name</span><span class="op">=</span><span class="key">lambda</span> <span class="nam">x</span><span class="op">:</span> <span class="fst">f"</span><span class="fst">Version</span><span class="op">{</span><span class="nam">x</span><span class="op">}</span><span class="fst">"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t135" href="#t135">135</a></span><span class="t">        <span class="nam">custom_model_name</span><span class="op">=</span><span class="key">lambda</span> <span class="nam">x</span><span class="op">:</span> <span class="str">f"Version{x}"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t136" href="#t136">136</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t137" href="#t137">137</a></span><span class="t">    <span class="nam">__history_date</span> <span class="op">=</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t138" href="#t138">138</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -307,7 +307,7 @@
             <a class="nav" href="z_18f121dc3730a25c_serializers_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.1">coverage.py v7.6.1</a>,
-            created at 2024-10-24 07:20 +0000
+            created at 2024-11-04 08:53 +0000
         </p>
     </div>
 </footer>
