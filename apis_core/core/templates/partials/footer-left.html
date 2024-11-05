@@ -2,19 +2,19 @@
 {% load static %}
 {% url "apis_core:apis_api:api-root" as api_root %}
 {% if api_root %}
-  <a href="{{ api_root }}" title="API">
+  <a href="{{ api_root }}">
     <span class="material-symbols-outlined material-symbols-align">api</span>
   </a>
 {% endif %}
 {% url "apis_core:swagger-ui" as swagger_ui %}
 {% if swagger_ui %}
-  <a href="{{ swagger_ui }}" title="Swagger UI">
-    <img src="{% static "/img/Swagger-logo.png" %}" height="24px">
+  <a href="{{ swagger_ui }}">
+    <img src="{% static "/img/Swagger-logo.png" %}" alt="Swagger UI" height="24px">
   </a>
 {% endif %}
 {% git_repository_url as repository_url %}
 {% if repository_url %}
-  <a href="{{ repository_url }}" title="Git repository">
-    <img src="{% static "/img/Git-Icon-1788C.png" %}" height="24px">
+  <a href="{{ repository_url }}">
+    <img src="{% static "/img/Git-Icon-1788C.png" %}" alt="Git repository" height="24px">
   </a>
 {% endif %}
