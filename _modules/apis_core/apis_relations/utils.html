@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>apis_core.apis_relations.utils &mdash; APIS 0.29.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=fcb1757e"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            APIS
+          </a>
+              <div class="version">
+                0.29.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ontology.html">Create your <span class="xref std std-term">ontology</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../customization.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Additional Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://acdh-oeaw.github.io/apis-core-rdf/htmlcov/">Coverage</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">APIS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">apis_core.apis_relations.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for apis_core.apis_relations.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+<span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">RequestConfig</span>
+
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">TempTriple</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_relations.tables</span> <span class="kn">import</span> <span class="n">get_generic_triple_table</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">get_entity_settings_by_modelname</span>
+
+
+<div class="viewcode-block" id="get_content_types_with_allowed_relation_from">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.utils.get_content_types_with_allowed_relation_from">[docs]</a>
+<span class="k">def</span> <span class="nf">get_content_types_with_allowed_relation_from</span><span class="p">(</span>
+    <span class="n">content_type</span><span class="p">:</span> <span class="n">ContentType</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ContentType</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a list of ContentTypes to which the given ContentTypes may be related by a Property&quot;&quot;&quot;</span>
+
+    <span class="c1"># Find all the properties where the entity is either subject or object</span>
+    <span class="n">properties_with_entity_as_subject</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">subj_class</span><span class="o">=</span><span class="n">content_type</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="s2">&quot;obj_class&quot;</span><span class="p">)</span>
+    <span class="n">properties_with_entity_as_object</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">obj_class</span><span class="o">=</span><span class="n">content_type</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="s2">&quot;subj_class&quot;</span><span class="p">)</span>
+
+    <span class="n">content_type_querysets</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Where entity is subject, get all the object content_types</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">properties_with_entity_as_subject</span><span class="p">:</span>
+        <span class="n">objs</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">obj_class</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">content_type_querysets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span>
+    <span class="c1"># Where entity is object, get all the subject content_types</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">properties_with_entity_as_object</span><span class="p">:</span>
+        <span class="n">subjs</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">subj_class</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">content_type_querysets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subjs</span><span class="p">)</span>
+
+    <span class="c1"># Join querysets with itertools.chain, call set to make unique, and extract the model class</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">content_type_querysets</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="triple_sidebar">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_relations.html#apis_core.apis_relations.utils.triple_sidebar">[docs]</a>
+<span class="k">def</span> <span class="nf">triple_sidebar</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="n">side_bar</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">triples_related_all</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">TempTriple</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">select_subclasses</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">other_content_type</span> <span class="ow">in</span> <span class="n">get_content_types_with_allowed_relation_from</span><span class="p">(</span>
+        <span class="n">content_type</span>
+    <span class="p">):</span>
+        <span class="n">triples_related_by_entity</span> <span class="o">=</span> <span class="n">triples_related_all</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj__self_contenttype</span><span class="o">=</span><span class="n">other_content_type</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__pk</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+            <span class="o">|</span> <span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">obj__self_contenttype</span><span class="o">=</span><span class="n">other_content_type</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Q</span><span class="p">(</span><span class="n">subj__pk</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="n">table_class</span> <span class="o">=</span> <span class="n">get_generic_triple_table</span><span class="p">(</span>
+            <span class="n">other_entity_class_name</span><span class="o">=</span><span class="n">other_content_type</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">entity_pk_self</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">other_content_type</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">title_card</span> <span class="o">=</span> <span class="n">other_content_type</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">tb_object</span> <span class="o">=</span> <span class="n">table_class</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">triples_related_by_entity</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="n">tb_object_open</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;page&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">entity_settings</span> <span class="o">=</span> <span class="n">get_entity_settings_by_modelname</span><span class="p">(</span><span class="n">content_type</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">per_page</span> <span class="o">=</span> <span class="n">entity_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relations_per_page&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">RequestConfig</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">paginate</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="n">per_page</span><span class="p">})</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">tb_object</span><span class="p">)</span>
+        <span class="n">tab_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;triple_form_</span><span class="si">{</span><span class="n">content_type</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">_to_</span><span class="si">{</span><span class="n">other_content_type</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">side_bar</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">title_card</span><span class="p">,</span>
+                <span class="n">tb_object</span><span class="p">,</span>
+                <span class="n">tab_id</span><span class="p">,</span>
+                <span class="n">tb_object_open</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">side_bar</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016-2024, Matthias Schlögl, Birger Schacht, K Kollmann, Saranya Balasubramanian.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
