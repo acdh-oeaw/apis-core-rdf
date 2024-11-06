@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.utils.http import urlencode
 
 from apis_core.generic.forms import GenericModelForm
+from apis_core.generic.forms.fields import ModelImportChoiceField
 
 
 class CustomSelect2ListChoiceField(autocomplete.Select2ListChoiceField):
@@ -54,30 +55,22 @@ class RelationForm(GenericModelForm):
         params = [f"entities={ct.app_label}.{ct.model}" for ct in content_types]
         return url + "?" + "&".join(params)
 
-    def __subj_autocomplete_url(self, subj_content_type=None) -> str:
-        """generate the autocomplete url for the subj field. by default use the
-        subject types configured in the relation. If there is a subj_content_type
-        passed in the `initial` dict of the form, use that contenttype instead of
-        the configured ones"""
+    def __subj_autocomplete_url(self) -> str:
+        """generate the autocomplete url for the subj field, using the subject
+        types configured in the relation"""
         subj_content_types = [
             ContentType.objects.get_for_model(model)
             for model in self.Meta.model.subj_list()
         ]
-        if subj_content_type:
-            subj_content_types = [ContentType.objects.get(pk=subj_content_type)]
         return self.__entities_autocomplete_with_params(subj_content_types)
 
-    def __obj_autocomplete_url(self, obj_content_type=None) -> str:
-        """generate the autocomplete url for the obj field. by default use the
-        object types configured in the relation. If there is a obj_content_type
-        passed in the `initial` dict of the form, use that contenttype instead of
-        the configured ones"""
+    def __obj_autocomplete_url(self) -> str:
+        """generate the autocomplete url for the obj field, using the object
+        types configured in the relation"""
         obj_content_types = [
             ContentType.objects.get_for_model(model)
             for model in self.Meta.model.obj_list()
         ]
-        if obj_content_type:
-            obj_content_types = [ContentType.objects.get(pk=obj_content_type)]
         return self.__entities_autocomplete_with_params(obj_content_types)
 
     def __init__(self, *args, **kwargs):
@@ -113,32 +106,68 @@ class RelationForm(GenericModelForm):
         self.fields["subj_object_id"].required = False
         self.fields["subj_content_type"].required = False
         if not subj_object_id:
-            self.fields["subj_ct_and_id"] = CustomSelect2ListChoiceField()
-            self.fields["subj_ct_and_id"].widget = autocomplete.ListSelect2(
-                url=self.__subj_autocomplete_url(subj_content_type)
-            )
-            if self.subj_instance:
-                content_type = ContentType.objects.get_for_model(self.subj_instance)
-                select_identifier = f"{content_type.id}_{self.subj_instance.id}"
-                self.fields["subj_ct_and_id"].initial = select_identifier
-                self.fields["subj_ct_and_id"].choices = [
-                    (select_identifier, self.subj_instance)
-                ]
+            if subj_content_type:
+                """ If we know the content type the subject will have, we
+                use another autocomplete field that allows us to paste links
+                and provides external autocomplete results.
+                """
+                ct = ContentType.objects.get(pk=subj_content_type)
+                self.fields["subj"] = ModelImportChoiceField(
+                    queryset=ct.model_class().objects.all()
+                )
+                self.fields["subj"].widget = autocomplete.ListSelect2(
+                    url=reverse("apis_core:generic:autocomplete", args=[ct])
+                )
+                self.fields["subj"].widget.choices = self.fields["subj"].choices
+            else:
+                """ If we don't know the content type, we use a generic autocomplete
+                field that autocompletes any content type the relation can have as a
+                subject.
+                """
+                self.fields["subj_ct_and_id"] = CustomSelect2ListChoiceField()
+                self.fields["subj_ct_and_id"].widget = autocomplete.ListSelect2(
+                    url=self.__subj_autocomplete_url()
+                )
+                if self.subj_instance:
+                    content_type = ContentType.objects.get_for_model(self.subj_instance)
+                    select_identifier = f"{content_type.id}_{self.subj_instance.id}"
+                    self.fields["subj_ct_and_id"].initial = select_identifier
+                    self.fields["subj_ct_and_id"].choices = [
+                        (select_identifier, self.subj_instance)
+                    ]
 
         self.fields["obj_object_id"].required = False
         self.fields["obj_content_type"].required = False
         if not obj_object_id:
-            self.fields["obj_ct_and_id"] = CustomSelect2ListChoiceField()
-            self.fields["obj_ct_and_id"].widget = autocomplete.ListSelect2(
-                url=self.__obj_autocomplete_url(obj_content_type)
-            )
-            if self.obj_instance:
-                content_type = ContentType.objects.get_for_model(self.obj_instance)
-                select_identifier = f"{content_type.id}_{self.obj_instance.id}"
-                self.fields["obj_ct_and_id"].initial = select_identifier
-                self.fields["obj_ct_and_id"].choices = [
-                    (select_identifier, self.obj_instance)
-                ]
+            if obj_content_type:
+                """ If we know the content type the object will have, we
+                use another autocomplete field that allows us to paste links
+                and provides external autocomplete results.
+                """
+                ct = ContentType.objects.get(pk=obj_content_type)
+                self.fields["obj"] = ModelImportChoiceField(
+                    queryset=ct.model_class().objects.all()
+                )
+                self.fields["obj"].widget = autocomplete.ListSelect2(
+                    url=reverse("apis_core:generic:autocomplete", args=[ct])
+                )
+                self.fields["obj"].widget.choices = self.fields["obj"].choices
+            else:
+                """ If we don't know the content type, we use a generic autocomplete
+                field that autocompletes any content type the relation can have as a
+                object.
+                """
+                self.fields["obj_ct_and_id"] = CustomSelect2ListChoiceField()
+                self.fields["obj_ct_and_id"].widget = autocomplete.ListSelect2(
+                    url=self.__obj_autocomplete_url()
+                )
+                if self.obj_instance:
+                    content_type = ContentType.objects.get_for_model(self.obj_instance)
+                    select_identifier = f"{content_type.id}_{self.obj_instance.id}"
+                    self.fields["obj_ct_and_id"].initial = select_identifier
+                    self.fields["obj_ct_and_id"].choices = [
+                        (select_identifier, self.obj_instance)
+                    ]
 
         self.helper = FormHelper(self)
         model_ct = ContentType.objects.get_for_model(self.Meta.model)
@@ -178,6 +207,10 @@ class RelationForm(GenericModelForm):
             )
             cleaned_data["obj_object_id"] = obj_object_id
             del cleaned_data["obj_ct_and_id"]
+        if "subj" in cleaned_data:
+            cleaned_data["subj_object_id"] = cleaned_data.pop("subj").id
+        if "obj" in cleaned_data:
+            cleaned_data["obj_object_id"] = cleaned_data.pop("obj").id
         return cleaned_data
 
     @property
