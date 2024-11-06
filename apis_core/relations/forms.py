@@ -113,28 +113,32 @@ class RelationForm(GenericModelForm):
         self.fields["subj_object_id"].required = False
         self.fields["subj_content_type"].required = False
         if not subj_object_id:
-            self.fields["subj"] = CustomSelect2ListChoiceField()
-            self.fields["subj"].widget = autocomplete.ListSelect2(
+            self.fields["subj_ct_and_id"] = CustomSelect2ListChoiceField()
+            self.fields["subj_ct_and_id"].widget = autocomplete.ListSelect2(
                 url=self.__subj_autocomplete_url(subj_content_type)
             )
             if self.subj_instance:
                 content_type = ContentType.objects.get_for_model(self.subj_instance)
                 select_identifier = f"{content_type.id}_{self.subj_instance.id}"
-                self.fields["subj"].initial = select_identifier
-                self.fields["subj"].choices = [(select_identifier, self.subj_instance)]
+                self.fields["subj_ct_and_id"].initial = select_identifier
+                self.fields["subj_ct_and_id"].choices = [
+                    (select_identifier, self.subj_instance)
+                ]
 
         self.fields["obj_object_id"].required = False
         self.fields["obj_content_type"].required = False
         if not obj_object_id:
-            self.fields["obj"] = CustomSelect2ListChoiceField()
-            self.fields["obj"].widget = autocomplete.ListSelect2(
+            self.fields["obj_ct_and_id"] = CustomSelect2ListChoiceField()
+            self.fields["obj_ct_and_id"].widget = autocomplete.ListSelect2(
                 url=self.__obj_autocomplete_url(obj_content_type)
             )
             if self.obj_instance:
                 content_type = ContentType.objects.get_for_model(self.obj_instance)
                 select_identifier = f"{content_type.id}_{self.obj_instance.id}"
-                self.fields["obj"].initial = select_identifier
-                self.fields["obj"].choices = [(select_identifier, self.obj_instance)]
+                self.fields["obj_ct_and_id"].initial = select_identifier
+                self.fields["obj_ct_and_id"].choices = [
+                    (select_identifier, self.obj_instance)
+                ]
 
         self.helper = FormHelper(self)
         model_ct = ContentType.objects.get_for_model(self.Meta.model)
@@ -158,20 +162,22 @@ class RelationForm(GenericModelForm):
         the Relation
         """
         cleaned_data = super().clean()
-        if "subj" in cleaned_data:
-            subj_content_type, subj_object_id = cleaned_data["subj"].split("_")
+        if "subj_ct_and_id" in cleaned_data:
+            subj_content_type, subj_object_id = cleaned_data["subj_ct_and_id"].split(
+                "_"
+            )
             cleaned_data["subj_content_type"] = ContentType.objects.get(
                 pk=subj_content_type
             )
             cleaned_data["subj_object_id"] = subj_object_id
-            del cleaned_data["subj"]
-        if "obj" in cleaned_data:
-            obj_content_type, obj_object_id = cleaned_data["obj"].split("_")
+            del cleaned_data["subj_ct_and_id"]
+        if "obj_ct_and_id" in cleaned_data:
+            obj_content_type, obj_object_id = cleaned_data["obj_ct_and_id"].split("_")
             cleaned_data["obj_content_type"] = ContentType.objects.get(
                 pk=obj_content_type
             )
             cleaned_data["obj_object_id"] = obj_object_id
-            del cleaned_data["obj"]
+            del cleaned_data["obj_ct_and_id"]
         return cleaned_data
 
     @property
