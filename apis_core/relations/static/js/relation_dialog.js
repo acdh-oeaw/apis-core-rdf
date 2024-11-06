@@ -1,3 +1,8 @@
+function tohtml(item) {
+    const span = document.createElement('span');
+    span.innerHTML = item.text;
+    return span;
+}
 document.body.addEventListener("reinit_select2", function(evt) {
     form = document.getElementById(evt.detail.value);
     form.querySelectorAll(".listselect2").forEach(element => {
@@ -6,6 +11,8 @@ document.body.addEventListener("reinit_select2", function(evt) {
                 url: $(element).data("autocomplete-light-url"),
             },
             dropdownParent: $(form),
+            templateResult: tohtml,
+            templateSelection: tohtml,
         });
     });
     $('.select2-selection').addClass("form-control");
