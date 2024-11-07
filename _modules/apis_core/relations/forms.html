@@ -97,6 +97,7 @@
 <span class="kn">from</span> <span class="nn">django.utils.http</span> <span class="kn">import</span> <span class="n">urlencode</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.generic.forms</span> <span class="kn">import</span> <span class="n">GenericModelForm</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.forms.fields</span> <span class="kn">import</span> <span class="n">ModelImportChoiceField</span>
 
 
 <div class="viewcode-block" id="CustomSelect2ListChoiceField">
@@ -153,30 +154,22 @@
         <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;entities=</span><span class="si">{</span><span class="n">ct</span><span class="o">.</span><span class="n">app_label</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">ct</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">content_types</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;?&quot;</span> <span class="o">+</span> <span class="s2">&quot;&amp;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__subj_autocomplete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subj_content_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;generate the autocomplete url for the subj field. by default use the</span>
-<span class="sd">        subject types configured in the relation. If there is a subj_content_type</span>
-<span class="sd">        passed in the `initial` dict of the form, use that contenttype instead of</span>
-<span class="sd">        the configured ones&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__subj_autocomplete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;generate the autocomplete url for the subj field, using the subject</span>
+<span class="sd">        types configured in the relation&quot;&quot;&quot;</span>
         <span class="n">subj_content_types</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">subj_list</span><span class="p">()</span>
         <span class="p">]</span>
-        <span class="k">if</span> <span class="n">subj_content_type</span><span class="p">:</span>
-            <span class="n">subj_content_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">subj_content_type</span><span class="p">)]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__entities_autocomplete_with_params</span><span class="p">(</span><span class="n">subj_content_types</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__obj_autocomplete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_content_type</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;generate the autocomplete url for the obj field. by default use the</span>
-<span class="sd">        object types configured in the relation. If there is a obj_content_type</span>
-<span class="sd">        passed in the `initial` dict of the form, use that contenttype instead of</span>
-<span class="sd">        the configured ones&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__obj_autocomplete_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;generate the autocomplete url for the obj field, using the object</span>
+<span class="sd">        types configured in the relation&quot;&quot;&quot;</span>
         <span class="n">obj_content_types</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">obj_list</span><span class="p">()</span>
         <span class="p">]</span>
-        <span class="k">if</span> <span class="n">obj_content_type</span><span class="p">:</span>
-            <span class="n">obj_content_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">obj_content_type</span><span class="p">)]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__entities_autocomplete_with_params</span><span class="p">(</span><span class="n">obj_content_types</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -212,28 +205,68 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj_object_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj_content_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">subj_object_id</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CustomSelect2ListChoiceField</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ListSelect2</span><span class="p">(</span>
-                <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__subj_autocomplete_url</span><span class="p">(</span><span class="n">subj_content_type</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subj_instance</span><span class="p">:</span>
-                <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subj_instance</span><span class="p">)</span>
-                <span class="n">select_identifier</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">content_type</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">subj_instance</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">select_identifier</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[(</span><span class="n">select_identifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subj_instance</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">subj_content_type</span><span class="p">:</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot; If we know the content type the subject will have, we</span>
+<span class="sd">                use another autocomplete field that allows us to paste links</span>
+<span class="sd">                and provides external autocomplete results.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">subj_content_type</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ModelImportChoiceField</span><span class="p">(</span>
+                    <span class="n">queryset</span><span class="o">=</span><span class="n">ct</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ListSelect2</span><span class="p">(</span>
+                    <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:autocomplete&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">])</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span>
+            <span class="k">else</span><span class="p">:</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot; If we don&#39;t know the content type, we use a generic autocomplete</span>
+<span class="sd">                field that autocompletes any content type the relation can have as a</span>
+<span class="sd">                subject.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj_ct_and_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CustomSelect2ListChoiceField</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj_ct_and_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ListSelect2</span><span class="p">(</span>
+                    <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__subj_autocomplete_url</span><span class="p">()</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subj_instance</span><span class="p">:</span>
+                    <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subj_instance</span><span class="p">)</span>
+                    <span class="n">select_identifier</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">content_type</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">subj_instance</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj_ct_and_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">select_identifier</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;subj_ct_and_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">(</span><span class="n">select_identifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subj_instance</span><span class="p">)</span>
+                    <span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj_object_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj_content_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">obj_object_id</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CustomSelect2ListChoiceField</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ListSelect2</span><span class="p">(</span>
-                <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj_autocomplete_url</span><span class="p">(</span><span class="n">obj_content_type</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_instance</span><span class="p">:</span>
-                <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_instance</span><span class="p">)</span>
-                <span class="n">select_identifier</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">content_type</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_instance</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">select_identifier</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[(</span><span class="n">select_identifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_instance</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">obj_content_type</span><span class="p">:</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot; If we know the content type the object will have, we</span>
+<span class="sd">                use another autocomplete field that allows us to paste links</span>
+<span class="sd">                and provides external autocomplete results.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">obj_content_type</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ModelImportChoiceField</span><span class="p">(</span>
+                    <span class="n">queryset</span><span class="o">=</span><span class="n">ct</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ListSelect2</span><span class="p">(</span>
+                    <span class="n">url</span><span class="o">=</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:autocomplete&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">])</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span>
+            <span class="k">else</span><span class="p">:</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot; If we don&#39;t know the content type, we use a generic autocomplete</span>
+<span class="sd">                field that autocompletes any content type the relation can have as a</span>
+<span class="sd">                object.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj_ct_and_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CustomSelect2ListChoiceField</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj_ct_and_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ListSelect2</span><span class="p">(</span>
+                    <span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj_autocomplete_url</span><span class="p">()</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_instance</span><span class="p">:</span>
+                    <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_instance</span><span class="p">)</span>
+                    <span class="n">select_identifier</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">content_type</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_instance</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj_ct_and_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">select_identifier</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;obj_ct_and_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">(</span><span class="n">select_identifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_instance</span><span class="p">)</span>
+                    <span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">model_ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
@@ -259,20 +292,26 @@
 <span class="sd">        the Relation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cleaned_data</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
-        <span class="k">if</span> <span class="s2">&quot;subj&quot;</span> <span class="ow">in</span> <span class="n">cleaned_data</span><span class="p">:</span>
-            <span class="n">subj_content_type</span><span class="p">,</span> <span class="n">subj_object_id</span> <span class="o">=</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;subj_ct_and_id&quot;</span> <span class="ow">in</span> <span class="n">cleaned_data</span><span class="p">:</span>
+            <span class="n">subj_content_type</span><span class="p">,</span> <span class="n">subj_object_id</span> <span class="o">=</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;subj_ct_and_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+                <span class="s2">&quot;_&quot;</span>
+            <span class="p">)</span>
             <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;subj_content_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="n">pk</span><span class="o">=</span><span class="n">subj_content_type</span>
             <span class="p">)</span>
             <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;subj_object_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">subj_object_id</span>
-            <span class="k">del</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;obj&quot;</span> <span class="ow">in</span> <span class="n">cleaned_data</span><span class="p">:</span>
-            <span class="n">obj_content_type</span><span class="p">,</span> <span class="n">obj_object_id</span> <span class="o">=</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;subj_ct_and_id&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;obj_ct_and_id&quot;</span> <span class="ow">in</span> <span class="n">cleaned_data</span><span class="p">:</span>
+            <span class="n">obj_content_type</span><span class="p">,</span> <span class="n">obj_object_id</span> <span class="o">=</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;obj_ct_and_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
             <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;obj_content_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="n">pk</span><span class="o">=</span><span class="n">obj_content_type</span>
             <span class="p">)</span>
             <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;obj_object_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj_object_id</span>
-            <span class="k">del</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;obj&quot;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;obj_ct_and_id&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;subj&quot;</span> <span class="ow">in</span> <span class="n">cleaned_data</span><span class="p">:</span>
+            <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;subj_object_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;subj&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">if</span> <span class="s2">&quot;obj&quot;</span> <span class="ow">in</span> <span class="n">cleaned_data</span><span class="p">:</span>
+            <span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;obj_object_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;obj&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">id</span>
         <span class="k">return</span> <span class="n">cleaned_data</span></div>
 
 
