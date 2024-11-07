@@ -116,38 +116,14 @@ class List(
 
     def get_table_kwargs(self):
         kwargs = super().get_table_kwargs()
-
-        # we look at the selected columns and exclude
-        # all modelfields that are not part of that list
-        selected_columns = self.request.GET.getlist(
-            "columns",
-            self.get_filterset(self.get_filterset_class()).form["columns"].initial,
-        )
-        modelfields = self.model._meta.get_fields()
-        kwargs["exclude"] = [
-            field.name for field in modelfields if field.name not in selected_columns
+        columns = self.request.GET.getlist("columns", [])
+        column_fields = [
+            field for field in self.model._meta.fields if field.name in columns
         ]
-
-        # now we look at the selected columns and
-        # add all modelfields and annotated fields that
-        # are part of the selected columns to the extra_columns
-        annotationfields = list()
-        for key, value in self.object_list.query.annotations.items():
-            fake_field = getattr(value, "field", value.output_field)
-            setattr(fake_field, "name", key)
-            annotationfields.append(fake_field)
-        extra_fields = list(
-            filter(
-                lambda x: x.name in selected_columns,
-                modelfields + tuple(annotationfields),
-            )
-        )
         kwargs["extra_columns"] = [
             (field.name, library.column_for_field(field, accessor=field.name))
-            for field in extra_fields
-            if field.name not in self.get_table_class().base_columns
+            for field in column_fields
         ]
-
         return kwargs
 
     def get_filterset_class(self):
@@ -157,38 +133,21 @@ class List(
         filterset_class = first_member_match(filterset_modules, GenericFilterSet)
         return filterset_factory(self.model, filterset_class)
 
-    def _get_columns_choices(self, columns_exclude):
-        # we start with the model fields
-        choices = [
-            (field.name, getattr(field, "verbose_name", field.name))
-            for field in self.model._meta.get_fields()
-        ]
-        # we add any annotated fields to that
-        choices += [(key, key) for key in self.get_queryset().query.annotations.keys()]
-        # now we drop all the choices that are listed in columns_exclude
-        choices = list(filter(lambda x: x[0] not in columns_exclude, choices))
-        return choices
-
-    def _get_columns_initial(self, columns_exclude):
-        return [
-            field
-            for field in self.get_table().columns.names()
-            if field not in columns_exclude
-        ]
-
     def get_filterset(self, filterset_class):
         """
         We override the `get_filterset` method, so we can inject a
         `columns` selector into the form
         """
         filterset = super().get_filterset(filterset_class)
-        columns_exclude = filterset.form.columns_exclude
 
         # we inject a `columns` selector in the beginning of the form
         columns = forms.MultipleChoiceField(
             required=False,
-            choices=self._get_columns_choices(columns_exclude),
-            initial=self._get_columns_initial(columns_exclude),
+            choices=[
+                (field.name, field.verbose_name)
+                for field in self.model._meta.fields
+                if field.name not in filterset.form.columns_exclude
+            ],
         )
         filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
 
