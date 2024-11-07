@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.30.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.29.0...v0.30.0) (2024-11-07)
+
+
+### Features
+
+* **generic:** add a repr dunder method to the GenericModel ([e0b44aa](https://github.com/acdh-oeaw/apis-core-rdf/commit/e0b44aaf151c865c12f8990a3bf55556db32536a))
+* **relations:** implement duplicate and merge signal receivers ([77b9f10](https://github.com/acdh-oeaw/apis-core-rdf/commit/77b9f108a5667cabf72cf313c3b30f766df1db1d)), closes [#1251](https://github.com/acdh-oeaw/apis-core-rdf/issues/1251)
+* **relations:** new template to list relations ([a6d7030](https://github.com/acdh-oeaw/apis-core-rdf/commit/a6d7030c17d59ee4bf7005c91201f71192ba3abf)), closes [#489](https://github.com/acdh-oeaw/apis-core-rdf/issues/489)
+* **relations:** put relations in a block ([65225d0](https://github.com/acdh-oeaw/apis-core-rdf/commit/65225d0e77f61a656ba0352a344113f346d69108))
+* **relations:** run autocomplete results through js method ([947fbf4](https://github.com/acdh-oeaw/apis-core-rdf/commit/947fbf411b071ac042c4a8db0955d602510e0a66))
+* **relations:** use content type specific autocomplete in relation form ([da939b8](https://github.com/acdh-oeaw/apis-core-rdf/commit/da939b8335786162f951014fd967d8f523dcb36f))
+* **sample_project:** automaticall add admin ([32c8f4e](https://github.com/acdh-oeaw/apis-core-rdf/commit/32c8f4eeee2e4bca04d04020746c7872a796f20b)), closes [#1292](https://github.com/acdh-oeaw/apis-core-rdf/issues/1292)
+* **sample_project:** tabbed relations for person ([ff675bd](https://github.com/acdh-oeaw/apis-core-rdf/commit/ff675bdc4d8d7a698ee8496b8d43a1873ca4756d))
+
+
+### Bug Fixes
+
+* **core:** don't underline hovered footer icon links ([20ec314](https://github.com/acdh-oeaw/apis-core-rdf/commit/20ec3148aa351ab5ae2649f2606415cd63c079eb))
+* **documentation:** force read lazy objects as str ([a0f52bf](https://github.com/acdh-oeaw/apis-core-rdf/commit/a0f52bf44f65d071ac0be22b3efb9b98b60f1b38)), closes [#1319](https://github.com/acdh-oeaw/apis-core-rdf/issues/1319)
+
 ## [0.29.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.28.0...v0.29.0) (2024-10-15)
 
 
