@@ -169,6 +169,7 @@ class RelationForm(GenericModelForm):
                         (select_identifier, self.obj_instance)
                     ]
 
+        self.order_fields(self.field_order)
         self.helper = FormHelper(self)
         model_ct = ContentType.objects.get_for_model(self.Meta.model)
         self.helper.form_id = f"relation_{model_ct.model}_form"
