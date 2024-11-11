@@ -1,4 +1,5 @@
 from collections import namedtuple
+from copy import copy
 from typing import Optional
 
 from dal import autocomplete
@@ -133,7 +134,8 @@ class List(
         # are part of the selected columns to the extra_columns
         annotationfields = list()
         for key, value in self.object_list.query.annotations.items():
-            fake_field = getattr(value, "field", value.output_field)
+            # we have to use copy, so we don't edit the original field
+            fake_field = copy(getattr(value, "field", value.output_field))
             setattr(fake_field, "name", key)
             annotationfields.append(fake_field)
         extra_fields = list(
