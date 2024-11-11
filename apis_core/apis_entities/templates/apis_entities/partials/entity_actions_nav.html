@@ -10,14 +10,11 @@
             </a>
           {% endif %}
           {% if object.get_add_permission in perms %}
-            <a class="dropdown-item"
-               style="color: blueviolet"
+            <a class="object-duplicate dropdown-item"
                href="{{ object.get_duplicate_url }}">
               <span class="material-symbols-outlined material-symbols-align">content_copy</span> Duplicate
             </a>
-            <a class="dropdown-item"
-               style="color: dodgerblue"
-               href="{{ object.get_merge_view_url }}">
+            <a class="object-merge dropdown-item" href="{{ object.get_merge_url }}">
               <span class="material-symbols-outlined material-symbols-align">cell_merge</span> Merge
             </a>
           {% endif %}
