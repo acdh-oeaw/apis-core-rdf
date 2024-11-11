@@ -268,6 +268,7 @@
                         <span class="p">(</span><span class="n">select_identifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_instance</span><span class="p">)</span>
                     <span class="p">]</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">order_fields</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_order</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">model_ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;relation_</span><span class="si">{</span><span class="n">model_ct</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">_form&quot;</span>
