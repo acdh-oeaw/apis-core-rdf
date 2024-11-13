@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.forms import modelform_factory
+from django.forms.utils import pretty_name
 from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
@@ -162,7 +163,7 @@ class List(
     def _get_columns_choices(self, columns_exclude):
         # we start with the model fields
         choices = [
-            (field.name, getattr(field, "verbose_name", field.name))
+            (field.name, pretty_name(getattr(field, "verbose_name", field.name)))
             for field in self.model._meta.get_fields()
         ]
         # we add any annotated fields to that
