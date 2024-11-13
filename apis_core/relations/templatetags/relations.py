@@ -91,3 +91,73 @@ def relations_verbose_name_listview_url():
         for relation in relation_classes
     }
     return sorted(ret.items())
+
+
+@register.simple_tag(takes_context=True)
+def relations_graph(context, relations, target=None):
+    from django.conf import settings
+
+    if "apis_core.relations" not in settings.INSTALLED_APPS:
+        return {
+            "error": "This has currently been configured only for apis_core.relations."
+        }
+
+    import hashlib
+
+    from pydot import Dot, Edge, Node
+
+    def get_colour(entity_type):
+        # TODO: Could this be better, by choosing from a proper matplotlib palette?
+        hash_value = int(hashlib.md5(entity_type.encode("utf-8")).hexdigest(), 16)
+        r = (hash_value >> 16) & 0xFF
+        g = (hash_value >> 8) & 0xFF
+        b = hash_value & 0xFF
+
+        # Format it into a hex color string
+        return f"#{r:02x}{g:02x}{b:02x}"
+
+    def get_node(obj):
+        node = Node(
+            obj.pk,
+            label="",  # use tooltip instead
+            shape="circle",
+            style="filled",
+            splines=False,
+            fillcolor=get_colour(obj.__class__.__name__),
+            tooltip=str(rel.obj),
+        )
+        node.set_tooltip(str(obj))
+        node.set_URL(obj.get_absolute_url())
+        return node
+
+    graph = Dot(
+        graph_type="digraph",
+        layout="sfdp",
+        splines=True,
+        center=True,
+        # repulsiveforce=2.0, #
+        # K=1,
+    )
+
+    for rel in relations:
+        graph.add_node(get_node(rel.subj))
+        graph.add_node(get_node(rel.obj))
+
+        src = rel.subj.pk if rel.forward else rel.obj.pk
+        dest = rel.obj.pk if rel.forward else rel.subj.pk
+        edge_label = rel.name() if rel.forward else rel.reverse_name()
+
+        e = Edge(
+            src,
+            dest,
+            label=edge_label,
+        )
+        graph.add_edge(e)
+
+    graph_data = {}
+    try:
+        graph_data["dot"] = graph.to_string()
+        graph_data["svg"] = graph.create_svg().decode()
+    except Exception as e:
+        graph_data["error"] = f"{str(e)} occured while creating graph."
+    return graph_data

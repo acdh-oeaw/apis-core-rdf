@@ -1,0 +1,10 @@
+{% load relations %}
+{% relations_graph relations target as graph %}
+{% if graph.error %}<div class="alert alert-warning" role="alert">{{ graph.error }}</div>{% endif %}
+{% if graph.svg %}
+  <div class="d-flex justify-content-center"
+       style="overflow: auto;
+              max-width: 100%">
+    <div id="svg-container">{{ graph.svg|safe }}</div>
+  </div>
+{% endif %}
