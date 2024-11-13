@@ -1,6 +1,5 @@
 {% extends "apis_core/apis_entities/abstractentity.html" %}
 {% load crispy_forms_tags %}
-{% load apis_entities %}
 {% load static %}
 
 {% block col-zero %}
@@ -9,18 +8,6 @@
     <div class="card-footer">{% include "apis_entities/partials/linked_open_data.html" %}</div>
   </div>
 {% endblock col-zero %}
-
-{% block col-one %}
-  {{ block.super }}
-  <div class="card mt-2">
-    <div class="card-body">
-      {% mergeform as mergeform %}
-      {% if mergeform %}
-        {% crispy mergeform mergeform.helper %}
-      {% endif %}
-    </div>
-  </div>
-{% endblock col-one %}
 
 {% block scripts %}
   {{ block.super }}
