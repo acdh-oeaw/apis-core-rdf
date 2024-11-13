@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.31.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.30.0...v0.31.0) (2024-11-13)
+
+
+### Features
+
+* **core:** add alt attributes to footer images ([cfa9006](https://github.com/acdh-oeaw/apis-core-rdf/commit/cfa9006472d59ad8e544173b85cb2bf7d28a2ffa))
+* **sample_project:** demo a long relations form ([cb80dd3](https://github.com/acdh-oeaw/apis-core-rdf/commit/cb80dd3ca5199860ecda860782e16d495ed02660))
+
+
+### Bug Fixes
+
+* **core:** fix dimensions of links in footer ([c2c5594](https://github.com/acdh-oeaw/apis-core-rdf/commit/c2c5594cc73dd61eb5b6a42aa402c2c3d98bec6b))
+* **generic:** use copy instead of working with the original field ([1fec441](https://github.com/acdh-oeaw/apis-core-rdf/commit/1fec441289b95b3bdfdc771f44929986fd47ce52)), closes [#1346](https://github.com/acdh-oeaw/apis-core-rdf/issues/1346)
+* **relations:** fix modal overflow to access dropdown ([e14c806](https://github.com/acdh-oeaw/apis-core-rdf/commit/e14c8060672744076248a20438fdfe9fe95c3947)), closes [#1359](https://github.com/acdh-oeaw/apis-core-rdf/issues/1359)
+* **relations:** handle overflow in relations dialog ([4b08b6f](https://github.com/acdh-oeaw/apis-core-rdf/commit/4b08b6f0680d0448fee2ce456507101e92069509))
+* **relations:** order fields before initializing FormHelper ([c8e9945](https://github.com/acdh-oeaw/apis-core-rdf/commit/c8e9945f0cc0a1b1e347fb04b6779449ae8d4639)), closes [#1355](https://github.com/acdh-oeaw/apis-core-rdf/issues/1355)
+
 ## [0.30.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.29.0...v0.30.0) (2024-11-07)
 
 
