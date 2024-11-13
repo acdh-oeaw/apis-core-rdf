@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.apis_entities.urls &mdash; APIS 0.29.0 documentation</title>
+  <title>apis_core.apis_entities.urls &mdash; APIS 0.30.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=fcb1757e"></script>
+      <script src="../../../_static/documentation_options.js?v=a7ea5d77"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -86,6 +86,8 @@
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_list_or_404</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">register_converter</span>
 
+<span class="kn">from</span> <span class="nn">apis_core.apis_entities.api_views</span> <span class="kn">import</span> <span class="n">GetEntityGeneric</span><span class="p">,</span> <span class="n">ListEntityGeneric</span>
+
 <span class="c1"># from .views import ReversionCompareView TODO: add again when import is fixed</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.views</span> <span class="kn">import</span> <span class="p">(</span>
@@ -93,6 +95,15 @@
     <span class="n">EntitiesDuplicate</span><span class="p">,</span>
     <span class="n">EntitiesMerge</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="n">api_routes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;entities/&quot;</span><span class="p">,</span> <span class="n">ListEntityGeneric</span><span class="o">.</span><span class="n">as_view</span><span class="p">()),</span>
+    <span class="n">path</span><span class="p">(</span>
+        <span class="s2">&quot;entity/&lt;int:pk&gt;/&quot;</span><span class="p">,</span>
+        <span class="n">GetEntityGeneric</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;GetEntityGeneric&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="EntityToContenttypeConverter">
