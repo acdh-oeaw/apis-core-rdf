@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.31.0...v0.31.1) (2024-11-14)
+
+
+### Bug Fixes
+
+* **apis_entities:** set target of merge link to correct route ([5b200ed](https://github.com/acdh-oeaw/apis-core-rdf/commit/5b200ed245159780b37b24e61720265c7653ac58)), closes [#1374](https://github.com/acdh-oeaw/apis-core-rdf/issues/1374)
+
 ## [0.31.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.30.0...v0.31.0) (2024-11-13)
 
 
