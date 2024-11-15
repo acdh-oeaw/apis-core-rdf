@@ -20,6 +20,7 @@ class EntitiesMergeForm(forms.Form):
             "data-placeholder": "Search ...",
             "data-minimum-input-length": 3,
             "data-html": True,
+            "data-tags": 1,
         }
         self.fields["uri"].widget = autocomplete.ModelSelect2(uri, attrs=attrs)
         self.fields["uri"].widget.choices = self.fields["uri"].choices
