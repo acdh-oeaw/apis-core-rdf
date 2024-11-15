@@ -297,10 +297,13 @@ class Autocomplete(
 
     permission_action_required = "view"
     template_name_suffix = "_autocomplete_result"
-    create_field = "thisisnotimportant"  # because we are using create_object_from_uri
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
+        # We use a URI parameter to enable the create functionality in the
+        # autocomplete dropdown. It is not important what the value of the
+        # `create_field` is, because we use create_object_from_uri anyway.
+        self.create_field = self.request.GET.get("create", None)
         try:
             template = select_template(self.get_template_names())
             self.template = template.template.name
