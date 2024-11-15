@@ -21,7 +21,7 @@ class GenericImportForm(forms.Form):
         ct = ContentType.objects.get_for_model(self.Meta.model)
         url = reverse("apis_core:generic:autocompleteexternalonly", args=[ct])
         self.fields["url"].widget = autocomplete.ModelSelect2(
-            url, attrs={"data-html": True}
+            url, attrs={"data-html": True, "data-tags": 1}
         )
         self.fields["url"].widget.choices = self.fields["url"].choices
         self.helper = FormHelper()
