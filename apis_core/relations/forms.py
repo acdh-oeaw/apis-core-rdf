@@ -117,6 +117,7 @@ class RelationForm(GenericModelForm):
                 )
                 self.fields["subj"].widget = autocomplete.ListSelect2(
                     url=reverse("apis_core:generic:autocomplete", args=[ct])
+                    + "?create=True"
                 )
                 self.fields["subj"].widget.choices = self.fields["subj"].choices
             else:
@@ -150,6 +151,7 @@ class RelationForm(GenericModelForm):
                 )
                 self.fields["obj"].widget = autocomplete.ListSelect2(
                     url=reverse("apis_core:generic:autocomplete", args=[ct])
+                    + "?create=True"
                 )
                 self.fields["obj"].widget.choices = self.fields["obj"].choices
             else:
