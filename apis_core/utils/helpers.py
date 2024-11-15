@@ -1,6 +1,7 @@
 import difflib
 
 from django.apps import apps
+from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.core.exceptions import ImproperlyConfigured
 from django.db import DEFAULT_DB_ALIAS, router
@@ -81,7 +82,10 @@ def create_object_from_uri(uri: str, model: object) -> object:
             instance = importer.create_instance()
             uri = Uri.objects.create(uri=importer.get_uri, root_object=instance)
             return instance
-    return None
+    content_type = ContentType.objects.get_for_model(model)
+    raise ImproperlyConfigured(
+        f'Could not create {content_type.name} from string "{uri}"'
+    )
 
 
 def get_html_diff(a, b, show_a=True, show_b=True, shorten=0):
