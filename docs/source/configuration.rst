@@ -134,3 +134,20 @@ Allows to define a function that receives the view - including e.g. the
 `request` object - and a queryset and can do custom filtering on that queryset.
 This can be used to set the listviews to public using the
 `APIS_LIST_VIEWS_ALLOWED` setting, but still only list specific entities.
+
+
+Maintenance Middleware
+^^^^^^^^^^^^^^^^^^^^^^
+
+APIS ships a maintenance middlware that you can use and activate to enable a maintenance mode in your project.
+Maintenance mode means that only superuser accounts can access the webinterfaces, all other requests are being
+answered with a simple maintenance mode page (the ``maintenance.html`` template).
+To use the middleware, add
+
+.. code-block:: python
+
+   "apis_core.core.middleware.MaintenanceMiddleware"
+
+to your ``settings.MIDDLEWARE`` list. To activate the maintenance mode once the middlware is enabled, simply
+create a file ``apis_maintenance`` in the directory the main Django process runs in.
+The path of the maintenance file can be changed in the settings: ``APIS_MAINTENANCE_FILE = "path of the file"``
