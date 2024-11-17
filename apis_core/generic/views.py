@@ -23,7 +23,6 @@ from django_tables2.columns import library
 from django_tables2.tables import table_factory
 
 from apis_core.apis_metainfo.models import Uri
-from apis_core.core.mixins import ListViewObjectFilterMixin
 from apis_core.utils.helpers import create_object_from_uri, get_importer_for_model
 
 from .filtersets import GenericFilterSet
@@ -88,16 +87,16 @@ class GenericModelMixin:
         return template_names
 
     def get_permission_required(self):
-        if hasattr(settings, "APIS_VIEW_PASSES_TEST"):
-            if settings.APIS_VIEW_PASSES_TEST(self):
-                return []
+        if getattr(self, "permission_action_required", None) == "view" and getattr(
+            settings, "APIS_ANON_VIEWS_ALLOWED", False
+        ):
+            return []
         if hasattr(self, "permission_action_required"):
             return [permission_fullname(self.permission_action_required, self.model)]
         return []
 
 
 class List(
-    ListViewObjectFilterMixin,
     GenericModelMixin,
     PermissionRequiredMixin,
     SingleTableMixin,
@@ -204,13 +203,6 @@ class List(
         filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
 
         return filterset
-
-    def get_queryset(self):
-        queryset_methods = module_paths(
-            self.model, path="querysets", suffix="ListViewQueryset"
-        )
-        queryset = first_member_match(queryset_methods) or (lambda x: x)
-        return self.filter_queryset(queryset(self.model.objects.all()))
 
     def get_table_pagination(self, table):
         """
