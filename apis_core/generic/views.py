@@ -23,7 +23,7 @@ from django_tables2.columns import library
 from django_tables2.tables import table_factory
 
 from apis_core.apis_metainfo.models import Uri
-from apis_core.core.mixins import ListViewObjectFilterMixin
+from apis_core.core.mixins import DetailViewObjectMixin, ListViewObjectFilterMixin
 from apis_core.utils.helpers import create_object_from_uri, get_importer_for_model
 
 from .filtersets import GenericFilterSet
@@ -211,7 +211,9 @@ class List(
         return getattr(self.get_table_class(), "paginate_by", None)
 
 
-class Detail(GenericModelMixin, PermissionRequiredMixin, DetailView):
+class Detail(
+    DetailViewObjectMixin, GenericModelMixin, PermissionRequiredMixin, DetailView
+):
     """
     Detail view for a generic model.
     Access requires the `<model>_view` permission.
