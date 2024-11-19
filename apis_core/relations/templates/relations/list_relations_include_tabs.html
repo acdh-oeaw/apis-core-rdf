@@ -17,6 +17,9 @@
              href="#reltab_{{ object.id }}_{{ target.name }}">{{ target.name | title }}</a>
         </li>
       {% endfor %}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#reltab_graph">Graph</a>
+      </li>
     </ul>
   </div>
   <div class="card-body">
@@ -25,6 +28,7 @@
       {% for target in possible_targets %}
         <div class="tab-pane" id="reltab_{{ object.id }}_{{ target.name }}">{% include "relations/list_relations.html" %}</div>
       {% endfor %}
+      <div class="tab-pane" id="reltab_graph">{% include "relations/graph_relations.html" %}</div>
     </div>
   </div>
 </div>
