@@ -168,7 +168,7 @@
 
 <div class="viewcode-block" id="create_object_from_uri">
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.helpers.create_object_from_uri">[docs]</a>
-<span class="k">def</span> <span class="nf">create_object_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">create_object_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">raise_on_fail</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">uri</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">)</span>
@@ -179,10 +179,12 @@
             <span class="n">instance</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">create_instance</span><span class="p">()</span>
             <span class="n">uri</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">importer</span><span class="o">.</span><span class="n">get_uri</span><span class="p">,</span> <span class="n">root_object</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">instance</span>
-    <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s1">&#39;Could not create </span><span class="si">{</span><span class="n">content_type</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> from string &quot;</span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
-    <span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">raise_on_fail</span><span class="p">:</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;Could not create </span><span class="si">{</span><span class="n">content_type</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> from string &quot;</span><span class="si">{</span><span class="n">uri</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
 
 
 
