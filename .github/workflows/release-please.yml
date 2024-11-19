@@ -18,6 +18,6 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          release-type: python
-          package-name: apis-core-rdf
-          bump-minor-pre-major: true
+          config-file: .github/release-please-config.json
+          manifest-file: .github/release-please-manifest.json
+          #target-branch: use this for testing
