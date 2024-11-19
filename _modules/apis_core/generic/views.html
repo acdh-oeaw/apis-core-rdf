@@ -448,12 +448,15 @@
 
     <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;view&quot;</span>
     <span class="n">template_name_suffix</span> <span class="o">=</span> <span class="s2">&quot;_autocomplete_result&quot;</span>
-    <span class="n">create_field</span> <span class="o">=</span> <span class="s2">&quot;thisisnotimportant&quot;</span>  <span class="c1"># because we are using create_object_from_uri</span>
 
 <div class="viewcode-block" id="Autocomplete.setup">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.setup">[docs]</a>
     <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># We use a URI parameter to enable the create functionality in the</span>
+        <span class="c1"># autocomplete dropdown. It is not important what the value of the</span>
+        <span class="c1"># `create_field` is, because we use create_object_from_uri anyway.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;create&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">template</span> <span class="o">=</span> <span class="n">select_template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_template_names</span><span class="p">())</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">name</span>
