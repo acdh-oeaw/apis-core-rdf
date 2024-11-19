@@ -328,7 +328,7 @@ class Autocomplete(
         return results
 
     def create_object(self, value):
-        return create_object_from_uri(value, self.queryset.model)
+        return create_object_from_uri(value, self.queryset.model, raise_on_fail=True)
 
     def post(self, request, *args, **kwargs):
         try:
