@@ -5,7 +5,7 @@ function tohtml(item) {
 }
 document.body.addEventListener("reinit_select2", function(evt) {
     form = document.getElementById(evt.detail.value);
-    form.querySelectorAll(".listselect2").forEach(element => {
+    form.querySelectorAll(".listselect2, .modelselect2multiple, .modelselect2").forEach(element => {
         $(element).select2({
             ajax: {
                 url: $(element).data("autocomplete-light-url"),
