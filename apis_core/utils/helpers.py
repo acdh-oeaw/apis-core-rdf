@@ -71,7 +71,7 @@ def get_importer_for_model(model: object):
     raise ImproperlyConfigured(f"No suitable importer found for {model}")
 
 
-def create_object_from_uri(uri: str, model: object) -> object:
+def create_object_from_uri(uri: str, model: object, raise_on_fail=False) -> object:
     if uri.startswith("http"):
         try:
             uri = Uri.objects.get(uri=uri)
@@ -82,10 +82,12 @@ def create_object_from_uri(uri: str, model: object) -> object:
             instance = importer.create_instance()
             uri = Uri.objects.create(uri=importer.get_uri, root_object=instance)
             return instance
-    content_type = ContentType.objects.get_for_model(model)
-    raise ImproperlyConfigured(
-        f'Could not create {content_type.name} from string "{uri}"'
-    )
+    if raise_on_fail:
+        content_type = ContentType.objects.get_for_model(model)
+        raise ImproperlyConfigured(
+            f'Could not create {content_type.name} from string "{uri}"'
+        )
+    return False
 
 
 def get_html_diff(a, b, show_a=True, show_b=True, shorten=0):
