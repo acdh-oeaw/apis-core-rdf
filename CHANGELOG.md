@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.32.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/apis-core-rdf-v0.31.1...apis-core-rdf-v0.32.0) (2024-11-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **utils:** drop unused `utils.utils` module
+* **core:** drop unused ViewPassesTestMixin
+
+### Features
+
+* **apis_entities:** allow to paste string in merge form ([6b44299](https://github.com/acdh-oeaw/apis-core-rdf/commit/6b44299dfc253053c565e432cb3271d66a107db6))
+* **generic:** allow to paste a string in the import form ([41cb229](https://github.com/acdh-oeaw/apis-core-rdf/commit/41cb229ce49b07e5fba5ea3f3b3834e3242c10aa)), closes [#1223](https://github.com/acdh-oeaw/apis-core-rdf/issues/1223)
+* **relations:** put display logic of relations in a block ([0d71f8f](https://github.com/acdh-oeaw/apis-core-rdf/commit/0d71f8fde8c6d95f326b4ab67bd7455788389e6e))
+
+
+### Bug Fixes
+
+* **apis_entities:** remove merge form from the entities edit view ([2b0dcf1](https://github.com/acdh-oeaw/apis-core-rdf/commit/2b0dcf11792c766e72f7cfb487d65dffd54a289d)), closes [#1285](https://github.com/acdh-oeaw/apis-core-rdf/issues/1285)
+* **core:** remove leading slash from static files ([d657a98](https://github.com/acdh-oeaw/apis-core-rdf/commit/d657a9843ccf79f2caf2059654e86af26bbc7f36)), closes [#1339](https://github.com/acdh-oeaw/apis-core-rdf/issues/1339)
+* **generic:** run the columns names through `pretty_name` ([07951c4](https://github.com/acdh-oeaw/apis-core-rdf/commit/07951c400757185b948813a2dc56ab725117c3a7)), closes [#1028](https://github.com/acdh-oeaw/apis-core-rdf/issues/1028)
+* **generic:** use a URL param to enable autocomplete create function ([6995a73](https://github.com/acdh-oeaw/apis-core-rdf/commit/6995a73d6722f379f0d2cb0f22658fb47901e1b8))
+* **history:** drop TempTripleHistoryLogs api view ([b754e68](https://github.com/acdh-oeaw/apis-core-rdf/commit/b754e68f9d1f5d7e134eda7971cdef7910b2b274))
+* **relations:** support modelselect2 fields ([b7ba802](https://github.com/acdh-oeaw/apis-core-rdf/commit/b7ba80266b7bebc90ebe3034b5e5f8689833caee))
+* **utils:** add a `raise_on_fail` argument to the object create function ([16c2ef7](https://github.com/acdh-oeaw/apis-core-rdf/commit/16c2ef726e888deec5d6f3a0475b92f6392314fc)), closes [#1405](https://github.com/acdh-oeaw/apis-core-rdf/issues/1405)
+* **utils:** raise exception on failing creation of object ([d93a17d](https://github.com/acdh-oeaw/apis-core-rdf/commit/d93a17d7782c950968e189554e1b338aa06a7c76))
+
+
+### Miscellaneous Chores
+
+* **core:** drop unused ViewPassesTestMixin ([ed3dfa0](https://github.com/acdh-oeaw/apis-core-rdf/commit/ed3dfa0dadcbd9a3603bb20bb4c2ea4b34bf18b8))
+* **utils:** drop unused `utils.utils` module ([734ec4c](https://github.com/acdh-oeaw/apis-core-rdf/commit/734ec4c8d8343f54655eefbabb789b926d728878))
+
 ## [0.31.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.31.0...v0.31.1) (2024-11-14)
 
 
