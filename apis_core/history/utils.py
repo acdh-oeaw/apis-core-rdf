@@ -3,7 +3,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django_tables2 import RequestConfig
 
-from apis_core.apis_relations.tables import get_generic_triple_table
 from apis_core.utils.settings import get_entity_settings_by_modelname
 
 
@@ -18,6 +17,7 @@ def triple_sidebar_history(obj: object, request, detail=True):
         )
     content_type = ContentType.objects.get_for_model(obj.instance_type)
     if "apis_core.apis_relations" in settings.INSTALLED_APPS:
+        from apis_core.apis_relations.tables import get_generic_triple_table
         from apis_core.apis_relations.utils import (
             get_content_types_with_allowed_relation_from,
         )
