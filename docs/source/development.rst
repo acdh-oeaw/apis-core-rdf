@@ -15,9 +15,6 @@ Dependencies
 * drf-spectacular
 * requests
 * django-model-utils
-* django-admin-csvexport
-
-  Used in the ``apis_labels`` and ``apis_vocabularies`` admin apps
 
 * apis-override-select2js
 
