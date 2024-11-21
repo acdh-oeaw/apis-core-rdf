@@ -97,7 +97,7 @@
 
 ### Bug Fixes
 
-* **apis_entities,apis_relations:** move TempTriple update code to signal ([ad25547](https://github.com/acdh-oeaw/apis-core-rdf/commit/ad2554771fa7f660cdfb80c353bf05b0ffed0291)), closes [#1288](https://github.com/acdh-oeaw/apis-core-rdf/issues/1288)
+* **apis_entities,apis_relations:** move TempTriple update code to signal ([ad25547](https://github.com/acdh-oeaw/apis-core-rdf/commit/ad2554771fa7f660cdfb80c353bf05b0ffed0291)), closes [#1228](https://github.com/acdh-oeaw/apis-core-rdf/issues/1228)
 * **apis_entities:** correct merge link ([0088fc6](https://github.com/acdh-oeaw/apis-core-rdf/commit/0088fc6ff4d4b1541c258c23c85a8027b4a3e141)), closes [#1278](https://github.com/acdh-oeaw/apis-core-rdf/issues/1278)
 * **apis_relations:** call block.super in the col-one block ([720b637](https://github.com/acdh-oeaw/apis-core-rdf/commit/720b637b4eaf22276ed897962cf5a680dbdee0df))
 * **apis_relations:** edit button appearance ([510d0ed](https://github.com/acdh-oeaw/apis-core-rdf/commit/510d0edeaef9cff73205839168bbc835a42eb886))
