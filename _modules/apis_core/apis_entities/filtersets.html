@@ -83,17 +83,11 @@
   <h1>Source code for apis_core.apis_entities.filtersets</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">django_filters</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
-<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Case</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Value</span><span class="p">,</span> <span class="n">When</span>
-<span class="kn">from</span> <span class="nn">django.db.models.functions</span> <span class="kn">import</span> <span class="n">Concat</span>
 <span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">DateInput</span>
 <span class="kn">from</span> <span class="nn">django.utils.encoding</span> <span class="kn">import</span> <span class="n">force_str</span>
 <span class="kn">from</span> <span class="nn">simple_history.utils</span> <span class="kn">import</span> <span class="n">get_history_manager_for_model</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.utils</span> <span class="kn">import</span> <span class="n">get_entity_classes</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
-<span class="kn">from</span> <span class="nn">apis_core.apis_relations.models</span> <span class="kn">import</span> <span class="n">Property</span><span class="p">,</span> <span class="n">Triple</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span><span class="p">,</span> <span class="n">GenericFilterSetForm</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">default_search_fields</span><span class="p">,</span> <span class="n">generate_search_filter</span>
 
@@ -119,72 +113,6 @@
     <span class="s2">&quot;status&quot;</span><span class="p">,</span>
     <span class="s2">&quot;references&quot;</span><span class="p">,</span>
 <span class="p">]</span>
-
-
-<div class="viewcode-block" id="PropertyChoiceField">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.PropertyChoiceField">[docs]</a>
-<span class="k">class</span> <span class="nc">PropertyChoiceField</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">ModelChoiceField</span><span class="p">):</span>
-<div class="viewcode-block" id="PropertyChoiceField.label_from_instance">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.PropertyChoiceField.label_from_instance">[docs]</a>
-    <span class="k">def</span> <span class="nf">label_from_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">forward</span><span class="p">:</span>
-            <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">obj_class</span><span class="o">.</span><span class="n">all</span><span class="p">()]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">subj_class</span><span class="o">.</span><span class="n">all</span><span class="p">()]</span>
-        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; | &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="PropertyFilter">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.PropertyFilter">[docs]</a>
-<span class="k">class</span> <span class="nc">PropertyFilter</span><span class="p">(</span><span class="n">django_filters</span><span class="o">.</span><span class="n">ModelChoiceFilter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A child of ModelChoiceFilter that only works with</span>
-<span class="sd">    Properties, but in return it filters those so that</span>
-<span class="sd">    only the Properties are listed that can be connected</span>
-<span class="sd">    to the `model` given as argument.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">field_class</span> <span class="o">=</span> <span class="n">PropertyChoiceField</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">queryset</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj_class</span><span class="o">=</span><span class="n">ct</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj_class</span><span class="o">=</span><span class="n">ct</span><span class="p">))</span>
-                <span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="n">Case</span><span class="p">(</span>
-                        <span class="n">When</span><span class="p">(</span>
-                            <span class="n">obj_class</span><span class="o">=</span><span class="n">ct</span><span class="p">,</span>
-                            <span class="n">subj_class</span><span class="o">=</span><span class="n">ct</span><span class="p">,</span>
-                            <span class="n">then</span><span class="o">=</span><span class="n">Concat</span><span class="p">(</span><span class="s2">&quot;name_forward&quot;</span><span class="p">,</span> <span class="n">Value</span><span class="p">(</span><span class="s2">&quot; / &quot;</span><span class="p">),</span> <span class="s2">&quot;name_reverse&quot;</span><span class="p">),</span>
-                        <span class="p">),</span>
-                        <span class="n">When</span><span class="p">(</span><span class="n">obj_class</span><span class="o">=</span><span class="n">ct</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="s2">&quot;name_reverse&quot;</span><span class="p">),</span>
-                        <span class="n">When</span><span class="p">(</span><span class="n">subj_class</span><span class="o">=</span><span class="n">ct</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="s2">&quot;name_forward&quot;</span><span class="p">),</span>
-                    <span class="p">),</span>
-                    <span class="n">forward</span><span class="o">=</span><span class="n">Case</span><span class="p">(</span>
-                        <span class="n">When</span><span class="p">(</span><span class="n">obj_class</span><span class="o">=</span><span class="n">ct</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="n">Value</span><span class="p">(</span><span class="kc">False</span><span class="p">)),</span>
-                        <span class="n">When</span><span class="p">(</span><span class="n">subj_class</span><span class="o">=</span><span class="n">ct</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="n">Value</span><span class="p">(</span><span class="kc">True</span><span class="p">)),</span>
-                    <span class="p">),</span>
-                <span class="p">)</span>
-                <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
-            <span class="p">)</span>
-
-<div class="viewcode-block" id="PropertyFilter.filter">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.PropertyFilter.filter">[docs]</a>
-    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queryset</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">Property</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name_forward</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
-            <span class="n">queryset</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">triple_set_from_subj__prop</span><span class="o">=</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">queryset</span></div>
-</div>
-
 
 
 <div class="viewcode-block" id="ModelSearchFilter">
@@ -218,31 +146,6 @@
 
 
 
-<div class="viewcode-block" id="related_entity">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.related_entity">[docs]</a>
-<span class="k">def</span> <span class="nf">related_entity</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="n">entities</span> <span class="o">=</span> <span class="n">get_entity_classes</span><span class="p">()</span>
-    <span class="n">q</span> <span class="o">=</span> <span class="n">Q</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">model_name</span>
-        <span class="n">q</span> <span class="o">|=</span> <span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">__isnull&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span> <span class="o">&amp;</span> <span class="n">generate_search_filter</span><span class="p">(</span>
-            <span class="n">entity</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">__&quot;</span>
-        <span class="p">)</span>
-    <span class="n">all_entities</span> <span class="o">=</span> <span class="n">RootObject</span><span class="o">.</span><span class="n">objects_inheritance</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s2">&quot;pk&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">Triple</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">subj__in</span><span class="o">=</span><span class="n">all_entities</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">obj__in</span><span class="o">=</span><span class="n">all_entities</span><span class="p">))</span>
-        <span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-            <span class="n">related</span><span class="o">=</span><span class="n">Case</span><span class="p">(</span>
-                <span class="n">When</span><span class="p">(</span><span class="n">subj__in</span><span class="o">=</span><span class="n">all_entities</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="s2">&quot;obj&quot;</span><span class="p">),</span>
-                <span class="n">When</span><span class="p">(</span><span class="n">obj__in</span><span class="o">=</span><span class="n">all_entities</span><span class="p">,</span> <span class="n">then</span><span class="o">=</span><span class="s2">&quot;subj&quot;</span><span class="p">),</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s2">&quot;related&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk__in</span><span class="o">=</span><span class="n">t</span><span class="p">)</span></div>
-
-
-
 <div class="viewcode-block" id="changed_since">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.changed_since">[docs]</a>
 <span class="k">def</span> <span class="nf">changed_since</span><span class="p">(</span><span class="n">queryset</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -262,10 +165,6 @@
 <div class="viewcode-block" id="AbstractEntityFilterSet">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSet">[docs]</a>
 <span class="k">class</span> <span class="nc">AbstractEntityFilterSet</span><span class="p">(</span><span class="n">GenericFilterSet</span><span class="p">):</span>
-    <span class="n">related_entity</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">(</span>
-        <span class="n">method</span><span class="o">=</span><span class="n">related_entity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related entity contains&quot;</span>
-    <span class="p">)</span>
-
 <div class="viewcode-block" id="AbstractEntityFilterSet.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSet.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">GenericFilterSet</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
@@ -283,9 +182,15 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s2">&quot;related_property&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PropertyFilter</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related Property&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;apis_core.apis_relations&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">apis_core.apis_relations.filters</span> <span class="kn">import</span> <span class="n">PropertyFilter</span><span class="p">,</span> <span class="n">related_entity</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s2">&quot;related_property&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PropertyFilter</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related Property&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s2">&quot;related_entity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">(</span>
+                <span class="n">method</span><span class="o">=</span><span class="n">related_entity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Related entity contains&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">model</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="s2">&quot;search&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ModelSearchFilter</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>

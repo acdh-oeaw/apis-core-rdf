@@ -182,6 +182,49 @@
 </dd></dl>
 
 </section>
+<section id="module-apis_core.apis_relations.filters">
+<span id="apis-core-apis-relations-filters-module"></span><h2>apis_core.apis_relations.filters module<a class="headerlink" href="#module-apis_core.apis_relations.filters" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filters.PropertyChoiceField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.filters.</span></span><span class="sig-name descname"><span class="pre">PropertyChoiceField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filters.html#PropertyChoiceField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filters.PropertyChoiceField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelChoiceField</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filters.PropertyChoiceField.label_from_instance">
+<span class="sig-name descname"><span class="pre">label_from_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filters.html#PropertyChoiceField.label_from_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filters.PropertyChoiceField.label_from_instance" title="Link to this definition"></a></dt>
+<dd><p>Convert objects into strings and generate the labels for the choices
+presented by this object. Subclasses can override this method to
+customize the display of the choices.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filters.PropertyFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.filters.</span></span><span class="sig-name descname"><span class="pre">PropertyFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filters.html#PropertyFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filters.PropertyFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelChoiceFilter</span></code></p>
+<p>A child of ModelChoiceFilter that only works with
+Properties, but in return it filters those so that
+only the Properties are listed that can be connected
+to the <cite>model</cite> given as argument.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filters.PropertyFilter.field_class">
+<span class="sig-name descname"><span class="pre">field_class</span></span><a class="headerlink" href="#apis_core.apis_relations.filters.PropertyFilter.field_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#apis_core.apis_relations.filters.PropertyChoiceField" title="apis_core.apis_relations.filters.PropertyChoiceField"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyChoiceField</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filters.PropertyFilter.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filters.html#PropertyFilter.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filters.PropertyFilter.filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.apis_relations.filters.related_entity">
+<span class="sig-prename descclassname"><span class="pre">apis_core.apis_relations.filters.</span></span><span class="sig-name descname"><span class="pre">related_entity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_relations/filters.html#related_entity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_relations.filters.related_entity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
 <section id="module-apis_core.apis_relations.filtersets">
 <span id="apis-core-apis-relations-filtersets-module"></span><h2>apis_core.apis_relations.filtersets module<a class="headerlink" href="#module-apis_core.apis_relations.filtersets" title="Link to this heading"></a></h2>
 <dl class="py class">
