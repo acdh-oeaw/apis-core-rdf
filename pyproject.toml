@@ -68,11 +68,11 @@ lint.ignore = ["E501", "F403"]
 lint.isort.known-first-party = ["apis_core"]
 
 [tool.deptry]
-ignore = ["DEP002",]
 extend_exclude = [".*/tests"]
 
 [tool.deptry.per_rule_ignores]
 DEP001 = ["apis_ontology"]
+DEP002 = ["apis-override-select2js", "crispy-bootstrap4"]
 
 [tool.deptry.package_module_name_map]
 djangorestframework = "rest_framework"
