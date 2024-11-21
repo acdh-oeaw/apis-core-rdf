@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django_filters import CharFilter, MultipleChoiceFilter
 
@@ -42,11 +43,10 @@ class SubjObjClassFilter(MultipleChoiceFilter):
       subjects and objects
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, models, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.extra["choices"] = [
-            (item.id, item.name) for item in get_all_relation_subj_and_obj()
-        ]
+        content_types = [ContentType.objects.get_for_model(model) for model in models]
+        self.extra["choices"] = [(item.id, item.name) for item in content_types]
 
     def filter(self, qs, value: list[str] | None):
         # value is the list of contenttypes ids
@@ -75,14 +75,6 @@ class RelationFilterSet(GenericFilterSet):
         field_name="obj",
         label="Object search",
     )
-    subj_class = SubjObjClassFilter(
-        field_name="subj",
-        label="Subject class",
-    )
-    obj_class = SubjObjClassFilter(
-        field_name="obj",
-        label="Object class",
-    )
 
     class Meta:
         exclude = [
@@ -92,3 +84,18 @@ class RelationFilterSet(GenericFilterSet):
             "obj_content_type",
         ]
         form = GenericFilterSet.Meta.form
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if model := getattr(self.Meta, "model", False):
+            all_models = [ct.model_class() for ct in get_all_relation_subj_and_obj()]
+            subj_models = getattr(model, "subj_model", all_models)
+            obj_models = getattr(model, "obj_model", all_models)
+            if isinstance(subj_models, list):
+                self.filters["subj_class"] = SubjObjClassFilter(
+                    field_name="subj", label="Subject class", models=subj_models
+                )
+            if isinstance(obj_models, list):
+                self.filters["obj_class"] = SubjObjClassFilter(
+                    field_name="obj", label="Object Class", models=obj_models
+                )
