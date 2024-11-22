@@ -21,9 +21,19 @@ class ModelViewSet(viewsets.ModelViewSet):
         return super().dispatch(*args, **kwargs)
 
     def get_queryset(self):
+        renderer = getattr(getattr(self, "request", {}), "accepted_renderer", None)
         queryset_methods = module_paths(
             self.model, path="querysets", suffix="ViewSetQueryset"
         )
+        if renderer is not None:
+            prefix = makeclassprefix(renderer.format)
+            queryset_methods = (
+                module_paths(
+                    self.model, path="querysets", suffix=f"{prefix}ViewSetQueryset"
+                )
+                + queryset_methods
+            )
+
         queryset = first_member_match(queryset_methods) or (lambda x: x)
         return queryset(self.model.objects.all())
 
