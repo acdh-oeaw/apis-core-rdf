@@ -139,4 +139,4 @@ urlpatterns = [
 ]
 ```
 
-Now you should be ready to roll. Start creating your entities in you `apis_ontology/models.py`.
+Now you should be ready to roll. Start [creating your ontology](https://acdh-oeaw.github.io/apis-core-rdf/ontology.html).
