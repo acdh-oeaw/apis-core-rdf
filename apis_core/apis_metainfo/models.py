@@ -1,6 +1,5 @@
 import logging
 
-from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
@@ -15,9 +14,6 @@ from apis_core.utils import rdf
 from apis_core.utils.normalize import clean_uri
 
 logger = logging.getLogger(__name__)
-
-
-NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
 
 class RootObject(GenericModel, models.Model):
