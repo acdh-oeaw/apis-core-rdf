@@ -40,7 +40,7 @@ of results on the right side.
 The default filterset used is
 :class:`apis_core.generic.filtersets.GenericFilterSet`. You can override the
 filterset for you models by defining a custom filterset class in
-``you_app.filtersets``. The filterset has to be named ``<Modelname>FilterSet``,
+``your_app.filtersets``. The filterset has to be named ``<Modelname>FilterSet``,
 so if you have a model ``Person`` in your app ``myproject``, the view looks for
 the filterset ``myproject.filtersets.PersonFilterSet``. You can inherit from
 :class:`apis_core.generic.filtersets.GenericFilterSet` and add your
@@ -64,7 +64,7 @@ pagination (which is the default).
 The base queryset that is used in the listview, which is then filtered using
 the django-filters filter, is ``model.objects.all()`` - but you can override
 the queryset by creating a custom queryset for your model in
-``you_app.querysets``. The queryset function has to be named
+``your_app.querysets``. The queryset function has to be named
 ``<Modelname>ListViewQueryset``, so if you have a model ``Person`` in your app
 ``myproject``, the view looks for the queryset
 ``myproject.querysets.PersonListViewQueryset``.
@@ -83,7 +83,7 @@ Create and Update views
 
 The create and update view use the form
 :class:`apis_core.generic.forms.GenericModelForm` by default. You can override
-the form it uses by creating a custom form in ``you_app.forms``. The form class
+the form it uses by creating a custom form in ``your_app.forms``. The form class
 has to be named ``<Modelname>Form``, so if you have a model ``Person`` in your
 app ``myproject``, the view looks for the form class
 ``myproject.forms.PersonForm``.
