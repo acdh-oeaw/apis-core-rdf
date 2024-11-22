@@ -134,8 +134,84 @@
 </dd></dl>
 
 </section>
-<section id="apis-core-relations-filtersets-module">
-<h2>apis_core.relations.filtersets module<a class="headerlink" href="#apis-core-relations-filtersets-module" title="Link to this heading"></a></h2>
+<section id="module-apis_core.relations.filtersets">
+<span id="apis-core-relations-filtersets-module"></span><h2>apis_core.relations.filtersets module<a class="headerlink" href="#module-apis_core.relations.filtersets" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.EntityFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.relations.filtersets.</span></span><span class="sig-name descname"><span class="pre">EntityFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/filtersets.html#EntityFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.filtersets.EntityFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">CharFilter</span></code></p>
+<p>Custom CharFilter that uses the generate_search_filter helper
+to search in all instances inheriting from RootObject and then
+uses those results to only list relations that point to one of
+the results.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.EntityFilter.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/filtersets.html#EntityFilter.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.filtersets.EntityFilter.filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.RelationFilterSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.relations.filtersets.</span></span><span class="sig-name descname"><span class="pre">RelationFilterSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/filtersets.html#RelationFilterSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.filtersets.RelationFilterSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet" title="apis_core.generic.filtersets.GenericFilterSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericFilterSet</span></code></a></p>
+<p>Override the GenericFilterSet that is created for the Relation model.
+It does not really make sense to filter for content type id and object id,
+so we exclude those.
+Instead, we add a multiple choice filter for object and subject class, that
+only lists those choices that actually exists (meaning the classes that are
+actually set as subj or obj in some relation).
+Additionaly, we add a search filter, that searches in instances connected
+to relations (this does only work for instances inheriting from RootObject).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.RelationFilterSet.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/relations/filtersets.html#RelationFilterSet.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.filtersets.RelationFilterSet.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.RelationFilterSet.Meta.exclude">
+<span class="sig-name descname"><span class="pre">exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['subj_object_id',</span> <span class="pre">'subj_content_type',</span> <span class="pre">'obj_object_id',</span> <span class="pre">'obj_content_type']</span></em><a class="headerlink" href="#apis_core.relations.filtersets.RelationFilterSet.Meta.exclude" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.RelationFilterSet.Meta.form">
+<span class="sig-name descname"><span class="pre">form</span></span><a class="headerlink" href="#apis_core.relations.filtersets.RelationFilterSet.Meta.form" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericFilterSetForm" title="apis_core.generic.forms.GenericFilterSetForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericFilterSetForm</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.RelationFilterSet.base_filters">
+<span class="sig-name descname"><span class="pre">base_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'obj_search':</span> <span class="pre">&lt;apis_core.relations.filtersets.EntityFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'subj_search':</span> <span class="pre">&lt;apis_core.relations.filtersets.EntityFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.relations.filtersets.RelationFilterSet.base_filters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.RelationFilterSet.declared_filters">
+<span class="sig-name descname"><span class="pre">declared_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'obj_search':</span> <span class="pre">&lt;apis_core.relations.filtersets.EntityFilter</span> <span class="pre">object&gt;,</span> <span class="pre">'subj_search':</span> <span class="pre">&lt;apis_core.relations.filtersets.EntityFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.relations.filtersets.RelationFilterSet.declared_filters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.SubjObjClassFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.relations.filtersets.</span></span><span class="sig-name descname"><span class="pre">SubjObjClassFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/filtersets.html#SubjObjClassFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.filtersets.SubjObjClassFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleChoiceFilter</span></code></p>
+<p>Custom MultipleChoiceFilter
+* it lists model classes as choices, that are in some way</p>
+<blockquote>
+<div><p>connected to a relation, either as subj or as obj</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>it filters relations by the content types of the connected
+subjects and objects</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.filtersets.SubjObjClassFilter.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/filtersets.html#SubjObjClassFilter.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.filtersets.SubjObjClassFilter.filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-apis_core.relations.forms">
 <span id="apis-core-relations-forms-module"></span><h2>apis_core.relations.forms module<a class="headerlink" href="#module-apis_core.relations.forms" title="Link to this heading"></a></h2>
