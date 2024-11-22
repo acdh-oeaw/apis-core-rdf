@@ -79,7 +79,7 @@ poetry run ./manage.py runserver
 ```
 
 To use the APIS framework in your application, you will need to add the following dependencies to
-[`INSTALLED_APPS`](https://docs.djangoproject.com/en/4.2/ref/settings/#installed-apps):
+[`INSTALLED_APPS`](https://docs.djangoproject.com/en/stable/ref/settings/#installed-apps):
 
 ```python
 INSTALLED_APPS = [
@@ -127,14 +127,14 @@ INSTALLED_APPS = [
 ]
 ```
 
-Finally, add the APIS urls to your applications [URL Dispatcher](https://docs.djangoproject.com/en/4.2/topics/http/urls/)
+Finally, add the APIS urls to your applications [URL Dispatcher](https://docs.djangoproject.com/en/stable/topics/http/urls/)
 
 ```python
 urlpatterns = [
     path("", include("apis_core.urls", namespace="apis")),
-    # https://docs.djangoproject.com/en/5.0/topics/auth/default/#module-django.contrib.auth.views
+    # https://docs.djangoproject.com/en/stable/topics/auth/default/#module-django.contrib.auth.views
     path("accounts/", include("django.contrib.auth.urls")),
-    # https://docs.djangoproject.com/en/5.0/ref/contrib/admin/#hooking-adminsite-to-urlconf
+    # https://docs.djangoproject.com/en/stable/ref/contrib/admin/#hooking-adminsite-to-urlconf
     path("admin/", admin.site.urls),
 ]
 ```
