@@ -19,10 +19,10 @@ In standard APIS those models are
 The :py:mod:`apis_core.history` module also uses the generic views for
 its models. This means that you can use the generic views for the historical 
 models of your own ontology. E.g. if you have a model ``Person`` in your 
-``apis_ontology.models`` module, you can use the generic views for it. 
-``/apis/apis_ontology.historicalperson/`` 
+``your_app.models`` module, you can use the generic views for it.
+``/apis/your_app.historicalperson/``
 will be the URL for the list view of the historical model. 
-``/apis/api/apis_ontology.historicalperson/`` for the API view.
+``/apis/api/your_app.historicalperson/`` for the API view.
 
 If you want to use the generic app for your own model, simple make your model
 inherit from :class:`apis_core.generic.abc.GenericModel`.
