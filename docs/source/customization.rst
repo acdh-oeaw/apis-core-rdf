@@ -207,6 +207,6 @@ which you can inherit from. It is used by default of no other importer is define
 
 To use this logic in forms, there is
 :py:class:`apis_core.generic.forms.fields.ModelImportChoiceField` which is
-based on `django.forms.ModelChoiceField <https://docs.djangoproject.com/en/5.0/ref/forms/fields/#modelchoicefield>`_. It checks if the passed value starts
+based on `django.forms.ModelChoiceField <https://docs.djangoproject.com/en/stable/ref/forms/fields/#modelchoicefield>`_. It checks if the passed value starts
 with ``http`` and if so, it uses the importer that fits the model and uses it to
 create the model instance.
