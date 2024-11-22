@@ -120,10 +120,10 @@ In standard APIS those models are</p>
 <p>The <a class="reference internal" href="modules/apis_core.history.html#module-apis_core.history" title="apis_core.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.history</span></code></a> module also uses the generic views for
 its models. This means that you can use the generic views for the historical
 models of your own ontology. E.g. if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
-<code class="docutils literal notranslate"><span class="pre">apis_ontology.models</span></code> module, you can use the generic views for it.
-<code class="docutils literal notranslate"><span class="pre">/apis/apis_ontology.historicalperson/</span></code>
+<code class="docutils literal notranslate"><span class="pre">your_app.models</span></code> module, you can use the generic views for it.
+<code class="docutils literal notranslate"><span class="pre">/apis/your_app.historicalperson/</span></code>
 will be the URL for the list view of the historical model.
-<code class="docutils literal notranslate"><span class="pre">/apis/api/apis_ontology.historicalperson/</span></code> for the API view.</p>
+<code class="docutils literal notranslate"><span class="pre">/apis/api/your_app.historicalperson/</span></code> for the API view.</p>
 <p>If you want to use the generic app for your own model, simple make your model
 inherit from <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel" title="apis_core.generic.abc.GenericModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.abc.GenericModel</span></code></a>.</p>
 <section id="list-views">
@@ -134,7 +134,7 @@ of results on the right side.</p>
 <p>The default filterset used is
 <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet" title="apis_core.generic.filtersets.GenericFilterSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.filtersets.GenericFilterSet</span></code></a>. You can override the
 filterset for you models by defining a custom filterset class in
-<code class="docutils literal notranslate"><span class="pre">you_app.filtersets</span></code>. The filterset has to be named <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;FilterSet</span></code>,
+<code class="docutils literal notranslate"><span class="pre">your_app.filtersets</span></code>. The filterset has to be named <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;FilterSet</span></code>,
 so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for
 the filterset <code class="docutils literal notranslate"><span class="pre">myproject.filtersets.PersonFilterSet</span></code>. You can inherit from
 <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet" title="apis_core.generic.filtersets.GenericFilterSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.filtersets.GenericFilterSet</span></code></a> and add your
@@ -154,7 +154,7 @@ pagination (which is the default).</p>
 <p>The base queryset that is used in the listview, which is then filtered using
 the django-filters filter, is <code class="docutils literal notranslate"><span class="pre">model.objects.all()</span></code> - but you can override
 the queryset by creating a custom queryset for your model in
-<code class="docutils literal notranslate"><span class="pre">you_app.querysets</span></code>. The queryset function has to be named
+<code class="docutils literal notranslate"><span class="pre">your_app.querysets</span></code>. The queryset function has to be named
 <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;ListViewQueryset</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your app
 <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the queryset
 <code class="docutils literal notranslate"><span class="pre">myproject.querysets.PersonListViewQueryset</span></code>.</p>
@@ -171,7 +171,7 @@ template.</p>
 <h2>Create and Update views<a class="headerlink" href="#create-and-update-views" title="Link to this heading"></a></h2>
 <p>The create and update view use the form
 <a class="reference internal" href="modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm" title="apis_core.generic.forms.GenericModelForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.GenericModelForm</span></code></a> by default. You can override
-the form it uses by creating a custom form in <code class="docutils literal notranslate"><span class="pre">you_app.forms</span></code>. The form class
+the form it uses by creating a custom form in <code class="docutils literal notranslate"><span class="pre">your_app.forms</span></code>. The form class
 has to be named <code class="docutils literal notranslate"><span class="pre">&lt;Modelname&gt;Form</span></code>, so if you have a model <code class="docutils literal notranslate"><span class="pre">Person</span></code> in your
 app <code class="docutils literal notranslate"><span class="pre">myproject</span></code>, the view looks for the form class
 <code class="docutils literal notranslate"><span class="pre">myproject.forms.PersonForm</span></code>.</p>
