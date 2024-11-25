@@ -122,7 +122,7 @@ poetry<span class="w"> </span>run<span class="w"> </span>django-admin<span class
 </pre></div>
 </div>
 <p>To use the APIS framework in your application, you will need to add the following dependencies to
-<a class="reference external" href="https://docs.djangoproject.com/en/4.2/ref/settings/#installed-apps"><code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code></a>:</p>
+<a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/settings/#installed-apps"><code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># our main app, containing the ontology (in the `models.py`)</span>
     <span class="c1"># and our customizations</span>
@@ -168,12 +168,12 @@ poetry<span class="w"> </span>run<span class="w"> </span>django-admin<span class
 <span class="p">]</span>
 </pre></div>
 </div>
-<p>Finally, add the APIS urls to your applications <a class="reference external" href="https://docs.djangoproject.com/en/4.2/topics/http/urls/">URL Dispatcher</a></p>
+<p>Finally, add the APIS urls to your applications <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/http/urls/">URL Dispatcher</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">path</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;apis_core.urls&quot;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;apis&quot;</span><span class="p">)),</span>
-    <span class="c1"># https://docs.djangoproject.com/en/5.0/topics/auth/default/#module-django.contrib.auth.views</span>
+    <span class="c1"># https://docs.djangoproject.com/en/stable/topics/auth/default/#module-django.contrib.auth.views</span>
     <span class="n">path</span><span class="p">(</span><span class="s2">&quot;accounts/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;django.contrib.auth.urls&quot;</span><span class="p">)),</span>
-    <span class="c1"># https://docs.djangoproject.com/en/5.0/ref/contrib/admin/#hooking-adminsite-to-urlconf</span>
+    <span class="c1"># https://docs.djangoproject.com/en/stable/ref/contrib/admin/#hooking-adminsite-to-urlconf</span>
     <span class="n">path</span><span class="p">(</span><span class="s2">&quot;admin/&quot;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
 <span class="p">]</span>
 </pre></div>

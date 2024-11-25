@@ -6,7 +6,7 @@ describes :term:`entities<entity>` and :term:`relations<relation>`.
 
 Given that APIS is based on `Django <https://www.djangoproject.com/>`_, the
 file where we describe our entities and relations is the `models.py
-<https://docs.djangoproject.com/en/4.2/topics/db/models/>`_ file of your APIS
+<https://docs.djangoproject.com/en/stable/topics/db/models/>`_ file of your APIS
 project.
 
 Entities
@@ -15,7 +15,7 @@ Entities
 Entities have to inherit from
 :class:`apis_core.apis_entities.models.AbstractEntity`. Like with any other
 Django model, you can define `model fields
-<https://docs.djangoproject.com/en/4.2/ref/models/fields/>`_ describing the
+<https://docs.djangoproject.com/en/stable/ref/models/fields/>`_ describing the
 attributes of this entity. A simple person model could look like this:
 
 .. code-block:: python
@@ -31,7 +31,7 @@ attributes of this entity. A simple person model could look like this:
 functionality for Entities, but it also itself inherits from
 :class:`apis_core.generic.abc.GenericModel`, which means that as soon as
 you define your models and `run
-migrations <https://docs.djangoproject.com/en/4.2/topics/migrations/>`_ your
+migrations <https://docs.djangoproject.com/en/stable/topics/migrations/>`_ your
 models will show up in the APIS webinterface in ``Entities`` menu in the
 top left corner.
 For every :term:`entity` you defined there will be an overview page that

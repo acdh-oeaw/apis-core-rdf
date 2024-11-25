@@ -278,7 +278,7 @@ importer. There is <a class="reference internal" href="modules/apis_core.generic
 which you can inherit from. It is used by default of no other importer is defined for the model and it tries to do the right thing out of the box: it first looks if there is an RDF configuration for the URI and if that fails tries to parse the URI response as json.</p>
 <p>To use this logic in forms, there is
 <a class="reference internal" href="modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField" title="apis_core.generic.forms.fields.ModelImportChoiceField"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.forms.fields.ModelImportChoiceField</span></code></a> which is
-based on <a class="reference external" href="https://docs.djangoproject.com/en/5.0/ref/forms/fields/#modelchoicefield">django.forms.ModelChoiceField</a>. It checks if the passed value starts
+based on <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/forms/fields/#modelchoicefield">django.forms.ModelChoiceField</a>. It checks if the passed value starts
 with <code class="docutils literal notranslate"><span class="pre">http</span></code> and if so, it uses the importer that fits the model and uses it to
 create the model instance.</p>
 </section>
