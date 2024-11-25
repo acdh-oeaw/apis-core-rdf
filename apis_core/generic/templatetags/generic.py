@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from apis_core.core.templatetags.core import get_model_fields
 from apis_core.generic.abc import GenericModel
+from apis_core.generic.helpers import template_names_via_mro
 
 register = template.Library()
 
@@ -71,3 +72,8 @@ def content_type_count(content_type):
     Return the number of objects having a specific content type
     """
     return content_type.model_class().objects.count()
+
+
+@register.simple_tag
+def template_list(obj, suffix):
+    return template_names_via_mro(type(obj), suffix)
