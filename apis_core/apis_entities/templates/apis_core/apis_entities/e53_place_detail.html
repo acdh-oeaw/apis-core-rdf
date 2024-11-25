@@ -1,5 +1,6 @@
 {% extends "apis_core/apis_entities/abstractentity_detail.html" %}
 {% load static %}
+{% load generic %}
 
 {% block scripts %}
   {{ block.super }}
@@ -8,7 +9,8 @@
 
 {% block col-zero %}
   <div class="card">
-    <div class="card-body">{% include "generic/partials/object_table.html" %}</div>
+    {% template_list object "_card_table.html" as template_list %}
+    <div class="card-body">{% include template_list %}</div>
     <div class="card-body pt-0">
       <table class="table table-hover table-bordered">
         {% if object.latitude and object.longitude %}
