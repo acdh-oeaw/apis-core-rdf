@@ -68,6 +68,20 @@ def get_definition_and_attributes_from_uri(
             break
     model_attributes = dict()
     if matching_definition:
+        sameas = matching_definition.get(
+            "sameas",
+            """
+            PREFIX owl: <http://www.w3.org/2002/7/owl#>
+            SELECT ?sameas WHERE {
+                ?subject owl:sameAs ?sameas .
+            }
+        """,
+        )
+        model_attributes["sameas"] = []
+        result = graph.query(sameas)
+        for binding in result.bindings:
+            for value in binding.values():
+                model_attributes["sameas"].append(str(value))
         attributes = matching_definition.get("attributes", [])
         sparql_attributes = list(filter(lambda d: d.get("sparql"), attributes))
         for attribute in sparql_attributes:
