@@ -149,8 +149,9 @@ the table class <code class="docutils literal notranslate"><span class="pre">myp
 useful <a class="reference external" href="https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#columns">django table columns</a>
 that you might want to use.</p>
 <p>Your table can also contain a <code class="docutils literal notranslate"><span class="pre">paginate_by</span></code> attribute, which is then used
-by the list view to determines the number of items per page, or <code class="docutils literal notranslate"><span class="pre">None</span></code> for no
-pagination (which is the default).</p>
+by the list view to determines the number of items per page. When this is not
+set, the page size defaults to <code class="docutils literal notranslate"><span class="pre">25</span></code>. To disable pagination altogether, use
+<code class="docutils literal notranslate"><span class="pre">table_pagination</span> <span class="pre">=</span> <span class="pre">False</span></code>.</p>
 <p>The base queryset that is used in the listview, which is then filtered using
 the django-filters filter, is <code class="docutils literal notranslate"><span class="pre">model.objects.all()</span></code> - but you can override
 the queryset by creating a custom queryset for your model in

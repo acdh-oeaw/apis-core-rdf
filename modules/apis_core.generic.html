@@ -1287,13 +1287,6 @@ keyword arguments, and other things.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.generic.views.List.get_paginate_by">
-<span class="sig-name descname"><span class="pre">get_paginate_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_data</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_paginate_by"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_paginate_by" title="Link to this definition"></a></dt>
-<dd><p>Override <cite>get_paginate_by</cite> from the tables2 TableMixinBase,
-so we can set the paginate_by value as attribute of the table.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.views.List.get_queryset">
 <span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_queryset" title="Link to this definition"></a></dt>
 <dd><p>Return the list of items for this view.</p>
@@ -1319,6 +1312,13 @@ to remove the buttons column, you could define this method in your View:</p>
     <span class="p">}</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.get_table_pagination">
+<span class="sig-name descname"><span class="pre">get_table_pagination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_table_pagination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_table_pagination" title="Link to this definition"></a></dt>
+<dd><p>Override <cite>get_table_pagination</cite> from the tables2 TableMixinBase,
+so we can set the paginate_by and the table_pagination value as attribute of the table.</p>
 </dd></dl>
 
 <dl class="py attribute">

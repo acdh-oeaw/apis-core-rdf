@@ -83,7 +83,6 @@
   <h1>Source code for apis_core.generic.views</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span><span class="p">,</span> <span class="n">http</span>
@@ -319,14 +318,16 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_queryset</span><span class="p">(</span><span class="n">queryset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()))</span></div>
 
 
-<div class="viewcode-block" id="List.get_paginate_by">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_paginate_by">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_paginate_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<div class="viewcode-block" id="List.get_table_pagination">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_table_pagination">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_table_pagination</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Override `get_paginate_by` from the tables2 TableMixinBase,</span>
-<span class="sd">        so we can set the paginate_by value as attribute of the table.</span>
+<span class="sd">        Override `get_table_pagination` from the tables2 TableMixinBase,</span>
+<span class="sd">        so we can set the paginate_by and the table_pagination value as attribute of the table.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_table_class</span><span class="p">(),</span> <span class="s2">&quot;paginate_by&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paginate_by</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="s2">&quot;paginate_by&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table_pagination</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="s2">&quot;table_pagination&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_table_pagination</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
 </div>
 
 

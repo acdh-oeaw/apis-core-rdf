@@ -58,8 +58,9 @@ useful `django table columns
 that you might want to use.
 
 Your table can also contain a ``paginate_by`` attribute, which is then used
-by the list view to determines the number of items per page, or ``None`` for no
-pagination (which is the default).
+by the list view to determines the number of items per page. When this is not
+set, the page size defaults to ``25``. To disable pagination altogether, use
+``table_pagination = False``.
 
 The base queryset that is used in the listview, which is then filtered using
 the django-filters filter, is ``model.objects.all()`` - but you can override
