@@ -5,7 +5,7 @@
       <li>
         {{ uri.uri | urlize }}
         {% if object.get_change_permission in perms %}
-          <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}"><span class="material-symbols-outlined">network_intelligence_update</span></a>
+          | <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}" class="small">... merge data</a>
         {% endif %}
       </li>
     {% endfor %}
