@@ -54,6 +54,10 @@ if "apis_core.documentation" in settings.INSTALLED_APPS:
     urlpatterns.append(path("", include("apis_core.documentation.urls")))
 
 
+if "apis_core.invite" in settings.INSTALLED_APPS:
+    urlpatterns.append(path("", include("apis_core.invite.urls")))
+
+
 urlpatterns.append(path("api/", include(router.urls)))
 urlpatterns.append(path("api-auth/", include("rest_framework.urls")))
 
