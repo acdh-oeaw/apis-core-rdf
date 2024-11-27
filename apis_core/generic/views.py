@@ -1,6 +1,5 @@
 from collections import namedtuple
 from copy import copy
-from typing import Optional
 
 from dal import autocomplete
 from django import forms, http
@@ -204,12 +203,14 @@ class List(
         queryset = first_member_match(queryset_methods) or (lambda x: x)
         return self.filter_queryset(queryset(self.model.objects.all()))
 
-    def get_paginate_by(self, table_data) -> Optional[int]:
+    def get_table_pagination(self, table):
         """
-        Override `get_paginate_by` from the tables2 TableMixinBase,
-        so we can set the paginate_by value as attribute of the table.
+        Override `get_table_pagination` from the tables2 TableMixinBase,
+        so we can set the paginate_by and the table_pagination value as attribute of the table.
         """
-        return getattr(self.get_table_class(), "paginate_by", None)
+        self.paginate_by = getattr(table, "paginate_by", None)
+        self.table_pagination = getattr(table, "table_pagination", None)
+        return super().get_table_pagination(table)
 
 
 class Detail(GenericModelMixin, PermissionRequiredMixin, DetailView):
