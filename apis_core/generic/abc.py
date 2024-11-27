@@ -7,7 +7,9 @@ from apis_core.generic.helpers import permission_fullname
 
 class GenericModel:
     def __repr__(self):
-        return super().__repr__() + f" (ID: {self.id})"
+        if id := getattr(self, "id", None):
+            return super().__repr__() + f" (ID: {id})"
+        return super().__repr__()
 
     @classmethod
     def get_listview_url(cls):
