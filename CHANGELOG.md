@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.33.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.32.0...v0.33.0) (2024-11-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** replace `object_table.html` by template_list lookup
+
+### Features
+
+* **generic:** add a templatetag wrapper for template_names_via_mro ([9605817](https://github.com/acdh-oeaw/apis-core-rdf/commit/9605817e04674e1c91338acec515dbd7234d93ae))
+* **generic:** allow to disable pagination in table class ([e275e59](https://github.com/acdh-oeaw/apis-core-rdf/commit/e275e59be75e25fe92c1b8e4127f6667e6861e29)), closes [#1444](https://github.com/acdh-oeaw/apis-core-rdf/issues/1444)
+* **relations:** limit the number of subj/obj models in filter ([6e6d026](https://github.com/acdh-oeaw/apis-core-rdf/commit/6e6d026a1df0d4f682a43d9abdff61a9810b2a73)), closes [#1390](https://github.com/acdh-oeaw/apis-core-rdf/issues/1390)
+
+
+### Bug Fixes
+
+* **apis_entities:** change icon for enrich functionality ([2b44bce](https://github.com/acdh-oeaw/apis-core-rdf/commit/2b44bce4f36db165767bb9a4a74e467377512c69)), closes [#1439](https://github.com/acdh-oeaw/apis-core-rdf/issues/1439)
+* **apis_entities:** replace the update link icon with text ([c30eded](https://github.com/acdh-oeaw/apis-core-rdf/commit/c30eded4b469e7b4060434f790d7cc76c862fd5b))
+* **core:** harmonize footer icon dimension specification ([624d74a](https://github.com/acdh-oeaw/apis-core-rdf/commit/624d74a1d300973876cc5012e7b7dc0c3dff7115)), closes [#1340](https://github.com/acdh-oeaw/apis-core-rdf/issues/1340)
+* **generic:** check for attribute `id` before using it ([076e9f3](https://github.com/acdh-oeaw/apis-core-rdf/commit/076e9f361e4c98e74afe264924086bb75b9cea8e)), closes [#1450](https://github.com/acdh-oeaw/apis-core-rdf/issues/1450)
+* **generic:** replace `object_table.html` by template_list lookup ([055ec94](https://github.com/acdh-oeaw/apis-core-rdf/commit/055ec94af98234b48153a83752869270e1a6a453)), closes [#1446](https://github.com/acdh-oeaw/apis-core-rdf/issues/1446)
+
+
+### Documentation
+
+* **changelog:** replace wrong bug number with correct one ([36c97b1](https://github.com/acdh-oeaw/apis-core-rdf/commit/36c97b1a7574f18b258ad4bc158c86d7eecf2328)), closes [#1376](https://github.com/acdh-oeaw/apis-core-rdf/issues/1376)
+* **customization:** document the `table_pagination` setting ([9e35eb7](https://github.com/acdh-oeaw/apis-core-rdf/commit/9e35eb7f4a09fd4a74ef58ccf208b6f5ed0d92a4))
+* **customization:** fix typos `you_app` -&gt; `your_app` ([e3445d9](https://github.com/acdh-oeaw/apis-core-rdf/commit/e3445d9bc87dbb1d7408455835a0d568de4962c2))
+* **customization:** replace `apis_ontology` with `your_app` ([06a960e](https://github.com/acdh-oeaw/apis-core-rdf/commit/06a960eb83b2b6bc69315f25928e72cf58a545cd))
+* point Django documentation links to stable version ([f87ad58](https://github.com/acdh-oeaw/apis-core-rdf/commit/f87ad58f1e25314d8ab10dffc7b717e59665e38b))
+* **README:** point Django documentation links to stable version ([8accb2b](https://github.com/acdh-oeaw/apis-core-rdf/commit/8accb2bb20fcda0b0d42037082b735c9318a5dbd))
+* **README:** replace note about models.py with link to the docs ([f8bb514](https://github.com/acdh-oeaw/apis-core-rdf/commit/f8bb51499fe1da61d925a46db5698a09fa3d7ba8))
+* remove `django-admin-csvexport` from list of dependencies ([96dd125](https://github.com/acdh-oeaw/apis-core-rdf/commit/96dd125219fc9de999759cd7e11dcd25db7aa42e))
+
 ## [0.32.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/apis-core-rdf-v0.31.1...apis-core-rdf-v0.32.0) (2024-11-20)
 
 
