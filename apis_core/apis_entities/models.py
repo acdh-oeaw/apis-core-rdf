@@ -84,13 +84,6 @@ class AbstractEntity(RootObject):
             kwargs={"contenttype": entity, "pk": self.id},
         )
 
-    def get_merge_view_url(self):
-        entity = self.__class__.__name__.lower()
-        return reverse(
-            "apis_core:apis_entities:generic_entities_merge_view",
-            kwargs={"contenttype": entity, "pk": self.id},
-        )
-
     def merge_start_date_written(self, other):
         self.start_date_written = self.start_date_written or other.start_date_written
 
