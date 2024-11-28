@@ -67,7 +67,14 @@ class GenericModelMixin:
     def get_template_names(self):
         template_names = []
         if hasattr(super(), "get_template_names"):
-            template_names = super().get_template_names()
+            # Some parent classes come with custom template_names,
+            # some need a `.template_name` attribute set. For the
+            # latter ones we handle the missing `.template_name`
+            # gracefully
+            try:
+                template_names = super().get_template_names()
+            except ImproperlyConfigured:
+                pass
         suffix = ".html"
         if hasattr(self, "template_name_suffix"):
             suffix = self.template_name_suffix + ".html"
