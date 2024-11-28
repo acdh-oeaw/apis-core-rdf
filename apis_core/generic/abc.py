@@ -46,6 +46,10 @@ class GenericModel:
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:merge", args=[ct, self.id, other_id])
 
+    def get_select_merge_or_enrich_url(self):
+        ct = ContentType.objects.get_for_model(self)
+        return reverse("apis_core:generic:selectmergeorenrich", args=[ct, self.id])
+
     def get_create_success_url(self):
         return self.get_absolute_url()
 

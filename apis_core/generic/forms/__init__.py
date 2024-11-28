@@ -88,6 +88,26 @@ class GenericModelForm(forms.ModelForm):
                     self.fields[field].widget.choices = self.fields[field].choices
 
 
+class GenericSelectMergeOrEnrichForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        if "instance" in kwargs:
+            instance = kwargs.pop("instance")
+        super().__init__(*args, **kwargs)
+        ct = ContentType.objects.get_for_model(instance)
+        self.fields["uri"] = forms.ModelChoiceField(
+            queryset=ct.model_class().objects.all()
+        )
+        uri = reverse("apis_core:generic:autocomplete", args=[ct])
+        attrs = {"data-html": True, "data-tags": 1}
+        self.fields["uri"].widget = autocomplete.ModelSelect2(uri, attrs=attrs)
+        self.fields["uri"].widget.choices = self.fields["uri"].choices
+        self.fields["uri"].label = "Select or paste URI"
+        self.helper = FormHelper()
+        self.helper.form_method = "GET"
+        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.form_action = instance.get_enrich_url()
+
+
 class GenericMergeWithForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

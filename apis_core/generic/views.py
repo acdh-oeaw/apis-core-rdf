@@ -32,6 +32,7 @@ from .forms import (
     GenericImportForm,
     GenericMergeWithForm,
     GenericModelForm,
+    GenericSelectMergeOrEnrichForm,
 )
 from .helpers import (
     first_member_match,
@@ -364,6 +365,30 @@ class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+
+class SelectMergeOrEnrich(GenericModelMixin, PermissionRequiredMixin, FormView):
+    """
+    This view provides a simple form that allows to select other entities (also from
+    external sources, if set up) and on form submit redirects to the Enrich view.
+    """
+
+    template_name_suffix = "_selectmergeorenrich.html"
+    permission_action_required = "create"
+    form_class = GenericSelectMergeOrEnrichForm
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(self.model, pk=self.kwargs.get("pk"))
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["object"] = self.get_object()
+        return context
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs["instance"] = self.get_object()
+        return kwargs
 
 
 class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
