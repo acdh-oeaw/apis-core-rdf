@@ -88,7 +88,7 @@ class GenericModelForm(forms.ModelForm):
                     self.fields[field].widget.choices = self.fields[field].choices
 
 
-class GenericMergeForm(forms.Form):
+class GenericMergeWithForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
