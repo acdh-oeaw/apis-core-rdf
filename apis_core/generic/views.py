@@ -30,7 +30,7 @@ from .filtersets import GenericFilterSet
 from .forms import (
     GenericEnrichForm,
     GenericImportForm,
-    GenericMergeForm,
+    GenericMergeWithForm,
     GenericModelForm,
 )
 from .helpers import (
@@ -372,7 +372,7 @@ class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
     """
 
     permission_action_required = "change"
-    form_class = GenericMergeForm
+    form_class = GenericMergeWithForm
     template_name = "generic/generic_merge.html"
 
     def setup(self, *args, **kwargs):
