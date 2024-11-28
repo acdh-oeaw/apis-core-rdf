@@ -50,6 +50,11 @@ urlpatterns = [
                 path("delete/<int:pk>", views.Delete.as_view(), name="delete"),
                 path("update/<int:pk>", views.Update.as_view(), name="update"),
                 path(
+                    "selectmergeorenrich/<int:pk>",
+                    views.SelectMergeOrEnrich.as_view(),
+                    name="selectmergeorenrich",
+                ),
+                path(
                     "merge/<int:pk>/<int:otherpk>",
                     views.MergeWith.as_view(),
                     name="merge",
