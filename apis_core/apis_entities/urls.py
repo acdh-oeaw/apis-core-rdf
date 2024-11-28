@@ -10,7 +10,6 @@ from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_entities.views import (
     EntitiesAutocomplete,
     EntitiesDuplicate,
-    EntitiesMerge,
 )
 
 api_routes = [
@@ -60,11 +59,6 @@ entity_patterns = [
         "<int:pk>/duplicate/",
         EntitiesDuplicate.as_view(),
         name="generic_entities_duplicate_view",
-    ),
-    path(
-        "<int:pk>/merge/",
-        EntitiesMerge.as_view(),
-        name="generic_entities_merge_view",
     ),
 ]
 
