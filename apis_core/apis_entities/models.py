@@ -2,6 +2,7 @@ import functools
 import re
 
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import NoReverseMatch, reverse
@@ -102,4 +103,9 @@ def create_default_uri(sender, instance, created, raw, using, update_fields, **k
                     "apis_core:GetEntityGeneric", kwargs={"pk": instance.pk}
                 )
             uri = f"{base}{route}"
-            Uri.objects.create(uri=uri, root_object=instance)
+            content_type = ContentType.objects.get_for_model(instance)
+            Uri.objects.create(
+                uri=uri,
+                content_type=content_type,
+                object_id=instance.id,
+            )
