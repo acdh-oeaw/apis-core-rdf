@@ -22,6 +22,8 @@ class RootObject(GenericModel, models.Model):
     By having one overarching super class we gain the advantage of unique identifiers.
     """
 
+    _sameas = None  # Internal storage for sameas property
+
     # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
     # triples where the subject's or object's contenttype must be respected (e.g. get all triples
     # where the subject is a Person)
@@ -35,9 +37,23 @@ class RootObject(GenericModel, models.Model):
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
 
+    @property
+    def sameas(self):
+        uri = [u.uri for u in Uri.objects.filter(root_object=self)]
+        return uri if len(uri) > 0 else None
+
+    @sameas.setter
+    def sameas(self, value):
+        self._sameas = value
+
     def save(self, *args, **kwargs):
         self.self_contenttype = ContentType.objects.get_for_model(self)
         super().save(*args, **kwargs)
+
+        if self._sameas is not None:
+            for uri in self._sameas:
+                Uri.objects.create(root_object=self, uri=uri)
+            self._sameas = None
 
     def duplicate(self):
         origin = self.__class__

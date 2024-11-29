@@ -4,6 +4,7 @@ import urllib
 from functools import cache
 
 from django.core.exceptions import ImproperlyConfigured
+from django.db.utils import IntegrityError
 
 from apis_core.utils.normalize import clean_uri
 from apis_core.utils.rdf import get_definition_and_attributes_from_uri
@@ -42,16 +43,16 @@ class GenericModelImporter:
         # we first try to use the RDF parser
         try:
             defn, data = get_definition_and_attributes_from_uri(uri, self.model)
-            return data
+            return data, defn
         except Exception as e:
             logger.debug(e)
         # if everything else fails, try parsing json
         # if even that does not help, return an empty dict
         try:
-            return json.loads(urllib.request.urlopen(uri).read())
+            return json.loads(urllib.request.urlopen(uri).read()), {}
         except Exception as e:
             logger.debug(e)
-        return {}
+        return {}, {}
 
     def mangle_data(self, data):
         return data
@@ -64,11 +65,12 @@ class GenericModelImporter:
         remove all fields from the data dict that do not
         have an equivalent field in the model.
         """
-        data = self.request(self.import_uri)
+        data, defn = self.request(self.import_uri)
+        self.definition = defn
         data = self.mangle_data(data)
         if drop_unknown_fields:
             # we are dropping all fields that are not part of the model
-            modelfields = [field.name for field in self.model._meta.fields]
+            modelfields = [field.name for field in self.model._meta.fields] + ["sameas"]
             data = {key: data[key] for key in data if key in modelfields}
         if not data:
             raise ImproperlyConfigured(
@@ -85,5 +87,16 @@ class GenericModelImporter:
                 setattr(instance, field, data[field])
         instance.save()
 
-    def create_instance(self):
-        return self.model.objects.create(**self.get_data(drop_unknown_fields=True))
+    def create_instance(self, follow_sameas=True):
+        data = self.get_data(drop_unknown_fields=True)
+        if follow_sameas:
+            sa = self.model.objects.filter(uri__uri__in=self.definition["sameas"])
+            if sa.count() == 1:
+                return sa.first()
+            elif sa.count() > 1:
+                raise IntegrityError(
+                    f"Multiple objects found for sameAs URIs {self.definition['sames']}. "
+                    f"This indicates a data integrity problem as these URIs should be unique."
+                )
+        obj = self.model.objects.create(**data)
+        return obj
