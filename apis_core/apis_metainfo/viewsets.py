@@ -28,7 +28,10 @@ class UriToObjectViewSet(viewsets.ViewSet):
         uri = params.pop("uri", None)
         if uri:
             u = get_object_or_404(Uri, uri=request.query_params.get("uri"))
-            r = u.root_object.get_api_detail_endpoint()
+            if u.content_object:
+                r = u.content_object.get_api_detail_endpoint()
+            else:
+                r = u.root_object.get_api_detail_endpoint()
             if params:
                 r += "?" + QueryDict.from_keys(params).urlencode()
             return HttpResponseRedirect(r)
