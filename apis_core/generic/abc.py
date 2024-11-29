@@ -165,7 +165,11 @@ class GenericModel:
                     for s in getattr(ent, f.name).all():
                         if s not in sl:
                             getattr(self, f.name).add(s)
-            Uri.objects.filter(root_object=ent).update(root_object=self)
+            self_content_type = ContentType.objects.get_for_model(self)
+            ent_content_type = ContentType.objects.get_for_model(ent)
+            Uri.objects.filter(content_type=ent_content_type, object_id=ent.id).update(
+                content_type=self_content_type, object_id=self.id
+            )
 
         for ent in entities:
             self.merge_fields(ent)

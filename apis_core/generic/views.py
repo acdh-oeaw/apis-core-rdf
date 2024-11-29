@@ -6,6 +6,7 @@ from django import forms, http
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
@@ -458,12 +459,12 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
             return redirect(self.object.get_merge_url(self.uri))
         try:
             uriobj = Uri.objects.get(uri=self.uri)
-            if uriobj.root_object.id != self.object.id:
+            if uriobj.object_id != self.object.id:
                 messages.info(
                     self.request,
                     f"Object with URI {self.uri} already exists, you were redirected to the merge form.",
                 )
-                return redirect(self.object.get_merge_url(uriobj.root_object.id))
+                return redirect(self.object.get_merge_url(uriobj.object_id))
         except Uri.DoesNotExist:
             pass
         return super().get(*args, **kwargs)
@@ -500,7 +501,12 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         importer = self.importer_class(self.uri, self.model)
         importer.import_into_instance(self.object, fields=update_fields)
         messages.info(self.request, f"Updated fields {update_fields}")
-        uri, created = Uri.objects.get_or_create(uri=self.uri, root_object=self.object)
+        content_type = ContentType.objects.get_for_model(self.model)
+        uri, created = Uri.objects.get_or_create(
+            uri=self.uri,
+            content_type=content_type,
+            object_id=self.object.id,
+        )
         if created:
             messages.info(self.request, f"Added uri {self.uri} to {self.object}")
         return super().form_valid(form)
