@@ -75,12 +75,17 @@ def create_object_from_uri(uri: str, model: object, raise_on_fail=False) -> obje
     if uri.startswith("http"):
         try:
             uri = Uri.objects.get(uri=uri)
-            return uri.root_object
+            return uri.content_object
         except Uri.DoesNotExist:
             Importer = get_importer_for_model(model)
             importer = Importer(uri, model)
             instance = importer.create_instance()
-            uri = Uri.objects.create(uri=importer.get_uri, root_object=instance)
+            content_type = ContentType.objects.get_for_model(instance)
+            uri = Uri.objects.create(
+                uri=importer.get_uri,
+                content_type=content_type,
+                object_id=instance.id,
+            )
             return instance
     if raise_on_fail:
         content_type = ContentType.objects.get_for_model(model)
