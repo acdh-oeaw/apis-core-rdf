@@ -189,6 +189,29 @@
 
 
 
+<div class="viewcode-block" id="GenericSelectMergeOrEnrichForm">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericSelectMergeOrEnrichForm">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericSelectMergeOrEnrichForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;instance&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;instance&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">ModelChoiceField</span><span class="p">(</span>
+            <span class="n">queryset</span><span class="o">=</span><span class="n">ct</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:autocomplete&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">])</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data-html&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;data-tags&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Select or paste URI&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_method</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">Submit</span><span class="p">(</span><span class="s2">&quot;submit&quot;</span><span class="p">,</span> <span class="s2">&quot;Submit&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">form_action</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get_enrich_url</span><span class="p">()</span></div>
+
+
+
 <div class="viewcode-block" id="GenericMergeWithForm">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.GenericMergeWithForm">[docs]</a>
 <span class="k">class</span> <span class="nc">GenericMergeWithForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>

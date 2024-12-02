@@ -181,16 +181,6 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="AbstractEntity.get_merge_view_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_merge_view_url">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_merge_view_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
-            <span class="s2">&quot;apis_core:apis_entities:generic_entities_merge_view&quot;</span><span class="p">,</span>
-            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;contenttype&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
-        <span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="AbstractEntity.merge_start_date_written">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_start_date_written">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_start_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>

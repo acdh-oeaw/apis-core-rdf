@@ -128,6 +128,12 @@
 <li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericModelForm.media"><code class="docutils literal notranslate"><span class="pre">GenericModelForm.media</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericSelectMergeOrEnrichForm"><code class="docutils literal notranslate"><span class="pre">GenericSelectMergeOrEnrichForm</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericSelectMergeOrEnrichForm.base_fields"><code class="docutils literal notranslate"><span class="pre">GenericSelectMergeOrEnrichForm.base_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericSelectMergeOrEnrichForm.declared_fields"><code class="docutils literal notranslate"><span class="pre">GenericSelectMergeOrEnrichForm.declared_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericSelectMergeOrEnrichForm.media"><code class="docutils literal notranslate"><span class="pre">GenericSelectMergeOrEnrichForm.media</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#module-apis_core.generic.forms.fields">apis_core.generic.forms.fields module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField"><code class="docutils literal notranslate"><span class="pre">ModelImportChoiceField</span></code></a><ul>
@@ -260,6 +266,11 @@ in self is not set, otherwise it keeps the value in self.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_merge_url">
 <span class="sig-name descname"><span class="pre">get_merge_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_merge_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_merge_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_select_merge_or_enrich_url">
+<span class="sig-name descname"><span class="pre">get_select_merge_or_enrich_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_select_merge_or_enrich_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_select_merge_or_enrich_url" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1393,6 +1404,49 @@ keyword arguments, and other things.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.views.Overview.template_name">
 <span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'generic/overview.html'</span></em><a class="headerlink" href="#apis_core.generic.views.Overview.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.views.SelectMergeOrEnrich">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">SelectMergeOrEnrich</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#SelectMergeOrEnrich"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.SelectMergeOrEnrich" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FormView</span></code></p>
+<p>This view provides a simple form that allows to select other entities (also from
+external sources, if set up) and on form submit redirects to the Enrich view.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.SelectMergeOrEnrich.form_class">
+<span class="sig-name descname"><span class="pre">form_class</span></span><a class="headerlink" href="#apis_core.generic.views.SelectMergeOrEnrich.form_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.GenericSelectMergeOrEnrichForm" title="apis_core.generic.forms.GenericSelectMergeOrEnrichForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericSelectMergeOrEnrichForm</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.SelectMergeOrEnrich.get_context_data">
+<span class="sig-name descname"><span class="pre">get_context_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#SelectMergeOrEnrich.get_context_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.SelectMergeOrEnrich.get_context_data" title="Link to this definition"></a></dt>
+<dd><p>Insert the form into the context dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.SelectMergeOrEnrich.get_form_kwargs">
+<span class="sig-name descname"><span class="pre">get_form_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#SelectMergeOrEnrich.get_form_kwargs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.SelectMergeOrEnrich.get_form_kwargs" title="Link to this definition"></a></dt>
+<dd><p>Return the keyword arguments for instantiating the form.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.SelectMergeOrEnrich.get_object">
+<span class="sig-name descname"><span class="pre">get_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#SelectMergeOrEnrich.get_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.SelectMergeOrEnrich.get_object" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.SelectMergeOrEnrich.permission_action_required">
+<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'create'</span></em><a class="headerlink" href="#apis_core.generic.views.SelectMergeOrEnrich.permission_action_required" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.SelectMergeOrEnrich.template_name_suffix">
+<span class="sig-name descname"><span class="pre">template_name_suffix</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'_selectmergeorenrich.html'</span></em><a class="headerlink" href="#apis_core.generic.views.SelectMergeOrEnrich.template_name_suffix" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

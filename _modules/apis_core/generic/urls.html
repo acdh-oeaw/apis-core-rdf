@@ -142,6 +142,11 @@
                 <span class="n">path</span><span class="p">(</span><span class="s2">&quot;delete/&lt;int:pk&gt;&quot;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">Delete</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;delete&quot;</span><span class="p">),</span>
                 <span class="n">path</span><span class="p">(</span><span class="s2">&quot;update/&lt;int:pk&gt;&quot;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">Update</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;update&quot;</span><span class="p">),</span>
                 <span class="n">path</span><span class="p">(</span>
+                    <span class="s2">&quot;selectmergeorenrich/&lt;int:pk&gt;&quot;</span><span class="p">,</span>
+                    <span class="n">views</span><span class="o">.</span><span class="n">SelectMergeOrEnrich</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;selectmergeorenrich&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">path</span><span class="p">(</span>
                     <span class="s2">&quot;merge/&lt;int:pk&gt;/&lt;int:otherpk&gt;&quot;</span><span class="p">,</span>
                     <span class="n">views</span><span class="o">.</span><span class="n">MergeWith</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
                     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;merge&quot;</span><span class="p">,</span>

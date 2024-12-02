@@ -155,6 +155,13 @@
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:merge&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">other_id</span><span class="p">])</span></div>
 
 
+<div class="viewcode-block" id="GenericModel.get_select_merge_or_enrich_url">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_select_merge_or_enrich_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_select_merge_or_enrich_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:selectmergeorenrich&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span></div>
+
+
 <div class="viewcode-block" id="GenericModel.get_create_success_url">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_create_success_url">[docs]</a>
     <span class="k">def</span> <span class="nf">get_create_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
