@@ -19,3 +19,15 @@ class ListViewObjectFilterMixin:
         if getattr(settings, "APIS_LIST_VIEWS_ALLOWED", False):
             return []
         return super().get_permission_required()
+
+
+class DetailViewObjectMixin:
+    """
+    This mixin ensures that no permissions are required for the detail view
+    of the object IF APIS_DETAIL_VIEWS_ALLOWED is set.
+    """
+
+    def get_permission_required(self):
+        if getattr(settings, "APIS_DETAIL_VIEWS_ALLOWED", False):
+            return []
+        return super().get_permission_required()
