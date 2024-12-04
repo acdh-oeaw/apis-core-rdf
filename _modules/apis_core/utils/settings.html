@@ -120,6 +120,16 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TOML parser could not read </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">configs</span></div>
 
+
+
+<div class="viewcode-block" id="internal_uris">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.settings.internal_uris">[docs]</a>
+<span class="k">def</span> <span class="nf">internal_uris</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span>
+        <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_BASE_URI&quot;</span><span class="p">,</span> <span class="s2">&quot;https://example.org&quot;</span><span class="p">)]</span>
+        <span class="o">+</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_FORMER_BASE_URIS&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="p">)</span></div>
+
 </pre></div>
 
            </div>

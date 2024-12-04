@@ -82,6 +82,7 @@
              
   <h1>Source code for apis_core.apis_metainfo.models</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlsplit</span>
 
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ImproperlyConfigured</span><span class="p">,</span> <span class="n">ValidationError</span>
@@ -94,6 +95,7 @@
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo</span> <span class="kn">import</span> <span class="n">signals</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">rdf</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils</span> <span class="kn">import</span> <span class="n">settings</span> <span class="k">as</span> <span class="n">apis_settings</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.normalize</span> <span class="kn">import</span> <span class="n">clean_uri</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -276,6 +278,15 @@
                     <span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Uri.internal">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.internal">[docs]</a>
+    <span class="k">def</span> <span class="nf">internal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">my_netloc</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">my_netloc</span> <span class="o">==</span> <span class="n">urlsplit</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span> <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">apis_settings</span><span class="o">.</span><span class="n">internal_uris</span><span class="p">()]</span>
+        <span class="p">)</span></div>
 </div>
 
 </pre></div>
