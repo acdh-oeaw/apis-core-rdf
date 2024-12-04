@@ -26,8 +26,8 @@ class E21_Person(models.Model):
 
 class E53_Place(models.Model):
     label = models.CharField(blank=True, default="", max_length=4096)
-    longitude = models.FloatField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     class Meta:
         abstract = True
