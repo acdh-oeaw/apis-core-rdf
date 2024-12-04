@@ -2,7 +2,11 @@
 $(document).ready(function() {
     $('select.selectmultiple').multiselect({
         includeSelectAllOption: true,
-        enableFiltering: true
+        enableFiltering: true,
+        enableCaseInsensitiveFiltering: true,
+        templates: {
+            filter: '<div class="multiselect-filter"><div class="input-group input-group-sm p-1"><input class="form-control multiselect-search" type="text" /></div></div>'
+        }
     });
 })
 
