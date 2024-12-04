@@ -1,4 +1,5 @@
 import logging
+from urllib.parse import urlsplit
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
@@ -11,6 +12,7 @@ from model_utils.managers import InheritanceManager
 from apis_core.apis_metainfo import signals
 from apis_core.generic.abc import GenericModel
 from apis_core.utils import rdf
+from apis_core.utils import settings as apis_settings
 from apis_core.utils.normalize import clean_uri
 
 logger = logging.getLogger(__name__)
@@ -153,3 +155,9 @@ class Uri(GenericModel, models.Model):
                     )
             except Exception as e:
                 raise ValidationError(f"{e}: {self.uri}")
+
+    def internal(self) -> bool:
+        my_netloc = urlsplit(self.uri).netloc
+        return any(
+            [my_netloc == urlsplit(uri).netloc for uri in apis_settings.internal_uris()]
+        )
