@@ -31,3 +31,10 @@ def dict_from_toml_directory(directory: str) -> dict:
         except Exception as e:
             logger.error(f"TOML parser could not read {file}: {e}")
     return configs
+
+
+def internal_uris() -> list[str]:
+    return set(
+        [getattr(settings, "APIS_BASE_URI", "https://example.org")]
+        + getattr(settings, "APIS_FORMER_BASE_URIS", [])
+    )
