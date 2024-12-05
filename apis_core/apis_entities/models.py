@@ -2,14 +2,11 @@ import functools
 import re
 
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-from django.db.models.query import QuerySet
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import NoReverseMatch, reverse
 
 from apis_core.apis_metainfo.models import RootObject, Uri
-from apis_core.generic import signals
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
@@ -89,46 +86,6 @@ class AbstractEntity(RootObject):
 
     def merge_end_date_written(self, other):
         self.end_date_written = self.end_date_written or other.end_date_written
-
-    def merge_with(self, entities):
-        if self in entities:
-            entities.remove(self)
-        origin = self.__class__
-        signals.pre_merge_with.send(sender=origin, instance=self, entities=entities)
-
-        # TODO: check if these imports can be put to top of module without
-        #  causing circular import issues.
-        from apis_core.apis_metainfo.models import Uri
-
-        e_a = type(self).__name__
-        self_model_class = ContentType.objects.get(model__iexact=e_a).model_class()
-        if isinstance(entities, int):
-            entities = self_model_class.objects.get(pk=entities)
-        if not isinstance(entities, list) and not isinstance(entities, QuerySet):
-            entities = [entities]
-            entities = [
-                self_model_class.objects.get(pk=ent) if isinstance(ent, int) else ent
-                for ent in entities
-            ]
-        for ent in entities:
-            e_b = type(ent).__name__
-            if e_a != e_b:
-                continue
-            for f in ent._meta.local_many_to_many:
-                if not f.name.endswith("_set"):
-                    sl = list(getattr(self, f.name).all())
-                    for s in getattr(ent, f.name).all():
-                        if s not in sl:
-                            getattr(self, f.name).add(s)
-            Uri.objects.filter(root_object=ent).update(root_object=self)
-
-        for ent in entities:
-            self.merge_fields(ent)
-
-        signals.post_merge_with.send(sender=origin, instance=self, entities=entities)
-
-        for ent in entities:
-            ent.delete()
 
     def get_serialization(self):
         from apis_core.apis_entities.serializers_generic import EntitySerializer
