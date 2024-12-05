@@ -83,9 +83,11 @@
   <h1>Source code for apis_core.generic.abc</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">BooleanField</span><span class="p">,</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">TextField</span>
+<span class="kn">from</span> <span class="nn">django.db.models.query</span> <span class="kn">import</span> <span class="n">QuerySet</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">permission_fullname</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.signals</span> <span class="kn">import</span> <span class="n">post_merge_with</span><span class="p">,</span> <span class="n">pre_merge_with</span>
 
 
 <div class="viewcode-block" id="GenericModel">
@@ -265,6 +267,49 @@
             <span class="k">if</span> <span class="n">newval</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">newval</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.merge_with">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.merge_with">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="n">entities</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">pre_merge_with</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="n">entities</span><span class="p">)</span>
+
+        <span class="c1"># TODO: check if these imports can be put to top of module without</span>
+        <span class="c1">#  causing circular import issues.</span>
+        <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
+
+        <span class="n">e_a</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">self_model_class</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model__iexact</span><span class="o">=</span><span class="n">e_a</span><span class="p">)</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">entities</span> <span class="o">=</span> <span class="n">self_model_class</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">entities</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="n">QuerySet</span><span class="p">):</span>
+            <span class="n">entities</span> <span class="o">=</span> <span class="p">[</span><span class="n">entities</span><span class="p">]</span>
+            <span class="n">entities</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">self_model_class</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">ent</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">ent</span>
+                <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span>
+            <span class="p">]</span>
+        <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="n">e_b</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">ent</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="k">if</span> <span class="n">e_a</span> <span class="o">!=</span> <span class="n">e_b</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ent</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">local_many_to_many</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_set&quot;</span><span class="p">):</span>
+                    <span class="n">sl</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+                    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">:</span>
+                            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="n">ent</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">root_object</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">merge_fields</span><span class="p">(</span><span class="n">ent</span><span class="p">)</span>
+
+        <span class="n">post_merge_with</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="n">entities</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="n">ent</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
 </div>
 
 </pre></div>
