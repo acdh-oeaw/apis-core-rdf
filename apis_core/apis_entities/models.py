@@ -120,7 +120,11 @@ class AbstractEntity(RootObject):
                     for s in getattr(ent, f.name).all():
                         if s not in sl:
                             getattr(self, f.name).add(s)
-            Uri.objects.filter(root_object=ent).update(root_object=self)
+            self_content_type = ContentType.objects.get_for_model(self)
+            ent_content_type = ContentType.objects.get_for_model(ent)
+            Uri.objects.filter(content_type=ent_content_type, object_id=ent.id).update(
+                content_type=self_content_type, object_id=self.id
+            )
 
         for ent in entities:
             self.merge_fields(ent)
@@ -150,4 +154,9 @@ def create_default_uri(sender, instance, created, raw, using, update_fields, **k
                     "apis_core:GetEntityGeneric", kwargs={"pk": instance.pk}
                 )
             uri = f"{base}{route}"
-            Uri.objects.create(uri=uri, root_object=instance)
+            content_type = ContentType.objects.get_for_model(instance)
+            Uri.objects.create(
+                uri=uri,
+                content_type=content_type,
+                object_id=instance.id,
+            )
