@@ -3,8 +3,8 @@ import logging
 from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver
 
-from apis_core.apis_entities.signals import post_merge_with
 from apis_core.apis_metainfo.signals import post_duplicate
+from apis_core.generic.signals import post_merge_with
 from apis_core.relations.models import Relation
 
 logger = logging.getLogger(__name__)
