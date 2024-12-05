@@ -8,8 +8,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import NoReverseMatch, reverse
 
-from apis_core.apis_entities import signals
 from apis_core.apis_metainfo.models import RootObject, Uri
+from apis_core.generic import signals
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
