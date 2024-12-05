@@ -95,6 +95,9 @@ class AbstractEntity(RootObject):
 
 @receiver(post_save, dispatch_uid="create_default_uri")
 def create_default_uri(sender, instance, created, raw, using, update_fields, **kwargs):
+    # disable the handler during fixture loading
+    if raw:
+        return
     create_default_uri = getattr(settings, "CREATE_DEFAULT_URI", True)
     skip_default_uri = getattr(instance, "skip_default_uri", False)
     if create_default_uri and not skip_default_uri:
