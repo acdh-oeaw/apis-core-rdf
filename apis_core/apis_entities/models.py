@@ -25,9 +25,6 @@ class AbstractEntity(RootObject):
     class Meta:
         abstract = True
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     @classmethod
     def get_or_create_uri(cls, uri):
         uri = str(uri)
@@ -86,11 +83,6 @@ class AbstractEntity(RootObject):
 
     def merge_end_date_written(self, other):
         self.end_date_written = self.end_date_written or other.end_date_written
-
-    def get_serialization(self):
-        from apis_core.apis_entities.serializers_generic import EntitySerializer
-
-        return EntitySerializer(self).data
 
 
 @receiver(post_save, dispatch_uid="create_default_uri")
