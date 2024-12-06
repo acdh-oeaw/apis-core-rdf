@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     # The APIS apps
     "apis_core.relations",
     "apis_core.apis_metainfo",
-    "apis_core.apis_relations",
     "apis_core.apis_entities",
     # apis_vocabularies is deprecated, but there are
     # still migrations depending on it - it will be dropped
