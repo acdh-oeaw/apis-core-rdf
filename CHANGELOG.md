@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.34.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.33.0...v0.34.0) (2024-12-09)
+
+
+### Features
+
+* **apis_entities:** replace apis_entities merge route ([40e4618](https://github.com/acdh-oeaw/apis-core-rdf/commit/40e461826911059c85742b5cb66a76c37fdda373))
+* **apis_entities:** reuse legacy _merge template ([10c524e](https://github.com/acdh-oeaw/apis-core-rdf/commit/10c524ef36da57924b738cc92cc230cf5a28a3ec))
+* **apis_metainfo:** add a `internal` method to the Uri ([a65617e](https://github.com/acdh-oeaw/apis-core-rdf/commit/a65617eecdcd974474b3936abd4062b9dedbc82b))
+* **core:** add additional settings of bootstrap-multiselect ([012e1d1](https://github.com/acdh-oeaw/apis-core-rdf/commit/012e1d18ed04c6844a6528ab3aed7f0ce646dd3c))
+* **core:** drop inclusion of select2 javascript and css ([3d53102](https://github.com/acdh-oeaw/apis-core-rdf/commit/3d5310202ab3e6e3c9624d436ae99053459e4f54)), closes [#1481](https://github.com/acdh-oeaw/apis-core-rdf/issues/1481)
+* **core:** update bootstrap-multiselect dependency ([4fdd848](https://github.com/acdh-oeaw/apis-core-rdf/commit/4fdd848f626475f328f0cb7fee28316475fe915b))
+* **generic:** Introduce SelectMergeOrEnrich view and route ([fb07e49](https://github.com/acdh-oeaw/apis-core-rdf/commit/fb07e49ee0753924bac25953a06754ff24b96ccf))
+* **utils:** introduce an `internal_uris` settings helper ([bb1e7a3](https://github.com/acdh-oeaw/apis-core-rdf/commit/bb1e7a3af2691223243da78e9560ffb9dab47d13))
+
+
+### Bug Fixes
+
+* **apis_entities:** disable create_default_uri during fixture loading ([f604816](https://github.com/acdh-oeaw/apis-core-rdf/commit/f6048161bb87d00b0e617a16de1e01a5b4a99590)), closes [#1473](https://github.com/acdh-oeaw/apis-core-rdf/issues/1473)
+* **apis_entities:** show enrich link only for external URIs ([8aea255](https://github.com/acdh-oeaw/apis-core-rdf/commit/8aea2556c89febea11eaf5a7e0c27d72d012502e))
+* **generic,apis_entities:** move action classes to generic app ([ff58a98](https://github.com/acdh-oeaw/apis-core-rdf/commit/ff58a987a3fb78026ac3b5b4c51b8918ea04b3c5)), closes [#1469](https://github.com/acdh-oeaw/apis-core-rdf/issues/1469)
+* **generic:** catch exception if .template_name is not set ([91f7c77](https://github.com/acdh-oeaw/apis-core-rdf/commit/91f7c7768a3f410c9ab4841a8b509e74942dd382))
+* **generic:** exclude subclasses from columns selector ([14dcb6f](https://github.com/acdh-oeaw/apis-core-rdf/commit/14dcb6f674b319df89d4976c0aed0df9fd754bf3)), closes [#1297](https://github.com/acdh-oeaw/apis-core-rdf/issues/1297)
+
 ## [0.33.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.32.0...v0.33.0) (2024-11-27)
 
 
