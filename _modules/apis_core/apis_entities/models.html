@@ -113,9 +113,6 @@
         <span class="n">abstract</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
 <div class="viewcode-block" id="AbstractEntity.get_or_create_uri">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_or_create_uri">[docs]</a>
     <span class="nd">@classmethod</span>
@@ -188,14 +185,6 @@
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.merge_end_date_written">[docs]</a>
     <span class="k">def</span> <span class="nf">merge_end_date_written</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_date_written</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_date_written</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">end_date_written</span></div>
-
-
-<div class="viewcode-block" id="AbstractEntity.get_serialization">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_serialization">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_serialization</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">apis_core.apis_entities.serializers_generic</span> <span class="kn">import</span> <span class="n">EntitySerializer</span>
-
-        <span class="k">return</span> <span class="n">EntitySerializer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">data</span></div>
 </div>
 
 
