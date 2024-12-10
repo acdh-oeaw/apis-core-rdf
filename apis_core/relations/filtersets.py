@@ -30,8 +30,10 @@ class EntityFilter(CharFilter):
         return RootObject.objects_inheritance.filter(q).values_list("pk", flat=True)
 
     def filter(self, qs, value):
-        all_entities = self._search_all_entities(value)
-        return qs.filter(**{f"{self.field_name}_object_id__in": all_entities})
+        if value:
+            all_entities = self._search_all_entities(value)
+            return qs.filter(**{f"{self.field_name}_object_id__in": all_entities})
+        return qs
 
 
 class SubjObjClassFilter(MultipleChoiceFilter):
