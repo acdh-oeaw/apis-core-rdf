@@ -71,6 +71,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "crum.CurrentRequestUserMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 # ROOT_URLCONF = "apis_core.urls"

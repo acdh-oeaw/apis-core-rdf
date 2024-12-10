@@ -11,6 +11,25 @@ The :py:mod:`apis_core.history` module provides versioning
 for APIS. It is based on the `django-simple-history`_
 package.
 
+Track changes by users
+^^^^^^^^^^^^^^^^^^^^^^
+
+To record the user who made a change, the `django-simple-history` module 
+used by APIS provides a middleware that sets the `history_user` attribute of 
+the request object to the current user. It then saves this information to the 
+`history_user` attribute of the historical record. 
+To activate the middleware, add `simple_history.middleware.HistoryRequestMiddleware` 
+to your `MIDDLEWARE` setting:
+
+.. code-block:: python
+
+    MIDDLEWARE = [
+        ...
+        'apis_core.history.middleware.HistoryRequestMiddleware',
+        ...
+    ]
+
+
 VersionMixin
 ^^^^^^^^^^^^
 
