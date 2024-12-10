@@ -13,10 +13,16 @@ class RelationSerializer(SimpleObjectSerializer):
 
     @extend_schema_field(SimpleObjectSerializer())
     def get_subj(self, obj):
-        serializer = serializer_factory(type(obj.subj), SimpleObjectSerializer)
-        return serializer(obj.subj, context={"request": self.context["request"]}).data
+        if obj.subj:
+            serializer = serializer_factory(type(obj.subj), SimpleObjectSerializer)
+            return serializer(
+                obj.subj, context={"request": self.context["request"]}
+            ).data
 
     @extend_schema_field(SimpleObjectSerializer())
     def get_obj(self, obj):
-        serializer = serializer_factory(type(obj.obj), SimpleObjectSerializer)
-        return serializer(obj.obj, context={"request": self.context["request"]}).data
+        if obj.obj:
+            serializer = serializer_factory(type(obj.obj), SimpleObjectSerializer)
+            return serializer(
+                obj.obj, context={"request": self.context["request"]}
+            ).data
