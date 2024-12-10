@@ -52,8 +52,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#history-plugin">History plugin</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#versionmixin">VersionMixin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#api-endpoint">API endpoint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#management-commands">Management Commands</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#populate-history-tables">1. Populate History Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clean-duplicate-history-entries">2. Clean Duplicate History Entries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#remove-old-history-entries">3. Remove Old History Entries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#collections-plugin">Collections plugin</a></li>
 </ul>
 </li>
@@ -128,6 +132,32 @@ the model class. The viewset returns a list of historical revisions of the model
 instance. It is also included in the <cite>apis_core</cite> API schema. The swagger documentation
 can be accessed under <cite>/apis/swagger/schema/swagger-ui/#/apis/apis_api_history_entity_edit_log_list</cite>.</p>
 </section>
+<section id="management-commands">
+<h3>Management Commands<a class="headerlink" href="#management-commands" title="Link to this heading"></a></h3>
+<p>The APIS history plugin, based on <cite>django-simple-history</cite>, provides several management commands to help curate history objects. Here are some of the most useful commands:</p>
+</section>
+</section>
+<section id="populate-history-tables">
+<h2>1. Populate History Tables<a class="headerlink" href="#populate-history-tables" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>manage.py<span class="w"> </span>populate_history<span class="w"> </span>--auto
+</pre></div>
+</div>
+<p>This command populates history tables with the current state of the models. It’s particularly useful when you’ve added <cite>VersionMixin</cite> to an existing model. The <cite>–auto</cite> flag applies the command to all tracked models, or you can specify a list of models instead.</p>
+</section>
+<section id="clean-duplicate-history-entries">
+<h2>2. Clean Duplicate History Entries<a class="headerlink" href="#clean-duplicate-history-entries" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>manage.py<span class="w"> </span>clean_duplicate_history<span class="w"> </span>--auto
+</pre></div>
+</div>
+<p>This command removes duplicate history entries. <cite>django-simple-history</cite> creates a history object every time <cite>save()</cite> is called on an object, regardless of whether any changes were made. This command deletes history objects that are identical to the previous entry.</p>
+</section>
+<section id="remove-old-history-entries">
+<h2>3. Remove Old History Entries<a class="headerlink" href="#remove-old-history-entries" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>manage.py<span class="w"> </span>clean_old_history<span class="w"> </span>--days<span class="w"> </span><span class="m">60</span><span class="w"> </span>--auto
+</pre></div>
+</div>
+<p>This command deletes history entries older than the specified number of days (60 in this example).</p>
+<p>For more information on these and other management commands, refer to the <a class="reference external" href="https://django-simple-history.readthedocs.io/en/latest/utils.html">django-simple-history documentation</a>.</p>
 </section>
 <section id="collections-plugin">
 <h2>Collections plugin<a class="headerlink" href="#collections-plugin" title="Link to this heading"></a></h2>
@@ -184,8 +214,8 @@ and
 a collection to point to the collections parent. This is useful if you want to
 implement a workflow (i.e. three collections: <cite>done</cite> as the root one, <cite>in
 process</cite> with <cite>done</cite> as parent and <cite>todo</cite> with <cite>in process</cite> as parent - the
-user can then on the click of a button change an the collection an instance is
-connected to)</p>
+user can then on the click of a button change the collection an instance is
+connected to from <cite>todo</cite> to <cite>in process</cite> and finally <cite>done</cite>.)</p>
 <ul class="simple">
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id()</span></code></p></li>
 </ul>
