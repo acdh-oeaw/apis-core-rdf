@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.34.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.34.0...v0.34.1) (2024-12-11)
+
+
+### Bug Fixes
+
+* **relations:** only filter queryset if there is actually a value ([7cd93e7](https://github.com/acdh-oeaw/apis-core-rdf/commit/7cd93e70f27ba97cfc7cb95bd324ee2ebd0bac15))
+* **relations:** only serialize if there is an object ([163f3f8](https://github.com/acdh-oeaw/apis-core-rdf/commit/163f3f85472841de3e553c2042fb89a2da863976))
+
+
+### Documentation
+
+* **history:** add documentation on some management commands ([320e73f](https://github.com/acdh-oeaw/apis-core-rdf/commit/320e73f8a83df38103fa64694b4548382b4852e2)), closes [#873](https://github.com/acdh-oeaw/apis-core-rdf/issues/873)
+* **history:** add section on middleware for user tracking ([4694885](https://github.com/acdh-oeaw/apis-core-rdf/commit/4694885f6278d76e2a54a7daf248678dd7ee779d))
+
 ## [0.34.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.33.0...v0.34.0) (2024-12-09)
 
 
