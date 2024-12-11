@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="customization.html">Customization</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Additional Features</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#history-plugin">History plugin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#track-changes-by-users">Track changes by users</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#versionmixin">VersionMixin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#api-endpoint">API endpoint</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#management-commands">Management Commands</a></li>
@@ -104,6 +105,22 @@ additional features that are shipped with APIS and how to use them.</p>
 <p>The <a class="reference internal" href="modules/apis_core.history.html#module-apis_core.history" title="apis_core.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.history</span></code></a> module provides versioning
 for APIS. It is based on the <a class="reference external" href="https://django-simple-history.readthedocs.io/en/latest/">django-simple-history</a>
 package.</p>
+<section id="track-changes-by-users">
+<h3>Track changes by users<a class="headerlink" href="#track-changes-by-users" title="Link to this heading"></a></h3>
+<p>To record the user who made a change, the <cite>django-simple-history</cite> module
+used by APIS provides a middleware that sets the <cite>history_user</cite> attribute of
+the request object to the current user. It then saves this information to the
+<cite>history_user</cite> attribute of the historical record.
+To activate the middleware, add <cite>simple_history.middleware.HistoryRequestMiddleware</cite>
+to your <cite>MIDDLEWARE</cite> setting:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MIDDLEWARE</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="o">...</span>
+    <span class="s1">&#39;apis_core.history.middleware.HistoryRequestMiddleware&#39;</span><span class="p">,</span>
+    <span class="o">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
 <section id="versionmixin">
 <h3>VersionMixin<a class="headerlink" href="#versionmixin" title="Link to this heading"></a></h3>
 <p>The <a class="reference internal" href="modules/apis_core.history.html#apis_core.history.models.VersionMixin" title="apis_core.history.models.VersionMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.history.models.VersionMixin</span></code></a> class is a mixin
