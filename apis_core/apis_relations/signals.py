@@ -3,9 +3,8 @@ import logging
 from django.dispatch import receiver
 
 from apis_core.apis_metainfo.models import RootObject
-from apis_core.apis_metainfo.signals import post_duplicate
 from apis_core.apis_relations.models import TempTriple
-from apis_core.generic.signals import post_merge_with
+from apis_core.generic.signals import post_duplicate, post_merge_with
 
 logger = logging.getLogger(__name__)
 
