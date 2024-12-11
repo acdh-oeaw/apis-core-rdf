@@ -103,16 +103,22 @@
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.serializers.RelationSerializer.get_subj">[docs]</a>
     <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">SimpleObjectSerializer</span><span class="p">())</span>
     <span class="k">def</span> <span class="nf">get_subj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="n">serializer</span> <span class="o">=</span> <span class="n">serializer_factory</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">subj</span><span class="p">),</span> <span class="n">SimpleObjectSerializer</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">serializer</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">subj</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;request&quot;</span><span class="p">]})</span><span class="o">.</span><span class="n">data</span></div>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">subj</span><span class="p">:</span>
+            <span class="n">serializer</span> <span class="o">=</span> <span class="n">serializer_factory</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">subj</span><span class="p">),</span> <span class="n">SimpleObjectSerializer</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">serializer</span><span class="p">(</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">subj</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;request&quot;</span><span class="p">]}</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">data</span></div>
 
 
 <div class="viewcode-block" id="RelationSerializer.get_obj">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.serializers.RelationSerializer.get_obj">[docs]</a>
     <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">SimpleObjectSerializer</span><span class="p">())</span>
     <span class="k">def</span> <span class="nf">get_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="n">serializer</span> <span class="o">=</span> <span class="n">serializer_factory</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">obj</span><span class="p">),</span> <span class="n">SimpleObjectSerializer</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">serializer</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;request&quot;</span><span class="p">]})</span><span class="o">.</span><span class="n">data</span></div>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">obj</span><span class="p">:</span>
+            <span class="n">serializer</span> <span class="o">=</span> <span class="n">serializer_factory</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">obj</span><span class="p">),</span> <span class="n">SimpleObjectSerializer</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">serializer</span><span class="p">(</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;request&quot;</span><span class="p">]}</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">data</span></div>
 </div>
 
 </pre></div>
