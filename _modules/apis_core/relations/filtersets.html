@@ -117,8 +117,10 @@
 <div class="viewcode-block" id="EntityFilter.filter">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.EntityFilter.filter">[docs]</a>
     <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qs</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="n">all_entities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_all_entities</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">field_name</span><span class="si">}</span><span class="s2">_object_id__in&quot;</span><span class="p">:</span> <span class="n">all_entities</span><span class="p">})</span></div>
+        <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">all_entities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_all_entities</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">field_name</span><span class="si">}</span><span class="s2">_object_id__in&quot;</span><span class="p">:</span> <span class="n">all_entities</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">qs</span></div>
 </div>
 
 
