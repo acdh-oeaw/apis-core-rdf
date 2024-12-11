@@ -10,8 +10,8 @@ from django.db.models.fields.related_descriptors import ForwardManyToOneDescript
 from django.db.models.signals import m2m_changed
 from model_utils.managers import InheritanceManager
 
-from apis_core.apis_metainfo import signals
 from apis_core.apis_metainfo.models import RootObject
+from apis_core.generic import signals
 from apis_core.generic.abc import GenericModel
 from apis_core.history.models import VersionMixin
 from apis_core.utils import DateParser

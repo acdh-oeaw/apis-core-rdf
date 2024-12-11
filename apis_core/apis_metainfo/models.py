@@ -9,7 +9,7 @@ from django.db.models.fields.related_descriptors import ForwardManyToOneDescript
 from django.forms import model_to_dict
 from model_utils.managers import InheritanceManager
 
-from apis_core.apis_metainfo import signals
+from apis_core.generic import signals
 from apis_core.generic.abc import GenericModel
 from apis_core.utils import rdf
 from apis_core.utils import settings as apis_settings
