@@ -21,7 +21,7 @@ SELECT ?longitude
 WHERE {
   ?subject geo:hasGeometry ?geo1 .
   ?geo1 geo:asWKT ?point .
-  BIND(REPLACE(str(?point), "Point \\( \\+(\\d+.\\d+).*", "$1") as ?longitude)
+  BIND(REPLACE(str(?point), "Point \\( \\+?(-?\\d+.\\d+).*", "$1") as ?longitude)
   }
 '''
 [[attributes]]
@@ -32,6 +32,6 @@ SELECT ?latitude
 WHERE {
   ?subject geo:hasGeometry ?geo1 .
   ?geo1 geo:asWKT ?point .
-  BIND(REPLACE(str(?point), "Point \\( \\+(\\d+.\\d+) \\+(\\d+.\\d+) .$", "$2") as ?latitude)
+  BIND(REPLACE(str(?point), "^Point\\s*\\(\\s*[+-]?\\d+\\.\\d+\\s+([+-]?\\d+\\.\\d+)\\s*\\)$", "$1") as ?latitude)
   }
 '''
