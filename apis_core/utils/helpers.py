@@ -176,3 +176,9 @@ def construct_lookup(value: str) -> tuple[str, str]:
         if value.startswith("*") and value.endswith("*"):
             value = value[1:-1]
         return "__icontains", value
+
+
+def flatten_if_single(value: list):
+    if len(value) == 1:
+        return value[0]
+    return value

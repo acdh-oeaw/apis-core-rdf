@@ -6,6 +6,7 @@ from functools import cache
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.core.exceptions import ImproperlyConfigured
 
+from apis_core.utils.helpers import flatten_if_single
 from apis_core.utils.rdf import get_definition_and_attributes_from_uri
 
 logger = logging.getLogger(__name__)
@@ -70,6 +71,7 @@ class GenericModelImporter:
             # we are dropping all fields that are not part of the model
             modelfields = [field.name for field in self.model._meta.fields]
             data = {key: data[key] for key in data if key in modelfields}
+        data = {key: flatten_if_single(value) for key, value in data.items()}
         if not data:
             raise ImproperlyConfigured(
                 f"Could not import {self.import_uri}. Data fetched was: {data}"
