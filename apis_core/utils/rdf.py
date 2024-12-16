@@ -4,6 +4,7 @@
 import importlib
 import logging
 import re
+from collections import defaultdict
 from typing import Tuple
 
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
@@ -66,7 +67,7 @@ def get_definition_and_attributes_from_uri(
             matching_definition = definition
             matching_definition["filename"] = str(key)
             break
-    model_attributes = dict()
+    model_attributes = defaultdict(list)
     if matching_definition:
         attributes = matching_definition.get("attributes", [])
         sparql_attributes = list(filter(lambda d: d.get("sparql"), attributes))
@@ -75,7 +76,7 @@ def get_definition_and_attributes_from_uri(
             for binding in result.bindings:
                 # {rdflib.term.Variable('somekey'): rdflib.term.Literal('some value')}
                 for key, value in binding.items():
-                    model_attributes[str(key)] = str(value)
+                    model_attributes[str(key)].append(str(value))
     else:
         raise AttributeError(f"No matching definition found for {uri}")
     return matching_definition, model_attributes

@@ -10,10 +10,13 @@ sparql = """
 PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
 SELECT ?label
 WHERE {
-  ?subject gndo:preferredNameForTheCorporateBody ?name
+  OPTIONAL {
+    ?subject gndo:preferredNameForTheCorporateBody ?name
+  }
   OPTIONAL {
     ?subject gndo:variantNameForTheCorporateBody ?altName
   }
   BIND(COALESCE(?name, ?altName) AS ?label)
 }
+GROUP BY ?subject
 """
