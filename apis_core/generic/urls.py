@@ -68,6 +68,7 @@ urlpatterns = [
                     {"external_only": True},
                     name="autocompleteexternalonly",
                 ),
+                path("tomselect-autocomplete", views.AutocompleteView.as_view(), name="tautocomplete"),
             ]
         ),
     ),

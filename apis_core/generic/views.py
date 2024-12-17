@@ -1,6 +1,7 @@
 from collections import namedtuple
 from copy import copy
 
+from django_tomselect.autocompletes import AutocompleteModelView
 from dal import autocomplete
 from django import forms, http
 from django.conf import settings
@@ -60,10 +61,10 @@ class GenericModelMixin:
     """
 
     def setup(self, *args, **kwargs):
-        super().setup(*args, **kwargs)
         if contenttype := kwargs.get("contenttype"):
             self.model = contenttype.model_class()
             self.queryset = self.model.objects.all()
+        super().setup(*args, **kwargs)
 
     def get_template_names(self):
         template_names = []
@@ -507,3 +508,7 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+
+class AutocompleteView(GenericModelMixin, AutocompleteModelView):
+    permission_action_required = "view"

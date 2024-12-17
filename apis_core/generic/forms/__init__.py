@@ -7,6 +7,9 @@ from django.urls import reverse
 
 from apis_core.generic.abc import GenericModel
 from apis_core.generic.forms.fields import ModelImportChoiceField
+from django_tomselect.forms import TomSelectModelChoiceField
+from django_tomselect.widgets import TomSelectModelWidget, TomSelectIterablesWidget
+from django_tomselect.app_settings import TomSelectConfig
 
 
 class GenericImportForm(forms.Form):
@@ -70,8 +73,8 @@ class GenericModelForm(forms.ModelForm):
         # override the fields pointing to other models,
         # to make them use the autocomplete widgets
         override_fieldtypes = {
-            "ModelMultipleChoiceField": autocomplete.ModelSelect2Multiple,
-            "ModelChoiceField": autocomplete.ModelSelect2,
+            "ModelMultipleChoiceField": TomSelectIterablesWidget,
+            "ModelChoiceField": TomSelectModelChoiceField,
             "ModelImportChoiceField": autocomplete.ModelSelect2,
         }
         for field in self.fields:
@@ -81,9 +84,10 @@ class GenericModelForm(forms.ModelForm):
                     self.fields[field]._queryset.model
                 )
                 if issubclass(ct.model_class(), GenericModel):
-                    url = reverse("apis_core:generic:autocomplete", args=[ct])
+                    url = reverse("apis_core:generic:tautocomplete", args=[ct])
+                    tsc = TomSelectConfig(url=url)
                     self.fields[field].widget = override_fieldtypes[clsname](
-                        url, attrs={"data-html": True}
+                            config = tsc
                     )
                     self.fields[field].widget.choices = self.fields[field].choices
 

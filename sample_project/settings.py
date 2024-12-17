@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "apis_core.generic",
     "apis_core.core",
     "apis_core.documentation",
+    "django_tomselect",
 ]
 
 MIDDLEWARE = [
@@ -72,6 +73,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "crum.CurrentRequestUserMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
+    "django_tomselect.middleware.TomSelectMiddleware",
 ]
 
 # ROOT_URLCONF = "apis_core.urls"
@@ -88,6 +90,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django_tomselect.context_processors.tomselect",
             ],
         },
     },
