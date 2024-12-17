@@ -9,27 +9,43 @@ sparql = """
 PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
 SELECT ?forename
 WHERE {
-  ?subject gndo:forename ?default_forename .
-   OPTIONAL {
-    ?subject2 gndo:preferredNameEntityForThePerson ?med .
+  OPTIONAL {
+    ?subject gndo:preferredNameEntityForThePerson ?med .
     ?med gndo:forename ?preferred_forename .
+  }
+  OPTIONAL {
+    ?subject2 gndo:forename ?default_forename .
   }
   BIND(COALESCE(?preferred_forename, ?default_forename) AS ?forename)
 }
+GROUP BY ?subject
 """
+[[attributes]]
+# alternative_names
+sparql = """
+PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
+SELECT ?alternative_names
+WHERE {
+  ?subject gndo:variantNameForThePerson ?alternative_names
+}
+"""
+
 [[attributes]]
 # surname
 sparql = """
 PREFIX gndo: <https://d-nb.info/standards/elementset/gnd#>
 SELECT ?surname
 WHERE {
-  ?subject gndo:surname ?default_surname .
   OPTIONAL {
-    ?subject2 gndo:preferredNameEntityForThePerson ?med .
+    ?subject gndo:preferredNameEntityForThePerson ?med .
     ?med gndo:surname ?preferred_surname .
+  }
+  OPTIONAL {
+    ?subject2 gndo:surname ?default_surname .
   }
   BIND(COALESCE(?preferred_surname, ?default_surname) AS ?surname)
 }
+GROUP BY ?subject
 """
 [[attributes]]
 # date_of_birth
