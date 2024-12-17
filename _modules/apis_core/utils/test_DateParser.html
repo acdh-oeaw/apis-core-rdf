@@ -88,7 +88,7 @@
 
 <span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
 
-<span class="kn">from</span> <span class="nn">.DateParser</span> <span class="kn">import</span> <span class="n">get_date_help_text_from_dates</span><span class="p">,</span> <span class="n">parse_date</span>
+<span class="kn">from</span> <span class="nn">.DateParser</span> <span class="kn">import</span> <span class="n">parse_date</span>
 
 <span class="n">help_text_default</span> <span class="o">=</span> <span class="s2">&quot;Dates are interpreted by defined rules. If this fails, an iso-date can be explicitly set with &#39;&amp;lt;YYYY-MM-DD&amp;gt;&#39;.&quot;</span>
 
@@ -102,26 +102,23 @@
 
 
 <span class="c1"># a dict of dates with the written date as key</span>
-<span class="c1"># followed by a tuple of (single, start, end, help_text)</span>
+<span class="c1"># followed by a tuple of (single, start, end)</span>
 <span class="n">dates</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;vor dem 23.10.1449 &lt;1449-10-23&gt;&quot;</span><span class="p">:</span> <span class="p">(</span>
         <span class="n">fi</span><span class="p">(</span><span class="s2">&quot;1449-10-23&quot;</span><span class="p">),</span>
         <span class="kc">None</span><span class="p">,</span>
         <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;Date interpreted as 1449-10-23&quot;</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="s2">&quot;1459-12&quot;</span><span class="p">:</span> <span class="p">(</span>
         <span class="n">fi</span><span class="p">(</span><span class="s2">&quot;1459-12-16&quot;</span><span class="p">),</span>
         <span class="n">fi</span><span class="p">(</span><span class="s2">&quot;1459-12-01&quot;</span><span class="p">),</span>
         <span class="n">fi</span><span class="p">(</span><span class="s2">&quot;1459-12-31&quot;</span><span class="p">),</span>
-        <span class="s2">&quot;Date interpreted as 1459-12-1 until 1459-12-31&quot;</span><span class="p">,</span>
     <span class="p">),</span>
-    <span class="s2">&quot;1460-03-30&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">fi</span><span class="p">(</span><span class="s2">&quot;1460-03-30&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Date interpreted as 1460-3-30&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;1460-03-30&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">fi</span><span class="p">(</span><span class="s2">&quot;1460-03-30&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="p">(</span>
         <span class="kc">None</span><span class="p">,</span>
         <span class="kc">None</span><span class="p">,</span>
         <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;&lt;b&gt;Date could not be interpreted&lt;/b&gt;&lt;br&gt;&quot;</span> <span class="o">+</span> <span class="n">help_text_default</span><span class="p">,</span>
     <span class="p">),</span>
 <span class="p">}</span>
 
@@ -132,19 +129,11 @@
 <div class="viewcode-block" id="DateParserTest.test_dates">
 <a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest.test_dates">[docs]</a>
     <span class="k">def</span> <span class="nf">test_dates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">datestring</span><span class="p">,</span> <span class="p">(</span><span class="n">expsingle</span><span class="p">,</span> <span class="n">expstart</span><span class="p">,</span> <span class="n">expend</span><span class="p">,</span> <span class="n">help_text</span><span class="p">)</span> <span class="ow">in</span> <span class="n">dates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">datestring</span><span class="p">,</span> <span class="p">(</span><span class="n">expsingle</span><span class="p">,</span> <span class="n">expstart</span><span class="p">,</span> <span class="n">expend</span><span class="p">)</span> <span class="ow">in</span> <span class="n">dates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">single</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">parse_date</span><span class="p">(</span><span class="n">datestring</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expsingle</span><span class="p">,</span> <span class="n">single</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expstart</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expend</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="DateParserTest.test_help_text">
-<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.test_DateParser.DateParserTest.test_help_text">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">datestring</span><span class="p">,</span> <span class="p">(</span><span class="n">single</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">exp_help_text</span><span class="p">)</span> <span class="ow">in</span> <span class="n">dates</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">help_text</span> <span class="o">=</span> <span class="n">get_date_help_text_from_dates</span><span class="p">(</span><span class="n">single</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">datestring</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">exp_help_text</span><span class="p">,</span> <span class="n">help_text</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

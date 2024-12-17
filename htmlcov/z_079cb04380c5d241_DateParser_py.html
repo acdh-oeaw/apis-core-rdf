@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for apis_core/utils/DateParser.py: 61%</title>
+    <title>Coverage for apis_core/utils/DateParser.py: 58%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>apis_core/utils/DateParser.py</b>:
-            <span class="pc_cov">61%</span>
+            <span class="pc_cov">58%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -54,9 +54,9 @@
             </div>
         </aside>
         <h2>
-            <span class="text">151 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">92<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">59<span class="text"> missing</span></button>
+            <span class="text">133 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">77<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">56<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_079cb04380c5d241___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.8">coverage.py v7.6.8</a>,
-            created at 2024-12-17 09:35 +0000
+            created at 2024-12-17 09:43 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -355,82 +355,6 @@
     <p class="mis show_mis"><span class="n"><a id="t273" href="#t273">273</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="str">"Could not parse date: '"</span><span class="op">,</span> <span class="nam">date_string</span><span class="op">,</span> <span class="str">"' due to error: "</span><span class="op">,</span> <span class="nam">e</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">    <span class="key">return</span> <span class="nam">date_single</span><span class="op">,</span> <span class="nam">date_ab</span><span class="op">,</span> <span class="nam">date_bis</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t"><span class="key">def</span> <span class="nam">get_date_help_text_from_dates</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">    <span class="nam">single_date</span><span class="op">,</span> <span class="nam">single_start_date</span><span class="op">,</span> <span class="nam">single_end_date</span><span class="op">,</span> <span class="nam">single_date_written</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t"><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">    <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t"><span class="str">    function for creating string help text from parsed dates, to provide feedback to the user</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t"><span class="str">    about the parsing status of a given date field.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t284" href="#t284">284</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t285" href="#t285">285</a></span><span class="t"><span class="str">    :param single_date: datetime :</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t286" href="#t286">286</a></span><span class="t"><span class="str">        the individual date point</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t287" href="#t287">287</a></span><span class="t"><span class="str">    :param single_start_date: datetime :</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t288" href="#t288">288</a></span><span class="t"><span class="str">        the start range of a date</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t289" href="#t289">289</a></span><span class="t"><span class="str">    :param single_end_date: datetime :</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t290" href="#t290">290</a></span><span class="t"><span class="str">        the endrange of a date</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t291" href="#t291">291</a></span><span class="t"><span class="str">    :param single_date_written: str :</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t292" href="#t292">292</a></span><span class="t"><span class="str">        the textual user entry of a date field (needed to check if empty or not)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t293" href="#t293">293</a></span><span class="t"><span class="str">    :return help_text: str :</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t294" href="#t294">294</a></span><span class="t"><span class="str">        The text to be displayed underneath a date field, informing the user about the parsing result</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t295" href="#t295">295</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t296" href="#t296">296</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t297" href="#t297">297</a></span><span class="t">    <span class="com"># check which of the dates could be parsed to construct the relevant feedback text</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t298" href="#t298">298</a></span><span class="t">    <span class="nam">help_text</span> <span class="op">=</span> <span class="str">""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t299" href="#t299">299</a></span><span class="t">    <span class="key">if</span> <span class="nam">single_date</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t300" href="#t300">300</a></span><span class="t">        <span class="com"># single date could be parsed</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t301" href="#t301">301</a></span><span class="t">        <span class="nam">help_text</span> <span class="op">=</span> <span class="str">"Date interpreted as "</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t302" href="#t302">302</a></span><span class="t">        <span class="key">if</span> <span class="nam">single_start_date</span> <span class="key">or</span> <span class="nam">single_end_date</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t303" href="#t303">303</a></span><span class="t">            <span class="com"># date has also start or end ranges, then ignore single date</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t304" href="#t304">304</a></span><span class="t">            <span class="key">if</span> <span class="nam">single_start_date</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t305" href="#t305">305</a></span><span class="t">                <span class="com"># date has start range</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t306" href="#t306">306</a></span><span class="t">                <span class="nam">help_text</span> <span class="op">+=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t307" href="#t307">307</a></span><span class="t">                    <span class="nam">str</span><span class="op">(</span><span class="nam">single_start_date</span><span class="op">.</span><span class="nam">year</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t308" href="#t308">308</a></span><span class="t">                    <span class="op">+</span> <span class="str">"-"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t309" href="#t309">309</a></span><span class="t">                    <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">single_start_date</span><span class="op">.</span><span class="nam">month</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t310" href="#t310">310</a></span><span class="t">                    <span class="op">+</span> <span class="str">"-"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t311" href="#t311">311</a></span><span class="t">                    <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">single_start_date</span><span class="op">.</span><span class="nam">day</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t">                    <span class="op">+</span> <span class="str">" until "</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t313" href="#t313">313</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t314" href="#t314">314</a></span><span class="t">            <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t315" href="#t315">315</a></span><span class="t">                <span class="com"># date has no start range, then write "undefined"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t316" href="#t316">316</a></span><span class="t">                <span class="nam">help_text</span> <span class="op">+=</span> <span class="str">"undefined start until "</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t317" href="#t317">317</a></span><span class="t">            <span class="key">if</span> <span class="nam">single_end_date</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t318" href="#t318">318</a></span><span class="t">                <span class="com"># date has end range</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t319" href="#t319">319</a></span><span class="t">                <span class="nam">help_text</span> <span class="op">+=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t320" href="#t320">320</a></span><span class="t">                    <span class="nam">str</span><span class="op">(</span><span class="nam">single_end_date</span><span class="op">.</span><span class="nam">year</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t321" href="#t321">321</a></span><span class="t">                    <span class="op">+</span> <span class="str">"-"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t322" href="#t322">322</a></span><span class="t">                    <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">single_end_date</span><span class="op">.</span><span class="nam">month</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t323" href="#t323">323</a></span><span class="t">                    <span class="op">+</span> <span class="str">"-"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t324" href="#t324">324</a></span><span class="t">                    <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">single_end_date</span><span class="op">.</span><span class="nam">day</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t325" href="#t325">325</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t326" href="#t326">326</a></span><span class="t">            <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t327" href="#t327">327</a></span><span class="t">                <span class="com"># date has no start range, then write "undefined"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t328" href="#t328">328</a></span><span class="t">                <span class="nam">help_text</span> <span class="op">+=</span> <span class="str">"undefined end"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t329" href="#t329">329</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t330" href="#t330">330</a></span><span class="t">            <span class="com"># date has no start nor end range. Use single date then.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t331" href="#t331">331</a></span><span class="t">            <span class="nam">help_text</span> <span class="op">+=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t332" href="#t332">332</a></span><span class="t">                <span class="nam">str</span><span class="op">(</span><span class="nam">single_date</span><span class="op">.</span><span class="nam">year</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t333" href="#t333">333</a></span><span class="t">                <span class="op">+</span> <span class="str">"-"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t334" href="#t334">334</a></span><span class="t">                <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">single_date</span><span class="op">.</span><span class="nam">month</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t335" href="#t335">335</a></span><span class="t">                <span class="op">+</span> <span class="str">"-"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t336" href="#t336">336</a></span><span class="t">                <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">single_date</span><span class="op">.</span><span class="nam">day</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t337" href="#t337">337</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t338" href="#t338">338</a></span><span class="t">    <span class="key">elif</span> <span class="nam">single_date_written</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t339" href="#t339">339</a></span><span class="t">        <span class="com"># date input field is not empty but it could not be parsed either. Show parsing info and help text</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t340" href="#t340">340</a></span><span class="t">        <span class="nam">help_text</span> <span class="op">=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t341" href="#t341">341</a></span><span class="t">            <span class="str">"&lt;b>Date could not be interpreted&lt;/b>&lt;br>"</span> <span class="op">+</span> <span class="nam">get_date_help_text_default</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t342" href="#t342">342</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t343" href="#t343">343</a></span><span class="t">    <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t344" href="#t344">344</a></span><span class="t">        <span class="com"># date field is completely empty. Show help text only</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t345" href="#t345">345</a></span><span class="t">        <span class="nam">help_text</span> <span class="op">=</span> <span class="nam">get_date_help_text_default</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t346" href="#t346">346</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t347" href="#t347">347</a></span><span class="t">    <span class="key">return</span> <span class="nam">help_text</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t348" href="#t348">348</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t349" href="#t349">349</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t350" href="#t350">350</a></span><span class="t"><span class="key">def</span> <span class="nam">get_date_help_text_default</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t351" href="#t351">351</a></span><span class="t">    <span class="key">return</span> <span class="str">"Dates are interpreted by defined rules. If this fails, an iso-date can be explicitly set with '&amp;lt;YYYY-MM-DD&amp;gt;'."</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -440,7 +364,7 @@
             <a class="nav" href="z_079cb04380c5d241___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.8">coverage.py v7.6.8</a>,
-            created at 2024-12-17 09:35 +0000
+            created at 2024-12-17 09:43 +0000
         </p>
     </div>
 </footer>
