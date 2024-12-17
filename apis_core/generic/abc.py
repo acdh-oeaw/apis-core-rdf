@@ -218,3 +218,12 @@ class GenericModel:
         return newobj
 
     duplicate.alters_data = True
+
+    def uri_set(self):
+        ct = ContentType.objects.get_for_model(self)
+        return (
+            ContentType.objects.get(app_label="apis_metainfo", model="uri")
+            .model_class()
+            .objects.filter(content_type=ct, object_id=self.id)
+            .all()
+        )
