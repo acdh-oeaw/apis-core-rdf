@@ -57,6 +57,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#apis-detail-views-allowed">APIS_DETAIL_VIEWS_ALLOWED</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#apis-view-passes-test">APIS_VIEW_PASSES_TEST</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#apis-list-view-object-filter">APIS_LIST_VIEW_OBJECT_FILTER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#maintenance-middleware">Maintenance Middleware</a></li>
 </ul>
 </li>
 </ul>
@@ -200,6 +201,19 @@ decides if the request is successful or leads to a 403 permission denied.</p>
 <cite>request</cite> object - and a queryset and can do custom filtering on that queryset.
 This can be used to set the listviews to public using the
 <cite>APIS_LIST_VIEWS_ALLOWED</cite> setting, but still only list specific entities.</p>
+</section>
+<section id="maintenance-middleware">
+<h3>Maintenance Middleware<a class="headerlink" href="#maintenance-middleware" title="Link to this heading"></a></h3>
+<p>APIS ships a maintenance middlware that you can use and activate to enable a maintenance mode in your project.
+Maintenance mode means that only superuser accounts can access the webinterfaces, all other requests are being
+answered with a simple maintenance mode page (the <code class="docutils literal notranslate"><span class="pre">maintenance.html</span></code> template).
+To use the middleware, add</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;apis_core.core.middleware.MaintenanceMiddleware&quot;</span>
+</pre></div>
+</div>
+<p>to your <code class="docutils literal notranslate"><span class="pre">settings.MIDDLEWARE</span></code> list. To activate the maintenance mode once the middlware is enabled, simply
+create a file <code class="docutils literal notranslate"><span class="pre">apis_maintenance</span></code> in the directory the main Django process runs in.
+The path of the maintenance file can be changed in the settings: <code class="docutils literal notranslate"><span class="pre">APIS_MAINTENANCE_FILE</span> <span class="pre">=</span> <span class="pre">&quot;path</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">file&quot;</span></code></p>
 </section>
 </section>
 </section>
