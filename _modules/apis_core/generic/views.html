@@ -106,7 +106,6 @@
 <span class="kn">from</span> <span class="nn">django_tables2.tables</span> <span class="kn">import</span> <span class="n">table_factory</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-<span class="kn">from</span> <span class="nn">apis_core.core.mixins</span> <span class="kn">import</span> <span class="n">ListViewObjectFilterMixin</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span><span class="p">,</span> <span class="n">get_importer_for_model</span>
 
 <span class="kn">from</span> <span class="nn">.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span>
@@ -184,9 +183,10 @@
 <div class="viewcode-block" id="GenericModelMixin.get_permission_required">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.GenericModelMixin.get_permission_required">[docs]</a>
     <span class="k">def</span> <span class="nf">get_permission_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_VIEW_PASSES_TEST&quot;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">APIS_VIEW_PASSES_TEST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;permission_action_required&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;view&quot;</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span>
+            <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_ANON_VIEWS_ALLOWED&quot;</span><span class="p">,</span> <span class="kc">False</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;permission_action_required&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">permission_fullname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">permission_action_required</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)]</span>
         <span class="k">return</span> <span class="p">[]</span></div>
@@ -197,7 +197,6 @@
 <div class="viewcode-block" id="List">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List">[docs]</a>
 <span class="k">class</span> <span class="nc">List</span><span class="p">(</span>
-    <span class="n">ListViewObjectFilterMixin</span><span class="p">,</span>
     <span class="n">GenericModelMixin</span><span class="p">,</span>
     <span class="n">PermissionRequiredMixin</span><span class="p">,</span>
     <span class="n">SingleTableMixin</span><span class="p">,</span>
@@ -315,16 +314,6 @@
         <span class="n">filterset</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="n">columns</span><span class="p">},</span> <span class="o">**</span><span class="n">filterset</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">fields</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="n">filterset</span></div>
-
-
-<div class="viewcode-block" id="List.get_queryset">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_queryset">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">queryset_methods</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ListViewQueryset&quot;</span>
-        <span class="p">)</span>
-        <span class="n">queryset</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">queryset_methods</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_queryset</span><span class="p">(</span><span class="n">queryset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()))</span></div>
 
 
 <div class="viewcode-block" id="List.get_table_pagination">

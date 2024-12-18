@@ -1285,7 +1285,7 @@ keyword arguments, and other things.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.generic.views.List">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">List</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ListViewObjectFilterMixin</span></code>, <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SingleTableMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterView</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SingleTableMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterView</span></code></p>
 <p>List view for a generic model.
 Access requires the <cite>&lt;model&gt;_view</cite> permission.
 It is based on django-filters FilterView and django-tables SingleTableMixin.
@@ -1308,14 +1308,6 @@ keyword arguments, and other things.</p>
 <dt class="sig sig-object py" id="apis_core.generic.views.List.get_filterset_class">
 <span class="sig-name descname"><span class="pre">get_filterset_class</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_filterset_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_filterset_class" title="Link to this definition"></a></dt>
 <dd><p>Returns the filterset class to use in this view</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.generic.views.List.get_queryset">
-<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_queryset" title="Link to this definition"></a></dt>
-<dd><p>Return the list of items for this view.</p>
-<p>The return value must be an iterable and may be an instance of
-<cite>QuerySet</cite> in which case <cite>QuerySet</cite> specific behavior will be enabled.</p>
 </dd></dl>
 
 <dl class="py method">
