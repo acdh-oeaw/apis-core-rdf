@@ -98,42 +98,15 @@ APIS_NEXT_PREV
     APIS_NEXT_PREV = True
 
 
-APIS_LIST_VIEWS_ALLOWED
+APIS_ANON_VIEWS_ALLOWED
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    APIS_LIST_VIEWS_ALLOWED = False
+    APIS_ANON_VIEWS_ALLOWED = False
 
-
-Sets whether list views are accessible for anonymous (not logged in) users.
-
-
-APIS_DETAIL_VIEWS_ALLOWED
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-    
-    APIS_DETAIL_VIEWS_ALLOWED - False
-
-
-Sets whether detail views are accessible for anonymous (note logged in) users.
-
-APIS_VIEW_PASSES_TEST
-^^^^^^^^^^^^^^^^^^^^^
-
-Allows to define a function that receives the view as an argument - including
-e.g. the `request` object - and can perform checks on any of the views
-attributes. The function can, based on these checks, return a boolean which
-decides if the request is successful or leads to a 403 permission denied.
-
-APIS_LIST_VIEW_OBJECT_FILTER
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Allows to define a function that receives the view - including e.g. the
-`request` object - and a queryset and can do custom filtering on that queryset.
-This can be used to set the listviews to public using the
-`APIS_LIST_VIEWS_ALLOWED` setting, but still only list specific entities.
+Sets whether list and detail views are accessible for anonymous (not logged in) users.
+If only a subset of the data should be exposed to the anonymous user, use `custom managers <https://docs.djangoproject.com/en/stable/topics/db/managers/#custom-managers>`_.
 
 
 Maintenance Middleware
