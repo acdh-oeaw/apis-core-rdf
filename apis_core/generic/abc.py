@@ -7,7 +7,7 @@ from django.db.models.query import QuerySet
 from django.forms import model_to_dict
 from django.urls import reverse
 
-from apis_core.generic.helpers import permission_fullname
+from apis_core.generic.helpers import mro_paths, permission_fullname
 from apis_core.generic.signals import (
     post_duplicate,
     post_merge_with,
@@ -38,6 +38,10 @@ class GenericModel:
     def get_importview_url(cls):
         ct = ContentType.objects.get_for_model(cls)
         return reverse("apis_core:generic:import", args=[ct])
+
+    @classmethod
+    def get_openapi_tags(cls):
+        return [item[-1] for item in mro_paths(cls)]
 
     def get_edit_url(self):
         ct = ContentType.objects.get_for_model(self)
