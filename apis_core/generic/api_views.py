@@ -1,5 +1,7 @@
 from rest_framework import viewsets
 
+from apis_core.generic.schema import GenericAutoSchema
+
 from .filterbackends import GenericFilterBackend
 from .helpers import first_member_match, makeclassprefix, module_paths
 from .serializers import GenericHyperlinkedModelSerializer, serializer_factory
@@ -15,6 +17,7 @@ class ModelViewSet(viewsets.ModelViewSet):
     """
 
     filter_backends = [GenericFilterBackend]
+    schema = GenericAutoSchema()
 
     def dispatch(self, *args, **kwargs):
         self.model = kwargs.get("contenttype").model_class()
