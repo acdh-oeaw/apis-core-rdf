@@ -1,7 +1,13 @@
+import re
+
+from AcdhArcheAssets.uri_norm_rules import get_rules
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
+from rdflib import Graph, Literal, Namespace, URIRef
+from rdflib.namespace import OWL, RDF, RDFS
 from rest_framework.reverse import reverse
 from rest_framework.serializers import (
+    BaseSerializer,
     CharField,
     HyperlinkedModelSerializer,
     HyperlinkedRelatedField,
@@ -9,6 +15,9 @@ from rest_framework.serializers import (
     Serializer,
     SerializerMethodField,
 )
+
+from apis_core.generic.utils.rdf_namespace import APPELLATION, ATTRIBUTES, CRM
+from apis_core.utils.settings import apis_base_uri, rdf_namespace_prefix
 
 
 class GenericHyperlinkedRelatedField(HyperlinkedRelatedField):
@@ -87,3 +96,88 @@ class SimpleObjectSerializer(Serializer):
     def get_content_type_name(self, obj) -> str:
         content_type = ContentType.objects.get_for_model(obj)
         return content_type.name
+
+
+class GenericModelCidocSerializer(BaseSerializer):
+    def __init__(self, *args, **kwargs):
+        self.base_uri = f"{apis_base_uri()}"
+        self.rdf_nsp_base = rdf_namespace_prefix()
+        self.appellation_nsp_prefix = f"{self.rdf_nsp_base}-appellation"
+        self.attr_nsp_prefix = f"{self.rdf_nsp_base}-attr"
+        super().__init__(*args, **kwargs)
+
+    def create_sameas(self, g, instance):
+        # add the ID as APIS Identifier
+        apis_id = URIRef(ATTRIBUTES[f"apis-identifier/{instance.pk}"])
+        g.add((apis_id, RDF.type, CRM.E42_Identifier))
+        g.add((apis_id, RDFS.label, Literal(instance.pk)))
+
+        # APIS internal identifier type
+        apis_id_type = URIRef(ATTRIBUTES["apis-identifier/type"])
+        g.add((apis_id, CRM.P2_has_type, apis_id_type))
+        g.add((apis_id_type, RDF.type, CRM.E55_Type))
+        g.add((apis_id_type, RDFS.label, Literal("APIS internal identifier")))
+        g.add((self.instance_uri, CRM.P1_is_identified_by, apis_id))
+
+        for uri in instance.uri_set():
+            g.add((self.instance_uri, OWL.sameAs, URIRef(uri.uri)))
+
+            for x in get_rules():
+                if m := re.match(x["match"], uri.uri):
+                    id_type = URIRef(ATTRIBUTES[x["name"] + "-identifier/type"])
+                    g.add((id_type, RDF.type, CRM.E55_Type))
+                    g.add((id_type, RDFS.label, Literal(x["name"] + " ID")))
+                    id_uri = URIRef(
+                        ATTRIBUTES[x["name"] + f"-identifier/{instance.pk}"]
+                    )
+                    g.add((id_uri, RDF.type, CRM.E42_Identifier))
+                    g.add((id_uri, CRM.P2_has_type, id_type))
+                    g.add(
+                        (
+                            self.instance_uri,
+                            CRM.P1_is_identified_by,
+                            id_uri,
+                        )
+                    )
+                    g.add((id_uri, RDFS.label, Literal(m[1])))
+
+        return g
+
+    def to_representation(self, instance):
+        g = Graph()
+        content_type = ContentType.objects.get_for_model(instance)
+
+        g.namespace_manager.bind("crm", CRM, replace=True)
+        g.namespace_manager.bind("owl", OWL, replace=True)
+
+        g.namespace_manager.bind(self.appellation_nsp_prefix, APPELLATION, replace=True)
+        g.namespace_manager.bind(self.attr_nsp_prefix, ATTRIBUTES, replace=True)
+
+        self.instance_nsp_prefix = f"{self.rdf_nsp_base}-{content_type.name.lower()}"
+        self.instance_namespace = Namespace(self.base_uri + instance.get_listview_url())
+        g.namespace_manager.bind(self.instance_nsp_prefix, self.instance_namespace)
+
+        self.instance_uri = URIRef(self.instance_namespace[str(instance.id)])
+
+        # Add properties
+        self.appellation_uri = URIRef(APPELLATION[str(instance.id)])
+        g.add(
+            (
+                self.appellation_uri,
+                RDF.type,
+                CRM.E33_E41_Linguistic_Appellation,
+            )
+        )
+        g.add(
+            (
+                self.instance_uri,
+                CRM.P1_is_identified_by,
+                self.appellation_uri,
+            )
+        )
+        g.add((self.appellation_uri, RDFS.label, Literal(str(instance))))
+        g.add((self.instance_uri, RDFS.label, Literal(str(instance))))
+        # Add sameAs links
+        g = self.create_sameas(g, instance)
+
+        return g
