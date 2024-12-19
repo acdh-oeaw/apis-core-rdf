@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from django.urls import NoReverseMatch, reverse
 
 from apis_core.apis_metainfo.models import RootObject, Uri
+from apis_core.utils.settings import apis_base_uri
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
@@ -82,7 +83,7 @@ def create_default_uri(sender, instance, created, raw, using, update_fields, **k
     skip_default_uri = getattr(instance, "skip_default_uri", False)
     if create_default_uri and not skip_default_uri:
         if isinstance(instance, AbstractEntity) and created:
-            base = getattr(settings, "APIS_BASE_URI", "https://example.org").strip("/")
+            base = apis_base_uri().strip("/")
             try:
                 route = reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk})
             except NoReverseMatch:

@@ -34,7 +34,8 @@ def dict_from_toml_directory(directory: str) -> dict:
 
 
 def internal_uris() -> list[str]:
-    return set(
-        [getattr(settings, "APIS_BASE_URI", "https://example.org")]
-        + getattr(settings, "APIS_FORMER_BASE_URIS", [])
-    )
+    return set([apis_base_uri()] + getattr(settings, "APIS_FORMER_BASE_URIS", []))
+
+
+def apis_base_uri() -> str:
+    return getattr(settings, "APIS_BASE_URI", "https://example.org")
