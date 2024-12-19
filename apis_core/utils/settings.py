@@ -3,6 +3,7 @@
 
 import logging
 import tomllib
+from urllib.parse import urlparse
 
 from django.conf import settings
 from django.template.utils import get_app_template_dirs
@@ -39,3 +40,10 @@ def internal_uris() -> list[str]:
 
 def apis_base_uri() -> str:
     return getattr(settings, "APIS_BASE_URI", "https://example.org")
+
+
+def rdf_namespace_prefix() -> str:
+    if hasattr(settings, "APIS_RDF_NAMESPACE_PREFIX"):
+        return settings.APIS_RDF_NAMESPACE_PREFIX
+    base_uri = urlparse(apis_base_uri())
+    return base_uri.hostname.split(".", 1)[0]

@@ -14,6 +14,7 @@ from apis_core.generic.signals import (
     pre_duplicate,
     pre_merge_with,
 )
+from apis_core.utils.settings import rdf_namespace_prefix
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +47,11 @@ class GenericModel:
     @classmethod
     def get_openapi_tags(cls):
         return [item[-1] for item in mro_paths(cls)]
+
+    @classmethod
+    def get_namespace_prefix(cls):
+        ct = ContentType.objects.get_for_model(cls)
+        return f"{rdf_namespace_prefix()}-{ct.name.lower()}"
 
     def get_edit_url(self):
         ct = ContentType.objects.get_for_model(self)
