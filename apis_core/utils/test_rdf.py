@@ -31,9 +31,9 @@ class Institution(E74_Group):
 class RdfTest(TestCase):
     def test_get_definition_from_dict_place_from_geonames(self):
         achensee = {
-            "latitude": "47.5",
-            "longitude": "11.7",
-            "label": "Achensee",
+            "latitude": ["47.5"],
+            "longitude": ["11.7"],
+            "label": ["Achensee"],
         }
         # https://www.geonames.org/2783029/achensee.html
         uri = str(testdata / "achensee.rdf")
@@ -43,7 +43,11 @@ class RdfTest(TestCase):
         self.assertEqual(achensee, attributes)
 
     def test_get_definition_from_dict_place_from_dnb(self):
-        wien = {"label": "Wien", "latitude": "048.208199", "longitude": "016.371690"}
+        wien = {
+            "label": ["Wien"],
+            "latitude": ["048.208199"],
+            "longitude": ["016.371690"],
+        }
         # https://d-nb.info/gnd/4066009-6
         uri = str(testdata / "wien.rdf")
 
@@ -53,21 +57,30 @@ class RdfTest(TestCase):
 
     def test_get_definition_from_dict_person_from_dnb(self):
         pierre = {
-            "forename": "Pierre",
-            "surname": "Ramus",
-            "date_of_birth": "1882-04-15",
-            "date_of_death": "1942",
+            "forename": ["Pierre"],
+            "surname": ["Ramus"],
+            "alternative_names": [
+                "Ramus, Pʹer",
+                "Großmann, Rudolf",
+                "Grossmann, Rudolf",
+                "Grossman, Rudolf",
+                "Grossman, Rodolphe",
+                "Grossmann, Rodolphe",
+                "Libertarian, ...",
+            ],
+            "date_of_birth": ["1882-04-15"],
+            "date_of_death": ["1942"],
         }
         # https://d-nb.info/gnd/118833197
         uri = str(testdata / "ramus.rdf")
 
         person = Person()
         defintion, attributes = rdf.get_definition_and_attributes_from_uri(uri, person)
-        self.assertEqual(pierre, attributes)
+        self.assertEqual(pierre, dict(attributes))
 
     def test_get_definition_from_dict_institution_from_dnb(self):
         pierre_ges = {
-            "label": "Pierre-Ramus-Gesellschaft",
+            "label": ["Pierre-Ramus-Gesellschaft"],
         }
         # https://d-nb.info/gnd/415006-5
         uri = str(testdata / "ramus_gesellschaft.rdf")
@@ -76,11 +89,11 @@ class RdfTest(TestCase):
         defintion, attributes = rdf.get_definition_and_attributes_from_uri(
             uri, institution
         )
-        self.assertEqual(pierre_ges, attributes)
+        self.assertEqual(pierre_ges, dict(attributes))
 
     def test_get_definition_from_dict_institution_from_dnb2(self):
         pierre_ges = {
-            "label": "Akademie der Wissenschaften in Wien",
+            "label": ["Akademie der Wissenschaften in Wien"],
         }
         # https://d-nb.info/gnd/35077-1
         uri = str(testdata / "oeaw.rdf")
@@ -89,4 +102,4 @@ class RdfTest(TestCase):
         defintion, attributes = rdf.get_definition_and_attributes_from_uri(
             uri, institution
         )
-        self.assertEqual(pierre_ges, attributes)
+        self.assertEqual(pierre_ges, dict(attributes))
