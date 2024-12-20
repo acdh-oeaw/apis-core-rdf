@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.35.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.34.1...v0.35.0) (2024-12-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** APIS_LIST_VIEWS_ALLOWED and APIS_DETAIL_VIEWS_ALLOWED are replaced with a single setting APIS_ANON_VIEWS_ALLOWED When APIS_ANON_VIEWS_ALLOWED is set to True List views and Detail views will be open to anyone, without having to login. APIS_LIST_VIEW_OBJECT_FILTER and APIS_VIEW_PASSES_TEST are no longer supported. Custom managers should be used instead.
+* **generic,apis_metainfo:** move duplicate signals to generic app
+
+### Features
+
+* **core:** introduce a MaintenanceMiddleware ([dc0cda0](https://github.com/acdh-oeaw/apis-core-rdf/commit/dc0cda03c59c9fff24224543f5c2a4bc6bb5426f)), closes [#1296](https://github.com/acdh-oeaw/apis-core-rdf/issues/1296)
+* **generic:** APIS_ANON_VIEWS_ALLOWED setting ([f2e0b2f](https://github.com/acdh-oeaw/apis-core-rdf/commit/f2e0b2f9ac5f43154049284529e9ec9e1af393c7)), closes [#1400](https://github.com/acdh-oeaw/apis-core-rdf/issues/1400)
+
+
+### Bug Fixes
+
+* **generic:** remove .html from template_name_suffix ([9944661](https://github.com/acdh-oeaw/apis-core-rdf/commit/994466155def462374a95d96aad2b65cd6837ef7))
+
+
+### Documentation
+
+* add documentation regarding MaintenanceMiddleware ([516b07c](https://github.com/acdh-oeaw/apis-core-rdf/commit/516b07c9f16a0cb5075947346fa69b4e6dc89a8d))
+* **configuration:** update configs for anonymous views ([6f28df6](https://github.com/acdh-oeaw/apis-core-rdf/commit/6f28df6a83ce3f2a2059f52c01b2de7b9f0d35c2))
+
+
+### Code Refactoring
+
+* **generic,apis_metainfo:** move duplicate signals to generic app ([3e20f06](https://github.com/acdh-oeaw/apis-core-rdf/commit/3e20f067e7ff412547ef0d2534e4eadb585789fc))
+
 ## [0.34.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.34.0...v0.34.1) (2024-12-11)
 
 
