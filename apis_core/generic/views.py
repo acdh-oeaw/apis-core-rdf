@@ -366,7 +366,7 @@ class SelectMergeOrEnrich(GenericModelMixin, PermissionRequiredMixin, FormView):
     external sources, if set up) and on form submit redirects to the Enrich view.
     """
 
-    template_name_suffix = "_selectmergeorenrich.html"
+    template_name_suffix = "_selectmergeorenrich"
     permission_action_required = "create"
     form_class = GenericSelectMergeOrEnrichForm
 
