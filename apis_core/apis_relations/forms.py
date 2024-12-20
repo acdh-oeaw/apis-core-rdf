@@ -129,10 +129,11 @@ class GenericTripleForm(forms.ModelForm):
         self.fields["property"].initial = property_initial_value
         self.fields["property"].choices = [property_initial_value]
 
+        content_type = ContentType.objects.get_for_model(entity_instance_other)
         other_entity_initial_value = (
             str(
                 Uri.objects.filter(
-                    root_object=entity_instance_other,
+                    content_type=content_type, object_id=entity_instance_other.id
                 ).first()
             ),
             f"<span ><small>db</small> {str(entity_instance_other)}</span>",

@@ -1,5 +1,6 @@
 from urllib.parse import urlsplit
 
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
@@ -66,9 +67,9 @@ class UriManager(models.Manager):
 
 class Uri(GenericModel, models.Model):
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
-    root_object = InheritanceForeignKey(
-        RootObject, blank=True, null=True, on_delete=models.CASCADE
-    )
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    content_object = GenericForeignKey()
 
     objects = UriManager()
 
@@ -79,9 +80,9 @@ class Uri(GenericModel, models.Model):
         result = {
             "relation_pk": self.pk,
             "relation_type": "uri",
-            "related_root_object": self.root_object.name,
-            "related_root_object_url": self.root_object.get_absolute_url(),
-            "related_root_object_class_name": self.root_object.__class__.__name__.lower(),
+            "related_root_object": self.content_object.name,
+            "related_root_object_url": self.content_object.get_absolute_url(),
+            "related_root_object_class_name": self.content_object.__class__.__name__.lower(),
             "uri": self.uri,
         }
         return result
@@ -92,7 +93,7 @@ class Uri(GenericModel, models.Model):
 
     def clean(self):
         self.uri = clean_uri(self.uri)
-        if self.uri and not hasattr(self, "root_object"):
+        if self.uri and not hasattr(self, "content_object"):
             try:
                 definition, attributes = rdf.get_definition_and_attributes_from_uri(
                     self.uri
@@ -102,7 +103,8 @@ class Uri(GenericModel, models.Model):
                     ct = ContentType.objects.get_by_natural_key(app_label, model)
                     obj = ct.model_class()(**attributes)
                     obj.save()
-                    self.root_object = obj
+                    self.content_type = ContentType.objects.get_for_model(obj)
+                    self.object_id = obj.id
                 else:
                     raise ImproperlyConfigured(
                         f"{self.uri}: did not find matching rdf defintion"
