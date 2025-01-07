@@ -83,6 +83,8 @@
   <h1>Source code for apis_core.generic.api_views</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">viewsets</span>
 
+<span class="kn">from</span> <span class="nn">apis_core.generic.schema</span> <span class="kn">import</span> <span class="n">GenericAutoSchema</span>
+
 <span class="kn">from</span> <span class="nn">.filterbackends</span> <span class="kn">import</span> <span class="n">GenericFilterBackend</span>
 <span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="n">first_member_match</span><span class="p">,</span> <span class="n">makeclassprefix</span><span class="p">,</span> <span class="n">module_paths</span>
 <span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">GenericHyperlinkedModelSerializer</span><span class="p">,</span> <span class="n">serializer_factory</span>
@@ -100,6 +102,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">filter_backends</span> <span class="o">=</span> <span class="p">[</span><span class="n">GenericFilterBackend</span><span class="p">]</span>
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">GenericAutoSchema</span><span class="p">()</span>
 
 <div class="viewcode-block" id="ModelViewSet.dispatch">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet.dispatch">[docs]</a>
@@ -150,7 +153,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2016-2024, Matthias Schlögl, Birger Schacht, K Kollmann, Saranya Balasubramanian.</p>
+    <p>&#169; Copyright 2016-2025, Matthias Schlögl, Birger Schacht, K Kollmann, Saranya Balasubramanian.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

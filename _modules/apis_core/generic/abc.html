@@ -90,7 +90,7 @@
 <span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">model_to_dict</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">permission_fullname</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">mro_paths</span><span class="p">,</span> <span class="n">permission_fullname</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.signals</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">post_duplicate</span><span class="p">,</span>
     <span class="n">post_merge_with</span><span class="p">,</span>
@@ -131,6 +131,13 @@
     <span class="k">def</span> <span class="nf">get_importview_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:import&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="GenericModel.get_openapi_tags">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_openapi_tags">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_openapi_tags</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">mro_paths</span><span class="p">(</span><span class="bp">cls</span><span class="p">)]</span></div>
 
 
 <div class="viewcode-block" id="GenericModel.get_edit_url">
@@ -375,7 +382,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2016-2024, Matthias Schlögl, Birger Schacht, K Kollmann, Saranya Balasubramanian.</p>
+    <p>&#169; Copyright 2016-2025, Matthias Schlögl, Birger Schacht, K Kollmann, Saranya Balasubramanian.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

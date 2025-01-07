@@ -274,6 +274,11 @@ in self is not set, otherwise it keeps the value in self.</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_openapi_tags">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_openapi_tags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_openapi_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_openapi_tags" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.abc.GenericModel.get_select_merge_or_enrich_url">
 <span class="sig-name descname"><span class="pre">get_select_merge_or_enrich_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/abc.html#GenericModel.get_select_merge_or_enrich_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.abc.GenericModel.get_select_merge_or_enrich_url" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -367,6 +372,13 @@ serializations depending on the incoming request.</p>
 <dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.name">
 <span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.schema">
+<span class="sig-name descname"><span class="pre">schema</span></span><a class="headerlink" href="#apis_core.generic.api_views.ModelViewSet.schema" title="Link to this definition"></a></dt>
+<dd><p>Add an option to the default drf_spectacular schema that
+allows to set the tags of a route via the model.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.api_views.ModelViewSet.suffix">
@@ -674,6 +686,23 @@ by setting the APIRootView to our CustomAPIRootView.</p>
 <dt class="sig sig-object py" id="apis_core.generic.routers.CustomDefaultRouter.APIRootView">
 <span class="sig-name descname"><span class="pre">APIRootView</span></span><a class="headerlink" href="#apis_core.generic.routers.CustomDefaultRouter.APIRootView" title="Link to this definition"></a></dt>
 <dd><p>alias of <a class="reference internal" href="#apis_core.generic.routers.CustomAPIRootView" title="apis_core.generic.routers.CustomAPIRootView"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomAPIRootView</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-apis_core.generic.schema">
+<span id="apis-core-generic-schema-module"></span><h2>apis_core.generic.schema module<a class="headerlink" href="#module-apis_core.generic.schema" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.schema.GenericAutoSchema">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.schema.</span></span><span class="sig-name descname"><span class="pre">GenericAutoSchema</span></span><a class="reference internal" href="../_modules/apis_core/generic/schema.html#GenericAutoSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.schema.GenericAutoSchema" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AutoSchema</span></code></p>
+<p>Add an option to the default drf_spectacular schema that
+allows to set the tags of a route via the model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.schema.GenericAutoSchema.get_tags">
+<span class="sig-name descname"><span class="pre">get_tags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/apis_core/generic/schema.html#GenericAutoSchema.get_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.schema.GenericAutoSchema.get_tags" title="Link to this definition"></a></dt>
+<dd><p>override this for custom behaviour</p>
 </dd></dl>
 
 </dd></dl>
@@ -1496,7 +1525,7 @@ keyword arguments, and other things.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2016-2024, Matthias Schlögl, Birger Schacht, K Kollmann, Saranya Balasubramanian.</p>
+    <p>&#169; Copyright 2016-2025, Matthias Schlögl, Birger Schacht, K Kollmann, Saranya Balasubramanian.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

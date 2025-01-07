@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.apis_entities.utils &mdash; APIS 0.34.1 documentation</title>
+  <title>apis_core.generic.schema &mdash; APIS 0.34.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
@@ -71,7 +71,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.apis_entities.utils</li>
+      <li class="breadcrumb-item active">apis_core.generic.schema</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -80,24 +80,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.apis_entities.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">apps</span>
-<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
-
-<span class="kn">from</span> <span class="nn">apis_core.apis_entities.models</span> <span class="kn">import</span> <span class="n">AbstractEntity</span>
+  <h1>Source code for apis_core.generic.schema</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">drf_spectacular.openapi</span> <span class="kn">import</span> <span class="n">AutoSchema</span>
 
 
-<div class="viewcode-block" id="get_entity_classes">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.utils.get_entity_classes">[docs]</a>
-<span class="k">def</span> <span class="nf">get_entity_classes</span><span class="p">():</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">AbstractEntity</span><span class="p">),</span> <span class="n">apps</span><span class="o">.</span><span class="n">get_models</span><span class="p">()))</span></div>
+<div class="viewcode-block" id="GenericAutoSchema">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.api_views.GenericAutoSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericAutoSchema</span><span class="p">(</span><span class="n">AutoSchema</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add an option to the default drf_spectacular schema that</span>
+<span class="sd">    allows to set the tags of a route via the model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-
-
-<div class="viewcode-block" id="get_entity_content_types">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.utils.get_entity_content_types">[docs]</a>
-<span class="k">def</span> <span class="nf">get_entity_content_types</span><span class="p">():</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">get_entity_classes</span><span class="p">()]</span></div>
+<div class="viewcode-block" id="GenericAutoSchema.get_tags">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.api_views.GenericAutoSchema.get_tags">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;get_openapi_tags&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">get_openapi_tags</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_tags</span><span class="p">()</span></div>
+</div>
 
 </pre></div>
 
