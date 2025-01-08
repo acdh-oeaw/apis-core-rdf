@@ -1,5 +1,45 @@
 # Changelog
 
+## [0.35.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.34.1...v0.35.0) (2025-01-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** APIS_LIST_VIEWS_ALLOWED and APIS_DETAIL_VIEWS_ALLOWED are replaced with a single setting APIS_ANON_VIEWS_ALLOWED When APIS_ANON_VIEWS_ALLOWED is set to True List views and Detail views will be open to anyone, without having to login. APIS_LIST_VIEW_OBJECT_FILTER and APIS_VIEW_PASSES_TEST are no longer supported. Custom managers should be used instead.
+* **generic,apis_metainfo:** move duplicate signals to generic app
+
+### Features
+
+* **apis_entities:** update `create_default_uri` to use generic uri ([2050de3](https://github.com/acdh-oeaw/apis-core-rdf/commit/2050de3acb5fd83ab29769f72246ad5d601403a4))
+* **apis_metainfo:** add a signal to remove unused Uris ([e64182c](https://github.com/acdh-oeaw/apis-core-rdf/commit/e64182c630086432764719517969b4db7061f430))
+* **apis_metainfo:** replace Uri.root_object with GenericForeignKey ([43aec8b](https://github.com/acdh-oeaw/apis-core-rdf/commit/43aec8b3c0572774601a886d21c10c83ad56a59c))
+* **apis_relations:** update GenericTripleForm to work with generic uri ([e4e5616](https://github.com/acdh-oeaw/apis-core-rdf/commit/e4e5616fa02b4e5dba7653d28a306daa49b3136c))
+* **core:** introduce a MaintenanceMiddleware ([dc0cda0](https://github.com/acdh-oeaw/apis-core-rdf/commit/dc0cda03c59c9fff24224543f5c2a4bc6bb5426f)), closes [#1296](https://github.com/acdh-oeaw/apis-core-rdf/issues/1296)
+* **generic:** add `uri_set` method to GenericModel ([a95c076](https://github.com/acdh-oeaw/apis-core-rdf/commit/a95c0767b19602b6bbb3b935797335df69e6c2f1))
+* **generic:** add a `get_openapi_tags` class method ([512f769](https://github.com/acdh-oeaw/apis-core-rdf/commit/512f7692698b898356324ebd9495fcb43052ce15))
+* **generic:** APIS_ANON_VIEWS_ALLOWED setting ([f2e0b2f](https://github.com/acdh-oeaw/apis-core-rdf/commit/f2e0b2f9ac5f43154049284529e9ec9e1af393c7)), closes [#1400](https://github.com/acdh-oeaw/apis-core-rdf/issues/1400)
+* **generic:** introduce custom AutoSchema for schema customization ([7b4646d](https://github.com/acdh-oeaw/apis-core-rdf/commit/7b4646df5f4d9756a6be74cb900e63f9176369dd))
+* **generic:** update Enrichview & GenericModel to work with generic uri ([c5dbc80](https://github.com/acdh-oeaw/apis-core-rdf/commit/c5dbc80f16a5a3e8d1cb39f5a8e9e7380df1c0f5))
+* **generic:** use GenericAutoSchema in ModelViewSet ([454de2f](https://github.com/acdh-oeaw/apis-core-rdf/commit/454de2fa0281e2f0b3df6b1260884c34962420a5))
+* **utils:** update create_object_from_uri to work with generic uri ([1ccfffe](https://github.com/acdh-oeaw/apis-core-rdf/commit/1ccfffe8525b0397349a4e022c32e26cabe9acba))
+
+
+### Bug Fixes
+
+* **generic:** remove .html from template_name_suffix ([9944661](https://github.com/acdh-oeaw/apis-core-rdf/commit/994466155def462374a95d96aad2b65cd6837ef7))
+
+
+### Documentation
+
+* add documentation regarding MaintenanceMiddleware ([516b07c](https://github.com/acdh-oeaw/apis-core-rdf/commit/516b07c9f16a0cb5075947346fa69b4e6dc89a8d))
+* **configuration:** add APIS_FORMER_BASE_URIS setting ([46223a9](https://github.com/acdh-oeaw/apis-core-rdf/commit/46223a908eea25c5cfefa040ac62bbd168e0e4eb))
+* **configuration:** update configs for anonymous views ([6f28df6](https://github.com/acdh-oeaw/apis-core-rdf/commit/6f28df6a83ce3f2a2059f52c01b2de7b9f0d35c2))
+
+
+### Code Refactoring
+
+* **generic,apis_metainfo:** move duplicate signals to generic app ([3e20f06](https://github.com/acdh-oeaw/apis-core-rdf/commit/3e20f067e7ff412547ef0d2534e4eadb585789fc))
+
 ## [0.34.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.34.0...v0.34.1) (2024-12-11)
 
 
