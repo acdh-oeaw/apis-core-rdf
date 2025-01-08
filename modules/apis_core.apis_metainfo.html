@@ -203,6 +203,16 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#module-apis_core.apis_metainfo.migrations.0015_uri_content_type_uri_object_id">apis_core.apis_metainfo.migrations.0015_uri_content_type_uri_object_id module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#apis_core.apis_metainfo.migrations.0015_uri_content_type_uri_object_id.Migration"><code class="docutils literal notranslate"><span class="pre">Migration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#apis_core.apis_metainfo.migrations.0015_uri_content_type_uri_object_id.Migration.dependencies"><code class="docutils literal notranslate"><span class="pre">Migration.dependencies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#apis_core.apis_metainfo.migrations.0015_uri_content_type_uri_object_id.Migration.operations"><code class="docutils literal notranslate"><span class="pre">Migration.operations</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#apis_core.apis_metainfo.migrations.0015_uri_content_type_uri_object_id.copy_root_object"><code class="docutils literal notranslate"><span class="pre">copy_root_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.apis_metainfo.migrations.html#apis_core.apis_metainfo.migrations.0015_uri_content_type_uri_object_id.reverse_copy_root_object"><code class="docutils literal notranslate"><span class="pre">reverse_copy_root_object()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -245,17 +255,6 @@
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.filtersets.UriFilterSet">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.filtersets.</span></span><span class="sig-name descname"><span class="pre">UriFilterSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/filtersets.html#UriFilterSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.filtersets.UriFilterSet" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet" title="apis_core.generic.filtersets.GenericFilterSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericFilterSet</span></code></a></p>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.filtersets.UriFilterSet.Meta">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/filtersets.html#UriFilterSet.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.filtersets.UriFilterSet.Meta" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet.Meta" title="apis_core.generic.filtersets.GenericFilterSet.Meta"><code class="xref py py-class docutils literal notranslate"><span class="pre">Meta</span></code></a></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.filtersets.UriFilterSet.Meta.exclude">
-<span class="sig-name descname"><span class="pre">exclude</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['root_object']</span></em><a class="headerlink" href="#apis_core.apis_metainfo.filtersets.UriFilterSet.Meta.exclude" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.filtersets.UriFilterSet.base_filters">
 <span class="sig-name descname"><span class="pre">base_filters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'uri':</span> <span class="pre">&lt;django_filters.filters.CharFilter</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_metainfo.filtersets.UriFilterSet.base_filters" title="Link to this definition"></a></dt>
@@ -421,26 +420,11 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <span class="sig-name descname"><span class="pre">self_contenttype_id</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.self_contenttype_id" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.RootObject.uri_set">
-<span class="sig-name descname"><span class="pre">uri_set</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.RootObject.uri_set" title="Link to this definition"></a></dt>
-<dd><p>Accessor to the related objects manager on the reverse side of a
-many-to-one relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.models.</span></span><span class="sig-name descname"><span class="pre">Uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/models.html#Uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.models.</span></span><span class="sig-name descname"><span class="pre">Uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/models.html#Uri"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.abc.GenericModel" title="apis_core.generic.abc.GenericModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.DoesNotExist">
@@ -463,6 +447,33 @@ by this method will not be associated with a particular field; it will
 have a special-case association with the field defined by NON_FIELD_ERRORS.</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.content_object">
+<span class="sig-name descname"><span class="pre">content_object</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.content_object" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.content_type" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.content_type_id">
+<span class="sig-name descname"><span class="pre">content_type_id</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.content_type_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.get_web_object">
 <span class="sig-name descname"><span class="pre">get_web_object</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/models.html#Uri.get_web_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.get_web_object" title="Link to this definition"></a></dt>
@@ -481,18 +492,15 @@ object the first time, the query is executed.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.object_id">
+<span class="sig-name descname"><span class="pre">object_id</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.object_id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.objects">
 <span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;apis_core.apis_metainfo.models.UriManager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.objects" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.root_object">
-<span class="sig-name descname"><span class="pre">root_object</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.root_object" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.models.Uri.root_object_id">
-<span class="sig-name descname"><span class="pre">root_object_id</span></span><a class="headerlink" href="#apis_core.apis_metainfo.models.Uri.root_object_id" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -569,6 +577,14 @@ so that we can present a helpful representation of the object.</p>
 </dd></dl>
 
 </section>
+<section id="module-apis_core.apis_metainfo.signals">
+<span id="apis-core-apis-metainfo-signals-module"></span><h2>apis_core.apis_metainfo.signals module<a class="headerlink" href="#module-apis_core.apis_metainfo.signals" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.apis_metainfo.signals.remove_stale_uris">
+<span class="sig-prename descclassname"><span class="pre">apis_core.apis_metainfo.signals.</span></span><span class="sig-name descname"><span class="pre">remove_stale_uris</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/signals.html#remove_stale_uris"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.signals.remove_stale_uris" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
 <section id="module-apis_core.apis_metainfo.tables">
 <span id="apis-core-apis-metainfo-tables-module"></span><h2>apis_core.apis_metainfo.tables module<a class="headerlink" href="#module-apis_core.apis_metainfo.tables" title="Link to this heading"></a></h2>
 <dl class="py class">
@@ -586,7 +602,7 @@ so that we can present a helpful representation of the object.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.tables.UriTable.Meta.fields">
-<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'uri',</span> <span class="pre">'entity',</span> <span class="pre">'ent_type']</span></em><a class="headerlink" href="#apis_core.apis_metainfo.tables.UriTable.Meta.fields" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'uri',</span> <span class="pre">'entity',</span> <span class="pre">'content_type']</span></em><a class="headerlink" href="#apis_core.apis_metainfo.tables.UriTable.Meta.fields" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -599,12 +615,7 @@ so that we can present a helpful representation of the object.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.apis_metainfo.tables.UriTable.base_columns">
-<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'delete':</span> <span class="pre">&lt;apis_core.generic.tables.DeleteColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'edit':</span> <span class="pre">&lt;apis_core.generic.tables.EditColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'ent_type':</span> <span class="pre">&lt;django_tables2.columns.templatecolumn.TemplateColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'entity':</span> <span class="pre">&lt;django_tables2.columns.templatecolumn.TemplateColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'id':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'uri':</span> <span class="pre">&lt;django_tables2.columns.urlcolumn.URLColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'view':</span> <span class="pre">&lt;apis_core.generic.tables.ViewColumn</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_metainfo.tables.UriTable.base_columns" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_metainfo.tables.UriTable.order_ent_type">
-<span class="sig-name descname"><span class="pre">order_ent_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_descending</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_metainfo/tables.html#UriTable.order_ent_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_metainfo.tables.UriTable.order_ent_type" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">base_columns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'content_type':</span> <span class="pre">&lt;django_tables2.columns.templatecolumn.TemplateColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'delete':</span> <span class="pre">&lt;apis_core.generic.tables.DeleteColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'edit':</span> <span class="pre">&lt;apis_core.generic.tables.EditColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'entity':</span> <span class="pre">&lt;django_tables2.columns.templatecolumn.TemplateColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'id':</span> <span class="pre">&lt;django_tables2.columns.base.Column</span> <span class="pre">object&gt;,</span> <span class="pre">'uri':</span> <span class="pre">&lt;django_tables2.columns.urlcolumn.URLColumn</span> <span class="pre">object&gt;,</span> <span class="pre">'view':</span> <span class="pre">&lt;apis_core.generic.tables.ViewColumn</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#apis_core.apis_metainfo.tables.UriTable.base_columns" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

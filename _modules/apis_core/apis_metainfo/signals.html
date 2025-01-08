@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>apis_core.apis_metainfo.tables &mdash; APIS 0.34.1 documentation</title>
+  <title>apis_core.apis_metainfo.signals &mdash; APIS 0.34.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
@@ -71,7 +71,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">apis_core.apis_metainfo.tables</li>
+      <li class="breadcrumb-item active">apis_core.apis_metainfo.signals</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -80,34 +80,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for apis_core.apis_metainfo.tables</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">django_tables2</span> <span class="k">as</span> <span class="nn">tables</span>
+  <h1>Source code for apis_core.apis_metainfo.signals</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.generic.tables</span> <span class="kn">import</span> <span class="n">GenericTable</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_delete</span>
+<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Uri</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="UriTable">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable">[docs]</a>
-<span class="k">class</span> <span class="nc">UriTable</span><span class="p">(</span><span class="n">GenericTable</span><span class="p">):</span>
-    <span class="n">entity</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
-        <span class="s2">&quot;&lt;a href=&#39;{{ record.content_object.get_absolute_url }}&#39;&gt;{{ record.content_object }}&lt;/a&gt;&quot;</span><span class="p">,</span>
-        <span class="n">orderable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;related Entity&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">content_type</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">(</span>
-        <span class="s2">&quot;{{ record.content_type.model }}&quot;</span><span class="p">,</span>
-        <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Entity Type&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-<div class="viewcode-block" id="UriTable.Meta">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta">[docs]</a>
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">GenericTable</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">Uri</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="s2">&quot;content_type&quot;</span><span class="p">]</span>
-        <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;desc&quot;</span><span class="p">,)</span></div>
-</div>
+<div class="viewcode-block" id="remove_stale_uris">
+<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.signals.remove_stale_uris">[docs]</a>
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_delete</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">remove_stale_uris</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+    <span class="n">uris</span> <span class="o">=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">uris</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Deleting uri </span><span class="si">%s</span><span class="s2"> as a result of deleting </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">uri</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">uri</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
 
 </pre></div>
 
