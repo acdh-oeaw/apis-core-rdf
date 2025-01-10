@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.35.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.35.0...v0.35.1) (2025-01-10)
+
+
+### Bug Fixes
+
+* **apis_metainfo:** check for numeric id before iterating related Uris ([a909428](https://github.com/acdh-oeaw/apis-core-rdf/commit/a90942853bedcbe5cd4ee801c9ac86c7b732df34))
+
 ## [0.35.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.34.1...v0.35.0) (2025-01-08)
 
 
