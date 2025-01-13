@@ -3,8 +3,6 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-import apis_core.apis_metainfo.models
-
 
 class Migration(migrations.Migration):
     initial = True
@@ -126,7 +124,7 @@ class Migration(migrations.Migration):
                 ("loaded_time", models.DateTimeField(blank=True, null=True)),
                 (
                     "root_object",
-                    apis_core.apis_metainfo.models.InheritanceForeignKey(
+                    models.ForeignKey(
                         blank=True,
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
