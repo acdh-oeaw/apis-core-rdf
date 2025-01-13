@@ -4,7 +4,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
-from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 from model_utils.managers import InheritanceManager
 
 from apis_core.generic.abc import GenericModel
@@ -35,17 +34,6 @@ class RootObject(GenericModel, models.Model):
     def save(self, *args, **kwargs):
         self.self_contenttype = ContentType.objects.get_for_model(self)
         super().save(*args, **kwargs)
-
-
-class InheritanceForwardManyToOneDescriptor(ForwardManyToOneDescriptor):
-    def get_queryset(self, **hints):
-        return self.field.remote_field.model.objects_inheritance.db_manager(
-            hints=hints
-        ).select_subclasses()
-
-
-class InheritanceForeignKey(models.ForeignKey):
-    forward_related_accessor_class = InheritanceForwardManyToOneDescriptor
 
 
 # Uri model
