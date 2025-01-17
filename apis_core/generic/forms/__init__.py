@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 
+from apis_core.collections.models import SkosCollection
 from apis_core.generic.abc import GenericModel
 from apis_core.generic.forms.fields import ModelImportChoiceField
 
@@ -64,6 +65,14 @@ class GenericModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["collections"] = forms.ModelMultipleChoiceField(
+            required=False, queryset=SkosCollection.objects.all()
+        )
+        if instance := kwargs.get("instance"):
+            self.fields["collections"].initial = SkosCollection.objects.by_instance(
+                instance
+            ).values_list("pk", flat=True)
+
         self.helper = FormHelper(self)
         self.helper.add_input(Submit("submit", "Submit"))
 
@@ -86,6 +95,15 @@ class GenericModelForm(forms.ModelForm):
                         url, attrs={"data-html": True}
                     )
                     self.fields[field].widget.choices = self.fields[field].choices
+
+    def save(self, *args, **kwargs):
+        instance = super().save(*args, **kwargs)
+        if collections := self.cleaned_data.get("collections"):
+            for collection in SkosCollection.objects.exclude(pk__in=collections):
+                collection.remove(instance)
+            for collection in SkosCollection.objects.filter(pk__in=collections):
+                collection.add(instance)
+        return instance
 
 
 class GenericSelectMergeOrEnrichForm(forms.Form):
