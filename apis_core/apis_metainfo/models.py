@@ -1,5 +1,6 @@
 from urllib.parse import urlsplit
 
+from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
@@ -10,7 +11,6 @@ from model_utils.managers import InheritanceManager
 from apis_core.generic.abc import GenericModel
 from apis_core.utils import rdf
 from apis_core.utils import settings as apis_settings
-from apis_core.utils.normalize import clean_uri
 
 
 class RootObject(GenericModel, models.Model):
@@ -56,7 +56,7 @@ class InheritanceForeignKey(models.ForeignKey):
 class UriQuerySet(models.query.QuerySet):
     def get(self, *args, **kwargs):
         if "uri" in kwargs:
-            kwargs["uri"] = clean_uri(kwargs["uri"])
+            kwargs["uri"] = get_normalized_uri(kwargs["uri"])
         return super().get(*args, **kwargs)
 
 
@@ -92,7 +92,7 @@ class Uri(GenericModel, models.Model):
         return super().save(*args, **kwargs)
 
     def clean(self):
-        self.uri = clean_uri(self.uri)
+        self.uri = get_normalized_uri(self.uri)
         if self.uri and not hasattr(self, "content_object"):
             try:
                 definition, attributes = rdf.get_definition_and_attributes_from_uri(
