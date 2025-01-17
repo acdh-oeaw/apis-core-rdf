@@ -3,9 +3,9 @@ import logging
 import urllib
 from functools import cache
 
+from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.core.exceptions import ImproperlyConfigured
 
-from apis_core.utils.normalize import clean_uri
 from apis_core.utils.rdf import get_definition_and_attributes_from_uri
 
 logger = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ class GenericModelImporter:
         return self.import_uri
 
     def clean_uri(self, uri):
-        return clean_uri(uri)
+        return get_normalized_uri(uri)
 
     @cache
     def request(self, uri):

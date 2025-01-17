@@ -1,8 +1,8 @@
+from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from apis_core.apis_metainfo.models import Uri
-from apis_core.utils.normalize import clean_uri
 
 
 class Command(BaseCommand):
@@ -13,7 +13,7 @@ class Command(BaseCommand):
         with transaction.atomic():
             for x in Uri.objects.all():
                 old_uri = x.uri
-                new_uri = clean_uri(old_uri)
+                new_uri = get_normalized_uri(old_uri)
                 if old_uri != new_uri:
                     x.uri = new_uri
                     x.save()

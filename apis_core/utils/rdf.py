@@ -6,9 +6,9 @@ import logging
 import re
 from typing import Tuple
 
+from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from rdflib import Graph
 
-from apis_core.utils.normalize import clean_uri
 from apis_core.utils.settings import dict_from_toml_directory
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ def get_definition_and_attributes_from_uri(
     The dict containing the parsed file contents also contains the filename, to
     make debugging a bit easier.
     """
-    uri = clean_uri(uri)
+    uri = get_normalized_uri(uri)
     graph = Graph()
     graph.parse(uri)
 
