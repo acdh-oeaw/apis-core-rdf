@@ -19,6 +19,15 @@ class SkosCollectionManager(models.Manager):
             parent = self.get(parent=parent, name=names.pop(0))
         return parent
 
+    def by_instance(self, instance):
+        content_type = ContentType.objects.get_for_model(instance)
+        scco = SkosCollectionContentObject.objects.filter(
+            content_type=content_type, object_id=instance.id
+        )
+        return self.get_queryset().filter(
+            pk__in=scco.values_list("collection", flat=True)
+        )
+
 
 class SkosCollection(GenericModel, models.Model):
     """
@@ -89,6 +98,18 @@ class SkosCollection(GenericModel, models.Model):
         for child in self.children():
             childtrees.extend(child.children_tree_as_list())
         return childtrees
+
+    def add(self, instance: object):
+        content_type = ContentType.objects.get_for_model(instance)
+        SkosCollectionContentObject.objects.get_or_create(
+            collection=self, content_type=content_type, object_id=instance.id
+        )
+
+    def remove(self, instance: object):
+        content_type = ContentType.objects.get_for_model(instance)
+        SkosCollectionContentObject.objects.filter(
+            collection=self, content_type=content_type, object_id=instance.id
+        ).delete()
 
 
 class SkosCollectionContentObject(GenericModel, models.Model):
