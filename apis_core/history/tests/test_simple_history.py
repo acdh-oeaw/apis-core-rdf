@@ -1,9 +1,7 @@
 from datetime import datetime, timedelta
 
-from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
-from apis_core.apis_relations.models import Property, TempTriple
 from sample_project.models import Person, Place, Profession
 
 
@@ -15,11 +13,6 @@ class SimpleHistoryTestCase(TestCase):
         self.Place = Place
         self.Profession = Profession
 
-        prop = Property.objects.create(
-            name_forward="geboren in", name_reverse="Geburtsort von"
-        )
-        prop.subj_class.add(ContentType.objects.get(model="person"))
-        prop.obj_class.add(ContentType.objects.get(model="place"))
         Person.objects.create(forename="John", surname="Doe")
         Place.objects.create(
             label="Steyr", _history_date=datetime.now() - timedelta(hours=0, minutes=50)
@@ -36,45 +29,6 @@ class SimpleHistoryTestCase(TestCase):
         self.assertEqual("Jane", pers.history.most_recent().forename)
         self.assertEqual("John", pers.history.earliest().forename)
 
-    def test_history_through_triples(self):
-        """Tests the newly introduced function for retrieving triples for a specific version of a model instance."""
-        # first entity
-        pers = self.Person.objects.get(forename="John")
-        # second entity
-        place = self.Place.objects.first()
-        # create a triple
-        tt1 = TempTriple.objects.create(
-            subj=pers, prop=Property.objects.first(), obj=place
-        )
-        # test that we get one triple version for both entities
-        self.assertEqual(len(pers.history.earliest().get_triples_for_version()), 1)
-        self.assertEqual(len(place.history.earliest().get_triples_for_version()), 1)
-        # change the triple and test again
-        tt1.start_date_written = "2020-01-01"
-        tt1.save()
-        triples = pers.history.earliest().get_triples_for_version()
-        self.assertEqual(len(triples), 1)
-        self.assertEqual(triples[0].start_date_written, "2020-01-01")
-        # change the place and test again
-        place2 = self.Place.objects.create(label="testplace")
-        tt1.obj = place2
-        tt1.save()
-        triples = place.history.earliest().get_triples_for_version()
-        self.assertEqual(len(triples), 1)
-        self.assertEqual(triples[0].obj, place)
-        triples = place2.history.earliest().get_triples_for_version()
-        self.assertEqual(len(triples), 1)
-        self.assertEqual(triples[0].obj, place2)
-        # given that the function should return the latest version of a triple, we should get the new place
-        triples = pers.history.earliest().get_triples_for_version()
-        self.assertEqual(len(triples), 1)
-        self.assertEqual(triples[0].obj, place2)
-        # test retrieving triples for a specific datetime
-        triples = pers.history.earliest().get_triples_for_version(
-            history_date=datetime.now() - timedelta(hours=0, minutes=40)
-        )
-        self.assertEqual(len(triples), 0)
-
     def test_history_tag(self):
         """Tests the version tag function."""
         pers = self.Person.objects.get(forename="John")
@@ -85,12 +39,8 @@ class SimpleHistoryTestCase(TestCase):
         self.assertEqual(pers_history[0].version_tag, "test_tag")
         # test with TemTriple
         pers2 = self.Person.objects.create(forename="Jane", surname="Doe")
-        place = self.Place.objects.first()
-        TempTriple.objects.create(subj=pers2, prop=Property.objects.first(), obj=place)
         pers2.history.latest().set_version_tag("test_tag")
         self.assertEqual(pers2.history.latest().version_tag, "test_tag")
-        triples = pers2.history.earliest().get_triples_for_version()
-        self.assertEqual(triples[0].version_tag, "test_tag")
 
     def test_history_delete_entry(self):
         """Tests the deletion of an entry."""

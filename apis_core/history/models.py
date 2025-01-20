@@ -1,5 +1,4 @@
 import inspect
-from datetime import datetime
 from typing import Any
 
 import django
@@ -14,7 +13,6 @@ from django.utils import timezone
 from simple_history import utils
 from simple_history.models import HistoricalRecords
 
-from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.abc import GenericModel
 
 
@@ -56,51 +54,8 @@ class APISHistoryTableBase(models.Model, GenericModel):
             ),
         ]
 
-    def get_triples_for_version(
-        self,
-        only_latest: bool = True,
-        history_date: datetime = None,
-        filter_for_triples: bool = True,
-    ):
-        """returns all triples for a specific version of a model instance.
-        If only_latest is True, only the latest version of a triple is returned."""
-        from apis_core.apis_relations.models import TempTriple
-
-        if not isinstance(self.instance, RootObject):
-            return TempTriple.objects.none()
-
-        if history_date is None:
-            filter_date = (
-                self.next_record.history_date if self.next_record else datetime.now()
-            )
-        else:
-            filter_date = history_date
-        triples = TempTriple.history.filter(
-            Q(subj=self.instance) | Q(obj=self.instance), history_date__lte=filter_date
-        )
-        if self.version_tag and filter_for_triples:
-            triples = triples.filter(
-                Q(version_tag=self.version_tag)
-                | Q(version_tag__contains=f"{self.version_tag},")
-            )
-        if only_latest:
-            triples = triples.latest_of_each()
-        if filter_for_triples:
-            triples = triples.exclude(history_type="-")
-        return triples
-
-    def set_version_tag(self, tag: str, include_triples: bool = True):
+    def set_version_tag(self, tag: str):
         self.version_tag = tag
-        if include_triples:
-            triples = self.get_triples_for_version(filter_for_triples=False)
-            for triple in triples:
-                if triple.version_tag is None:
-                    triple.version_tag = tag
-                else:
-                    triple.version_tag = f"{triple.version_tag},{tag},".replace(
-                        ",,", ","
-                    )
-                triple.save()
         self.save()
 
     def get_absolute_url(self):
@@ -178,24 +133,10 @@ class VersionMixin(models.Model):
                 )
         return ret
 
-    def _get_historical_triples(self):
-        # TODO: this is a workaround to filter out Triple history entries and leave
-        # TempTriple entries only. Fix when we switch to new relations model.
-        ret = []
-        if "apis_core.apis_relations" in settings.INSTALLED_APPS:
-            from apis_core.apis_relations.models import TempTriple
-
-            ret.append(
-                TempTriple.history.filter(Q(subj=self) | Q(obj=self)).order_by(
-                    "history_id"
-                )
-            )
-        return ret
-
     def get_history_data(self):
         data = []
         prev_entry = None
-        queries = self._get_historical_relations() + self._get_historical_triples()
+        queries = self._get_historical_relations()
         flatten_queries = [entry for query in queries for entry in query]
 
         for entry in flatten_queries:
