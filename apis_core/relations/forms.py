@@ -40,6 +40,9 @@ class RelationForm(GenericModelForm):
     can then select the success_url based on the `reverse` state).
     """
 
+    class Media:
+        js = ["js/relation_dialog.js"]
+
     class Meta:
         fields = "__all__"
         widgets = {

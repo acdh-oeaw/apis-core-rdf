@@ -3,19 +3,25 @@ function tohtml(item) {
     span.innerHTML = item.text;
     return span;
 }
-document.body.addEventListener("reinit_select2", function(evt) {
-    form = document.getElementById(evt.detail.value);
-    form.querySelectorAll(".listselect2, .modelselect2multiple, .modelselect2").forEach(element => {
+
+function rel_reinit_select2() {
+    document.querySelectorAll(".listselect2, .modelselect2multiple, .modelselect2").forEach(element => {
         $(element).select2({
             ajax: {
                 url: $(element).data("autocomplete-light-url"),
             },
-            dropdownParent: $(form),
+            dropdownParent: $(element.form),
             templateResult: tohtml,
             templateSelection: tohtml,
         });
     });
     $('.select2-selection').addClass("form-control");
+}
+
+rel_reinit_select2();
+
+document.body.addEventListener("reinit_select2", function(evt) {
+    rel_reinit_select2();
 });
 document.body.addEventListener("dismissModal", function(evt) {
     document.getElementById("relationdialog").close();
