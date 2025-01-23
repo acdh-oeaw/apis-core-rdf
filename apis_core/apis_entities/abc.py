@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.db import models
 
 #########################
@@ -23,6 +25,13 @@ class E21_Person(models.Model):
     def __str__(self):
         return f"{self.forename} {self.surname}"
 
+    @classmethod
+    def rdf_configs(cls):
+        return [
+            Path(__file__).parent / "triple_configs/E21_PersonFromDNB.toml",
+            Path(__file__).parent / "triple_configs/E21_PersonFromWikidata.toml",
+        ]
+
 
 class E53_Place(models.Model):
     """
@@ -46,6 +55,14 @@ class E53_Place(models.Model):
     def __str__(self):
         return self.label
 
+    @classmethod
+    def rdf_configs(cls):
+        return [
+            Path(__file__).parent / "triple_configs/E53_PlaceFromDNB.toml",
+            Path(__file__).parent / "triple_configs/E53_PlaceFromGeonames.toml",
+            Path(__file__).parent / "triple_configs/E53_PlaceFromWikidata.toml",
+        ]
+
 
 class E74_Group(models.Model):
     label = models.CharField(blank=True, default="", max_length=4096)
@@ -55,3 +72,10 @@ class E74_Group(models.Model):
 
     def __str__(self):
         return self.label
+
+    @classmethod
+    def rdf_configs(cls):
+        return [
+            Path(__file__).parent / "triple_configs/E74_GroupFromDNB.toml",
+            Path(__file__).parent / "triple_configs/E74_GroupFromWikidata.toml",
+        ]
