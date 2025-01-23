@@ -1,0 +1,22 @@
+[[filters]]
+# look for entities that have geocoordinates
+"wdt:P625" = true
+
+
+[attributes]
+label = ["rdfs:label", "wdt:P1448/rdfs:label"]
+longitude = '''
+SELECT ?longitude
+WHERE {
+  ?subject wdt:P625 ?geo1 .
+  BIND(REPLACE(str(?geo1), "Point\\(([-+]?\\d+\\.?\\d+).*$", "$1") as ?longitude)
+  }
+'''
+latitude = '''
+SELECT ?latitude
+WHERE {
+  ?subject wdt:P625 ?geo1 .
+  BIND(REPLACE(str(?geo1), "Point\\(([-+]?\\d+\\.?\\d+) ([-+]?\\d+\\.?\\d+).*$", "$2") as ?latitude)
+  }
+'''
+same_as = ["owl:sameAs", "wdtn:P227", "wdtn:P1566", "wdtn:P214", "wdtn:P244"]
