@@ -89,6 +89,7 @@
 <span class="kn">from</span> <span class="nn">AcdhArcheAssets.uri_norm_rules</span> <span class="kn">import</span> <span class="n">get_normalized_uri</span>
 <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ImproperlyConfigured</span>
 
+<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">flatten_if_single</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.rdf</span> <span class="kn">import</span> <span class="n">get_definition_and_attributes_from_uri</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -166,6 +167,7 @@
             <span class="c1"># we are dropping all fields that are not part of the model</span>
             <span class="n">modelfields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
             <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">modelfields</span><span class="p">}</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">flatten_if_single</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Could not import </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="si">}</span><span class="s2">. Data fetched was: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span>
