@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.36.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.35.1...v0.36.0) (2025-01-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* **utils:** let the rdf parser return lists instead of strings
+* **utils:** drop unused module `apis_core.utils.normalize`
+
+### Features
+
+* **collections:** add some helper methods to SkosCollection + Manager ([372a5ae](https://github.com/acdh-oeaw/apis-core-rdf/commit/372a5ae9a3b68216e3171cb2bcd1116e22aa47f7))
+* **generic:** adapt importer to rdf parser list style return values ([2a2cdfd](https://github.com/acdh-oeaw/apis-core-rdf/commit/2a2cdfdb31473c04d4e84afa57852dcd1b2d103c))
+* **generic:** add a form field for managing collections for an instance ([e0f7961](https://github.com/acdh-oeaw/apis-core-rdf/commit/e0f7961cbd52449bcd64c9a56fe00f9a18373405)), closes [#1532](https://github.com/acdh-oeaw/apis-core-rdf/issues/1532)
+* switch from custom uri normalization to acdh-arche-assets ([83c0737](https://github.com/acdh-oeaw/apis-core-rdf/commit/83c07374df44f61aa048e46d8c55d36108c6dc7d)), closes [#1531](https://github.com/acdh-oeaw/apis-core-rdf/issues/1531)
+* **utils:** let the rdf parser return lists instead of strings ([aa1b6ed](https://github.com/acdh-oeaw/apis-core-rdf/commit/aa1b6ed254d80cbe882267ae59316eebeedfb5f9))
+
+
+### Bug Fixes
+
+* **relations:** refactor js and add it to forms Media class ([5e4a9c0](https://github.com/acdh-oeaw/apis-core-rdf/commit/5e4a9c04b3bd882a8afd84729b48bcc7f7e9924b)), closes [#1544](https://github.com/acdh-oeaw/apis-core-rdf/issues/1544)
+
+
+### Miscellaneous Chores
+
+* **utils:** drop unused module `apis_core.utils.normalize` ([ad54c56](https://github.com/acdh-oeaw/apis-core-rdf/commit/ad54c5609b43120b578dd311183195a87cff701c))
+
 ## [0.35.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.35.0...v0.35.1) (2025-01-10)
 
 
