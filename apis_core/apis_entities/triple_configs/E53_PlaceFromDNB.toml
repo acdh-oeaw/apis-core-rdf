@@ -1,0 +1,21 @@
+[[filters]]
+"rdf:type" = "gndo:TerritorialCorporateBodyOrAdministrativeUnit"
+
+
+[attributes]
+label = "gndo:preferredNameForThePlaceOrGeographicName"
+longitude = '''
+SELECT ?longitude
+WHERE {
+  ?subject geo:hasGeometry/geo:asWKT ?point .
+  BIND(REPLACE(str(?point), "Point \\( \\+?(-?\\d+.\\d+).*", "$1") as ?longitude)
+}
+'''
+latitude = '''
+SELECT ?latitude
+WHERE {
+  ?subject geo:hasGeometry/geo:asWKT ?point .
+  BIND(REPLACE(str(?point), "^Point\\s*\\(\\s*[+-]?\\d+\\.\\d+\\s+([+-]?\\d+\\.\\d+)\\s*\\)$", "$1") as ?latitude)
+}
+'''
+same_as = "owl:sameAs"
