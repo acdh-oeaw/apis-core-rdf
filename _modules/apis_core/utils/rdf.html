@@ -89,9 +89,9 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
+<span class="kn">from</span> <span class="nn">AcdhArcheAssets.uri_norm_rules</span> <span class="kn">import</span> <span class="n">get_normalized_uri</span>
 <span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">Graph</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.utils.normalize</span> <span class="kn">import</span> <span class="n">clean_uri</span>
 <span class="kn">from</span> <span class="nn">apis_core.utils.settings</span> <span class="kn">import</span> <span class="n">dict_from_toml_directory</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -144,7 +144,7 @@
 <span class="sd">    The dict containing the parsed file contents also contains the filename, to</span>
 <span class="sd">    make debugging a bit easier.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">uri</span> <span class="o">=</span> <span class="n">clean_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+    <span class="n">uri</span> <span class="o">=</span> <span class="n">get_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
     <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
     <span class="n">graph</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
 
