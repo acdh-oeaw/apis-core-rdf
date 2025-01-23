@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.db import models
 
 #########################
@@ -22,6 +24,10 @@ class E21_Person(models.Model):
 
     def __str__(self):
         return f"{self.forename} {self.surname}"
+
+    @classmethod
+    def rdf_configs(cls):
+        return [Path(__file__).parent / "triple_configs/E21_PersonFromDNB.toml"]
 
 
 class E53_Place(models.Model):
