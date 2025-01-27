@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.36.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.36.0...v0.36.1) (2025-01-27)
+
+
+### Bug Fixes
+
+* **generic:** only add collections if app is installed ([a709d33](https://github.com/acdh-oeaw/apis-core-rdf/commit/a709d337dc4e7f41912f8ac6525168819c56a635)), closes [#1554](https://github.com/acdh-oeaw/apis-core-rdf/issues/1554)
+
 ## [0.36.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.35.1...v0.36.0) (2025-01-23)
 
 
