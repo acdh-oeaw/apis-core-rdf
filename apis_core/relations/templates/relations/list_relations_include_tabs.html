@@ -6,13 +6,13 @@
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link active"
-             data-toggle="tab"
+             data-bs-toggle="tab"
              href="#reltab_{{ object.id }}_ALL">All</a>
         </li>
         {% for target in possible_targets %}
           <li class="nav-item">
             <a class="nav-link"
-               data-toggle="tab"
+               data-bs-toggle="tab"
                href="#reltab_{{ object.id }}_{{ target.name }}">{{ target.name | title }}</a>
           </li>
         {% endfor %}

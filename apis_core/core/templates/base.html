@@ -83,23 +83,22 @@
 
           <button class="navbar-toggler"
                   type="button"
-                  data-toggle="collapse"
-                  data-target="#navbarNavDropdown"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarNavDropdown"
                   aria-controls="navbarNavDropdown"
                   aria-expanded="false"
                   aria-label="Toggle navigation">
             <span class="navbar-toggler-icon" />
           </button>
           <!-- Start main menu -->
-          <div class="collapse navbar-collapse justify-content-end"
-               id="navbarNavDropdown">
-            <ul id="main-menu" class="navbar-nav mr-auto">
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul id="main-menu" class="navbar-nav me-auto">
 
               {% block main-menu %}
                 <li class="nav-item dropdown">
                   <a href="#"
                      class="nav-link dropdown-toggle"
-                     data-toggle="dropdown"
+                     data-bs-toggle="dropdown"
                      role="button"
                      aria-haspopup="true"
                      aria-expanded="false">
@@ -120,7 +119,7 @@
                 <li class="nav-item dropdown">
                   <a href="#"
                      class="nav-link dropdown-toggle"
-                     data-toggle="dropdown"
+                     data-bs-toggle="dropdown"
                      role="button"
                      aria-haspopup="true"
                      aria-expanded="false">Relations
@@ -147,7 +146,7 @@
                   <li class="nav-item dropdown ml-auto">
                     <a href=""
                        class="nav-link dropdown-toggle"
-                       data-toggle="dropdown"
+                       data-bs-toggle="dropdown"
                        role="button"
                        aria-haspopup="true"
                        aria-expanded="false">User: {{ user.get_username }}</a>
