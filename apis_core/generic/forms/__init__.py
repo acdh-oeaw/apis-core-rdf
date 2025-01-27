@@ -1,13 +1,17 @@
+import logging
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from dal import autocomplete
 from django import forms
+from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 
-from apis_core.collections.models import SkosCollection
 from apis_core.generic.abc import GenericModel
 from apis_core.generic.forms.fields import ModelImportChoiceField
+
+logger = logging.getLogger(__name__)
 
 
 class GenericImportForm(forms.Form):
@@ -65,13 +69,17 @@ class GenericModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["collections"] = forms.ModelMultipleChoiceField(
-            required=False, queryset=SkosCollection.objects.all()
-        )
-        if instance := kwargs.get("instance"):
-            self.fields["collections"].initial = SkosCollection.objects.by_instance(
-                instance
-            ).values_list("pk", flat=True)
+        try:
+            skoscollection = apps.get_model("collections.SkosCollection")
+            self.fields["collections"] = forms.ModelMultipleChoiceField(
+                required=False, queryset=skoscollection.objects.all()
+            )
+            if instance := kwargs.get("instance"):
+                self.fields["collections"].initial = skoscollection.objects.by_instance(
+                    instance
+                ).values_list("pk", flat=True)
+        except LookupError as e:
+            logger.debug("Not adding collections to form: %s", e)
 
         self.helper = FormHelper(self)
         self.helper.add_input(Submit("submit", "Submit"))
@@ -98,11 +106,15 @@ class GenericModelForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
-        if collections := self.cleaned_data.get("collections"):
-            for collection in SkosCollection.objects.exclude(pk__in=collections):
-                collection.remove(instance)
-            for collection in SkosCollection.objects.filter(pk__in=collections):
-                collection.add(instance)
+        try:
+            skoscollection = apps.get_model("collections.SkosCollection")
+            if collections := self.cleaned_data.get("collections"):
+                for collection in skoscollection.objects.exclude(pk__in=collections):
+                    collection.remove(instance)
+                for collection in skoscollection.objects.filter(pk__in=collections):
+                    collection.add(instance)
+        except LookupError as e:
+            logger.debug("Not creating collections from form: %s", e)
         return instance
 
 
