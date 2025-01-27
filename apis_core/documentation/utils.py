@@ -22,18 +22,6 @@ class Datamodel:
 
     def edges(self):
         edges = defaultdict(list)
-        if "apis_core.apis_relations" in settings.INSTALLED_APPS:
-            from apis_core.apis_relations.models import Property
-
-            for prop in Property.objects.all():
-                for subj_class in prop.subj_class.all():
-                    for obj_class in prop.obj_class.all():
-                        key = (
-                            subj_class.name,
-                            obj_class.name,
-                        )
-                        edges[key].append(prop.name_forward)
-
         for rel in self.relations:
             for subj_class in rel.model_class().subj_list():
                 for obj_class in rel.model_class().obj_list():
