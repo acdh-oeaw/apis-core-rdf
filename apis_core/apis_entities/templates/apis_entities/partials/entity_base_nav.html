@@ -1,6 +1,6 @@
 {% block base-nav %}
   {% if object.get_change_permission in perms %}
-    <ul class="nav nav-tabs card-header-tabs float-left">
+    <ul class="nav nav-tabs card-header-tabs float-start">
       <li class="nav-item">
         <a class="nav-link text-success {% if request.path == object.get_absolute_url %}active{% endif %} "
            href="{{ object.get_absolute_url }}"><span class="material-symbols-outlined material-symbols-align">visibility</span>View</a>

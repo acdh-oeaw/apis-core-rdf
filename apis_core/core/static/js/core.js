@@ -5,7 +5,8 @@ $(document).ready(function() {
         enableFiltering: true,
         enableCaseInsensitiveFiltering: true,
         templates: {
-            filter: '<div class="multiselect-filter"><div class="input-group input-group-sm p-1"><input class="form-control multiselect-search" type="text" /></div></div>'
+            filter: '<div class="multiselect-filter"><div class="input-group input-group-sm p-1"><input class="form-control multiselect-search" type="text" /></div></div>',
+            button: '<button type="button" class="multiselect dropdown-toggle form-control" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>'
         }
     });
 })

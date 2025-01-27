@@ -1,8 +1,8 @@
 {% block action-nav %}
   {% if object.get_delete_permission in perms or object_create_perm in perms %}
-    <ul class="nav nav-tabs card-header-tabs float-right">
+    <ul class="nav nav-tabs card-header-tabs float-end">
       <li class="nav-item">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Actions</a>
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Actions</a>
         <div class="dropdown-menu">
           {% if object.get_delete_permission in perms %}
             <a class="dropdown-item text-danger" href="{{ object.get_delete_url }}">

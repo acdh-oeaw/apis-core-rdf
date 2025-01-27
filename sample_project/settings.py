@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     # ui stuff used by APIS
     "crispy_forms",
     "crispy_bootstrap4",
+    "crispy_bootstrap5",
     "django_filters",
     "django_tables2",
     "dal",
@@ -103,8 +104,9 @@ DATABASES = {
     },
 }
 
-CRISPY_TEMPLATE_PACK = "bootstrap4"
-DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap5.html"
 
 # for django spectacular to be able to generate the schema, we have to use its view inspector
 REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"}
