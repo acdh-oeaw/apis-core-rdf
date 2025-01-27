@@ -4,7 +4,9 @@
 
   {% block relations_list %}
     {% relations_list_table relations target as table %}
-    {% render_table table %}
+    {% if table.data %}
+      {% render_table table %}
+    {% endif %}
   {% endblock relations_list %}
 
   {% block relations_create %}
