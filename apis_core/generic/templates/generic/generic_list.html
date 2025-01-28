@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 {% load generic %}
 {% load core %}
+{% load export_url from django_tables2 %}
 {% if filter %}
 
   {% block col %}
@@ -39,7 +40,16 @@
   {% block additionalcols %}
     <div class="col-8">
       <div class="card">
-        <div class="card-header">{{ table.paginator.count }} results</div>
+        <div class="card-header">
+          {{ table.paginator.count }} results.
+          {% if view.export_formats %}
+            Download
+            {% for format in view.export_formats %}
+              <a href="{% export_url format %}">{{ format | upper }}</a>
+              {% if not forloop.last %}|{% endif %}
+            {% endfor %}
+          {% endif %}
+        </div>
         <div class="card-body">
 
           {% block table %}
