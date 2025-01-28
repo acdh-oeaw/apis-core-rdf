@@ -21,6 +21,7 @@ from django_filters.filterset import filterset_factory
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
 from django_tables2.columns import library
+from django_tables2.export.views import ExportMixin
 from django_tables2.tables import table_factory
 
 from apis_core.apis_metainfo.models import Uri
@@ -100,6 +101,7 @@ class GenericModelMixin:
 class List(
     GenericModelMixin,
     PermissionRequiredMixin,
+    ExportMixin,
     SingleTableMixin,
     FilterView,
 ):
@@ -122,6 +124,15 @@ class List(
         table_modules = module_paths(self.model, path="tables", suffix="Table")
         table_class = first_member_match(table_modules, GenericTable)
         return table_factory(self.model, table_class)
+
+    export_formats = getattr(settings, "EXPORT_FORMATS", ["csv", "json"])
+
+    def get_export_filename(self, extension):
+        table_class = self.get_table_class()
+        if hasattr(table_class, "export_filename"):
+            return f"{table_class.export_filename}.{extension}"
+
+        return super().get_export_filename(extension)
 
     def get_table_kwargs(self):
         kwargs = super().get_table_kwargs()
