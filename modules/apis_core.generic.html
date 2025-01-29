@@ -1320,7 +1320,7 @@ keyword arguments, and other things.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.generic.views.List">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.views.</span></span><span class="sig-name descname"><span class="pre">List</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SingleTableMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterView</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ExportMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SingleTableMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterView</span></code></p>
 <p>List view for a generic model.
 Access requires the <cite>&lt;model&gt;_view</cite> permission.
 It is based on django-filters FilterView and django-tables SingleTableMixin.
@@ -1332,6 +1332,16 @@ The queryset is overridden by the first match from
 the <cite>first_member_match</cite> helper.</p>
 <p>Constructor. Called in the URLconf; can contain helpful extra
 keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.export_formats">
+<span class="sig-name descname"><span class="pre">export_formats</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['csv',</span> <span class="pre">'json']</span></em><a class="headerlink" href="#apis_core.generic.views.List.export_formats" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.views.List.get_export_filename">
+<span class="sig-name descname"><span class="pre">get_export_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extension</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_export_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_export_filename" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.views.List.get_filterset">
 <span class="sig-name descname"><span class="pre">get_filterset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filterset_class</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#List.get_filterset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.List.get_filterset" title="Link to this definition"></a></dt>
