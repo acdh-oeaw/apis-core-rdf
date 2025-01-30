@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load apis_entities %}
+
+{% block main-menu %}
+  {{ block.super }}
+  <li class="nav-item dropdown">
+    <a href="#"
+       class="nav-link dropdown-toggle"
+       data-bs-toggle="dropdown"
+       role="button"
+       aria-haspopup="true"
+       aria-expanded="false">
+      Entities
+      <span class="caret" />
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+      {% block entities-menu-items %}
+        {% entities_verbose_name_plural_listview_url as entities %}
+        {% for verbose_name_plural, list_url in entities %}
+          <a class="dropdown-item" href="{{ list_url }}">{{ verbose_name_plural|capfirst }}</a>
+        {% endfor %}
+      {% endblock entities-menu-items %}
+
+    </div>
+  </li>
+{% endblock main-menu %}
