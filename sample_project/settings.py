@@ -43,16 +43,16 @@ INSTALLED_APPS = [
     # swagger ui generation
     "drf_spectacular",
     # The APIS apps
-    "apis_core.relations",
+    # APIS collections provide a collection model similar to
+    # SKOS collections and allow tagging of content
+    "apis_core.collections",
     "apis_core.apis_metainfo",
+    "apis_core.relations",
     "apis_core.apis_entities",
     # apis_vocabularies is deprecated, but there are
     # still migrations depending on it - it will be dropped
     # at some point
     "apis_core.apis_vocabularies",
-    # APIS collections provide a collection model similar to
-    # SKOS collections and allow tagging of content
-    "apis_core.collections",
     # APIS history modules tracks changes of instances over
     # time and lets you revert changes
     "apis_core.history",
