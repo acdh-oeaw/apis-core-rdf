@@ -137,6 +137,17 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.generic.forms.html#module-apis_core.generic.forms.fields">apis_core.generic.forms.fields module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeField"><code class="docutils literal notranslate"><span class="pre">IncludeExcludeField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeField.compress"><code class="docutils literal notranslate"><span class="pre">IncludeExcludeField.compress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeMultiWidget"><code class="docutils literal notranslate"><span class="pre">IncludeExcludeMultiWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeMultiWidget.decompress"><code class="docutils literal notranslate"><span class="pre">IncludeExcludeMultiWidget.decompress()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeMultiWidget.media"><code class="docutils literal notranslate"><span class="pre">IncludeExcludeMultiWidget.media</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeMultiWidget.template_name"><code class="docutils literal notranslate"><span class="pre">IncludeExcludeMultiWidget.template_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeMultiWidget.use_fieldset"><code class="docutils literal notranslate"><span class="pre">IncludeExcludeMultiWidget.use_fieldset</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField"><code class="docutils literal notranslate"><span class="pre">ModelImportChoiceField</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField.to_python"><code class="docutils literal notranslate"><span class="pre">ModelImportChoiceField.to_python()</span></code></a></li>
 </ul>
@@ -412,8 +423,26 @@ allows to set the tags of a route via the model.</p>
 <section id="module-apis_core.generic.filtersets">
 <span id="apis-core-generic-filtersets-module"></span><h2>apis_core.generic.filtersets module<a class="headerlink" href="#module-apis_core.generic.filtersets" title="Link to this heading"></a></h2>
 <dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.CollectionsFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.filtersets.</span></span><span class="sig-name descname"><span class="pre">CollectionsFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/filtersets.html#CollectionsFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filtersets.CollectionsFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelMultipleChoiceFilter</span></code></p>
+<p>A simple filter for connections to collections. It provides an <cite>include</cite>/<cite>exclude</cite>
+selector, which allows to define what the filter should do.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.CollectionsFilter.field">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">field</span></span><a class="headerlink" href="#apis_core.generic.filtersets.CollectionsFilter.field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.filtersets.CollectionsFilter.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/filtersets.html#CollectionsFilter.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filtersets.CollectionsFilter.filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="apis_core.generic.filtersets.GenericFilterSet">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.filtersets.</span></span><span class="sig-name descname"><span class="pre">GenericFilterSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queryset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/filtersets.html#GenericFilterSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.filtersets.</span></span><span class="sig-name descname"><span class="pre">GenericFilterSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/filtersets.html#GenericFilterSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.filtersets.GenericFilterSet" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">FilterSet</span></code></p>
 <p>Our GenericFilterSet sets the default <cite>form</cite> to be our
 GenericFilterSetForm, which is set up to ignore the <cite>columns</cite> field
