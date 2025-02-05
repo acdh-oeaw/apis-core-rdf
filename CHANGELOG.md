@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.37.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.36.1...v0.37.0) (2025-02-05)
+
+
+### Features
+
+* **apis_entities:** move entities menu to apis_entities app ([cf73280](https://github.com/acdh-oeaw/apis-core-rdf/commit/cf732801edd19918ac3fd5acf9595fa51a99e927))
+* **collections:** add `Collections` entry to main menu ([954e49d](https://github.com/acdh-oeaw/apis-core-rdf/commit/954e49def98b6e2a6f20f5847db74341302abbb6)), closes [#1565](https://github.com/acdh-oeaw/apis-core-rdf/issues/1565)
+* **core:** enclose user-menu items in a block ([4ef987c](https://github.com/acdh-oeaw/apis-core-rdf/commit/4ef987cad7d10d50a9ca63297288f91729343459))
+* **core:** include bootstrap 5.3.3 instead of bootstrap 4.6.2 ([5dc28e9](https://github.com/acdh-oeaw/apis-core-rdf/commit/5dc28e9a69607f97b890598dc471e402a97aa039)), closes [#1529](https://github.com/acdh-oeaw/apis-core-rdf/issues/1529)
+* **generic:** add a collections filter ([501ab78](https://github.com/acdh-oeaw/apis-core-rdf/commit/501ab780fbc3766f747a58825c47c4af5faf401a)), closes [#1557](https://github.com/acdh-oeaw/apis-core-rdf/issues/1557)
+* **generic:** add export support to list views ([c8c7670](https://github.com/acdh-oeaw/apis-core-rdf/commit/c8c76708bc42dfc9503c9dbf9e95da01f4a08425))
+* **relations:** move relations menu to relations app ([b04b8f9](https://github.com/acdh-oeaw/apis-core-rdf/commit/b04b8f91cecde554a8f1ce62dcd3e6e48b737671))
+* **sample_project:** configure sample project to use bootstrap 5 ([aca77f6](https://github.com/acdh-oeaw/apis-core-rdf/commit/aca77f6e94807e46f5f097b00efde4045d0123aa))
+
+
+### Bug Fixes
+
+* adapt templates for bootstrap version 5 ([6e771bf](https://github.com/acdh-oeaw/apis-core-rdf/commit/6e771bf48bc4577bc42a261cd8beafe4788ee736))
+* **core:** adapt multiselect settings for bootstrap 5 ([6bc99fe](https://github.com/acdh-oeaw/apis-core-rdf/commit/6bc99fe2f091c76f257a544faead5d169755e9e5))
+* **relations:** hide empty relations tables ([8f13605](https://github.com/acdh-oeaw/apis-core-rdf/commit/8f13605ad3405c59039c1c3746763f1d6e353520)), closes [#1543](https://github.com/acdh-oeaw/apis-core-rdf/issues/1543)
+
 ## [0.36.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.36.0...v0.36.1) (2025-01-27)
 
 
