@@ -23,8 +23,8 @@ class CollectionsFilter(django_filters.filters.ModelMultipleChoiceFilter):
         return IncludeExcludeField(super().field, required=self.extra["required"])
 
     def filter(self, queryset, value):
-        value, include_exclude = value
         if value:
+            value, include_exclude = value
             content_type = ContentType.objects.get_for_model(queryset.model)
             try:
                 skoscollectioncontentobject = apps.get_model(
