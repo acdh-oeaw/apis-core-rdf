@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.37.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.37.0...v0.37.1) (2025-02-05)
+
+
+### Bug Fixes
+
+* **generic:** only split value if it actually exists ([997975c](https://github.com/acdh-oeaw/apis-core-rdf/commit/997975c64387fe825e8893f6b22ecc7d9c869239))
+
 ## [0.37.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.36.1...v0.37.0) (2025-02-05)
 
 
