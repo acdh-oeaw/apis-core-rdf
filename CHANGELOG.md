@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.37.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.37.1...v0.37.2) (2025-02-05)
+
+
+### Bug Fixes
+
+* **generic:** move split up again and put it inside try/except ([543d6ae](https://github.com/acdh-oeaw/apis-core-rdf/commit/543d6ae79776dbeaab0bd3c279b684ae59ab67fb))
+
 ## [0.37.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.37.0...v0.37.1) (2025-02-05)
 
 
