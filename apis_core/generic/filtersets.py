@@ -55,6 +55,9 @@ class GenericFilterSet(FilterSet):
 
     class Meta:
         form = GenericFilterSetForm
+        # we set the UnknownFieldBehavior to WARN, so the form does not
+        # break if there are JSONFields
+        unknown_field_behavior = django_filters.UnknownFieldBehavior.WARN
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
