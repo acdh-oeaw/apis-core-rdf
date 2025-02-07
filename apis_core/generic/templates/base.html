@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load generic %}
+
+{% block main-menu %}
+  {{ block.super }}
+  <li class="nav-item dropdown">
+    <a href="#"
+       class="nav-link dropdown-toggle"
+       data-bs-toggle="dropdown"
+       role="button"
+       aria-haspopup="true"
+       aria-expanded="false">
+      Other
+      <span class="caret" />
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      {% pure_genericmodel_content_types as content_types %}
+      {% for content_type in content_types %}
+        <a class="dropdown-item"
+           href="{{ content_type.model_class.get_listview_url }}">{{ content_type.name }}</a>
+      {% endfor %}
+    </div>
+  </li>
+{% endblock main-menu %}
