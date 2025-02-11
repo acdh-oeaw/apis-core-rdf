@@ -25,7 +25,7 @@ to your `MIDDLEWARE` setting:
 
     MIDDLEWARE = [
         ...
-        'apis_core.history.middleware.HistoryRequestMiddleware',
+        'simple_history.middleware.HistoryRequestMiddleware',
         ...
     ]
 
