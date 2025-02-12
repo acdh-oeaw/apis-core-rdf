@@ -1,3 +1,18 @@
+function successFunction(data, textStatus, jqXHR) {
+	if ('error' in data) {
+		error = data['error']
+                        $('.dal-create').append(
+                            `<p class="invalid-feedback d-block""><strong>${error}</strong>`
+                        );
+
+                    } else {
+                        select.append(
+                            $('<option>', {value: data.id, text: data.text, selected: true})
+                        );
+                        select.trigger('change');
+                        select.select2('close');
+                    }
+}
 function tohtml(item) {
     const span = document.createElement('span');
     span.innerHTML = item.text;
@@ -13,6 +28,7 @@ function rel_reinit_select2() {
             dropdownParent: $(element.form),
             templateResult: tohtml,
             templateSelection: tohtml,
+	    success: successFunction,
         });
     });
     $('.select2-selection').addClass("form-control");
