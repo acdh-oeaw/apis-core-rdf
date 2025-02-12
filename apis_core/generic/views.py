@@ -7,7 +7,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.core.validators import URLValidator
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
 from django.shortcuts import get_object_or_404, redirect
@@ -345,7 +346,32 @@ class Autocomplete(
         return results
 
     def create_object(self, value):
-        return create_object_from_uri(value, self.queryset.model, raise_on_fail=True)
+        """
+        We try multiple approaches to create a model instance from a value:
+        * we first test if the value is an URL and if so we expect it to be
+        something that can be imported using one of the configured importers
+        and so we pass the value to the import logic.
+        * if the value is not a string, we try to pass it to the `create_from_string`
+        method of the model, if that does exist. Its the models responsibility to
+        implement this method and the method should somehow know how to create
+        model instance from the value...
+        * finally we pass the value to the `create_object` method from the DAL
+        view, which tries to pass it to `get_or_create` which likely also fails,
+        but this is expected and we raise a more useful exception.
+        """
+        try:
+            URLValidator()(value)
+            return create_object_from_uri(
+                value, self.queryset.model, raise_on_fail=True
+            )
+        except ValidationError:
+            pass
+        try:
+            return self.queryset.model.create_from_string(value)
+        except AttributeError:
+            raise ImproperlyConfigured(
+                f'Model "{self.queryset.model._meta.verbose_name}" not configured to create from string'
+            )
 
     def post(self, request, *args, **kwargs):
         try:
