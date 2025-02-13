@@ -1,3 +1,4 @@
+from colorhash import ColorHash
 from django import template
 from django.contrib.contenttypes.models import ContentType
 
@@ -77,3 +78,9 @@ def content_type_count(content_type):
 @register.simple_tag
 def template_list(obj, suffix):
     return template_names_via_mro(type(obj), suffix)
+
+
+@register.filter
+def colorhash(string: str, lightness: [float] = (0.35, 0.5, 0.65), saturation: [float] = (0.35, 0.5, 0.65)):
+    c = ColorHash(string, lightness, saturation)
+    return c.hex
