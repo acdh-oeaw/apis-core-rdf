@@ -7,7 +7,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.core.validators import URLValidator
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
 from django.shortcuts import get_object_or_404, redirect
@@ -345,7 +346,11 @@ class Autocomplete(
         return results
 
     def create_object(self, value):
-        return create_object_from_uri(value, self.queryset.model, raise_on_fail=True)
+        try:
+            URLValidator(value)
+            return create_object_from_uri(value, self.queryset.model, raise_on_fail=True)
+        except ValidationError:
+            return super().create_object(value)
 
     def post(self, request, *args, **kwargs):
         try:
