@@ -19,11 +19,6 @@ INSTALLED_APPS = [
     # our main app, containing the ontology (in the `models.py`)
     # and our customizations
     "sample_project",
-    # `apis_override_select2js` is a workaround for APIS'
-    # handling of autocomplete forms. It should be listed
-    # at the beginning of the list, to make sure the
-    # files shipped with it are served in precedence.
-    "apis_override_select2js",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
