@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.37.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.37.2...v0.37.3) (2025-02-13)
+
+
+### Bug Fixes
+
+* **generic:** set unknown_field_behavior to WARN in GenericFilterSet ([291cb14](https://github.com/acdh-oeaw/apis-core-rdf/commit/291cb1494b0140fc492e6bd9980c8382d43c3945)), closes [#1583](https://github.com/acdh-oeaw/apis-core-rdf/issues/1583)
+
+
+### Documentation
+
+* **features:** fix typo ([0381d59](https://github.com/acdh-oeaw/apis-core-rdf/commit/0381d598960e9e1bdd27acc79099568c69619618)), closes [#1589](https://github.com/acdh-oeaw/apis-core-rdf/issues/1589)
+
 ## [0.37.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.37.1...v0.37.2) (2025-02-05)
 
 
