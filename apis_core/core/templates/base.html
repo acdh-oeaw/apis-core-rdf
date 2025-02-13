@@ -78,6 +78,13 @@
         <div class="container-fluid">
 
           {% block navbar-before %}
+            <div class="navbar-nav">
+              <a href="{% url "apis_core:generic:overview" %}" class="nav-link">
+                <svg viewBox="0 0 320 320" id="logo">
+                  <polygon points="310,160 235,290 85,290 10,160 85,30 235,30" stroke="#212529" stroke-width="20" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
           {% endblock navbar-before %}
 
           <button class="navbar-toggler"
