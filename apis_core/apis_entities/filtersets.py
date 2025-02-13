@@ -82,16 +82,6 @@ class AbstractEntityFilterSet(GenericFilterSet):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if "apis_core.apis_relations" in settings.INSTALLED_APPS:
-            from apis_core.apis_relations.filters import PropertyFilter, related_entity
-
-            self.filters["related_property"] = PropertyFilter(
-                label="Related Property", model=getattr(self.Meta, "model", None)
-            )
-            self.filters["related_entity"] = django_filters.CharFilter(
-                method=related_entity, label="Related entity contains"
-            )
-
         if model := getattr(self.Meta, "model", False):
             self.filters["search"] = ModelSearchFilter(model=model)
             self.filters.move_to_end("search", False)

@@ -34,10 +34,6 @@ if "apis_core.apis_entities" in settings.INSTALLED_APPS:
     urlpatterns.append(path("api/", include(api_routes)))
 
 
-if "apis_core.apis_relations" in settings.INSTALLED_APPS:
-    urlpatterns.append(path("relations/", include("apis_core.apis_relations.urls")))
-
-
 if "apis_core.relations" in settings.INSTALLED_APPS:
     urlpatterns.append(path("relations/", include("apis_core.relations.urls")))
 
