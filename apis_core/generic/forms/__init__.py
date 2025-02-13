@@ -2,12 +2,12 @@ import logging
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from dal import autocomplete
 from django import forms
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 
+from apis_core.core.fields import ApisModelSelect2, ApisModelSelect2Multiple
 from apis_core.generic.abc import GenericModel
 from apis_core.generic.forms.fields import ModelImportChoiceField
 
@@ -25,7 +25,7 @@ class GenericImportForm(forms.Form):
         )
         ct = ContentType.objects.get_for_model(self.Meta.model)
         url = reverse("apis_core:generic:autocompleteexternalonly", args=[ct])
-        self.fields["url"].widget = autocomplete.ModelSelect2(
+        self.fields["url"].widget = ApisModelSelect2(
             url, attrs={"data-html": True, "data-tags": 1}
         )
         self.fields["url"].widget.choices = self.fields["url"].choices
@@ -87,9 +87,9 @@ class GenericModelForm(forms.ModelForm):
         # override the fields pointing to other models,
         # to make them use the autocomplete widgets
         override_fieldtypes = {
-            "ModelMultipleChoiceField": autocomplete.ModelSelect2Multiple,
-            "ModelChoiceField": autocomplete.ModelSelect2,
-            "ModelImportChoiceField": autocomplete.ModelSelect2,
+            "ModelMultipleChoiceField": ApisModelSelect2Multiple,
+            "ModelChoiceField": ApisModelSelect2,
+            "ModelImportChoiceField": ApisModelSelect2,
         }
         for field in self.fields:
             clsname = self.fields[field].__class__.__name__
@@ -129,7 +129,7 @@ class GenericSelectMergeOrEnrichForm(forms.Form):
         )
         uri = reverse("apis_core:generic:autocomplete", args=[ct])
         attrs = {"data-html": True, "data-tags": 1}
-        self.fields["uri"].widget = autocomplete.ModelSelect2(uri, attrs=attrs)
+        self.fields["uri"].widget = ApisModelSelect2(uri, attrs=attrs)
         self.fields["uri"].widget.choices = self.fields["uri"].choices
         self.fields["uri"].label = "Select or paste URI"
         self.helper = FormHelper()
