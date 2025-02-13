@@ -81,6 +81,10 @@ def template_list(obj, suffix):
 
 
 @register.filter
-def colorhash(string: str, lightness: [float] = (0.35, 0.5, 0.65), saturation: [float] = (0.35, 0.5, 0.65)):
+def colorhash(
+    string: str,
+    lightness: [float] = (0.35, 0.5, 0.65),
+    saturation: [float] = (0.35, 0.5, 0.65),
+):
     c = ColorHash(string, lightness, saturation)
     return c.hex

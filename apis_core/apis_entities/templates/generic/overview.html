@@ -1,0 +1,35 @@
+{% extends "generic/overview.html" %}
+{% load core %}
+{% load apis_entities %}
+{% load generic %}
+{% load i18n %}
+
+{% block overview %}
+  <div class="d-flex justify-content-center">
+    <div class="d-flex flex-column">
+      <div class="d-flex justify-content-center">
+        <h1>{% translate "Entities" %}</h1>
+      </div>
+      {% entities_content_types as entities_content_types %}
+      {% with entities_content_types|length as entity_count %}
+        <svg class="chart"
+             width="{% widthratio entity_count 1 100 %}"
+             height="300"
+             aria-labelledby="title desc"
+             role="img">
+        {% endwith %}
+        {% for entity in entities_content_types %}
+          {% with entity|content_type_count as count %}
+            {% widthratio count 50000 300 as wr %}
+            {% widthratio forloop.counter0 1 100 as x %}
+            {% widthratio wr 1 -1 as wrn %}
+            <a href="{{ entity.model_class.get_listview_url }}">
+              <rect width="80" height="{{ wr }}" x="{{ x }}" y="{{ 300|add:wrn }}" style="fill: {{ entity.name|colorhash }}"></rect>
+              <text y="{% cycle 50 100 %}" x="{{ x }}" dy=".35em">{{ count }} {{ entity|model_meta:"verbose_name_plural" }}</text>
+            </a>
+          {% endwith %}
+        {% endfor %}
+      </svg>
+    </div>
+  </div>
+{% endblock overview %}
