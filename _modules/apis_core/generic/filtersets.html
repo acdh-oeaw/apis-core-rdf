@@ -147,7 +147,10 @@
 <div class="viewcode-block" id="GenericFilterSet.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.filtersets.GenericFilterSet.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">GenericFilterSetForm</span></div>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">GenericFilterSetForm</span>
+        <span class="c1"># we set the UnknownFieldBehavior to WARN, so the form does not</span>
+        <span class="c1"># break if there are JSONFields</span>
+        <span class="n">unknown_field_behavior</span> <span class="o">=</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">UnknownFieldBehavior</span><span class="o">.</span><span class="n">WARN</span></div>
 
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
