@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.http import urlencode
 
+from apis_core.core.fields import ApisListSelect2
 from apis_core.generic.forms import GenericModelForm
 from apis_core.generic.forms.fields import ModelImportChoiceField
 
@@ -118,9 +119,10 @@ class RelationForm(GenericModelForm):
                 self.fields["subj"] = ModelImportChoiceField(
                     queryset=ct.model_class().objects.all()
                 )
-                self.fields["subj"].widget = autocomplete.ListSelect2(
+                self.fields["subj"].widget = ApisListSelect2(
+                    attrs={"data-html": True},
                     url=reverse("apis_core:generic:autocomplete", args=[ct])
-                    + "?create=True"
+                    + "?create=True",
                 )
                 self.fields["subj"].widget.choices = self.fields["subj"].choices
             else:
@@ -129,8 +131,9 @@ class RelationForm(GenericModelForm):
                 subject.
                 """
                 self.fields["subj_ct_and_id"] = CustomSelect2ListChoiceField()
-                self.fields["subj_ct_and_id"].widget = autocomplete.ListSelect2(
-                    url=self.__subj_autocomplete_url()
+                self.fields["subj_ct_and_id"].widget = ApisListSelect2(
+                    attrs={"data-html": True},
+                    url=self.__subj_autocomplete_url(),
                 )
                 if self.subj_instance:
                     content_type = ContentType.objects.get_for_model(self.subj_instance)
@@ -152,9 +155,10 @@ class RelationForm(GenericModelForm):
                 self.fields["obj"] = ModelImportChoiceField(
                     queryset=ct.model_class().objects.all()
                 )
-                self.fields["obj"].widget = autocomplete.ListSelect2(
+                self.fields["obj"].widget = ApisListSelect2(
+                    attrs={"data-html": True},
                     url=reverse("apis_core:generic:autocomplete", args=[ct])
-                    + "?create=True"
+                    + "?create=True",
                 )
                 self.fields["obj"].widget.choices = self.fields["obj"].choices
             else:
@@ -163,8 +167,9 @@ class RelationForm(GenericModelForm):
                 object.
                 """
                 self.fields["obj_ct_and_id"] = CustomSelect2ListChoiceField()
-                self.fields["obj_ct_and_id"].widget = autocomplete.ListSelect2(
-                    url=self.__obj_autocomplete_url()
+                self.fields["obj_ct_and_id"].widget = ApisListSelect2(
+                    attrs={"data-html": True},
+                    url=self.__obj_autocomplete_url(),
                 )
                 if self.obj_instance:
                     content_type = ContentType.objects.get_for_model(self.obj_instance)
