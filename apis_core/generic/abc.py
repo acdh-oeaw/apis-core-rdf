@@ -89,6 +89,10 @@ class GenericModel:
     def get_delete_permission(self):
         return permission_fullname("delete", self)
 
+    @classmethod
+    def get_view_permission(self):
+        return permission_fullname("view", self)
+
     def get_merge_charfield_value(self, other: CharField, field: CharField):
         res = getattr(self, field.name)
         if not field.choices:
