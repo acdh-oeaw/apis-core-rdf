@@ -77,3 +77,11 @@ def content_type_count(content_type):
 @register.simple_tag
 def template_list(obj, suffix):
     return template_names_via_mro(type(obj), suffix)
+
+
+@register.simple_tag(takes_context=True)
+def any_view_permission(context, content_types):
+    user = context.request.user
+    return any(
+        [user.has_perm(ct.model_class().get_view_permission()) for ct in content_types]
+    )
