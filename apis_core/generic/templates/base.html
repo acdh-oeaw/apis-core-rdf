@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load generic %}
+
+{% block main-menu %}
+  {{ block.super }}
+  {% pure_genericmodel_content_types as content_types %}
+  {% any_view_permission content_types as anyperm %}
+  {% if anyperm %}
+    <li class="nav-item dropdown">
+      <a href="#"
+         class="nav-link dropdown-toggle"
+         data-bs-toggle="dropdown"
+         role="button"
+         aria-haspopup="true"
+         aria-expanded="false">
+        Other models
+        <span class="caret" />
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        {% for content_type in content_types %}
+          {% if content_type.model_class.get_view_permission in perms %}
+            <a class="dropdown-item"
+               href="{{ content_type.model_class.get_listview_url }}">{{ content_type.name }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </li>
+  {% endif %}
+{% endblock main-menu %}
