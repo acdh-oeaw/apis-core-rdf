@@ -1,10 +1,13 @@
 # SPDX-FileCopyrightText: 2024 K Kollmann
 # SPDX-License-Identifier: MIT
 
-name: Add repository issues to Prosnet project
+name: Add issues, PRs to Prosnet project
 
 on:
   issues:
+    types:
+      - opened
+  pull_request:
     types:
       - opened
 
