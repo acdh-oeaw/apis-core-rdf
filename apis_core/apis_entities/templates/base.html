@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load apis_entities %}
+{% load core %}
 
 {% block main-menu %}
   {{ block.super }}
@@ -14,14 +15,13 @@
       <span class="caret" />
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-      {% block entities-menu-items %}
-        {% entities_verbose_name_plural_listview_url as entities %}
-        {% for verbose_name_plural, list_url in entities %}
-          <a class="dropdown-item" href="{{ list_url }}">{{ verbose_name_plural|capfirst }}</a>
-        {% endfor %}
-      {% endblock entities-menu-items %}
-
+      {% entities_content_types as content_types %}
+      {% for content_type in content_types %}
+        {% with content_type.model_class|opts as meta %}
+          <a class="dropdown-item"
+             href="{{ content_type.model_class.get_listview_url }}">{{ meta.verbose_name_plural|capfirst }}</a>
+        {% endwith %}
+      {% endfor %}
     </div>
   </li>
 {% endblock main-menu %}
