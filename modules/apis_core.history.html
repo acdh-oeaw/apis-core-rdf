@@ -89,7 +89,19 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="apis_core.history.tests.html">apis_core.history.tests package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="apis_core.history.tests.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="apis_core.history.tests.html#apis-core-history-tests-test-simple-history-module">apis_core.history.tests.test_simple_history module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apis_core.history.tests.html#module-apis_core.history.tests.test_simple_history">apis_core.history.tests.test_simple_history module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase"><code class="docutils literal notranslate"><span class="pre">SimpleHistoryTestCase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.setUp"><code class="docutils literal notranslate"><span class="pre">SimpleHistoryTestCase.setUp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history"><code class="docutils literal notranslate"><span class="pre">SimpleHistoryTestCase.test_history()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_date"><code class="docutils literal notranslate"><span class="pre">SimpleHistoryTestCase.test_history_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_delete_entry"><code class="docutils literal notranslate"><span class="pre">SimpleHistoryTestCase.test_history_delete_entry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_merge"><code class="docutils literal notranslate"><span class="pre">SimpleHistoryTestCase.test_history_merge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_tag"><code class="docutils literal notranslate"><span class="pre">SimpleHistoryTestCase.test_history_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="apis_core.history.tests.html#apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_m2m_save"><code class="docutils literal notranslate"><span class="pre">SimpleHistoryTestCase.test_m2m_save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -221,15 +233,8 @@ querysets depending on the incoming request.</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.history.models.APISHistoryTableBase.get_triples_for_version">
-<span class="sig-name descname"><span class="pre">get_triples_for_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">only_latest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_for_triples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/history/models.html#APISHistoryTableBase.get_triples_for_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.history.models.APISHistoryTableBase.get_triples_for_version" title="Link to this definition"></a></dt>
-<dd><p>returns all triples for a specific version of a model instance.
-If only_latest is True, only the latest version of a triple is returned.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="apis_core.history.models.APISHistoryTableBase.set_version_tag">
-<span class="sig-name descname"><span class="pre">set_version_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_triples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/history/models.html#APISHistoryTableBase.set_version_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.history.models.APISHistoryTableBase.set_version_tag" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_version_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/history/models.html#APISHistoryTableBase.set_version_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.history.models.APISHistoryTableBase.set_version_tag" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -441,14 +446,6 @@ so that we can present a helpful representation of the object.</p>
 </section>
 <section id="module-apis_core.history.urls">
 <span id="apis-core-history-urls-module"></span><h2>apis_core.history.urls module<a class="headerlink" href="#module-apis_core.history.urls" title="Link to this heading"></a></h2>
-</section>
-<section id="module-apis_core.history.utils">
-<span id="apis-core-history-utils-module"></span><h2>apis_core.history.utils module<a class="headerlink" href="#module-apis_core.history.utils" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="apis_core.history.utils.triple_sidebar_history">
-<span class="sig-prename descclassname"><span class="pre">apis_core.history.utils.</span></span><span class="sig-name descname"><span class="pre">triple_sidebar_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/history/utils.html#triple_sidebar_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.history.utils.triple_sidebar_history" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </section>
 <section id="module-apis_core.history.views">
 <span id="apis-core-history-views-module"></span><h2>apis_core.history.views module<a class="headerlink" href="#module-apis_core.history.views" title="Link to this heading"></a></h2>
