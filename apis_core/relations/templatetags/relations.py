@@ -79,15 +79,5 @@ def relations_list_table(context, relations, target=None):
 
 
 @register.simple_tag
-def relations_verbose_name_listview_url():
-    """
-    Return all relations verbose names together with their list uri, sorted in alphabetical order
-    USED BY:
-    * `apis_core/relations/templates/base.html` (to extend the default `base.html`)
-    """
-    relation_classes = [relation.model_class() for relation in relation_content_types()]
-    ret = {
-        relation._meta.verbose_name: relation.get_listview_url()
-        for relation in relation_classes
-    }
-    return sorted(ret.items())
+def get_relation_content_types():
+    return relation_content_types()
