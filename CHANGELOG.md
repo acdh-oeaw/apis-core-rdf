@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.38.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.37.2...v0.38.0) (2025-02-18)
+
+
+### Features
+
+* **apis_relations:** drop `apis_relations` app ([31a37b6](https://github.com/acdh-oeaw/apis-core-rdf/commit/31a37b6ecc670be8d00f48340c88f2a65c0f6359)), closes [#1528](https://github.com/acdh-oeaw/apis-core-rdf/issues/1528)
+* **core:** introduce a custom select2 function ([0468c3f](https://github.com/acdh-oeaw/apis-core-rdf/commit/0468c3f809c4aa2a48e69b466f573d1e0920cd63))
+* **generic:** add `get_view_permission` to GenericModel ([a3fb75d](https://github.com/acdh-oeaw/apis-core-rdf/commit/a3fb75da37d52b34bee1aa9cf9b652e40626aa64))
+* **generic:** introduce `pure_genericmodel_content_types` templatetag ([eaf7d5a](https://github.com/acdh-oeaw/apis-core-rdf/commit/eaf7d5a8c2a4d5591e7a03d85760fbce72261fe5))
+* **generic:** introduce any_view_permission templatetag ([4c35738](https://github.com/acdh-oeaw/apis-core-rdf/commit/4c357384ed7807f0b3084fedff5cd9a8557d4814))
+* **generic:** override base.html to inject menu entry ([54a5b37](https://github.com/acdh-oeaw/apis-core-rdf/commit/54a5b378f00844972d1c7d768b1118b139253637))
+* **generic:** use custom autocomplete widgets instead of upstreams ([bd9e49a](https://github.com/acdh-oeaw/apis-core-rdf/commit/bd9e49a81fe317b6dc9df94d4b4eaf7e964c824c))
+* **relations:** replace custom select2 call ([7377e38](https://github.com/acdh-oeaw/apis-core-rdf/commit/7377e388a5a58ff1972a1a75ab8f9cbb93214637))
+* **relations:** use custom autocomplete widgets instead of upstreams ([ae7dfba](https://github.com/acdh-oeaw/apis-core-rdf/commit/ae7dfba2d4e04a2b583c0927975287283352f23f))
+
+
+### Bug Fixes
+
+* **apis_entities:** drop `apis_relation` related code parts ([4962949](https://github.com/acdh-oeaw/apis-core-rdf/commit/49629494c1e5111e96a70a7c1e72cba3b6fd923a))
+* **documentation:** drop `apis_relation` related code parts ([3f06425](https://github.com/acdh-oeaw/apis-core-rdf/commit/3f064250db0248bd231f19f17a589bcf4d5a6785))
+* **generic:** set unknown_field_behavior to WARN in GenericFilterSet ([291cb14](https://github.com/acdh-oeaw/apis-core-rdf/commit/291cb1494b0140fc492e6bd9980c8382d43c3945)), closes [#1583](https://github.com/acdh-oeaw/apis-core-rdf/issues/1583)
+* **history:** drop `apis_relation` related code parts ([e588c70](https://github.com/acdh-oeaw/apis-core-rdf/commit/e588c7079a5c49f658c7e1ca553d14b6fa9f7d4a)), closes [#1536](https://github.com/acdh-oeaw/apis-core-rdf/issues/1536)
+* **urls:** drop `apis_relations` entry from urllist ([09b7fea](https://github.com/acdh-oeaw/apis-core-rdf/commit/09b7fea9d43dd1860d6c1e652e24de78e7415f33))
+
+
+### Documentation
+
+* **features:** fix typo ([0381d59](https://github.com/acdh-oeaw/apis-core-rdf/commit/0381d598960e9e1bdd27acc79099568c69619618)), closes [#1589](https://github.com/acdh-oeaw/apis-core-rdf/issues/1589)
+
 ## [0.37.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.37.1...v0.37.2) (2025-02-05)
 
 
