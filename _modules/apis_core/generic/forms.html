@@ -85,12 +85,12 @@
 
 <span class="kn">from</span> <span class="nn">crispy_forms.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
 <span class="kn">from</span> <span class="nn">crispy_forms.layout</span> <span class="kn">import</span> <span class="n">Submit</span>
-<span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
 <span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">apps</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
 
+<span class="kn">from</span> <span class="nn">apis_core.core.fields</span> <span class="kn">import</span> <span class="n">ApisModelSelect2</span><span class="p">,</span> <span class="n">ApisModelSelect2Multiple</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.abc</span> <span class="kn">import</span> <span class="n">GenericModel</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.forms.fields</span> <span class="kn">import</span> <span class="n">ModelImportChoiceField</span>
 
@@ -113,7 +113,7 @@
         <span class="p">)</span>
         <span class="n">ct</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:autocompleteexternalonly&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">ApisModelSelect2</span><span class="p">(</span>
             <span class="n">url</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data-html&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;data-tags&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span>
@@ -187,9 +187,9 @@
         <span class="c1"># override the fields pointing to other models,</span>
         <span class="c1"># to make them use the autocomplete widgets</span>
         <span class="n">override_fieldtypes</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;ModelMultipleChoiceField&quot;</span><span class="p">:</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2Multiple</span><span class="p">,</span>
-            <span class="s2">&quot;ModelChoiceField&quot;</span><span class="p">:</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2</span><span class="p">,</span>
-            <span class="s2">&quot;ModelImportChoiceField&quot;</span><span class="p">:</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2</span><span class="p">,</span>
+            <span class="s2">&quot;ModelMultipleChoiceField&quot;</span><span class="p">:</span> <span class="n">ApisModelSelect2Multiple</span><span class="p">,</span>
+            <span class="s2">&quot;ModelChoiceField&quot;</span><span class="p">:</span> <span class="n">ApisModelSelect2</span><span class="p">,</span>
+            <span class="s2">&quot;ModelImportChoiceField&quot;</span><span class="p">:</span> <span class="n">ApisModelSelect2</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="n">clsname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
@@ -235,7 +235,7 @@
         <span class="p">)</span>
         <span class="n">uri</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;apis_core:generic:autocomplete&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">ct</span><span class="p">])</span>
         <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data-html&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;data-tags&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">ModelSelect2</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span> <span class="o">=</span> <span class="n">ApisModelSelect2</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">choices</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Select or paste URI&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
