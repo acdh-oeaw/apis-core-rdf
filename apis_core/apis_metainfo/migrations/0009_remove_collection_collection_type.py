@@ -8,9 +8,4 @@ class Migration(migrations.Migration):
         ("apis_metainfo", "0008_alter_rootobject_self_contenttype"),
     ]
 
-    operations = [
-        migrations.RemoveField(
-            model_name="collection",
-            name="collection_type",
-        ),
-    ]
+    operations = []

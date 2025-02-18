@@ -45,10 +45,6 @@ INSTALLED_APPS = [
     "apis_core.apis_metainfo",
     "apis_core.relations",
     "apis_core.apis_entities",
-    # apis_vocabularies is deprecated, but there are
-    # still migrations depending on it - it will be dropped
-    # at some point
-    "apis_core.apis_vocabularies",
     # APIS history modules tracks changes of instances over
     # time and lets you revert changes
     "apis_core.history",
