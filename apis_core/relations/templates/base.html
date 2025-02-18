@@ -24,9 +24,10 @@
                placeholder="Filter relations...">
       </form>
       <div id="relationList">
-        {% relations_verbose_name_listview_url as relations %}
-        {% for verbose_name, list_url in relations %}
-          <a class="dropdown-item relation-item" href="{{ list_url }}">{{ verbose_name|capfirst }}</a>
+        {% get_relation_content_types as content_types %}
+        {% for content_type in content_types %}
+          <a class="dropdown-item relation-item"
+             href="{{ content_type.model_class.get_listview_url }}">{{ content_type.model_class.name }}</a>
         {% endfor %}
       </div>
     </div>
