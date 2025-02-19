@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils.http import urlencode
 
 from apis_core.core.fields import ApisListSelect2
-from apis_core.generic.forms import GenericModelForm
+from apis_core.generic.forms import GenericFilterSetForm, GenericModelForm
 from apis_core.generic.forms.fields import ModelImportChoiceField
 
 
@@ -230,3 +230,12 @@ class RelationForm(GenericModelForm):
         if self.is_reverse:
             return self._meta.model.reverse_name
         return self._meta.model.name
+
+
+class RelationFilterSetForm(GenericFilterSetForm):
+    """
+    FilterSet form for relations based on GenericFilterSetForm.
+    Excludes `relation_ptr` from the columns selector
+    """
+
+    columns_exclude = ["relation_ptr"]
