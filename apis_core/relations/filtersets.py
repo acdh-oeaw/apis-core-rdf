@@ -5,6 +5,7 @@ from django_filters import CharFilter, MultipleChoiceFilter
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.filtersets import GenericFilterSet
 from apis_core.generic.helpers import generate_search_filter
+from apis_core.relations.forms import RelationFilterSetForm
 from apis_core.relations.utils import get_all_relation_subj_and_obj
 
 
@@ -85,7 +86,7 @@ class RelationFilterSet(GenericFilterSet):
             "obj_object_id",
             "obj_content_type",
         ]
-        form = GenericFilterSet.Meta.form
+        form = RelationFilterSetForm
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
