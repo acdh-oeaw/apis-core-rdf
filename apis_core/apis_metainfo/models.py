@@ -18,22 +18,8 @@ class RootObject(GenericModel, models.Model):
     By having one overarching super class we gain the advantage of unique identifiers.
     """
 
-    # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
-    # triples where the subject's or object's contenttype must be respected (e.g. get all triples
-    # where the subject is a Person)
-    self_contenttype = models.ForeignKey(
-        ContentType,
-        on_delete=models.deletion.CASCADE,
-        null=True,
-        blank=True,
-        editable=False,
-    )
     objects = models.Manager()
     objects_inheritance = InheritanceManager()
-
-    def save(self, *args, **kwargs):
-        self.self_contenttype = ContentType.objects.get_for_model(self)
-        super().save(*args, **kwargs)
 
 
 # Uri model
