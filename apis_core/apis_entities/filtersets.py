@@ -10,7 +10,6 @@ from apis_core.generic.helpers import default_search_fields, generate_search_fil
 
 ABSTRACT_ENTITY_COLUMNS_EXCLUDE = [
     "rootobject_ptr",
-    "self_contenttype",
     "triple_set_from_subj",
     "triple_set_from_obj",
     "uri",
