@@ -88,6 +88,7 @@
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">generate_search_filter</span>
+<span class="kn">from</span> <span class="nn">apis_core.relations.forms</span> <span class="kn">import</span> <span class="n">RelationFilterSetForm</span>
 <span class="kn">from</span> <span class="nn">apis_core.relations.utils</span> <span class="kn">import</span> <span class="n">get_all_relation_subj_and_obj</span>
 
 
@@ -184,7 +185,7 @@
             <span class="s2">&quot;obj_object_id&quot;</span><span class="p">,</span>
             <span class="s2">&quot;obj_content_type&quot;</span><span class="p">,</span>
         <span class="p">]</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">GenericFilterSet</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">form</span></div>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">RelationFilterSetForm</span></div>
 
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
