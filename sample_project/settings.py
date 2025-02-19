@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     # swagger ui generation
     "drf_spectacular",
     # The APIS apps
+    "apis_core.generic",
     # APIS collections provide a collection model similar to
     # SKOS collections and allow tagging of content
     "apis_core.collections",
@@ -53,7 +54,6 @@ INSTALLED_APPS = [
     "apis_core.history",
     # The core APIS apps come last, so other apps can override
     # and extend their templates
-    "apis_core.generic",
     "apis_core.core",
     "apis_core.documentation",
 ]
