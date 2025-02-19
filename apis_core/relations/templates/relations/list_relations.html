@@ -15,17 +15,17 @@
         {% if relation.model_class.get_add_permission in perms %}
           {% url "apis_core:relations:create_relation" relation as baseurl %}
           {% url "apis_core:relations:create_relation_form" relation as baseurlform %}
-          {% if target.model_class in relation.model_class.subj_list and object.self_contenttype.model_class in relation.model_class.obj_list %}
-            <a href="{{ baseurl }}?obj_content_type={{ object.self_contenttype.id }}&obj_object_id={{ object.id }}&subj_content_type={{ target.id }}"
+          {% if target.model_class in relation.model_class.subj_list and object.content_type.model_class in relation.model_class.obj_list %}
+            <a href="{{ baseurl }}?obj_content_type={{ object.content_type.id }}&obj_object_id={{ object.id }}&subj_content_type={{ target.id }}"
                class="btn btn-sm btn-outline-secondary"
-               hx-get="{{ baseurlform }}?obj_content_type={{ object.self_contenttype.id }}&obj_object_id={{ object.id }}&subj_content_type={{ target.id }}&hx=true&reverse=true"
+               hx-get="{{ baseurlform }}?obj_content_type={{ object.content_type.id }}&obj_object_id={{ object.id }}&subj_content_type={{ target.id }}&hx=true&reverse=true"
                hx-target="#relation-dialog-content"
                onclick="relationdialog.showModal();">{{ relation.model_class.reverse_name }}</a>
           {% endif %}
-          {% if target.model_class in relation.model_class.obj_list and object.self_contenttype.model_class in relation.model_class.subj_list %}
-            <a href="{{ baseurl }}?subj_content_type={{ object.self_contenttype.id }}&subj_object_id={{ object.id }}&obj_content_type={{ target.id }}"
+          {% if target.model_class in relation.model_class.obj_list and object.content_type.model_class in relation.model_class.subj_list %}
+            <a href="{{ baseurl }}?subj_content_type={{ object.content_type.id }}&subj_object_id={{ object.id }}&obj_content_type={{ target.id }}"
                class="btn btn-sm btn-outline-secondary"
-               hx-get="{{ baseurlform }}?subj_content_type={{ object.self_contenttype.id }}&subj_object_id={{ object.id }}&obj_content_type={{ target.id }}&hx=true"
+               hx-get="{{ baseurlform }}?subj_content_type={{ object.content_type.id }}&subj_object_id={{ object.id }}&obj_content_type={{ target.id }}&hx=true"
                hx-target="#relation-dialog-content"
                onclick="relationdialog.showModal();">{{ relation.model_class.name }}</a>
           {% endif %}
