@@ -58,13 +58,9 @@ class Uri(GenericModel, models.Model):
         self.uri = get_normalized_uri(self.uri)
         if self.uri and not hasattr(self, "content_object"):
             try:
-                definition, attributes = rdf.get_definition_and_attributes_from_uri(
-                    self.uri
-                )
-                if definition.getattr("model", False) and attributes:
-                    app_label, model = definition.getattr("model").split(".", 1)
-                    ct = ContentType.objects.get_by_natural_key(app_label, model)
-                    obj = ct.model_class()(**attributes)
+                result = rdf.get_something_from_uri(self.uri)
+                if model := result.getattr("model", False):
+                    obj = model(**result.get("attributes", {}))
                     obj.save()
                     self.content_type = ContentType.objects.get_for_model(obj)
                     self.object_id = obj.id
