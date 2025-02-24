@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.39.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.38.0...v0.39.0) (2025-02-24)
+
+
+### Features
+
+* **apis_entities:** replace entity list templatetag with generic one ([0d1abd6](https://github.com/acdh-oeaw/apis-core-rdf/commit/0d1abd607edc1348f0efdcc2650f2eaeb74a5ea2)), closes [#1576](https://github.com/acdh-oeaw/apis-core-rdf/issues/1576)
+* **relations:** remove relation_ptr from columns selector ([a697a78](https://github.com/acdh-oeaw/apis-core-rdf/commit/a697a78fc39764b46bf39c43774b4cc0b8d03a5d)), closes [#1612](https://github.com/acdh-oeaw/apis-core-rdf/issues/1612)
+* **relations:** replace relation list template tag with generic one ([79d8691](https://github.com/acdh-oeaw/apis-core-rdf/commit/79d8691bf099c43b1a61e112a900bd1f295b6477)), closes [#1577](https://github.com/acdh-oeaw/apis-core-rdf/issues/1577)
+* **sample_project:** move generic app up in INSTALLED_APPS list ([321a061](https://github.com/acdh-oeaw/apis-core-rdf/commit/321a06119f80be762fe94b2822ca9019ceca0fd3))
+
 ## [0.38.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.37.2...v0.38.0) (2025-02-18)
 
 
