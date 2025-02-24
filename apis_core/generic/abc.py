@@ -24,6 +24,10 @@ class GenericModel:
             return super().__repr__() + f" (ID: {id})"
         return super().__repr__()
 
+    @property
+    def content_type(self):
+        return ContentType.objects.get_for_model(self)
+
     @classmethod
     def get_listview_url(cls):
         ct = ContentType.objects.get_for_model(cls)
