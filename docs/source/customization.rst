@@ -211,3 +211,46 @@ To use this logic in forms, there is
 based on `django.forms.ModelChoiceField <https://docs.djangoproject.com/en/stable/ref/forms/fields/#modelchoicefield>`_. It checks if the passed value starts
 with ``http`` and if so, it uses the importer that fits the model and uses it to
 create the model instance.
+
+Using the GenericModelImporter to import RDF
+--------------------------------------------
+
+The :py:class:`apis_core.generic.importers.GenericModelImporter` tries to
+parse the passed URI using the :py:mod:`apis_core.utils.rdf` module.
+This module looks at all the existing models and uses the models `rdf_configs`
+class methos to get a list of potential RDF-Import config files. 
+Those RDF-Import config files are `TOML <https://toml.io/>`_ configuration
+files. They have three main attributes, which are ``filters``, ``attributes``
+and ``relations``.
+
+The ``filters`` attributes are key, value pairs that define filters that
+have to match on the input data. Multiple ``filters`` entries can be defined,
+only one of them has to match. Every ``filters`` entry can contain multiple
+key, value pairs, which ALL have to match:
+
+.. code-block:: toml
+
+   [[filters]]
+   "rdf:type" = "gndo:DifferentiatedPerson"
+
+
+The ``attributes`` config option lists key value pairs, which map keys (usually
+model attributes) to a single SPARQL query or a list of SPARQL queries. Instead
+of SPARQL it is also possible to simply write a compact URI which is then
+looked up in the graph that results from the data input:
+
+.. code-block:: toml
+
+   [attributes]
+   forename = ["gndo:forename", "gndo:preferredNameEntityForThePerson/gndo:forename"]
+
+
+The ``relations`` config option lists mappings from a natural key of a relation model
+to a dict containing a ``curie`` key with a compact URI or a list of compact URIs and
+an ``obj`` or ``subj`` key defining the relations other type (which will be used to
+import the data from the URI).
+
+.. code-block:: toml
+
+   [relations]
+   "apis_ontology.starbin" = { curies = "gndo:placeOfDeath", obj = "apis_ontology.place" }
