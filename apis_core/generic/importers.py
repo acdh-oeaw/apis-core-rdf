@@ -4,10 +4,13 @@ import urllib
 from functools import cache
 
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
+from django.db.utils import IntegrityError
 
-from apis_core.utils.helpers import flatten_if_single
-from apis_core.utils.rdf import get_definition_and_attributes_from_uri
+from apis_core.apis_metainfo.models import Uri
+from apis_core.utils.helpers import create_object_from_uri
+from apis_core.utils.rdf import get_something_from_uri
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +45,7 @@ class GenericModelImporter:
     def request(self, uri):
         # we first try to use the RDF parser
         try:
-            defn, data = get_definition_and_attributes_from_uri(uri, self.model)
+            data = get_something_from_uri(uri)
             return data
         except Exception as e:
             logger.debug(e)
@@ -71,7 +74,6 @@ class GenericModelImporter:
             # we are dropping all fields that are not part of the model
             modelfields = [field.name for field in self.model._meta.fields]
             data = {key: data[key] for key in data if key in modelfields}
-        data = {key: flatten_if_single(value) for key, value in data.items()}
         if not data:
             raise ImproperlyConfigured(
                 f"Could not import {self.import_uri}. Data fetched was: {data}"
@@ -88,4 +90,69 @@ class GenericModelImporter:
         instance.save()
 
     def create_instance(self):
-        return self.model.objects.create(**self.get_data(drop_unknown_fields=True))
+        logger.debug("Create instance from URI %s", self.import_uri)
+        data = self.get_data(drop_unknown_fields=False)
+        instance = None
+        same_as = data.get("same_as", [])
+        same_as = [get_normalized_uri(uri) for uri in same_as]
+        if sa := Uri.objects.filter(uri__in=same_as):
+            root_set = set([s.content_object for s in sa])
+            if len(root_set) > 1:
+                raise IntegrityError(
+                    f"Multiple objects found for sameAs URIs {data['same_as']}. "
+                    f"This indicates a data integrity problem as these URIs should be unique."
+                )
+            instance = sa.first().content_object
+            logger.debug("Found existing instance %s", instance)
+        if not instance:
+            attributes = {}
+            for field in self.model._meta.fields:
+                if data.get(field.name, False):
+                    attributes[field.name] = data[field.name][0]
+            instance = self.model.objects.create(**attributes)
+            logger.debug("Created instance %s from attributes %s", instance, attributes)
+        content_type = ContentType.objects.get_for_model(instance)
+        for uri in same_as:
+            Uri.objects.get_or_create(
+                uri=uri, content_type=content_type, object_id=instance.id
+            )
+        for relation, details in data.get("relations", {}).items():
+            rel_app_label, rel_model = relation.split(".")
+            relation_model = ContentType.objects.get_by_natural_key(
+                app_label=rel_app_label, model=rel_model
+            ).model_class()
+
+            reld = details.get("obj", None) or details.get("subj", None)
+            reld_app_label, reld_model = reld.split(".")
+            related_content_type = ContentType.objects.get_by_natural_key(
+                app_label=reld_app_label, model=reld_model
+            )
+            related_model = related_content_type.model_class()
+
+            for related_uri in details["curies"]:
+                related_instance = create_object_from_uri(
+                    uri=related_uri, model=related_model
+                )
+                if details.get("obj"):
+                    subj_object_id = instance.pk
+                    subj_content_type = content_type
+                    obj_object_id = related_instance.pk
+                    obj_content_type = related_content_type
+                else:
+                    obj_object_id = instance.pk
+                    obj_content_type = content_type
+                    subj_object_id = related_instance.pk
+                    subj_content_type = related_content_type
+                rel, _ = relation_model.objects.get_or_create(
+                    subj_object_id=subj_object_id,
+                    subj_content_type=subj_content_type,
+                    obj_object_id=obj_object_id,
+                    obj_content_type=obj_content_type,
+                )
+                logger.debug(
+                    "Created relation %s between %s and %s",
+                    relation_model.name(),
+                    rel.subj,
+                    rel.obj,
+                )
+        return instance
