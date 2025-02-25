@@ -1098,7 +1098,17 @@ keyword arguments, and other things.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.views.Autocomplete.create_object">
 <span class="sig-name descname"><span class="pre">create_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/views.html#Autocomplete.create_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.views.Autocomplete.create_object" title="Link to this definition"></a></dt>
-<dd><p>Create an object given a text.</p>
+<dd><p>We try multiple approaches to create a model instance from a value:
+* we first test if the value is an URL and if so we expect it to be
+something that can be imported using one of the configured importers
+and so we pass the value to the import logic.
+* if the value is not a string, we try to pass it to the <cite>create_from_string</cite>
+method of the model, if that does exist. Its the models responsibility to
+implement this method and the method should somehow know how to create
+model instance from the value…
+* finally we pass the value to the <cite>create_object</cite> method from the DAL
+view, which tries to pass it to <cite>get_or_create</cite> which likely also fails,
+but this is expected and we raise a more useful exception.</p>
 </dd></dl>
 
 <dl class="py method">
