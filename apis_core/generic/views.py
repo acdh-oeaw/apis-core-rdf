@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.validators import URLValidator
+from django.db.models.fields.related import ManyToManyRel
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
 from django.shortcuts import get_object_or_404, redirect
@@ -185,6 +186,7 @@ class List(
             (field.name, pretty_name(getattr(field, "verbose_name", field.name)))
             for field in self.model._meta.get_fields()
             if not getattr(field, "parent_link", False)
+            and not isinstance(field, ManyToManyRel)
         ]
         # we add any annotated fields to that
         choices += [(key, key) for key in self.get_queryset().query.annotations.keys()]
