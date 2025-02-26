@@ -82,6 +82,36 @@ def collection_object_parent_by_id(context, obj, collectionobject_id):
     return collection_object_parent(context, obj, collectionobject)
 
 
+@register.inclusion_tag(
+    "collections/collection_object_collection.html", takes_context=True
+)
+def collection_object_collection(context, obj, collectionobject):
+    """
+    Provide a button to change the connection between an object and
+    a collection to point to the collection the collection is in.
+    """
+    try:
+        context["parent"] = collectionobject.collection.parent
+        context["collectionobject"] = collectionobject
+        context["content_type"] = ContentType.objects.get_for_model(obj)
+        context["object"] = obj
+    except collectionobject.collection.MultipleObjectsReturned as e:
+        context["error"] = e
+    return context
+
+
+@register.inclusion_tag(
+    "collections/collection_object_collection.html", takes_context=True
+)
+def collection_object_collection_by_id(context, obj, collectionobject_id):
+    """
+    Wrapper templatetag to allow using `collection_object_parent` with
+    just the `id` of the collectionobject.
+    """
+    collectionobject = SkosCollectionContentObject.objects.get(pk=collectionobject_id)
+    return collection_object_parent(context, obj, collectionobject)
+
+
 @register.simple_tag(takes_context=True)
 def collection_content_objects(context, obj, collectionids=None):
     content_type = ContentType.objects.get_for_model(obj)
