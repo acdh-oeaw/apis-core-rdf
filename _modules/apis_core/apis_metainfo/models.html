@@ -103,25 +103,8 @@
 <span class="sd">    By having one overarching super class we gain the advantage of unique identifiers.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># self_contenttype: a foreign key to the respective contenttype comes in handy when querying for</span>
-    <span class="c1"># triples where the subject&#39;s or object&#39;s contenttype must be respected (e.g. get all triples</span>
-    <span class="c1"># where the subject is a Person)</span>
-    <span class="n">self_contenttype</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
-        <span class="n">ContentType</span><span class="p">,</span>
-        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">deletion</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span>
-        <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span>
     <span class="n">objects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">()</span>
-    <span class="n">objects_inheritance</span> <span class="o">=</span> <span class="n">InheritanceManager</span><span class="p">()</span>
-
-<div class="viewcode-block" id="RootObject.save">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.RootObject.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">self_contenttype</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-</div>
+    <span class="n">objects_inheritance</span> <span class="o">=</span> <span class="n">InheritanceManager</span><span class="p">()</span></div>
 
 
 
