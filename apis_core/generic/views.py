@@ -184,7 +184,7 @@ class List(
         choices = [
             (field.name, pretty_name(getattr(field, "verbose_name", field.name)))
             for field in self.model._meta.get_fields()
-            if field.name not in getattr(self.get_queryset(), "subclasses", [])
+            if not getattr(field, "parent_link", False)
         ]
         # we add any annotated fields to that
         choices += [(key, key) for key in self.get_queryset().query.annotations.keys()]
