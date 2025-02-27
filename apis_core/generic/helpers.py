@@ -1,6 +1,7 @@
 import functools
 import logging
 
+from django.conf import settings
 from django.contrib.auth import get_permission_codename
 from django.db.models import CharField, Model, Q, TextField
 from django.utils import module_loading
@@ -89,7 +90,12 @@ def permission_fullname(action: str, model: object) -> str:
 @functools.lru_cache
 def module_paths(model, path: str = "", suffix: str = "") -> list:
     paths = list(map(lambda x: x[:-1] + [path] + x[-1:], mro_paths(model)))
-    classes = tuple(".".join(prefix) + suffix for prefix in paths)
+    prepends = []
+    for prepend in getattr(settings, "ADDITIONAL_MODULE_LOOKUP_PATHS", []):
+        prepends.extend(
+            list(map(lambda x: prepend.split(".") + [path] + x[-1:], mro_paths(model)))
+        )
+    classes = tuple(".".join(prefix) + suffix for prefix in prepends + paths)
     return classes
 
 
