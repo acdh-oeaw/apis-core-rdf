@@ -111,6 +111,18 @@ class SkosCollection(GenericModel, models.Model):
             collection=self, content_type=content_type, object_id=instance.id
         ).delete()
 
+    @property
+    def parent_collection(self):
+        content_type = ContentType.objects.get_for_model(self)
+        sccos = SkosCollectionContentObject.objects.filter(
+            content_type=content_type, object_id=self.id
+        )
+        if len(sccos) == 1:
+            return sccos.first().collection
+        raise SkosCollection.MultipleObjectsReturned(
+            f'"{self}" is part of multiple collections'
+        )
+
 
 class SkosCollectionContentObject(GenericModel, models.Model):
     """

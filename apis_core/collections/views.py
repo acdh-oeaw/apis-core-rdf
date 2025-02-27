@@ -77,6 +77,26 @@ class CollectionObjectParent(LoginRequiredMixin, ContentObjectMixin, TemplateVie
         return context
 
 
+class CollectionObjectCollection(LoginRequiredMixin, ContentObjectMixin, TemplateView):
+    """
+    Change the requested CollectionObjects collection to point to the collection the
+    current collection is in.
+    """
+
+    template_name = "collections/collection_object_collection.html"
+
+    def get_context_data(self, *args, **kwargs):
+        collectionobject = get_object_or_404(
+            SkosCollectionContentObject, pk=kwargs["collectionobject"]
+        )
+        parent = collectionobject.collection.parent_collection
+        collectionobject.collection = parent
+        collectionobject.save()
+        context = super().get_context_data(*args, **kwargs)
+        context["collectionobject"] = collectionobject
+        return context
+
+
 class CollectionSessionToggle(LoginRequiredMixin, TemplateView):
     """
     Toggle the existence of an SkosCollection in the `session_collections`
