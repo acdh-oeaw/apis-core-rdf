@@ -25,9 +25,20 @@ class E21_Person(models.Model):
 
 
 class E53_Place(models.Model):
+    """
+    The feature_code field refers to the geonames feature codes, as
+    listed on https://www.geonames.org/export/codes.html
+    """
+
     label = models.CharField(blank=True, default="", max_length=4096)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
+    feature_code = models.CharField(
+        blank=True,
+        default="",
+        max_length=16,
+        help_text='<a href="https://www.geonames.org/export/codes.html">Geonames Feature Code List</a>',
+    )
 
     class Meta:
         abstract = True
