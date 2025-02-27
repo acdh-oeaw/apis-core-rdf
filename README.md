@@ -4,7 +4,7 @@ APIS
 ![Django Tests](https://github.com/acdh-oeaw/apis-core-rdf/actions/workflows/django-tests.yml/badge.svg)
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/acdh-oeaw/apis-core-rdf)
 
-The *Austrian Prosophographic Information System* is a
+The *Austrian Prosophographical Information System* is a
 [Django](https://www.djangoproject.com/) based prosopography framework. It
 allows to create web applications to manage both entities and relations between
 entities. It provides API access to the data in various formats and creates
