@@ -79,12 +79,6 @@ class AbstractEntity(RootObject):
             kwargs={"contenttype": entity, "pk": self.id},
         )
 
-    def merge_start_date_written(self, other):
-        self.start_date_written = self.start_date_written or other.start_date_written
-
-    def merge_end_date_written(self, other):
-        self.end_date_written = self.end_date_written or other.end_date_written
-
 
 @receiver(post_save, dispatch_uid="create_default_uri")
 def create_default_uri(sender, instance, created, raw, using, update_fields, **kwargs):

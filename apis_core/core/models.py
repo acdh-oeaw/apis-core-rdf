@@ -71,3 +71,9 @@ class LegacyDateMixin(models.Model):
         super().save(*args, **kwargs)
 
         return self
+
+    def merge_start_date_written(self, other):
+        self.start_date_written = self.start_date_written or other.start_date_written
+
+    def merge_end_date_written(self, other):
+        self.end_date_written = self.end_date_written or other.end_date_written
