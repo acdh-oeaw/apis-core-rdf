@@ -55,7 +55,6 @@ class Migration(migrations.Migration):
                 ("references", models.TextField(blank=True, null=True)),
                 ("notes", models.TextField(blank=True, null=True)),
                 ("published", models.BooleanField(default=False)),
-                ("collection", models.ManyToManyField(to="apis_metainfo.Collection")),
                 (
                     "source",
                     models.ForeignKey(

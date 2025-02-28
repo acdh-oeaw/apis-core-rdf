@@ -39,14 +39,4 @@ class Migration(migrations.Migration):
             name="groups_allowed",
             field=models.ManyToManyField(to="auth.Group"),
         ),
-        migrations.AddField(
-            model_name="collection",
-            name="parent_class",
-            field=models.ForeignKey(
-                blank=True,
-                null=True,
-                on_delete=django.db.models.deletion.CASCADE,
-                to="apis_metainfo.collection",
-            ),
-        ),
     ]
