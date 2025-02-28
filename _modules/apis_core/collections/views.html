@@ -187,6 +187,32 @@
 
 
 
+<div class="viewcode-block" id="CollectionObjectCollection">
+<a class="viewcode-back" href="../../../modules/apis_core.collections.html#apis_core.collections.views.CollectionObjectCollection">[docs]</a>
+<span class="k">class</span> <span class="nc">CollectionObjectCollection</span><span class="p">(</span><span class="n">LoginRequiredMixin</span><span class="p">,</span> <span class="n">ContentObjectMixin</span><span class="p">,</span> <span class="n">TemplateView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Change the requested CollectionObjects collection to point to the collection the</span>
+<span class="sd">    current collection is in.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;collections/collection_object_collection.html&quot;</span>
+
+<div class="viewcode-block" id="CollectionObjectCollection.get_context_data">
+<a class="viewcode-back" href="../../../modules/apis_core.collections.html#apis_core.collections.views.CollectionObjectCollection.get_context_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">collectionobject</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span>
+            <span class="n">SkosCollectionContentObject</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;collectionobject&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">collectionobject</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">parent_collection</span>
+        <span class="n">collectionobject</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="n">collectionobject</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;collectionobject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">collectionobject</span>
+        <span class="k">return</span> <span class="n">context</span></div>
+</div>
+
+
+
 <div class="viewcode-block" id="CollectionSessionToggle">
 <a class="viewcode-back" href="../../../modules/apis_core.collections.html#apis_core.collections.views.CollectionSessionToggle">[docs]</a>
 <span class="k">class</span> <span class="nc">CollectionSessionToggle</span><span class="p">(</span><span class="n">LoginRequiredMixin</span><span class="p">,</span> <span class="n">TemplateView</span><span class="p">):</span>

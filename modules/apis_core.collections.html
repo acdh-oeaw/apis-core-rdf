@@ -122,6 +122,8 @@
 <li class="toctree-l3"><a class="reference internal" href="apis_core.collections.templatetags.html#apis_core.collections.templatetags.collections.collection_children_toggle"><code class="docutils literal notranslate"><span class="pre">collection_children_toggle()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.collections.templatetags.html#apis_core.collections.templatetags.collections.collection_children_toggle_by_id"><code class="docutils literal notranslate"><span class="pre">collection_children_toggle_by_id()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.collections.templatetags.html#apis_core.collections.templatetags.collections.collection_content_objects"><code class="docutils literal notranslate"><span class="pre">collection_content_objects()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.collections.templatetags.html#apis_core.collections.templatetags.collections.collection_object_collection"><code class="docutils literal notranslate"><span class="pre">collection_object_collection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="apis_core.collections.templatetags.html#apis_core.collections.templatetags.collections.collection_object_collection_by_id"><code class="docutils literal notranslate"><span class="pre">collection_object_collection_by_id()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.collections.templatetags.html#apis_core.collections.templatetags.collections.collection_object_parent"><code class="docutils literal notranslate"><span class="pre">collection_object_parent()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.collections.templatetags.html#apis_core.collections.templatetags.collections.collection_object_parent_by_id"><code class="docutils literal notranslate"><span class="pre">collection_object_parent_by_id()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="apis_core.collections.templatetags.html#apis_core.collections.templatetags.collections.collection_session_toggle_by_id"><code class="docutils literal notranslate"><span class="pre">collection_session_toggle_by_id()</span></code></a></li>
@@ -275,6 +277,11 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
 </dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="apis_core.collections.models.SkosCollection.parent_collection">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent_collection</span></span><a class="headerlink" href="#apis_core.collections.models.SkosCollection.parent_collection" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.collections.models.SkosCollection.parent_id">
@@ -453,6 +460,26 @@ be enabled.</p>
 </section>
 <section id="module-apis_core.collections.views">
 <span id="apis-core-collections-views-module"></span><h2>apis_core.collections.views module<a class="headerlink" href="#module-apis_core.collections.views" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.collections.views.CollectionObjectCollection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.collections.views.</span></span><span class="sig-name descname"><span class="pre">CollectionObjectCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/collections/views.html#CollectionObjectCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.collections.views.CollectionObjectCollection" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LoginRequiredMixin</span></code>, <a class="reference internal" href="#apis_core.collections.views.ContentObjectMixin" title="apis_core.collections.views.ContentObjectMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContentObjectMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">TemplateView</span></code></p>
+<p>Change the requested CollectionObjects collection to point to the collection the
+current collection is in.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.collections.views.CollectionObjectCollection.get_context_data">
+<span class="sig-name descname"><span class="pre">get_context_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/collections/views.html#CollectionObjectCollection.get_context_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.collections.views.CollectionObjectCollection.get_context_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.collections.views.CollectionObjectCollection.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'collections/collection_object_collection.html'</span></em><a class="headerlink" href="#apis_core.collections.views.CollectionObjectCollection.template_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="apis_core.collections.views.CollectionObjectParent">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.collections.views.</span></span><span class="sig-name descname"><span class="pre">CollectionObjectParent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/collections/views.html#CollectionObjectParent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.collections.views.CollectionObjectParent" title="Link to this definition"></a></dt>

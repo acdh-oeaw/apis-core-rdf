@@ -215,7 +215,19 @@
         <span class="n">SkosCollectionContentObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
             <span class="n">collection</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">id</span>
         <span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
-</div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parent_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">sccos</span> <span class="o">=</span> <span class="n">SkosCollectionContentObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sccos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sccos</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">collection</span>
+        <span class="k">raise</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">MultipleObjectsReturned</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1">&quot; is part of multiple collections&#39;</span>
+        <span class="p">)</span></div>
 
 
 
