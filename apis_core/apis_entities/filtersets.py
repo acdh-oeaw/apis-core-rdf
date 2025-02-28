@@ -1,5 +1,6 @@
 import django_filters
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.forms import DateInput
 from django.utils.encoding import force_str
@@ -7,6 +8,7 @@ from simple_history.utils import get_history_manager_for_model
 
 from apis_core.generic.filtersets import GenericFilterSet, GenericFilterSetForm
 from apis_core.generic.helpers import default_search_fields, generate_search_filter
+from apis_core.apis_entities.forms.fields import RelationField
 
 ABSTRACT_ENTITY_COLUMNS_EXCLUDE = [
     "rootobject_ptr",
@@ -62,6 +64,15 @@ def changed_since(queryset, name, value):
     return queryset.filter(pk__in=ids)
 
 
+class RelationFilter(django_filters.Filter):
+    field_class = RelationField
+
+    def filter(self, qs, value):
+        relationid, entity_ct_id = value
+        relation = ContentType.objects.get(pk=relationid).model_class()
+        return super().filter(qs, value)
+
+
 class AbstractEntityFilterSetForm(GenericFilterSetForm):
     columns_exclude = ABSTRACT_ENTITY_COLUMNS_EXCLUDE
 
@@ -91,3 +102,5 @@ class AbstractEntityFilterSet(GenericFilterSet):
                 widget=DateInput(attrs={"type": "date"}),
                 method=changed_since,
             )
+
+        self.filters["relation"] = RelationFilter()
