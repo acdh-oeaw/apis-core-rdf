@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.39.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.38.0...v0.39.0) (2025-02-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_metainfo:** The `self_contenttype` field is removed from the RootObject. This means that all models inheriting from RootObject (i.e. all models inheriting from AbstractEntity) loose this field. For the models using the VersionMixin, this leads to a migration removing the `self_contenttype` field from the historic version of that model.
+
+### Features
+
+* **apis_entities:** add a feature code field to E53_Place ([f8867db](https://github.com/acdh-oeaw/apis-core-rdf/commit/f8867dbbdac452bf11c0a033e4d49986cb0ff482))
+* **apis_entities:** replace entity list templatetag with generic one ([0d1abd6](https://github.com/acdh-oeaw/apis-core-rdf/commit/0d1abd607edc1348f0efdcc2650f2eaeb74a5ea2)), closes [#1576](https://github.com/acdh-oeaw/apis-core-rdf/issues/1576)
+* **apis_metainfo:** drop `self_contenttype` field from RootObject ([cf2ea10](https://github.com/acdh-oeaw/apis-core-rdf/commit/cf2ea10b363152b377543d4e168dda3c715364e4))
+* **apis_vocabularies:** drop apis_vocabularies app ([3602f85](https://github.com/acdh-oeaw/apis-core-rdf/commit/3602f85c34f161315c261d9b83e047888813435b))
+* **collections:** implement toggling collection without the parent ([1d63c15](https://github.com/acdh-oeaw/apis-core-rdf/commit/1d63c156364913855db8d33560c3624458edc05a))
+* **core:** update htmx script inclusion to v2.0.4 ([0e63150](https://github.com/acdh-oeaw/apis-core-rdf/commit/0e631503c01b6f5393682ad1adec1a01dbb34758)), closes [#1606](https://github.com/acdh-oeaw/apis-core-rdf/issues/1606)
+* **generic:** allow to inject additional modules into lookup path ([fa9ede2](https://github.com/acdh-oeaw/apis-core-rdf/commit/fa9ede2b8b06a637162cb5679e857bd945b0e94a))
+* **generic:** fallback to custom create method if value is not an URI ([15831c1](https://github.com/acdh-oeaw/apis-core-rdf/commit/15831c1251c197e1b6609f043071b36840e94035))
+* **generic:** introduce a `content_type` property on GenericModel ([c103b90](https://github.com/acdh-oeaw/apis-core-rdf/commit/c103b90703352a546e75a873dfefed1e4d790c7f))
+* **relations:** remove relation_ptr from columns selector ([a697a78](https://github.com/acdh-oeaw/apis-core-rdf/commit/a697a78fc39764b46bf39c43774b4cc0b8d03a5d)), closes [#1612](https://github.com/acdh-oeaw/apis-core-rdf/issues/1612)
+* **relations:** replace `self_contenttype` with `content_type` property ([31c7191](https://github.com/acdh-oeaw/apis-core-rdf/commit/31c7191405a6d37259dbb090c6422997101bb28e))
+* **relations:** replace relation list template tag with generic one ([79d8691](https://github.com/acdh-oeaw/apis-core-rdf/commit/79d8691bf099c43b1a61e112a900bd1f295b6477)), closes [#1577](https://github.com/acdh-oeaw/apis-core-rdf/issues/1577)
+* **sample_project:** add migration introducing E53_Place.feature_code ([3458a7f](https://github.com/acdh-oeaw/apis-core-rdf/commit/3458a7fa01a30a69d7adcab9b852fe8eed98c3be))
+* **sample_project:** add migration that drops `self_contenttype` ([ed02d02](https://github.com/acdh-oeaw/apis-core-rdf/commit/ed02d02eabd32886dae3bc61c23a7d90f62288e8))
+* **sample_project:** move generic app up in INSTALLED_APPS list ([321a061](https://github.com/acdh-oeaw/apis-core-rdf/commit/321a06119f80be762fe94b2822ca9019ceca0fd3))
+
+
+### Bug Fixes
+
+* **generic:** don't show subclasses in columns selector ([37e9170](https://github.com/acdh-oeaw/apis-core-rdf/commit/37e9170705ceb7e5d7ed20060859108f50c440d2)), closes [#1297](https://github.com/acdh-oeaw/apis-core-rdf/issues/1297)
+* **generic:** remove many2many relation tables from columns ([82235c7](https://github.com/acdh-oeaw/apis-core-rdf/commit/82235c76f0e125b8fade3bdf159c7af0e568d70e)), closes [#1500](https://github.com/acdh-oeaw/apis-core-rdf/issues/1500)
+* **generic:** use verbose_name_plural for generic menu items ([d3f4c8c](https://github.com/acdh-oeaw/apis-core-rdf/commit/d3f4c8c9f53b3d1b87ea9e0861fb939997aad7f9)), closes [#1624](https://github.com/acdh-oeaw/apis-core-rdf/issues/1624)
+* **sample_project:** drop self_contenttype from fixtures ([e77665a](https://github.com/acdh-oeaw/apis-core-rdf/commit/e77665ad5d2d6712681659ea44d0b7075ce1e3d4)), closes [#1633](https://github.com/acdh-oeaw/apis-core-rdf/issues/1633)
+
 ## [0.38.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.37.2...v0.38.0) (2025-02-18)
 
 
