@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.html import format_html
 from django.views import View
 
+from apis_core.apis_entities.utils import get_entity_content_types
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.helpers import generate_search_filter
 from apis_core.generic.views import GenericModelMixin
@@ -55,18 +56,20 @@ class EntitiesAutocomplete(autocomplete.Select2QuerySetView):
 
     def get_queryset(self):
         q = Q()
-        if entities := self.request.GET.getlist("entities"):
-            for entity in entities:
-                app_label, model = entity.split(".")
-                content_type = get_object_or_404(
-                    ContentType, app_label=app_label, model=model
-                )
-                name = (
-                    RootObject.objects_inheritance.get_queryset()._get_ancestors_path(
-                        content_type.model_class()
-                    )
-                )
-                q |= Q(**{f"{name}__isnull": False}) & generate_search_filter(
-                    content_type.model_class(), self.q, prefix=f"{name}__"
-                )
+        entities = []
+        for entity in self.request.GET.getlist("entities"):
+            app_label, model = entity.split(".")
+            content_type = get_object_or_404(
+                ContentType, app_label=app_label, model=model
+            )
+            entities.append(content_type)
+        if not entities:
+            entities = get_entity_content_types()
+        for content_type in entities:
+            name = RootObject.objects_inheritance.get_queryset()._get_ancestors_path(
+                content_type.model_class()
+            )
+            q |= Q(**{f"{name}__isnull": False}) & generate_search_filter(
+                content_type.model_class(), self.q, prefix=f"{name}__"
+            )
         return RootObject.objects_inheritance.select_subclasses().filter(q)
