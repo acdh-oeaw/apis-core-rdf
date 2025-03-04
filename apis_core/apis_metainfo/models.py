@@ -50,17 +50,6 @@ class Uri(GenericModel, models.Model):
     def __str__(self):
         return str(self.uri)
 
-    def get_web_object(self):
-        result = {
-            "relation_pk": self.pk,
-            "relation_type": "uri",
-            "related_root_object": self.content_object.name,
-            "related_root_object_url": self.content_object.get_absolute_url(),
-            "related_root_object_class_name": self.content_object.__class__.__name__.lower(),
-            "uri": self.uri,
-        }
-        return result
-
     def save(self, *args, **kwargs):
         self.clean()
         return super().save(*args, **kwargs)
