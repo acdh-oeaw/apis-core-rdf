@@ -185,7 +185,7 @@ class List(
         choices = [
             (field.name, pretty_name(getattr(field, "verbose_name", field.name)))
             for field in self.model._meta.get_fields()
-            if not getattr(field, "parent_link", False)
+            if not getattr(field, "auto_created", False)
             and not isinstance(field, ManyToManyRel)
         ]
         # we add any annotated fields to that
