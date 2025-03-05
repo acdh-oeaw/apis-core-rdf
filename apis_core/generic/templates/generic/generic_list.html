@@ -22,6 +22,7 @@
         </div>
       </div>
       <div class="card-body">
+        {% if filter.form.errors %}<div class="alert alert-warning">{{ filter.form.errors }}</div>{% endif %}
 
         {% block filter %}
           {% crispy filter.form filter.form.helper %}
