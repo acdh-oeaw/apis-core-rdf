@@ -16,7 +16,7 @@ urlpatterns = [
         name="create_relation_form",
     ),
     path(
-        "<contenttype:target_contenttype>/list/<contenttype:object_contenttype>/<int:object_id>",
+        "list/<contenttype:contenttype>/<int:pk>",
         ListRelations.as_view(),
         name="list_relations",
     ),

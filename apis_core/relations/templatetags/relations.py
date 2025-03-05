@@ -2,10 +2,10 @@ from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Case, Q, Value, When
 
-from apis_core.generic.helpers import first_member_match, module_paths, mro_paths
+from apis_core.generic.helpers import first_member_match, module_paths
 from apis_core.relations.models import Relation
 from apis_core.relations.tables import RelationsListTable
-from apis_core.relations.utils import relation_content_types, relation_match_target
+from apis_core.relations.utils import relation_content_types
 
 register = template.Library()
 
@@ -57,27 +57,34 @@ def relations_from(from_obj, relation_type: ContentType = None):
 
 
 @register.simple_tag(takes_context=True)
-def relations_list_table(context, relations, target=None):
+def relations_list_table(context, relations, suffix=None):
     suffixes = ["RelationsTable"]
-    if target:
-        suffixes.extend(
-            f"{module[-1]}RelationsTable" for module in mro_paths(target.model_class())
-        )
+    if suffix:
+        suffixes.append(f"{suffix}RelationsTable")
     table_modules = ()
     for suffix in suffixes:
         table_modules += module_paths(
             type(context["object"]), path="tables", suffix=suffix
         )
     table_class = first_member_match(table_modules, RelationsListTable)
-    if target:
-        relations = [
-            relation
-            for relation in relations
-            if relation_match_target(relation, target)
-        ]
     return table_class(relations, request=context["request"])
 
 
 @register.simple_tag
 def get_relation_content_types():
     return relation_content_types()
+
+
+@register.simple_tag
+def get_relation_between_content_types(source: ContentType, target: ContentType):
+    return relation_content_types(
+        combination=(source.model_class(), target.model_class())
+    )
+
+
+@register.simple_tag(takes_context=True)
+def relations_instances_from_relation_types(context, relation_types):
+    relations = []
+    for relation_type in relation_types:
+        relations.extend(relations_from(context["object"], relation_type))
+    return relations

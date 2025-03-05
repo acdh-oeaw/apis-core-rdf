@@ -83,8 +83,7 @@ class RelationForm(GenericModelForm):
         generic apis_entities autocomplete with the correct parameters.
         """
 
-        self.is_reverse = kwargs.pop("reverse", False)
-        hx_post_route = kwargs.pop("hx_post_route", False)
+        self.params = kwargs.pop("params", {})
         super().__init__(*args, **kwargs)
         subj_content_type = kwargs["initial"].get("subj_content_type", None)
         subj_object_id = kwargs["initial"].get("subj_object_id", None)
@@ -185,12 +184,9 @@ class RelationForm(GenericModelForm):
         self.helper.form_id = f"relation_{model_ct.model}_form"
         self.helper.add_input(Submit("submit", "Submit"))
 
-        if hx_post_route:
-            urlparams = kwargs["initial"]
-            urlparams["reverse"] = self.is_reverse
-            urlparams = {k: v for k, v in urlparams.items() if v}
+        if hx_post_route := self.params.get("hx_post_route", False):
             self.helper.attrs = {
-                "hx-post": hx_post_route + "?" + urlencode(urlparams),
+                "hx-post": hx_post_route + "?" + urlencode(self.params, doseq=True),
                 "hx-swap": "outerHTML",
                 "hx-target": f"#{self.helper.form_id}",
             }
@@ -227,7 +223,7 @@ class RelationForm(GenericModelForm):
     @property
     def relation_name(self) -> str:
         """A helper method to access the correct name of the relation"""
-        if self.is_reverse:
+        if self.params["reverse"]:
             return self._meta.model.reverse_name
         return self._meta.model.name
 
