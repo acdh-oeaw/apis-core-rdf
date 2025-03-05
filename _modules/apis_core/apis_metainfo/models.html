@@ -150,20 +150,6 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Uri.get_web_object">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.get_web_object">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_web_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;relation_pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
-            <span class="s2">&quot;relation_type&quot;</span><span class="p">:</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;related_root_object&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_object</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="s2">&quot;related_root_object_url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">(),</span>
-            <span class="s2">&quot;related_root_object_class_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_object</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
-            <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">result</span></div>
-
-
 <div class="viewcode-block" id="Uri.save">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.Uri.save">[docs]</a>
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
