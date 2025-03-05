@@ -1,4 +1,7 @@
-{% extends "relations/list_relations_include.html" %}
+{% extends "relations/list_relations.html" %}
+{% load generic %}
+{% load core %}
+{% load relations %}
 
 {% block display-relations %}
   <div class="card mb-2">
@@ -20,9 +23,27 @@
     </div>
     <div class="card-body">
       <div class="tab-content">
-        <div class="tab-pane active" id="reltab_{{ object.id }}_ALL">{% include "relations/list_relations.html" %}</div>
+        <div class="tab-pane active" id="reltab_{{ object.id }}_ALL">
+          {% include "relations/partials/list_relations.html" %}
+        </div>
         {% for target in possible_targets %}
-          <div class="tab-pane" id="reltab_{{ object.id }}_{{ target.name }}">{% include "relations/list_relations.html" %}</div>
+          <div class="tab-pane" id="reltab_{{ object.id }}_{{ target.name }}">
+            {% with object.id|stringformat:"i" as object_id %}
+              {% with "rel_"|add:object_id|add:"_"|add:target.name as replace_id %}
+                {% with target|model_meta:"object_name" as table_suffix %}
+                  {% get_relation_between_content_types object.content_type target as relation_types %}
+                  {% relations_instances_from_relation_types relation_types as relations %}
+                  {% include "relations/partials/list_relations.html" %}
+                  {% if linkify %}
+                    {% natural_keys_by_content_types relation_types as relation_types_natural_keys %}
+                    {% for relation_type in relation_types %}
+                      {% include "relations/partials/create_relation_link.html" with relation_types=relation_types_natural_keys|join:"," %}
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+              {% endwith %}
+            {% endwith %}
+          </div>
         {% endfor %}
       </div>
     </div>
