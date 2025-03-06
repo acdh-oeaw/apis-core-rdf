@@ -16,7 +16,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
       {% entities_content_types as content_types %}
-      {% for content_type in content_types %}
+      {% for content_type in content_types|dictsort:"name" %}
         {% with content_type.model_class|opts as meta %}
           <a class="dropdown-item"
              href="{{ content_type.model_class.get_listview_url }}">{{ meta.verbose_name_plural|capfirst }}</a>
