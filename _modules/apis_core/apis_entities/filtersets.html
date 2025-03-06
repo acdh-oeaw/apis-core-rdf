@@ -88,30 +88,8 @@
 <span class="kn">from</span> <span class="nn">django.utils.encoding</span> <span class="kn">import</span> <span class="n">force_str</span>
 <span class="kn">from</span> <span class="nn">simple_history.utils</span> <span class="kn">import</span> <span class="n">get_history_manager_for_model</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.generic.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span><span class="p">,</span> <span class="n">GenericFilterSetForm</span>
+<span class="kn">from</span> <span class="nn">apis_core.generic.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">default_search_fields</span><span class="p">,</span> <span class="n">generate_search_filter</span>
-
-<span class="n">ABSTRACT_ENTITY_COLUMNS_EXCLUDE</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;rootobject_ptr&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;triple_set_from_subj&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;triple_set_from_obj&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
-<span class="p">]</span>
-
-<span class="n">ABSTRACT_ENTITY_FILTERS_EXCLUDE</span> <span class="o">=</span> <span class="n">ABSTRACT_ENTITY_COLUMNS_EXCLUDE</span> <span class="o">+</span> <span class="p">[</span>
-    <span class="s2">&quot;review&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;start_date&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;start_start_date&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;start_end_date&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;end_date&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;end_start_date&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;end_end_date&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;notes&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;text&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;published&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;status&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;references&quot;</span><span class="p">,</span>
-<span class="p">]</span>
 
 
 <div class="viewcode-block" id="ModelSearchFilter">
@@ -154,21 +132,12 @@
 
 
 
-<div class="viewcode-block" id="AbstractEntityFilterSetForm">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSetForm">[docs]</a>
-<span class="k">class</span> <span class="nc">AbstractEntityFilterSetForm</span><span class="p">(</span><span class="n">GenericFilterSetForm</span><span class="p">):</span>
-    <span class="n">columns_exclude</span> <span class="o">=</span> <span class="n">ABSTRACT_ENTITY_COLUMNS_EXCLUDE</span></div>
-
-
-
 <div class="viewcode-block" id="AbstractEntityFilterSet">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSet">[docs]</a>
 <span class="k">class</span> <span class="nc">AbstractEntityFilterSet</span><span class="p">(</span><span class="n">GenericFilterSet</span><span class="p">):</span>
 <div class="viewcode-block" id="AbstractEntityFilterSet.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.filtersets.AbstractEntityFilterSet.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">GenericFilterSet</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">AbstractEntityFilterSetForm</span>
-        <span class="n">exclude</span> <span class="o">=</span> <span class="n">ABSTRACT_ENTITY_FILTERS_EXCLUDE</span>
         <span class="n">filter_overrides</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;filter_class&quot;</span><span class="p">:</span> <span class="n">django_filters</span><span class="o">.</span><span class="n">CharFilter</span><span class="p">,</span>
