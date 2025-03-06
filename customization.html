@@ -63,6 +63,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#class-method-and-template-lookup">Class, method and template lookup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#importing-data-from-external-resources">Importing data from external resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-genericmodelimporter-to-import-rdf">Using the GenericModelImporter to import RDF</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">Additional Features</a></li>
@@ -282,6 +283,40 @@ which you can inherit from. It is used by default of no other importer is define
 based on <a class="reference external" href="https://docs.djangoproject.com/en/stable/ref/forms/fields/#modelchoicefield">django.forms.ModelChoiceField</a>. It checks if the passed value starts
 with <code class="docutils literal notranslate"><span class="pre">http</span></code> and if so, it uses the importer that fits the model and uses it to
 create the model instance.</p>
+</section>
+<section id="using-the-genericmodelimporter-to-import-rdf">
+<h2>Using the GenericModelImporter to import RDF<a class="headerlink" href="#using-the-genericmodelimporter-to-import-rdf" title="Link to this heading"></a></h2>
+<p>The <a class="reference internal" href="modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter" title="apis_core.generic.importers.GenericModelImporter"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.generic.importers.GenericModelImporter</span></code></a> tries to
+parse the passed URI using the <a class="reference internal" href="modules/apis_core.utils.html#module-apis_core.utils.rdf" title="apis_core.utils.rdf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.utils.rdf</span></code></a> module.
+This module looks at all the existing models and uses the models <cite>rdf_configs</cite>
+class methos to get a list of potential RDF-Import config files.
+Those RDF-Import config files are <a class="reference external" href="https://toml.io/">TOML</a> configuration
+files. They have three main attributes, which are <code class="docutils literal notranslate"><span class="pre">filters</span></code>, <code class="docutils literal notranslate"><span class="pre">attributes</span></code>
+and <code class="docutils literal notranslate"><span class="pre">relations</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">filters</span></code> attributes are key, value pairs that define filters that
+have to match on the input data. Multiple <code class="docutils literal notranslate"><span class="pre">filters</span></code> entries can be defined,
+only one of them has to match. Every <code class="docutils literal notranslate"><span class="pre">filters</span></code> entry can contain multiple
+key, value pairs, which ALL have to match:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[[filters]]</span>
+<span class="s2">&quot;rdf:type&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gndo:DifferentiatedPerson&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">attributes</span></code> config option lists key value pairs, which map keys (usually
+model attributes) to a single SPARQL query or a list of SPARQL queries. Instead
+of SPARQL it is also possible to simply write a compact URI which is then
+looked up in the graph that results from the data input:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[attributes]</span>
+<span class="n">forename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;gndo:forename&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gndo:preferredNameEntityForThePerson/gndo:forename&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">relations</span></code> config option lists mappings from a natural key of a relation model
+to a dict containing a <code class="docutils literal notranslate"><span class="pre">curie</span></code> key with a compact URI or a list of compact URIs and
+an <code class="docutils literal notranslate"><span class="pre">obj</span></code> or <code class="docutils literal notranslate"><span class="pre">subj</span></code> key defining the relations other type (which will be used to
+import the data from the URI).</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[relations]</span>
+<span class="s2">&quot;apis_ontology.starbin&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">curies</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;gndo:placeOfDeath&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;apis_ontology.place&quot;</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
 </section>
 </section>
 

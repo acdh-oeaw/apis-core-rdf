@@ -87,10 +87,13 @@
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cache</span>
 
 <span class="kn">from</span> <span class="nn">AcdhArcheAssets.uri_norm_rules</span> <span class="kn">import</span> <span class="n">get_normalized_uri</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ImproperlyConfigured</span>
+<span class="kn">from</span> <span class="nn">django.db.utils</span> <span class="kn">import</span> <span class="n">IntegrityError</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">flatten_if_single</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.rdf</span> <span class="kn">import</span> <span class="n">get_definition_and_attributes_from_uri</span>
+<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span>
+<span class="kn">from</span> <span class="nn">apis_core.utils.rdf</span> <span class="kn">import</span> <span class="n">get_something_from_uri</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -132,7 +135,7 @@
     <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">):</span>
         <span class="c1"># we first try to use the RDF parser</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">defn</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">get_definition_and_attributes_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">get_something_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">data</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
@@ -167,7 +170,6 @@
             <span class="c1"># we are dropping all fields that are not part of the model</span>
             <span class="n">modelfields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
             <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">modelfields</span><span class="p">}</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">flatten_if_single</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Could not import </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="si">}</span><span class="s2">. Data fetched was: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -190,7 +192,72 @@
 <div class="viewcode-block" id="GenericModelImporter.create_instance">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.importers.GenericModelImporter.create_instance">[docs]</a>
     <span class="k">def</span> <span class="nf">create_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">drop_unknown_fields</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create instance from URI </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">drop_unknown_fields</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">same_as</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;same_as&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">same_as</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">same_as</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">sa</span> <span class="o">:=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri__in</span><span class="o">=</span><span class="n">same_as</span><span class="p">):</span>
+            <span class="n">root_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">content_object</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sa</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root_set</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">IntegrityError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Multiple objects found for sameAs URIs </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;same_as&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;This indicates a data integrity problem as these URIs should be unique.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">content_object</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Found existing instance </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="p">:</span>
+            <span class="n">attributes</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                    <span class="n">attributes</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">attributes</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Created instance </span><span class="si">%s</span><span class="s2"> from attributes </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">same_as</span><span class="p">:</span>
+            <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+                <span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">id</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">relation</span><span class="p">,</span> <span class="n">details</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;relations&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">rel_app_label</span><span class="p">,</span> <span class="n">rel_model</span> <span class="o">=</span> <span class="n">relation</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">relation_model</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_by_natural_key</span><span class="p">(</span>
+                <span class="n">app_label</span><span class="o">=</span><span class="n">rel_app_label</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">rel_model</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
+
+            <span class="n">reld</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;obj&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subj&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">reld_app_label</span><span class="p">,</span> <span class="n">reld_model</span> <span class="o">=</span> <span class="n">reld</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">related_content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_by_natural_key</span><span class="p">(</span>
+                <span class="n">app_label</span><span class="o">=</span><span class="n">reld_app_label</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">reld_model</span>
+            <span class="p">)</span>
+            <span class="n">related_model</span> <span class="o">=</span> <span class="n">related_content_type</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">related_uri</span> <span class="ow">in</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;curies&quot;</span><span class="p">]:</span>
+                <span class="n">related_instance</span> <span class="o">=</span> <span class="n">create_object_from_uri</span><span class="p">(</span>
+                    <span class="n">uri</span><span class="o">=</span><span class="n">related_uri</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">related_model</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;obj&quot;</span><span class="p">):</span>
+                    <span class="n">subj_object_id</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">pk</span>
+                    <span class="n">subj_content_type</span> <span class="o">=</span> <span class="n">content_type</span>
+                    <span class="n">obj_object_id</span> <span class="o">=</span> <span class="n">related_instance</span><span class="o">.</span><span class="n">pk</span>
+                    <span class="n">obj_content_type</span> <span class="o">=</span> <span class="n">related_content_type</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">obj_object_id</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">pk</span>
+                    <span class="n">obj_content_type</span> <span class="o">=</span> <span class="n">content_type</span>
+                    <span class="n">subj_object_id</span> <span class="o">=</span> <span class="n">related_instance</span><span class="o">.</span><span class="n">pk</span>
+                    <span class="n">subj_content_type</span> <span class="o">=</span> <span class="n">related_content_type</span>
+                <span class="n">rel</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">relation_model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+                    <span class="n">subj_object_id</span><span class="o">=</span><span class="n">subj_object_id</span><span class="p">,</span>
+                    <span class="n">subj_content_type</span><span class="o">=</span><span class="n">subj_content_type</span><span class="p">,</span>
+                    <span class="n">obj_object_id</span><span class="o">=</span><span class="n">obj_object_id</span><span class="p">,</span>
+                    <span class="n">obj_content_type</span><span class="o">=</span><span class="n">obj_content_type</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="s2">&quot;Created relation </span><span class="si">%s</span><span class="s2"> between </span><span class="si">%s</span><span class="s2"> and </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">relation_model</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span>
+                    <span class="n">rel</span><span class="o">.</span><span class="n">subj</span><span class="p">,</span>
+                    <span class="n">rel</span><span class="o">.</span><span class="n">obj</span><span class="p">,</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">instance</span></div>
 </div>
 
 </pre></div>
