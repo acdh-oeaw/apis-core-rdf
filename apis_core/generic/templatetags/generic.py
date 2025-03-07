@@ -1,6 +1,7 @@
 from django import template
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import get_object_or_404
 
 from apis_core.core.templatetags.core import get_model_fields
 from apis_core.generic.abc import GenericModel
@@ -114,3 +115,37 @@ def any_view_permission(context, content_types):
     return any(
         [user.has_perm(ct.model_class().get_view_permission()) for ct in content_types]
     )
+
+
+@register.simple_tag
+def content_types_by_natural_keys(natural_keys: tuple() = ()) -> [ContentType]:
+    """
+    Convert a list of natural keys to a list of ContentType models
+    If any of the natural keys does not refer to an existing model, raise a 404
+    """
+    content_types = []
+    for key in natural_keys:
+        app_label, model = key.split(".")
+        content_type = get_object_or_404(ContentType, app_label=app_label, model=model)
+        content_types.append(content_type)
+    return content_types
+
+
+@register.simple_tag
+def natural_keys_by_content_types(content_types: tuple() = ()) -> [str]:
+    """
+    Convert a list of ContentType models to their natural key
+    """
+    natural_keys = []
+    for content_type in content_types:
+        natural_keys.append(content_type.app_label + "." + content_type.model)
+    return natural_keys
+
+
+@register.filter
+def split(string: str = "", delimiter=",") -> [str]:
+    """
+    Split a string by a specific delimiter and also strip the string of
+    leading and trailing whitespaces.
+    """
+    return map(str.strip, string.split(delimiter))
