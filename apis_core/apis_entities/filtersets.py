@@ -1,4 +1,5 @@
 import django_filters
+from django.apps import apps
 from django.conf import settings
 from django.db import models
 from django.forms import DateInput
@@ -63,3 +64,8 @@ class AbstractEntityFilterSet(GenericFilterSet):
                 widget=DateInput(attrs={"type": "date"}),
                 method=changed_since,
             )
+
+        if apps.is_installed("apis_core.relations"):
+            from apis_core.relations.filters import RelationFilter
+
+            self.filters["relation"] = RelationFilter()
