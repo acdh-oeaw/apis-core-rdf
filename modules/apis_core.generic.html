@@ -572,6 +572,23 @@ this can be useful if you want to use the <cite>generate_search_filter</cite> in
 <dd></dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.split_and_strip_parameter">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">split_and_strip_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">params:</span> <span class="pre">[&lt;class</span> <span class="pre">'str'&gt;]</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">[&lt;class</span> <span class="pre">'str'&gt;]</span></span></span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#split_and_strip_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.split_and_strip_parameter" title="Link to this definition"></a></dt>
+<dd><p>Clean a URI param list type
+This method iterates through a list of strings. It looks if
+the items contain a comma separated list of items and then splits
+those and also runs strip on all those items.
+So out of [“foo.bar”, “bar.faz, faz.foo”] it
+creates a list [“foo.bar”, “bar.faz”, “faz.foo”]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="apis_core.generic.helpers.string_to_bool">
+<span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">string_to_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'false'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#string_to_bool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.string_to_bool" title="Link to this definition"></a></dt>
+<dd><p>Convert a string to a boolean representing its semantic value</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="apis_core.generic.helpers.template_names_via_mro">
 <span class="sig-prename descclassname"><span class="pre">apis_core.generic.helpers.</span></span><span class="sig-name descname"><span class="pre">template_names_via_mro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/helpers.html#template_names_via_mro"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.helpers.template_names_via_mro" title="Link to this definition"></a></dt>
 <dd><p>Use the MRO to generate a list of template names for a model</p>

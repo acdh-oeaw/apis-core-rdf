@@ -234,6 +234,35 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Found nothing, returning fallback: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fallback</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span> <span class="ow">or</span> <span class="n">fallback</span></div>
 
+
+
+<div class="viewcode-block" id="split_and_strip_parameter">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.helpers.split_and_strip_parameter">[docs]</a>
+<span class="k">def</span> <span class="nf">split_and_strip_parameter</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clean a URI param list type</span>
+<span class="sd">    This method iterates through a list of strings. It looks if</span>
+<span class="sd">    the items contain a comma separated list of items and then splits</span>
+<span class="sd">    those and also runs strip on all those items.</span>
+<span class="sd">    So out of [&quot;foo.bar&quot;, &quot;bar.faz, faz.foo&quot;] it</span>
+<span class="sd">    creates a list [&quot;foo.bar&quot;, &quot;bar.faz&quot;, &quot;faz.foo&quot;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">newlist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">subparams</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">strip</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
+        <span class="n">newlist</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subparams</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">newlist</span></div>
+
+
+
+<div class="viewcode-block" id="string_to_bool">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.helpers.string_to_bool">[docs]</a>
+<span class="k">def</span> <span class="nf">string_to_bool</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a string to a boolean representing its semantic value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span></div>
+
 </pre></div>
 
            </div>
