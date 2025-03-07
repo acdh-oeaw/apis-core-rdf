@@ -124,3 +124,26 @@ def first_member_match(dotted_path_list: tuple[str], fallback=None) -> object:
     else:
         logger.debug("Found nothing, returning fallback: %s", fallback)
     return result or fallback
+
+
+def split_and_strip_parameter(params: [str]) -> [str]:
+    """
+    Clean a URI param list type
+    This method iterates through a list of strings. It looks if
+    the items contain a comma separated list of items and then splits
+    those and also runs strip on all those items.
+    So out of ["foo.bar", "bar.faz, faz.foo"] it
+    creates a list ["foo.bar", "bar.faz", "faz.foo"]
+    """
+    newlist = []
+    for param in params:
+        subparams = map(str.strip, param.split(","))
+        newlist.extend(subparams)
+    return newlist
+
+
+def string_to_bool(string: str = "false") -> bool:
+    """
+    Convert a string to a boolean representing its semantic value
+    """
+    return string.lower() == "true"
