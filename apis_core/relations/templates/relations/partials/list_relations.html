@@ -1,0 +1,12 @@
+{% load relations %}
+{% load django_tables2 %}
+<div id="{{ replace_id }}" hx-swap-oob="true">
+
+  {% block relations_list %}
+    {% relations_list_table relations table_suffix as table %}
+    {% if table.data %}
+      {% render_table table %}
+    {% endif %}
+  {% endblock relations_list %}
+
+</div>
