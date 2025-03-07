@@ -60,6 +60,13 @@ class GenericFilterSet(FilterSet):
         unknown_field_behavior = django_filters.UnknownFieldBehavior.WARN
 
     def __init__(self, *args, **kwargs):
+        # workaround: we add all generated `django-interval` fields to
+        # the `exclude` list. they are mostly used for database queries
+        # and not for direct filtering.
+        if model := getattr(self.Meta, "model"):
+            for field in model._meta.get_fields():
+                if field.name.endswith(("_date_from", "_date_to", "_date_sort")):
+                    self._meta.exclude.append(field.name)
         super().__init__(*args, **kwargs)
         try:
             skoscollection = apps.get_model("collections.SkosCollection")
