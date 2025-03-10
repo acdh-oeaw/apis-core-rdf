@@ -1,6 +1,7 @@
 {% if error %}
   <a class="btn btn-sm btn-outline-dark disabled">Could not create toggle button: {{ error }}</a>
-{% else %}
+{% endif %}
+{% if content_type and object and collectionobject %}
   <a href="{% url "apis_core:collections:collectionobjectparent" content_type.id object.id collectionobject.id %}?to={{ request.get_full_path }}"
      hx-get="{% url "apis_core:collections:collectionobjectparent" content_type.id object.id collectionobject.id %}"
      hx-swap="outerHTML"
