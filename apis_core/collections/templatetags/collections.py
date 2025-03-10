@@ -85,31 +85,37 @@ def collection_object_parent_by_id(context, obj, collectionobject_id):
 @register.inclusion_tag(
     "collections/collection_object_collection.html", takes_context=True
 )
-def collection_object_collection(context, obj, collectionobject):
+def collection_object_collection(context, obj, skoscollectioncollectionobjects):
     """
     Provide a button to change the connection between an object and
     a collection to point to the collection the collection is in.
     """
-    try:
+    if len(skoscollectioncollectionobjects) > 1:
+        context["error"] = (
+            "Multiple collections found to toggle, please check `collection_object_collection`"
+        )
+    if len(skoscollectioncollectionobjects) == 1:
+        collectionobject = skoscollectioncollectionobjects.first()
         context["parent"] = collectionobject.collection.parent
         context["collectionobject"] = collectionobject
         context["content_type"] = ContentType.objects.get_for_model(obj)
         context["object"] = obj
-    except collectionobject.collection.MultipleObjectsReturned as e:
-        context["error"] = e
     return context
 
 
 @register.inclusion_tag(
     "collections/collection_object_collection.html", takes_context=True
 )
-def collection_object_collection_by_id(context, obj, collectionobject_id):
+def collection_object_collection_by_id(context, obj, *collection_ids):
     """
     Wrapper templatetag to allow using `collection_object_parent` with
-    just the `id` of the collectionobject.
+    just the `ids` of collections.
     """
-    collectionobject = SkosCollectionContentObject.objects.get(pk=collectionobject_id)
-    return collection_object_parent(context, obj, collectionobject)
+    content_type = ContentType.objects.get_for_model(obj)
+    sccos = SkosCollectionContentObject.objects.filter(
+        collection__in=collection_ids, content_type=content_type, object_id=obj.id
+    )
+    return collection_object_collection(context, obj, sccos)
 
 
 @register.simple_tag(takes_context=True)
