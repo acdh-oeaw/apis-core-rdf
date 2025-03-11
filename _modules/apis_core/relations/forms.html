@@ -97,7 +97,7 @@
 
 
 <div class="viewcode-block" id="CustomSelect2ListChoiceField">
-<a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.CustomSelect2ListChoiceField">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.relations.forms.html#apis_core.relations.forms.CustomSelect2ListChoiceField">[docs]</a>
 <span class="k">class</span> <span class="nc">CustomSelect2ListChoiceField</span><span class="p">(</span><span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2ListChoiceField</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    We use a custom Select2ListChoiceField in our Relation form,</span>
@@ -108,7 +108,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CustomSelect2ListChoiceField.validate">
-<a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.CustomSelect2ListChoiceField.validate">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.relations.forms.html#apis_core.relations.forms.CustomSelect2ListChoiceField.validate">[docs]</a>
     <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;_&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">&quot;please choose a correct value&quot;</span><span class="p">)</span></div>
@@ -117,7 +117,7 @@
 
 
 <div class="viewcode-block" id="RelationForm">
-<a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.RelationForm">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.relations.forms.html#apis_core.relations.forms.RelationForm">[docs]</a>
 <span class="k">class</span> <span class="nc">RelationForm</span><span class="p">(</span><span class="n">GenericModelForm</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This form overrides generic form for relation editing.</span>
@@ -133,13 +133,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RelationForm.Media">
-<a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.RelationForm.Media">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.relations.forms.html#apis_core.relations.forms.RelationForm.Media">[docs]</a>
     <span class="k">class</span> <span class="nc">Media</span><span class="p">:</span>
         <span class="n">js</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;js/relation_dialog.js&quot;</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="RelationForm.Meta">
-<a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.RelationForm.Meta">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.relations.forms.html#apis_core.relations.forms.RelationForm.Meta">[docs]</a>
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span>
         <span class="n">widgets</span> <span class="o">=</span> <span class="p">{</span>
@@ -293,7 +293,7 @@
             <span class="p">}</span>
 
 <div class="viewcode-block" id="RelationForm.clean">
-<a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.RelationForm.clean">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.relations.forms.html#apis_core.relations.forms.RelationForm.clean">[docs]</a>
     <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        We check if there are `subj` or `obj` fields in the form data</span>
@@ -334,7 +334,7 @@
 
 
 <div class="viewcode-block" id="RelationFilterSetForm">
-<a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.RelationFilterSetForm">[docs]</a>
+<a class="viewcode-back" href="../../../modules/apis_core.relations.forms.html#apis_core.relations.forms.RelationFilterSetForm">[docs]</a>
 <span class="k">class</span> <span class="nc">RelationFilterSetForm</span><span class="p">(</span><span class="n">GenericFilterSetForm</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    FilterSet form for relations based on GenericFilterSetForm.</span>
