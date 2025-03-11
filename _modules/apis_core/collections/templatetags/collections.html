@@ -188,18 +188,21 @@
 <span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span>
     <span class="s2">&quot;collections/collection_object_collection.html&quot;</span><span class="p">,</span> <span class="n">takes_context</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
-<span class="k">def</span> <span class="nf">collection_object_collection</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">collectionobject</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">collection_object_collection</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">skoscollectioncollectionobjects</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provide a button to change the connection between an object and</span>
 <span class="sd">    a collection to point to the collection the collection is in.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">skoscollectioncollectionobjects</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Multiple collections found to toggle, please check `collection_object_collection`&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">skoscollectioncollectionobjects</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">collectionobject</span> <span class="o">=</span> <span class="n">skoscollectioncollectionobjects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">collectionobject</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">parent</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;collectionobject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">collectionobject</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;content_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
-    <span class="k">except</span> <span class="n">collectionobject</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">MultipleObjectsReturned</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span>
     <span class="k">return</span> <span class="n">context</span></div>
 
 
@@ -209,13 +212,16 @@
 <span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span>
     <span class="s2">&quot;collections/collection_object_collection.html&quot;</span><span class="p">,</span> <span class="n">takes_context</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
-<span class="k">def</span> <span class="nf">collection_object_collection_by_id</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">collectionobject_id</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">collection_object_collection_by_id</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">collection_ids</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper templatetag to allow using `collection_object_parent` with</span>
-<span class="sd">    just the `id` of the collectionobject.</span>
+<span class="sd">    just the `ids` of collections.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">collectionobject</span> <span class="o">=</span> <span class="n">SkosCollectionContentObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">collectionobject_id</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">collection_object_parent</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">collectionobject</span><span class="p">)</span></div>
+    <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="n">sccos</span> <span class="o">=</span> <span class="n">SkosCollectionContentObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">collection__in</span><span class="o">=</span><span class="n">collection_ids</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">id</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">collection_object_collection</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">sccos</span><span class="p">)</span></div>
 
 
 
