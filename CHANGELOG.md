@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.40.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.39.0...v0.40.0) (2025-03-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **relations:** The refactoring of the relations template tags leads to a slightly different behaviour in the lookup of the relations tables; please have a look at the lookup debug statements if your relations tables are not found anymore.
+* **utils:** drop the DateParser and the corresponding tests
+* **core:** drop LegacyDateMixin
+
+### Features
+
+* **apis_metainfo:** adapt Uri model for new type rdf import ([4184584](https://github.com/acdh-oeaw/apis-core-rdf/commit/41845848193c103c408b06c561d3dd6e28a4800e))
+* **generic:** adapt importer for new type rdf import methods ([db6f4bf](https://github.com/acdh-oeaw/apis-core-rdf/commit/db6f4bff2591228f0e97d055d14a4a412cf3dbe5))
+* **generic:** introduce new templatetags ([37f8f11](https://github.com/acdh-oeaw/apis-core-rdf/commit/37f8f11d92a0d405c05d79f43837b56900b28bb4))
+* **generic:** introduce small helper functions ([2b6bef8](https://github.com/acdh-oeaw/apis-core-rdf/commit/2b6bef83754baf4339cf0698c1e833eb00ba2c88))
+* **relations:** implement a relation filter ([5f56b45](https://github.com/acdh-oeaw/apis-core-rdf/commit/5f56b455825236c32998d08cf367f78a79e6993f))
+* **relations:** major rewrite of the relations list ([29d39da](https://github.com/acdh-oeaw/apis-core-rdf/commit/29d39dab2644980f51c7d09a6a24695e4b8cdde5))
+* **sample_project:** update sample project for new relation templates ([c1f293c](https://github.com/acdh-oeaw/apis-core-rdf/commit/c1f293cecaa8e6c5a97a8d1e5236517b85fd5c14))
+* **utils:** drop old rdf import methods ([0852822](https://github.com/acdh-oeaw/apis-core-rdf/commit/0852822075eadbd705ee635dd925baee6a4340a3))
+* **utils:** implement new type rdf importer ([73e738e](https://github.com/acdh-oeaw/apis-core-rdf/commit/73e738e118462db605b88dacf5dd58327232d680))
+
+
+### Bug Fixes
+
+* **apis_entities:** fix entities autocomplete ([dcc479b](https://github.com/acdh-oeaw/apis-core-rdf/commit/dcc479be754737b515d951245de4dad602a36243))
+* **apis_entities:** reorder entity menu items ([cb242cf](https://github.com/acdh-oeaw/apis-core-rdf/commit/cb242cf6e8e9e5299ece510f73b86d09d9bdb52c)), closes [#1657](https://github.com/acdh-oeaw/apis-core-rdf/issues/1657)
+* **apis_metainfo:** drop references to `apis_metainfo.collection` ([2a7500e](https://github.com/acdh-oeaw/apis-core-rdf/commit/2a7500e55b69b9c686a15d2f7cd647f1111fc5bb)), closes [#1377](https://github.com/acdh-oeaw/apis-core-rdf/issues/1377)
+* **collections:** repair the new collection toggle templatetags ([c3f4f6b](https://github.com/acdh-oeaw/apis-core-rdf/commit/c3f4f6be26cf22d6a2110382db07ea6f842e2deb))
+* **generic:** show form errors of generic filter form ([d8e81c8](https://github.com/acdh-oeaw/apis-core-rdf/commit/d8e81c8bcac484bb06f7f51e6faec28bd6dbdaaa)), closes [#1604](https://github.com/acdh-oeaw/apis-core-rdf/issues/1604)
+
+
+### Documentation
+
+* **customization:** add documentation about new rdf parser ([c51ada4](https://github.com/acdh-oeaw/apis-core-rdf/commit/c51ada4503247374557d99b47688646e3e3413a5))
+
+
+### Code Refactoring
+
+* **core:** drop LegacyDateMixin ([7a1d940](https://github.com/acdh-oeaw/apis-core-rdf/commit/7a1d9401eafec33869f8818e79a80d7b5da94b35))
+* **utils:** drop the DateParser and the corresponding tests ([5325d46](https://github.com/acdh-oeaw/apis-core-rdf/commit/5325d46a1f08cb530d9c72a4df2223a9caeeb353))
+
 ## [0.39.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.38.0...v0.39.0) (2025-02-28)
 
 
