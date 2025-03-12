@@ -1,6 +1,7 @@
+import re
 from urllib.parse import urlsplit
 
-from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
+from AcdhArcheAssets.uri_norm_rules import get_normalized_uri, get_rules
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
@@ -76,3 +77,11 @@ class Uri(GenericModel, models.Model):
         return any(
             [my_netloc == urlsplit(uri).netloc for uri in apis_settings.internal_uris()]
         )
+
+    def short_label(self) -> str:
+        if self.internal():
+            return "local"
+        for x in get_rules():
+            if re.match(x["match"], self.uri):
+                return x["name"]
+        return urlsplit(self.uri).netloc
