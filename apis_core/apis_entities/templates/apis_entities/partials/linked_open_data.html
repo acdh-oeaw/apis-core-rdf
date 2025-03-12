@@ -3,7 +3,7 @@
   <ul>
     {% for uri in object.uri_set.all %}
       <li>
-        {{ uri.uri | urlize }}
+        <a href="{{ uri.uri }}">{{ uri.short_label }}</a>
         {% if object.get_change_permission in perms %}
           {% if not uri.internal %}
             | <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}" class="small">... merge data</a>
