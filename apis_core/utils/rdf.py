@@ -8,9 +8,25 @@ from pathlib import Path
 import tomllib
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.apps import apps
-from rdflib import RDF, BNode, Graph
+from rdflib import RDF, BNode, Graph, URIRef
 
 logger = logging.getLogger(__name__)
+
+
+def resolve(obj, graph):
+    """
+    Look at the value of object and return the parsed
+    value. If the value starts and ens with angle brackets,
+    we interpret it as and transform it to an URI.
+    If the value is simple text we interpret it as an curie
+    and we expand it using the graphs namespace manager.
+    Otherwise we simply return the value
+    """
+    if obj.startswith("<") and obj.endswith(">"):
+        return URIRef(obj[1:-1])
+    if isinstance(obj, str):
+        return graph.namespace_manager.expand_curie(obj)
+    return obj
 
 
 def find_matching_config(graph: Graph) -> dict | None:
@@ -24,13 +40,9 @@ def find_matching_config(graph: Graph) -> dict | None:
                 try:
                     triples = []
                     for predicate, obj in _filter.items():
-                        predicate = graph.namespace_manager.expand_curie(predicate)
-                        match obj:
-                            case str():
-                                obj = graph.namespace_manager.expand_curie(obj)
-                            case True:
-                                obj = None
-                        triples.append((None, predicate, obj))
+                        triples.append(
+                            (None, resolve(predicate, graph), resolve(obj, graph))
+                        )
                     triples = [triple in graph for triple in triples]
                     if all(triples):
                         logger.debug("Using %s for parsing graph", path)
