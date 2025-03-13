@@ -1,0 +1,10 @@
+<div class="row">
+  {% spaceless %}
+    {% for widget in widget.subwidgets %}
+      <div class="col">
+        <label class="form-label me-2">{{ widget.label|title }}</label>
+        {% include widget.template_name %}
+      </div>
+    {% endfor %}
+  {% endspaceless %}
+</div>
