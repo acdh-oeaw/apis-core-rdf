@@ -1,16 +1,13 @@
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_list_or_404
-from django.urls import include, path, register_converter
+from django.urls import path, register_converter
 
 from apis_core.apis_entities.api_views import GetEntityGeneric, ListEntityGeneric
 
 # from .views import ReversionCompareView TODO: add again when import is fixed
 from apis_core.apis_entities.models import AbstractEntity
-from apis_core.apis_entities.views import (
-    EntitiesAutocomplete,
-    EntitiesDuplicate,
-)
+from apis_core.apis_entities.views import EntitiesAutocomplete
 
 api_routes = [
     path("entities/", ListEntityGeneric.as_view()),
@@ -54,18 +51,6 @@ register_converter(EntityToContenttypeConverter, "entitytocontenttype")
 
 app_name = "apis_entities"
 
-entity_patterns = [
-    path(
-        "<int:pk>/duplicate/",
-        EntitiesDuplicate.as_view(),
-        name="generic_entities_duplicate_view",
-    ),
-]
-
 urlpatterns = [
-    path(
-        "entity/<entitytocontenttype:contenttype>/",
-        include(entity_patterns),
-    ),
     path("autocomplete/", EntitiesAutocomplete.as_view(), name="autocomplete"),
 ]
