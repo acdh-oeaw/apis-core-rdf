@@ -72,13 +72,6 @@ class AbstractEntity(RootObject):
                 return next_instance.id
         return False
 
-    def get_duplicate_url(self):
-        entity = self.__class__.__name__.lower()
-        return reverse(
-            "apis_core:apis_entities:generic_entities_duplicate_view",
-            kwargs={"contenttype": entity, "pk": self.id},
-        )
-
 
 @receiver(post_save, dispatch_uid="create_default_uri")
 def create_default_uri(sender, instance, created, raw, using, update_fields, **kwargs):

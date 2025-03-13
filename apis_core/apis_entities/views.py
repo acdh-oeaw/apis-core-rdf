@@ -1,34 +1,11 @@
 from dal import autocomplete
-from django.contrib import messages
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect
-from django.utils.html import format_html
-from django.views import View
+from django.shortcuts import get_object_or_404
 
 from apis_core.apis_entities.utils import get_entity_content_types
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.helpers import generate_search_filter
-from apis_core.generic.views import GenericModelMixin
-
-
-class EntitiesDuplicate(GenericModelMixin, PermissionRequiredMixin, View):
-    permission_action_required = "create"
-
-    def get(self, request, *args, **kwargs):
-        source_obj = get_object_or_404(self.model, pk=kwargs["pk"])
-        newobj = source_obj.duplicate()
-
-        messages.success(
-            request,
-            format_html(
-                "<a href={}>{}</a> was successfully duplicated to the current object:",
-                source_obj.get_absolute_url(),
-                source_obj,
-            ),
-        )
-        return redirect(newobj.get_edit_url())
 
 
 class EntitiesAutocomplete(autocomplete.Select2QuerySetView):
