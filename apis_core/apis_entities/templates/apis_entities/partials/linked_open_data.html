@@ -1,15 +1,24 @@
 <h5 class="card-title">Linked Open Data</h5>
 {% if object.uri_set %}
-  <ul>
-    {% for uri in object.uri_set.all %}
-      <li>
-        <a href="{{ uri.uri }}">{{ uri.short_label }}</a>
-        {% if object.get_change_permission in perms %}
-          {% if not uri.internal %}
-            | <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}" class="small">... merge data</a>
-          {% endif %}
+  {% for uri in object.uri_set.all %}
+    <div class="btn-group">
+      <a class="btn btn-sm btn-outline-secondary" href="{{ uri.uri }}">{{ uri.short_label }}</a>
+      {% if object.get_change_permission in perms %}
+        {% if not uri.internal %}
+          <button type="button"
+                  class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}"
+                 class="dropdown-item small">... merge data</a>
+            </li>
+          </ul>
         {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
+      {% endif %}
+    </div>
+  {% endfor %}
 {% endif %}
