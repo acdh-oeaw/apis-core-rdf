@@ -16,6 +16,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
 from django.urls import reverse, reverse_lazy
+from django.utils.html import format_html
+from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
@@ -300,6 +302,24 @@ class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return self.object.get_update_success_url()
+
+
+class Duplicate(GenericModelMixin, PermissionRequiredMixin, View):
+    permission_action_required = "create"
+
+    def get(self, request, *args, **kwargs):
+        source_obj = get_object_or_404(self.model, pk=kwargs["pk"])
+        newobj = source_obj.duplicate()
+
+        messages.success(
+            request,
+            format_html(
+                "<a href={}>{}</a> was successfully duplicated to the current object:",
+                source_obj.get_absolute_url(),
+                source_obj,
+            ),
+        )
+        return redirect(newobj.get_edit_url())
 
 
 class Autocomplete(
