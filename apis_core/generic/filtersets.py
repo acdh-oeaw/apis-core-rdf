@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django_filters.filterset import FilterSet
 
 from apis_core.generic.forms.fields import IncludeExcludeField
+from apis_core.collections.filters import CollectionsIncludeExcludeFilter
 
 from .forms import GenericFilterSetForm
 
@@ -64,7 +65,7 @@ class GenericFilterSet(FilterSet):
         try:
             skoscollection = apps.get_model("collections.SkosCollection")
             if skoscollection.objects.exists():
-                self.filters["collections"] = CollectionsFilter(
+                self.filters["collections"] = CollectionsIncludeExcludeFilter(
                     queryset=skoscollection.objects.all(),
                 )
         except LookupError as e:
