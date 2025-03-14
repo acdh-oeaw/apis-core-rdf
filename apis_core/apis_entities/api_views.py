@@ -11,6 +11,8 @@ from apis_core.utils.filters import CustomSearchFilter
 
 
 class GetEntityGeneric(APIView):
+    queryset = RootObject.objects.all()
+
     def get(self, request, pk):
         try:
             obj = RootObject.objects_inheritance.get_subclass(id=pk)
