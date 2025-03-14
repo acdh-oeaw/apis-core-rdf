@@ -26,7 +26,9 @@ def modeldict(instance, fields=None, exclude=None):
         if exclude and f.name in exclude:
             continue
         field = instance._meta.get_field(f.name)
-        data[field] = instance._get_FIELD_display(field)
+        data[field] = getattr(instance, field.name)
+        if fn := getattr(instance, f"get_{field.name}_display", False):
+            data[field] = fn()
         if getattr(field, "remote_field", False):
             data[field] = getattr(instance, field.name)
         if getattr(field, "m2m_field_name", False):
