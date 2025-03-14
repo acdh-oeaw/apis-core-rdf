@@ -2,9 +2,7 @@
 <table class="table table-hover">
   {% modeldict object as d %}
   {% for key, value in d.items %}
-    <tr>
-      <th>{{ key.verbose_name }}</th>
-      <td>{{ value }}</td>
-    </tr>
+    {% model_field_template_lookup_list object key "table_row" as template_list %}
+    {% include template_list %}
   {% endfor %}
 </table>

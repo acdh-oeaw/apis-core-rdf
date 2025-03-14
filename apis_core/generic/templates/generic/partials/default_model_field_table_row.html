@@ -1,0 +1,8 @@
+{% load generic %}
+<tr>
+  <th>{{ key.verbose_name }}</th>
+  <td>
+    {% model_field_template_lookup_list object key "value" as template_list %}
+    {% include template_list with value=value %}
+  </td>
+</tr>
