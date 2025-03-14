@@ -151,3 +151,15 @@ def split(string: str = "", delimiter=",") -> [str]:
     leading and trailing whitespaces.
     """
     return map(str.strip, string.split(delimiter))
+
+
+@register.simple_tag
+def model_field_template_lookup_list(model, field, suffix="") -> [str]:
+    """
+    generate a template path based on the modelname, the fieldname and
+    the suffix. return a list with this template path and a fallback
+    path.
+    """
+    content_type = ContentType.objects.get_for_model(model)
+    path = f"{content_type.app_label}/partials/{content_type.model}_{field.name}_{suffix}.html"
+    return [path, f"generic/partials/default_model_field_{suffix}.html"]
