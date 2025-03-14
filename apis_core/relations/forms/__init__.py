@@ -84,6 +84,23 @@ class RelationForm(GenericModelForm):
         """
 
         self.params = kwargs.pop("params", {})
+        # workaround: if there is only one possible subj or obj type
+        # we use that as subj_content_type or obj_content_type, which
+        # lets us use another endpoint for autocomplete
+        # this can be removed when we stop allowing multiple types
+        # for relation subjects or objects
+        initial = kwargs["initial"]
+        if (
+            initial["subj_content_type"] is None
+            and len(self.Meta.model.subj_list()) == 1
+        ):
+            kwargs["initial"]["subj_content_type"] = ContentType.objects.get_for_model(
+                self.Meta.model.subj_list()[0]
+            ).id
+        if initial["obj_content_type"] is None and len(self.Meta.model.obj_list()) == 1:
+            kwargs["initial"]["obj_content_type"] = ContentType.objects.get_for_model(
+                self.Meta.model.obj_list()[0]
+            ).id
         super().__init__(*args, **kwargs)
         subj_content_type = kwargs["initial"].get("subj_content_type", None)
         subj_object_id = kwargs["initial"].get("subj_object_id", None)
