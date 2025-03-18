@@ -2,7 +2,7 @@ Configuration
 =============
 
 
-``APIS_BASE_URL`` and :class:`apis_core.apis_entities.api_views.GetEntityGeneric`
+``APIS_BASE_URI`` and :class:`apis_core.apis_entities.api_views.GetEntityGeneric`
 ---------------------------------------------------------------------------------
 
 When you create an instance of an Entity a signal
@@ -14,7 +14,7 @@ comes from the ``APIS_BASE_URI`` setting. The second part comes from the reverse
 route of ``GetEntityGenericRoot`` if that exists. If not, it uses the
 the reverse route of ``apis_core:GetEntityGeneric``, which is defined in
 :py:mod:`apis_core.urls` and defaults to ``/entity/{pk}``.
-If the value of ``APIS_BASE_URL`` changes and urls containing the former ``APIS_BASE_URL`` remain in the database, then the old ``APIS_BASE_URL`` value must added to the setting ``APIS_FORMER_BASE_URIS``.
+If the value of ``APIS_BASE_URI`` changes and urls containing the former ``APIS_BASE_URI`` remain in the database, then the old ``APIS_BASE_URI`` value must added to the setting ``APIS_FORMER_BASE_URIS``.
 ``APIS_FORMER_BASE_URIS`` is a list that contains base urls that were once used.
 
 Django Settings
