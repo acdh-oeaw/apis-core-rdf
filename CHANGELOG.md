@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.40.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.40.0...v0.40.1) (2025-03-19)
+
+
+### Bug Fixes
+
+* **generic:** don't coerce values to string in modeldict ([cfbbb92](https://github.com/acdh-oeaw/apis-core-rdf/commit/cfbbb923f61f054a56a925255b2e308b8330bca0))
+* **relations:** repair the relation target autocomplete ([5f22e67](https://github.com/acdh-oeaw/apis-core-rdf/commit/5f22e6746e55393f7e64a9160224074b322e0e34)), closes [#1676](https://github.com/acdh-oeaw/apis-core-rdf/issues/1676)
+* **utils:** allow to pass an URI string to rdf config filter ([ac6a68f](https://github.com/acdh-oeaw/apis-core-rdf/commit/ac6a68f090b63c8846fe6080dde555bb8545f65c)), closes [#1668](https://github.com/acdh-oeaw/apis-core-rdf/issues/1668)
+
 ## [0.40.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.39.0...v0.40.0) (2025-03-11)
 
 
