@@ -91,9 +91,28 @@
 <span class="kn">import</span> <span class="nn">tomllib</span>
 <span class="kn">from</span> <span class="nn">AcdhArcheAssets.uri_norm_rules</span> <span class="kn">import</span> <span class="n">get_normalized_uri</span>
 <span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">apps</span>
-<span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">BNode</span><span class="p">,</span> <span class="n">Graph</span>
+<span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">RDF</span><span class="p">,</span> <span class="n">BNode</span><span class="p">,</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">URIRef</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="resolve">
+<a class="viewcode-back" href="../../../modules/apis_core.utils.html#apis_core.utils.rdf.resolve">[docs]</a>
+<span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Look at the value of object and return the parsed</span>
+<span class="sd">    value. If the value starts and ens with angle brackets,</span>
+<span class="sd">    we interpret it as and transform it to an URI.</span>
+<span class="sd">    If the value is simple text we interpret it as an curie</span>
+<span class="sd">    and we expand it using the graphs namespace manager.</span>
+<span class="sd">    Otherwise we simply return the value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">URIRef</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">graph</span><span class="o">.</span><span class="n">namespace_manager</span><span class="o">.</span><span class="n">expand_curie</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
 
 
 <div class="viewcode-block" id="find_matching_config">
@@ -109,13 +128,9 @@
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">triples</span> <span class="o">=</span> <span class="p">[]</span>
                     <span class="k">for</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">_filter</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                        <span class="n">predicate</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">namespace_manager</span><span class="o">.</span><span class="n">expand_curie</span><span class="p">(</span><span class="n">predicate</span><span class="p">)</span>
-                        <span class="k">match</span> <span class="n">obj</span><span class="p">:</span>
-                            <span class="k">case</span> <span class="nb">str</span><span class="p">():</span>
-                                <span class="n">obj</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">namespace_manager</span><span class="o">.</span><span class="n">expand_curie</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-                            <span class="n">case</span> <span class="kc">True</span><span class="p">:</span>
-                                <span class="n">obj</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">triples</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
+                        <span class="n">triples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">resolve</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">graph</span><span class="p">),</span> <span class="n">resolve</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">graph</span><span class="p">))</span>
+                        <span class="p">)</span>
                     <span class="n">triples</span> <span class="o">=</span> <span class="p">[</span><span class="n">triple</span> <span class="ow">in</span> <span class="n">graph</span> <span class="k">for</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">triples</span><span class="p">]</span>
                     <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">triples</span><span class="p">):</span>
                         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Using </span><span class="si">%s</span><span class="s2"> for parsing graph&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
