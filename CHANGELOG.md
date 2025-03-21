@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.41.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.40.1...v0.41.0) (2025-03-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_entities:** drop legacy EntityToContenttypeConverter
+* **generic:** This change also removes the `id` field from the colums selector, which means it can not be deselected anymore. This is a known issue and we might want to look up a way that *all* the existing table columns (`desc`, `view`, `edit`...) can be deselected.
+
+### Features
+
+* **generic:** introduce `model_field_template_lookup_list` templatetag ([72d8c93](https://github.com/acdh-oeaw/apis-core-rdf/commit/72d8c93a98af681d1f485c4c30137b1b5f2e814b))
+* **generic:** use `model_field_template_lookup_list` for generic table ([2f4b97a](https://github.com/acdh-oeaw/apis-core-rdf/commit/2f4b97a8ea7af729a221caa84e55c17f5e1b20ec))
+
+
+### Bug Fixes
+
+* **generic:** use different attribute for excluding column choices ([253171a](https://github.com/acdh-oeaw/apis-core-rdf/commit/253171a616ba85e4646728ce818b8e8685c92777))
+
+
+### Documentation
+
+* **configuration:** correct references to APIS_BASE_URI ([2d13c62](https://github.com/acdh-oeaw/apis-core-rdf/commit/2d13c6274b75bb6d2a8fa4a9aa50a2427e1c3048)), closes [#1680](https://github.com/acdh-oeaw/apis-core-rdf/issues/1680)
+
+
+### Code Refactoring
+
+* **apis_entities:** drop legacy EntityToContenttypeConverter ([214e634](https://github.com/acdh-oeaw/apis-core-rdf/commit/214e63480c931c268b67457b19dde4a63c16cdc8))
+
 ## [0.40.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.40.0...v0.40.1) (2025-03-19)
 
 
