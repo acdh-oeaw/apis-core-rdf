@@ -164,17 +164,7 @@
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">next_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">next_instance</span><span class="o">.</span><span class="n">id</span>
-        <span class="k">return</span> <span class="kc">False</span>
-
-<div class="viewcode-block" id="AbstractEntity.get_duplicate_url">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_duplicate_url">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_duplicate_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
-            <span class="s2">&quot;apis_core:apis_entities:generic_entities_duplicate_view&quot;</span><span class="p">,</span>
-            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;contenttype&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">},</span>
-        <span class="p">)</span></div>
-</div>
+        <span class="k">return</span> <span class="kc">False</span></div>
 
 
 

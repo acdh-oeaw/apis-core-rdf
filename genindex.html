@@ -1328,6 +1328,8 @@
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.api_views.ModelViewSet.dispatch">dispatch() (apis_core.generic.api_views.ModelViewSet method)</a>
 </li>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Duplicate">Duplicate (class in apis_core.generic.views)</a>
+</li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.duplicate">duplicate() (apis_core.generic.abc.GenericModel method)</a>
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.tables.DuplicateColumn">DuplicateColumn (class in apis_core.apis_entities.tables)</a>
@@ -1360,8 +1362,6 @@
 </li>
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.apps.EntitiesConfig">EntitiesConfig (class in apis_core.apis_entities.apps)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesDuplicate">EntitiesDuplicate (class in apis_core.apis_entities.views)</a>
-</li>
       <li><a href="glossary.html#term-entity"><strong>entity</strong></a>
 </li>
   </ul></td>
@@ -1369,8 +1369,6 @@
       <li><a href="modules/apis_core.relations.html#apis_core.relations.filtersets.EntityFilter">EntityFilter (class in apis_core.relations.filtersets)</a>
 </li>
       <li><a href="modules/apis_core.history.html#apis_core.history.api_views.EntityHistoryLogs">EntityHistoryLogs (class in apis_core.history.api_views)</a>
-</li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.urls.EntityToContenttypeConverter">EntityToContenttypeConverter (class in apis_core.apis_entities.urls)</a>
 </li>
       <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.tables.UriTable.Meta.exclude">exclude (apis_core.apis_metainfo.tables.UriTable.Meta attribute)</a>
 
@@ -1563,8 +1561,6 @@
       <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric.get">get() (apis_core.apis_entities.api_views.GetEntityGeneric method)</a>
 
       <ul>
-        <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesDuplicate.get">(apis_core.apis_entities.views.EntitiesDuplicate method)</a>
-</li>
         <li><a href="modules/apis_core.apis_metainfo.html#apis_core.apis_metainfo.models.UriQuerySet.get">(apis_core.apis_metainfo.models.UriQuerySet method)</a>
 </li>
         <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionSessionToggle.get">(apis_core.collections.views.CollectionSessionToggle method)</a>
@@ -1572,6 +1568,8 @@
         <li><a href="modules/apis_core.collections.html#apis_core.collections.views.CollectionToggle.get">(apis_core.collections.views.CollectionToggle method)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.routers.CustomAPIRootView.get">(apis_core.generic.routers.CustomAPIRootView method)</a>
+</li>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Duplicate.get">(apis_core.generic.views.Duplicate method)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Enrich.get">(apis_core.generic.views.Enrich method)</a>
 </li>
@@ -1646,7 +1644,7 @@
         <li><a href="modules/apis_core.history.html#apis_core.history.serializers.HistoryLogSerializer.get_diff">(apis_core.history.serializers.HistoryLogSerializer method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.AbstractEntity.get_duplicate_url">get_duplicate_url() (apis_core.apis_entities.models.AbstractEntity method)</a>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_duplicate_url">get_duplicate_url() (apis_core.generic.abc.GenericModel method)</a>
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.abc.GenericModel.get_edit_url">get_edit_url() (apis_core.generic.abc.GenericModel method)</a>
 </li>
@@ -2519,16 +2517,16 @@
         <li><a href="modules/apis_core.generic.html#apis_core.generic.tables.ViewColumn.permission">(apis_core.generic.tables.ViewColumn attribute)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesDuplicate.permission_action_required">permission_action_required (apis_core.apis_entities.views.EntitiesDuplicate attribute)</a>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.permission_action_required">permission_action_required (apis_core.generic.views.Autocomplete attribute)</a>
 
       <ul>
-        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.permission_action_required">(apis_core.generic.views.Autocomplete attribute)</a>
-</li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Create.permission_action_required">(apis_core.generic.views.Create attribute)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Delete.permission_action_required">(apis_core.generic.views.Delete attribute)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Detail.permission_action_required">(apis_core.generic.views.Detail attribute)</a>
+</li>
+        <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Duplicate.permission_action_required">(apis_core.generic.views.Duplicate attribute)</a>
 </li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.views.Enrich.permission_action_required">(apis_core.generic.views.Enrich attribute)</a>
 </li>
@@ -2581,12 +2579,8 @@
         <li><a href="modules/apis_core.relations.html#apis_core.relations.apps.RelationsNgConfig.ready">(apis_core.relations.apps.RelationsNgConfig method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.urls.EntityToContenttypeConverter.regex">regex (apis_core.apis_entities.urls.EntityToContenttypeConverter attribute)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.generic.html#apis_core.generic.urls.ContenttypeConverter.regex">(apis_core.generic.urls.ContenttypeConverter attribute)</a>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.urls.ContenttypeConverter.regex">regex (apis_core.generic.urls.ContenttypeConverter attribute)</a>
 </li>
-      </ul></li>
       <li><a href="glossary.html#term-relation"><strong>relation</strong></a>
 </li>
       <li><a href="modules/apis_core.relations.html#apis_core.relations.models.Relation">Relation (class in apis_core.relations.models)</a>
@@ -2917,20 +2911,14 @@
 </li>
       <li><a href="modules/apis_core.generic.html#apis_core.generic.serializers.ContentTypeInstanceSerializer.to_internal_value">to_internal_value() (apis_core.generic.serializers.ContentTypeInstanceSerializer method)</a>
 </li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.urls.EntityToContenttypeConverter.to_python">to_python() (apis_core.apis_entities.urls.EntityToContenttypeConverter method)</a>
+      <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField.to_python">to_python() (apis_core.generic.forms.fields.ModelImportChoiceField method)</a>
 
       <ul>
-        <li><a href="modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField.to_python">(apis_core.generic.forms.fields.ModelImportChoiceField method)</a>
-</li>
         <li><a href="modules/apis_core.generic.html#apis_core.generic.urls.ContenttypeConverter.to_python">(apis_core.generic.urls.ContenttypeConverter method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/apis_core.apis_entities.html#apis_core.apis_entities.urls.EntityToContenttypeConverter.to_url">to_url() (apis_core.apis_entities.urls.EntityToContenttypeConverter method)</a>
-
-      <ul>
-        <li><a href="modules/apis_core.generic.html#apis_core.generic.urls.ContenttypeConverter.to_url">(apis_core.generic.urls.ContenttypeConverter method)</a>
+      <li><a href="modules/apis_core.generic.html#apis_core.generic.urls.ContenttypeConverter.to_url">to_url() (apis_core.generic.urls.ContenttypeConverter method)</a>
 </li>
-      </ul></li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter.token">token (apis_core.utils.autocomplete.TypeSenseAutocompleteAdapter attribute)</a>
 </li>
       <li><a href="modules/apis_core.utils.html#apis_core.utils.authentication.TokenAuthSupportQueryString">TokenAuthSupportQueryString (class in apis_core.utils.authentication)</a>

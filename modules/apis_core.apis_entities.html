@@ -503,11 +503,6 @@ So they are to be understood in that dynamic context.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_entities.models.AbstractEntity.get_duplicate_url">
-<span class="sig-name descname"><span class="pre">get_duplicate_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/models.html#AbstractEntity.get_duplicate_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.models.AbstractEntity.get_duplicate_url" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="apis_core.apis_entities.models.AbstractEntity.get_entity_list_filter">
 <em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_entity_list_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/models.html#AbstractEntity.get_entity_list_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.models.AbstractEntity.get_entity_list_filter" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -612,29 +607,6 @@ so that we can present a helpful representation of the object.</p>
 </section>
 <section id="module-apis_core.apis_entities.urls">
 <span id="apis-core-apis-entities-urls-module"></span><h2>apis_core.apis_entities.urls module<a class="headerlink" href="#module-apis_core.apis_entities.urls" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_entities.urls.EntityToContenttypeConverter">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_entities.urls.</span></span><span class="sig-name descname"><span class="pre">EntityToContenttypeConverter</span></span><a class="reference internal" href="../_modules/apis_core/apis_entities/urls.html#EntityToContenttypeConverter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.urls.EntityToContenttypeConverter" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A converter that converts from a the name of an entity class
-(i.e. <cite>person</cite>) to the actual Django model class.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_entities.urls.EntityToContenttypeConverter.regex">
-<span class="sig-name descname"><span class="pre">regex</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\\w+'</span></em><a class="headerlink" href="#apis_core.apis_entities.urls.EntityToContenttypeConverter.regex" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_entities.urls.EntityToContenttypeConverter.to_python">
-<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/urls.html#EntityToContenttypeConverter.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.urls.EntityToContenttypeConverter.to_python" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_entities.urls.EntityToContenttypeConverter.to_url">
-<span class="sig-name descname"><span class="pre">to_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/urls.html#EntityToContenttypeConverter.to_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.urls.EntityToContenttypeConverter.to_url" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </section>
 <section id="module-apis_core.apis_entities.utils">
 <span id="apis-core-apis-entities-utils-module"></span><h2>apis_core.apis_entities.utils module<a class="headerlink" href="#module-apis_core.apis_entities.utils" title="Link to this heading"></a></h2>
@@ -682,24 +654,6 @@ keyword arguments, and other things.</p>
 <span class="sig-name descname"><span class="pre">get_result_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/apis_entities/views.html#EntitiesAutocomplete.get_result_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.views.EntitiesAutocomplete.get_result_value" title="Link to this definition"></a></dt>
 <dd><p>Return the value of a result.</p>
 </dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.apis_entities.views.EntitiesDuplicate">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.apis_entities.views.</span></span><span class="sig-name descname"><span class="pre">EntitiesDuplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/views.html#EntitiesDuplicate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.views.EntitiesDuplicate" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="apis_core.generic.html#apis_core.generic.views.GenericModelMixin" title="apis_core.generic.views.GenericModelMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericModelMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionRequiredMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">View</span></code></p>
-<p>Constructor. Called in the URLconf; can contain helpful extra
-keyword arguments, and other things.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.apis_entities.views.EntitiesDuplicate.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/apis_entities/views.html#EntitiesDuplicate.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.apis_entities.views.EntitiesDuplicate.get" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.apis_entities.views.EntitiesDuplicate.permission_action_required">
-<span class="sig-name descname"><span class="pre">permission_action_required</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'create'</span></em><a class="headerlink" href="#apis_core.apis_entities.views.EntitiesDuplicate.permission_action_required" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 

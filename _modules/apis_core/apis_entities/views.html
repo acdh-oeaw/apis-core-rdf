@@ -82,42 +82,13 @@
              
   <h1>Source code for apis_core.apis_entities.views</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
-<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">messages</span>
-<span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">PermissionRequiredMixin</span>
 <span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
-<span class="kn">from</span> <span class="nn">django.utils.html</span> <span class="kn">import</span> <span class="n">format_html</span>
-<span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.apis_entities.utils</span> <span class="kn">import</span> <span class="n">get_entity_content_types</span>
 <span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
 <span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">generate_search_filter</span>
-<span class="kn">from</span> <span class="nn">apis_core.generic.views</span> <span class="kn">import</span> <span class="n">GenericModelMixin</span>
-
-
-<div class="viewcode-block" id="EntitiesDuplicate">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesDuplicate">[docs]</a>
-<span class="k">class</span> <span class="nc">EntitiesDuplicate</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
-    <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;create&quot;</span>
-
-<div class="viewcode-block" id="EntitiesDuplicate.get">
-<a class="viewcode-back" href="../../../modules/apis_core.apis_entities.html#apis_core.apis_entities.views.EntitiesDuplicate.get">[docs]</a>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">source_obj</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">])</span>
-        <span class="n">newobj</span> <span class="o">=</span> <span class="n">source_obj</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
-
-        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span>
-            <span class="n">request</span><span class="p">,</span>
-            <span class="n">format_html</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;a href=</span><span class="si">{}</span><span class="s2">&gt;</span><span class="si">{}</span><span class="s2">&lt;/a&gt; was successfully duplicated to the current object:&quot;</span><span class="p">,</span>
-                <span class="n">source_obj</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">(),</span>
-                <span class="n">source_obj</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">newobj</span><span class="o">.</span><span class="n">get_edit_url</span><span class="p">())</span></div>
-</div>
-
 
 
 <div class="viewcode-block" id="EntitiesAutocomplete">
