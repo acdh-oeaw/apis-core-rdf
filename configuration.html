@@ -47,7 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ontology.html">Create your <span class="xref std std-term">ontology</span></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#apis-base-url-and-apis-core-apis-entities-api-views-getentitygeneric"><code class="docutils literal notranslate"><span class="pre">APIS_BASE_URL</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_entities.api_views.GetEntityGeneric</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apis-base-uri-and-apis-core-apis-entities-api-views-getentitygeneric"><code class="docutils literal notranslate"><span class="pre">APIS_BASE_URI</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_entities.api_views.GetEntityGeneric</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#django-settings">Django Settings</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#rest-framework">REST_FRAMEWORK</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#spectacular-settings">SPECTACULAR_SETTINGS</a></li>
@@ -97,8 +97,8 @@
              
   <section id="configuration">
 <h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h1>
-<section id="apis-base-url-and-apis-core-apis-entities-api-views-getentitygeneric">
-<h2><code class="docutils literal notranslate"><span class="pre">APIS_BASE_URL</span></code> and <a class="reference internal" href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric" title="apis_core.apis_entities.api_views.GetEntityGeneric"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_entities.api_views.GetEntityGeneric</span></code></a><a class="headerlink" href="#apis-base-url-and-apis-core-apis-entities-api-views-getentitygeneric" title="Link to this heading"></a></h2>
+<section id="apis-base-uri-and-apis-core-apis-entities-api-views-getentitygeneric">
+<h2><code class="docutils literal notranslate"><span class="pre">APIS_BASE_URI</span></code> and <a class="reference internal" href="modules/apis_core.apis_entities.html#apis_core.apis_entities.api_views.GetEntityGeneric" title="apis_core.apis_entities.api_views.GetEntityGeneric"><code class="xref py py-class docutils literal notranslate"><span class="pre">apis_core.apis_entities.api_views.GetEntityGeneric</span></code></a><a class="headerlink" href="#apis-base-uri-and-apis-core-apis-entities-api-views-getentitygeneric" title="Link to this heading"></a></h2>
 <p>When you create an instance of an Entity a signal
 <a class="reference internal" href="modules/apis_core.apis_entities.html#apis_core.apis_entities.models.create_default_uri" title="apis_core.apis_entities.models.create_default_uri"><code class="xref py py-func docutils literal notranslate"><span class="pre">apis_core.apis_entities.models.create_default_uri()</span></code></a> is triggered that
 tries to generate a canonical URI for the entity. The signal can be disabled by
@@ -108,7 +108,7 @@ comes from the <code class="docutils literal notranslate"><span class="pre">APIS
 route of <code class="docutils literal notranslate"><span class="pre">GetEntityGenericRoot</span></code> if that exists. If not, it uses the
 the reverse route of <code class="docutils literal notranslate"><span class="pre">apis_core:GetEntityGeneric</span></code>, which is defined in
 <a class="reference internal" href="modules/apis_core.html#module-apis_core.urls" title="apis_core.urls"><code class="xref py py-mod docutils literal notranslate"><span class="pre">apis_core.urls</span></code></a> and defaults to <code class="docutils literal notranslate"><span class="pre">/entity/{pk}</span></code>.
-If the value of <code class="docutils literal notranslate"><span class="pre">APIS_BASE_URL</span></code> changes and urls containing the former <code class="docutils literal notranslate"><span class="pre">APIS_BASE_URL</span></code> remain in the database, then the old <code class="docutils literal notranslate"><span class="pre">APIS_BASE_URL</span></code> value must added to the setting <code class="docutils literal notranslate"><span class="pre">APIS_FORMER_BASE_URIS</span></code>.
+If the value of <code class="docutils literal notranslate"><span class="pre">APIS_BASE_URI</span></code> changes and urls containing the former <code class="docutils literal notranslate"><span class="pre">APIS_BASE_URI</span></code> remain in the database, then the old <code class="docutils literal notranslate"><span class="pre">APIS_BASE_URI</span></code> value must added to the setting <code class="docutils literal notranslate"><span class="pre">APIS_FORMER_BASE_URIS</span></code>.
 <code class="docutils literal notranslate"><span class="pre">APIS_FORMER_BASE_URIS</span></code> is a list that contains base urls that were once used.</p>
 </section>
 <section id="django-settings">
