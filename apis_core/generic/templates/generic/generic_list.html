@@ -50,11 +50,21 @@
         <div class="card-header">
           {% blocktranslate with count=table.paginator.count %}{{ count }} results.{% endblocktranslate %}
           {% if view.export_formats %}
-            {% translate "Download" %}
-            {% for format in view.export_formats %}
-              <a href="{% export_url format %}">{{ format | upper }}</a>
-              {% if not forloop.last %}|{% endif %}
-            {% endfor %}
+            <div class="d-inline-block">
+              <a id="downloadMenuButton"
+                 title="{% translate "download" %}"
+                 role="button"
+                 href="#"
+                 data-bs-toggle="dropdown"
+                 aria-expanded="false"><span class="material-symbols-outlined material-symbols-align">download</span></a>
+              <ul class="dropdown-menu" aria-labelledby="downloadMenuButton">
+                {% for format in view.export_formats %}
+                  <li>
+                    <a class="dropdown-item" href="{% export_url format %}">{{ format | upper }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
           {% endif %}
         </div>
         <div class="card-body">
