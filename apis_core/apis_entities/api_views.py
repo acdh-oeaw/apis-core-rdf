@@ -2,6 +2,7 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
 from apis_core.apis_entities.serializers import MinimalEntitySerializer
@@ -11,6 +12,8 @@ from apis_core.utils.filters import CustomSearchFilter
 
 
 class GetEntityGeneric(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, pk):
         try:
             obj = RootObject.objects_inheritance.get_subclass(id=pk)
