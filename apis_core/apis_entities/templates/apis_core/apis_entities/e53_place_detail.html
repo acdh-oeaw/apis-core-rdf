@@ -4,7 +4,7 @@
 
 {% block scripts %}
   {{ block.super }}
-  <script src="{% static "js/E53_Place_detail_map.js" %}"></script>
+  <script src="{% static "js/E53_Place_map.js" %}"></script>
 {% endblock %}
 
 {% block col-zero %}
@@ -14,9 +14,12 @@
     <div class="card-body pt-0">
       <table class="table table-hover table-bordered">
         {% if object.latitude and object.longitude %}
-          <td id="map"
-              data-longitude="{{ object.longitude|floatformat:"4u" }}"
-              data-latitude="{{ object.latitude|floatformat:"4u" }}">{{ object }}</td>
+          <td id="map" class="height-300">
+            <ul hidden>
+              <li data-longitude="{{ object.longitude|floatformat:"4u" }}"
+                  data-latitude="{{ object.latitude|floatformat:"4u" }}">{{ object }}</li>
+            </ul>
+          </td>
         {% endif %}
       </table>
     </div>
