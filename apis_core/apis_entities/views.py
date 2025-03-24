@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from apis_core.apis_entities.utils import get_entity_content_types
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.helpers import generate_search_filter
+from apis_core.generic.views import List
 
 
 class EntitiesAutocomplete(autocomplete.Select2QuerySetView):
@@ -50,3 +51,7 @@ class EntitiesAutocomplete(autocomplete.Select2QuerySetView):
                 content_type.model_class(), self.q, prefix=f"{name}__"
             )
         return RootObject.objects_inheritance.select_subclasses().filter(q)
+
+
+class E53_PlaceMap(List):
+    template_name_suffix = "_map"

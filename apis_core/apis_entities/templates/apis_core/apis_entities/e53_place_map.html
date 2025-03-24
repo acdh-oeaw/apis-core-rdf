@@ -1,0 +1,29 @@
+{% extends "generic/generic_list.html" %}
+{% load static %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static "js/E53_Place_map.js" %}"></script>
+{% endblock %}
+
+{% block additionalcols %}
+  <div class="col-8">
+    <div class="card">
+      <div class="card-header"></div>
+      <div class="card-body">
+        <div id="map" class="h80vh">
+          <ul hidden>
+            {% for object in object_list %}
+              {% if object.longitude and object.latitude %}
+                <li data-longitude="{{ object.longitude|floatformat:"4u" }}"
+                    data-latitude="{{ object.latitude|floatformat:"4u" }}">
+                  <a href="{{ object.get_absolute_url }}">{{ object }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock additionalcols %}
