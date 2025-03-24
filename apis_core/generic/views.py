@@ -221,6 +221,13 @@ class List(
 
         return filterset
 
+    def get_queryset(self):
+        queryset_methods = module_paths(
+            self.model, path="querysets", suffix="ListViewQueryset"
+        )
+        queryset = first_member_match(queryset_methods) or (lambda x: x)
+        return queryset(self.model.objects.all())
+
     def get_table_pagination(self, table):
         """
         Override `get_table_pagination` from the tables2 TableMixinBase,
