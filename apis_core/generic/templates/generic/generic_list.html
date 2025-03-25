@@ -44,11 +44,20 @@
         <div class="card-header">
           {{ table.paginator.count }} results.
           {% if view.export_formats %}
-            Download
-            {% for format in view.export_formats %}
-              <a href="{% export_url format %}">{{ format | upper }}</a>
-              {% if not forloop.last %}|{% endif %}
-            {% endfor %}
+            <div class="dropdown  d-inline-block">
+              <button class="btn btn-secondary dropdown-toggle btn-sm"
+                      type="button"
+                      id="dropdownMenuButton1"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false">Download</button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                {% for format in view.export_formats %}
+                  <li>
+                    <a class="dropdown-item" href="{% export_url format %}">{{ format | upper }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
           {% endif %}
         </div>
         <div class="card-body">
