@@ -9,16 +9,12 @@
 {% url "apis_core:swagger-ui" as swagger_ui %}
 {% if swagger_ui %}
   <a href="{{ swagger_ui }}" title="Swagger UI">
-    <img class="icon"
-         src="{% static "img/Swagger-logo.png" %}"
-         alt="Swagger UI">
+    <img class="icon" src="{% static "img/Swagger-logo.png" %}" alt="Swagger UI">
   </a>
 {% endif %}
 {% git_repository_url as repository_url %}
 {% if repository_url %}
   <a href="{{ repository_url }}" title="Git repository">
-    <img class="icon"
-         src="{% static "img/Git-Icon-1788C.png" %}"
-         alt="Git repository">
+    <img class="icon" src="{% static "img/Git-Icon-1788C.png" %}" alt="Git repository">
   </a>
 {% endif %}
