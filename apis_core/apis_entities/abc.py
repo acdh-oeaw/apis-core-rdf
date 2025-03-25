@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 #########################
 # Abstract base classes #
@@ -79,3 +80,20 @@ class E74_Group(models.Model):
             Path(__file__).parent / "triple_configs/E74_GroupFromDNB.toml",
             Path(__file__).parent / "triple_configs/E74_GroupFromWikidata.toml",
         ]
+
+
+class SimpleLabelModel(models.Model):
+    label = models.CharField(
+        blank=True, default="", max_length=4096, verbose_name=_("Label")
+    )
+
+    class Meta:
+        abstract = True
+        ordering = ["label"]
+
+    def __str__(self):
+        return self.label
+
+    @classmethod
+    def create_from_string(cls, string):
+        return cls.objects.create(label=string)
