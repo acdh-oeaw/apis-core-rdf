@@ -83,7 +83,7 @@
              
   <h1>Source code for apis_core.generic.forms.fields</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
-<span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">ChoiceField</span><span class="p">,</span> <span class="n">ModelChoiceField</span><span class="p">,</span> <span class="n">MultiValueField</span><span class="p">,</span> <span class="n">MultiWidget</span>
+<span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">ModelChoiceField</span><span class="p">,</span> <span class="n">MultiValueField</span><span class="p">,</span> <span class="n">MultiWidget</span>
 <span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
 
 <span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span>
@@ -108,39 +108,65 @@
 
 
 
-<div class="viewcode-block" id="IncludeExcludeMultiWidget">
-<a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeMultiWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">IncludeExcludeMultiWidget</span><span class="p">(</span><span class="n">MultiWidget</span><span class="p">):</span>
-    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;widgets/includeexclude_multiwidget.html&quot;</span>
+<div class="viewcode-block" id="RowColumnMultiWidget">
+<a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiWidget">[docs]</a>
+<span class="k">class</span> <span class="nc">RowColumnMultiWidget</span><span class="p">(</span><span class="n">MultiWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A custom MultiWidget that is meant to be used with the</span>
+<span class="sd">    RowColumnMultiValueField. The widget takes a list of widgets</span>
+<span class="sd">    as a parameter and displays those widgets in columns in one row.</span>
+<span class="sd">    The `labels` parameter is used to add a separate label to the</span>
+<span class="sd">    individual widgets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;widgets/row_column_multiwidget.html&quot;</span>
     <span class="n">use_fieldset</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="IncludeExcludeMultiWidget.decompress">
-<a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeMultiWidget.decompress">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widgets</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[],</span> <span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">widgets</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RowColumnMultiWidget.get_context">
+<a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiWidget.get_context">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;widget&quot;</span><span class="p">][</span><span class="s2">&quot;subwidgets&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
+                <span class="n">widget</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ctx</span></div>
+
+
+<div class="viewcode-block" id="RowColumnMultiWidget.decompress">
+<a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiWidget.decompress">[docs]</a>
     <span class="k">def</span> <span class="nf">decompress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span></div>
+        <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
 </div>
 
 
 
-<div class="viewcode-block" id="IncludeExcludeField">
-<a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeField">[docs]</a>
-<span class="k">class</span> <span class="nc">IncludeExcludeField</span><span class="p">(</span><span class="n">MultiValueField</span><span class="p">):</span>
+<div class="viewcode-block" id="RowColumnMultiValueField">
+<a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiValueField">[docs]</a>
+<span class="k">class</span> <span class="nc">RowColumnMultiValueField</span><span class="p">(</span><span class="n">MultiValueField</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This is a custom MultiValueField that adds a ChoiceField that only provides two</span>
-<span class="sd">    choices, namely `exclude` and `include`. It can be used for django-filter filters</span>
-<span class="sd">    to specify which action should be done with the filter.</span>
+<span class="sd">    This is a custom MultiValueField that simply shows multiple form</span>
+<span class="sd">    fields in a row. The form fields are passed to the constructor and</span>
+<span class="sd">    the corresponding RowColumnMultiWidget simply iterates through all</span>
+<span class="sd">    the fields and shows them in rows.</span>
+<span class="sd">    Additionaly it is possible to pass a list of `labels` that are then</span>
+<span class="sd">    also passed on to the widget, which uses those to add a separate</span>
+<span class="sd">    label to the individual widgets.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">field</span><span class="p">,</span>
-            <span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;include&quot;</span><span class="p">,</span> <span class="s2">&quot;include&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;exclude&quot;</span><span class="p">)]),</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;widget&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RowColumnMultiWidget</span><span class="p">(</span>
+            <span class="n">widgets</span><span class="o">=</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">widget</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span>
         <span class="p">)</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;widget&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">IncludeExcludeMultiWidget</span><span class="p">(</span><span class="n">widgets</span><span class="o">=</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">widget</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">])</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="IncludeExcludeField.compress">
-<a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.IncludeExcludeField.compress">[docs]</a>
+<div class="viewcode-block" id="RowColumnMultiValueField.compress">
+<a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiValueField.compress">[docs]</a>
     <span class="k">def</span> <span class="nf">compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_list</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">data_list</span></div>
 </div>

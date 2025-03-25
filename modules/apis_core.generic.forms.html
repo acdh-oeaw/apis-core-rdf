@@ -273,15 +273,31 @@ is saved manually at a later time. Return the model instance.</p>
 <section id="module-apis_core.generic.forms.fields">
 <span id="apis-core-generic-forms-fields-module"></span><h2>apis_core.generic.forms.fields module<a class="headerlink" href="#module-apis_core.generic.forms.fields" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="apis_core.generic.forms.fields.IncludeExcludeField">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.forms.fields.</span></span><span class="sig-name descname"><span class="pre">IncludeExcludeField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#IncludeExcludeField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.IncludeExcludeField" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultiValueField</span></code></p>
-<p>This is a custom MultiValueField that adds a ChoiceField that only provides two
-choices, namely <cite>exclude</cite> and <cite>include</cite>. It can be used for django-filter filters
-to specify which action should be done with the filter.</p>
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.ModelImportChoiceField">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.forms.fields.</span></span><span class="sig-name descname"><span class="pre">ModelImportChoiceField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'---------'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">help_text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_field_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_choices_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#ModelImportChoiceField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.ModelImportChoiceField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelChoiceField</span></code></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.generic.forms.fields.IncludeExcludeField.compress">
-<span class="sig-name descname"><span class="pre">compress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#IncludeExcludeField.compress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.IncludeExcludeField.compress" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.ModelImportChoiceField.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#ModelImportChoiceField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.ModelImportChoiceField.to_python" title="Link to this definition"></a></dt>
+<dd><p>Return a string.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.RowColumnMultiValueField">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.forms.fields.</span></span><span class="sig-name descname"><span class="pre">RowColumnMultiValueField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#RowColumnMultiValueField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.RowColumnMultiValueField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultiValueField</span></code></p>
+<p>This is a custom MultiValueField that simply shows multiple form
+fields in a row. The form fields are passed to the constructor and
+the corresponding RowColumnMultiWidget simply iterates through all
+the fields and shows them in rows.
+Additionaly it is possible to pass a list of <cite>labels</cite> that are then
+also passed on to the widget, which uses those to add a separate
+label to the individual widgets.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.RowColumnMultiValueField.compress">
+<span class="sig-name descname"><span class="pre">compress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#RowColumnMultiValueField.compress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.RowColumnMultiValueField.compress" title="Link to this definition"></a></dt>
 <dd><p>Return a single value for the given list of values. The values can be
 assumed to be valid.</p>
 <p>For example, if this MultiValueField was instantiated with
@@ -292,45 +308,43 @@ object created by combining the date and time in data_list.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="apis_core.generic.forms.fields.IncludeExcludeMultiWidget">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.forms.fields.</span></span><span class="sig-name descname"><span class="pre">IncludeExcludeMultiWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widgets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#IncludeExcludeMultiWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.IncludeExcludeMultiWidget" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.RowColumnMultiWidget">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.forms.fields.</span></span><span class="sig-name descname"><span class="pre">RowColumnMultiWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widgets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#RowColumnMultiWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.RowColumnMultiWidget" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultiWidget</span></code></p>
+<p>A custom MultiWidget that is meant to be used with the
+RowColumnMultiValueField. The widget takes a list of widgets
+as a parameter and displays those widgets in columns in one row.
+The <cite>labels</cite> parameter is used to add a separate label to the
+individual widgets.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="apis_core.generic.forms.fields.IncludeExcludeMultiWidget.decompress">
-<span class="sig-name descname"><span class="pre">decompress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#IncludeExcludeMultiWidget.decompress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.IncludeExcludeMultiWidget.decompress" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.RowColumnMultiWidget.decompress">
+<span class="sig-name descname"><span class="pre">decompress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#RowColumnMultiWidget.decompress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.RowColumnMultiWidget.decompress" title="Link to this definition"></a></dt>
 <dd><p>Return a list of decompressed values for the given compressed value.
 The given value can be assumed to be valid, but not necessarily
 non-empty.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.RowColumnMultiWidget.get_context">
+<span class="sig-name descname"><span class="pre">get_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#RowColumnMultiWidget.get_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.RowColumnMultiWidget.get_context" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py property">
-<dt class="sig sig-object py" id="apis_core.generic.forms.fields.IncludeExcludeMultiWidget.media">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#apis_core.generic.forms.fields.IncludeExcludeMultiWidget.media" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.RowColumnMultiWidget.media">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#apis_core.generic.forms.fields.RowColumnMultiWidget.media" title="Link to this definition"></a></dt>
 <dd><p>Media for a multiwidget is the combination of all media of the
 subwidgets.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.generic.forms.fields.IncludeExcludeMultiWidget.template_name">
-<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'widgets/includeexclude_multiwidget.html'</span></em><a class="headerlink" href="#apis_core.generic.forms.fields.IncludeExcludeMultiWidget.template_name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.RowColumnMultiWidget.template_name">
+<span class="sig-name descname"><span class="pre">template_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'widgets/row_column_multiwidget.html'</span></em><a class="headerlink" href="#apis_core.generic.forms.fields.RowColumnMultiWidget.template_name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="apis_core.generic.forms.fields.IncludeExcludeMultiWidget.use_fieldset">
-<span class="sig-name descname"><span class="pre">use_fieldset</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#apis_core.generic.forms.fields.IncludeExcludeMultiWidget.use_fieldset" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="apis_core.generic.forms.fields.RowColumnMultiWidget.use_fieldset">
+<span class="sig-name descname"><span class="pre">use_fieldset</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#apis_core.generic.forms.fields.RowColumnMultiWidget.use_fieldset" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="apis_core.generic.forms.fields.ModelImportChoiceField">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.forms.fields.</span></span><span class="sig-name descname"><span class="pre">ModelImportChoiceField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queryset</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'---------'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">help_text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_field_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_choices_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#ModelImportChoiceField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.ModelImportChoiceField" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelChoiceField</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="apis_core.generic.forms.fields.ModelImportChoiceField.to_python">
-<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/forms/fields.html#ModelImportChoiceField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.forms.fields.ModelImportChoiceField.to_python" title="Link to this definition"></a></dt>
-<dd><p>Return a string.</p>
-</dd></dl>
 
 </dd></dl>
 
