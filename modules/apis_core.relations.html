@@ -139,6 +139,384 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
+<section id="module-apis_core.relations.abc">
+<span id="apis-core-relations-abc-module"></span><h2>apis_core.relations.abc module<a class="headerlink" href="#module-apis_core.relations.abc" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.relations.abc.</span></span><span class="sig-name descname"><span class="pre">BornIn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relation_ptr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#BornIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.BornIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation" title="apis_core.relations.models.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Relation</span></code></a></p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.DoesNotExist">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.relations.abc.BornIn.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.DoesNotExist" title="apis_core.relations.models.Relation.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.MultipleObjectsReturned">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.relations.abc.BornIn.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.MultipleObjectsReturned" title="apis_core.relations.models.Relation.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#BornIn.name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.BornIn.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.obj">
+<span class="sig-name descname"><span class="pre">obj</span></span><a class="headerlink" href="#apis_core.relations.abc.BornIn.obj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.obj_model">
+<span class="sig-name descname"><span class="pre">obj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.BornIn.obj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E53_Place" title="apis_core.apis_entities.abc.E53_Place"><code class="xref py py-class docutils literal notranslate"><span class="pre">E53_Place</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.relation_ptr">
+<span class="sig-name descname"><span class="pre">relation_ptr</span></span><a class="headerlink" href="#apis_core.relations.abc.BornIn.relation_ptr" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.relation_ptr_id">
+<span class="sig-name descname"><span class="pre">relation_ptr_id</span></span><a class="headerlink" href="#apis_core.relations.abc.BornIn.relation_ptr_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.reverse_name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reverse_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#BornIn.reverse_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.BornIn.reverse_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.subj">
+<span class="sig-name descname"><span class="pre">subj</span></span><a class="headerlink" href="#apis_core.relations.abc.BornIn.subj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.BornIn.subj_model">
+<span class="sig-name descname"><span class="pre">subj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.BornIn.subj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E21_Person" title="apis_core.apis_entities.abc.E21_Person"><code class="xref py py-class docutils literal notranslate"><span class="pre">E21_Person</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.relations.abc.</span></span><span class="sig-name descname"><span class="pre">DiedIn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relation_ptr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#DiedIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.DiedIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation" title="apis_core.relations.models.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Relation</span></code></a></p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.DoesNotExist">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.relations.abc.DiedIn.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.DoesNotExist" title="apis_core.relations.models.Relation.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.MultipleObjectsReturned">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.relations.abc.DiedIn.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.MultipleObjectsReturned" title="apis_core.relations.models.Relation.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#DiedIn.name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.DiedIn.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.obj">
+<span class="sig-name descname"><span class="pre">obj</span></span><a class="headerlink" href="#apis_core.relations.abc.DiedIn.obj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.obj_model">
+<span class="sig-name descname"><span class="pre">obj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.DiedIn.obj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E53_Place" title="apis_core.apis_entities.abc.E53_Place"><code class="xref py py-class docutils literal notranslate"><span class="pre">E53_Place</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.relation_ptr">
+<span class="sig-name descname"><span class="pre">relation_ptr</span></span><a class="headerlink" href="#apis_core.relations.abc.DiedIn.relation_ptr" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.relation_ptr_id">
+<span class="sig-name descname"><span class="pre">relation_ptr_id</span></span><a class="headerlink" href="#apis_core.relations.abc.DiedIn.relation_ptr_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.reverse_name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reverse_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#DiedIn.reverse_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.DiedIn.reverse_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.subj">
+<span class="sig-name descname"><span class="pre">subj</span></span><a class="headerlink" href="#apis_core.relations.abc.DiedIn.subj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.DiedIn.subj_model">
+<span class="sig-name descname"><span class="pre">subj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.DiedIn.subj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E21_Person" title="apis_core.apis_entities.abc.E21_Person"><code class="xref py py-class docutils literal notranslate"><span class="pre">E21_Person</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.relations.abc.</span></span><span class="sig-name descname"><span class="pre">IsLocatedIn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relation_ptr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#IsLocatedIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation" title="apis_core.relations.models.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Relation</span></code></a></p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.DoesNotExist">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.DoesNotExist" title="apis_core.relations.models.Relation.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.MultipleObjectsReturned">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.MultipleObjectsReturned" title="apis_core.relations.models.Relation.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#IsLocatedIn.name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.obj">
+<span class="sig-name descname"><span class="pre">obj</span></span><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.obj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.obj_model">
+<span class="sig-name descname"><span class="pre">obj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.obj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E53_Place" title="apis_core.apis_entities.abc.E53_Place"><code class="xref py py-class docutils literal notranslate"><span class="pre">E53_Place</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.relation_ptr">
+<span class="sig-name descname"><span class="pre">relation_ptr</span></span><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.relation_ptr" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.relation_ptr_id">
+<span class="sig-name descname"><span class="pre">relation_ptr_id</span></span><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.relation_ptr_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.reverse_name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reverse_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#IsLocatedIn.reverse_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.reverse_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.subj">
+<span class="sig-name descname"><span class="pre">subj</span></span><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.subj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsLocatedIn.subj_model">
+<span class="sig-name descname"><span class="pre">subj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.IsLocatedIn.subj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E53_Place" title="apis_core.apis_entities.abc.E53_Place"><code class="xref py py-class docutils literal notranslate"><span class="pre">E53_Place</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.relations.abc.</span></span><span class="sig-name descname"><span class="pre">IsMemberOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relation_ptr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#IsMemberOf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation" title="apis_core.relations.models.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Relation</span></code></a></p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.DoesNotExist">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.DoesNotExist" title="apis_core.relations.models.Relation.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.MultipleObjectsReturned">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.MultipleObjectsReturned" title="apis_core.relations.models.Relation.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#IsMemberOf.name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.obj">
+<span class="sig-name descname"><span class="pre">obj</span></span><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.obj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.obj_model">
+<span class="sig-name descname"><span class="pre">obj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.obj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E74_Group" title="apis_core.apis_entities.abc.E74_Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">E74_Group</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.relation_ptr">
+<span class="sig-name descname"><span class="pre">relation_ptr</span></span><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.relation_ptr" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.relation_ptr_id">
+<span class="sig-name descname"><span class="pre">relation_ptr_id</span></span><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.relation_ptr_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.reverse_name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reverse_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#IsMemberOf.reverse_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.reverse_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.subj">
+<span class="sig-name descname"><span class="pre">subj</span></span><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.subj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.IsMemberOf.subj_model">
+<span class="sig-name descname"><span class="pre">subj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.IsMemberOf.subj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E21_Person" title="apis_core.apis_entities.abc.E21_Person"><code class="xref py py-class docutils literal notranslate"><span class="pre">E21_Person</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.relations.abc.</span></span><span class="sig-name descname"><span class="pre">LivesIn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_content_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relation_ptr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#LivesIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.LivesIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation" title="apis_core.relations.models.Relation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Relation</span></code></a></p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.DoesNotExist">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#apis_core.relations.abc.LivesIn.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.DoesNotExist" title="apis_core.relations.models.Relation.DoesNotExist"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoesNotExist</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.MultipleObjectsReturned">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#apis_core.relations.abc.LivesIn.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.relations.models.Relation.MultipleObjectsReturned" title="apis_core.relations.models.Relation.MultipleObjectsReturned"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#LivesIn.name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.LivesIn.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.obj">
+<span class="sig-name descname"><span class="pre">obj</span></span><a class="headerlink" href="#apis_core.relations.abc.LivesIn.obj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.obj_model">
+<span class="sig-name descname"><span class="pre">obj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.LivesIn.obj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E53_Place" title="apis_core.apis_entities.abc.E53_Place"><code class="xref py py-class docutils literal notranslate"><span class="pre">E53_Place</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.relation_ptr">
+<span class="sig-name descname"><span class="pre">relation_ptr</span></span><a class="headerlink" href="#apis_core.relations.abc.LivesIn.relation_ptr" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.relation_ptr_id">
+<span class="sig-name descname"><span class="pre">relation_ptr_id</span></span><a class="headerlink" href="#apis_core.relations.abc.LivesIn.relation_ptr_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.reverse_name">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reverse_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/apis_core/relations/abc.html#LivesIn.reverse_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.relations.abc.LivesIn.reverse_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.subj">
+<span class="sig-name descname"><span class="pre">subj</span></span><a class="headerlink" href="#apis_core.relations.abc.LivesIn.subj" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.abc.LivesIn.subj_model">
+<span class="sig-name descname"><span class="pre">subj_model</span></span><a class="headerlink" href="#apis_core.relations.abc.LivesIn.subj_model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="apis_core.apis_entities.html#apis_core.apis_entities.abc.E21_Person" title="apis_core.apis_entities.abc.E21_Person"><code class="xref py py-class docutils literal notranslate"><span class="pre">E21_Person</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-apis_core.relations.admin">
 <span id="apis-core-relations-admin-module"></span><h2>apis_core.relations.admin module<a class="headerlink" href="#module-apis_core.relations.admin" title="Link to this heading"></a></h2>
 </section>
@@ -268,6 +646,32 @@ subjects and objects</p></li>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.models.Relation.bornin">
+<span class="sig-name descname"><span class="pre">bornin</span></span><a class="headerlink" href="#apis_core.relations.models.Relation.bornin" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.models.Relation.diedin">
+<span class="sig-name descname"><span class="pre">diedin</span></span><a class="headerlink" href="#apis_core.relations.models.Relation.diedin" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.relations.models.Relation.id">
 <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#apis_core.relations.models.Relation.id" title="Link to this definition"></a></dt>
 <dd><p>A wrapper for a deferred-loading field. When the value is read from this
@@ -277,6 +681,32 @@ object the first time, the query is executed.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.relations.models.Relation.iscousinof">
 <span class="sig-name descname"><span class="pre">iscousinof</span></span><a class="headerlink" href="#apis_core.relations.models.Relation.iscousinof" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.models.Relation.islocatedin">
+<span class="sig-name descname"><span class="pre">islocatedin</span></span><a class="headerlink" href="#apis_core.relations.models.Relation.islocatedin" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.relations.models.Relation.ismemberof">
+<span class="sig-name descname"><span class="pre">ismemberof</span></span><a class="headerlink" href="#apis_core.relations.models.Relation.ismemberof" title="Link to this definition"></a></dt>
 <dd><p>Accessor to the related object on the reverse side of a one-to-one
 relation.</p>
 <p>In the example:</p>
