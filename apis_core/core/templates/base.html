@@ -23,6 +23,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="generator"
             content="APIS Core{% if debug %} {% apis_version %}{% endif %}">
+      <meta name="htmx-config"
+            content='{"responseHandling":[{"code":"204", "swap": true}]}' />
     {% endblock meta %}
 
     {% block favicons %}
@@ -218,14 +220,6 @@
               integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
               crossorigin="anonymous"></script>
       <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-      <script>
-        document.body.addEventListener('htmx:beforeSwap', function(event) {
-          if (event.detail.xhr.status === 204) {
-            // Swap content even when the response is empty.
-            event.detail.shouldSwap = true;
-          }
-        });
-      </script>
     {% endblock %}
 
     {% block modal %}
