@@ -1,5 +1,47 @@
 # Changelog
 
+## [0.41.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.40.1...v0.41.0) (2025-03-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_entities:** drop legacy EntityToContenttypeConverter
+* **generic:** This change also removes the `id` field from the colums selector, which means it can not be deselected anymore. This is a known issue and we might want to look up a way that *all* the existing table columns (`desc`, `view`, `edit`...) can be deselected.
+
+### Features
+
+* **apis_entities:** adapt place js to also work with lists of points ([71039d5](https://github.com/acdh-oeaw/apis-core-rdf/commit/71039d5f016b24b126873cfc7c2928594c923aba))
+* **apis_entities:** add a custom view showing all the places on a map ([623bf50](https://github.com/acdh-oeaw/apis-core-rdf/commit/623bf502bdd828dd3553f7ecf1bca15301494e05)), closes [#1158](https://github.com/acdh-oeaw/apis-core-rdf/issues/1158)
+* **apis_entities:** override the list template for e53_place ([1712d68](https://github.com/acdh-oeaw/apis-core-rdf/commit/1712d6863bf82e493abea94081755624b4273c33))
+* **apis_entities:** refactor linked_open_data template ([1f22dc0](https://github.com/acdh-oeaw/apis-core-rdf/commit/1f22dc08419246cc7d22592a9e6f572d31dac9f1))
+* **apis_entities:** ship SimpleLabelModel ([e64c38f](https://github.com/acdh-oeaw/apis-core-rdf/commit/e64c38ff2f86da182e5a5ac7bb76bc3a65cf6259)), closes [#1686](https://github.com/acdh-oeaw/apis-core-rdf/issues/1686)
+* **apis_entities:** use uri shortname in linked_open_data template ([bc39960](https://github.com/acdh-oeaw/apis-core-rdf/commit/bc399607a634c89500a6446fc81ca0e45d923e0e))
+* **apis_metainfo:** provide a shortname for Uris ([a73a983](https://github.com/acdh-oeaw/apis-core-rdf/commit/a73a983f74f369ceb71250dce79efa3a494a8ed4))
+* **collections:** add CollectionsIncludeExcludeFilter ([26c222d](https://github.com/acdh-oeaw/apis-core-rdf/commit/26c222d027266974f7182447a6047d358672b8dd))
+* **generic:** introduce `model_field_template_lookup_list` templatetag ([72d8c93](https://github.com/acdh-oeaw/apis-core-rdf/commit/72d8c93a98af681d1f485c4c30137b1b5f2e814b))
+* **generic:** introduce RowColumnMultiValueField + RowColumnMultiWidget ([d7b7d38](https://github.com/acdh-oeaw/apis-core-rdf/commit/d7b7d38c3bd642a2d2c7d7f204df712b5e430a7b))
+* **generic:** readd the `get_queryset` method to the List view ([e0465d3](https://github.com/acdh-oeaw/apis-core-rdf/commit/e0465d3d15d8e197fd3eac273dfb0cb57334c00d))
+* **generic:** use `model_field_template_lookup_list` for generic table ([2f4b97a](https://github.com/acdh-oeaw/apis-core-rdf/commit/2f4b97a8ea7af729a221caa84e55c17f5e1b20ec))
+* **generic:** use CollectionsIncludeExcludeFilter in generic filterset ([d71fd51](https://github.com/acdh-oeaw/apis-core-rdf/commit/d71fd514075d7fc683f5402056ff30e389805b23))
+* **relations:** ship some default relations ([b51945c](https://github.com/acdh-oeaw/apis-core-rdf/commit/b51945c8bb4ae749b8416c17c3c60ccb75c6046d)), closes [#1104](https://github.com/acdh-oeaw/apis-core-rdf/issues/1104)
+
+
+### Bug Fixes
+
+* **apis_entities:** add permission class to GetEntityGeneric view ([d67a782](https://github.com/acdh-oeaw/apis-core-rdf/commit/d67a7826e9d95ec85533de234b4b7b6b5884774b)), closes [#1678](https://github.com/acdh-oeaw/apis-core-rdf/issues/1678)
+* **core:** include the main autocomplete_light js in the header ([afa96df](https://github.com/acdh-oeaw/apis-core-rdf/commit/afa96df519a07918e88a1d11dbb3181a7591d541)), closes [#1696](https://github.com/acdh-oeaw/apis-core-rdf/issues/1696)
+* **generic:** use different attribute for excluding column choices ([253171a](https://github.com/acdh-oeaw/apis-core-rdf/commit/253171a616ba85e4646728ce818b8e8685c92777))
+
+
+### Documentation
+
+* **configuration:** correct references to APIS_BASE_URI ([2d13c62](https://github.com/acdh-oeaw/apis-core-rdf/commit/2d13c6274b75bb6d2a8fa4a9aa50a2427e1c3048)), closes [#1680](https://github.com/acdh-oeaw/apis-core-rdf/issues/1680)
+
+
+### Code Refactoring
+
+* **apis_entities:** drop legacy EntityToContenttypeConverter ([214e634](https://github.com/acdh-oeaw/apis-core-rdf/commit/214e63480c931c268b67457b19dde4a63c16cdc8))
+
 ## [0.40.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.40.0...v0.40.1) (2025-03-19)
 
 
