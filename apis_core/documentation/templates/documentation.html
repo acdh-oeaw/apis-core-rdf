@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load core %}
 {% load generic %}
+{% load i18n %}
 
 {% block content %}
   {% if datamodel.graph.svg %}
@@ -11,13 +12,13 @@
     {% if datamodel.graph.error %}
       <div class="alert alert-warning" role="alert">{{ datamodel.graph.error }}</div>
     {% endif %}
-    <h1>Entities</h1>
+    <h1>{% translate "Entities" %}</h1>
     {% for entity in datamodel.entities %}
       <div class="border p-3 mb-3">
         <a id="entity-{{ entity.name }}">
           <h2>{{ entity.name|title }}</h2>
         </a>
-        <h3>related via</h3>
+        <h3>{% translate "related via" %}</h3>
         {% for relation in datamodel.relations %}
           {% with relation.model_class.subj_list|add:relation.model_class.obj_list as model_list %}
             <ul>
@@ -29,17 +30,17 @@
             </ul>
           {% endwith %}
         {% endfor %}
-        <h3>attributes</h3>
+        <h3>{% translate "attributes" %}</h3>
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>Verbose name</th>
-              <th>Help text</th>
-              <th>Primary key</th>
-              <th>Can be blank</th>
-              <th>Can be null</th>
-              <th>Choices</th>
-              <th>Type</th>
+              <th>{% translate "Verbose name" %}</th>
+              <th>{% translate "Help text" %}</th>
+              <th>{% translate "Primary key" %}</th>
+              <th>{% translate "Can be blank" %}</th>
+              <th>{% translate "Can be null" %}</th>
+              <th>{% translate "Choices" %}</th>
+              <th>{% translate "Type" %}</th>
             </tr>
           </thead>
           <tbody>
@@ -72,17 +73,17 @@
         </table>
       </div>
     {% endfor %}
-    <h1>Relations</h1>
+    <h1>{% translate "Relations" %}</h1>
     {% for relation in datamodel.relations %}
       <a id="relation-{{ relation.model }}">
         <h2>
-          {{ relation.model_class.name }} <span class="material-symbols-outlined">width</span> {{ relation.model_class.reverse_name }}
+          {{ relation.model_class.name }} <span class="material-symbols-outlined">{% translate "with" %}</span> {{ relation.model_class.reverse_name }}
         </h2>
         <table class="table">
           <thead>
             <tr>
-              <th>Subjects</th>
-              <th>Objects</th>
+              <th>{% translate "Subjects" %}</th>
+              <th>{% translate "Objects" %}</th>
             </tr>
           </thead>
           <tbody>
