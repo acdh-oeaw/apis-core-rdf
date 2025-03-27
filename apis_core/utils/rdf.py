@@ -53,6 +53,38 @@ def find_matching_config(graph: Graph) -> dict | None:
     return None
 
 
+def build_sparql_query(filter: str) -> str:
+    """
+    Build a SPARQL query with language preferences.
+
+    Args:
+        filter: Filter sring as defined in the toml.
+                needs to include the predicate and optionally
+                a lang tag to filter for separated with a comma.
+                Eg "wdt:P122,en". Only one lang_tag per filter is supported.
+
+    Returns:
+        A SPARQL query string
+    """
+    predicate, *lang_tag = filter.split(",")
+    query = f"""
+            SELECT ?object 
+            WHERE {{ 
+                ?subject {predicate} ?object 
+            }}
+        """
+    if lang_tag:
+        if len(lang_tag) > 1:
+            logger.debug(
+                f"You habe more than one lang tag in {filter}, but only one per filter definition is allowed."
+            )
+        lang_tag = f'FILTER(LANG(?object) = "{lang_tag[0]}") }}'
+        query = query.replace("}", lang_tag)
+
+    logger.debug("Generated SPARQL query: %s", query)
+    return query
+
+
 def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
     values = []
     if isinstance(curies, str):
@@ -61,9 +93,8 @@ def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
         if curie.startswith("SELECT "):
             results = graph.query(curie)
         else:
-            results = graph.query(
-                "SELECT ?object WHERE { ?subject " + curie + " ?object }"
-            )
+            query = build_sparql_query(curie)
+            results = graph.query(query)
         objects = [result[0] for result in results]
         for obj in objects:
             if isinstance(obj, BNode):
