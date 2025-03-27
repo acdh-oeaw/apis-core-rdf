@@ -110,7 +110,8 @@ def makeclassprefix(string: str) -> str:
 def import_string(dotted_path):
     try:
         return module_loading.import_string(dotted_path)
-    except (ModuleNotFoundError, ImportError):
+    except (ModuleNotFoundError, ImportError) as e:
+        logger.debug("Could not load %s: %s", dotted_path, e)
         return False
 
 
