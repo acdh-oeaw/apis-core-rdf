@@ -28,7 +28,7 @@ class ModelViewSet(viewsets.ModelViewSet):
             self.model, path="querysets", suffix="ViewSetQueryset"
         )
         queryset = first_member_match(queryset_methods) or (lambda x: x)
-        return queryset(self.model.objects.all())
+        return queryset(self.model.objects.all()).distinct()
 
     def get_serializer_class(self):
         renderer = getattr(getattr(self, "request", {}), "accepted_renderer", None)
