@@ -91,13 +91,16 @@ class RelationForm(GenericModelForm):
         # for relation subjects or objects
         initial = kwargs["initial"]
         if (
-            initial["subj_content_type"] is None
+            initial.get("subj_content_type", None) is None
             and len(self.Meta.model.subj_list()) == 1
         ):
             kwargs["initial"]["subj_content_type"] = ContentType.objects.get_for_model(
                 self.Meta.model.subj_list()[0]
             ).id
-        if initial["obj_content_type"] is None and len(self.Meta.model.obj_list()) == 1:
+        if (
+            initial.get("obj_content_type", None) is None
+            and len(self.Meta.model.obj_list()) == 1
+        ):
             kwargs["initial"]["obj_content_type"] = ContentType.objects.get_for_model(
                 self.Meta.model.obj_list()[0]
             ).id
@@ -111,6 +114,8 @@ class RelationForm(GenericModelForm):
         if instance := kwargs.get("instance"):
             self.subj_instance = instance.subj
             self.obj_instance = instance.obj
+            subj_object_id = instance.subj.id
+            obj_object_id = instance.obj.id
         else:
             if subj_content_type and subj_object_id:
                 model = get_object_or_404(ContentType, pk=subj_content_type)
