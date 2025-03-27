@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 {% load core %}
+{% load i18n %}
 <html lang="en">
   <head>
     <title>
@@ -129,7 +130,7 @@
                             {% csrf_token %}
                             <button type="submit" class="btn">
                               <span class="material-symbols-outlined material-symbols-align">logout</span>
-                              log out
+                              {% translate "log out" %}
                             </button>
                           </form>
                         </div>
