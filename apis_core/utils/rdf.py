@@ -52,17 +52,42 @@ def find_matching_config(graph: Graph, models: list | None = None) -> dict | Non
     return None
 
 
+def build_sparql_query(curie: str) -> str:
+    """
+    Build a SPARQL query with language preferences.
+
+    Args:
+        curie: predicate to filter on as defined in the toml.
+                needs to include the predicate and optionally
+                a lang tag to filter for separated with a comma.
+                Eg "wdt:P122,en".
+
+    Returns:
+        A SPARQL query string
+    """
+    if curie.lower().strip().startswith(("select", "prefix")):
+        return curie
+    lang_tag = ""
+    if "," in curie:
+        curie, lang_tag = curie.split(",", 1)
+        lang_tag = f'FILTER LANGMATCHES(LANG(?object), "{lang_tag}")'
+    query = f"""
+            SELECT ?object 
+            WHERE {{ 
+                ?subject {curie} ?object {lang_tag}
+            }}
+        """
+
+    logger.debug("Generated SPARQL query: %s", query)
+    return query
+
+
 def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
     values = []
     if isinstance(curies, str):
         curies = [curies]
     for curie in curies:
-        if curie.startswith("SELECT "):
-            results = graph.query(curie)
-        else:
-            results = graph.query(
-                "SELECT ?object WHERE { ?subject " + curie + " ?object }"
-            )
+        results = graph.query(build_sparql_query(curie))
         objects = [result[0] for result in results]
         for obj in objects:
             if isinstance(obj, BNode):
