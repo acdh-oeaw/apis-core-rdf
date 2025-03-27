@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block main-menu %}
   {{ block.super }}
   <li class="nav-item dropdown">
     <a href="{% url "apis_core:generic:list" "collections.skoscollection" %}"
        class="nav-link"
-       role="button">Collections</a>
+       role="button">{% translate "Collections" %}</a>
   </li>
 {% endblock main-menu %}
