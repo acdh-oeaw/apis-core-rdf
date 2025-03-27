@@ -1,3 +1,4 @@
+{% load i18n %}
 <h5 class="card-title">Linked Open Data</h5>
 {% if object.uri_set %}
   {% for uri in object.uri_set.all %}
@@ -14,7 +15,7 @@
           <ul class="dropdown-menu">
             <li>
               <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}"
-                 class="dropdown-item small">... merge data</a>
+                 class="dropdown-item small">{% translate "... merge data" %}</a>
             </li>
           </ul>
         {% endif %}

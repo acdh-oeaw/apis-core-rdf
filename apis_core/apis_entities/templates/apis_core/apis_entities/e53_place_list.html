@@ -1,6 +1,7 @@
 {% extends "generic/generic_list.html" %}
+{% load i18n %}
 
 {% block table %}
   {{ block.super }}
-  <a href="{% url "apis_core:apis_entities:e53_place_map" object_list.first.content_type %}?{{ request.GET.urlencode }}">Map</a>
+  <a href="{% url "apis_core:apis_entities:e53_place_map" object_list.first.content_type %}?{{ request.GET.urlencode }}">{% translate "Map" %}</a>
 {% endblock %}
