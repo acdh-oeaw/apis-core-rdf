@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 {% load generic %}
 {% load core %}
+{% load i18n %}
 {% load export_url from django_tables2 %}
 {% if filter %}
 
@@ -14,9 +15,9 @@
           <div class="col">
             {% if object_list.model.get_add_permission in perms %}
               <a class="btn btn-outline-success float-end btn-sm"
-                 href="{{ object_list.model.get_createview_url }}">Create</a>
+                 href="{{ object_list.model.get_createview_url }}">{% translate "Create" %}</a>
               <a class="btn btn-outline-success float-end btn-sm me-1"
-                 href="{{ object_list.model.get_importview_url }}">Import</a>
+                 href="{{ object_list.model.get_importview_url }}">{% translate "Import" %}</a>
             {% endif %}
           </div>
         </div>
@@ -30,7 +31,7 @@
 
       </div>
       <div class="card-footer text-muted">
-        <a class="btn btn-outline-secondary"  href=".">Reset filter</a>
+        <a class="btn btn-outline-secondary"  href=".">{% translate "Reset filter" %}</a>
       </div>
     </div>
   {% endblock col %}
@@ -42,9 +43,9 @@
     <div class="col-8">
       <div class="card">
         <div class="card-header">
-          {{ table.paginator.count }} results.
+          {% blocktranslate %}{{ table.paginator.count }} results.{% endblocktranslate %}
           {% if view.export_formats %}
-            Download
+            {% translate "Download" %}
             {% for format in view.export_formats %}
               <a href="{% export_url format %}">{{ format | upper }}</a>
               {% if not forloop.last %}|{% endif %}

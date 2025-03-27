@@ -1,3 +1,4 @@
+{% load i18n %}
 {% extends basetemplate|default:"base.html" %}
 
 {% block content %}
@@ -5,11 +6,13 @@
     <div class="text-center">
       <form action="" method="post">
         {% csrf_token %}
-        <h4>Confirm deletion of:</h4>
+        <h4>{% translate "Confirm deletion of" %}:</h4>
         <h3>
           <strong>{{ object }}</strong>
         </h3>
-        <input class="btn btn-danger" type="submit" value="Yes, delete" />
+        <input class="btn btn-danger"
+               type="submit"
+               value="{% translate "Yes, delete" %}" />
       </form>
     </div>
   </div>

@@ -3,6 +3,7 @@
 {% load history %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load i18n %}
 
 {% block styles %}
   {{ block.super }}
@@ -12,17 +13,17 @@
 {% block content %}
   <div class="container">
     <h4 class="mb-4">
-      Merging values of <a href="{{ other.get_absolute_url }}">{{ other }}</a> into <a href="{{ object.get_absolute_url }}">{{ object }}</a>
+      {% blocktranslate %}Merging values of <a href="{{ other.get_absolute_url }}">{{ other }}</a> into <a href="{{ object.get_absolute_url }}">{{ object }}</a>{% endblocktranslate %}
     </h4>
     <div class="alert alert-warning" role="alert">
-      After the merge <a href="{{ other.get_absolute_url }}">{{ other }}</a> will be deleted!
+      {% blocktranslate %}After the merge <a href="{{ other.get_absolute_url }}">{{ other }}</a> will be deleted!{% endblocktranslate %}
     </div>
     <table class="table table-sm table-hover table-bordered difftable">
       <thead>
         <tr>
           <th></th>
-          <th>Old value</th>
-          <th>New value</th>
+          <th>{% translate "Old value" %}</th>
+          <th>{% translate "New value" %}</th>
         </tr>
       </thead>
       <tbody>
