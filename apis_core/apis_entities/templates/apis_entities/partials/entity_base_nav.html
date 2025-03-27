@@ -1,18 +1,20 @@
+{% load i18n %}
+
 {% block base-nav %}
   {% if object.get_change_permission in perms %}
     <ul class="nav nav-tabs card-header-tabs float-start">
       <li class="nav-item">
         <a class="nav-link text-success {% if request.path == object.get_absolute_url %}active{% endif %} "
-           href="{{ object.get_absolute_url }}"><span class="material-symbols-outlined material-symbols-align">visibility</span>View</a>
+           href="{{ object.get_absolute_url }}"><span class="material-symbols-outlined material-symbols-align">visibility</span>{% translate "View" %}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-warning {% if request.path == object.get_edit_url %}active{% endif %} "
-           href="{{ object.get_edit_url }}"><span class="material-symbols-outlined material-symbols-align">edit</span>Edit</a>
+           href="{{ object.get_edit_url }}"><span class="material-symbols-outlined material-symbols-align">edit</span>{% translate "Edit" %}</a>
       </li>
       {% if object.history %}
         <li class="object-history nav-item">
           <a class="nav-link {% if request.path == object.get_history_url %}active{% endif %}"
-             href="{{ object.get_history_url }}"><span class="material-symbols-outlined material-symbols-align">history</span>History</a>
+             href="{{ object.get_history_url }}"><span class="material-symbols-outlined material-symbols-align">history</span>{% translate "History" %}</a>
         </li>
       {% endif %}
     </ul>

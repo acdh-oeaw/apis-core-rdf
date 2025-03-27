@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load apis_entities %}
 {% load core %}
+{% load i18n %}
 
 {% block main-menu %}
   {{ block.super }}
@@ -11,7 +12,7 @@
        role="button"
        aria-haspopup="true"
        aria-expanded="false">
-      Entities
+      {% translate "Entities" %}
       <span class="caret" />
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
