@@ -1,11 +1,12 @@
 {% extends basetemplate|default:"base.html" %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 
 {% block content %}
   <div class="container">
     <div class="card">
       <div class="card-header">
-        Select to merge into <a href="{{ object.get_absolute_url }}">{{ object }}</a>
+        {% blocktranslate %}Select to merge into <a href="{{ object.get_absolute_url }}">{{ object }}</a>{% endblocktranslate %}
       </div>
       <div class="card-body">{% crispy form form.helper %}</div>
     </div>
