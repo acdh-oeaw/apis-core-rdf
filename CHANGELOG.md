@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.41.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.41.0...v0.41.1) (2025-03-27)
+
+
+### Bug Fixes
+
+* **relations:** work around initial data being empty ([242c6ef](https://github.com/acdh-oeaw/apis-core-rdf/commit/242c6eff4680c6db1768a8c670aea38c0b9a7bca)), closes [#1712](https://github.com/acdh-oeaw/apis-core-rdf/issues/1712)
+
 ## [0.41.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.40.1...v0.41.0) (2025-03-26)
 
 
