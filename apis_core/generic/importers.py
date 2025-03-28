@@ -45,7 +45,10 @@ class GenericModelImporter:
     def request(self, uri):
         # we first try to use the RDF parser
         try:
-            data = get_something_from_uri(uri)
+            data = get_something_from_uri(
+                uri,
+                [self.model],
+            )
             return data
         except Exception as e:
             logger.debug(e)
