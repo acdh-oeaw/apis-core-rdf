@@ -29,10 +29,12 @@ def resolve(obj, graph):
     return obj
 
 
-def find_matching_config(graph: Graph) -> dict | None:
+def find_matching_config(graph: Graph, models: list | None = None) -> dict | None:
     models_with_config = [
         model for model in apps.get_models() if hasattr(model, "rdf_configs")
     ]
+    if models is not None:
+        models_with_config = [model for model in models_with_config if model in models]
     for model in models_with_config:
         for path in model.rdf_configs():
             config = tomllib.loads(Path(path).read_text())
@@ -79,12 +81,12 @@ def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
     return list(dict.fromkeys(values))
 
 
-def get_something_from_uri(uri: str) -> dict | None:
+def get_something_from_uri(uri: str, models: list | None = None) -> dict | None:
     uri = get_normalized_uri(uri)
     graph = Graph()
     graph.parse(uri)
 
-    if config := find_matching_config(graph):
+    if config := find_matching_config(graph, models):
         result = defaultdict(list)
         result["model"] = config["model"]
         result["relations"] = defaultdict(list)
