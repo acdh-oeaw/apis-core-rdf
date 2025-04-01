@@ -85,6 +85,7 @@
 
 <span class="kn">from</span> <span class="nn">rdflib</span> <span class="kn">import</span> <span class="n">Graph</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">renderers</span>
+<span class="kn">from</span> <span class="nn">rest_framework.exceptions</span> <span class="kn">import</span> <span class="n">APIException</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -92,42 +93,96 @@
 <div class="viewcode-block" id="GenericRDFBaseRenderer">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.renderers.GenericRDFBaseRenderer">[docs]</a>
 <span class="k">class</span> <span class="nc">GenericRDFBaseRenderer</span><span class="p">(</span><span class="n">renderers</span><span class="o">.</span><span class="n">BaseRenderer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class to render RDF graphs to various formats.</span>
+<span class="sd">    This renderer expects the serialized data to either be a rdflib grap **or**</span>
+<span class="sd">    to contain a list of rdflib graphs. If it works with a list of graphs, those</span>
+<span class="sd">    are combined to one graph.</span>
+<span class="sd">    This graph is then serialized and the result is returned. The serialization</span>
+<span class="sd">    format can be set using the `rdflib_format` attribute. If this is not set, the</span>
+<span class="sd">    `format` attribute of the renderer is used as serialization format (this is the</span>
+<span class="sd">    format as it is used by the Django Rest Framework for content negotiation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;ttl&quot;</span>
+    <span class="n">rdflib_format</span> <span class="o">=</span> <span class="kc">None</span>
+
 <div class="viewcode-block" id="GenericRDFBaseRenderer.render">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.renderers.GenericRDFBaseRenderer.render">[docs]</a>
     <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">accepted_media_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renderer_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[]):</span>
-            <span class="k">match</span> <span class="n">result</span><span class="p">:</span>
-                <span class="k">case</span><span class="w"> </span><span class="nb">tuple</span><span class="p">(</span><span class="k">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
-                    <span class="n">g</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-                <span class="k">case</span> <span class="n">other</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Could not add </span><span class="si">%s</span><span class="s2"> to RDF graph: not a tuple&quot;</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">media_type</span><span class="p">)</span></div>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+
+        <span class="k">match</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">case</span> <span class="p">{</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">results</span><span class="p">,</span> <span class="o">**</span><span class="n">rest</span><span class="p">}:</span>  <span class="c1"># noqa: F841</span>
+                <span class="c1"># Handle case where data is a dict with multiple graphs</span>
+                <span class="k">for</span> <span class="n">graph</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">Graph</span><span class="p">):</span>
+                        <span class="c1"># Merge triples</span>
+                        <span class="k">for</span> <span class="n">triple</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
+                            <span class="n">result</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">triple</span><span class="p">)</span>
+                        <span class="c1"># Merge namespace bindings</span>
+                        <span class="k">for</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">namespace</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">namespaces</span><span class="p">():</span>
+                            <span class="n">result</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">case</span> <span class="p">{</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="n">detail</span><span class="p">}:</span>
+                <span class="k">raise</span> <span class="n">APIException</span><span class="p">(</span><span class="n">detail</span><span class="p">)</span>
+            <span class="k">case</span> <span class="n">Graph</span><span class="p">():</span>
+                <span class="c1"># Handle case where data is a single graph</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">data</span>
+                <span class="c1"># Ensure namespaces are properly bound in the single graph case</span>
+                <span class="k">for</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">namespace</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">namespaces</span><span class="p">():</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid data format. Expected rdflib Graph or dict with &#39;results&#39; key containing graphs&quot;</span>
+                <span class="p">)</span>
+        <span class="n">serialization_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdflib_format</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">serialization_format</span><span class="p">)</span></div>
 </div>
-
-
-
-<div class="viewcode-block" id="GenericRDFXMLRenderer">
-<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.renderers.GenericRDFXMLRenderer">[docs]</a>
-<span class="k">class</span> <span class="nc">GenericRDFXMLRenderer</span><span class="p">(</span><span class="n">GenericRDFBaseRenderer</span><span class="p">):</span>
-    <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;application/rdf+xml&quot;</span>
-    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+xml&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="GenericRDFTurtleRenderer">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.renderers.GenericRDFTurtleRenderer">[docs]</a>
 <span class="k">class</span> <span class="nc">GenericRDFTurtleRenderer</span><span class="p">(</span><span class="n">GenericRDFBaseRenderer</span><span class="p">):</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;ttl&quot;</span>
     <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;text/turtle&quot;</span>
-    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+turtle&quot;</span></div>
+    <span class="n">rdflib_format</span> <span class="o">=</span> <span class="s2">&quot;turtle&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="GenericRDFXMLRenderer">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.renderers.GenericRDFXMLRenderer">[docs]</a>
+<span class="k">class</span> <span class="nc">GenericRDFXMLRenderer</span><span class="p">(</span><span class="n">GenericRDFBaseRenderer</span><span class="p">):</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf&quot;</span>
+    <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;application/rdf+xml&quot;</span>
+    <span class="n">rdflib_format</span> <span class="o">=</span> <span class="s2">&quot;xml&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="GenericRDFN3Renderer">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.renderers.GenericRDFN3Renderer">[docs]</a>
 <span class="k">class</span> <span class="nc">GenericRDFN3Renderer</span><span class="p">(</span><span class="n">GenericRDFBaseRenderer</span><span class="p">):</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf&quot;</span>
     <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;text/n3&quot;</span>
-    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;rdf+n3&quot;</span></div>
+    <span class="n">rdflib_format</span> <span class="o">=</span> <span class="s2">&quot;n3&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CidocTTLRenderer">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.renderers.CidocTTLRenderer">[docs]</a>
+<span class="k">class</span> <span class="nc">CidocTTLRenderer</span><span class="p">(</span><span class="n">GenericRDFBaseRenderer</span><span class="p">):</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;cidoc&quot;</span>
+    <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;text/ttl&quot;</span>
+    <span class="n">rdflib_format</span> <span class="o">=</span> <span class="s2">&quot;ttl&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CidocXMLRenderer">
+<a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.renderers.CidocXMLRenderer">[docs]</a>
+<span class="k">class</span> <span class="nc">CidocXMLRenderer</span><span class="p">(</span><span class="n">GenericRDFBaseRenderer</span><span class="p">):</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;cidoc&quot;</span>
+    <span class="n">media_type</span> <span class="o">=</span> <span class="s2">&quot;application/rdf+xml&quot;</span>
+    <span class="n">rdflib_format</span> <span class="o">=</span> <span class="s2">&quot;xml&quot;</span></div>
 
 </pre></div>
 

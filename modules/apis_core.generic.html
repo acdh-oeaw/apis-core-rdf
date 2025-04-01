@@ -653,9 +653,69 @@ have an equivalent field in the model.</p>
 <section id="module-apis_core.generic.renderers">
 <span id="apis-core-generic-renderers-module"></span><h2>apis_core.generic.renderers module<a class="headerlink" href="#module-apis_core.generic.renderers" title="Link to this heading"></a></h2>
 <dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.CidocTTLRenderer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.renderers.</span></span><span class="sig-name descname"><span class="pre">CidocTTLRenderer</span></span><a class="reference internal" href="../_modules/apis_core/generic/renderers.html#CidocTTLRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.renderers.CidocTTLRenderer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.renderers.GenericRDFBaseRenderer" title="apis_core.generic.renderers.GenericRDFBaseRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericRDFBaseRenderer</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.CidocTTLRenderer.format">
+<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cidoc'</span></em><a class="headerlink" href="#apis_core.generic.renderers.CidocTTLRenderer.format" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.CidocTTLRenderer.media_type">
+<span class="sig-name descname"><span class="pre">media_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'text/ttl'</span></em><a class="headerlink" href="#apis_core.generic.renderers.CidocTTLRenderer.media_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.CidocTTLRenderer.rdflib_format">
+<span class="sig-name descname"><span class="pre">rdflib_format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ttl'</span></em><a class="headerlink" href="#apis_core.generic.renderers.CidocTTLRenderer.rdflib_format" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.CidocXMLRenderer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.renderers.</span></span><span class="sig-name descname"><span class="pre">CidocXMLRenderer</span></span><a class="reference internal" href="../_modules/apis_core/generic/renderers.html#CidocXMLRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.renderers.CidocXMLRenderer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#apis_core.generic.renderers.GenericRDFBaseRenderer" title="apis_core.generic.renderers.GenericRDFBaseRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericRDFBaseRenderer</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.CidocXMLRenderer.format">
+<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cidoc'</span></em><a class="headerlink" href="#apis_core.generic.renderers.CidocXMLRenderer.format" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.CidocXMLRenderer.media_type">
+<span class="sig-name descname"><span class="pre">media_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'application/rdf+xml'</span></em><a class="headerlink" href="#apis_core.generic.renderers.CidocXMLRenderer.media_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.CidocXMLRenderer.rdflib_format">
+<span class="sig-name descname"><span class="pre">rdflib_format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'xml'</span></em><a class="headerlink" href="#apis_core.generic.renderers.CidocXMLRenderer.rdflib_format" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFBaseRenderer">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">apis_core.generic.renderers.</span></span><span class="sig-name descname"><span class="pre">GenericRDFBaseRenderer</span></span><a class="reference internal" href="../_modules/apis_core/generic/renderers.html#GenericRDFBaseRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFBaseRenderer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseRenderer</span></code></p>
+<p>Base class to render RDF graphs to various formats.
+This renderer expects the serialized data to either be a rdflib grap <strong>or</strong>
+to contain a list of rdflib graphs. If it works with a list of graphs, those
+are combined to one graph.
+This graph is then serialized and the result is returned. The serialization
+format can be set using the <cite>rdflib_format</cite> attribute. If this is not set, the
+<cite>format</cite> attribute of the renderer is used as serialization format (this is the
+format as it is used by the Django Rest Framework for content negotiation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFBaseRenderer.format">
+<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ttl'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFBaseRenderer.format" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFBaseRenderer.rdflib_format">
+<span class="sig-name descname"><span class="pre">rdflib_format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFBaseRenderer.rdflib_format" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFBaseRenderer.render">
 <span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accepted_media_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer_context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/apis_core/generic/renderers.html#GenericRDFBaseRenderer.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFBaseRenderer.render" title="Link to this definition"></a></dt>
@@ -669,12 +729,17 @@ have an equivalent field in the model.</p>
 <dd><p>Bases: <a class="reference internal" href="#apis_core.generic.renderers.GenericRDFBaseRenderer" title="apis_core.generic.renderers.GenericRDFBaseRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericRDFBaseRenderer</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFN3Renderer.format">
-<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rdf+n3'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFN3Renderer.format" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rdf'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFN3Renderer.format" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFN3Renderer.media_type">
 <span class="sig-name descname"><span class="pre">media_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'text/n3'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFN3Renderer.media_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFN3Renderer.rdflib_format">
+<span class="sig-name descname"><span class="pre">rdflib_format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'n3'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFN3Renderer.rdflib_format" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -685,12 +750,17 @@ have an equivalent field in the model.</p>
 <dd><p>Bases: <a class="reference internal" href="#apis_core.generic.renderers.GenericRDFBaseRenderer" title="apis_core.generic.renderers.GenericRDFBaseRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericRDFBaseRenderer</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFTurtleRenderer.format">
-<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rdf+turtle'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFTurtleRenderer.format" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ttl'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFTurtleRenderer.format" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFTurtleRenderer.media_type">
 <span class="sig-name descname"><span class="pre">media_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'text/turtle'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFTurtleRenderer.media_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFTurtleRenderer.rdflib_format">
+<span class="sig-name descname"><span class="pre">rdflib_format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'turtle'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFTurtleRenderer.rdflib_format" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -701,12 +771,17 @@ have an equivalent field in the model.</p>
 <dd><p>Bases: <a class="reference internal" href="#apis_core.generic.renderers.GenericRDFBaseRenderer" title="apis_core.generic.renderers.GenericRDFBaseRenderer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenericRDFBaseRenderer</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFXMLRenderer.format">
-<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rdf+xml'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFXMLRenderer.format" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rdf'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFXMLRenderer.format" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFXMLRenderer.media_type">
 <span class="sig-name descname"><span class="pre">media_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'application/rdf+xml'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFXMLRenderer.media_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="apis_core.generic.renderers.GenericRDFXMLRenderer.rdflib_format">
+<span class="sig-name descname"><span class="pre">rdflib_format</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'xml'</span></em><a class="headerlink" href="#apis_core.generic.renderers.GenericRDFXMLRenderer.rdflib_format" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
