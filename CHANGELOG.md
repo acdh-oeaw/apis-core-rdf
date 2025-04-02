@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.42.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.2...v0.42.3) (2025-04-02)
+
+
+### Bug Fixes
+
+* **collections:** use blocktranslate with `with` statement ([66eade2](https://github.com/acdh-oeaw/apis-core-rdf/commit/66eade2405fcb452aea035f3f254350fafebec41))
+* **generic:** use blocktranslate with with statement ([1400479](https://github.com/acdh-oeaw/apis-core-rdf/commit/1400479ece26422de1bb150d5ca676402e75dc22))
+* **templates:** repeat the default settings for htmx.responseHandling ([ac17b83](https://github.com/acdh-oeaw/apis-core-rdf/commit/ac17b836d1b526e44ec6ba6c3d67dd938ee32d70))
+
 ## [0.42.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.1...v0.42.2) (2025-04-02)
 
 
