@@ -43,7 +43,7 @@
     <div class="col-8">
       <div class="card">
         <div class="card-header">
-          {% blocktranslate %}{{ table.paginator.count }} results.{% endblocktranslate %}
+          {% blocktranslate with count=table.paginator.count %}{{ count }} results.{% endblocktranslate %}
           {% if view.export_formats %}
             {% translate "Download" %}
             {% for format in view.export_formats %}

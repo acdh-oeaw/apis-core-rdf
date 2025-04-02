@@ -7,7 +7,7 @@
   <div class="container">
     {% if form.fields %}
       <h4 class="mb-4">
-        {% blocktranslate %}Updating <a href="{{ object.get_absolute_url }}">{{ object }}</a> using the data from <a href="{{ uri }}">{{ uri }}</a>{% endblocktranslate %}
+        {% blocktranslate with url=object.get_absolute_url %}Updating <a href="{{ url }}">{{ object }}</a> using the data from <a href="{{ uri }}">{{ uri }}</a>{% endblocktranslate %}
       </h4>
       {% crispy form form.helper %}
     {% endif %}
