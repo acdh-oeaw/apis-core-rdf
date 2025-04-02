@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.42.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.0...v0.42.1) (2025-04-02)
+
+
+### Bug Fixes
+
+* **build:** fix project-name that was broken in 0feff6e ([96468e9](https://github.com/acdh-oeaw/apis-core-rdf/commit/96468e91ea56009af877a56a7ec3d15ba27e48ea))
+
 ## [0.42.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.41.1...v0.42.0) (2025-04-02)
 
 
