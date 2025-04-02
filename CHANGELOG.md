@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.42.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.1...v0.42.2) (2025-04-02)
+
+
+### Bug Fixes
+
+* **generic:** load i18n in generic_form template ([48f84f5](https://github.com/acdh-oeaw/apis-core-rdf/commit/48f84f56f326af76ccb2400fb8c93352af68441d))
+
 ## [0.42.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.0...v0.42.1) (2025-04-02)
 
 
