@@ -7,6 +7,6 @@
      hx-get="{% url "apis_core:collections:collectionobjectparent" content_type.id object.id collectionobject.id %}"
      hx-swap="outerHTML"
      class="btn btn-sm btn-outline-dark col-{{ collectionobject.collection.name|slugify }} col-{{ collectionobject.collection.pk }}"
-     title="{% blocktranslate %}Click to change to {{ collectionobject.collection.parent.name }}{% endblocktranslate %}"
-     hx-confirm="{% blocktranslate %}Change {{ object }} from {{ collectionobject.collection.name }} to {{ collectionobject.collection.parent.name }}?{% endblocktranslate %}">{{ collectionobject.collection }}</a>
+     title="{% blocktranslate with parent_name=collectionobject.collection.parent.name %}Click to change to {{ parent_name }}{% endblocktranslate %}"
+     hx-confirm="{% blocktranslate with name=collectionobject.collection.name parent_name=collectionobject.collection.parent.name %}Change {{ object }} from {{ name }} to {{ parent_name }}?{% endblocktranslate %}">{{ collectionobject.collection }}</a>
 {% endif %}
