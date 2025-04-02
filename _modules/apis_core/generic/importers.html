@@ -135,7 +135,10 @@
     <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">):</span>
         <span class="c1"># we first try to use the RDF parser</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">get_something_from_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">get_something_from_uri</span><span class="p">(</span>
+                <span class="n">uri</span><span class="p">,</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">],</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="n">data</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
