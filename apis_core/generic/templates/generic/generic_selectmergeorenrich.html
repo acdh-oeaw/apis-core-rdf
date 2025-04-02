@@ -6,7 +6,7 @@
   <div class="container">
     <div class="card">
       <div class="card-header">
-        {% blocktranslate %}Select to merge into <a href="{{ object.get_absolute_url }}">{{ object }}</a>{% endblocktranslate %}
+        {% blocktranslate with url=object.get_absolute_url %}Select to merge into <a href="{{ url }}">{{ object }}</a>{% endblocktranslate %}
       </div>
       <div class="card-body">{% crispy form form.helper %}</div>
     </div>

@@ -13,10 +13,10 @@
 {% block content %}
   <div class="container">
     <h4 class="mb-4">
-      {% blocktranslate %}Merging values of <a href="{{ other.get_absolute_url }}">{{ other }}</a> into <a href="{{ object.get_absolute_url }}">{{ object }}</a>{% endblocktranslate %}
+      {% blocktranslate with url=object.get_absolute_url %}Merging values of <a href="{{ url }}">{{ other }}</a> into <a href="{{ url }}">{{ object }}</a>{% endblocktranslate %}
     </h4>
     <div class="alert alert-warning" role="alert">
-      {% blocktranslate %}After the merge <a href="{{ other.get_absolute_url }}">{{ other }}</a> will be deleted!{% endblocktranslate %}
+      {% blocktranslate with url=object.get_absolute_url %}After the merge <a href="{{ url }}">{{ other }}</a> will be deleted!{% endblocktranslate %}
     </div>
     <table class="table table-sm table-hover table-bordered difftable">
       <thead>
