@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+import tomllib
 from collections import defaultdict
 from pathlib import Path
 
-import tomllib
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.apps import apps
 from rdflib import RDF, BNode, Graph, URIRef
