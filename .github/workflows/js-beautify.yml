@@ -10,20 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # for poetry caching, we have to install poetry before setting up python
-      - name: Install poetry
-        run: pipx install poetry
-      - uses: actions/setup-python@v5
-        with:
-          cache: 'poetry'
-          cache-dependency-path: "pyproject.toml"
-          python-version: "3.11"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
       - name: Install dev dependencies
-        run: |
-          poetry install --no-root --no-directory --only dev
+        run: uv sync --only-dev
       - name: Run js-beautify
         run: |
-          if find . -name "*.js" -exec poetry run js-beautify -rn {} \; | grep -v unchanged; then
+          if find apis_core -name "*.js" -exec uv run js-beautify -rn {} \; | grep -v unchanged; then
             exit 1;
           else
             exit 0;
