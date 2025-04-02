@@ -1,20 +1,22 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.relations.filtersets &mdash; APIS 0.41.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
   
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=0e152771"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=0e152771"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -31,6 +33,9 @@
           <a href="../../../index.html" class="icon icon-home">
             APIS
           </a>
+              <div class="version">
+                0.41.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -81,20 +86,20 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.relations.filtersets</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
-<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
-<span class="kn">from</span> <span class="nn">django_filters</span> <span class="kn">import</span> <span class="n">CharFilter</span><span class="p">,</span> <span class="n">MultipleChoiceFilter</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.contenttypes.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Q</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_filters</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharFilter</span><span class="p">,</span> <span class="n">MultipleChoiceFilter</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">RootObject</span>
-<span class="kn">from</span> <span class="nn">apis_core.generic.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span>
-<span class="kn">from</span> <span class="nn">apis_core.generic.helpers</span> <span class="kn">import</span> <span class="n">generate_search_filter</span>
-<span class="kn">from</span> <span class="nn">apis_core.relations.forms</span> <span class="kn">import</span> <span class="n">RelationFilterSetForm</span>
-<span class="kn">from</span> <span class="nn">apis_core.relations.utils</span> <span class="kn">import</span> <span class="n">get_all_relation_subj_and_obj</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.apis_metainfo.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">RootObject</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.generic.filtersets</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericFilterSet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.generic.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_search_filter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.relations.forms</span><span class="w"> </span><span class="kn">import</span> <span class="n">RelationFilterSetForm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.relations.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_all_relation_subj_and_obj</span>
 
 
 <div class="viewcode-block" id="EntityFilter">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.EntityFilter">[docs]</a>
-<span class="k">class</span> <span class="nc">EntityFilter</span><span class="p">(</span><span class="n">CharFilter</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EntityFilter</span><span class="p">(</span><span class="n">CharFilter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom CharFilter that uses the generate_search_filter helper</span>
 <span class="sd">    to search in all instances inheriting from RootObject and then</span>
@@ -102,11 +107,11 @@
 <span class="sd">    the results.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">[</span><span class="s2">&quot;help_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Searches in subclasses of RootObject&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_search_all_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_search_all_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">Q</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">content_type</span> <span class="ow">in</span> <span class="n">get_all_relation_subj_and_obj</span><span class="p">():</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">content_type</span><span class="o">.</span><span class="n">model</span>
@@ -117,7 +122,7 @@
 
 <div class="viewcode-block" id="EntityFilter.filter">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.EntityFilter.filter">[docs]</a>
-    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qs</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qs</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
             <span class="n">all_entities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_all_entities</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">field_name</span><span class="si">}</span><span class="s2">_object_id__in&quot;</span><span class="p">:</span> <span class="n">all_entities</span><span class="p">})</span>
@@ -128,7 +133,7 @@
 
 <div class="viewcode-block" id="SubjObjClassFilter">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.SubjObjClassFilter">[docs]</a>
-<span class="k">class</span> <span class="nc">SubjObjClassFilter</span><span class="p">(</span><span class="n">MultipleChoiceFilter</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SubjObjClassFilter</span><span class="p">(</span><span class="n">MultipleChoiceFilter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom MultipleChoiceFilter</span>
 <span class="sd">    * it lists model classes as choices, that are in some way</span>
@@ -137,14 +142,14 @@
 <span class="sd">      subjects and objects</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">content_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">[</span><span class="s2">&quot;choices&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">content_types</span><span class="p">]</span>
 
 <div class="viewcode-block" id="SubjObjClassFilter.filter">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.SubjObjClassFilter.filter">[docs]</a>
-    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qs</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qs</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
         <span class="c1"># value is the list of contenttypes ids</span>
         <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">field_name</span><span class="si">}</span><span class="s2">_content_type__in&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">}))</span>
@@ -155,7 +160,7 @@
 
 <div class="viewcode-block" id="RelationFilterSet">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.RelationFilterSet">[docs]</a>
-<span class="k">class</span> <span class="nc">RelationFilterSet</span><span class="p">(</span><span class="n">GenericFilterSet</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RelationFilterSet</span><span class="p">(</span><span class="n">GenericFilterSet</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Override the GenericFilterSet that is created for the Relation model.</span>
 <span class="sd">    It does not really make sense to filter for content type id and object id,</span>
@@ -178,7 +183,7 @@
 
 <div class="viewcode-block" id="RelationFilterSet.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.filtersets.RelationFilterSet.Meta">[docs]</a>
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
         <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;subj_object_id&quot;</span><span class="p">,</span>
             <span class="s2">&quot;subj_content_type&quot;</span><span class="p">,</span>
@@ -188,7 +193,7 @@
         <span class="n">form</span> <span class="o">=</span> <span class="n">RelationFilterSetForm</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">model</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Meta</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="n">all_models</span> <span class="o">=</span> <span class="p">[</span><span class="n">ct</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span> <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">get_all_relation_subj_and_obj</span><span class="p">()]</span>

@@ -1,20 +1,22 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.relations.serializers &mdash; APIS 0.41.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
   
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=0e152771"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=0e152771"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -31,6 +33,9 @@
           <a href="../../../index.html" class="icon icon-home">
             APIS
           </a>
+              <div class="version">
+                0.41.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -81,28 +86,28 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.relations.serializers</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">drf_spectacular.utils</span> <span class="kn">import</span> <span class="n">extend_schema_field</span>
-<span class="kn">from</span> <span class="nn">rest_framework.serializers</span> <span class="kn">import</span> <span class="n">SerializerMethodField</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">drf_spectacular.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">extend_schema_field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.serializers</span><span class="w"> </span><span class="kn">import</span> <span class="n">SerializerMethodField</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.generic.serializers</span> <span class="kn">import</span> <span class="n">SimpleObjectSerializer</span><span class="p">,</span> <span class="n">serializer_factory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.generic.serializers</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleObjectSerializer</span><span class="p">,</span> <span class="n">serializer_factory</span>
 
 
 <div class="viewcode-block" id="RelationSerializer">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.serializers.RelationSerializer">[docs]</a>
-<span class="k">class</span> <span class="nc">RelationSerializer</span><span class="p">(</span><span class="n">SimpleObjectSerializer</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RelationSerializer</span><span class="p">(</span><span class="n">SimpleObjectSerializer</span><span class="p">):</span>
     <span class="n">subj</span> <span class="o">=</span> <span class="n">SerializerMethodField</span><span class="p">()</span>
     <span class="n">obj</span> <span class="o">=</span> <span class="n">SerializerMethodField</span><span class="p">()</span>
 
 <div class="viewcode-block" id="RelationSerializer.Meta">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.serializers.RelationSerializer.Meta">[docs]</a>
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="n">SimpleObjectSerializer</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;subj&quot;</span><span class="p">,</span> <span class="s2">&quot;obj&quot;</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="RelationSerializer.get_subj">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.serializers.RelationSerializer.get_subj">[docs]</a>
     <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">SimpleObjectSerializer</span><span class="p">())</span>
-    <span class="k">def</span> <span class="nf">get_subj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_subj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">subj</span><span class="p">:</span>
             <span class="n">serializer</span> <span class="o">=</span> <span class="n">serializer_factory</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">subj</span><span class="p">),</span> <span class="n">SimpleObjectSerializer</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">serializer</span><span class="p">(</span>
@@ -113,7 +118,7 @@
 <div class="viewcode-block" id="RelationSerializer.get_obj">
 <a class="viewcode-back" href="../../../modules/apis_core.relations.html#apis_core.relations.serializers.RelationSerializer.get_obj">[docs]</a>
     <span class="nd">@extend_schema_field</span><span class="p">(</span><span class="n">SimpleObjectSerializer</span><span class="p">())</span>
-    <span class="k">def</span> <span class="nf">get_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">obj</span><span class="p">:</span>
             <span class="n">serializer</span> <span class="o">=</span> <span class="n">serializer_factory</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">obj</span><span class="p">),</span> <span class="n">SimpleObjectSerializer</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">serializer</span><span class="p">(</span>

@@ -1,20 +1,22 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.generic.views &mdash; APIS 0.41.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
   
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=0e152771"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=0e152771"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -31,6 +33,9 @@
           <a href="../../../index.html" class="icon icon-home">
             APIS
           </a>
+              <div class="version">
+                0.41.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -81,67 +86,67 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.generic.views</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy</span>
 
-<span class="kn">from</span> <span class="nn">dal</span> <span class="kn">import</span> <span class="n">autocomplete</span>
-<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span><span class="p">,</span> <span class="n">http</span>
-<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">messages</span>
-<span class="kn">from</span> <span class="nn">django.contrib.auth.mixins</span> <span class="kn">import</span> <span class="n">PermissionRequiredMixin</span>
-<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
-<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ImproperlyConfigured</span><span class="p">,</span> <span class="n">ValidationError</span>
-<span class="kn">from</span> <span class="nn">django.core.validators</span> <span class="kn">import</span> <span class="n">URLValidator</span>
-<span class="kn">from</span> <span class="nn">django.db.models.fields.related</span> <span class="kn">import</span> <span class="n">ManyToManyRel</span>
-<span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">modelform_factory</span>
-<span class="kn">from</span> <span class="nn">django.forms.utils</span> <span class="kn">import</span> <span class="n">pretty_name</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
-<span class="kn">from</span> <span class="nn">django.template.exceptions</span> <span class="kn">import</span> <span class="n">TemplateDoesNotExist</span>
-<span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">select_template</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">reverse_lazy</span>
-<span class="kn">from</span> <span class="nn">django.utils.html</span> <span class="kn">import</span> <span class="n">format_html</span>
-<span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
-<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">DetailView</span>
-<span class="kn">from</span> <span class="nn">django.views.generic.base</span> <span class="kn">import</span> <span class="n">TemplateView</span>
-<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="kn">import</span> <span class="n">CreateView</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">,</span> <span class="n">FormView</span><span class="p">,</span> <span class="n">UpdateView</span>
-<span class="kn">from</span> <span class="nn">django_filters.filterset</span> <span class="kn">import</span> <span class="n">filterset_factory</span>
-<span class="kn">from</span> <span class="nn">django_filters.views</span> <span class="kn">import</span> <span class="n">FilterView</span>
-<span class="kn">from</span> <span class="nn">django_tables2</span> <span class="kn">import</span> <span class="n">SingleTableMixin</span>
-<span class="kn">from</span> <span class="nn">django_tables2.columns</span> <span class="kn">import</span> <span class="n">library</span>
-<span class="kn">from</span> <span class="nn">django_tables2.export.views</span> <span class="kn">import</span> <span class="n">ExportMixin</span>
-<span class="kn">from</span> <span class="nn">django_tables2.tables</span> <span class="kn">import</span> <span class="n">table_factory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dal</span><span class="w"> </span><span class="kn">import</span> <span class="n">autocomplete</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django</span><span class="w"> </span><span class="kn">import</span> <span class="n">forms</span><span class="p">,</span> <span class="n">http</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.conf</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">messages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.mixins</span><span class="w"> </span><span class="kn">import</span> <span class="n">PermissionRequiredMixin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.contenttypes.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImproperlyConfigured</span><span class="p">,</span> <span class="n">ValidationError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.core.validators</span><span class="w"> </span><span class="kn">import</span> <span class="n">URLValidator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.fields.related</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManyToManyRel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.forms</span><span class="w"> </span><span class="kn">import</span> <span class="n">modelform_factory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.forms.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">pretty_name</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.shortcuts</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.template.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemplateDoesNotExist</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.template.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">select_template</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">reverse_lazy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils.html</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_html</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">View</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.views.generic</span><span class="w"> </span><span class="kn">import</span> <span class="n">DetailView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.views.generic.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemplateView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.views.generic.edit</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateView</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">,</span> <span class="n">FormView</span><span class="p">,</span> <span class="n">UpdateView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_filters.filterset</span><span class="w"> </span><span class="kn">import</span> <span class="n">filterset_factory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_filters.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">FilterView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_tables2</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleTableMixin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_tables2.columns</span><span class="w"> </span><span class="kn">import</span> <span class="n">library</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_tables2.export.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExportMixin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_tables2.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">table_factory</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.apis_metainfo.models</span> <span class="kn">import</span> <span class="n">Uri</span>
-<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span><span class="p">,</span> <span class="n">get_importer_for_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.apis_metainfo.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Uri</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.utils.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_object_from_uri</span><span class="p">,</span> <span class="n">get_importer_for_model</span>
 
-<span class="kn">from</span> <span class="nn">.filtersets</span> <span class="kn">import</span> <span class="n">GenericFilterSet</span>
-<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.filtersets</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericFilterSet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.forms</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">GenericEnrichForm</span><span class="p">,</span>
     <span class="n">GenericImportForm</span><span class="p">,</span>
     <span class="n">GenericMergeWithForm</span><span class="p">,</span>
     <span class="n">GenericModelForm</span><span class="p">,</span>
     <span class="n">GenericSelectMergeOrEnrichForm</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">first_member_match</span><span class="p">,</span>
     <span class="n">generate_search_filter</span><span class="p">,</span>
     <span class="n">module_paths</span><span class="p">,</span>
     <span class="n">permission_fullname</span><span class="p">,</span>
     <span class="n">template_names_via_mro</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.tables</span> <span class="kn">import</span> <span class="n">GenericTable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericTable</span>
 
 
 <div class="viewcode-block" id="Overview">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Overview">[docs]</a>
-<span class="k">class</span> <span class="nc">Overview</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Overview</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;generic/overview.html&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="GenericModelMixin">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.GenericModelMixin">[docs]</a>
-<span class="k">class</span> <span class="nc">GenericModelMixin</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GenericModelMixin</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A mixin providing the common functionality for all the views working</span>
 <span class="sd">    with `generic` models - that is models that are accessed via the</span>
@@ -154,7 +159,7 @@
 
 <div class="viewcode-block" id="GenericModelMixin.setup">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.GenericModelMixin.setup">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">contenttype</span> <span class="o">:=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;contenttype&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">contenttype</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
@@ -163,7 +168,7 @@
 
 <div class="viewcode-block" id="GenericModelMixin.get_template_names">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.GenericModelMixin.get_template_names">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_template_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_template_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">template_names</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">super</span><span class="p">(),</span> <span class="s2">&quot;get_template_names&quot;</span><span class="p">):</span>
             <span class="c1"># Some parent classes come with custom template_names,</span>
@@ -188,7 +193,7 @@
 
 <div class="viewcode-block" id="GenericModelMixin.get_permission_required">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.GenericModelMixin.get_permission_required">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_permission_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_permission_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;permission_action_required&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;view&quot;</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span>
             <span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;APIS_ANON_VIEWS_ALLOWED&quot;</span><span class="p">,</span> <span class="kc">False</span>
         <span class="p">):</span>
@@ -202,7 +207,7 @@
 
 <div class="viewcode-block" id="List">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List">[docs]</a>
-<span class="k">class</span> <span class="nc">List</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span>
     <span class="n">GenericModelMixin</span><span class="p">,</span>
     <span class="n">PermissionRequiredMixin</span><span class="p">,</span>
     <span class="n">ExportMixin</span><span class="p">,</span>
@@ -226,7 +231,7 @@
 
 <div class="viewcode-block" id="List.get_table_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_table_class">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_table_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_table_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">table_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;tables&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Table&quot;</span><span class="p">)</span>
         <span class="n">table_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">table_modules</span><span class="p">,</span> <span class="n">GenericTable</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">table_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">table_class</span><span class="p">)</span></div>
@@ -236,7 +241,7 @@
 
 <div class="viewcode-block" id="List.get_export_filename">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_export_filename">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_export_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_export_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
         <span class="n">table_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table_class</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">table_class</span><span class="p">,</span> <span class="s2">&quot;export_filename&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">table_class</span><span class="o">.</span><span class="n">export_filename</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">extension</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -246,7 +251,7 @@
 
 <div class="viewcode-block" id="List.get_table_kwargs">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_table_kwargs">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_table_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_table_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_table_kwargs</span><span class="p">()</span>
 
         <span class="c1"># we look at the selected columns and exclude</span>
@@ -286,7 +291,7 @@
 
 <div class="viewcode-block" id="List.get_filterset_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_filterset_class">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_filterset_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filterset_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">filterset_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;filtersets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;FilterSet&quot;</span>
         <span class="p">)</span>
@@ -294,7 +299,7 @@
         <span class="k">return</span> <span class="n">filterset_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_get_columns_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns_exclude</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_columns_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns_exclude</span><span class="p">):</span>
         <span class="c1"># we start with the model fields</span>
         <span class="n">choices</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">pretty_name</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="s2">&quot;verbose_name&quot;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)))</span>
@@ -308,7 +313,7 @@
         <span class="n">choices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns_exclude</span><span class="p">,</span> <span class="n">choices</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">choices</span>
 
-    <span class="k">def</span> <span class="nf">_get_columns_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns_exclude</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_columns_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns_exclude</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">field</span>
             <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">names</span><span class="p">()</span>
@@ -317,7 +322,7 @@
 
 <div class="viewcode-block" id="List.get_filterset">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_filterset">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        We override the `get_filterset` method, so we can inject a</span>
 <span class="sd">        `columns` selector into the form</span>
@@ -338,7 +343,7 @@
 
 <div class="viewcode-block" id="List.get_queryset">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_queryset">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">queryset_methods</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ListViewQueryset&quot;</span>
         <span class="p">)</span>
@@ -348,7 +353,7 @@
 
 <div class="viewcode-block" id="List.get_table_pagination">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.List.get_table_pagination">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_table_pagination</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_table_pagination</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Override `get_table_pagination` from the tables2 TableMixinBase,</span>
 <span class="sd">        so we can set the paginate_by and the table_pagination value as attribute of the table.</span>
@@ -362,7 +367,7 @@
 
 <div class="viewcode-block" id="Detail">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Detail">[docs]</a>
-<span class="k">class</span> <span class="nc">Detail</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">DetailView</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Detail</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">DetailView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Detail view for a generic model.</span>
 <span class="sd">    Access requires the `&lt;model&gt;_view` permission.</span>
@@ -374,7 +379,7 @@
 
 <div class="viewcode-block" id="Create">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Create">[docs]</a>
-<span class="k">class</span> <span class="nc">Create</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">CreateView</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Create</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">CreateView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create view for a generic model.</span>
 <span class="sd">    Access requires the `&lt;model&gt;_add` permission.</span>
@@ -387,7 +392,7 @@
 
 <div class="viewcode-block" id="Create.get_form_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Create.get_form_class">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_form_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_form_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">form_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Form&quot;</span><span class="p">)</span>
         <span class="n">form_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">form_modules</span><span class="p">,</span> <span class="n">GenericModelForm</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">modelform_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">form_class</span><span class="p">)</span></div>
@@ -395,7 +400,7 @@
 
 <div class="viewcode-block" id="Create.get_success_url">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Create.get_success_url">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_create_success_url</span><span class="p">()</span></div>
 </div>
 
@@ -403,7 +408,7 @@
 
 <div class="viewcode-block" id="Delete">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Delete">[docs]</a>
-<span class="k">class</span> <span class="nc">Delete</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Delete</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delete view for a generic model.</span>
 <span class="sd">    Access requires the `&lt;model&gt;_delete` permission.</span>
@@ -413,7 +418,7 @@
 
 <div class="viewcode-block" id="Delete.get_success_url">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Delete.get_success_url">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>
             <span class="s2">&quot;apis_core:generic:list&quot;</span><span class="p">,</span>
             <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">resolver_match</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;contenttype&quot;</span><span class="p">]],</span>
@@ -422,7 +427,7 @@
 
 <div class="viewcode-block" id="Delete.delete">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Delete.delete">[docs]</a>
-    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;HX-Request&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span>
                 <span class="n">reverse_lazy</span><span class="p">(</span>
@@ -437,7 +442,7 @@
 
 <div class="viewcode-block" id="Update">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Update">[docs]</a>
-<span class="k">class</span> <span class="nc">Update</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">UpdateView</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Update</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">UpdateView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update view for a generic model.</span>
 <span class="sd">    Access requires the `&lt;model&gt;_change` permission.</span>
@@ -449,7 +454,7 @@
 
 <div class="viewcode-block" id="Update.get_form_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Update.get_form_class">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_form_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_form_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">form_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;Form&quot;</span><span class="p">)</span>
         <span class="n">form_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">form_modules</span><span class="p">,</span> <span class="n">GenericModelForm</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">modelform_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">form_class</span><span class="p">)</span></div>
@@ -457,7 +462,7 @@
 
 <div class="viewcode-block" id="Update.get_success_url">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Update.get_success_url">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_update_success_url</span><span class="p">()</span></div>
 </div>
 
@@ -465,12 +470,12 @@
 
 <div class="viewcode-block" id="Duplicate">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Duplicate">[docs]</a>
-<span class="k">class</span> <span class="nc">Duplicate</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Duplicate</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
     <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;create&quot;</span>
 
 <div class="viewcode-block" id="Duplicate.get">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Duplicate.get">[docs]</a>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">source_obj</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">])</span>
         <span class="n">newobj</span> <span class="o">=</span> <span class="n">source_obj</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
 
@@ -489,7 +494,7 @@
 
 <div class="viewcode-block" id="Autocomplete">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Autocomplete">[docs]</a>
-<span class="k">class</span> <span class="nc">Autocomplete</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Autocomplete</span><span class="p">(</span>
     <span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2QuerySetView</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -504,7 +509,7 @@
 
 <div class="viewcode-block" id="Autocomplete.setup">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.setup">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># We use a URI parameter to enable the create functionality in the</span>
         <span class="c1"># autocomplete dropdown. It is not important what the value of the</span>
@@ -519,7 +524,7 @@
 
 <div class="viewcode-block" id="Autocomplete.get_queryset">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.get_queryset">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">queryset_methods</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;querysets&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;AutocompleteQueryset&quot;</span>
         <span class="p">)</span>
@@ -531,7 +536,7 @@
 
 <div class="viewcode-block" id="Autocomplete.get_results">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.get_results">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
         <span class="n">external_only</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_only&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">external_only</span> <span class="k">else</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
         <span class="n">queryset_methods</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span>
@@ -545,7 +550,7 @@
 
 <div class="viewcode-block" id="Autocomplete.create_object">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.create_object">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        We try multiple approaches to create a model instance from a value:</span>
 <span class="sd">        * we first test if the value is an URL and if so we expect it to be</span>
@@ -576,7 +581,7 @@
 
 <div class="viewcode-block" id="Autocomplete.post">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Autocomplete.post">[docs]</a>
-    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -587,14 +592,14 @@
 
 <div class="viewcode-block" id="Import">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Import">[docs]</a>
-<span class="k">class</span> <span class="nc">Import</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Import</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;generic/generic_import_form.html&quot;</span>
     <span class="n">template_name_suffix</span> <span class="o">=</span> <span class="s2">&quot;_import&quot;</span>
     <span class="n">permission_action_required</span> <span class="o">=</span> <span class="s2">&quot;add&quot;</span>
 
 <div class="viewcode-block" id="Import.get_form_class">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Import.get_form_class">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_form_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_form_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">form_modules</span> <span class="o">=</span> <span class="n">module_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;forms&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;ImportForm&quot;</span><span class="p">)</span>
         <span class="n">form_class</span> <span class="o">=</span> <span class="n">first_member_match</span><span class="p">(</span><span class="n">form_modules</span><span class="p">,</span> <span class="n">GenericImportForm</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">modelform_factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">form_class</span><span class="p">)</span></div>
@@ -602,14 +607,14 @@
 
 <div class="viewcode-block" id="Import.form_valid">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Import.form_valid">[docs]</a>
-    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Import.get_success_url">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Import.get_success_url">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span></div>
 </div>
 
@@ -617,7 +622,7 @@
 
 <div class="viewcode-block" id="SelectMergeOrEnrich">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.SelectMergeOrEnrich">[docs]</a>
-<span class="k">class</span> <span class="nc">SelectMergeOrEnrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SelectMergeOrEnrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This view provides a simple form that allows to select other entities (also from</span>
 <span class="sd">    external sources, if set up) and on form submit redirects to the Enrich view.</span>
@@ -629,13 +634,13 @@
 
 <div class="viewcode-block" id="SelectMergeOrEnrich.get_object">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.SelectMergeOrEnrich.get_object">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pk&quot;</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="SelectMergeOrEnrich.get_context_data">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.SelectMergeOrEnrich.get_context_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">context</span></div>
@@ -643,7 +648,7 @@
 
 <div class="viewcode-block" id="SelectMergeOrEnrich.get_form_kwargs">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.SelectMergeOrEnrich.get_form_kwargs">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_form_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_form_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_form_kwargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;instance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">kwargs</span></div>
@@ -653,7 +658,7 @@
 
 <div class="viewcode-block" id="MergeWith">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith">[docs]</a>
-<span class="k">class</span> <span class="nc">MergeWith</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MergeWith</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generic merge view.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -664,7 +669,7 @@
 
 <div class="viewcode-block" id="MergeWith.setup">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.setup">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">other</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;otherpk&quot;</span><span class="p">])</span></div>
@@ -672,7 +677,7 @@
 
 <div class="viewcode-block" id="MergeWith.get_context_data">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.get_context_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The context consists of the two objects that are merged as well</span>
 <span class="sd">        as a list of changes. Those changes are presented in the view as</span>
@@ -693,7 +698,7 @@
 
 <div class="viewcode-block" id="MergeWith.form_valid">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.form_valid">[docs]</a>
-    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">merge_with</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="p">])</span>
         <span class="n">messages</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Merged values of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">other</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
@@ -701,7 +706,7 @@
 
 <div class="viewcode-block" id="MergeWith.get_success_url">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.MergeWith.get_success_url">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span></div>
 </div>
 
@@ -709,7 +714,7 @@
 
 <div class="viewcode-block" id="Enrich">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich">[docs]</a>
-<span class="k">class</span> <span class="nc">Enrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Enrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Enrich an entity with data from an external source</span>
 <span class="sd">    If so, it uses the proper Importer to get the data from the Uri and</span>
@@ -723,7 +728,7 @@
 
 <div class="viewcode-block" id="Enrich.setup">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.setup">[docs]</a>
-    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;pk&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">)</span>
@@ -734,7 +739,7 @@
 
 <div class="viewcode-block" id="Enrich.get">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.get">[docs]</a>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_merge_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
@@ -752,7 +757,7 @@
 
 <div class="viewcode-block" id="Enrich.get_context_data">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.get_context_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
         <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span>
@@ -761,7 +766,7 @@
 
 <div class="viewcode-block" id="Enrich.get_form_kwargs">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.get_form_kwargs">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_form_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_form_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_form_kwargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;instance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
         <span class="k">try</span><span class="p">:</span>
@@ -774,7 +779,7 @@
 
 <div class="viewcode-block" id="Enrich.form_valid">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.form_valid">[docs]</a>
-    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Go through all the form fields and extract the ones that</span>
 <span class="sd">        start with `update_` and that are set (those are the checkboxes that</span>
@@ -803,7 +808,7 @@
 
 <div class="viewcode-block" id="Enrich.get_success_url">
 <a class="viewcode-back" href="../../../modules/apis_core.generic.html#apis_core.generic.views.Enrich.get_success_url">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()</span></div>
 </div>
 

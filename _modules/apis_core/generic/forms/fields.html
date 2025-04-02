@@ -1,20 +1,22 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.generic.forms.fields &mdash; APIS 0.41.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
 
   
-      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=0e152771"></script>
-      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=0e152771"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -31,6 +33,9 @@
           <a href="../../../../index.html" class="icon icon-home">
             APIS
           </a>
+              <div class="version">
+                0.41.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -82,19 +87,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.generic.forms.fields</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
-<span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">ModelChoiceField</span><span class="p">,</span> <span class="n">MultiValueField</span><span class="p">,</span> <span class="n">MultiWidget</span>
-<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django.core.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.forms</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelChoiceField</span><span class="p">,</span> <span class="n">MultiValueField</span><span class="p">,</span> <span class="n">MultiWidget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils.translation</span><span class="w"> </span><span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.utils.helpers</span> <span class="kn">import</span> <span class="n">create_object_from_uri</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.utils.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_object_from_uri</span>
 
 
 <div class="viewcode-block" id="ModelImportChoiceField">
 <a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField">[docs]</a>
-<span class="k">class</span> <span class="nc">ModelImportChoiceField</span><span class="p">(</span><span class="n">ModelChoiceField</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModelImportChoiceField</span><span class="p">(</span><span class="n">ModelChoiceField</span><span class="p">):</span>
 <div class="viewcode-block" id="ModelImportChoiceField.to_python">
 <a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.ModelImportChoiceField.to_python">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">create_object_from_uri</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">queryset</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
@@ -110,7 +115,7 @@
 
 <div class="viewcode-block" id="RowColumnMultiWidget">
 <a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiWidget">[docs]</a>
-<span class="k">class</span> <span class="nc">RowColumnMultiWidget</span><span class="p">(</span><span class="n">MultiWidget</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RowColumnMultiWidget</span><span class="p">(</span><span class="n">MultiWidget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A custom MultiWidget that is meant to be used with the</span>
 <span class="sd">    RowColumnMultiValueField. The widget takes a list of widgets</span>
@@ -122,13 +127,13 @@
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;widgets/row_column_multiwidget.html&quot;</span>
     <span class="n">use_fieldset</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widgets</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[],</span> <span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widgets</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[],</span> <span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">widgets</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RowColumnMultiWidget.get_context">
 <a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiWidget.get_context">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="n">ctx</span><span class="p">[</span><span class="s2">&quot;widget&quot;</span><span class="p">][</span><span class="s2">&quot;subwidgets&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
@@ -138,7 +143,7 @@
 
 <div class="viewcode-block" id="RowColumnMultiWidget.decompress">
 <a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiWidget.decompress">[docs]</a>
-    <span class="k">def</span> <span class="nf">decompress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decompress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">value</span>
         <span class="k">return</span> <span class="p">[]</span></div>
@@ -148,7 +153,7 @@
 
 <div class="viewcode-block" id="RowColumnMultiValueField">
 <a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiValueField">[docs]</a>
-<span class="k">class</span> <span class="nc">RowColumnMultiValueField</span><span class="p">(</span><span class="n">MultiValueField</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RowColumnMultiValueField</span><span class="p">(</span><span class="n">MultiValueField</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is a custom MultiValueField that simply shows multiple form</span>
 <span class="sd">    fields in a row. The form fields are passed to the constructor and</span>
@@ -159,7 +164,7 @@
 <span class="sd">    label to the individual widgets.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;widget&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RowColumnMultiWidget</span><span class="p">(</span>
             <span class="n">widgets</span><span class="o">=</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">widget</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span>
         <span class="p">)</span>
@@ -167,7 +172,7 @@
 
 <div class="viewcode-block" id="RowColumnMultiValueField.compress">
 <a class="viewcode-back" href="../../../../modules/apis_core.generic.forms.html#apis_core.generic.forms.fields.RowColumnMultiValueField.compress">[docs]</a>
-    <span class="k">def</span> <span class="nf">compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_list</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_list</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">data_list</span></div>
 </div>
 

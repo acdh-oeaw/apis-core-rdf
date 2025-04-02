@@ -1,20 +1,22 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>apis_core.collections.tests.tests &mdash; APIS 0.41.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
 
   
-      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=0e152771"></script>
-      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=0e152771"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -31,6 +33,9 @@
           <a href="../../../../index.html" class="icon icon-home">
             APIS
           </a>
+              <div class="version">
+                0.41.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -81,21 +86,21 @@
            <div itemprop="articleBody">
              
   <h1>Source code for apis_core.collections.tests.tests</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
-<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
-<span class="kn">from</span> <span class="nn">faker</span> <span class="kn">import</span> <span class="n">Faker</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">faker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Faker</span>
 
-<span class="kn">from</span> <span class="nn">apis_core.collections.models</span> <span class="kn">import</span> <span class="n">SkosCollection</span><span class="p">,</span> <span class="n">SkosCollectionContentObject</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.collections.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">SkosCollection</span><span class="p">,</span> <span class="n">SkosCollectionContentObject</span>
 
 <span class="n">fake</span> <span class="o">=</span> <span class="n">Faker</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="SkosCollectionTestCase">
 <a class="viewcode-back" href="../../../../modules/apis_core.collections.tests.html#apis_core.collections.tests.tests.SkosCollectionTestCase">[docs]</a>
-<span class="k">class</span> <span class="nc">SkosCollectionTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SkosCollectionTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="SkosCollectionTestCase.test_name">
 <a class="viewcode-back" href="../../../../modules/apis_core.collections.tests.html#apis_core.collections.tests.tests.SkosCollectionTestCase.test_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
         <span class="n">skc</span> <span class="o">=</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">skc</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span></div>
@@ -103,7 +108,7 @@
 
 <div class="viewcode-block" id="SkosCollectionTestCase.test_parent_name">
 <a class="viewcode-back" href="../../../../modules/apis_core.collections.tests.html#apis_core.collections.tests.tests.SkosCollectionTestCase.test_parent_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_parent_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_parent_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">nameparent</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
         <span class="n">namechild</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">nameparent</span><span class="p">)</span>
@@ -114,7 +119,7 @@
 
 <div class="viewcode-block" id="SkosCollectionTestCase.test_parent_children">
 <a class="viewcode-back" href="../../../../modules/apis_core.collections.tests.html#apis_core.collections.tests.tests.SkosCollectionTestCase.test_parent_children">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_parent_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_parent_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
         <span class="n">SkosCollection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">children</span><span class="p">()),</span> <span class="mi">1</span><span class="p">)</span></div>
@@ -122,7 +127,7 @@
 
 <div class="viewcode-block" id="SkosCollectionTestCase.test_parent_children_tree_as_list">
 <a class="viewcode-back" href="../../../../modules/apis_core.collections.tests.html#apis_core.collections.tests.tests.SkosCollectionTestCase.test_parent_children_tree_as_list">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_parent_children_tree_as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_parent_children_tree_as_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
         <span class="n">child1</span> <span class="o">=</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
         <span class="n">child2</span> <span class="o">=</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">child1</span><span class="p">)</span>
@@ -133,17 +138,17 @@
 
 <div class="viewcode-block" id="SkosCollectionContentObjectTestCase">
 <a class="viewcode-back" href="../../../../modules/apis_core.collections.tests.html#apis_core.collections.tests.tests.SkosCollectionContentObjectTestCase">[docs]</a>
-<span class="k">class</span> <span class="nc">SkosCollectionContentObjectTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SkosCollectionContentObjectTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="SkosCollectionContentObjectTestCase.setUp">
 <a class="viewcode-back" href="../../../../modules/apis_core.collections.tests.html#apis_core.collections.tests.tests.SkosCollectionContentObjectTestCase.setUp">[docs]</a>
-    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">color_name</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">collection_name</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SkosCollectionContentObjectTestCase.test_collection">
 <a class="viewcode-back" href="../../../../modules/apis_core.collections.tests.html#apis_core.collections.tests.tests.SkosCollectionContentObjectTestCase.test_collection">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">fake</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
         <span class="n">scco</span> <span class="o">=</span> <span class="n">SkosCollectionContentObject</span><span class="p">(</span>
             <span class="n">collection</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">,</span> <span class="n">content_object</span><span class="o">=</span><span class="n">user</span>
