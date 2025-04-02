@@ -132,11 +132,6 @@ poetry<span class="w"> </span>run<span class="w"> </span>django-admin<span class
     <span class="c1"># our main app, containing the ontology (in the `models.py`)</span>
     <span class="c1"># and our customizations</span>
     <span class="s2">&quot;sample_project&quot;</span><span class="p">,</span>
-    <span class="c1"># `apis_override_select2js` is a workaround for APIS&#39;</span>
-    <span class="c1"># handling of autocomplete forms. It should be listed</span>
-    <span class="c1"># at the beginning of the list, to make sure the</span>
-    <span class="c1"># files shipped with it are served in precedence.</span>
-    <span class="s2">&quot;apis_override_select2js&quot;</span><span class="p">,</span>
     <span class="s2">&quot;django.contrib.admin&quot;</span><span class="p">,</span>
     <span class="s2">&quot;django.contrib.auth&quot;</span><span class="p">,</span>
     <span class="s2">&quot;django.contrib.contenttypes&quot;</span><span class="p">,</span>
@@ -158,12 +153,7 @@ poetry<span class="w"> </span>run<span class="w"> </span>django-admin<span class
     <span class="s2">&quot;apis_core.core&quot;</span><span class="p">,</span>
     <span class="s2">&quot;apis_core.generic&quot;</span><span class="p">,</span>
     <span class="s2">&quot;apis_core.apis_metainfo&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;apis_core.apis_relations&quot;</span><span class="p">,</span>
     <span class="s2">&quot;apis_core.apis_entities&quot;</span><span class="p">,</span>
-    <span class="c1"># apis_vocabularies is deprecated, but there are</span>
-    <span class="c1"># still migrations depending on it - it will be dropped</span>
-    <span class="c1"># at some point</span>
-    <span class="s2">&quot;apis_core.apis_vocabularies&quot;</span><span class="p">,</span>
     <span class="c1"># APIS collections provide a collection model similar to</span>
     <span class="c1"># SKOS collections and allow tagging of content</span>
     <span class="s2">&quot;apis_core.collections&quot;</span><span class="p">,</span>
