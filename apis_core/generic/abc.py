@@ -14,11 +14,20 @@ from apis_core.generic.signals import (
     pre_duplicate,
     pre_merge_with,
 )
+from apis_core.utils import TypeCheckerMetaClass
 
 logger = logging.getLogger(__name__)
 
 
+class GenericSettings(metaclass=TypeCheckerMetaClass):
+    collections: bool = True
+
+
 class GenericModel:
+
+    class Settings(GenericSettings):
+        ...
+
     def __repr__(self):
         if id := getattr(self, "id", None):
             return super().__repr__() + f" (ID: {id})"
