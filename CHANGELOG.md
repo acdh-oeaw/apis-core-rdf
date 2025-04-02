@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.42.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.41.1...v0.42.0) (2025-04-02)
+
+
+### Features
+
+* add po files for german translation ([fabcc3b](https://github.com/acdh-oeaw/apis-core-rdf/commit/fabcc3b66201d4c6e70f7cd953039a50dfdb5922))
+* **apis_entities:** add metadata & verbose names for abstract models ([e89d5d8](https://github.com/acdh-oeaw/apis-core-rdf/commit/e89d5d80832ea4b514fde1f4f559f4b65f65a586))
+* **apis_entities:** use translate blocks for all template stings ([240e1a2](https://github.com/acdh-oeaw/apis-core-rdf/commit/240e1a2b4aa67bda4a80e8e512c02af26c57a692))
+* **collections:** use translate blocks for all template stings ([a1e4da0](https://github.com/acdh-oeaw/apis-core-rdf/commit/a1e4da00fdd215992b09d81f3521311ca8fae168))
+* **core:** use translate blocks for all template stings ([f03c008](https://github.com/acdh-oeaw/apis-core-rdf/commit/f03c008ed227e7e8c737d31d87cd061554bb922b))
+* **documentation:** use translate blocks for all template stings ([45bab12](https://github.com/acdh-oeaw/apis-core-rdf/commit/45bab1223a222bfecb61a6654f30598e859f8537))
+* **generic:** print exception message if module not found ([f8b8f85](https://github.com/acdh-oeaw/apis-core-rdf/commit/f8b8f85c2ee06488b603f0a9173832cb8bdd068e))
+* **generic:** refactor the generic rdf renderer ([83eb0ab](https://github.com/acdh-oeaw/apis-core-rdf/commit/83eb0abf80eef59b3f3184138cce1bfa6cc1506e))
+* **generic:** use translate blocks for all template strings ([d2e4c81](https://github.com/acdh-oeaw/apis-core-rdf/commit/d2e4c818df7652f68cd61189158c79a4cd4a8e22))
+* **relations:** use translate blocks for all template stings ([2bfd2a6](https://github.com/acdh-oeaw/apis-core-rdf/commit/2bfd2a6609f0c3f9c4c7631d2dcfb2da572db79f))
+* **sample_project:** add migrations based on enhanced entities ([7642671](https://github.com/acdh-oeaw/apis-core-rdf/commit/7642671d0b59e920b3544535eba7fb2015aeb9fa))
+* **utils:** allow to pass a language to the rdf importer definition ([23858bb](https://github.com/acdh-oeaw/apis-core-rdf/commit/23858bb93dcb5d4b7bd775cdffbe08c0384aff72))
+
+
+### Bug Fixes
+
+* tunnel models through importer chain ([dd55edf](https://github.com/acdh-oeaw/apis-core-rdf/commit/dd55edf41101e694cf3b2edce9d3aa0c06a73982)), closes [#1716](https://github.com/acdh-oeaw/apis-core-rdf/issues/1716)
+
+
+### Documentation
+
+* **readme:** remove deprecated apps from sample config ([2516fc3](https://github.com/acdh-oeaw/apis-core-rdf/commit/2516fc39db46a72378034f51a7ecd06e3c9ab7bc))
+
 ## [0.41.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.41.0...v0.41.1) (2025-03-27)
 
 
