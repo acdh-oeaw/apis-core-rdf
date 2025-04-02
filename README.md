@@ -86,11 +86,6 @@ INSTALLED_APPS = [
     # our main app, containing the ontology (in the `models.py`)
     # and our customizations
     "sample_project",
-    # `apis_override_select2js` is a workaround for APIS'
-    # handling of autocomplete forms. It should be listed
-    # at the beginning of the list, to make sure the
-    # files shipped with it are served in precedence.
-    "apis_override_select2js",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -112,12 +107,7 @@ INSTALLED_APPS = [
     "apis_core.core",
     "apis_core.generic",
     "apis_core.apis_metainfo",
-    "apis_core.apis_relations",
     "apis_core.apis_entities",
-    # apis_vocabularies is deprecated, but there are
-    # still migrations depending on it - it will be dropped
-    # at some point
-    "apis_core.apis_vocabularies",
     # APIS collections provide a collection model similar to
     # SKOS collections and allow tagging of content
     "apis_core.collections",
