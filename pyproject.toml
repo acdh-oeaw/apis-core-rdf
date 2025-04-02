@@ -1,60 +1,54 @@
-[tool.poetry]
-name = "apis-core-rdf"
+[project]
+name = "apis-core"
 version = "0.41.1"
 description = "Base package for the APIS framework"
+readme = "README.md"
 authors = [
-    "Matthias Schlögl <matthias.schloegl@oeaw.ac.at>",
-    "Birger Schacht <birger.schacht@oeaw.ac.at>",
-    "K Kollmann <dev-kk@oeaw.ac.at>",
-    "Saranya Balasubramanian <saranya.balasubramanian@oeaw.ac.at>"
+    {name="Matthias Schlögl", email="matthias.schloegl@oeaw.ac.at"},
+    {name="Birger Schacht", email="birger.schacht@oeaw.ac.at"},
+    {name="K Kollmann", email="dev-kk@oeaw.ac.at"},
+    {name="Saranya Balasubramanian", email="saranya.balasubramanian@oeaw.ac.at"}
 ]
 license = "MIT"
-packages = [{include = "apis_core"}]
-readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "Django>=5.1,<5.2",
+    "djangorestframework>=3.14.0,<4.0",
+    "django-filter>=24.3",
+    "django-autocomplete-light>=3.9.4,<3.12.0",
+    "django-crum>=0.7.9,<8.0",
+    "django-crispy-forms>=2,<3.0",
+    "django-tables2>=2.3.3,<3.0",
+    "rdflib>=6.0.2,<8.0.0",
+    "drf-spectacular>=0.26.1,<0.29.0",
+    "requests>=2.25.0,<3.0",
+    "django-model-utils>=4.1.1,<6.0.0",
+    "crispy-bootstrap4>=2023.1,<2025.0",
+    "crispy-bootstrap5>=2024.10",
+    "django-simple-history>=3.6",
+    "pydot>=3.0.2,<4.0",
+    "acdh-arche-assets>=3.21.1,<=4.0",
+    "tablib>=3.8.0,<=4.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-Django = ">5"
-djangorestframework = "^3.14.0"
-django-filter = ">=24.3"
-django-autocomplete-light = ">=3.9.4,<3.12.0"
-django-crum = "^0.7.9"
-django-crispy-forms = "^2"
-django-tables2 = "^2.3.3"
-rdflib = ">=6.0.2,<8.0.0"
-drf-spectacular = ">=0.26.1,<0.29.0"
-requests = "^2.25.0"
-django-model-utils = ">=4.1.1,<6.0.0"
-crispy-bootstrap4 = ">=2023.1,<2025.0"
-crispy-bootstrap5 = ">=2024.10"
-django-simple-history = ">=3.6"
-pydot = "^3.0.2"
-acdh-arche-assets = "^3.21.1"
-tablib = "^3.8.0"
-
-[tool.poetry.group.docs]
-optional = true
-[tool.poetry.group.docs.dependencies]
-sphinx = ">=7,<9"
-sphinx-rtd-theme = ">=2.0.0"
-myst-parser = ">=3.0.1,<5.0.0"
-
-[tool.poetry.group.tests]
-optional = true
-[tool.poetry.group.tests.dependencies]
-faker = "*"
-coverage = "^7.5.3"
-
-[tool.poetry.group.dev]
-optional = true
-[tool.poetry.group.dev.dependencies]
-djlint = "^1.31.1"
-ruff = ">=0.5.0,<0.12.0"
-deptry = ">=0.12,<0.24"
+[tool.uv]
+dev-dependencies = [
+    "coverage==7.5.3",
+    "deptry==0.23",
+    "djlint==1.36.4",
+    "faker>=28.4.1",
+    "myst-parser>=3.0.1,<5.0",
+    "ruff==0.11.2",
+    "sphinx-rtd-theme==2.0.0",
+    "sphinx>=7,<=9",
+]
 
 [build-system]
-requires = ["poetry-core>=1.2.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["apis_core"]
 
 [tool.djlint]
 indent=2
