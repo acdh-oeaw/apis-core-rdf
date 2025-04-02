@@ -41,6 +41,7 @@ pyproject = tomllib.loads(pathlib.Path("../../pyproject.toml").read_text())
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
     "sphinx.ext.doctest",
     "sphinx.ext.todo",
     "sphinx.ext.coverage",
