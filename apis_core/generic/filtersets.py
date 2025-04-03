@@ -26,6 +26,11 @@ class GenericFilterSet(FilterSet):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        model = self._meta.model
+        # remove all the filters that are based on auto_created model fields
+        for field in model._meta.get_fields():
+            if getattr(field, "auto_created", False) and field.name in self.filters:
+                del self.filters[field.name]
         try:
             skoscollection = apps.get_model("collections.SkosCollection")
             if skoscollection.objects.exists():
