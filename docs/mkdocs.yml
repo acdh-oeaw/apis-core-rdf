@@ -1,0 +1,26 @@
+site_name: APIS
+docs_dir: source
+repo_url: https://github.com/acdh-oeaw/apis-core-rdf
+edit_uri: blob/main/docs/
+nav:
+  - "User Guide":
+    - 'installation.md'
+    - 'configuration.md'
+    - 'customization.md'
+    - 'ontology.md'
+    - 'features.md'
+  - "Development Guide":
+    - 'development.md'
+    - 'reference.md'
+  - 'glossary.md'
+markdown_extensions:
+    - markdown_include.include:
+        base_path: docs
+plugins:
+- search:
+- mkdocstrings:
+    default_handler: python
+    handlers:
+      python:
+        options:
+          show_submodules: true
