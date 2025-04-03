@@ -49,6 +49,10 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["apis_core"]
+artifacts = ["**/*.mo"]
+
+[tool.hatch.build.targets.sdist]
+artifacts = ["**/*.mo"]
 
 [tool.djlint]
 indent=2
