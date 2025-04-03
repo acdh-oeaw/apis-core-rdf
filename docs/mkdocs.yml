@@ -1,0 +1,12 @@
+site_name: APIS
+docs_dir: source
+markdown_extensions:
+    - markdown_include.include:
+        base_path: docs
+plugins:
+- mkdocstrings:
+    default_handler: python
+    handlers:
+      python:
+        options:
+          show_submodules: true
