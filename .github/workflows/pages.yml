@@ -27,7 +27,7 @@ jobs:
      - name: Install uv
        uses: astral-sh/setup-uv@v5
      - name: Build docs
-       run: uv run make -C "$GITHUB_WORKSPACE/docs" html
+       run: uv run mkdocs build -f docs/mkdocs.yml -d _build
      - name: Build coverage
        run: |
          uv run coverage run --source="." manage.py test
@@ -40,7 +40,7 @@ jobs:
        run: |
          cd apis-core-rdf-pages
          git rm -rf *
-         cp -r $GITHUB_WORKSPACE/docs/_build/html/* .
+         cp -r $GITHUB_WORKSPACE/docs/_build/* .
          cp -r $GITHUB_WORKSPACE/htmlcov .
          rm -f htmlcov/.gitignore
          touch .nojekyll
