@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.42.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.3...v0.42.4) (2025-04-04)
+
+
+### Bug Fixes
+
+* **apis_entities:** only show map link if there are results ([ca24017](https://github.com/acdh-oeaw/apis-core-rdf/commit/ca2401719253b2dd8e26068c49c7643a73cf4b4d)), closes [#1718](https://github.com/acdh-oeaw/apis-core-rdf/issues/1718)
+
 ## [0.42.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.2...v0.42.3) (2025-04-02)
 
 
