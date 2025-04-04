@@ -96,7 +96,7 @@ def collection_object_collection(context, obj, skoscollectioncollectionobjects):
         )
     if len(skoscollectioncollectionobjects) == 1:
         collectionobject = skoscollectioncollectionobjects.first()
-        context["parent"] = collectionobject.collection.parent
+        context["parent"] = collectionobject.collection.parent_collection
         context["collectionobject"] = collectionobject
         context["content_type"] = ContentType.objects.get_for_model(obj)
         context["object"] = obj
