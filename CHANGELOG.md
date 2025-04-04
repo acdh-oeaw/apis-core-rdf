@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.42.5](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.4...v0.42.5) (2025-04-04)
+
+
+### Bug Fixes
+
+* **collections:** use `.parent_collection` instead of `.parent` ([48372f5](https://github.com/acdh-oeaw/apis-core-rdf/commit/48372f538eac99766cc57fc1125ada4c8e84d17d))
+
 ## [0.42.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.3...v0.42.4) (2025-04-04)
 
 
