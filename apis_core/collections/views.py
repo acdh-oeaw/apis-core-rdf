@@ -57,26 +57,6 @@ class CollectionToggle(LoginRequiredMixin, ContentObjectMixin, TemplateView):
         return super().get(*args, **kwargs)
 
 
-class CollectionObjectParent(LoginRequiredMixin, ContentObjectMixin, TemplateView):
-    """
-    Change the requested CollectionObjects collection to point to the parent of the
-    current collection.
-    """
-
-    template_name = "collections/collection_object_parent.html"
-
-    def get_context_data(self, *args, **kwargs):
-        collectionobject = get_object_or_404(
-            SkosCollectionContentObject, pk=kwargs["collectionobject"]
-        )
-        if collectionobject.collection.parent:
-            collectionobject.collection = collectionobject.collection.parent
-            collectionobject.save()
-        context = super().get_context_data(*args, **kwargs)
-        context["collectionobject"] = collectionobject
-        return context
-
-
 class CollectionObjectCollection(LoginRequiredMixin, ContentObjectMixin, TemplateView):
     """
     Change the requested CollectionObjects collection to point to the collection the
