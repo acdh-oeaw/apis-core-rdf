@@ -9,6 +9,11 @@ file where we describe our entities and relations is the `models.py
 <https://docs.djangoproject.com/en/stable/topics/db/models/>`_ file of your APIS
 project.
 
+.. note::
+   You can use the :ref:`history plugin<History plugin>` to version model
+   instances, i.e. track changes to all objects of a given model in your
+   ontology, by having the model inherit from :ref:`VersionMixin`.
+
 Entities
 ^^^^^^^^
 

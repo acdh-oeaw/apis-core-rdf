@@ -99,6 +99,12 @@ describes <a class="reference internal" href="glossary.html#term-entity"><span c
 <p>Given that APIS is based on <a class="reference external" href="https://www.djangoproject.com/">Django</a>, the
 file where we describe our entities and relations is the <a class="reference external" href="https://docs.djangoproject.com/en/stable/topics/db/models/">models.py</a> file of your APIS
 project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can use the <a class="reference internal" href="features.html#history-plugin"><span class="std std-ref">history plugin</span></a> to version model
+instances, i.e. track changes to all objects of a given model in your
+ontology, by having the model inherit from <a class="reference internal" href="features.html#versionmixin"><span class="std std-ref">VersionMixin</span></a>.</p>
+</div>
 <section id="entities">
 <h2>Entities<a class="headerlink" href="#entities" title="Link to this heading"></a></h2>
 <p>Entities have to inherit from
