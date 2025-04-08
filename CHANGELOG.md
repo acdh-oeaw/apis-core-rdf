@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.42.6](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.5...v0.42.6) (2025-04-08)
+
+
+### Bug Fixes
+
+* **generic:** put `extends` at beginning of template ([0ca8402](https://github.com/acdh-oeaw/apis-core-rdf/commit/0ca8402a67fd2ded1f53602a4eeba8ff508b2d0c)), closes [#1761](https://github.com/acdh-oeaw/apis-core-rdf/issues/1761)
+
+
+### Documentation
+
+* add Sphinx autosectionlabel extension ([777a90a](https://github.com/acdh-oeaw/apis-core-rdf/commit/777a90acc3b1046a1c08896d9c7c8b07feca6473))
+* **ontology:** add note regarding history plugin ([48faa9f](https://github.com/acdh-oeaw/apis-core-rdf/commit/48faa9fb2eed5ce8a64895b4174e2d0535aa9fd1)), closes [#1329](https://github.com/acdh-oeaw/apis-core-rdf/issues/1329)
+
 ## [0.42.5](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.4...v0.42.5) (2025-04-04)
 
 
