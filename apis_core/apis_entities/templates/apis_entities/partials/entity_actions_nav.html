@@ -7,7 +7,8 @@
         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">{% translate "Actions" %}</a>
         <div class="dropdown-menu">
           {% if object.get_delete_permission in perms %}
-            <a class="dropdown-item text-danger" href="{{ object.get_delete_url }}">
+            <a class="dropdown-item object-delete"
+               href="{{ object.get_delete_url }}">
               <span class="material-symbols-outlined material-symbols-align">delete</span>{% translate "Delete" %}
             </a>
           {% endif %}
