@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load apis_entities %}
+{% load core %}
+{% load i18n %}
+
+{% block main-menu %}
+  {{ block.super }}
+  <li class="nav-item dropdown">
+    <a href="{% url "apis_core:documentation" %}"
+       class="nav-link"
+       role="button">{% translate "Documentation" %}</a>
+  </li>
+{% endblock main-menu %}
