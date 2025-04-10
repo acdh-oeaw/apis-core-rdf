@@ -12,7 +12,7 @@
         {% else %}
           Title Placeholder
         {% endif %}
-      {% endblock %}
+      {% endblock title %}
 
     </title>
 
@@ -74,7 +74,7 @@
       <script src="{% static 'js/E53_Place_popover.js' %}"></script>
       <script src="{% static 'js/apis_select2.js' %}"></script>
       <script src="{% static 'autocomplete_light/autocomplete_light.js' %}"></script>
-    {% endblock %}
+    {% endblock scriptHeader %}
 
   </head>
   <body role="document"
@@ -168,7 +168,7 @@
                    ">
                 {{ message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+                  <span aria-hidden="true">×</span>
                 </button>
               </div>
             {% endfor %}
@@ -176,7 +176,8 @@
         {% endif %}
       {% endblock messages %}
 
-      {% block content %}{% endblock %}
+      {% block content %}
+      {% endblock content %}
 
     </main>
     <!-- End main content block -->
@@ -221,7 +222,7 @@
               integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
               crossorigin="anonymous"></script>
       <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-    {% endblock %}
+    {% endblock scripts %}
 
     {% block modal %}
       <!-- Modal -->
@@ -239,7 +240,7 @@
     <button type="button"
             class="btn btn-danger btn-floating btn-lg"
             id="btn-back-to-top">
-      <span>&uarr;</span>
+      <span>↑</span>
     </button>
   </body>
 </html>
