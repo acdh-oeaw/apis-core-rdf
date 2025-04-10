@@ -1,6 +1,10 @@
 {% extends basetemplate|default:"base.html" %}
 {% load i18n %}
 
+{% block title %}
+  {% blocktranslate %}Confirm deletion of {{ object }}{% endblocktranslate %}
+{% endblock title %}
+
 {% block content %}
   <div class="container">
     <div class="text-center">

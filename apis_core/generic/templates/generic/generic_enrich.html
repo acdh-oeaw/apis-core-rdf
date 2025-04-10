@@ -3,6 +3,10 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
+{% block title %}
+  {% blocktranslate %}Updating {{ object }}{% endblocktranslate %}
+{% endblock title %}
+
 {% block content %}
   <div class="container">
     {% if form.fields %}

@@ -5,6 +5,10 @@
 {% load static %}
 {% load i18n %}
 
+{% block title %}
+  {% translate "Merge" %}
+{% endblock title %}
+
 {% block styles %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'css/history.css' %}" />

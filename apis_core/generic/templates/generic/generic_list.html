@@ -7,7 +7,7 @@
 {% load export_url from django_tables2 %}
 
 {% block title %}
-  {{ object_list.model|contenttype|model_meta:"verbose_name_plural"|title }}
+  {% blocktranslate with verbose_name_plural=object_list.model|contenttype|model_meta:"verbose_name_plural" %}List {{ verbose_name_plural }}{% endblocktranslate %}
 {% endblock title %}
 
 {% if filter %}
