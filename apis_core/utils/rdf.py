@@ -22,9 +22,9 @@ def resolve(obj, graph):
     and we expand it using the graphs namespace manager.
     Otherwise we simply return the value
     """
-    if obj.startswith("<") and obj.endswith(">"):
-        return URIRef(obj[1:-1])
     if isinstance(obj, str):
+        if obj.startswith("<") and obj.endswith(">"):
+            return URIRef(obj[1:-1])
         return graph.namespace_manager.expand_curie(obj)
     return obj
 
@@ -35,7 +35,7 @@ def find_matching_config(graph: Graph, models: list | None = None) -> dict | Non
     for model in models_with_config:
         for path in model.rdf_configs():
             config = tomllib.loads(Path(path).read_text())
-            for _filter in config.get("filters", []):
+            for _filter in config.get("filters", [{None: None}]):
                 try:
                     triples = []
                     for predicate, obj in _filter.items():
