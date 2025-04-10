@@ -47,8 +47,8 @@ def find_matching_config(graph: Graph, models: list | None = None) -> dict | Non
                         logger.debug("Using %s for parsing graph", path)
                         config["model"] = model
                         return config
-                except ValueError:
-                    logger.debug("Filter %s does not match", _filter)
+                except ValueError as e:
+                    logger.debug("Filter %s does not match: %s", _filter, e)
     return None
 
 
