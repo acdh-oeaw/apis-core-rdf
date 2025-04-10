@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -23,6 +22,7 @@ msgid "Submit"
 msgstr "Absenden"
 
 #: apis_core/generic/forms/__init__.py
+#: apis_core/generic/templates/generic/generic_merge.html
 msgid "Merge"
 msgstr "Vereinigen"
 
@@ -53,12 +53,22 @@ msgid "view"
 msgstr "ansehen"
 
 #: apis_core/generic/templates/generic/generic_confirm_delete.html
+#, fuzzy, python-format
+msgid "Confirm deletion of %(object)s"
+msgstr "Löschen von %(object)s bestätigen"
+
+#: apis_core/generic/templates/generic/generic_confirm_delete.html
 msgid "Confirm deletion of"
 msgstr "Bestätige Löschen von"
 
 #: apis_core/generic/templates/generic/generic_confirm_delete.html
 msgid "Yes, delete"
 msgstr "Ja, löschen"
+
+#: apis_core/generic/templates/generic/generic_enrich.html
+#, python-format
+msgid "Updating %(object)s"
+msgstr "Aktualisiere %(object)s"
 
 #: apis_core/generic/templates/generic/generic_enrich.html
 #, python-format
@@ -82,6 +92,11 @@ msgstr "Erstellen"
 #: apis_core/generic/templates/generic/generic_list.html
 msgid "Import"
 msgstr "Importieren"
+
+#: apis_core/generic/templates/generic/generic_list.html
+#, python-format
+msgid "List %(verbose_name_plural)s"
+msgstr "%(verbose_name_plural)s Liste"
 
 #: apis_core/generic/templates/generic/generic_list.html
 msgid "Reset filter"
@@ -118,6 +133,11 @@ msgstr "Alter Wert"
 #: apis_core/generic/templates/generic/generic_merge.html
 msgid "New value"
 msgstr "Neuer Wert"
+
+#: apis_core/generic/templates/generic/generic_selectmergeorenrich.html
+#, python-format
+msgid "Select to merge into %(object)s"
+msgstr "Auswahl um nach %(object)s zu überführen"
 
 #: apis_core/generic/templates/generic/generic_selectmergeorenrich.html
 #, python-format
