@@ -31,19 +31,7 @@ relation
 
 :   A relation is a connection between two entities. In the context of
     APIS, this is realized via the
-    [apis_core.apis_relations.models.Triple][] class.
-
-TempTriple
-
-:   [apis_core.apis_relations.models.TempTriple][] is a subclass of the more generic
-    [apis_core.apis_relations.models.Triple][] that allows to define dates directly on the relation.
-
-Triple
-
-:   In RDF, a triple is a statement that consists of three parts: a
-    subject, a predicate, and an object. In the context of APIS, a
-    triple is a relation between two entities realized via the
-    [apis_core.apis_relations.models.Triple][].
+    [apis_core.relations.models.Relation][] class.
 
 ontology
 
