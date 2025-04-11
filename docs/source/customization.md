@@ -46,7 +46,7 @@ a custom filterset class in `your_app.filtersets`. The filterset has to
 be named `<Modelname>FilterSet`, so if you have a model `Person` in your
 app `myproject`, the view looks for the filterset
 `myproject.filtersets.PersonFilterSet`. You can inherit from
-[apis_core.generic.filtersets.GenericFilterSet][] and add your customzations.
+[apis_core.generic.filtersets.GenericFilterSet][] and add your customizations.
 
 The default table used is
 [apis_core.generic.tables.GenericTable][].
@@ -65,7 +65,7 @@ used by the list view to determines the number of items per page. When
 this is not set, the page size defaults to `25`. To disable pagination
 altogether, use `table_pagination = False`.
 
-The base queryset that is used in the listview, which is then filtered
+The base queryset that is used in the list view, which is then filtered
 using the django-filters filter, is `model.objects.all()` - but you can
 override the queryset by creating a custom queryset for your model in
 `your_app.querysets`. The queryset function has to be named
@@ -149,8 +149,7 @@ class PersonExternalAutocomplete:
 The class has to have a `get_results` method that receives a query as
 the first parameter and returns a result in the format, the
 [django-autocomplete-light](https://django-autocomplete-light.readthedocs.io/)
-module uses- this is a dict with the keys \"id\", \"text\" and
-\"selected_text\".
+module uses- this is a dict with the keys `id`, `text` and `selected_text`.
 
 # Import view
 
@@ -203,7 +202,7 @@ needed fields. The instance should then be returned by the
 [apis_core.generic.importers.GenericModelImporter][] which you can inherit from. It is used by default of no
 other importer is defined for the model and it tries to do the right
 thing out of the box: it first looks if there is an RDF configuration
-for the URI and if that fails tries to parse the URI response as json.
+for the URI and if that fails tries to parse the URI response as JSON.
 
 To use this logic in forms, there is
 [apis_core.generic.forms.fields.ModelImportChoiceField][] which is based on
@@ -217,7 +216,7 @@ The [apis_core.generic.importers.GenericModelImporter][]
 tries to parse the passed URI using the
 [apis_core.utils.rdf][] module. This
 module looks at all the existing models and uses the models
-`rdf_configs` class methos to get a list of potential
+`rdf_configs` class methods to get a list of potential
 RDF-Import config files. Those RDF-Import config files are
 [TOML](https://toml.io/) configuration files. They have three main
 attributes, which are `filters`, `attributes` and `relations`.

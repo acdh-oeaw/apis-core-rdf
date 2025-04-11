@@ -37,17 +37,17 @@ itself inherits from
 [apis_core.generic.abc.GenericModel][],
 which means that as soon as you define your models and [run
 migrations](https://docs.djangoproject.com/en/stable/topics/migrations/)
-your models will show up in the APIS webinterface in `Entities` menu in
+your models will show up in the APIS Web interface in `Entities` menu in
 the top left corner. For every `entity` you defined there will be an overview
 page that lists all instances for that `entity`, as well as a form for
 creating, updating, merging and deleting entities.
 
-![Image showing the APIS Entity menu with one item labelled Persons](img/ontology_entity_menu.png)
+![Image showing the APIS Entity menu with one item labeled Persons](img/ontology_entity_menu.png)
 
 # Relations
 
 To use the relations module, you have to add it to your
-`INSTALLED_APPS`. The module ships with templates that add the relation
+`INSTALLED_APPS`. The module includes templates that add the relation
 listing to templates from other `apis_core` modules, so we recommend to
 put the Relations module at the top of the apps list:
 

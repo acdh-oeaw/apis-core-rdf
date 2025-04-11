@@ -22,13 +22,13 @@ APIS needs Python 3.11+.
 
 This is the recommended way to install APIS on local machines as well as
 on server infrastructure. For experimenting with APIS you can use the
-[Dockerfile](https://github.com/acdh-oeaw/apis-core-rdf/blob/main/Dockerfile)
+[Docker file](https://github.com/acdh-oeaw/apis-core-rdf/blob/main/Dockerfile)
 provided in the APIS core library. It allows you to spin up an APIS
 instance using the sample-project shipped with the APIS core library. To
-start it fire up a terminal and run
+start it start a terminal and run
 
 -   `cd path/to/apis-core-rdf` to change to the directory where the
-    Dockerfile is located.
+    Docker file is located.
 -   `docker build -t apis .` to build the APIS image.
 -   `docker run -p 5000:5000 apis` to start the container.
 

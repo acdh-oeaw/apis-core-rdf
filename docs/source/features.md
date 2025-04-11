@@ -55,7 +55,7 @@ The [apis_core.history.api_views.GenericHistoryLog][] class is a viewset that pr
 the version history of a model. It can be used to retrieve the version
 history of a model instance. The viewset can be accessed under
 `/apis/api/entity_combined/<contenttype:contenttype>/<int:pk>/`.
-It takes two mandatory url parameters: `pk` and
+It takes two mandatory URL parameters: `pk` and
 `contenttype`. The `pk` parameter is the primary
 key of the model instance and the `contenttype` parameter is
 the name of the model class. The viewset returns a list of historical
@@ -109,7 +109,7 @@ documentation](https://django-simple-history.readthedocs.io/en/latest/utils.html
 
 # Collections plugin
 
-APIS comes with models to make working with collections easier. These
+APIS includes models to make working with collections easier. These
 can be used to build vocabularies or a tagging solution or even a
 workflow solution. To use it, you have to add
 `apis_core.collections` to your
@@ -129,7 +129,7 @@ You can create your collections in the `admin` interface or
 using the `generic` app.
 
 If you want to use collections to provide choices for a form, you can
-either use a [django.models.ForeignKey][] or use use a
+either use a [django.models.ForeignKey][] or use a
 [django.models.CharField][] and you
 customize the model form to use the collection as choices for this
 field. Both approaches have pros and cons.
