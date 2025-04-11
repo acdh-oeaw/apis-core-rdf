@@ -11,11 +11,6 @@ urlpatterns = [
         name="collectiontoggle",
     ),
     path(
-        "collectionobjectparent/<int:content_type_id>/<int:object_id>/<int:collectionobject>",
-        views.CollectionObjectParent.as_view(),
-        name="collectionobjectparent",
-    ),
-    path(
         "collectionobjectcollection/<int:content_type_id>/<int:object_id>/<int:collectionobject>",
         views.CollectionObjectCollection.as_view(),
         name="collectionobjectparent",
