@@ -4,7 +4,7 @@ from typing import Any
 import django
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import AppRegistryNotReady
+from django.core.exceptions import AppRegistryNotReady, ImproperlyConfigured
 from django.db import models
 from django.db.models import Q, UniqueConstraint
 from django.db.models.functions import Lower
@@ -156,4 +156,8 @@ class VersionMixin(models.Model):
         return data
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        if "apis_core.history" not in settings.INSTALLED_APPS:
+            raise ImproperlyConfigured(
+                "If you use the `VersionMixin` you need to add `apis_core.history` to the installed apps."
+            )
         super().__init__(*args, **kwargs)
