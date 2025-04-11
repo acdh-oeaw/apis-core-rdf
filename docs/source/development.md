@@ -26,14 +26,7 @@ title: Development
 
 -   `django-model-utils`
 
--   `apis-override-select2js`
-
-    APIS overrides select2js to be able to provide autocomplete fields
-    that also integrate external sources. This package provides the
-    patched JavaScript files - it has to be listed in `INSTALLED_APPS`
-    *before* `django-autocomplete-light` packages.
-
--   `crispy-bootstrap4`
+-   `crispy-bootstrap5`
 
     The default theme used for the crispy forms
 
