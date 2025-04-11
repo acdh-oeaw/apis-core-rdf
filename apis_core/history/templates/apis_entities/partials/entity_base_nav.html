@@ -1,0 +1,12 @@
+{% extends "apis_entities/partials/entity_base_nav.html" %}
+{{ block.super }}
+{% load i18n %}
+
+{% block base-nav-additions %}
+  {% if object.history %}
+    <li class="object-history nav-item">
+      <a class="nav-link {% if request.path == object.get_history_url %}active{% endif %}"
+         href="{{ object.get_history_url }}"><span class="material-symbols-outlined material-symbols-align">history</span>{% translate "History" %}</a>
+    </li>
+  {% endif %}
+{% endblock base-nav-additions %}
