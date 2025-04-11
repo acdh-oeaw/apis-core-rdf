@@ -8,9 +8,9 @@ When you create an instance of an Entity a signal
 [apis_core.apis_entities.models.create_default_uri][] is triggered that tries to generate a canonical URI for
 the entity. The signal can be disabled by setting the
 `CREATE_DEFAULT_URI` setting to `False`. If the signal runs, it creates
-the canoncical URI from two parts. The first part comes from the
+the canonical URI from two parts. The first part comes from the
 `APIS_BASE_URI` setting. The second part comes from the reverse route of
-`GetEntityGenericRoot` if that exists. If not, it uses the the reverse
+`GetEntityGenericRoot` if that exists. If not, it uses the reverse
 route of `apis_core:GetEntityGeneric`, which is defined in
 [apis_core.urls][] and defaults to
 `/entity/{pk}`. If the value of `APIS_BASE_URI` changes and urls
@@ -30,8 +30,8 @@ file of your Django project.
 ## REST_FRAMEWORK
 
 APIS uses the [Django
-Restframework](https://www.django-rest-framework.org/) for API
-provisioning. Restframework specific settings like the default page size
+Rest Framework](https://www.django-rest-framework.org/) for API
+provisioning. Rest Framework specific settings like the default page size
 can be set here.
 
 ``` python
@@ -64,15 +64,15 @@ SPECTACULAR_SETTINGS["DEFAULT_GENERATOR_CLASS"] = 'apis_core.generic.generators.
 Background:
 
 The first reason is, that we are using a custom converter
-([apis_core.generic.urls.ContenttypeConverter][]) to provide access to views and api views of different
-contenttypes. The default endpoint generator of the drf-spectacular does
+([apis_core.generic.urls.ContenttypeConverter][]) to provide access to views and API views of different
+content types. The default endpoint generator of the drf-spectacular does
 not know about this converter and therefore sees the endpoints using
 this converter as *one* endpoint with one parameter called
-`contenttype`. Thats not what we want, so we have to do our own
-enumeration -we iterate through all contenttypes that inherit from
-`GenericModel` and create schema endpoints for those programatically.
+`contenttype`. That is not what we want, so we have to do our own
+enumeration -we iterate through all content types that inherit from
+`GenericModel` and create schema endpoints for those programmatically.
 
-The second reason is, that the autoapi schema generator of DRF
+The second reason is, that the `autoapi` schema generator of DRF
 Spectacular and our
 [apis_core.generic.api_views.ModelViewSet][] don't work well together. Our ModelViewSet needs the
 dispatch method to set the model of the `ModelViewSet`, but this method
@@ -91,7 +91,7 @@ APIS_BASE_URI = "https://your-url-goes-here.com"
 Sets the base URI your instance should use. This is important as APIS
 uses mainly URIs instead of IDs. This setting is used to generate the
 canonical URI of an entity. It is included in the serializations of
-entities (eg the JSON returned by the API) and therefore should be set
+entities (for example the JSON returned by the API) and therefore should be set
 to the URL your production app is running on.
 
 ## APIS_NEXT_PREV
@@ -113,9 +113,9 @@ managers](https://docs.djangoproject.com/en/stable/topics/db/managers/#custom-ma
 
 ## Maintenance Middleware
 
-APIS ships a maintenance middlware that you can use and activate to
+APIS ships a maintenance middleware that you can use and activate to
 enable a maintenance mode in your project. Maintenance mode means that
-only superuser accounts can access the webinterfaces, all other requests
+only superuser accounts can access the web interfaces, all other requests
 are being answered with a simple maintenance mode page (the
 `maintenance.html` template). To use the middleware, add
 
@@ -124,7 +124,7 @@ are being answered with a simple maintenance mode page (the
 ```
 
 to your `settings.MIDDLEWARE` list. To activate the maintenance mode
-once the middlware is enabled, simply create a file `apis_maintenance`
+once the middleware is enabled, simply create a file `apis_maintenance`
 in the directory the main Django process runs in. The path of the
 maintenance file can be changed in the settings:
 `APIS_MAINTENANCE_FILE = "path of the file"`
