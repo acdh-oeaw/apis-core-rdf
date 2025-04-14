@@ -17,14 +17,14 @@ logger = logging.getLogger(__name__)
 
 class GenericModelImporter:
     """
-    A generic importer class
-    It provides the standard methods for importing data from
-    an URI and creating a model instance of it.
-    By default it fetches a resource, first tries to parse it using
-    our rdf parser, if that fails tries to parse it using json and
+    A generic importer class which provides methods for
+    importing data from a URI and creating a model instance from it.
+
+    By default, it fetches a resource and first tries to parse it using
+    our RDF parser. If that fails, it tries to parse it using JSON and
     then extracts the fields whose keys match the model field names.
     Projects can inherit from this class and override the default
-    methods or simple write their own from scratch.
+    methods or simply write their own from scratch.
     """
 
     model = None
@@ -52,7 +52,7 @@ class GenericModelImporter:
             return data
         except Exception as e:
             logger.debug(e)
-        # if everything else fails, try parsing json
+        # if everything else fails, try parsing JSON
         # if even that does not help, return an empty dict
         try:
             return json.loads(urllib.request.urlopen(uri).read())
@@ -65,9 +65,10 @@ class GenericModelImporter:
 
     def get_data(self, drop_unknown_fields=True):
         """
-        fetch the data using the `request` method and
-        mangle the data using the `mangle_data` method.
-        If the `drop_unknown_fields` argument is true,
+        Fetch the data using the `request` method and
+        mangle it using the `mangle_data` method.
+
+        If the `drop_unknown_fields` argument is True,
         remove all fields from the data dict that do not
         have an equivalent field in the model.
         """
