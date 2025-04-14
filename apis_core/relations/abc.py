@@ -8,6 +8,9 @@ class IsMemberOf(Relation):
     subj_model = E21_Person
     obj_model = E74_Group
 
+    class Meta:
+        abstract = True
+
     @classmethod
     def name(self) -> str:
         return _("is member of")
@@ -20,6 +23,9 @@ class IsMemberOf(Relation):
 class LivesIn(Relation):
     subj_model = E21_Person
     obj_model = E53_Place
+
+    class Meta:
+        abstract = True
 
     @classmethod
     def name(self) -> str:
@@ -34,6 +40,9 @@ class IsLocatedIn(Relation):
     subj_model = E53_Place
     obj_model = E53_Place
 
+    class Meta:
+        abstract = True
+
     @classmethod
     def name(self) -> str:
         return _("is located in")
@@ -47,6 +56,9 @@ class BornIn(Relation):
     subj_model = E21_Person
     obj_model = E53_Place
 
+    class Meta:
+        abstract = True
+
     @classmethod
     def name(self) -> str:
         return _("born in")
@@ -59,6 +71,9 @@ class BornIn(Relation):
 class DiedIn(Relation):
     subj_model = E21_Person
     obj_model = E53_Place
+
+    class Meta:
+        abstract = True
 
     @classmethod
     def name(self) -> str:
