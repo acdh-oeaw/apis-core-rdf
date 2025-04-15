@@ -9508,9 +9508,9 @@ Otherwise we simply return the value</p>
     and we expand it using the graphs namespace manager.
     Otherwise we simply return the value
     """
-    if obj.startswith("&lt;") and obj.endswith("&gt;"):
-        return URIRef(obj[1:-1])
     if isinstance(obj, str):
+        if obj.startswith("&lt;") and obj.endswith("&gt;"):
+            return URIRef(obj[1:-1])
         return graph.namespace_manager.expand_curie(obj)
     return obj</code></pre>
             </details>
