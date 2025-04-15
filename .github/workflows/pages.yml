@@ -27,11 +27,11 @@ jobs:
      - name: Install uv
        uses: astral-sh/setup-uv@v5
      - name: Build docs
-       run: uv run mkdocs build -f docs/mkdocs.yml -d _build
+       run: uv run --group docs mkdocs build -f docs/mkdocs.yml -d _build
      - name: Build coverage
        run: |
-         uv run coverage run --source="." manage.py test
-         uv run coverage html
+         uv run --group docs coverage run --source="." manage.py test
+         uv run --group docs coverage html
      - uses: actions/checkout@v4
        with:
          path: apis-core-rdf-pages
