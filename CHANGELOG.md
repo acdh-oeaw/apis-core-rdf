@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.43.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.43.0...v0.43.1) (2025-04-15)
+
+
+### Bug Fixes
+
+* **generic:** make the object-action css classes important ([fadebe9](https://github.com/acdh-oeaw/apis-core-rdf/commit/fadebe95f0d6d25995b5eaa14cf8ac82f3316683)), closes [#1795](https://github.com/acdh-oeaw/apis-core-rdf/issues/1795)
+* **generic:** templates: show only existing values ([7103231](https://github.com/acdh-oeaw/apis-core-rdf/commit/71032318a9b04501bccb28c2519b0a02f0148b98)), closes [#1797](https://github.com/acdh-oeaw/apis-core-rdf/issues/1797)
+
 ## [0.43.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.6...v0.43.0) (2025-04-15)
 
 
