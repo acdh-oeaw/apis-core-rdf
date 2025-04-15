@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Installation - APIS</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">APIS</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../configuration/" class="nav-link">Configuration</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../customization/" class="nav-link">Customization</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../development/" class="nav-link">Development</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../features/" class="nav-link">Additional Features</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../glossary/" class="nav-link">Glossary</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Installation</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../ontology/" class="nav-link">Create your ontology</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../reference/" class="nav-link">Reference</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../glossary/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../ontology/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#prerequisites" class="nav-link">Prerequisites</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#installation" class="nav-link">Installation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#installation-with-docker" class="nav-link">Installation with Docker</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#docker-compose" class="nav-link">Docker Compose</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>APIS-core is a library that allows you to easily build tools to manage
+prosopographical data. It is not a ready-made software solution that you
+just deploy and start working. The typical workflow for starting an APIS
+project is as follows: set up the project, create an
+<code>ontology</code> customize the functionalities
+and views, and finally add your data. This section will guide you
+through the first step.</p>
+<h1 id="prerequisites">Prerequisites</h1>
+<p>APIS needs Python 3.11+.</p>
+<h1 id="installation">Installation</h1>
+<h1 id="installation-with-docker">Installation with Docker</h1>
+<p>This is the recommended way to install APIS on local machines as well as
+on server infrastructure. For experimenting with APIS you can use the
+<a href="https://github.com/acdh-oeaw/apis-core-rdf/blob/main/Dockerfile">Docker file</a>
+provided in the APIS core library. It allows you to spin up an APIS
+instance using the sample-project shipped with the APIS core library. To
+start it start a terminal and run</p>
+<ul>
+<li><code>cd path/to/apis-core-rdf</code> to change to the directory where the
+    Docker file is located.</li>
+<li><code>docker build -t apis .</code> to build the APIS image.</li>
+<li><code>docker run -p 5000:5000 apis</code> to start the container.</li>
+</ul>
+<p>The APIS instance should now be accessible under
+<a href="http://localhost:5000">http://localhost:5000</a>.</p>
+<p>Alternatively you can also use the docker image built for our
+demo-project. To do so run:</p>
+<ul>
+<li><code>docker run -p 5000:5000 ghcr.io/acdh-oeaw/apis-core-rdf/discworld/main:latest</code>
+    to start the container.</li>
+</ul>
+<p>To use the image for local development you can mount your local APIS
+instance directory into the container, using the following command: To
+do so you can use the following command:</p>
+<p><code>docker run -p 5000:5000 -v /path/to/your/apis_instance:/app apis</code></p>
+<p>Please note that you might need to install custom dependencies for the
+APIS instance in your local docker container.</p>
+<p>This container uses the Django development server and is not suitable
+for production use. Please see the next section for deploying APIS in
+production.</p>
+<h2 id="docker-compose">Docker Compose</h2>
+<p>In production APIS should be used together with an SQL database. The
+simplest way to set that up is by using <a href="https://docs.docker.com/compose/">Docker
+Compose</a>. Below is an example of a
+<code>docker-compose.yml</code> file that sets up an APIS instance with a
+PostgreSQL database.</p>
+<pre><code class="language-yaml">version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+    environment: # some settings can be overwritten with env variables
+      - DJANGO_SETTINGS_MODULE=apis.settings
+      - DJANGO_SECRET_KEY=your_secret_key
+      - DJANGO_DEBUG=True
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+    volumes:
+      - ${PWD}/local_apis_instance:/app #mount your local APIS instance to the container if needed
+    ports:
+      - 5000:5000
+
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres #use other passwords in production
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_EXTENSIONS: pg_trgm
+    healthcheck:
+      test: [&quot;CMD-SHELL&quot;, &quot;pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}&quot;]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  postgres-data:
+</code></pre>
+<p>After <code>docker-compose up</code> you should now have a default APIS
+installation accessible under <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a>.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

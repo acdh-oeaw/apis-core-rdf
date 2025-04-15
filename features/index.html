@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Additional Features - APIS</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">APIS</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../configuration/" class="nav-link">Configuration</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../customization/" class="nav-link">Customization</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../development/" class="nav-link">Development</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Additional Features</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../glossary/" class="nav-link">Glossary</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../ontology/" class="nav-link">Create your ontology</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../reference/" class="nav-link">Reference</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../development/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../glossary/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#history-plugin" class="nav-link">History plugin</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#track-changes-by-users" class="nav-link">Track changes by users</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#versionmixin" class="nav-link">VersionMixin</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#api-endpoint" class="nav-link">API endpoint</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#management-commands" class="nav-link">Management Commands</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#1-populate-history-tables" class="nav-link">1. Populate History Tables</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#2-clean-duplicate-history-entries" class="nav-link">2. Clean Duplicate History Entries</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#3-remove-old-history-entries" class="nav-link">3. Remove Old History Entries</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#collections-plugin" class="nav-link">Collections plugin</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>APIS is designed to be extensible and customizable. This section
+describes some additional features that are shipped with APIS and how to
+use them.</p>
+<h1 id="history-plugin">History plugin</h1>
+<p>The <a class="autorefs autorefs-internal" title="history" href="../reference/#apis_core.history">apis_core.history</a> module provides
+versioning for APIS. It is based on the
+<a href="https://django-simple-history.readthedocs.io/en/latest/">django-simple-history</a>
+package.</p>
+<h2 id="track-changes-by-users">Track changes by users</h2>
+<p>To record the user who made a change, the
+<code>django-simple-history</code> module used by APIS provides a
+middleware that sets the <code>history_user</code> attribute of the
+request object to the current user. It then saves this information to
+the <code>history_user</code> attribute of the historical record. To
+activate the middleware, add
+<code>simple_history.middleware.HistoryRequestMiddleware</code> to your
+<code>MIDDLEWARE</code> setting:</p>
+<pre><code class="language-python">MIDDLEWARE = [
+    ...
+    'simple_history.middleware.HistoryRequestMiddleware',
+    ...
+]
+</code></pre>
+<h2 id="versionmixin">VersionMixin</h2>
+<p>The [apis_core.history.models.VersionMixin][] class is a mixin that can be added to any model to enable
+versioning. It adds a <code>history</code> property to the model that
+returns a <code>HistoricalRecords</code> instance. Additionally it
+allows to override the date of the revision by setting the
+<code>_history_date</code> property of the model instance. To activate
+versioning for a model, simply inherit from <code>VersionMixin</code>:</p>
+<pre><code class="language-python">from django.db import models
+from apis_core.apis_history.models import VersionMixin
+
+class MyModel(VersionMixin, models.Model):
+    pass
+</code></pre>
+<h2 id="api-endpoint">API endpoint</h2>
+<p>The [apis_core.history.api_views.GenericHistoryLog][] class is a viewset that provides a REST API endpoint for
+the version history of a model. It can be used to retrieve the version
+history of a model instance. The viewset can be accessed under
+<code>/apis/api/entity_combined/&lt;contenttype:contenttype&gt;/&lt;int:pk&gt;/</code>.
+It takes two mandatory URL parameters: <code>pk</code> and
+<code>contenttype</code>. The <code>pk</code> parameter is the primary
+key of the model instance and the <code>contenttype</code> parameter is
+the name of the model class. The viewset returns a list of historical
+revisions of the model instance. It is also included in the
+<code>apis_core</code> API schema. The swagger documentation can be
+accessed under
+<code>/apis/swagger/schema/swagger-ui/#/apis/apis_api_history_entity_edit_log_list</code>.</p>
+<h2 id="management-commands">Management Commands</h2>
+<p>The APIS history plugin, based on <code>django-simple-history</code>,
+provides several management commands to help curate history objects.
+Here are some of the most useful commands:</p>
+<h1 id="1-populate-history-tables">1. Populate History Tables</h1>
+<pre><code class="language-bash">python manage.py populate_history --auto
+</code></pre>
+<p>This command populates history tables with the current state of the
+models. It's particularly useful when you've added
+<code>VersionMixin</code> to an existing model. The
+<code>--auto</code> flag applies the command to all tracked models, or
+you can specify a list of models instead.</p>
+<h1 id="2-clean-duplicate-history-entries">2. Clean Duplicate History Entries</h1>
+<pre><code class="language-bash">python manage.py clean_duplicate_history --auto
+</code></pre>
+<p>This command removes duplicate history entries.
+<code>django-simple-history</code> creates a history object every time
+<code>save()</code> is called on an object, regardless of whether any
+changes were made. This command deletes history objects that are
+identical to the previous entry.</p>
+<h1 id="3-remove-old-history-entries">3. Remove Old History Entries</h1>
+<pre><code class="language-bash">python manage.py clean_old_history --days 60 --auto
+</code></pre>
+<p>This command deletes history entries older than the specified number of
+days (60 in this example).</p>
+<p>For more information on these and other management commands, refer to
+the <a href="https://django-simple-history.readthedocs.io/en/latest/utils.html">django-simple-history
+documentation</a>.</p>
+<h1 id="collections-plugin">Collections plugin</h1>
+<p>APIS includes models to make working with collections easier. These
+can be used to build vocabularies or a tagging solution or even a
+workflow solution. To use it, you have to add
+<code>apis_core.collections</code> to your
+<code>INSTALLED_APPS</code>.</p>
+<p>The <code>collections</code> module consists of the two models
+<a class="autorefs autorefs-internal" title="SkosCollection" href="../reference/#apis_core.collections.models.SkosCollection">apis_core.collections.models.SkosCollection</a> and
+<a class="autorefs autorefs-internal" title="SkosCollectionContentObject" href="../reference/#apis_core.collections.models.SkosCollectionContentObject">apis_core.collections.models.SkosCollectionContentObject</a>.
+The former is the class for the collection
+vocabularies, whereas the latter lets you connect specific collections
+with any content instance, using generic relations.
+<code>SkosCollection</code> objects can have another
+<code>SkosCollection</code> as a parent, which lets you create
+hierarchies.</p>
+<p>You can create your collections in the <code>admin</code> interface or
+using the <code>generic</code> app.</p>
+<p>If you want to use collections to provide choices for a form, you can
+either use a [django.models.ForeignKey][] or use a
+[django.models.CharField][] and you
+customize the model form to use the collection as choices for this
+field. Both approaches have pros and cons.</p>
+<p>There are a couple of templatetags that make working with collection
+easier, they all reside in the
+[apis_core.collections.templatetags.apis_collections][] templatetag library. If you use them, you have to include
+[apis_core.collections.urls][] into your
+urls.py, for example like this:</p>
+<pre><code class="language-python">urlpatterns = [
+    ...
+    path(&quot;apis/collections/&quot;, include(&quot;apis_core.collections.urls&quot;)),
+    ...
+]
+</code></pre>
+<p>The templatetags are:</p>
+<ul>
+<li>[apis_core.collections.templatetags.apis_collections.collection_toggle][]</li>
+<li>[apis_core.collections.templatetags.apis_collections.collection_toggle_by_id][]</li>
+</ul>
+<p>This templatetag takes the instance of an object and a collection (or,
+in the case of <code>_by_id</code> the id of a collection) and lets
+the user create and remove the connection between this instance and the
+collection.</p>
+<ul>
+<li>[apis_core.collections.templatetags.apis_collections.collection_children_toggle][]</li>
+<li>[apis_core.collections.templatetags.apis_collections.collection_children_toggle_by_id][]</li>
+</ul>
+<p>This is a helper templatetag that creates toggle buttons for all the
+child collections of a collection. This way you can use one collections
+a parent for a couple of tags and simply add the parent of a new tag
+collection to the parent collection and it automatically shows up in
+this toggle button list.</p>
+<ul>
+<li>[apis_core.collections.templatetags.apis_collections.collection_object_parent][]</li>
+<li>[apis_core.collections.templatetags.apis_collections.collection_object_parent_by_id][]</li>
+</ul>
+<p>This templatetag provides a button to change the connection from an
+instance to a collection to point to the collections parent. This is
+useful if you want to implement a workflow (i.e. three collections:
+<code>done</code> as the root one, <code>in process</code> with
+<code>done</code> as parent and <code>todo</code> with <code>in process</code> as parent - the user can then on the click of a
+button change the collection an instance is connected to from
+<code>todo</code> to <code>in process</code> and finally <code>done</code>.)</p>
+<ul>
+<li>[apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id][]</li>
+</ul>
+<p>This templatetag provides a checkbox that enables a collection as
+"session collection" - this means that if enabled, all new versions of
+instances will be added to this collection. This is implemented in
+<a class="autorefs autorefs-internal" title="add_to_session_collection(sender, instance, created, raw, using, update_fields, **kwargs)" href="../reference/#apis_core.collections.signals.add_to_session_collection">apis_core.collections.signals.add_to_session_collection</a>.
+To use this feature, <a class="autorefs autorefs-internal" title="history" href="../reference/#apis_core.history">apis_core.history</a> has to be enabled
+and the [crum.CurrentRequestUserMiddleware][] has to be added to the <code>MIDDLEWARE</code></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

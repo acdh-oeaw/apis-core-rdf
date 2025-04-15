@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Customization - APIS</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">APIS</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../configuration/" class="nav-link">Configuration</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Customization</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../development/" class="nav-link">Development</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../features/" class="nav-link">Additional Features</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../glossary/" class="nav-link">Glossary</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../ontology/" class="nav-link">Create your ontology</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../reference/" class="nav-link">Reference</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../configuration/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../development/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#list-views" class="nav-link">List views</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#list-view-templates" class="nav-link">List view templates</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#create-and-update-views" class="nav-link">Create and Update views</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#create-and-update-view-templates" class="nav-link">Create and update view templates</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#autocomplete-views" class="nav-link">Autocomplete views</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#import-view" class="nav-link">Import view</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#import-view-template" class="nav-link">Import view template</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#class-method-and-template-lookup" class="nav-link">Class, method and template lookup</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#importing-data-from-external-resources" class="nav-link">Importing data from external resources</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#using-the-genericmodelimporter-to-import-rdf" class="nav-link">Using the GenericModelImporter to import RDF</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>APIS is designed to be easily customizable. This section describes how
+you can customize the views and the templates of the views that are
+shipped with APIS by injecting classes and methods that are then
+automatically used by the generic views. The core of the logic described
+here is based on the <a class="autorefs autorefs-internal" title="generic" href="../reference/#apis_core.generic">apis_core.generic</a>.
+It provides generic CRUD views and API views for all models that are
+configured to use it. To make a model use the generic functionality, it
+has to inherit from
+<a class="autorefs autorefs-internal" title="GenericModel" href="../reference/#apis_core.generic.abc.GenericModel">apis_core.generic.abc.GenericModel</a>. In
+standard APIS those models are</p>
+<ul>
+<li><a class="autorefs autorefs-internal" title="RootObject" href="../reference/#apis_core.apis_metainfo.models.RootObject">apis_core.apis_metainfo.models.RootObject</a></li>
+<li>[apis_core.apis_metainfo.models.Uri][]</li>
+<li>[apis_core.apis_relations.models.Triple][]</li>
+<li><a class="autorefs autorefs-internal" title="SkosCollection" href="../reference/#apis_core.collections.models.SkosCollection">apis_core.collections.models.SkosCollection</a></li>
+<li><a class="autorefs autorefs-internal" title="SkosCollectionContentObject" href="../reference/#apis_core.collections.models.SkosCollectionContentObject">apis_core.collections.models.SkosCollectionContentObject</a></li>
+</ul>
+<p>The <a class="autorefs autorefs-internal" title="history" href="../reference/#apis_core.history">apis_core.history</a> module also
+uses the generic views for its models. This means that you can use the
+generic views for the historical models of your own ontology. E.g. if
+you have a model <code>Person</code> in your <code>your_app.models</code> module, you can use
+the generic views for it. <code>/apis/your_app.historicalperson/</code> will be the
+URL for the list view of the historical model.
+<code>/apis/api/your_app.historicalperson/</code> for the API view.</p>
+<p>If you want to use the generic app for your own model, simple make your
+model inherit from
+<a class="autorefs autorefs-internal" title="GenericModel" href="../reference/#apis_core.generic.abc.GenericModel">apis_core.generic.abc.GenericModel</a>.</p>
+<h1 id="list-views">List views</h1>
+<p>The list views consist of a
+<a href="https://django-filter.readthedocs.io">django-filters</a>
+<a href="https://django-filter.readthedocs.io/en/stable/ref/filterset.html">filterset</a>
+on the left and a <a href="https://django-tables2.readthedocs.io/">django-tables</a>
+<a href="https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#table">table</a>
+of results on the right side.</p>
+<p>The default filterset used is
+<a class="autorefs autorefs-internal" title="GenericFilterSet" href="../reference/#apis_core.generic.filtersets.GenericFilterSet">apis_core.generic.filtersets.GenericFilterSet</a>. You can override the filterset for you models by defining
+a custom filterset class in <code>your_app.filtersets</code>. The filterset has to
+be named <code>&lt;Modelname&gt;FilterSet</code>, so if you have a model <code>Person</code> in your
+app <code>myproject</code>, the view looks for the filterset
+<code>myproject.filtersets.PersonFilterSet</code>. You can inherit from
+<a class="autorefs autorefs-internal" title="GenericFilterSet" href="../reference/#apis_core.generic.filtersets.GenericFilterSet">apis_core.generic.filtersets.GenericFilterSet</a> and add your customizations.</p>
+<p>The default table used is
+<a class="autorefs autorefs-internal" title="GenericTable" href="../reference/#apis_core.generic.tables.GenericTable">apis_core.generic.tables.GenericTable</a>.
+You can override the table for your models by defining a custom table
+class in <code>your_app.tables</code>. The table class has to be named
+<code>&lt;Modelname&gt;Table</code>, so if you have a model <code>Person</code> in your app
+<code>myproject</code>, the view looks for the table class
+<code>myproject.tables.PersonTable</code>. You can inherit from
+<a class="autorefs autorefs-internal" title="GenericTable" href="../reference/#apis_core.generic.tables.GenericTable">apis_core.generic.tables.GenericTable</a> and add your customizations.
+<a class="autorefs autorefs-internal" title="GenericTable" href="../reference/#apis_core.generic.tables.GenericTable">apis_core.generic.tables.GenericTable</a> also contains a handful of useful <a href="https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#columns">django table
+columns</a>
+that you might want to use.</p>
+<p>Your table can also contain a <code>paginate_by</code> attribute, which is then
+used by the list view to determines the number of items per page. When
+this is not set, the page size defaults to <code>25</code>. To disable pagination
+altogether, use <code>table_pagination = False</code>.</p>
+<p>The base queryset that is used in the list view, which is then filtered
+using the django-filters filter, is <code>model.objects.all()</code> - but you can
+override the queryset by creating a custom queryset for your model in
+<code>your_app.querysets</code>. The queryset function has to be named
+<code>&lt;Modelname&gt;ListViewQueryset</code>, so if you have a model <code>Person</code> in your
+app <code>myproject</code>, the view looks for the queryset
+<code>myproject.querysets.PersonListViewQueryset</code>.</p>
+<h2 id="list-view-templates">List view templates</h2>
+<p>The list view looks for templates using the <code>_list.html</code> suffix. It uses
+the <code>generic/generic_list.html</code> template as fallback, but you can use a
+custom template using your model name, so if your model is
+<code>myproject.Person</code> then you can use the <code>myproject/person_list.html</code>
+template to override the generic template.</p>
+<h1 id="create-and-update-views">Create and Update views</h1>
+<p>The create and update view use the form
+<a class="autorefs autorefs-internal" title="GenericModelForm" href="../reference/#apis_core.generic.forms.GenericModelForm">apis_core.generic.forms.GenericModelForm</a> by default. You can override the form it uses by creating
+a custom form in <code>your_app.forms</code>. The form class has to be named
+<code>&lt;Modelname&gt;Form</code>, so if you have a model <code>Person</code> in your app
+<code>myproject</code>, the view looks for the form class
+<code>myproject.forms.PersonForm</code>.</p>
+<h2 id="create-and-update-view-templates">Create and update view templates</h2>
+<p>The create and update views looks for templates using the <code>_form.html</code>
+suffix. It uses the <code>generic/generic_form.html</code> template as fallback,
+but you can use a custom template using your model name, so if your
+model is <code>myproject.Person</code> then you can use the
+<code>myproject/person_form.html</code> template to override the generic template.</p>
+<h1 id="autocomplete-views">Autocomplete views</h1>
+<p>The autocomplete views filter your model instances based on a query
+string provided. By default, the autocomplete views use
+<a class="autorefs autorefs-internal" title="generate_search_filter(model, query, fields_to_search=None, prefix='')" href="../reference/#apis_core.generic.helpers.generate_search_filter">apis_core.generic.helpers.generate_search_filter</a> to filter the model queryset. You can override the queryset
+by creating a custom queryset for your model in <code>your_app.querysets</code>.
+The queryset function has to be named <code>&lt;Modelname&gt;AutocompleteQueryset</code>,
+so if you have a model <code>Person</code> in your app <code>myproject</code>, the view looks
+for the queryset <code>myproject.querysets.PersonAutocompleteQueryset</code>.</p>
+<p>The results of the autocomplete view can be themed using templates. The
+autocomplete view looks for templates using the
+<code>autocomplete_result.html</code> suffix, if no such template is found, the
+string representation of the result is used. The autocomplete view uses
+the same template search function as for other templates, so if you have
+a model <code>myproject.Person</code> then you can use the
+<code>myproject/person_autocomplete_result.html</code> template.</p>
+<p>The results of the autocomplete view can be extended with additional
+results coming from another source (an external API or another
+queryset). The view looks for this function in <code>your_app.querysets</code> and
+it has to be named <code>&lt;Modelname&gt;ExternalAutocomplete</code>, so if you have a
+model <code>Person</code> in your app <code>myproject</code>, the view looks for the function
+in <code>myproject.querysets.PersonExternalAutocomplete</code>.</p>
+<p>Lets say you have an app called <code>myapp</code> with a <code>models.py</code></p>
+<pre><code class="language-python">class Person(models.Model):
+     name = models.CharField(max_length=255)
+</code></pre>
+<p>then the respective autocomplete class should reside in
+<code>myapp.querysets</code> and has to be called <code>PersonExternalAutocomplete</code>.</p>
+<pre><code class="language-python">class PersonExternalAutocomplete:
+    def extract_results(data):
+        ... do something with the data
+        return data
+
+    def get_results(self, q):
+        with urllib.request.urlopen(f&quot;https://some.uri.tld/search?q={q}&quot;) as f:
+            data = extract_results(json.loads(f.read()))
+            return results
+        return {}
+</code></pre>
+<p>The class has to have a <code>get_results</code> method that receives a query as
+the first parameter and returns a result in the format, the
+<a href="https://django-autocomplete-light.readthedocs.io/">django-autocomplete-light</a>
+module uses- this is a dict with the keys <code>id</code>, <code>text</code> and <code>selected_text</code>.</p>
+<h1 id="import-view">Import view</h1>
+<p>The import view uses the form
+[apis_core.generic.forms.GenericImportForm][] by default. You can override the form it uses by creating
+a custom form in <code>your_app.forms</code>. The form class has to be named
+<code>&lt;ModelName&gt;ImportForm</code>, so if you have a model <code>Person</code> in your app
+<code>myproject</code>, the view looks for the form class
+<code>myproject.forms.PersonImportForm</code>.</p>
+<h2 id="import-view-template">Import view template</h2>
+<p>The import view looks for templates using the <code>_import.html</code> suffix. It
+uses the <code>generic/generic_import.html</code> template as fallback, but you can
+use a custom template using your model name, so if your model is
+<code>myproject.Person</code> then you can use the <code>myproject/person_import.html</code>
+template to override the generic template.</p>
+<h1 id="class-method-and-template-lookup">Class, method and template lookup</h1>
+<p>As mentioned above, APIS tries to find the correct class or method to
+override the ones the <code>generic</code> one ships. This is done using
+[apis_core.generic.helpers.first_match_via_mro][]. The method does not only look for possible overrides using
+the name of the model itself, but also using all the parent models
+following the full inheritance chain. So if all your models inherit from
+<code>MyAbstractModel</code>, you can for example create an override table for all
+your models by creating a <code>myproject.tables.MyAbstractModelTable</code>.</p>
+<h1 id="importing-data-from-external-resources">Importing data from external resources</h1>
+<p>APIS provides the structure for easily importing data from external
+resources. One main component for this are <code>Importer</code> classes. They
+always belong to a Django model, reside in the same app as the Django
+model in the <code>importers</code> module and are named after the Django model. So
+if you have an app called <code>myapp</code> with a <code>models.py</code></p>
+<pre><code class="language-python">class Person(models.Model):
+     name = models.CharField(max_length=255)
+</code></pre>
+<p>then the respective importer should reside in <code>myapp.importers</code> and has
+to be called <code>PersonImporter</code>.</p>
+<p>An importer takes two arguments to instantiate: an <code>uri</code> and a <code>model</code>.
+The importers task is then to create a model instance from this URI,
+usually by fetching data from the URI, parsing it and extracting the
+needed fields. The instance should then be returned by the
+<code>create_instance</code> method of the importer. There is
+<a class="autorefs autorefs-internal" title="GenericModelImporter" href="../reference/#apis_core.generic.importers.GenericModelImporter">apis_core.generic.importers.GenericModelImporter</a> which you can inherit from. It is used by default of no
+other importer is defined for the model and it tries to do the right
+thing out of the box: it first looks if there is an RDF configuration
+for the URI and if that fails tries to parse the URI response as JSON.</p>
+<p>To use this logic in forms, there is
+[apis_core.generic.forms.fields.ModelImportChoiceField][] which is based on
+<a href="https://docs.djangoproject.com/en/stable/ref/forms/fields/#modelchoicefield">django.forms.ModelChoiceField</a>.
+It checks if the passed value starts with <code>http</code> and if so, it uses the
+importer that fits the model and uses it to create the model instance.</p>
+<h1 id="using-the-genericmodelimporter-to-import-rdf">Using the GenericModelImporter to import RDF</h1>
+<p>The <a class="autorefs autorefs-internal" title="GenericModelImporter" href="../reference/#apis_core.generic.importers.GenericModelImporter">apis_core.generic.importers.GenericModelImporter</a>
+tries to parse the passed URI using the
+<a class="autorefs autorefs-internal" title="rdf" href="../reference/#apis_core.utils.rdf">apis_core.utils.rdf</a> module. This
+module looks at all the existing models and uses the models
+<code>rdf_configs</code> class methods to get a list of potential
+RDF-Import config files. Those RDF-Import config files are
+<a href="https://toml.io/">TOML</a> configuration files. They have three main
+attributes, which are <code>filters</code>, <code>attributes</code> and <code>relations</code>.</p>
+<p>The <code>filters</code> attributes are key, value pairs that define filters that
+have to match on the input data. Multiple <code>filters</code> entries can be
+defined, only one of them has to match. Every <code>filters</code> entry can
+contain multiple key, value pairs, which ALL have to match:</p>
+<pre><code class="language-toml">[[filters]]
+&quot;rdf:type&quot; = &quot;gndo:DifferentiatedPerson&quot;
+</code></pre>
+<p>The <code>attributes</code> config option lists key value pairs, which map keys
+(usually model attributes) to a single SPARQL query or a list of SPARQL
+queries. Instead of SPARQL it is also possible to simply write a compact
+URI which is then looked up in the graph that results from the data
+input:</p>
+<pre><code class="language-toml">[attributes]
+forename = [&quot;gndo:forename&quot;, &quot;gndo:preferredNameEntityForThePerson/gndo:forename&quot;]
+</code></pre>
+<p>The <code>relations</code> config option lists mappings from a natural key of a
+relation model to a dict containing a <code>curie</code> key with a compact URI or
+a list of compact URIs and an <code>obj</code> or <code>subj</code> key defining the relations
+other type (which will be used to import the data from the URI).</p>
+<pre><code class="language-toml">[relations]
+&quot;apis_ontology.starbin&quot; = { curies = &quot;gndo:placeOfDeath&quot;, obj = &quot;apis_ontology.place&quot; }
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
