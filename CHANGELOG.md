@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.43.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.6...v0.43.0) (2025-04-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **collections:** drop code that relies on SkosCollection.parent
+
+### Features
+
+* **apis_core:** inner block in entity_base_nav ([4c1abb5](https://github.com/acdh-oeaw/apis-core-rdf/commit/4c1abb5b8407402291b0a4a5543621f1706e9d25))
+* **apis_entities:** open URIs in a new window/tab ([9f75920](https://github.com/acdh-oeaw/apis-core-rdf/commit/9f7592040c8c50de91c9a39c7af6d824e9031731))
+* **apis_entities:** ship a CIDOC serializers for E21_Person ([bb7bfad](https://github.com/acdh-oeaw/apis-core-rdf/commit/bb7bfad9b403585c2cc3268c6b1ccc045d96ccf8))
+* **documentation:** add menu entry for the documentation app ([826a62b](https://github.com/acdh-oeaw/apis-core-rdf/commit/826a62b41c6e38ca97b6d362e4b071b5d2236ce9)), closes [#1637](https://github.com/acdh-oeaw/apis-core-rdf/issues/1637)
+* **generic:** add a GenericModelCidocSerializer ([a8cd90c](https://github.com/acdh-oeaw/apis-core-rdf/commit/a8cd90cefd5e255fca9314ba9b5bf64adc7e2a51))
+* **generic:** hide filters that are based on auto_created fields ([e9e9d14](https://github.com/acdh-oeaw/apis-core-rdf/commit/e9e9d14966991583746abcb9719bf531b688bc26))
+* **utils:** introduce a apis_base_uri settings helper ([b286bc7](https://github.com/acdh-oeaw/apis-core-rdf/commit/b286bc764ac39b1d3d2a1079e60573f2ba601550))
+* **utils:** introduce a rdf_namespace_prefix settings helper ([5e7f93b](https://github.com/acdh-oeaw/apis-core-rdf/commit/5e7f93b7b17291d0b22231d3b9559b0fbcf1ebda))
+* **utils:** let config lookup return config if no filter is defined ([a2f4fb9](https://github.com/acdh-oeaw/apis-core-rdf/commit/a2f4fb9af62bfd355f089499c8b6a6376a22532f))
+* **utils:** make the `rdf.find_matching_config` method more verbose ([af99368](https://github.com/acdh-oeaw/apis-core-rdf/commit/af99368ae24c393966d7ed0f73d37880c6141c2c))
+
+
+### Bug Fixes
+
+* **apis_entities:** update translations ([1679ddd](https://github.com/acdh-oeaw/apis-core-rdf/commit/1679ddd2c9d882a684c96a6cb5684ba142aabda5))
+* **core:** update translations ([982b953](https://github.com/acdh-oeaw/apis-core-rdf/commit/982b953fadfb048960c5095fedc65ce2f7ba5469))
+* **relations:** make default relations abstract ([b44396e](https://github.com/acdh-oeaw/apis-core-rdf/commit/b44396e4e096a1d2503ffb2ba3c52ec1b3dfaf1a))
+
+
+### Documentation
+
+* cleanup some leftover content from the docs ([1a0e7e5](https://github.com/acdh-oeaw/apis-core-rdf/commit/1a0e7e58fc0f5a4922011ea484ac53fef076cde0))
+* move from sphinx to mkdocs ([8b7bc04](https://github.com/acdh-oeaw/apis-core-rdf/commit/8b7bc04802a8bf0220fec33f31bb380b3a0ac7f5))
+* spell and style check using vale ([ee8d490](https://github.com/acdh-oeaw/apis-core-rdf/commit/ee8d490eed1073141f2daddb6bf5af750447a37c))
+
+
+### Code Refactoring
+
+* **collections:** drop code that relies on SkosCollection.parent ([4ac58ad](https://github.com/acdh-oeaw/apis-core-rdf/commit/4ac58ad1fed1a0b2d22206620aa136ebd0ff81f3))
+
 ## [0.42.6](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.42.5...v0.42.6) (2025-04-08)
 
 
