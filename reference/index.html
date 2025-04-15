@@ -2555,6 +2555,11 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
     def get_openapi_tags(cls):
         return [item[-1] for item in mro_paths(cls)]
 
+    @classmethod
+    def get_namespace_prefix(cls):
+        ct = ContentType.objects.get_for_model(cls)
+        return f"{rdf_namespace_prefix()}-{ct.name.lower()}"
+
     def get_edit_url(self):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:update", args=[ct, self.id])
