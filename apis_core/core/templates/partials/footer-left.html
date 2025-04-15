@@ -16,9 +16,7 @@
 {% endif %}
 {% git_repository_url as repository_url %}
 {% if repository_url %}
-  <a href="{{ repository_url }}" title="Git repository">
-    <img class="icon"
-         src="{% static "img/Git-Icon-1788C.png" %}"
-         alt="Git repository">
+  <a href="{{ repository_url }}" title="{% translate "Code repository" %}">
+    <span class="material-symbols-outlined material-symbols-align icon">code</span>
   </a>
 {% endif %}
