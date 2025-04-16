@@ -23,7 +23,7 @@ base urls that were once used.
 
 This section deals with the internal configuration of APIS. For
 instructions on how to set it up please refer to
-[installation](/installation). All the settings described
+[installation](installation.md). All the settings described
 here are part of the Django settings and can be set in the `settings.py`
 file of your Django project.
 
