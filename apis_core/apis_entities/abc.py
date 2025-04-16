@@ -3,6 +3,8 @@ from pathlib import Path
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apis_core.apis_entities.utils import FeatureCodes
+
 #########################
 # Abstract base classes #
 #########################
@@ -64,6 +66,7 @@ class E53_Place(models.Model):
         max_length=16,
         verbose_name=_("feature code"),
         help_text='<a href="https://www.geonames.org/export/codes.html">Geonames Feature Code List</a>',
+        choices=FeatureCodes,
     )
 
     class Meta:
