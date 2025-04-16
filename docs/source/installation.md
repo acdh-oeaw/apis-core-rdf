@@ -16,7 +16,7 @@ APIS needs Python 3.11+.
 
 # Installation
 
-{!../../README.md!lines=55-132}
+{!../README.md!lines=55-132}
 
 # Installation with Docker
 
