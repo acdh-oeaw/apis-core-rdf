@@ -1,43 +1,43 @@
 summary.more-less-column {
-    list-style: none;
-    appearance: none;
-    /* for WebKit browsers */
-    -webkit-appearance: none;
+  list-style: none;
+  appearance: none;
+  /* for WebKit browsers */
+  -webkit-appearance: none;
 }
 
 /* optional: remove ::marker for older browsers */
 summary.more-less-column ::marker {
-    content: none;
+  content: none;
 }
 
 summary.more-less-column {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* add "Show more" text when collapsed */
 summary.more-less-column::after {
-    content: " Show more";
-    font-weight: normal;
-    font-size: smaller;
-    color: grey;
+  content: " Show more";
+  font-weight: normal;
+  font-size: smaller;
+  color: grey;
 }
 
 /* hide the summary text when expanded, show only "Show less" */
 details[open] summary.more-less-column::before {
-    content: "Show less";
-    color: grey;
+  content: "Show less";
+  color: grey;
 }
 
 /* hide the original summary text when expanded */
 details[open] summary.more-less-column::after {
-    content: "";
+  content: "";
 }
 
 details[open] summary.more-less-column {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 /* make sure the generated "Show less" text is visible */
 details[open] summary.more-less-column::before {
-    visibility: visible;
+  visibility: visible;
 }
