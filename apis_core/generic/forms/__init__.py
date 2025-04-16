@@ -6,6 +6,7 @@ from django import forms
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from apis_core.core.fields import ApisModelSelect2, ApisModelSelect2Multiple
 from apis_core.generic.abc import GenericModel
@@ -30,7 +31,7 @@ class GenericImportForm(forms.Form):
         )
         self.fields["url"].widget.choices = self.fields["url"].choices
         self.helper = FormHelper()
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.add_input(Submit("submit", _("Submit")))
 
 
 class GenericFilterSetForm(forms.Form):
@@ -48,7 +49,7 @@ class GenericFilterSetForm(forms.Form):
 
         self.helper = FormHelper()
         self.helper.form_method = "GET"
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.add_input(Submit("submit", _("Submit")))
 
     def clean(self):
         self.cleaned_data = super().clean()
@@ -82,7 +83,7 @@ class GenericModelForm(forms.ModelForm):
             logger.debug("Not adding collections to form: %s", e)
 
         self.helper = FormHelper(self)
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.add_input(Submit("submit", _("Submit")))
 
         # override the fields pointing to other models,
         # to make them use the autocomplete widgets
@@ -134,7 +135,7 @@ class GenericSelectMergeOrEnrichForm(forms.Form):
         self.fields["uri"].label = "Select or paste URI"
         self.helper = FormHelper()
         self.helper.form_method = "GET"
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.add_input(Submit("submit", _("Submit")))
         self.helper.form_action = instance.get_enrich_url()
 
 
@@ -142,7 +143,7 @@ class GenericMergeWithForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit("submit", "Merge"))
+        self.helper.add_input(Submit("submit", _("Merge")))
 
 
 class GenericEnrichForm(forms.Form):
@@ -160,4 +161,4 @@ class GenericEnrichForm(forms.Form):
             self.fields[key] = forms.CharField(initial=value, required=False)
             self.fields[key].widget = self.fields[key].hidden_widget()
         self.helper = FormHelper()
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.add_input(Submit("submit", _("Submit")))
