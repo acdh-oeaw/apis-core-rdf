@@ -11,15 +11,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name="skoscollection",
-            constraint=models.UniqueConstraint(
-                fields=("name", "parent"),
-                name="unique_name_parent",
-                nulls_distinct=False,
-                violation_error_message="The combination of name and parent collection must be unique",
-            ),
-        ),
-        migrations.AddConstraint(
-            model_name="skoscollection",
             constraint=models.CheckConstraint(
                 condition=models.Q(("name__contains", "|"), _negated=True),
                 name="check_name_pipe",
