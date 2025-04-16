@@ -53,30 +53,13 @@ ans is licensed under the [Creative Commons Attribution 3.0 Unported License](ht
 Installation
 ------------
 <!-- Installation -->
-Create a project using your favorite package manager:
+Create a new [Django project](https://docs.djangoproject.com/en/stable/ref/django-admin/#startproject):
 
 ```shell
-poetry new foobar-repository
+django-admin startproject my_apis_instance
 ```
 
-In your project folder, add apis as a dependency (replace `RELEASE_VERSION`
-with the version you want to install):
-
-```shell
-poetry add git+https://github.com/acdh-oeaw/apis-core-rdf#RELEASE_VERSION
-```
-
-Now remove the generated `__init__.py` (because `django-admin` wants to be the
-one that creates that) and setup your Django project
-```shell
-rm -f foobar_repository/__init__.py
-poetry run django-admin startproject foobar_repository .
-```
-
-Now start using your Django project
-```shell
-poetry run ./manage.py runserver
-```
+Add apis-core-rdf as a dependency to your project.
 
 To use the APIS framework in your application, you will need to add the following dependencies to
 [`INSTALLED_APPS`](https://docs.djangoproject.com/en/stable/ref/settings/#installed-apps):
@@ -127,6 +110,11 @@ urlpatterns = [
     # https://docs.djangoproject.com/en/stable/ref/contrib/admin/#hooking-adminsite-to-urlconf
     path("admin/", admin.site.urls),
 ]
+```
+
+Now start using your Django project
+```shell
+./manage.py runserver
 ```
 
 Now you should be ready to roll. Start [creating your ontology](https://acdh-oeaw.github.io/apis-core-rdf/ontology.html).
