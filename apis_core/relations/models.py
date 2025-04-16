@@ -53,12 +53,12 @@ class Relation(models.Model, GenericModel, metaclass=RelationModelBase):
     subj_content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, related_name="relation_subj_set"
     )
-    subj_object_id = models.PositiveIntegerField()
+    subj_object_id = models.PositiveIntegerField(null=True)
     subj = GenericForeignKey("subj_content_type", "subj_object_id")
     obj_content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, related_name="relation_obj_set"
     )
-    obj_object_id = models.PositiveIntegerField()
+    obj_object_id = models.PositiveIntegerField(null=True)
     obj = GenericForeignKey("obj_content_type", "obj_object_id")
 
     objects = InheritanceManager()
