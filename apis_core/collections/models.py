@@ -6,19 +6,6 @@ from apis_core.generic.abc import GenericModel
 
 
 class SkosCollectionManager(models.Manager):
-    def get_by_full_path(self, name: str):
-        """
-        Return a collection specified by its full path, from the root colletion
-        to the leaf collection, delimited by `|`. I.e. if there is a collection
-        named `foo` and it has a parent named `bar` and `bar` does not have a
-        parent, then you can use the string "bar|foo" to get the `foo` collection.
-        """
-        names = name.split("|")
-        parent = None
-        while names:
-            parent = self.get(parent=parent, name=names.pop(0))
-        return parent
-
     def by_instance(self, instance):
         content_type = ContentType.objects.get_for_model(instance)
         scco = SkosCollectionContentObject.objects.filter(
@@ -43,24 +30,7 @@ class SkosCollection(GenericModel, models.Model):
 
     class Meta:
         ordering = ["name"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=(
-                    "name",
-                    "parent",
-                ),
-                name="unique_name_parent",
-                nulls_distinct=False,
-                violation_error_message="The combination of name and parent collection must be unique",
-            ),
-            models.CheckConstraint(
-                check=~models.Q(name__contains="|"),
-                name="check_name_pipe",
-                violation_error_message="The name must not contain the pipe symbol: |",
-            ),
-        ]
 
-    parent = models.ForeignKey("self", null=True, on_delete=models.CASCADE, blank=True)
     name = models.CharField(
         max_length=300,
         verbose_name="skos:prefLabel",
@@ -89,15 +59,6 @@ class SkosCollection(GenericModel, models.Model):
 
     def __str__(self):
         return self.name
-
-    def children(self):
-        return SkosCollection.objects.filter(parent=self)
-
-    def children_tree_as_list(self):
-        childtrees = [self]
-        for child in self.children():
-            childtrees.extend(child.children_tree_as_list())
-        return childtrees
 
     def add(self, instance: object):
         content_type = ContentType.objects.get_for_model(instance)
