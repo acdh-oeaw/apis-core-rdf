@@ -36,7 +36,7 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="nav-item">
-                                <a href="." class="nav-link active" aria-current="page">Home</a>
+                                <a href="." class="nav-link active" aria-current="page">APIS</a>
                             </li>
                             <li class="nav-item">
                                 <a href="configuration/" class="nav-link">Configuration</a>
@@ -92,12 +92,124 @@
     
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#apis" class="nav-link">APIS</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#licensing" class="nav-link">Licensing</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#installation" class="nav-link">Installation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
         </ul>
     </div>
 </div></div>
                     <div class="col-md-9" role="main">
 
-</div>
+<h1 id="apis">APIS</h1>
+<p><img alt="Django Tests" src="https://github.com/acdh-oeaw/apis-core-rdf/actions/workflows/django-tests.yml/badge.svg" />
+<img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/acdh-oeaw/apis-core-rdf" /></p>
+<p>The <em>Austrian Prosophographical Information System</em> is a
+<a href="https://www.djangoproject.com/">Django</a> based prosopography framework. It
+allows to create web applications to manage both entities and relations between
+entities. It provides API access to the data in various formats and creates
+swagger defintions. A swagger-ui allows for comfortable access to the data.</p>
+<p>Data can also be imported from remote resources described in
+<a href="https://en.wikipedia.org/wiki/Resource_Description_Framework">RDF</a>.</p>
+<p>In addition to this configurable import of data via RDF, there is also an
+configurable serialization of data. The generic RestAPI of APIS provides data
+either in the internal JSON format, TEI or RDF (serialized with <em>CIDOC CRM</em>). </p>
+<p>APIS comes with a built in system of autocompletes that allows researchers to
+import meta-data of entities with just a single click. Out of the box APIS
+supports Stanbol as a backend for the autocompletes, but the system is rather
+easy to adapt to any Restfull API. APIS also supports the parsing of RDFs
+describing entities into an entity. The parsing is configured in a settings
+file.</p>
+<p><em>Entities</em></p>
+<p><em>Relations</em></p>
+<h2 id="licensing">Licensing</h2>
+<p>All code unless otherwise noted is licensed under the terms of the MIT License
+(MIT). Please refer to the file LICENSE.txt in the root directory of this
+repository.</p>
+<p>All documentation and images unless otherwise noted are licensed under the
+terms of Creative Commons Attribution-ShareAlike 4.0 International License. To
+view a copy of this license, visit
+http://creativecommons.org/licenses/by-sa/4.0/</p>
+<p>APIS contains the <a href="https://fonts.google.com/icons">"Material Symbols" font</a>(commit ace1af0), which
+is licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License Version 2.0</a>.
+The Swagger Logo in <code>core/static/img</code> comes from <a href="https://commons.wikimedia.org/wiki/File:Swagger-logo.png">wikimedia
+commons</a> and is
+licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">Creative Commons Attribution-Share Alike 4.0 International
+license</a>
+The Git Logo in <code>core/static/img</code> comes from <a href="https://git-scm.com/downloads/logos">the git scm website</a>
+ans is licensed under the <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+<h2 id="installation">Installation</h2>
+<!-- Installation -->
+<p>Create a project using your favorite package manager:</p>
+<pre><code class="language-shell">poetry new foobar-repository
+</code></pre>
+<p>In your project folder, add apis as a dependency (replace <code>RELEASE_VERSION</code>
+with the version you want to install):</p>
+<pre><code class="language-shell">poetry add git+https://github.com/acdh-oeaw/apis-core-rdf#RELEASE_VERSION
+</code></pre>
+<p>Now remove the generated <code>__init__.py</code> (because <code>django-admin</code> wants to be the
+one that creates that) and setup your Django project</p>
+<pre><code class="language-shell">rm -f foobar_repository/__init__.py
+poetry run django-admin startproject foobar_repository .
+</code></pre>
+<p>Now start using your Django project</p>
+<pre><code class="language-shell">poetry run ./manage.py runserver
+</code></pre>
+<p>To use the APIS framework in your application, you will need to add the following dependencies to
+<a href="https://docs.djangoproject.com/en/stable/ref/settings/#installed-apps"><code>INSTALLED_APPS</code></a>:</p>
+<pre><code class="language-python">INSTALLED_APPS = [
+    # our main app, containing the ontology (in the `models.py`)
+    # and our customizations
+    &quot;sample_project&quot;,
+    &quot;django.contrib.admin&quot;,
+    &quot;django.contrib.auth&quot;,
+    &quot;django.contrib.contenttypes&quot;,
+    &quot;django.contrib.sessions&quot;,
+    &quot;django.contrib.messages&quot;,
+    &quot;django.contrib.staticfiles&quot;,
+    # ui stuff used by APIS
+    &quot;crispy_forms&quot;,
+    &quot;crispy_bootstrap4&quot;,
+    &quot;django_filters&quot;,
+    &quot;django_tables2&quot;,
+    &quot;dal&quot;,
+    &quot;dal_select2&quot;,
+    # REST API
+    &quot;rest_framework&quot;,
+    # swagger ui generation
+    &quot;drf_spectacular&quot;,
+    # The APIS apps
+    &quot;apis_core.core&quot;,
+    &quot;apis_core.generic&quot;,
+    &quot;apis_core.apis_metainfo&quot;,
+    &quot;apis_core.apis_entities&quot;,
+    # APIS collections provide a collection model similar to
+    # SKOS collections and allow tagging of content
+    &quot;apis_core.collections&quot;,
+    # APIS history modules tracks changes of instances over
+    # time and lets you revert changes
+    &quot;apis_core.history&quot;,
+]
+</code></pre>
+<p>Finally, add the APIS urls to your applications <a href="https://docs.djangoproject.com/en/stable/topics/http/urls/">URL Dispatcher</a></p>
+<pre><code class="language-python">urlpatterns = [
+    path(&quot;&quot;, include(&quot;apis_core.urls&quot;, namespace=&quot;apis&quot;)),
+    # https://docs.djangoproject.com/en/stable/topics/auth/default/#module-django.contrib.auth.views
+    path(&quot;accounts/&quot;, include(&quot;django.contrib.auth.urls&quot;)),
+    # https://docs.djangoproject.com/en/stable/ref/contrib/admin/#hooking-adminsite-to-urlconf
+    path(&quot;admin/&quot;, admin.site.urls),
+]
+</code></pre>
+<p>Now you should be ready to roll. Start <a href="https://acdh-oeaw.github.io/apis-core-rdf/ontology.html">creating your ontology</a>.</p></div>
             </div>
         </div>
 
@@ -158,5 +270,5 @@
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-04-17 09:06:05.210275+00:00
+Build Date UTC : 2025-04-17 09:07:25.638008+00:00
 -->

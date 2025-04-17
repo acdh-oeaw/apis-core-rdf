@@ -36,7 +36,7 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="nav-item">
-                                <a href=".." class="nav-link">Home</a>
+                                <a href=".." class="nav-link">APIS</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../configuration/" class="nav-link">Configuration</a>
@@ -126,6 +126,68 @@ through the first step.</p>
 <h1 id="prerequisites">Prerequisites</h1>
 <p>APIS needs Python 3.11+.</p>
 <h1 id="installation">Installation</h1>
+<!-- Installation -->
+<p>Create a project using your favorite package manager:</p>
+<pre><code class="language-shell">poetry new foobar-repository
+</code></pre>
+<p>In your project folder, add apis as a dependency (replace <code>RELEASE_VERSION</code>
+with the version you want to install):</p>
+<pre><code class="language-shell">poetry add git+https://github.com/acdh-oeaw/apis-core-rdf#RELEASE_VERSION
+</code></pre>
+<p>Now remove the generated <code>__init__.py</code> (because <code>django-admin</code> wants to be the
+one that creates that) and setup your Django project</p>
+<pre><code class="language-shell">rm -f foobar_repository/__init__.py
+poetry run django-admin startproject foobar_repository .
+</code></pre>
+<p>Now start using your Django project</p>
+<pre><code class="language-shell">poetry run ./manage.py runserver
+</code></pre>
+<p>To use the APIS framework in your application, you will need to add the following dependencies to
+<a href="https://docs.djangoproject.com/en/stable/ref/settings/#installed-apps"><code>INSTALLED_APPS</code></a>:</p>
+<pre><code class="language-python">INSTALLED_APPS = [
+    # our main app, containing the ontology (in the `models.py`)
+    # and our customizations
+    &quot;sample_project&quot;,
+    &quot;django.contrib.admin&quot;,
+    &quot;django.contrib.auth&quot;,
+    &quot;django.contrib.contenttypes&quot;,
+    &quot;django.contrib.sessions&quot;,
+    &quot;django.contrib.messages&quot;,
+    &quot;django.contrib.staticfiles&quot;,
+    # ui stuff used by APIS
+    &quot;crispy_forms&quot;,
+    &quot;crispy_bootstrap4&quot;,
+    &quot;django_filters&quot;,
+    &quot;django_tables2&quot;,
+    &quot;dal&quot;,
+    &quot;dal_select2&quot;,
+    # REST API
+    &quot;rest_framework&quot;,
+    # swagger ui generation
+    &quot;drf_spectacular&quot;,
+    # The APIS apps
+    &quot;apis_core.core&quot;,
+    &quot;apis_core.generic&quot;,
+    &quot;apis_core.apis_metainfo&quot;,
+    &quot;apis_core.apis_entities&quot;,
+    # APIS collections provide a collection model similar to
+    # SKOS collections and allow tagging of content
+    &quot;apis_core.collections&quot;,
+    # APIS history modules tracks changes of instances over
+    # time and lets you revert changes
+    &quot;apis_core.history&quot;,
+]
+</code></pre>
+<p>Finally, add the APIS urls to your applications <a href="https://docs.djangoproject.com/en/stable/topics/http/urls/">URL Dispatcher</a></p>
+<pre><code class="language-python">urlpatterns = [
+    path(&quot;&quot;, include(&quot;apis_core.urls&quot;, namespace=&quot;apis&quot;)),
+    # https://docs.djangoproject.com/en/stable/topics/auth/default/#module-django.contrib.auth.views
+    path(&quot;accounts/&quot;, include(&quot;django.contrib.auth.urls&quot;)),
+    # https://docs.djangoproject.com/en/stable/ref/contrib/admin/#hooking-adminsite-to-urlconf
+    path(&quot;admin/&quot;, admin.site.urls),
+]
+</code></pre>
+<p>Now you should be ready to roll. Start <a href="https://acdh-oeaw.github.io/apis-core-rdf/ontology.html">creating your ontology</a>.</p>
 <h1 id="installation-with-docker">Installation with Docker</h1>
 <p>This is the recommended way to install APIS on local machines as well as
 on server infrastructure. For experimenting with APIS you can use the
