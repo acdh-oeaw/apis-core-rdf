@@ -15,7 +15,7 @@ from django.utils.translation import gettext_lazy as _
 
 class E21_Person(models.Model):
     forename = models.CharField(
-        blank=True, default="", max_length=4096, verbose_name=_("forname")
+        blank=True, default="", max_length=4096, verbose_name=_("forename")
     )
     surname = models.CharField(
         blank=True, default="", max_length=4096, verbose_name=_("surname")
