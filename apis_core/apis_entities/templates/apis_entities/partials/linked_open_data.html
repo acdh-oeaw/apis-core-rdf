@@ -2,7 +2,7 @@
 <h5 class="card-title">Linked Open Data</h5>
 {% if object.uri_set %}
   {% for uri in object.uri_set.all %}
-    <div class="btn-group">
+    <div class="btn-group mb-2">
       <a class="btn btn-sm btn-outline-secondary"
          target="_blank"
          href="{{ uri.uri }}">{{ uri.short_label }}</a>
