@@ -2995,7 +2995,7 @@ the model</p>
 
         self.helper = FormHelper()
         self.helper.form_method = "GET"
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.add_input(Submit("submit", _("Submit")))
 
     def clean(self):
         self.cleaned_data = super().clean()
@@ -3078,7 +3078,7 @@ to use autocomplete replacement fields</p>
             logger.debug("Not adding collections to form: %s", e)
 
         self.helper = FormHelper(self)
-        self.helper.add_input(Submit("submit", "Submit"))
+        self.helper.add_input(Submit("submit", _("Submit")))
 
         # override the fields pointing to other models,
         # to make them use the autocomplete widgets
