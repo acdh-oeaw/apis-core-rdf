@@ -46,8 +46,6 @@ The Swagger Logo in `core/static/img` comes from [wikimedia
 commons](https://commons.wikimedia.org/wiki/File:Swagger-logo.png) and is
 licensed under the [Creative Commons Attribution-Share Alike 4.0 International
 license](https://creativecommons.org/licenses/by-sa/4.0/deed.en)
-The Git Logo in `core/static/img` comes from [the git scm website](https://git-scm.com/downloads/logos)
-ans is licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/).
 
 
 Installation
