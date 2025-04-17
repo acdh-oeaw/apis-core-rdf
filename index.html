@@ -149,21 +149,10 @@ The Git Logo in <code>core/static/img</code> comes from <a href="https://git-scm
 ans is licensed under the <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
 <h2 id="installation">Installation</h2>
 <!-- Installation -->
-<p>Create a project using your favorite package manager:</p>
-<pre><code class="language-shell">poetry new foobar-repository
+<p>Create a new <a href="https://docs.djangoproject.com/en/stable/ref/django-admin/#startproject">Django project</a>:</p>
+<pre><code class="language-shell">django-admin startproject my_apis_instance
 </code></pre>
-<p>In your project folder, add apis as a dependency (replace <code>RELEASE_VERSION</code>
-with the version you want to install):</p>
-<pre><code class="language-shell">poetry add git+https://github.com/acdh-oeaw/apis-core-rdf#RELEASE_VERSION
-</code></pre>
-<p>Now remove the generated <code>__init__.py</code> (because <code>django-admin</code> wants to be the
-one that creates that) and setup your Django project</p>
-<pre><code class="language-shell">rm -f foobar_repository/__init__.py
-poetry run django-admin startproject foobar_repository .
-</code></pre>
-<p>Now start using your Django project</p>
-<pre><code class="language-shell">poetry run ./manage.py runserver
-</code></pre>
+<p>Add apis-core-rdf as a dependency to your project.</p>
 <p>To use the APIS framework in your application, you will need to add the following dependencies to
 <a href="https://docs.djangoproject.com/en/stable/ref/settings/#installed-apps"><code>INSTALLED_APPS</code></a>:</p>
 <pre><code class="language-python">INSTALLED_APPS = [
@@ -208,6 +197,9 @@ poetry run django-admin startproject foobar_repository .
     # https://docs.djangoproject.com/en/stable/ref/contrib/admin/#hooking-adminsite-to-urlconf
     path(&quot;admin/&quot;, admin.site.urls),
 ]
+</code></pre>
+<p>Now start using your Django project</p>
+<pre><code class="language-shell">./manage.py runserver
 </code></pre>
 <p>Now you should be ready to roll. Start <a href="https://acdh-oeaw.github.io/apis-core-rdf/ontology.html">creating your ontology</a>.</p></div>
             </div>
@@ -270,5 +262,5 @@ poetry run django-admin startproject foobar_repository .
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-04-17 09:07:25.638008+00:00
+Build Date UTC : 2025-04-17 09:12:00.590254+00:00
 -->
