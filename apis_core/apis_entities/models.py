@@ -1,8 +1,10 @@
 import functools
+import logging
 import re
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.db.models.base import ModelBase
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import NoReverseMatch, reverse
@@ -12,8 +14,26 @@ from apis_core.utils.settings import apis_base_uri
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
+logger = logging.getLogger(__name__)
 
-class AbstractEntity(RootObject):
+
+class AbstractEntityModelBase(ModelBase):
+    def __new__(metacls, name, bases, attrs):
+        if name == "AbstractEntity":
+            return super().__new__(metacls, name, bases, attrs)
+        else:
+            new_class = super().__new__(metacls, name, bases, attrs)
+            if not new_class._meta.ordering:
+                logger.warning(
+                    f"{name} inherits from AbstractEntity but does not specify 'ordering' in its Meta class. "
+                    "Empty ordering could result in inconsitent results with pagination. "
+                    "Set a ordering or inherit the Meta class from AbstractEntity.",
+                )
+
+            return new_class
+
+
+class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
     """
     Abstract super class which encapsulates common logic between the
     different entity kinds and provides various methods relating to either
