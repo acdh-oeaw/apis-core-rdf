@@ -15,7 +15,7 @@ standard APIS those models are
 
 -   [apis_core.apis_metainfo.models.RootObject][]
 -   [apis_core.apis_metainfo.models.Uri][]
--   [apis_core.apis_relations.models.Triple][]
+-   [apis_core.relations.models.Relation][]
 -   [apis_core.collections.models.SkosCollection][]
 -   [apis_core.collections.models.SkosCollectionContentObject][]
 
