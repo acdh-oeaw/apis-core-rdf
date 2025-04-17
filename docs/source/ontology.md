@@ -96,9 +96,3 @@ class PersonLivedInPlace(Relation):
 ```
 
 Now you can create instances of that relation on your entity pages.
-
-Note
-
-This new module does not change any code in the existing datamodel or
-codebase. This prevents existing projects that use the legacy Triple or
-TempTriple implementation to break.
