@@ -121,9 +121,6 @@ The `collections` module consists of the two models
 The former is the class for the collection
 vocabularies, whereas the latter lets you connect specific collections
 with any content instance, using generic relations.
-`SkosCollection` objects can have another
-`SkosCollection` as a parent, which lets you create
-hierarchies.
 
 You can create your collections in the `admin` interface or
 using the `generic` app.
@@ -157,26 +154,6 @@ This templatetag takes the instance of an object and a collection (or,
 in the case of `_by_id` the id of a collection) and lets
 the user create and remove the connection between this instance and the
 collection.
-
--   [apis_core.collections.templatetags.apis_collections.collection_children_toggle][]
--   [apis_core.collections.templatetags.apis_collections.collection_children_toggle_by_id][]
-
-This is a helper templatetag that creates toggle buttons for all the
-child collections of a collection. This way you can use one collections
-a parent for a couple of tags and simply add the parent of a new tag
-collection to the parent collection and it automatically shows up in
-this toggle button list.
-
--   [apis_core.collections.templatetags.apis_collections.collection_object_parent][]
--    [apis_core.collections.templatetags.apis_collections.collection_object_parent_by_id][]
-
-This templatetag provides a button to change the connection from an
-instance to a collection to point to the collections parent. This is
-useful if you want to implement a workflow (i.e. three collections:
-`done` as the root one, `in process` with
-`done` as parent and `todo` with `in process` as parent - the user can then on the click of a
-button change the collection an instance is connected to from
-`todo` to `in process` and finally `done`.)
 
 -   [apis_core.collections.templatetags.apis_collections.collection_session_toggle_by_id][]
 
