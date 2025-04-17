@@ -11,6 +11,7 @@ def list_relation_choices():
 
 class RelationMultiWidget(forms.MultiWidget):
     template_name = "relations/relation_multiwidget.html"
+    use_fieldset = False
 
     def __init__(self, attrs=None):
         relation_choices = [(None, "---")] + list_relation_choices()
