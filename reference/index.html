@@ -492,7 +492,7 @@ So they are to be understood in that dynamic context.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/apis_entities/models.py</code></summary>
-                <pre class="highlight"><code class="language-python">class AbstractEntity(RootObject):
+                <pre class="highlight"><code class="language-python">class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
     """
     Abstract super class which encapsulates common logic between the
     different entity kinds and provides various methods relating to either
