@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.44.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.43.1...v0.44.0) (2025-04-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **collections:** drop `parent` key from collections
+
+### Features
+
+* **apis_entities:** introduce AbstractEntityModelBase ([108482e](https://github.com/acdh-oeaw/apis-core-rdf/commit/108482e3ed46387f2bff1d9668d60cd4467921e1))
+* **collections:** drop `parent` key from collections ([1ccddea](https://github.com/acdh-oeaw/apis-core-rdf/commit/1ccddeaa4fc60fcaa00b088d2a6122146699ff7e)), closes [#1603](https://github.com/acdh-oeaw/apis-core-rdf/issues/1603)
+* **core:** add select2-bootstrap-5-theme to default stylesheet ([7e2b670](https://github.com/acdh-oeaw/apis-core-rdf/commit/7e2b6701d83b44580ebe19a7be10705ba7801f61))
+* **core:** replace icon for code repository ([1a9e7c5](https://github.com/acdh-oeaw/apis-core-rdf/commit/1a9e7c5333ec17fbf7df8813ccb5332eadb5ce78)), closes [#1331](https://github.com/acdh-oeaw/apis-core-rdf/issues/1331)
+* **generic:** move css include into the base template ([0288c6d](https://github.com/acdh-oeaw/apis-core-rdf/commit/0288c6da72c333fe3433af8cc5786b942a233eb6))
+* **generic:** use gettext for the form submit buttons ([b36aa52](https://github.com/acdh-oeaw/apis-core-rdf/commit/b36aa52ea74bc606b22e9c122060bdda959e36dd))
+* **relations:** add check for Meta.ordering to Relation metaclass ([98ac168](https://github.com/acdh-oeaw/apis-core-rdf/commit/98ac168c6aa25c8f28b1f705fdf9d8ea788ffd9f))
+
+
+### Bug Fixes
+
+* **core:** drop the `User` string in front of the username ([5e31248](https://github.com/acdh-oeaw/apis-core-rdf/commit/5e312487192293342ce83daba256eb0cee7c7ded))
+* **core:** use `end` instead of `right` for aligning dropdown ([211135a](https://github.com/acdh-oeaw/apis-core-rdf/commit/211135a6fcb4be56551722b26340cfb892aa2613))
+* **core:** use bootstrap5 theme for Select2 widgets ([c01e01c](https://github.com/acdh-oeaw/apis-core-rdf/commit/c01e01cb542d59f177f528e65c3a456bf0152340)), closes [#1754](https://github.com/acdh-oeaw/apis-core-rdf/issues/1754)
+
+
+### Documentation
+
+* fix import path of README.md ([d197698](https://github.com/acdh-oeaw/apis-core-rdf/commit/d197698d3cfb63524e7085d0f5b915f4c838838e)), closes [#1808](https://github.com/acdh-oeaw/apis-core-rdf/issues/1808)
+* **readme:** remove references to poetry from readme ([7a3572d](https://github.com/acdh-oeaw/apis-core-rdf/commit/7a3572d116679b5116cea253d332b9b0c0a38bf5))
+
 ## [0.43.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.43.0...v0.43.1) (2025-04-15)
 
 
