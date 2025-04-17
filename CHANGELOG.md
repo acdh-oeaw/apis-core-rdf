@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.44.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.44.0...v0.44.1) (2025-04-17)
+
+
+### Bug Fixes
+
+* **core:** load i18n templatetags in template ([36ee1e3](https://github.com/acdh-oeaw/apis-core-rdf/commit/36ee1e38b14c6ed0d5bdaa58ed53c49dc99f3d83))
+
 ## [0.44.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.43.1...v0.44.0) (2025-04-17)
 
 
