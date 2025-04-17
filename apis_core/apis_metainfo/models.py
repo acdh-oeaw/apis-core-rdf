@@ -41,6 +41,14 @@ class UriManager(models.Manager):
 
 
 class Uri(GenericModel, models.Model):
+    """
+    The URI model provides a way of storing globally scoped identifiers for
+    objects. For the objects in our application, we store both internal URIs
+    (URIs that we created) as well as external URIs (when we want to link the
+    object to an external resource, asserting that this object is the "same as"
+    the external object).
+    """
+
     uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
     object_id = models.PositiveIntegerField(null=True)
