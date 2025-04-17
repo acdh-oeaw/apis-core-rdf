@@ -1,4 +1,5 @@
 import functools
+import logging
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -8,6 +9,8 @@ from django.db.models.base import ModelBase
 from model_utils.managers import InheritanceManager
 
 from apis_core.generic.abc import GenericModel
+
+logger = logging.getLogger(__name__)
 
 
 # This ModelBase is simply there to check if the needed attributes
@@ -27,6 +30,13 @@ class RelationModelBase(ModelBase):
                 raise ValueError(
                     "%s inherits from Relation and must therefore specify obj_model"
                     % name
+                )
+
+            if not new_class._meta.ordering:
+                logger.warning(
+                    f"{name} inherits from Relation but does not specify 'ordering' in its Meta class. "
+                    "Empty ordering could result in inconsitent results with pagination. "
+                    "Set a ordering or inherit the Meta class from Relation.",
                 )
 
             return new_class
