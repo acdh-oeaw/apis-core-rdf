@@ -60,7 +60,7 @@ def relations_from(from_obj, relation_type: ContentType = None):
 def relations_list_table(context, relations, suffix=None):
     suffixes = ["RelationsTable"]
     if suffix:
-        suffixes.append(f"{suffix}RelationsTable")
+        suffixes.insert(0, f"{suffix}RelationsTable")
     table_modules = ()
     for suffix in suffixes:
         table_modules += module_paths(
