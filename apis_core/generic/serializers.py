@@ -17,7 +17,7 @@ from rest_framework.serializers import (
 )
 
 from apis_core.generic.utils.rdf_namespace import APPELLATION, ATTRIBUTES, CRM
-from apis_core.utils.settings import apis_base_uri, rdf_namespace_prefix
+from apis_core.utils.settings import rdf_namespace_prefix
 
 
 class GenericHyperlinkedRelatedField(HyperlinkedRelatedField):
@@ -100,7 +100,6 @@ class SimpleObjectSerializer(Serializer):
 
 class GenericModelCidocSerializer(BaseSerializer):
     def __init__(self, *args, **kwargs):
-        self.base_uri = f"{apis_base_uri()}"
         self.rdf_nsp_base = rdf_namespace_prefix()
         self.appellation_nsp_prefix = f"{self.rdf_nsp_base}-appellation"
         self.attr_nsp_prefix = f"{self.rdf_nsp_base}-attr"
@@ -152,7 +151,7 @@ class GenericModelCidocSerializer(BaseSerializer):
         g.namespace_manager.bind(self.appellation_nsp_prefix, APPELLATION, replace=True)
         g.namespace_manager.bind(self.attr_nsp_prefix, ATTRIBUTES, replace=True)
 
-        self.instance_namespace = Namespace(self.base_uri + instance.get_listview_url())
+        self.instance_namespace = Namespace(instance.get_namespace_uri())
         g.namespace_manager.bind(
             instance.get_namespace_prefix(), self.instance_namespace
         )
