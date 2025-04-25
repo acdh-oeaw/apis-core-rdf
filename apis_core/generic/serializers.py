@@ -145,7 +145,6 @@ class GenericModelCidocSerializer(BaseSerializer):
 
     def to_representation(self, instance):
         g = Graph()
-        content_type = ContentType.objects.get_for_model(instance)
 
         g.namespace_manager.bind("crm", CRM, replace=True)
         g.namespace_manager.bind("owl", OWL, replace=True)
@@ -153,9 +152,10 @@ class GenericModelCidocSerializer(BaseSerializer):
         g.namespace_manager.bind(self.appellation_nsp_prefix, APPELLATION, replace=True)
         g.namespace_manager.bind(self.attr_nsp_prefix, ATTRIBUTES, replace=True)
 
-        self.instance_nsp_prefix = f"{self.rdf_nsp_base}-{content_type.name.lower()}"
         self.instance_namespace = Namespace(self.base_uri + instance.get_listview_url())
-        g.namespace_manager.bind(self.instance_nsp_prefix, self.instance_namespace)
+        g.namespace_manager.bind(
+            instance.get_namespace_prefix(), self.instance_namespace
+        )
 
         self.instance_uri = URIRef(self.instance_namespace[str(instance.id)])
 
