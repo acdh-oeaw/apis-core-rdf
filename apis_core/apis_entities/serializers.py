@@ -74,3 +74,11 @@ class E53_PlaceCidocSerializer(GenericModelCidocSerializer):
             literal = Literal(literal_text, datatype=GEO.wktLiteral)
             g.add((self.instance_uri, CRM.P168_place_is_defined_by, literal))
         return g
+
+
+class E74_GroupCidocSerializer(GenericModelCidocSerializer):
+    def to_representation(self, instance):
+        g = super().to_representation(instance)
+
+        g.add((self.instance_uri, RDF.type, CRM.E74_Group))
+        return g
