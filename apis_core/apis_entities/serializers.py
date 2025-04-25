@@ -1,5 +1,5 @@
 from rdflib import Literal, URIRef
-from rdflib.namespace import RDF, RDFS
+from rdflib.namespace import GEO, RDF, RDFS
 from rest_framework import serializers
 
 from apis_core.generic.serializers import (
@@ -61,4 +61,16 @@ class E21_PersonCidocSerializer(GenericModelCidocSerializer):
             )
             g.add((surname_uri, RDFS.label, Literal(instance.surname)))
 
+        return g
+
+
+class E53_PlaceCidocSerializer(GenericModelCidocSerializer):
+    def to_representation(self, instance):
+        g = super().to_representation(instance)
+
+        g.add((self.instance_uri, RDF.type, CRM.E53_Place))
+        if instance.latitude is not None and instance.longitude is not None:
+            literal_text = f"Point ( {instance.longitude:+} {instance.latitude:+} )"
+            literal = Literal(literal_text, datatype=GEO.wktLiteral)
+            g.add((self.instance_uri, CRM.P168_place_is_defined_by, literal))
         return g
