@@ -51,7 +51,7 @@ class GenericModel:
     @classmethod
     def get_namespace_prefix(cls):
         ct = ContentType.objects.get_for_model(cls)
-        return f"{rdf_namespace_prefix()}-{ct.name.lower()}"
+        return f"{rdf_namespace_prefix()}-{ct.model}"
 
     def get_edit_url(self):
         ct = ContentType.objects.get_for_model(self)
