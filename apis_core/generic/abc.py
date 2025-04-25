@@ -14,7 +14,7 @@ from apis_core.generic.signals import (
     pre_duplicate,
     pre_merge_with,
 )
-from apis_core.utils.settings import rdf_namespace_prefix
+from apis_core.utils.settings import apis_base_uri, rdf_namespace_prefix
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +52,10 @@ class GenericModel:
     def get_namespace_prefix(cls):
         ct = ContentType.objects.get_for_model(cls)
         return f"{rdf_namespace_prefix()}-{ct.model}"
+
+    @classmethod
+    def get_namespace_uri(cls):
+        return apis_base_uri() + cls.get_listview_url()
 
     def get_edit_url(self):
         ct = ContentType.objects.get_for_model(self)
