@@ -2344,7 +2344,11 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
     @classmethod
     def get_namespace_prefix(cls):
         ct = ContentType.objects.get_for_model(cls)
-        return f"{rdf_namespace_prefix()}-{ct.name.lower()}"
+        return f"{rdf_namespace_prefix()}-{ct.model}"
+
+    @classmethod
+    def get_namespace_uri(cls):
+        return apis_base_uri() + cls.get_listview_url()
 
     def get_edit_url(self):
         ct = ContentType.objects.get_for_model(self)
