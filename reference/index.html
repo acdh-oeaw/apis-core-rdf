@@ -943,6 +943,111 @@ By having one overarching super class we gain the advantage of unique identifier
 
 </div>
 
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="apis_core.apis_metainfo.models.Uri" class="doc doc-heading">
+            <code>Uri</code>
+
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="GenericModel (apis_core.generic.abc.GenericModel)" href="#apis_core.generic.abc.GenericModel">GenericModel</a></code>, <code><span title="django.db.models.Model">Model</span></code></p>
+
+
+        <p>The URI model provides a way of storing globally scoped identifiers for
+objects. For the objects in our application, we store both internal URIs
+(URIs that we created) as well as external URIs (when we want to link the
+object to an external resource, asserting that this object is the "same as"
+the external object).</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>apis_core/apis_metainfo/models.py</code></summary>
+                <pre class="highlight"><code class="language-python">class Uri(GenericModel, models.Model):
+    """
+    The URI model provides a way of storing globally scoped identifiers for
+    objects. For the objects in our application, we store both internal URIs
+    (URIs that we created) as well as external URIs (when we want to link the
+    object to an external resource, asserting that this object is the "same as"
+    the external object).
+    """
+
+    uri = models.URLField(blank=True, null=True, unique=True, max_length=255)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    content_object = GenericForeignKey()
+
+    objects = UriManager()
+
+    def __str__(self):
+        return str(self.uri)
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self):
+        self.uri = get_normalized_uri(self.uri)
+        if self.uri and not hasattr(self, "content_object"):
+            try:
+                result = rdf.get_something_from_uri(self.uri)
+                if model := result.getattr("model", False):
+                    obj = model(**result.get("attributes", {}))
+                    obj.save()
+                    self.content_type = ContentType.objects.get_for_model(obj)
+                    self.object_id = obj.id
+                else:
+                    raise ImproperlyConfigured(
+                        f"{self.uri}: did not find matching rdf defintion"
+                    )
+            except Exception as e:
+                raise ValidationError(f"{e}: {self.uri}")
+
+    def internal(self) -&gt; bool:
+        my_netloc = urlsplit(self.uri).netloc
+        return any(
+            [my_netloc == urlsplit(uri).netloc for uri in apis_settings.internal_uris()]
+        )
+
+    def short_label(self) -&gt; str:
+        if self.internal():
+            return "local"
+        for x in get_rules():
+            if re.match(x["match"], self.uri):
+                return x["name"]
+        return urlsplit(self.uri).netloc</code></pre>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
 
 
 
