@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.45.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.44.1...v0.45.0) (2025-04-28)
+
+
+### Features
+
+* **generic:** add a `get_namespace_uri` method to GenericModel ([7af8b83](https://github.com/acdh-oeaw/apis-core-rdf/commit/7af8b8341998cc33d48c6d87b1824f8af4bb82e8))
+
+
+### Bug Fixes
+
+* **apis_entities:** add margin to bottom of the pills in the lod block ([2b01f34](https://github.com/acdh-oeaw/apis-core-rdf/commit/2b01f34fa44e8bf0dba22521a0713bac4906ff26)), closes [#1773](https://github.com/acdh-oeaw/apis-core-rdf/issues/1773)
+* **apis_entities:** fix misspelled verbose_name ([c9e17aa](https://github.com/acdh-oeaw/apis-core-rdf/commit/c9e17aaeb1ad40f412fcb0ac1b2106d596dad4d9)), closes [#1817](https://github.com/acdh-oeaw/apis-core-rdf/issues/1817)
+* **generic:** use `.model` instead of `.name.lower()` for prefix ([084528c](https://github.com/acdh-oeaw/apis-core-rdf/commit/084528cc103eafb245e92e0ff8e73b501c70ea0f))
+* **relations:** add {suffix}RelationsTable before RelationsTable ([7a4c348](https://github.com/acdh-oeaw/apis-core-rdf/commit/7a4c348d346d048ff68fd36c4e319abaa69a8877)), closes [#1830](https://github.com/acdh-oeaw/apis-core-rdf/issues/1830)
+* **relations:** make RelationMultiWidget not use a fieldset ([d9bd5a4](https://github.com/acdh-oeaw/apis-core-rdf/commit/d9bd5a4aeeb05b3d98278ceae874df5c7a3a0373)), closes [#1814](https://github.com/acdh-oeaw/apis-core-rdf/issues/1814)
+* **sample_project:** add migration for verbose name update ([8e1b22b](https://github.com/acdh-oeaw/apis-core-rdf/commit/8e1b22bce94e6c35e3236edbaed034ebe24f496c))
+
+
+### Documentation
+
+* **apis_core:** add basic docstring to urls module ([28aa6ce](https://github.com/acdh-oeaw/apis-core-rdf/commit/28aa6ceb3d91e4b04966f09c40896c9b50115066))
+* **apis_metainfo:** add docstring to Uri model ([2b290c1](https://github.com/acdh-oeaw/apis-core-rdf/commit/2b290c10e7c329650dde8dea4d9c9cbe33986dfe))
+* **customization:** replace Triple with Relation in model listing ([ccbff74](https://github.com/acdh-oeaw/apis-core-rdf/commit/ccbff74f15161b9f6e042eab03ddc26fe146fdd9))
+* **features:** remove documentation of dropped collections features ([87b1501](https://github.com/acdh-oeaw/apis-core-rdf/commit/87b150129342e658501c0eea7e054907a724e1fe))
+* **generic:** update importers docstrings, comments ([886f3bf](https://github.com/acdh-oeaw/apis-core-rdf/commit/886f3bf57558e79482b1db480712b0e19208da15))
+* **ontology:** drop reference to legacy triples ([f8630aa](https://github.com/acdh-oeaw/apis-core-rdf/commit/f8630aadf7bdf3bf0ce4f2d073896c17557c1365))
+* **readme:** drop reference to git logo file ([824df23](https://github.com/acdh-oeaw/apis-core-rdf/commit/824df23afd916857923c5b7f59117ac1afb24917))
+
 ## [0.44.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.44.0...v0.44.1) (2025-04-17)
 
 
