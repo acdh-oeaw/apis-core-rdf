@@ -43,7 +43,8 @@ def generate_search_filter(model, query, fields_to_search=None, prefix=""):
     this can be useful if you want to use the `generate_search_filter` in a
     `Q` combined query while searching over multiple models.
     """
-    query = query.split()
+    if isinstance(query, str):
+        query = query.split()
 
     _fields_to_search = [
         field.name for field in default_search_fields(model, fields_to_search)
