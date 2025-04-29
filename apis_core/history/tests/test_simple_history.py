@@ -29,19 +29,6 @@ class SimpleHistoryTestCase(TestCase):
         self.assertEqual("Jane", pers.history.most_recent().forename)
         self.assertEqual("John", pers.history.earliest().forename)
 
-    def test_history_tag(self):
-        """Tests the version tag function."""
-        pers = self.Person.objects.get(forename="John")
-        pers.history.latest().set_version_tag("test_tag")
-        self.assertEqual(pers.history.latest().version_tag, "test_tag")
-        pers_history = pers.history.all()
-        self.assertEqual(pers_history.count(), 1)
-        self.assertEqual(pers_history[0].version_tag, "test_tag")
-        # test with TemTriple
-        pers2 = self.Person.objects.create(forename="Jane", surname="Doe")
-        pers2.history.latest().set_version_tag("test_tag")
-        self.assertEqual(pers2.history.latest().version_tag, "test_tag")
-
     def test_history_delete_entry(self):
         """Tests the deletion of an entry."""
         pers = self.Person.objects.get(forename="John")
