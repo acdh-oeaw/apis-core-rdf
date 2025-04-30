@@ -59,7 +59,7 @@ class CustomEndpointEnumerator(EndpointEnumerator):
         api_endpoints = [
             endpoint
             for endpoint in api_endpoints
-            if not endpoint[0].startswith("/apis/api/{contenttype}/")
+            if "/api/{contenttype}/" not in endpoint[0]
         ]
         for content_type in ContentType.objects.all():
             if content_type.model_class() is not None and issubclass(
