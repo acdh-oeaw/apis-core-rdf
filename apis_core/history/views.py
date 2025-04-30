@@ -29,20 +29,9 @@ def create_new_version(request, contenttype, pk):
     model = contenttype.model_class()
     instance = model.objects.get(id=pk)
     history_latest = instance.history.latest()
-    latest_version_list = [
-        int(x.replace("v", ""))
-        for x in instance.history.filter(version_tag__isnull=False).values_list(
-            "version_tag", flat=True
-        )
-    ]
     history_latest.history_id = None
     history_latest.history_date = timezone.now()
     history_latest.save()
-    if latest_version_list:
-        latest_version = max(latest_version_list)
-    else:
-        latest_version = 0
-    history_latest.set_version_tag(f"v{latest_version + 1}")
     return redirect(
         reverse(
             "apis_core:generic:detail",

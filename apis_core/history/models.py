@@ -6,8 +6,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import AppRegistryNotReady
 from django.db import models
-from django.db.models import Q, UniqueConstraint
-from django.db.models.functions import Lower
+from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 from simple_history import utils
@@ -44,19 +43,8 @@ class APISHistoricalRecords(HistoricalRecords, GenericModel):
 
 
 class APISHistoryTableBase(models.Model, GenericModel):
-    version_tag = models.CharField(max_length=255, blank=True, null=True)
-
     class Meta:
         abstract = True
-        constraints = [
-            UniqueConstraint(
-                fields=["id", Lower("version_tag")], name="id_version_tag_unique"
-            ),
-        ]
-
-    def set_version_tag(self, tag: str):
-        self.version_tag = tag
-        self.save()
 
     def get_absolute_url(self):
         ct = ContentType.objects.get_for_model(self)

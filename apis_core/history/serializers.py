@@ -49,7 +49,6 @@ class ModelChangeSerializer(serializers.Serializer):
 class HistoryLogSerializer(serializers.Serializer):
     diff = serializers.SerializerMethodField()
     timestamp = serializers.DateTimeField(source="history_date")
-    version_tag = serializers.CharField()
     user = serializers.CharField(source="history_user")
     action = serializers.SerializerMethodField()
     model = serializers.CharField(source="instance.__class__.__name__")

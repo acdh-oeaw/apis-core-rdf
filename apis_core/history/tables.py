@@ -44,7 +44,6 @@ class HistoryGenericTable(tables.Table):
         fields = [
             "model",
             "instance",
-            "tag",
             "fields_changed",
             "history_type",
             "history_date",
