@@ -21,16 +21,17 @@ class RelationModelBase(ModelBase):
             return super().__new__(metacls, name, bases, attrs)
         else:
             new_class = super().__new__(metacls, name, bases, attrs)
-            if not hasattr(new_class, "subj_model"):
-                raise ValueError(
-                    "%s inherits from Relation and must therefore specify subj_model"
-                    % name
-                )
-            if not hasattr(new_class, "obj_model"):
-                raise ValueError(
-                    "%s inherits from Relation and must therefore specify obj_model"
-                    % name
-                )
+            if not (new_class._meta.abstract or new_class._meta.proxy):
+                if not hasattr(new_class, "subj_model"):
+                    raise ValueError(
+                        "%s inherits from Relation and must therefore specify subj_model"
+                        % name
+                    )
+                if not hasattr(new_class, "obj_model"):
+                    raise ValueError(
+                        "%s inherits from Relation and must therefore specify obj_model"
+                        % name
+                    )
 
             if not new_class._meta.ordering:
                 logger.warning(
