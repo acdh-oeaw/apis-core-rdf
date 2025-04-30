@@ -63,13 +63,13 @@ class SkosCollection(GenericModel, models.Model):
     def add(self, instance: object):
         content_type = ContentType.objects.get_for_model(instance)
         SkosCollectionContentObject.objects.get_or_create(
-            collection=self, content_type=content_type, object_id=instance.id
+            collection=self, content_type=content_type, object_id=instance.pk
         )
 
     def remove(self, instance: object):
         content_type = ContentType.objects.get_for_model(instance)
         SkosCollectionContentObject.objects.filter(
-            collection=self, content_type=content_type, object_id=instance.id
+            collection=self, content_type=content_type, object_id=instance.pk
         ).delete()
 
     @property
