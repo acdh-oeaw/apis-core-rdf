@@ -51,13 +51,17 @@ class GenericHyperlinkedModelSerializer(HyperlinkedModelSerializer):
 
 
 def serializer_factory(
-    model, serializer=GenericHyperlinkedModelSerializer, fields="__all__", **kwargs
+    model,
+    serializer=GenericHyperlinkedModelSerializer,
+    action="detail",
+    fields="__all__",
+    **kwargs,
 ):
     defaultmeta = type(str("Meta"), (object,), {"fields": fields})
     meta = getattr(serializer, "Meta", defaultmeta)
     meta.model = model
     serializer = type(
-        str("%sModelSerializer" % model._meta.object_name),
+        str("%s%sModelSerializer" % (model._meta.object_name, action)),
         (serializer,),
         {"Meta": meta},
     )
