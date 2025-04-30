@@ -1,6 +1,10 @@
 {% extends "generic/generic_content.html" %}
 {% load static %}
 
+{% block title %}
+  {{ object }}
+{% endblock title %}
+
 {% block styles %}
   {{ block.super }}
   <link href="{% static 'css/apis_entities.css' %}" rel="stylesheet" />
