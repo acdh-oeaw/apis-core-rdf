@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.45.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.45.0...v0.45.1) (2025-04-30)
+
+
+### Bug Fixes
+
+* **generic:** only use `.split` on strings ([def4348](https://github.com/acdh-oeaw/apis-core-rdf/commit/def434808cb05f07fb69ba74f1c3a76534608e46)), closes [#1840](https://github.com/acdh-oeaw/apis-core-rdf/issues/1840)
+
 ## [0.45.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.44.1...v0.45.0) (2025-04-28)
 
 
