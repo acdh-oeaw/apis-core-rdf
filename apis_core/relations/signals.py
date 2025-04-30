@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.contenttypes.models import ContentType
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 from apis_core.generic.signals import post_duplicate, post_merge_with
@@ -42,3 +43,16 @@ def merge_relations(sender, instance, entities, **kwargs):
         Relation.objects.filter(
             obj_content_type=content_type, obj_object_id=ent.id
         ).update(obj_object_id=instance.id)
+
+
+@receiver(post_delete)
+def set_relations_null(sender, instance, using, origin, **kwargs):
+    content_type = ContentType.objects.get_for_model(instance)
+    object_id = instance.id
+    if isinstance(object_id, int):
+        Relation.objects.filter(
+            subj_content_type=content_type, subj_object_id=object_id
+        ).update(subj_object_id=None)
+        Relation.objects.filter(
+            obj_content_type=content_type, obj_object_id=object_id
+        ).update(obj_object_id=None)
