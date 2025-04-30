@@ -40,12 +40,12 @@ class CollectionsIncludeExcludeFilter(django_filters.filters.ModelMultipleChoice
                 content_type=content_type, collection__in=include
             ).values("object_id")
             if include:
-                q &= Q(id__in=include_ids)
+                q &= Q(pk__in=include_ids)
             exclude_ids = skoscollectioncontentobject.objects.filter(
                 content_type=content_type, collection__in=exclude
             ).values("object_id")
             if exclude:
-                q &= ~Q(id__in=exclude_ids)
+                q &= ~Q(pk__in=exclude_ids)
         except LookupError as e:
             logger.debug("Not filtering for collections: %s", e)
         return queryset.filter(q)
