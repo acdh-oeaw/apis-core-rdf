@@ -48,4 +48,6 @@ class ModelViewSet(viewsets.ModelViewSet):
             serializer_class_modules,
             getattr(renderer, "serializer", GenericHyperlinkedModelSerializer),
         )
-        return serializer_factory(self.model, serializer=serializer_class)
+        return serializer_factory(
+            self.model, serializer=serializer_class, action=self.action
+        )
