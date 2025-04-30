@@ -1,12 +1,10 @@
 import difflib
 
 from django.apps import apps
-from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.core.exceptions import ImproperlyConfigured
 from django.db import DEFAULT_DB_ALIAS, router
 
-from apis_core.apis_metainfo.models import Uri
 from apis_core.generic.helpers import first_member_match, module_paths
 
 
@@ -69,30 +67,6 @@ def get_importer_for_model(model: object):
     if importer := first_member_match(importer_paths):
         return importer
     raise ImproperlyConfigured(f"No suitable importer found for {model}")
-
-
-def create_object_from_uri(uri: str, model: object, raise_on_fail=False) -> object:
-    if uri.startswith("http"):
-        try:
-            uri = Uri.objects.get(uri=uri)
-            return uri.content_object
-        except Uri.DoesNotExist:
-            Importer = get_importer_for_model(model)
-            importer = Importer(uri, model)
-            instance = importer.create_instance()
-            content_type = ContentType.objects.get_for_model(instance)
-            uri = Uri.objects.create(
-                uri=importer.get_uri,
-                content_type=content_type,
-                object_id=instance.id,
-            )
-            return instance
-    if raise_on_fail:
-        content_type = ContentType.objects.get_for_model(model)
-        raise ImproperlyConfigured(
-            f'Could not create {content_type.name} from string "{uri}"'
-        )
-    return False
 
 
 def get_html_diff(a, b, show_a=True, show_b=True, shorten=0):

@@ -29,7 +29,8 @@ from django_tables2.export.views import ExportMixin
 from django_tables2.tables import table_factory
 
 from apis_core.apis_metainfo.models import Uri
-from apis_core.utils.helpers import create_object_from_uri, get_importer_for_model
+from apis_core.apis_metainfo.utils import create_object_from_uri
+from apis_core.utils.helpers import get_importer_for_model
 
 from .filtersets import GenericFilterSet
 from .forms import (
