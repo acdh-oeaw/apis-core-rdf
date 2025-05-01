@@ -30,3 +30,43 @@ footer .icon {
     height: 1em;
     font-size: 1.5em;
 }
+
+@keyframes example {
+    0% {
+        fill: white;
+    }
+
+    20% {
+        fill: red;
+    }
+
+    40% {
+        fill: yellow;
+    }
+
+    60% {
+        fill: green;
+    }
+
+    80% {
+        fill: blue;
+    }
+
+    100% {
+        fill: white;
+    }
+}
+
+#logo {
+    animation-name: example;
+    animation-duration: 240s;
+    animation-iteration-count: infinite;
+    transition: transform .7s ease-in-out;
+    width: 30px;
+    height: 30px;
+}
+
+#logo:hover {
+    transform: rotate(360deg);
+    fill: black;
+}
