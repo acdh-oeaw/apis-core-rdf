@@ -28,7 +28,7 @@ title: Development
 
 -   `crispy-bootstrap5`
 
-    The default theme used for the crispy forms
+    The default theme used for crispy forms.
 
 -   `django-simple-history`
 
@@ -37,4 +37,4 @@ title: Development
 -   `pydot`
 
     Used in `apis_core.documentation` to create a dot representation of
-    the datamodel.
+    the data model.

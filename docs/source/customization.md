@@ -6,12 +6,12 @@ APIS is designed to be easily customizable. This section describes how
 you can customize the views and the templates of the views that are
 shipped with APIS by injecting classes and methods that are then
 automatically used by the generic views. The core of the logic described
-here is based on the [apis_core.generic][].
+here is based on [apis_core.generic][].
 It provides generic CRUD views and API views for all models that are
 configured to use it. To make a model use the generic functionality, it
 has to inherit from
 [apis_core.generic.abc.GenericModel][]. In
-standard APIS those models are
+standard APIS those models are:
 
 -   [apis_core.apis_metainfo.models.RootObject][]
 -   [apis_core.apis_metainfo.models.Uri][]
@@ -27,7 +27,7 @@ the generic views for it. `/apis/your_app.historicalperson/` will be the
 URL for the list view of the historical model.
 `/apis/api/your_app.historicalperson/` for the API view.
 
-If you want to use the generic app for your own model, simple make your
+If you want to use the generic app for your own model, simply make your
 model inherit from
 [apis_core.generic.abc.GenericModel][].
 
@@ -61,7 +61,7 @@ columns](https://django-tables2.readthedocs.io/en/latest/pages/api-reference.htm
 that you might want to use.
 
 Your table can also contain a `paginate_by` attribute, which is then
-used by the list view to determines the number of items per page. When
+used by the list view to determine the number of items per page. When
 this is not set, the page size defaults to `25`. To disable pagination
 altogether, use `table_pagination = False`.
 
@@ -81,10 +81,10 @@ custom template using your model name, so if your model is
 `myproject.Person` then you can use the `myproject/person_list.html`
 template to override the generic template.
 
-# Create and Update views
+# Create and update views
 
-The create and update view use the form
-[apis_core.generic.forms.GenericModelForm][] by default. You can override the form it uses by creating
+The create and update views use the form
+[apis_core.generic.forms.GenericModelForm][] by default. You can override the form they use by creating
 a custom form in `your_app.forms`. The form class has to be named
 `<Modelname>Form`, so if you have a model `Person` in your app
 `myproject`, the view looks for the form class
@@ -92,10 +92,10 @@ a custom form in `your_app.forms`. The form class has to be named
 
 ## Create and update view templates
 
-The create and update views looks for templates using the `_form.html`
-suffix. It uses the `generic/generic_form.html` template as fallback,
+The create and update views look for templates using the `_form.html`
+suffix. They use the `generic/generic_form.html` template as fallback,
 but you can use a custom template using your model name, so if your
-model is `myproject.Person` then you can use the
+model is `myproject.Person`, you can use the
 `myproject/person_form.html` template to override the generic template.
 
 # Autocomplete views
@@ -110,7 +110,7 @@ for the queryset `myproject.querysets.PersonAutocompleteQueryset`.
 
 The results of the autocomplete view can be themed using templates. The
 autocomplete view looks for templates using the
-`autocomplete_result.html` suffix, if no such template is found, the
+`autocomplete_result.html` suffix; if no such template is found, the
 string representation of the result is used. The autocomplete view uses
 the same template search function as for other templates, so if you have
 a model `myproject.Person` then you can use the
@@ -119,11 +119,11 @@ a model `myproject.Person` then you can use the
 The results of the autocomplete view can be extended with additional
 results coming from another source (an external API or another
 queryset). The view looks for this function in `your_app.querysets` and
-it has to be named `<Modelname>ExternalAutocomplete`, so if you have a
+has to be named `<Modelname>ExternalAutocomplete`, so if you have a
 model `Person` in your app `myproject`, the view looks for the function
 in `myproject.querysets.PersonExternalAutocomplete`.
 
-Lets say you have an app called `myapp` with a `models.py`
+Let's say you have an app called `myapp` with the following `models.py`:
 
 ``` python
 class Person(models.Model):
@@ -147,9 +147,9 @@ class PersonExternalAutocomplete:
 ```
 
 The class has to have a `get_results` method that receives a query as
-the first parameter and returns a result in the format, the
+the first parameter and returns a result in the format the
 [django-autocomplete-light](https://django-autocomplete-light.readthedocs.io/)
-module uses- this is a dict with the keys `id`, `text` and `selected_text`.
+module uses - a dict with the keys `id`, `text` and `selected_text`.
 
 # Import view
 
@@ -165,13 +165,13 @@ a custom form in `your_app.forms`. The form class has to be named
 The import view looks for templates using the `_import.html` suffix. It
 uses the `generic/generic_import.html` template as fallback, but you can
 use a custom template using your model name, so if your model is
-`myproject.Person` then you can use the `myproject/person_import.html`
+`myproject.Person`, you can use the `myproject/person_import.html`
 template to override the generic template.
 
 # Class, method and template lookup
 
 As mentioned above, APIS tries to find the correct class or method to
-override the ones the `generic` one ships. This is done using
+override the ones `generic` ships. This is done using
 [apis_core.generic.helpers.first_match_via_mro][]. The method does not only look for possible overrides using
 the name of the model itself, but also using all the parent models
 following the full inheritance chain. So if all your models inherit from
@@ -184,7 +184,7 @@ APIS provides the structure for easily importing data from external
 resources. One main component for this are `Importer` classes. They
 always belong to a Django model, reside in the same app as the Django
 model in the `importers` module and are named after the Django model. So
-if you have an app called `myapp` with a `models.py`
+if you have an app called `myapp` with the following `models.py`:
 
 ``` python
 class Person(models.Model):
@@ -199,8 +199,8 @@ The importers task is then to create a model instance from this URI,
 usually by fetching data from the URI, parsing it and extracting the
 needed fields. The instance should then be returned by the
 `create_instance` method of the importer. There is
-[apis_core.generic.importers.GenericModelImporter][] which you can inherit from. It is used by default of no
-other importer is defined for the model and it tries to do the right
+[apis_core.generic.importers.GenericModelImporter][] which you can inherit from. It is used by default if no
+other importer is defined for the model and tries to do the right
 thing out of the box: it first looks if there is an RDF configuration
 for the URI and if that fails tries to parse the URI response as JSON.
 
@@ -221,17 +221,17 @@ RDF-Import config files. Those RDF-Import config files are
 [TOML](https://toml.io/) configuration files. They have three main
 attributes, which are `filters`, `attributes` and `relations`.
 
-The `filters` attributes are key, value pairs that define filters that
+The `filters` attributes are key-value pairs that define filters that
 have to match on the input data. Multiple `filters` entries can be
-defined, only one of them has to match. Every `filters` entry can
-contain multiple key, value pairs, which ALL have to match:
+defined; only one of them has to match. Every `filters` entry can
+contain multiple key-value pairs, which ALL have to match:
 
 ``` toml
 [[filters]]
 "rdf:type" = "gndo:DifferentiatedPerson"
 ```
 
-The `attributes` config option lists key value pairs, which map keys
+The `attributes` config option lists key-value pairs which map keys
 (usually model attributes) to a single SPARQL query or a list of SPARQL
 queries. Instead of SPARQL it is also possible to simply write a compact
 URI which is then looked up in the graph that results from the data

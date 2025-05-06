@@ -23,7 +23,7 @@ TEI
 RDF
 
 :   [Resource Description Framework](https://www.w3.org/RDF/) is a
-    standard model for data interchange on the Web. In the context of
+    standard model for data interchange on the web. In the context of
     APIS, RDF is used to provide data in a machine-readable format via
     the API.
 
