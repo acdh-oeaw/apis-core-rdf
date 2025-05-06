@@ -4,7 +4,7 @@ title: Configuration
 
 # `APIS_BASE_URI`
 
-When you create an instance of an Entity a signal
+When you create an instance of an entity, a signal
 [apis_core.apis_entities.models.create_default_uri][] is triggered that tries to generate a canonical URI for
 the entity. The signal can be disabled by setting the
 `CREATE_DEFAULT_URI` setting to `False`. If the signal runs, it creates
@@ -13,13 +13,13 @@ the canonical URI from two parts. The first part comes from the
 `GetEntityGenericRoot` if that exists. If not, it uses the reverse
 route of `apis_core:GetEntityGeneric`, which is defined in
 [apis_core.urls][] and defaults to
-`/entity/{pk}`. If the value of `APIS_BASE_URI` changes and urls
+`/entity/{pk}`. If the value of `APIS_BASE_URI` changes and URLs
 containing the former `APIS_BASE_URI` remain in the database, then the
-old `APIS_BASE_URI` value must added to the setting
+old `APIS_BASE_URI` value must be added to the setting
 `APIS_FORMER_BASE_URIS`. `APIS_FORMER_BASE_URIS` is a list that contains
-base urls that were once used.
+base URLs that were once used.
 
-# Django Settings
+# Django settings
 
 This section deals with the internal configuration of APIS. For
 instructions on how to set it up please refer to
@@ -29,9 +29,9 @@ file of your Django project.
 
 ## REST_FRAMEWORK
 
-APIS uses the [Django
-Rest Framework](https://www.django-rest-framework.org/) for API
-provisioning. Rest Framework specific settings like the default page size
+APIS uses [Django
+REST framework](https://www.django-rest-framework.org/) for API
+provisioning. REST framework-specific settings like the default page size
 can be set here.
 
 ``` python
@@ -42,14 +42,14 @@ REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] = (
 
 Use the above default for allowing every user with permissions on a
 model to change all model instances. Set
-`"rest_framework.permissions.IsAuthenticated"` if every logged in user
+`"rest_framework.permissions.IsAuthenticated"` if every logged-in user
 should have all permissions.
 
 ``` python
 REST_FRAMEWORK["PAGE_SIZE"] = 50
 ```
 
-Sets the default page size the APIS RestAPI should deliver.
+Sets the default page size the APIS REST API should deliver.
 
 ## SPECTACULAR_SETTINGS
 
@@ -63,23 +63,23 @@ SPECTACULAR_SETTINGS["DEFAULT_GENERATOR_CLASS"] = 'apis_core.generic.generators.
 
 Background:
 
-The first reason is, that we are using a custom converter
+The first reason is that we are using a custom converter
 ([apis_core.generic.urls.ContenttypeConverter][]) to provide access to views and API views of different
-content types. The default endpoint generator of the drf-spectacular does
+content types. The default endpoint generator of drf-spectacular does
 not know about this converter and therefore sees the endpoints using
 this converter as *one* endpoint with one parameter called
 `contenttype`. That is not what we want, so we have to do our own
-enumeration -we iterate through all content types that inherit from
+enumeration: we iterate through all content types that inherit from
 `GenericModel` and create schema endpoints for those programmatically.
 
-The second reason is, that the `autoapi` schema generator of DRF
+The second reason is that the `autoapi` schema generator of DRF
 Spectacular and our
 [apis_core.generic.api_views.ModelViewSet][] don't work well together. Our ModelViewSet needs the
 dispatch method to set the model of the `ModelViewSet`, but this method
 is not being called by the generator while doing the inspection, which
 means the `ModelViewSet` does not know about the model it should work
 with and can not provide the correct serializer and filter classes.
-Therefore we create the callback for the endpoints by hand and set the
+Therefore, we create the callback for the endpoints by hand and set the
 model from there.
 
 ## APIS_BASE_URI
@@ -107,15 +107,15 @@ APIS_ANON_VIEWS_ALLOWED = False
 ```
 
 Sets whether list and detail views are accessible for anonymous (not
-logged in) users. If only a subset of the data should be exposed to the
+logged-in) users. If only a subset of the data should be exposed to the
 anonymous user, use [custom
 managers](https://docs.djangoproject.com/en/stable/topics/db/managers/#custom-managers).
 
-## Maintenance Middleware
+## Maintenance middleware
 
 APIS ships a maintenance middleware that you can use and activate to
 enable a maintenance mode in your project. Maintenance mode means that
-only superuser accounts can access the web interfaces, all other requests
+only superuser accounts can access the web interfaces; all other requests
 are being answered with a simple maintenance mode page (the
 `maintenance.html` template). To use the middleware, add
 
@@ -126,5 +126,5 @@ are being answered with a simple maintenance mode page (the
 to your `settings.MIDDLEWARE` list. To activate the maintenance mode
 once the middleware is enabled, simply create a file `apis_maintenance`
 in the directory the main Django process runs in. The path of the
-maintenance file can be changed in the settings:
+maintenance file can be changed in settings:
 `APIS_MAINTENANCE_FILE = "path of the file"`
