@@ -36,7 +36,7 @@ MIDDLEWARE = [
 
 The [apis_core.history.models.VersionMixin][] class is a mixin that can be added to any model to enable
 versioning. It adds a `history` property to the model that
-returns a `HistoricalRecords` instance. Additionally it
+returns a `HistoricalRecords` instance. Additionally, it
 allows to override the date of the revision by setting the
 `_history_date` property of the model instance. To activate
 versioning for a model, simply inherit from `VersionMixin`:
@@ -64,13 +64,13 @@ revisions of the model instance. It is also included in the
 accessed under
 `/apis/swagger/schema/swagger-ui/#/apis/apis_api_history_entity_edit_log_list`.
 
-## Management Commands
+## Management commands
 
 The APIS history plugin, based on `django-simple-history`,
 provides several management commands to help curate history objects.
 Here are some of the most useful commands:
 
-# 1. Populate History Tables
+# 1. Populate history tables
 
 ``` bash
 python manage.py populate_history --auto
@@ -82,7 +82,7 @@ models. It's particularly useful when you've added
 `--auto` flag applies the command to all tracked models, or
 you can specify a list of models instead.
 
-# 2. Clean Duplicate History Entries
+# 2. Clean duplicate history entries
 
 ``` bash
 python manage.py clean_duplicate_history --auto
@@ -94,7 +94,7 @@ This command removes duplicate history entries.
 changes were made. This command deletes history objects that are
 identical to the previous entry.
 
-# 3. Remove Old History Entries
+# 3. Remove old history entries
 
 ``` bash
 python manage.py clean_old_history --days 60 --auto
@@ -132,7 +132,7 @@ customize the model form to use the collection as choices for this
 field. Both approaches have pros and cons.
 
 There are a couple of templatetags that make working with collection
-easier, they all reside in the
+easier. They all reside in the
 [apis_core.collections.templatetags.apis_collections][] templatetag library. If you use them, you have to include
 [apis_core.collections.urls][] into your
 urls.py, for example like this:
@@ -151,7 +151,7 @@ The templatetags are:
 -   [apis_core.collections.templatetags.apis_collections.collection_toggle_by_id][]
 
 This templatetag takes the instance of an object and a collection (or,
-in the case of `_by_id` the id of a collection) and lets
+in the case of `_by_id`, the id of a collection) and lets
 the user create and remove the connection between this instance and the
 collection.
 
@@ -162,4 +162,4 @@ This templatetag provides a checkbox that enables a collection as
 instances will be added to this collection. This is implemented in
 [apis_core.collections.signals.add_to_session_collection][].
 To use this feature, [apis_core.history][] has to be enabled
-and the [crum.CurrentRequestUserMiddleware][] has to be added to the `MIDDLEWARE`
+and [crum.CurrentRequestUserMiddleware][] has to be added to `MIDDLEWARE`
