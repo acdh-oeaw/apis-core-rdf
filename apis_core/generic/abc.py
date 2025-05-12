@@ -14,12 +14,16 @@ from apis_core.generic.signals import (
     pre_duplicate,
     pre_merge_with,
 )
+from apis_core.generic.utils.typing import TypeCheckerMetaClass
 from apis_core.utils.settings import apis_base_uri, rdf_namespace_prefix
 
 logger = logging.getLogger(__name__)
 
 
 class GenericModel:
+    class GenericModelSettings(metaclass=TypeCheckerMetaClass):
+        collections: bool = True
+
     def __repr__(self):
         if id := getattr(self, "id", None):
             return super().__repr__() + f" (ID: {id})"
