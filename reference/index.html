@@ -1296,12 +1296,12 @@ a collection.</p>
                 content_type=content_type, collection__in=include
             ).values("object_id")
             if include:
-                q &amp;= Q(id__in=include_ids)
+                q &amp;= Q(pk__in=include_ids)
             exclude_ids = skoscollectioncontentobject.objects.filter(
                 content_type=content_type, collection__in=exclude
             ).values("object_id")
             if exclude:
-                q &amp;= ~Q(id__in=exclude_ids)
+                q &amp;= ~Q(pk__in=exclude_ids)
         except LookupError as e:
             logger.debug("Not filtering for collections: %s", e)
         return queryset.filter(q)</code></pre>
@@ -1443,13 +1443,13 @@ organization system reference. W3C recommendation (2009)."</p>
     def add(self, instance: object):
         content_type = ContentType.objects.get_for_model(instance)
         SkosCollectionContentObject.objects.get_or_create(
-            collection=self, content_type=content_type, object_id=instance.id
+            collection=self, content_type=content_type, object_id=instance.pk
         )
 
     def remove(self, instance: object):
         content_type = ContentType.objects.get_for_model(instance)
         SkosCollectionContentObject.objects.filter(
-            collection=self, content_type=content_type, object_id=instance.id
+            collection=self, content_type=content_type, object_id=instance.pk
         ).delete()
 
     @property
