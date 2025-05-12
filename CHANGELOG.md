@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.46.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.45.1...v0.46.0) (2025-05-12)
+
+
+### Features
+
+* **apis_entities:** add default title for abstractentity template ([78f775d](https://github.com/acdh-oeaw/apis-core-rdf/commit/78f775d4d8af6f2fc54be9dd92f349b97451a219))
+* **apis_entities:** introduce E53_PlaceCidocSerializer ([68f68be](https://github.com/acdh-oeaw/apis-core-rdf/commit/68f68bec7ff9893fbd2fd3b17b5448abf3735725))
+* **apis_entities:** introduce E74_GroupCidocSerializer ([226aff9](https://github.com/acdh-oeaw/apis-core-rdf/commit/226aff988d6c32ccb3805de166768cbb777c5bb8))
+* **core:** replace hardcoded bootstrap class with custom values ([c6e0b55](https://github.com/acdh-oeaw/apis-core-rdf/commit/c6e0b558722c9b268994e8977b24b87c0f457390)), closes [#1855](https://github.com/acdh-oeaw/apis-core-rdf/issues/1855)
+* **generic:** add `action` argument to serializer factory ([5fe6080](https://github.com/acdh-oeaw/apis-core-rdf/commit/5fe60809ff16ddfddc51da3a1e40365fc9822949))
+* **generic:** add default titles for detail and list templates ([0743ebd](https://github.com/acdh-oeaw/apis-core-rdf/commit/0743ebded0ce96e5093b885145225fef51b32f91))
+* **generic:** pass the action name to the serializer factory ([b7a356a](https://github.com/acdh-oeaw/apis-core-rdf/commit/b7a356a2f3de058a2cce2f19921e93c6e80918f0))
+* **history:** drop history version_tag field ([80f5398](https://github.com/acdh-oeaw/apis-core-rdf/commit/80f5398b8f55a50d29a5756c08ac4b5544016a81)), closes [#1843](https://github.com/acdh-oeaw/apis-core-rdf/issues/1843)
+
+
+### Bug Fixes
+
+* **apis_metainfo:** move method from utils to apis_metainfo.utils ([f7869f7](https://github.com/acdh-oeaw/apis-core-rdf/commit/f7869f7669c9e3d665984dee28323fcfd08e9ac9)), closes [#1816](https://github.com/acdh-oeaw/apis-core-rdf/issues/1816)
+* **collections:** filter by pk and not by id ([baa0da4](https://github.com/acdh-oeaw/apis-core-rdf/commit/baa0da4284791bfde3ee9672ec196540875711a8))
+* **collections:** use `.pk` instead of `.id` for collection mgmt ([c3c7654](https://github.com/acdh-oeaw/apis-core-rdf/commit/c3c76541b006d7d091225c20e68fd0e8613a4544))
+* **core:** drop the fallback for the title block ([12bcc38](https://github.com/acdh-oeaw/apis-core-rdf/commit/12bcc3807ec54609fda71250320c041b86e46e51)), closes [#1769](https://github.com/acdh-oeaw/apis-core-rdf/issues/1769)
+* **core:** fix text alignment in site footer ([ddfbfcc](https://github.com/acdh-oeaw/apis-core-rdf/commit/ddfbfccc2a119c3fc6544684c0060d10c48e32b4)), closes [#1856](https://github.com/acdh-oeaw/apis-core-rdf/issues/1856)
+* **generic:** make endpoint enumeration exclude more generic ([cce8851](https://github.com/acdh-oeaw/apis-core-rdf/commit/cce88512f1827158de7106b65f90a2f6ac9ff532))
+* **generic:** only run `.mro()` if model is an actual object ([e71177a](https://github.com/acdh-oeaw/apis-core-rdf/commit/e71177a08a1c7c976218a2692e037b0b4c3e62b7))
+* **history:** move css class from li element to a element ([3f31b5c](https://github.com/acdh-oeaw/apis-core-rdf/commit/3f31b5c146d980ccb7834e1b93c08928f163e9b9)), closes [#1812](https://github.com/acdh-oeaw/apis-core-rdf/issues/1812)
+* **relations:** only check for subj & obj in concrete subclasses ([7fc7495](https://github.com/acdh-oeaw/apis-core-rdf/commit/7fc74952fce1b490c614eb9e4291bd8fedb38c58)), closes [#1837](https://github.com/acdh-oeaw/apis-core-rdf/issues/1837)
+* **sample_project:** add migration for history tag removal ([96c508a](https://github.com/acdh-oeaw/apis-core-rdf/commit/96c508a28be6794ac24a6df21aaf9ab7855f44ee))
+
 ## [0.45.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.45.0...v0.45.1) (2025-04-30)
 
 
