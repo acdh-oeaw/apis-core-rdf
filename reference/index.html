@@ -3642,8 +3642,9 @@ def mro_paths(model):
     Create a list of MRO classes for a Django model
     """
     paths = []
-    for cls in filter(lambda x: x not in Model.mro(), model.mro()):
-        paths.append(cls.__module__.split(".")[:-1] + [cls.__name__])
+    if model is not None:
+        for cls in filter(lambda x: x not in Model.mro(), model.mro()):
+            paths.append(cls.__module__.split(".")[:-1] + [cls.__name__])
     return paths</code></pre>
             </details>
     </div>
