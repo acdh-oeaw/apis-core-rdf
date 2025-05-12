@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import redirect
+from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny
@@ -14,6 +15,9 @@ from apis_core.utils.filters import CustomSearchFilter
 class GetEntityGeneric(APIView):
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        responses=inline_serializer(name="GetEntityGenericSerializer", fields={})
+    )
     def get(self, request, pk):
         try:
             obj = RootObject.objects_inheritance.get_subclass(id=pk)
