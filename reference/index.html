@@ -6736,19 +6736,6 @@ the <code>first_member_match</code> helper.</p>
         self.assertEqual("Jane", pers.history.most_recent().forename)
         self.assertEqual("John", pers.history.earliest().forename)
 
-    def test_history_tag(self):
-        """Tests the version tag function."""
-        pers = self.Person.objects.get(forename="John")
-        pers.history.latest().set_version_tag("test_tag")
-        self.assertEqual(pers.history.latest().version_tag, "test_tag")
-        pers_history = pers.history.all()
-        self.assertEqual(pers_history.count(), 1)
-        self.assertEqual(pers_history[0].version_tag, "test_tag")
-        # test with TemTriple
-        pers2 = self.Person.objects.create(forename="Jane", surname="Doe")
-        pers2.history.latest().set_version_tag("test_tag")
-        self.assertEqual(pers2.history.latest().version_tag, "test_tag")
-
     def test_history_delete_entry(self):
         """Tests the deletion of an entry."""
         pers = self.Person.objects.get(forename="John")
@@ -6917,39 +6904,6 @@ the <code>first_member_match</code> helper.</p>
 <div class="doc doc-object doc-function">
 
 
-<h6 id="apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_tag" class="doc doc-heading">
-            <code class="highlight language-python">test_history_tag()</code>
-
-</h6>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Tests the version tag function.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>apis_core/history/tests/test_simple_history.py</code></summary>
-              <pre class="highlight"><code class="language-python">def test_history_tag(self):
-    """Tests the version tag function."""
-    pers = self.Person.objects.get(forename="John")
-    pers.history.latest().set_version_tag("test_tag")
-    self.assertEqual(pers.history.latest().version_tag, "test_tag")
-    pers_history = pers.history.all()
-    self.assertEqual(pers_history.count(), 1)
-    self.assertEqual(pers_history[0].version_tag, "test_tag")
-    # test with TemTriple
-    pers2 = self.Person.objects.create(forename="Jane", surname="Doe")
-    pers2.history.latest().set_version_tag("test_tag")
-    self.assertEqual(pers2.history.latest().version_tag, "test_tag")</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
 <h6 id="apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_m2m_save" class="doc doc-heading">
             <code class="highlight language-python">test_m2m_save()</code>
 
@@ -7059,20 +7013,9 @@ the <code>first_member_match</code> helper.</p>
     model = contenttype.model_class()
     instance = model.objects.get(id=pk)
     history_latest = instance.history.latest()
-    latest_version_list = [
-        int(x.replace("v", ""))
-        for x in instance.history.filter(version_tag__isnull=False).values_list(
-            "version_tag", flat=True
-        )
-    ]
     history_latest.history_id = None
     history_latest.history_date = timezone.now()
     history_latest.save()
-    if latest_version_list:
-        latest_version = max(latest_version_list)
-    else:
-        latest_version = 0
-    history_latest.set_version_tag(f"v{latest_version + 1}")
     return redirect(
         reverse(
             "apis_core:generic:detail",
