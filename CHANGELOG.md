@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.46.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.46.0...v0.46.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* **sample_project:** remove `version_tag` attribute from fixtures ([7656a59](https://github.com/acdh-oeaw/apis-core-rdf/commit/7656a5980f419a1ce45ca4bf7816ccb14d96909c))
+
 ## [0.46.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.45.1...v0.46.0) (2025-05-12)
 
 
