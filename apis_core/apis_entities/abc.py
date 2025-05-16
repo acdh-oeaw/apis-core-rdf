@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -43,10 +41,10 @@ class E21_Person(models.Model):
 
     @classmethod
     def rdf_configs(cls):
-        return [
-            Path(__file__).parent / "triple_configs/E21_PersonFromDNB.toml",
-            Path(__file__).parent / "triple_configs/E21_PersonFromWikidata.toml",
-        ]
+        return {
+            "https://d-nb.info/*|/.*.rdf": "E21_PersonFromDNB.toml",
+            "http://www.wikidata.org/*|/.*.rdf": "E21_PersonFromWikidata.toml",
+        }
 
     @classmethod
     def get_rdf_types(cls):
@@ -83,11 +81,11 @@ class E53_Place(models.Model):
 
     @classmethod
     def rdf_configs(cls):
-        return [
-            Path(__file__).parent / "triple_configs/E53_PlaceFromDNB.toml",
-            Path(__file__).parent / "triple_configs/E53_PlaceFromGeonames.toml",
-            Path(__file__).parent / "triple_configs/E53_PlaceFromWikidata.toml",
-        ]
+        return {
+            "https://d-nb.info/*|/.*.rdf": "E53_PlaceFromDNB.toml",
+            "https://sws.geonames.org/*|/.*.rdf*": "E53_PlaceFromGeonames.toml",
+            "http://www.wikidata.org/*|/.*.rdf": "E53_PlaceFromWikidata.toml",
+        }
 
     @classmethod
     def get_rdf_types(cls):
@@ -114,10 +112,10 @@ class E74_Group(models.Model):
 
     @classmethod
     def rdf_configs(cls):
-        return [
-            Path(__file__).parent / "triple_configs/E74_GroupFromDNB.toml",
-            Path(__file__).parent / "triple_configs/E74_GroupFromWikidata.toml",
-        ]
+        return {
+            "https://d-nb.info/*|/.*.rdf": "E74_GroupFromDNB.toml",
+            "http://www.wikidata.org/*|/.*.rdf": "E74_GroupFromWikidata.toml",
+        }
 
     @classmethod
     def get_rdf_types(cls):
