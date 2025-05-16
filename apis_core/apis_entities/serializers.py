@@ -23,8 +23,6 @@ class E21_PersonCidocSerializer(GenericModelCidocSerializer):
     def to_representation(self, instance):
         g = super().to_representation(instance)
 
-        g.add((self.instance_uri, RDF.type, CRM.E21_Person))
-
         if hasattr(instance, "forename"):
             forename_uri = URIRef(APPELLATION[f"forename_{instance.id}"])
             g.add(
@@ -68,17 +66,8 @@ class E53_PlaceCidocSerializer(GenericModelCidocSerializer):
     def to_representation(self, instance):
         g = super().to_representation(instance)
 
-        g.add((self.instance_uri, RDF.type, CRM.E53_Place))
         if instance.latitude is not None and instance.longitude is not None:
             literal_text = f"Point ( {instance.longitude:+} {instance.latitude:+} )"
             literal = Literal(literal_text, datatype=GEO.wktLiteral)
             g.add((self.instance_uri, CRM.P168_place_is_defined_by, literal))
-        return g
-
-
-class E74_GroupCidocSerializer(GenericModelCidocSerializer):
-    def to_representation(self, instance):
-        g = super().to_representation(instance)
-
-        g.add((self.instance_uri, RDF.type, CRM.E74_Group))
         return g
