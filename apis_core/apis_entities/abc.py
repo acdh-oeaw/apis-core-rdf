@@ -3,6 +3,8 @@ from pathlib import Path
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apis_core.generic.utils.rdf_namespace import CRM
+
 #########################
 # Abstract base classes #
 #########################
@@ -46,6 +48,10 @@ class E21_Person(models.Model):
             Path(__file__).parent / "triple_configs/E21_PersonFromWikidata.toml",
         ]
 
+    @classmethod
+    def get_rdf_types(cls):
+        return [CRM.E21_Person]
+
 
 class E53_Place(models.Model):
     """
@@ -83,6 +89,10 @@ class E53_Place(models.Model):
             Path(__file__).parent / "triple_configs/E53_PlaceFromWikidata.toml",
         ]
 
+    @classmethod
+    def get_rdf_types(cls):
+        return [CRM.E53_Place]
+
 
 class E74_Group(models.Model):
     label = models.CharField(
@@ -104,6 +114,10 @@ class E74_Group(models.Model):
             Path(__file__).parent / "triple_configs/E74_GroupFromDNB.toml",
             Path(__file__).parent / "triple_configs/E74_GroupFromWikidata.toml",
         ]
+
+    @classmethod
+    def get_rdf_types(cls):
+        return [CRM.E74_Group]
 
 
 class SimpleLabelModel(models.Model):
