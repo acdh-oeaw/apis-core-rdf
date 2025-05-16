@@ -290,7 +290,11 @@ listed on https://www.geonames.org/export/codes.html</p>
             Path(__file__).parent / "triple_configs/E53_PlaceFromDNB.toml",
             Path(__file__).parent / "triple_configs/E53_PlaceFromGeonames.toml",
             Path(__file__).parent / "triple_configs/E53_PlaceFromWikidata.toml",
-        ]</code></pre>
+        ]
+
+    @classmethod
+    def get_rdf_types(cls):
+        return [CRM.E53_Place]</code></pre>
               </details>
 
 
@@ -2349,6 +2353,10 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
     @classmethod
     def get_namespace_uri(cls):
         return apis_base_uri() + cls.get_listview_url()
+
+    @classmethod
+    def get_rdf_types(cls):
+        return []
 
     def get_edit_url(self):
         ct = ContentType.objects.get_for_model(self)
