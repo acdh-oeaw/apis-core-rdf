@@ -2,12 +2,14 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+import re
 import tomllib
 from collections import defaultdict
 from pathlib import Path
 
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.apps import apps
+from django.template.utils import get_app_template_dirs
 from rdflib import RDF, BNode, Graph, URIRef
 
 logger = logging.getLogger(__name__)
@@ -29,26 +31,64 @@ def resolve(obj, graph):
     return obj
 
 
-def find_matching_config(graph: Graph, models: list | None = None) -> dict | None:
+def load_path(path: str | Path) -> dict:
+    """
+    Load a tomlfile either from a path or from the directory
+    `triple_configs` in any of the app directories.
+    """
+    if isinstance(path, str):
+        files = [
+            directory / path for directory in get_app_template_dirs("triple_configs")
+        ]
+        files = list(filter(lambda file: file.exists(), files))
+        if files:
+            path = files[0]
+        else:
+            raise ValueError(f"Could not find {path}")
+    return tomllib.loads(Path(path).read_text())
+
+
+def find_regex_matching_configs(uri: str, models: list | None = None) -> dict | None:
+    """
+    Go through a list of models and return all the rdf configs
+    that are configured in those models that have a regex that
+    matches the given URI.
+    """
     models = models or apps.get_models()
     models_with_config = [model for model in models if hasattr(model, "rdf_configs")]
+    configs = []
     for model in models_with_config:
-        for path in model.rdf_configs():
-            config = tomllib.loads(Path(path).read_text())
-            for _filter in config.get("filters", [{None: None}]):
-                try:
-                    triples = []
-                    for predicate, obj in _filter.items():
-                        triples.append(
-                            (None, resolve(predicate, graph), resolve(obj, graph))
-                        )
-                    triples = [triple in graph for triple in triples]
-                    if all(triples):
-                        logger.debug("Using %s for parsing graph", path)
-                        config["model"] = model
-                        return config
-                except ValueError as e:
-                    logger.debug("Filter %s does not match: %s", _filter, e)
+        for regex, path in model.rdf_configs().items():
+            if re.match(regex, uri):
+                logger.debug(f"{uri} matched {regex}")
+                config = load_path(path)
+                config["path"] = path
+                config["model"] = model
+                configs.append(config)
+            else:
+                logger.debug(f"{uri} did not match {regex}")
+    return configs
+
+
+def find_graph_matching_config(graph: Graph, configs: list[dict] = []) -> dict | None:
+    """
+    Go through al list of RDF import configs and return the
+    ones that have filters defined that match the given graph.
+    """
+    for config in configs:
+        for _filter in config.get("filters", [{None: None}]):
+            try:
+                triples = []
+                for predicate, obj in _filter.items():
+                    triples.append(
+                        (None, resolve(predicate, graph), resolve(obj, graph))
+                    )
+                triples = [triple in graph for triple in triples]
+                if all(triples):
+                    logger.debug("Using %s for parsing graph", config["path"])
+                    return config
+            except ValueError as e:
+                logger.debug("Filter %s does not match: %s", _filter, e)
     return None
 
 
@@ -108,7 +148,9 @@ def get_something_from_uri(uri: str, models: list | None = None) -> dict | None:
     graph = Graph()
     graph.parse(uri)
 
-    if config := find_matching_config(graph, models):
+    configs = find_regex_matching_configs(uri, models)
+
+    if config := find_graph_matching_config(graph, configs):
         result = defaultdict(list)
         result["model"] = config["model"]
         result["relations"] = defaultdict(list)
