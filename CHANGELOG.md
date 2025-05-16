@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.47.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.46.1...v0.47.0) (2025-05-16)
+
+
+### Features
+
+* **apis_entities:** drop override that is now handled in generic ([4c978e3](https://github.com/acdh-oeaw/apis-core-rdf/commit/4c978e3ad7bdf3608ac6113dc885cf8431b67a04))
+* **apis_entities:** return rdf types for various base classes ([9b84773](https://github.com/acdh-oeaw/apis-core-rdf/commit/9b8477357a8200bb351f57e469d8c39ed04a4422))
+* **generic:** add a title string to all the generic templates ([046a63d](https://github.com/acdh-oeaw/apis-core-rdf/commit/046a63db0ccf7e8be89e50a869c30295ea4d3d4b))
+* **generic:** add skeleton method for returning rdf types ([f0d82c0](https://github.com/acdh-oeaw/apis-core-rdf/commit/f0d82c065f87f0fda68bf94b58aff4861927bafc))
+* **generic:** replace download list with a dropdown ([d622892](https://github.com/acdh-oeaw/apis-core-rdf/commit/d6228922d62df4c59e4f506b0b0d8e158257f90f))
+* **generic:** use instance rdf type list in generic cidoc serializer ([cd69425](https://github.com/acdh-oeaw/apis-core-rdf/commit/cd6942547a9013cf5d0e4b5950b74591e6cc1ee1))
+* **sample_project:** add LocaleMiddleware to the list of middlewares ([6e1de25](https://github.com/acdh-oeaw/apis-core-rdf/commit/6e1de2501e9cdbff23876befacd1c53793bf2de1)), closes [#1867](https://github.com/acdh-oeaw/apis-core-rdf/issues/1867)
+
+
+### Bug Fixes
+
+* **apis_entities:** use implizit one-off serializer for GetEntityGeneric ([3ccace8](https://github.com/acdh-oeaw/apis-core-rdf/commit/3ccace820af1b0f84a663e9dacf42101643c62c8))
+* **collections:** add missing translations for collections ([232e7ab](https://github.com/acdh-oeaw/apis-core-rdf/commit/232e7abd335271aea8ff73e5a4fa16e23ae2e353)), closes [#1857](https://github.com/acdh-oeaw/apis-core-rdf/issues/1857)
+
+
+### Documentation
+
+* fix grammar, spelling, punctuation ([2680e8f](https://github.com/acdh-oeaw/apis-core-rdf/commit/2680e8f417d922cd0d7fccdf342421fdda8b2d2c)), closes [#1752](https://github.com/acdh-oeaw/apis-core-rdf/issues/1752)
+
 ## [0.46.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.46.0...v0.46.1) (2025-05-14)
 
 
