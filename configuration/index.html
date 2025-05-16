@@ -98,7 +98,7 @@
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="1"><a href="#django-settings" class="nav-link">Django Settings</a>
+            <li class="nav-item" data-bs-level="1"><a href="#django-settings" class="nav-link">Django settings</a>
               <ul class="nav flex-column">
             <li class="nav-item" data-bs-level="2"><a href="#rest_framework" class="nav-link">REST_FRAMEWORK</a>
               <ul class="nav flex-column">
@@ -120,7 +120,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#maintenance-middleware" class="nav-link">Maintenance Middleware</a>
+            <li class="nav-item" data-bs-level="2"><a href="#maintenance-middleware" class="nav-link">Maintenance middleware</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -132,7 +132,7 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="apis_base_uri"><code>APIS_BASE_URI</code></h1>
-<p>When you create an instance of an Entity a signal
+<p>When you create an instance of an entity, a signal
 [apis_core.apis_entities.models.create_default_uri][] is triggered that tries to generate a canonical URI for
 the entity. The signal can be disabled by setting the
 <code>CREATE_DEFAULT_URI</code> setting to <code>False</code>. If the signal runs, it creates
@@ -141,21 +141,21 @@ the canonical URI from two parts. The first part comes from the
 <code>GetEntityGenericRoot</code> if that exists. If not, it uses the reverse
 route of <code>apis_core:GetEntityGeneric</code>, which is defined in
 <a class="autorefs autorefs-internal" title="urls" href="../reference/#apis_core.urls">apis_core.urls</a> and defaults to
-<code>/entity/{pk}</code>. If the value of <code>APIS_BASE_URI</code> changes and urls
+<code>/entity/{pk}</code>. If the value of <code>APIS_BASE_URI</code> changes and URLs
 containing the former <code>APIS_BASE_URI</code> remain in the database, then the
-old <code>APIS_BASE_URI</code> value must added to the setting
+old <code>APIS_BASE_URI</code> value must be added to the setting
 <code>APIS_FORMER_BASE_URIS</code>. <code>APIS_FORMER_BASE_URIS</code> is a list that contains
-base urls that were once used.</p>
-<h1 id="django-settings">Django Settings</h1>
+base URLs that were once used.</p>
+<h1 id="django-settings">Django settings</h1>
 <p>This section deals with the internal configuration of APIS. For
 instructions on how to set it up please refer to
 <a href="../installation/">installation</a>. All the settings described
 here are part of the Django settings and can be set in the <code>settings.py</code>
 file of your Django project.</p>
 <h2 id="rest_framework">REST_FRAMEWORK</h2>
-<p>APIS uses the <a href="https://www.django-rest-framework.org/">Django
-Rest Framework</a> for API
-provisioning. Rest Framework specific settings like the default page size
+<p>APIS uses <a href="https://www.django-rest-framework.org/">Django
+REST framework</a> for API
+provisioning. REST framework-specific settings like the default page size
 can be set here.</p>
 <pre><code class="language-python">REST_FRAMEWORK[&quot;DEFAULT_AUTHENTICATION_CLASSES&quot;] = (
     &quot;rest_framework.permissions.DjangoModelPermissions&quot;,
@@ -163,11 +163,11 @@ can be set here.</p>
 </code></pre>
 <p>Use the above default for allowing every user with permissions on a
 model to change all model instances. Set
-<code>"rest_framework.permissions.IsAuthenticated"</code> if every logged in user
+<code>"rest_framework.permissions.IsAuthenticated"</code> if every logged-in user
 should have all permissions.</p>
 <pre><code class="language-python">REST_FRAMEWORK[&quot;PAGE_SIZE&quot;] = 50
 </code></pre>
-<p>Sets the default page size the APIS RestAPI should deliver.</p>
+<p>Sets the default page size the APIS REST API should deliver.</p>
 <h2 id="spectacular_settings">SPECTACULAR_SETTINGS</h2>
 <p>We provide a custom schema generator for spectacular. It is meant as a
 drop in replacement for the <code>DEFAULT_GENERATOR_CLASS</code> of
@@ -175,22 +175,22 @@ drf-spectacular. You can use it like this:</p>
 <pre><code class="language-python">SPECTACULAR_SETTINGS[&quot;DEFAULT_GENERATOR_CLASS&quot;] = 'apis_core.generic.generators.CustomSchemaGenerator'
 </code></pre>
 <p>Background:</p>
-<p>The first reason is, that we are using a custom converter
+<p>The first reason is that we are using a custom converter
 (<a class="autorefs autorefs-internal" title="ContenttypeConverter" href="../reference/#apis_core.generic.urls.ContenttypeConverter">apis_core.generic.urls.ContenttypeConverter</a>) to provide access to views and API views of different
-content types. The default endpoint generator of the drf-spectacular does
+content types. The default endpoint generator of drf-spectacular does
 not know about this converter and therefore sees the endpoints using
 this converter as <em>one</em> endpoint with one parameter called
 <code>contenttype</code>. That is not what we want, so we have to do our own
-enumeration -we iterate through all content types that inherit from
+enumeration: we iterate through all content types that inherit from
 <code>GenericModel</code> and create schema endpoints for those programmatically.</p>
-<p>The second reason is, that the <code>autoapi</code> schema generator of DRF
+<p>The second reason is that the <code>autoapi</code> schema generator of DRF
 Spectacular and our
 <a class="autorefs autorefs-internal" title="ModelViewSet" href="../reference/#apis_core.generic.api_views.ModelViewSet">apis_core.generic.api_views.ModelViewSet</a> don't work well together. Our ModelViewSet needs the
 dispatch method to set the model of the <code>ModelViewSet</code>, but this method
 is not being called by the generator while doing the inspection, which
 means the <code>ModelViewSet</code> does not know about the model it should work
 with and can not provide the correct serializer and filter classes.
-Therefore we create the callback for the endpoints by hand and set the
+Therefore, we create the callback for the endpoints by hand and set the
 model from there.</p>
 <h2 id="apis_base_uri_1">APIS_BASE_URI</h2>
 <pre><code class="language-python">APIS_BASE_URI = &quot;https://your-url-goes-here.com&quot;
@@ -207,13 +207,13 @@ to the URL your production app is running on.</p>
 <pre><code class="language-python">APIS_ANON_VIEWS_ALLOWED = False
 </code></pre>
 <p>Sets whether list and detail views are accessible for anonymous (not
-logged in) users. If only a subset of the data should be exposed to the
+logged-in) users. If only a subset of the data should be exposed to the
 anonymous user, use <a href="https://docs.djangoproject.com/en/stable/topics/db/managers/#custom-managers">custom
 managers</a>.</p>
-<h2 id="maintenance-middleware">Maintenance Middleware</h2>
+<h2 id="maintenance-middleware">Maintenance middleware</h2>
 <p>APIS ships a maintenance middleware that you can use and activate to
 enable a maintenance mode in your project. Maintenance mode means that
-only superuser accounts can access the web interfaces, all other requests
+only superuser accounts can access the web interfaces; all other requests
 are being answered with a simple maintenance mode page (the
 <code>maintenance.html</code> template). To use the middleware, add</p>
 <pre><code class="language-python">&quot;apis_core.core.middleware.MaintenanceMiddleware&quot;
@@ -221,7 +221,7 @@ are being answered with a simple maintenance mode page (the
 <p>to your <code>settings.MIDDLEWARE</code> list. To activate the maintenance mode
 once the middleware is enabled, simply create a file <code>apis_maintenance</code>
 in the directory the main Django process runs in. The path of the
-maintenance file can be changed in the settings:
+maintenance file can be changed in settings:
 <code>APIS_MAINTENANCE_FILE = "path of the file"</code></p></div>
             </div>
         </div>

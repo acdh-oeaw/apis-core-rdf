@@ -107,7 +107,7 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<p>The heart and soul of your APIS application is the
+<p>The heart and soul of your APIS application is its
 <code>ontology</code>. It describes <code>entities</code> and <code>relations</code>.</p>
 <p>Given that APIS is based on <a href="https://www.djangoproject.com/">Django</a>,
 the file where we describe our entities and relations is the
@@ -130,31 +130,31 @@ class Person(AbstractEntity):
      name = models.CharField(blank=True, default=&quot;&quot;, max_length=1024)
 </code></pre>
 <p><a class="autorefs autorefs-internal" title="AbstractEntity" href="../reference/#apis_core.apis_entities.models.AbstractEntity">apis_core.apis_entities.models.AbstractEntity</a>
-brings some useful functionality for Entities, but it also
-itself inherits from
+brings some useful functionality to entities but also
+inherits from
 <a class="autorefs autorefs-internal" title="GenericModel" href="../reference/#apis_core.generic.abc.GenericModel">apis_core.generic.abc.GenericModel</a>,
 which means that as soon as you define your models and <a href="https://docs.djangoproject.com/en/stable/topics/migrations/">run
-migrations</a>
-your models will show up in the APIS Web interface in <code>Entities</code> menu in
-the top left corner. For every <code>entity</code> you defined there will be an overview
-page that lists all instances for that <code>entity</code>, as well as a form for
+migrations</a>,
+your models will show up in the APIS web interface in the <code>Entities</code> menu in
+the top left corner. For every <code>entity</code> you define, there will be an overview
+page that lists all instances for that <code>entity</code> as well as a form for
 creating, updating, merging and deleting entities.</p>
 <p><img alt="Image showing the APIS Entity menu with one item labeled Persons" src="img/ontology_entity_menu.png" /></p>
 <h1 id="relations">Relations</h1>
 <p>To use the relations module, you have to add it to your
 <code>INSTALLED_APPS</code>. The module includes templates that add the relation
 listing to templates from other <code>apis_core</code> modules, so we recommend to
-put the Relations module at the top of the apps list:</p>
+put the relations module at the top of the apps list:</p>
 <pre><code class="language-python">INSTALLED_APPS = [&quot;apis_core.relations&quot;] + INSTALLED_APPS
 </code></pre>
 <p>Relations have to inherit from
 [apis_core.relations.models.Relation][].
-You will have to set the attribute <code>subj_model</code> and
-<code>obj_model</code> which point to some Django model (can also be a
+You will have to set the attributes <code>subj_model</code> and
+<code>obj_model</code>, which each point to some Django model (can also be a
 list of Django models). The Django models can be specified by their
 class name or using the natural key of the model
 (<code>APP_NAME.MODEL_CLASS</code>).</p>
-<p>A simple Relation between a person and a place could look like this:</p>
+<p>A simple relation between a person and a place could look like this:</p>
 <pre><code class="language-python">from apis_core.relations.models import Relation
 
 class PersonLivedInPlace(Relation):
@@ -162,7 +162,7 @@ class PersonLivedInPlace(Relation):
      obj_model = &quot;other_app.place&quot; # defining the obj_model using the natural key notation
 </code></pre>
 <p>You can define the class methods <code>name</code> and
-<code>reverse_name</code> to provide human readable strings for your
+<code>reverse_name</code> to provide human-readable strings for your
 relation model. They default to the <code>verbose_name</code>
 (<code>name</code>) and the <code>verbose_name</code> with the string
 <code>reverse</code> appended (<code>reverse_name</code>).</p>

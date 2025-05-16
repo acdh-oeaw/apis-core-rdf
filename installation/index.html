@@ -116,11 +116,11 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<p>APIS-core is a library that allows you to easily build tools to manage
-prosopographical data. It is not a ready-made software solution that you
+<p>APIS Core is a library that allows you to easily build tools to manage
+prosopographical data. It is not a ready-made software solution that you can
 just deploy and start working. The typical workflow for starting an APIS
 project is as follows: set up the project, create an
-<code>ontology</code> customize the functionalities
+<code>ontology</code>, customize functionalities
 and views, and finally add your data. This section will guide you
 through the first step.</p>
 <h1 id="prerequisites">Prerequisites</h1>
@@ -183,33 +183,32 @@ through the first step.</p>
 on server infrastructure. For experimenting with APIS you can use the
 <a href="https://github.com/acdh-oeaw/apis-core-rdf/blob/main/Dockerfile">Docker file</a>
 provided in the APIS core library. It allows you to spin up an APIS
-instance using the sample-project shipped with the APIS core library. To
-start it start a terminal and run</p>
+instance using the sample project shipped with the APIS core library. To
+start it, start a terminal and run:</p>
 <ul>
 <li><code>cd path/to/apis-core-rdf</code> to change to the directory where the
-    Docker file is located.</li>
-<li><code>docker build -t apis .</code> to build the APIS image.</li>
+    Docker file is located,</li>
+<li><code>docker build -t apis .</code> to build the APIS image,</li>
 <li><code>docker run -p 5000:5000 apis</code> to start the container.</li>
 </ul>
 <p>The APIS instance should now be accessible under
 <a href="http://localhost:5000">http://localhost:5000</a>.</p>
-<p>Alternatively you can also use the docker image built for our
-demo-project. To do so run:</p>
+<p>Alternatively you can also use the Docker image built for our
+demo project. To do so run:</p>
 <ul>
 <li><code>docker run -p 5000:5000 ghcr.io/acdh-oeaw/apis-core-rdf/discworld/main:latest</code>
     to start the container.</li>
 </ul>
 <p>To use the image for local development you can mount your local APIS
-instance directory into the container, using the following command: To
-do so you can use the following command:</p>
+instance directory into the container using the following command:</p>
 <p><code>docker run -p 5000:5000 -v /path/to/your/apis_instance:/app apis</code></p>
 <p>Please note that you might need to install custom dependencies for the
-APIS instance in your local docker container.</p>
+APIS instance in your local Docker container.</p>
 <p>This container uses the Django development server and is not suitable
 for production use. Please see the next section for deploying APIS in
 production.</p>
 <h2 id="docker-compose">Docker Compose</h2>
-<p>In production APIS should be used together with an SQL database. The
+<p>In production, APIS should be used together with an SQL database. The
 simplest way to set that up is by using <a href="https://docs.docker.com/compose/">Docker
 Compose</a>. Below is an example of a
 <code>docker-compose.yml</code> file that sets up an APIS instance with a

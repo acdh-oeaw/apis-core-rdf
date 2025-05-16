@@ -107,24 +107,24 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#management-commands" class="nav-link">Management Commands</a>
+            <li class="nav-item" data-bs-level="2"><a href="#management-commands" class="nav-link">Management commands</a>
               <ul class="nav flex-column">
               </ul>
             </li>
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="1"><a href="#1-populate-history-tables" class="nav-link">1. Populate History Tables</a>
+            <li class="nav-item" data-bs-level="1"><a href="#1-populate-history-tables" class="nav-link">1. Populate history tables</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="1"><a href="#2-clean-duplicate-history-entries" class="nav-link">2. Clean Duplicate History Entries</a>
+            <li class="nav-item" data-bs-level="1"><a href="#2-clean-duplicate-history-entries" class="nav-link">2. Clean duplicate history entries</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="1"><a href="#3-remove-old-history-entries" class="nav-link">3. Remove Old History Entries</a>
+            <li class="nav-item" data-bs-level="1"><a href="#3-remove-old-history-entries" class="nav-link">3. Remove old history entries</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -164,7 +164,7 @@ activate the middleware, add
 <h2 id="versionmixin">VersionMixin</h2>
 <p>The [apis_core.history.models.VersionMixin][] class is a mixin that can be added to any model to enable
 versioning. It adds a <code>history</code> property to the model that
-returns a <code>HistoricalRecords</code> instance. Additionally it
+returns a <code>HistoricalRecords</code> instance. Additionally, it
 allows to override the date of the revision by setting the
 <code>_history_date</code> property of the model instance. To activate
 versioning for a model, simply inherit from <code>VersionMixin</code>:</p>
@@ -187,11 +187,11 @@ revisions of the model instance. It is also included in the
 <code>apis_core</code> API schema. The swagger documentation can be
 accessed under
 <code>/apis/swagger/schema/swagger-ui/#/apis/apis_api_history_entity_edit_log_list</code>.</p>
-<h2 id="management-commands">Management Commands</h2>
+<h2 id="management-commands">Management commands</h2>
 <p>The APIS history plugin, based on <code>django-simple-history</code>,
 provides several management commands to help curate history objects.
 Here are some of the most useful commands:</p>
-<h1 id="1-populate-history-tables">1. Populate History Tables</h1>
+<h1 id="1-populate-history-tables">1. Populate history tables</h1>
 <pre><code class="language-bash">python manage.py populate_history --auto
 </code></pre>
 <p>This command populates history tables with the current state of the
@@ -199,7 +199,7 @@ models. It's particularly useful when you've added
 <code>VersionMixin</code> to an existing model. The
 <code>--auto</code> flag applies the command to all tracked models, or
 you can specify a list of models instead.</p>
-<h1 id="2-clean-duplicate-history-entries">2. Clean Duplicate History Entries</h1>
+<h1 id="2-clean-duplicate-history-entries">2. Clean duplicate history entries</h1>
 <pre><code class="language-bash">python manage.py clean_duplicate_history --auto
 </code></pre>
 <p>This command removes duplicate history entries.
@@ -207,7 +207,7 @@ you can specify a list of models instead.</p>
 <code>save()</code> is called on an object, regardless of whether any
 changes were made. This command deletes history objects that are
 identical to the previous entry.</p>
-<h1 id="3-remove-old-history-entries">3. Remove Old History Entries</h1>
+<h1 id="3-remove-old-history-entries">3. Remove old history entries</h1>
 <pre><code class="language-bash">python manage.py clean_old_history --days 60 --auto
 </code></pre>
 <p>This command deletes history entries older than the specified number of
@@ -235,7 +235,7 @@ either use a [django.models.ForeignKey][] or use a
 customize the model form to use the collection as choices for this
 field. Both approaches have pros and cons.</p>
 <p>There are a couple of templatetags that make working with collection
-easier, they all reside in the
+easier. They all reside in the
 [apis_core.collections.templatetags.apis_collections][] templatetag library. If you use them, you have to include
 [apis_core.collections.urls][] into your
 urls.py, for example like this:</p>
@@ -251,7 +251,7 @@ urls.py, for example like this:</p>
 <li>[apis_core.collections.templatetags.apis_collections.collection_toggle_by_id][]</li>
 </ul>
 <p>This templatetag takes the instance of an object and a collection (or,
-in the case of <code>_by_id</code> the id of a collection) and lets
+in the case of <code>_by_id</code>, the id of a collection) and lets
 the user create and remove the connection between this instance and the
 collection.</p>
 <ul>
@@ -262,7 +262,7 @@ collection.</p>
 instances will be added to this collection. This is implemented in
 <a class="autorefs autorefs-internal" title="add_to_session_collection(sender, instance, created, raw, using, update_fields, **kwargs)" href="../reference/#apis_core.collections.signals.add_to_session_collection">apis_core.collections.signals.add_to_session_collection</a>.
 To use this feature, <a class="autorefs autorefs-internal" title="history" href="../reference/#apis_core.history">apis_core.history</a> has to be enabled
-and the [crum.CurrentRequestUserMiddleware][] has to be added to the <code>MIDDLEWARE</code></p></div>
+and [crum.CurrentRequestUserMiddleware][] has to be added to <code>MIDDLEWARE</code></p></div>
             </div>
         </div>
 

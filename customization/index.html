@@ -102,7 +102,7 @@
               </ul>
             </li>
             
-            <li class="nav-item" data-bs-level="1"><a href="#create-and-update-views" class="nav-link">Create and Update views</a>
+            <li class="nav-item" data-bs-level="1"><a href="#create-and-update-views" class="nav-link">Create and update views</a>
               <ul class="nav flex-column">
             <li class="nav-item" data-bs-level="2"><a href="#create-and-update-view-templates" class="nav-link">Create and update view templates</a>
               <ul class="nav flex-column">
@@ -148,12 +148,12 @@
 you can customize the views and the templates of the views that are
 shipped with APIS by injecting classes and methods that are then
 automatically used by the generic views. The core of the logic described
-here is based on the <a class="autorefs autorefs-internal" title="generic" href="../reference/#apis_core.generic">apis_core.generic</a>.
+here is based on <a class="autorefs autorefs-internal" title="generic" href="../reference/#apis_core.generic">apis_core.generic</a>.
 It provides generic CRUD views and API views for all models that are
 configured to use it. To make a model use the generic functionality, it
 has to inherit from
 <a class="autorefs autorefs-internal" title="GenericModel" href="../reference/#apis_core.generic.abc.GenericModel">apis_core.generic.abc.GenericModel</a>. In
-standard APIS those models are</p>
+standard APIS those models are:</p>
 <ul>
 <li><a class="autorefs autorefs-internal" title="RootObject" href="../reference/#apis_core.apis_metainfo.models.RootObject">apis_core.apis_metainfo.models.RootObject</a></li>
 <li><a class="autorefs autorefs-internal" title="Uri" href="../reference/#apis_core.apis_metainfo.models.Uri">apis_core.apis_metainfo.models.Uri</a></li>
@@ -168,7 +168,7 @@ you have a model <code>Person</code> in your <code>your_app.models</code> module
 the generic views for it. <code>/apis/your_app.historicalperson/</code> will be the
 URL for the list view of the historical model.
 <code>/apis/api/your_app.historicalperson/</code> for the API view.</p>
-<p>If you want to use the generic app for your own model, simple make your
+<p>If you want to use the generic app for your own model, simply make your
 model inherit from
 <a class="autorefs autorefs-internal" title="GenericModel" href="../reference/#apis_core.generic.abc.GenericModel">apis_core.generic.abc.GenericModel</a>.</p>
 <h1 id="list-views">List views</h1>
@@ -197,7 +197,7 @@ class in <code>your_app.tables</code>. The table class has to be named
 columns</a>
 that you might want to use.</p>
 <p>Your table can also contain a <code>paginate_by</code> attribute, which is then
-used by the list view to determines the number of items per page. When
+used by the list view to determine the number of items per page. When
 this is not set, the page size defaults to <code>25</code>. To disable pagination
 altogether, use <code>table_pagination = False</code>.</p>
 <p>The base queryset that is used in the list view, which is then filtered
@@ -213,18 +213,18 @@ the <code>generic/generic_list.html</code> template as fallback, but you can use
 custom template using your model name, so if your model is
 <code>myproject.Person</code> then you can use the <code>myproject/person_list.html</code>
 template to override the generic template.</p>
-<h1 id="create-and-update-views">Create and Update views</h1>
-<p>The create and update view use the form
-<a class="autorefs autorefs-internal" title="GenericModelForm" href="../reference/#apis_core.generic.forms.GenericModelForm">apis_core.generic.forms.GenericModelForm</a> by default. You can override the form it uses by creating
+<h1 id="create-and-update-views">Create and update views</h1>
+<p>The create and update views use the form
+<a class="autorefs autorefs-internal" title="GenericModelForm" href="../reference/#apis_core.generic.forms.GenericModelForm">apis_core.generic.forms.GenericModelForm</a> by default. You can override the form they use by creating
 a custom form in <code>your_app.forms</code>. The form class has to be named
 <code>&lt;Modelname&gt;Form</code>, so if you have a model <code>Person</code> in your app
 <code>myproject</code>, the view looks for the form class
 <code>myproject.forms.PersonForm</code>.</p>
 <h2 id="create-and-update-view-templates">Create and update view templates</h2>
-<p>The create and update views looks for templates using the <code>_form.html</code>
-suffix. It uses the <code>generic/generic_form.html</code> template as fallback,
+<p>The create and update views look for templates using the <code>_form.html</code>
+suffix. They use the <code>generic/generic_form.html</code> template as fallback,
 but you can use a custom template using your model name, so if your
-model is <code>myproject.Person</code> then you can use the
+model is <code>myproject.Person</code>, you can use the
 <code>myproject/person_form.html</code> template to override the generic template.</p>
 <h1 id="autocomplete-views">Autocomplete views</h1>
 <p>The autocomplete views filter your model instances based on a query
@@ -236,7 +236,7 @@ so if you have a model <code>Person</code> in your app <code>myproject</code>, t
 for the queryset <code>myproject.querysets.PersonAutocompleteQueryset</code>.</p>
 <p>The results of the autocomplete view can be themed using templates. The
 autocomplete view looks for templates using the
-<code>autocomplete_result.html</code> suffix, if no such template is found, the
+<code>autocomplete_result.html</code> suffix; if no such template is found, the
 string representation of the result is used. The autocomplete view uses
 the same template search function as for other templates, so if you have
 a model <code>myproject.Person</code> then you can use the
@@ -244,10 +244,10 @@ a model <code>myproject.Person</code> then you can use the
 <p>The results of the autocomplete view can be extended with additional
 results coming from another source (an external API or another
 queryset). The view looks for this function in <code>your_app.querysets</code> and
-it has to be named <code>&lt;Modelname&gt;ExternalAutocomplete</code>, so if you have a
+has to be named <code>&lt;Modelname&gt;ExternalAutocomplete</code>, so if you have a
 model <code>Person</code> in your app <code>myproject</code>, the view looks for the function
 in <code>myproject.querysets.PersonExternalAutocomplete</code>.</p>
-<p>Lets say you have an app called <code>myapp</code> with a <code>models.py</code></p>
+<p>Let's say you have an app called <code>myapp</code> with the following <code>models.py</code>:</p>
 <pre><code class="language-python">class Person(models.Model):
      name = models.CharField(max_length=255)
 </code></pre>
@@ -265,9 +265,9 @@ in <code>myproject.querysets.PersonExternalAutocomplete</code>.</p>
         return {}
 </code></pre>
 <p>The class has to have a <code>get_results</code> method that receives a query as
-the first parameter and returns a result in the format, the
+the first parameter and returns a result in the format the
 <a href="https://django-autocomplete-light.readthedocs.io/">django-autocomplete-light</a>
-module uses- this is a dict with the keys <code>id</code>, <code>text</code> and <code>selected_text</code>.</p>
+module uses - a dict with the keys <code>id</code>, <code>text</code> and <code>selected_text</code>.</p>
 <h1 id="import-view">Import view</h1>
 <p>The import view uses the form
 [apis_core.generic.forms.GenericImportForm][] by default. You can override the form it uses by creating
@@ -279,11 +279,11 @@ a custom form in <code>your_app.forms</code>. The form class has to be named
 <p>The import view looks for templates using the <code>_import.html</code> suffix. It
 uses the <code>generic/generic_import.html</code> template as fallback, but you can
 use a custom template using your model name, so if your model is
-<code>myproject.Person</code> then you can use the <code>myproject/person_import.html</code>
+<code>myproject.Person</code>, you can use the <code>myproject/person_import.html</code>
 template to override the generic template.</p>
 <h1 id="class-method-and-template-lookup">Class, method and template lookup</h1>
 <p>As mentioned above, APIS tries to find the correct class or method to
-override the ones the <code>generic</code> one ships. This is done using
+override the ones <code>generic</code> ships. This is done using
 [apis_core.generic.helpers.first_match_via_mro][]. The method does not only look for possible overrides using
 the name of the model itself, but also using all the parent models
 following the full inheritance chain. So if all your models inherit from
@@ -294,7 +294,7 @@ your models by creating a <code>myproject.tables.MyAbstractModelTable</code>.</p
 resources. One main component for this are <code>Importer</code> classes. They
 always belong to a Django model, reside in the same app as the Django
 model in the <code>importers</code> module and are named after the Django model. So
-if you have an app called <code>myapp</code> with a <code>models.py</code></p>
+if you have an app called <code>myapp</code> with the following <code>models.py</code>:</p>
 <pre><code class="language-python">class Person(models.Model):
      name = models.CharField(max_length=255)
 </code></pre>
@@ -305,8 +305,8 @@ The importers task is then to create a model instance from this URI,
 usually by fetching data from the URI, parsing it and extracting the
 needed fields. The instance should then be returned by the
 <code>create_instance</code> method of the importer. There is
-<a class="autorefs autorefs-internal" title="GenericModelImporter" href="../reference/#apis_core.generic.importers.GenericModelImporter">apis_core.generic.importers.GenericModelImporter</a> which you can inherit from. It is used by default of no
-other importer is defined for the model and it tries to do the right
+<a class="autorefs autorefs-internal" title="GenericModelImporter" href="../reference/#apis_core.generic.importers.GenericModelImporter">apis_core.generic.importers.GenericModelImporter</a> which you can inherit from. It is used by default if no
+other importer is defined for the model and tries to do the right
 thing out of the box: it first looks if there is an RDF configuration
 for the URI and if that fails tries to parse the URI response as JSON.</p>
 <p>To use this logic in forms, there is
@@ -323,14 +323,14 @@ module looks at all the existing models and uses the models
 RDF-Import config files. Those RDF-Import config files are
 <a href="https://toml.io/">TOML</a> configuration files. They have three main
 attributes, which are <code>filters</code>, <code>attributes</code> and <code>relations</code>.</p>
-<p>The <code>filters</code> attributes are key, value pairs that define filters that
+<p>The <code>filters</code> attributes are key-value pairs that define filters that
 have to match on the input data. Multiple <code>filters</code> entries can be
-defined, only one of them has to match. Every <code>filters</code> entry can
-contain multiple key, value pairs, which ALL have to match:</p>
+defined; only one of them has to match. Every <code>filters</code> entry can
+contain multiple key-value pairs, which ALL have to match:</p>
 <pre><code class="language-toml">[[filters]]
 &quot;rdf:type&quot; = &quot;gndo:DifferentiatedPerson&quot;
 </code></pre>
-<p>The <code>attributes</code> config option lists key value pairs, which map keys
+<p>The <code>attributes</code> config option lists key-value pairs which map keys
 (usually model attributes) to a single SPARQL query or a list of SPARQL
 queries. Instead of SPARQL it is also possible to simply write a compact
 URI which is then looked up in the graph that results from the data
