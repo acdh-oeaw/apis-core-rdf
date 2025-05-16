@@ -57,6 +57,10 @@ class GenericModel:
     def get_namespace_uri(cls):
         return apis_base_uri() + cls.get_listview_url()
 
+    @classmethod
+    def get_rdf_types(cls):
+        return []
+
     def get_edit_url(self):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:update", args=[ct, self.id])
