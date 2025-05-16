@@ -180,6 +180,9 @@ class GenericModelCidocSerializer(BaseSerializer):
         )
         g.add((self.appellation_uri, RDFS.label, Literal(str(instance))))
         g.add((self.instance_uri, RDFS.label, Literal(str(instance))))
+        # Add RDF types
+        for rdf_type in instance.get_rdf_types():
+            g.add((self.instance_uri, RDF.type, rdf_type))
         # Add sameAs links
         g = self.create_sameas(g, instance)
 
