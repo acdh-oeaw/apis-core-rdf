@@ -8,13 +8,14 @@ from apis_core.apis_metainfo.utils import create_object_from_uri
 class ModelImportChoiceField(ModelChoiceField):
     def to_python(self, value):
         result = None
-        try:
-            result = create_object_from_uri(value, self.queryset.model)
-        except Exception as e:
-            raise ValidationError(
-                _("Could not import %(value)s: %(exception)s"),
-                params={"value": value, "exception": e},
-            )
+        if value:
+            try:
+                result = create_object_from_uri(value, self.queryset.model)
+            except Exception as e:
+                raise ValidationError(
+                    _("Could not import %(value)s: %(exception)s"),
+                    params={"value": value, "exception": e},
+                )
         return result or super().to_python(value)
 
 
