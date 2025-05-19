@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.47.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.47.0...v0.47.1) (2025-05-19)
+
+
+### Bug Fixes
+
+* **generic:** only include title block once ([25f525b](https://github.com/acdh-oeaw/apis-core-rdf/commit/25f525b2d2e377e496b12e42987c4eb258c49230))
+
 ## [0.47.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.46.1...v0.47.0) (2025-05-16)
 
 
