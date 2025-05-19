@@ -93,6 +93,10 @@ class E53_Place(models.Model):
     def get_rdf_types(cls):
         return [CRM.E53_Place]
 
+    @classmethod
+    def create_from_string(cls, string):
+        return cls.objects.create(label=string)
+
 
 class E74_Group(models.Model):
     label = models.CharField(
@@ -118,6 +122,10 @@ class E74_Group(models.Model):
     @classmethod
     def get_rdf_types(cls):
         return [CRM.E74_Group]
+
+    @classmethod
+    def create_from_string(cls, string):
+        return cls.objects.create(label=string)
 
 
 class SimpleLabelModel(models.Model):
