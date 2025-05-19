@@ -1,8 +1,5 @@
-{% load core %}
-{% with object|opts as opts %}
-  {% if object.get_listview_url %}
-    <a href="{{ object.get_listview_url }}"><small>{{ opts.verbose_name_plural }}</small></a>
-  {% else %}
-    <small>{{ opts.verbose_name_plural }}</small>
-  {% endif %}
-{% endwith %}
+{% if object.get_listview_url %}
+  <a href="{{ object.get_listview_url }}"><small>{{ object.get_verbose_name_plural }}</small></a>
+{% else %}
+  <small>{{ object.get_verbose_name_plural }}</small>
+{% endif %}
