@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load generic %}
-{% load core %}
 {% load i18n %}
 {% load static %}
 
@@ -27,10 +26,8 @@
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         {% for content_type in content_types %}
           {% if content_type.model_class.get_view_permission in perms %}
-            {% with content_type.model_class|opts as meta %}
-              <a class="dropdown-item"
-                 href="{{ content_type.model_class.get_listview_url }}">{{ meta.verbose_name_plural|capfirst }}</a>
-            {% endwith %}
+            <a class="dropdown-item"
+               href="{{ content_type.model_class.get_listview_url }}">{{ content_type.model_class.get_verbose_name_plural|capfirst }}</a>
           {% endif %}
         {% endfor %}
       </div>
