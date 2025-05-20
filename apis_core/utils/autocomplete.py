@@ -1,7 +1,7 @@
 import json
 import logging
 
-import requests
+import httpx
 from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
@@ -19,13 +19,13 @@ class ExternalAutocomplete:
     add external autocomplete search results.
     """
 
-    session = requests.Session()
+    client = httpx.Client()
     adapters = []
 
     def get_results(self, q):
         results = []
         for adapter in self.adapters:
-            results.extend(adapter.get_results(q, self.session))
+            results.extend(adapter.get_results(q, self.client))
         return results
 
 
@@ -87,7 +87,7 @@ class TypeSenseAutocompleteAdapter(ExternalAutocompleteAdapter):
         )
         return False
 
-    def get_results(self, q, session=requests.Session()):
+    def get_results(self, q, client=httpx.Client()):
         headers = {"X-TYPESENSE-API-KEY": self.token}
         res = None
         if self.token and self.server:
@@ -95,14 +95,14 @@ class TypeSenseAutocompleteAdapter(ExternalAutocompleteAdapter):
                 # if there is only on collection configured, we hit that collection directly
                 case str() as collection:
                     url = f"{self.server}/collections/{collection}/documents/search?q={q}&query_by=description&query_by=label"
-                    res = session.get(url, headers=headers)
+                    res = client.get(url, headers=headers)
                 # if there are multiple collections configured, we use the `multi_search` endpoint
                 case list() as collectionlist:
                     url = f"{self.server}/multi_search?q={q}&query_by=description&query_by=label"
                     data = {"searches": []}
                     for collection in collectionlist:
                         data["searches"].append({"collection": collection})
-                    res = session.post(url, data=json.dumps(data), headers=headers)
+                    res = client.post(url, data=json.dumps(data), headers=headers)
                 case unknown:
                     logger.error("Don't know what to do with collection %s", unknown)
 
@@ -136,10 +136,10 @@ class LobidAutocompleteAdapter(ExternalAutocompleteAdapter):
             "selected_text": self.get_result_label(res),
         }
 
-    def get_results(self, q, session=requests.Session()):
+    def get_results(self, q, client=httpx.Client()):
         endpoint = "https://lobid.org/gnd/search?"
         self.params["q"] = q
-        res = session.get(endpoint, params=self.params)
+        res = client.get(endpoint, params=self.params)
         if res:
             return list(filter(bool, map(self.extract, res.json())))
         return []
