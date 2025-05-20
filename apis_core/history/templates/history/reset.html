@@ -1,0 +1,22 @@
+{% extends basetemplate|default:"base.html" %}
+{% load i18n %}
+
+{% block title %}
+  {% blocktranslate with object=object.instance.history.most_recent %}Confirm reset of {{ object }}{% endblocktranslate %}
+{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <div class="text-center mt-4">
+      <form action="" method="post">
+        {% csrf_token %}
+        <h4>
+          {% blocktranslate with object=object.instance.history.most_recent date=object.history_date %}Confirm reset of {{ object }} to the version from {{ date }}{% endblocktranslate %}:
+        </h4>
+        <input class="btn btn-danger"
+               type="submit"
+               value="{% translate "Yes, reset" %}" />
+      </form>
+    </div>
+  </div>
+{% endblock content %}

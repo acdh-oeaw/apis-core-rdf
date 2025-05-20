@@ -30,4 +30,9 @@ urlpatterns = [
         GenericHistoryLog.as_view(),
         name="generichistorylog",
     ),
+    path(
+        "<contenttype:contenttype>/<int:pk>/reset",
+        views.HistoryReset.as_view(),
+        name="reset",
+    ),
 ]
