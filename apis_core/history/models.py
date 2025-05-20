@@ -50,6 +50,10 @@ class APISHistoryTableBase(models.Model, GenericModel):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:detail", args=[ct, self.history_id])
 
+    def get_reset_url(self):
+        ct = ContentType.objects.get_for_model(self)
+        return reverse("apis_core:history:reset", args=[ct, self.history_id])
+
     def get_diff(self, other_version=None):
         if self.history_type == "-":
             return None
