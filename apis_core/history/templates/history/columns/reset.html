@@ -1,0 +1,6 @@
+{% load i18n %}
+{% if record.instance.history.first != record %}
+  <a title="{% translate "reset" %}"
+     href="{{ record.get_reset_url }}"
+     class="object-delete"><span class="material-symbols-outlined">undo</span></a>
+{% endif %}
