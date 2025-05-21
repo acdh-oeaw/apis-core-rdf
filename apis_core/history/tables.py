@@ -1,6 +1,6 @@
 import django_tables2 as tables
 
-from apis_core.generic.tables import CustomTemplateColumn, ViewColumn
+from apis_core.generic.tables import ActionColumn, CustomTemplateColumn, ViewColumn
 
 
 class DescriptionColumnHistory(CustomTemplateColumn):
@@ -22,6 +22,15 @@ class OriginalIDColumn(CustomTemplateColumn):
     verbose_name = "Original ID"
 
 
+class ResetColumn(ActionColumn):
+    """
+    A column showing a reset button
+    """
+
+    template_name = "history/columns/reset.html"
+    permission = "change"
+
+
 class APISHistoryTableBaseTable(tables.Table):
     history_id = tables.Column(verbose_name="ID")
     original_id = OriginalIDColumn()
@@ -39,6 +48,7 @@ class HistoryGenericTable(tables.Table):
     fields_changed = tables.TemplateColumn(
         template_name="history/columns/fields_changed.html"
     )
+    reset = ResetColumn()
 
     class Meta:
         fields = [

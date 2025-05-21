@@ -1,8 +1,10 @@
 from django.contrib.contenttypes.models import ContentType
+from django.forms import Form
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import BaseDetailView, DetailView
+from django.views.generic.edit import FormView
 from django_tables2 import SingleTableMixin
 from django_tables2.tables import table_factory
 
@@ -41,3 +43,15 @@ def create_new_version(request, contenttype, pk):
             ],
         )
     )
+
+
+class HistoryReset(GenericModelMixin, BaseDetailView, FormView):
+    form_class = Form
+    template_name = "history/reset.html"
+
+    def form_valid(self, form):
+        self.get_object().instance.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.get_object().instance.get_history_url()
