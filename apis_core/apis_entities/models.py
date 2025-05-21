@@ -4,12 +4,14 @@ import re
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
 from django.db.models.base import ModelBase
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import NoReverseMatch, reverse
 
-from apis_core.apis_metainfo.models import RootObject, Uri
+from apis_core.apis_metainfo.models import Uri
+from apis_core.generic.abc import GenericModel
 from apis_core.utils.settings import apis_base_uri
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
@@ -33,37 +35,71 @@ class AbstractEntityModelBase(ModelBase):
             return new_class
 
 
-class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
-    """
-    Abstract super class which encapsulates common logic between the
-    different entity kinds and provides various methods relating to either
-    all or one specific entity kind.
+#class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
+#    """
+#    Abstract super class which encapsulates common logic between the
+#    different entity kinds and provides various methods relating to either
+#    all or one specific entity kind.
+#
+#    Most of the class methods are designed to be used in the subclass as they
+#    are considering contexts which depend on the subclass entity type.
+#    So they are to be understood in that dynamic context.
+#    """
+#
+#    class Meta:
+#        abstract = True
+#
+#    @classmethod
+#    def get_or_create_uri(cls, uri):
+#        uri = str(uri)
+#        try:
+#            if re.match(r"^[0-9]*$", uri):
+#                p = cls.objects.get(pk=uri)
+#            else:
+#                p = cls.objects.get(uri__uri=uri)
+#            return p
+#        except Exception as e:
+#            print("Found no object corresponding to given uri." + e)
+#            return False
+#
+#    # TODO
+#    @classmethod
+#    def get_entity_list_filter(cls):
+#        return None
+#
+#    @functools.cached_property
+#    def get_prev_id(self):
+#        if NEXT_PREV:
+#            prev_instance = (
+#                type(self)
+#                .objects.filter(id__lt=self.id)
+#                .order_by("-id")
+#                .only("id")
+#                .first()
+#            )
+#            if prev_instance is not None:
+#                return prev_instance.id
+#        return False
+#
+#    @functools.cached_property
+#    def get_next_id(self):
+#        if NEXT_PREV:
+#            next_instance = (
+#                type(self)
+#                .objects.filter(id__gt=self.id)
+#                .order_by("id")
+#                .only("id")
+#                .first()
+#            )
+#            if next_instance is not None:
+#                return next_instance.id
+#        return False
 
-    Most of the class methods are designed to be used in the subclass as they
-    are considering contexts which depend on the subclass entity type.
-    So they are to be understood in that dynamic context.
-    """
+
+class AbstractEntity(models.Model, GenericModel, metaclass=AbstractEntityModelBase):
 
     class Meta:
-        abstract = True
-
-    @classmethod
-    def get_or_create_uri(cls, uri):
-        uri = str(uri)
-        try:
-            if re.match(r"^[0-9]*$", uri):
-                p = cls.objects.get(pk=uri)
-            else:
-                p = cls.objects.get(uri__uri=uri)
-            return p
-        except Exception as e:
-            print("Found no object corresponding to given uri." + e)
-            return False
-
-    # TODO
-    @classmethod
-    def get_entity_list_filter(cls):
-        return None
+        db_table = "entities_entity"
 
     @functools.cached_property
     def get_prev_id(self):

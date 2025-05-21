@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
 from apis_core.apis_entities.utils import get_entity_content_types
-from apis_core.apis_metainfo.models import RootObject
+from apis_core.apis_entities.models import AbstractEntity
 from apis_core.generic.helpers import generate_search_filter
 from apis_core.generic.views import List
 
@@ -44,13 +44,13 @@ class EntitiesAutocomplete(autocomplete.Select2QuerySetView):
         if not entities:
             entities = get_entity_content_types()
         for content_type in entities:
-            name = RootObject.objects_inheritance.get_queryset()._get_ancestors_path(
+            name = AbstractEntity.objects_inheritance.get_queryset()._get_ancestors_path(
                 content_type.model_class()
             )
             q |= Q(**{f"{name}__isnull": False}) & generate_search_filter(
                 content_type.model_class(), self.q, prefix=f"{name}__"
             )
-        return RootObject.objects_inheritance.select_subclasses().filter(q)
+        return AbstractEntity.objects_inheritance.select_subclasses().filter(q)
 
 
 class E53_PlaceMap(List):

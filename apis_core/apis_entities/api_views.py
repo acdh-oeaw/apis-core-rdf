@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from apis_core.apis_entities.serializers import MinimalEntitySerializer
 from apis_core.apis_entities.utils import get_entity_classes
-from apis_core.apis_metainfo.models import RootObject
+from apis_core.apis_entities.models import AbstractEntity
 from apis_core.utils.filters import CustomSearchFilter
 
 
@@ -20,9 +20,9 @@ class GetEntityGeneric(APIView):
     )
     def get(self, request, pk):
         try:
-            obj = RootObject.objects_inheritance.get_subclass(id=pk)
+            obj = AbstractEntity.objects_inheritance.get_subclass(id=pk)
             return redirect(obj.get_api_detail_endpoint())
-        except RootObject.DoesNotExist:
+        except AbstractEntity.DoesNotExist:
             raise NotFound
 
 
@@ -36,4 +36,4 @@ class ListEntityGeneric(ListAPIView):
         q = Q()
         for entity in entities:
             q |= Q(**{f"{entity}__isnull": False})
-        return RootObject.objects_inheritance.select_subclasses().filter(q)
+        return AbstractEntity.objects_inheritance.select_subclasses().filter(q)

@@ -13,14 +13,14 @@ from apis_core.utils import rdf
 from apis_core.utils import settings as apis_settings
 
 
-class RootObject(GenericModel, models.Model):
-    """
-    The very root thing that can exist in a given ontology. Several classes inherit from it.
-    By having one overarching super class we gain the advantage of unique identifiers.
-    """
-
-    objects = models.Manager()
-    objects_inheritance = InheritanceManager()
+#class RootObject(GenericModel, models.Model):
+#    """
+#    The very root thing that can exist in a given ontology. Several classes inherit from it.
+#    By having one overarching super class we gain the advantage of unique identifiers.
+#    """
+#
+#    objects = models.Manager()
+#    objects_inheritance = InheritanceManager()
 
 
 # Uri model
