@@ -111,12 +111,12 @@ class GenericModelCidocSerializer(BaseSerializer):
 
     def create_sameas(self, g, instance):
         # add the ID as APIS Identifier
-        apis_id = URIRef(ATTRIBUTES[f"apis-identifier/{instance.pk}"])
+        apis_id = URIRef(ATTRIBUTES[f"apis-identifier_{instance.pk}"])
         g.add((apis_id, RDF.type, CRM.E42_Identifier))
         g.add((apis_id, RDFS.label, Literal(instance.pk)))
 
         # APIS internal identifier type
-        apis_id_type = URIRef(ATTRIBUTES["apis-identifier/type"])
+        apis_id_type = URIRef(ATTRIBUTES["apis-identifier_type"])
         g.add((apis_id, CRM.P2_has_type, apis_id_type))
         g.add((apis_id_type, RDF.type, CRM.E55_Type))
         g.add((apis_id_type, RDFS.label, Literal("APIS internal identifier")))
@@ -127,11 +127,11 @@ class GenericModelCidocSerializer(BaseSerializer):
 
             for x in get_rules():
                 if m := re.match(x["match"], uri.uri):
-                    id_type = URIRef(ATTRIBUTES[x["name"] + "-identifier/type"])
+                    id_type = URIRef(ATTRIBUTES[x["name"] + "-identifier_type"])
                     g.add((id_type, RDF.type, CRM.E55_Type))
                     g.add((id_type, RDFS.label, Literal(x["name"] + " ID")))
                     id_uri = URIRef(
-                        ATTRIBUTES[x["name"] + f"-identifier/{instance.pk}"]
+                        ATTRIBUTES[x["name"] + f"-identifier_{instance.pk}"]
                     )
                     g.add((id_uri, RDF.type, CRM.E42_Identifier))
                     g.add((id_uri, CRM.P2_has_type, id_type))
