@@ -144,10 +144,9 @@ class List(
 
         # we look at the selected columns and exclude
         # all modelfields that are not part of that list
-        selected_columns = self.request.GET.getlist(
-            "columns",
-            self.get_filterset(self.get_filterset_class()).form["columns"].initial,
-        )
+        form = self.get_filterset(self.get_filterset_class()).form
+        initial = form.fields["columns"].initial if "columns" in form.fields else []
+        selected_columns = self.request.GET.getlist("columns", initial)
         modelfields = self.model._meta.get_fields()
         kwargs["exclude"] = [
             field.name for field in modelfields if field.name not in selected_columns
@@ -213,12 +212,13 @@ class List(
         columns_exclude = filterset.form.columns_exclude
 
         # we inject a `columns` selector in the beginning of the form
-        columns = forms.MultipleChoiceField(
-            required=False,
-            choices=self._get_columns_choices(columns_exclude),
-            initial=self._get_columns_initial(columns_exclude),
-        )
-        filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
+        if choices := self._get_columns_choices(columns_exclude):
+            columns = forms.MultipleChoiceField(
+                required=False,
+                choices=choices,
+                initial=self._get_columns_initial(columns_exclude),
+            )
+            filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
 
         return filterset
 
