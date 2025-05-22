@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                         parent_link=True,
                         primary_key=True,
                         serialize=False,
-                        to="apis_metainfo.rootobject",
+                        to="apis_entities.rootobject",
                     ),
                 ),
                 ("label", models.CharField(blank=True, default="", max_length=4096)),
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
             options={
                 "abstract": False,
             },
-            bases=("apis_metainfo.rootobject", models.Model),
+            bases=("apis_entities.rootobject", models.Model),
         ),
         migrations.CreateModel(
             name="Place",
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
                         parent_link=True,
                         primary_key=True,
                         serialize=False,
-                        to="apis_metainfo.rootobject",
+                        to="apis_entities.rootobject",
                     ),
                 ),
                 ("label", models.CharField(blank=True, default="", max_length=4096)),
@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
             options={
                 "abstract": False,
             },
-            bases=("apis_metainfo.rootobject", models.Model),
+            bases=("apis_entities.rootobject", models.Model),
         ),
         migrations.CreateModel(
             name="Profession",
@@ -89,7 +89,7 @@ class Migration(migrations.Migration):
                         parent_link=True,
                         primary_key=True,
                         serialize=False,
-                        to="apis_metainfo.rootobject",
+                        to="apis_entities.rootobject",
                     ),
                 ),
                 ("forename", models.CharField(blank=True, default="", max_length=4096)),
@@ -105,7 +105,7 @@ class Migration(migrations.Migration):
             options={
                 "abstract": False,
             },
-            bases=("apis_metainfo.rootobject", models.Model),
+            bases=("apis_entities.rootobject", models.Model),
         ),
         migrations.CreateModel(
             name="VersionGroup",
@@ -120,7 +120,7 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.DO_NOTHING,
                         parent_link=True,
                         related_name="+",
-                        to="apis_metainfo.rootobject",
+                        to="apis_entities.rootobject",
                     ),
                 ),
                 (
@@ -191,7 +191,7 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.DO_NOTHING,
                         parent_link=True,
                         related_name="+",
-                        to="apis_metainfo.rootobject",
+                        to="apis_entities.rootobject",
                     ),
                 ),
                 (
@@ -314,7 +314,7 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.DO_NOTHING,
                         parent_link=True,
                         related_name="+",
-                        to="apis_metainfo.rootobject",
+                        to="apis_entities.rootobject",
                     ),
                 ),
                 (
