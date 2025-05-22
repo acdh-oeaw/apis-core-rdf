@@ -1,6 +1,7 @@
 from django import template
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
 from apis_core.core.templatetags.core import get_model_fields
@@ -26,11 +27,12 @@ def modeldict(instance, fields=None, exclude=None):
         if exclude and f.name in exclude:
             continue
         field = instance._meta.get_field(f.name)
-        data[field] = getattr(instance, field.name)
+        try:
+            data[field] = getattr(instance, field.name)
+        except ObjectDoesNotExist as e:
+            data[field] = f"{field.value_from_object(instance)} ({e})"
         if fn := getattr(instance, f"get_{field.name}_display", False):
             data[field] = fn()
-        if getattr(field, "remote_field", False):
-            data[field] = getattr(instance, field.name)
         if getattr(field, "m2m_field_name", False):
             values = getattr(instance, field.name).all()
             data[field] = ", ".join([str(value) for value in values])
