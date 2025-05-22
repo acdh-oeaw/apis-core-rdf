@@ -16,11 +16,6 @@ urlpatterns = [
         name="history",
     ),
     path(
-        "add_new_version/<contenttype:contenttype>/<int:pk>/",
-        views.create_new_version,
-        name="add_new_history_version",
-    ),
-    path(
         "api/version_log/<contenttype:contenttype>/<int:pk>/",
         EntityHistoryLogs.as_view(),
         name="entityhistorylog",

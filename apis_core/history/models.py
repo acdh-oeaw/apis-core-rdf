@@ -95,10 +95,6 @@ class VersionMixin(models.Model):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:history:history", args=[ct, self.id])
 
-    def get_create_version_url(self):
-        ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:history:add_new_history_version", args=[ct, self.id])
-
     def _get_historical_relations(self):
         ret = []
         if "apis_core.relations" in settings.INSTALLED_APPS:
