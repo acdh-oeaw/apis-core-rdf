@@ -3,8 +3,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
+from apis_core.apis_entities.models import RootObject
 from apis_core.apis_entities.utils import get_entity_content_types
-from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.helpers import generate_search_filter
 from apis_core.generic.views import List
 

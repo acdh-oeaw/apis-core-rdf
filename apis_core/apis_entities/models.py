@@ -4,12 +4,15 @@ import re
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
 from django.db.models.base import ModelBase
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import NoReverseMatch, reverse
+from model_utils.managers import InheritanceManager
 
-from apis_core.apis_metainfo.models import RootObject, Uri
+from apis_core.apis_metainfo.models import Uri
+from apis_core.generic.abc import GenericModel
 from apis_core.utils.settings import apis_base_uri
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
@@ -31,6 +34,19 @@ class AbstractEntityModelBase(ModelBase):
                 )
 
             return new_class
+
+
+class RootObject(GenericModel, models.Model):
+    """
+    The very root thing that can exist in a given ontology. Several classes inherit from it.
+    By having one overarching super class we gain the advantage of unique identifiers.
+    """
+
+    objects = models.Manager()
+    objects_inheritance = InheritanceManager()
+
+    class Meta:
+        db_table = "apis_metainfo_rootobject"
 
 
 class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):

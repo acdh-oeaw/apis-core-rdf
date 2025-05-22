@@ -6,22 +6,10 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
-from model_utils.managers import InheritanceManager
 
 from apis_core.generic.abc import GenericModel
 from apis_core.utils import rdf
 from apis_core.utils import settings as apis_settings
-
-
-class RootObject(GenericModel, models.Model):
-    """
-    The very root thing that can exist in a given ontology. Several classes inherit from it.
-    By having one overarching super class we gain the advantage of unique identifiers.
-    """
-
-    objects = models.Manager()
-    objects_inheritance = InheritanceManager()
-
 
 # Uri model
 # We use a custom UriManager, so we can override the queryset `get`

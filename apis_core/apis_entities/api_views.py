@@ -6,9 +6,9 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
+from apis_core.apis_entities.models import RootObject
 from apis_core.apis_entities.serializers import MinimalEntitySerializer
 from apis_core.apis_entities.utils import get_entity_classes
-from apis_core.apis_metainfo.models import RootObject
 from apis_core.utils.filters import CustomSearchFilter
 
 
