@@ -44,11 +44,11 @@ class RdfTest(TestCase):
     def test_get_definition_from_dict_person_from_dnb(self):
         pierre = {
             "forename": [
+                "Pierre",
                 "Pʹer",
                 "Rudolf",
                 "Rodolphe",
                 "...",
-                "Pierre",
             ],
             "surname": ["Ramus", "Großmann", "Grossmann", "Grossman", "Libertarian"],
             "alternative_names": [
