@@ -26,6 +26,8 @@ def resolve(obj, graph):
         if obj.startswith("<") and obj.endswith(">"):
             return URIRef(obj[1:-1])
         return graph.namespace_manager.expand_curie(obj)
+    if isinstance(obj, bool) and obj is True:
+        return None
     return obj
 
 
