@@ -294,7 +294,11 @@ listed on https://www.geonames.org/export/codes.html</p>
 
     @classmethod
     def get_rdf_types(cls):
-        return [CRM.E53_Place]</code></pre>
+        return [CRM.E53_Place]
+
+    @classmethod
+    def create_from_string(cls, string):
+        return cls.objects.create(label=string)</code></pre>
               </details>
 
 
