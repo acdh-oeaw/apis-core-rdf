@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.48.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.47.1...v0.48.0) (2025-06-04)
+
+
+### Features
+
+* **apis_entities:** add `create_from_string` methods ([b013ac4](https://github.com/acdh-oeaw/apis-core-rdf/commit/b013ac4b213aff0b7529d6cfd1216963b81e9c38)), closes [#1872](https://github.com/acdh-oeaw/apis-core-rdf/issues/1872)
+* **apis_entities:** update rdf_configs for regex based matching ([32eaed1](https://github.com/acdh-oeaw/apis-core-rdf/commit/32eaed121acba7322896781718a4aa61375bd82a)), closes [#1257](https://github.com/acdh-oeaw/apis-core-rdf/issues/1257)
+* **apis_entities:** use `get_verbose_name_plural` method instead filter ([31f4861](https://github.com/acdh-oeaw/apis-core-rdf/commit/31f4861af4960545e1248c3eab3ee5fef0c7c7e9))
+* **deps:** replace `requests` with `httpx` ([278b87e](https://github.com/acdh-oeaw/apis-core-rdf/commit/278b87e12d2ddbc4529caecc293a6960629c7d27)), closes [#1040](https://github.com/acdh-oeaw/apis-core-rdf/issues/1040)
+* **generic:** add `get_verbose_name_plural` method to GenericModel ([f264a97](https://github.com/acdh-oeaw/apis-core-rdf/commit/f264a97c5ebb282fb749d5f59bc3384f244aa7a3))
+* **generic:** only show columns selector if there are columns to select ([d076708](https://github.com/acdh-oeaw/apis-core-rdf/commit/d0767082bfc577f1aa7023deaade1960cb60f49d))
+* **generic:** use `get_verbose_name_plural` method instead of filter ([52aaefc](https://github.com/acdh-oeaw/apis-core-rdf/commit/52aaefce6dbfdf613ec814fceb2e23ac3339d656))
+* **history:** add `get_reset_url` helper method to history models ([27dcdf0](https://github.com/acdh-oeaw/apis-core-rdf/commit/27dcdf01a9138a5c4f1f81a545f264083b47f4af))
+* **history:** add a link to the reset view to the history table ([4550876](https://github.com/acdh-oeaw/apis-core-rdf/commit/455087673b389661dd525ee42abae56764f6109e))
+* **history:** introduce view to reset object to a history version ([5097096](https://github.com/acdh-oeaw/apis-core-rdf/commit/5097096c335420f3ff6f2bccee3f6f7f83f4b33c)), closes [#283](https://github.com/acdh-oeaw/apis-core-rdf/issues/283)
+* **history:** use history queryset for views ([ae5fecd](https://github.com/acdh-oeaw/apis-core-rdf/commit/ae5fecd44b71d1971e62ce31ee46ea46ae6fa31f))
+* **sample_project:** compile translations on startup ([c30d185](https://github.com/acdh-oeaw/apis-core-rdf/commit/c30d185bb4a2ca29b0d909bdca25445816d8d52b))
+* **utils:** refactor rdf config to use regex for uri matching ([ab7813f](https://github.com/acdh-oeaw/apis-core-rdf/commit/ab7813f423d09a9096e7618bc0909cf226cb818e))
+
+
+### Bug Fixes
+
+* **apis_entities:** drop `tag version` link from entity actions ([c9cfcab](https://github.com/acdh-oeaw/apis-core-rdf/commit/c9cfcaba1551962d1c8ccf26c04cda67f61f7e4f))
+* **apis_entities:** reorder label & select place label using languages ([5101da1](https://github.com/acdh-oeaw/apis-core-rdf/commit/5101da1a7168894f28f216bb870d1318b5b7f03a)), closes [#1863](https://github.com/acdh-oeaw/apis-core-rdf/issues/1863)
+* **apis_entities:** reorder name sources and also use variantName ([c76f8a1](https://github.com/acdh-oeaw/apis-core-rdf/commit/c76f8a1b668c8474688070013c6d846274d89c01)), closes [#1903](https://github.com/acdh-oeaw/apis-core-rdf/issues/1903)
+* **generic:** catch ObjectDoesNotExist for remote fields ([d8ffaed](https://github.com/acdh-oeaw/apis-core-rdf/commit/d8ffaedb364237fc72b3f0291e71d05b9b3b3d93))
+* **generic:** fix typo in rdf APPELLATION namespace ([e729ee0](https://github.com/acdh-oeaw/apis-core-rdf/commit/e729ee0a504ab61fec67f27205ba88251f620199))
+* **generic:** replace slashes with underscores in ATTRIBUTES ids ([4439b6d](https://github.com/acdh-oeaw/apis-core-rdf/commit/4439b6d0a0de0ec4c5296d18b9b223eca10a973d)), closes [#1876](https://github.com/acdh-oeaw/apis-core-rdf/issues/1876)
+* **generic:** use plural form in result header ([089dce1](https://github.com/acdh-oeaw/apis-core-rdf/commit/089dce101d2c4f421fd493cf7005dcc11e300515)), closes [#1874](https://github.com/acdh-oeaw/apis-core-rdf/issues/1874)
+* **utils:** when resolving, also handle boolean `True` value ([05f6a6b](https://github.com/acdh-oeaw/apis-core-rdf/commit/05f6a6b9746b23b5fb3c46b7c147e8d4d8527ba9)), closes [#1905](https://github.com/acdh-oeaw/apis-core-rdf/issues/1905)
+
 ## [0.47.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.47.0...v0.47.1) (2025-05-19)
 
 
