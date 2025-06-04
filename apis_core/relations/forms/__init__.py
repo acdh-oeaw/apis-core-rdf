@@ -114,8 +114,8 @@ class RelationForm(GenericModelForm):
         if instance := kwargs.get("instance"):
             self.subj_instance = instance.subj
             self.obj_instance = instance.obj
-            subj_object_id = instance.subj.id
-            obj_object_id = instance.obj.id
+            subj_object_id = getattr(instance.subj, "id", None)
+            obj_object_id = getattr(instance.obj, "id", None)
         else:
             if subj_content_type and subj_object_id:
                 model = get_object_or_404(ContentType, pk=subj_content_type)
@@ -146,6 +146,7 @@ class RelationForm(GenericModelForm):
                     + "?create=True",
                 )
                 self.fields["subj"].widget.choices = self.fields["subj"].choices
+                self.fields["subj"].required = False
             else:
                 """ If we don't know the content type, we use a generic autocomplete
                 field that autocompletes any content type the relation can have as a
@@ -182,6 +183,7 @@ class RelationForm(GenericModelForm):
                     + "?create=True",
                 )
                 self.fields["obj"].widget.choices = self.fields["obj"].choices
+                self.fields["obj"].required = False
             else:
                 """ If we don't know the content type, we use a generic autocomplete
                 field that autocompletes any content type the relation can have as a
@@ -236,9 +238,9 @@ class RelationForm(GenericModelForm):
             )
             cleaned_data["obj_object_id"] = obj_object_id
             del cleaned_data["obj_ct_and_id"]
-        if "subj" in cleaned_data:
+        if cleaned_data.get("subj", None):
             cleaned_data["subj_object_id"] = cleaned_data.pop("subj").id
-        if "obj" in cleaned_data:
+        if cleaned_data.get("obj", None):
             cleaned_data["obj_object_id"] = cleaned_data.pop("obj").id
         return cleaned_data
 
