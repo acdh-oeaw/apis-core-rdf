@@ -78,9 +78,9 @@ class APISHistoryTableBase(models.Model, GenericModel):
             return None
         version = other_version or self.prev_record
         if version:
-            delta = self.diff_against(version)
+            delta = self.diff_against(version, foreign_keys_are_objs=True)
         else:
-            delta = self.diff_against(self.__class__())
+            delta = self.diff_against(self.__class__(), foreign_keys_are_objs=True)
         changes = list(
             filter(
                 lambda x: (x.new != "" or x.old is not None)
