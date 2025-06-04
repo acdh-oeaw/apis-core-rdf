@@ -9298,6 +9298,8 @@ Otherwise we simply return the value</p>
         if obj.startswith("&lt;") and obj.endswith("&gt;"):
             return URIRef(obj[1:-1])
         return graph.namespace_manager.expand_curie(obj)
+    if isinstance(obj, bool) and obj is True:
+        return None
     return obj</code></pre>
             </details>
     </div>
