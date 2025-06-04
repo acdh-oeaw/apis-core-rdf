@@ -1,3 +1,4 @@
+import dataclasses
 import inspect
 from typing import Any
 
@@ -50,14 +51,32 @@ class APISHistoryTableBase(models.Model, GenericModel):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:detail", args=[ct, self.history_id])
 
+    def _flatten_modelchange_many_to_many(self, obj: Any) -> Any:
+        """
+        The `.diff_against` method of the `HistoricalChanges` model represent
+        changes in many-to-many fields as lists of dicts. Those dicts contain
+        a mapping of the model names to the model instances (i.e.
+        {'person': <Person1>, 'profession': <Profession2>}).
+        To make this a bit more readable, we flatten the dicts to one dict
+        containing a mapping between the model instance string representation
+        and the string representations of the connected model instances.
+        """
+        if isinstance(obj, list) and all(isinstance(el, dict) for el in obj):
+            ret = []
+            for el in obj:
+                key, val = el.values()
+                ret.append(str(val))
+            return ret
+        return obj
+
     def get_diff(self, other_version=None):
         if self.history_type == "-":
             return None
         version = other_version or self.prev_record
         if version:
-            delta = self.diff_against(version)
+            delta = self.diff_against(version, foreign_keys_are_objs=True)
         else:
-            delta = self.diff_against(self.__class__())
+            delta = self.diff_against(self.__class__(), foreign_keys_are_objs=True)
         changes = list(
             filter(
                 lambda x: (x.new != "" or x.old is not None)
@@ -66,7 +85,18 @@ class APISHistoryTableBase(models.Model, GenericModel):
                 delta.changes,
             )
         )
-        return sorted(changes, key=lambda change: change.field)
+        # The changes consist of `ModelChange` classes, which are frozen
+        # To flatten the many-to-many representation of those ModelChanges
+        # we use a separate list containing the changed values
+        newchanges = []
+        for change in changes:
+            change = dataclasses.replace(
+                change,
+                old=self._flatten_modelchange_many_to_many(change.old),
+                new=self._flatten_modelchange_many_to_many(change.new),
+            )
+            newchanges.append(change)
+        return sorted(newchanges, key=lambda change: change.field)
 
 
 class VersionMixin(models.Model):
