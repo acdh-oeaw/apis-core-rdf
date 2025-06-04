@@ -286,11 +286,11 @@ listed on https://www.geonames.org/export/codes.html</p>
 
     @classmethod
     def rdf_configs(cls):
-        return [
-            Path(__file__).parent / "triple_configs/E53_PlaceFromDNB.toml",
-            Path(__file__).parent / "triple_configs/E53_PlaceFromGeonames.toml",
-            Path(__file__).parent / "triple_configs/E53_PlaceFromWikidata.toml",
-        ]
+        return {
+            "https://d-nb.info/*|/.*.rdf": "E53_PlaceFromDNB.toml",
+            "https://sws.geonames.org/*|/.*.rdf*": "E53_PlaceFromGeonames.toml",
+            "http://www.wikidata.org/*|/.*.rdf": "E53_PlaceFromWikidata.toml",
+        }
 
     @classmethod
     def get_rdf_types(cls):
@@ -9192,6 +9192,128 @@ The value of <code>shorten</code> defines if long parts of strings that contains
 
     logger.debug("Generated SPARQL query: %s", query)
     return query</code></pre>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="apis_core.utils.rdf.find_graph_matching_config" class="doc doc-heading">
+            <code class="highlight language-python">find_graph_matching_config(graph, configs=[])</code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Go through al list of RDF import configs and return the
+ones that have filters defined that match the given graph.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>apis_core/utils/rdf.py</code></summary>
+              <pre class="highlight"><code class="language-python">def find_graph_matching_config(graph: Graph, configs: list[dict] = []) -&gt; dict | None:
+    """
+    Go through al list of RDF import configs and return the
+    ones that have filters defined that match the given graph.
+    """
+    for config in configs:
+        for _filter in config.get("filters", [{None: None}]):
+            try:
+                triples = []
+                for predicate, obj in _filter.items():
+                    triples.append(
+                        (None, resolve(predicate, graph), resolve(obj, graph))
+                    )
+                triples = [triple in graph for triple in triples]
+                if all(triples):
+                    logger.debug("Using %s for parsing graph", config["path"])
+                    return config
+            except ValueError as e:
+                logger.debug("Filter %s does not match: %s", _filter, e)
+    return None</code></pre>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="apis_core.utils.rdf.find_regex_matching_configs" class="doc doc-heading">
+            <code class="highlight language-python">find_regex_matching_configs(uri, models=None)</code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Go through a list of models and return all the rdf configs
+that are configured in those models that have a regex that
+matches the given URI.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>apis_core/utils/rdf.py</code></summary>
+              <pre class="highlight"><code class="language-python">def find_regex_matching_configs(uri: str, models: list | None = None) -&gt; dict | None:
+    """
+    Go through a list of models and return all the rdf configs
+    that are configured in those models that have a regex that
+    matches the given URI.
+    """
+    models = models or apps.get_models()
+    models_with_config = [model for model in models if hasattr(model, "rdf_configs")]
+    configs = []
+    for model in models_with_config:
+        for regex, path in model.rdf_configs().items():
+            if re.match(regex, uri):
+                logger.debug(f"{uri} matched {regex}")
+                config = load_path(path)
+                config["path"] = path
+                config["model"] = model
+                configs.append(config)
+            else:
+                logger.debug(f"{uri} did not match {regex}")
+    return configs</code></pre>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="apis_core.utils.rdf.load_path" class="doc doc-heading">
+            <code class="highlight language-python">load_path(path)</code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Load a tomlfile either from a path or from the directory
+<code>triple_configs</code> in any of the app directories.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>apis_core/utils/rdf.py</code></summary>
+              <pre class="highlight"><code class="language-python">def load_path(path: str | Path) -&gt; dict:
+    """
+    Load a tomlfile either from a path or from the directory
+    `triple_configs` in any of the app directories.
+    """
+    if isinstance(path, str):
+        files = [
+            directory / path for directory in get_app_template_dirs("triple_configs")
+        ]
+        files = list(filter(lambda file: file.exists(), files))
+        if files:
+            path = files[0]
+        else:
+            raise ValueError(f"Could not find {path}")
+    return tomllib.loads(Path(path).read_text())</code></pre>
             </details>
     </div>
 
