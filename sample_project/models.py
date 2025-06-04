@@ -7,7 +7,7 @@ from apis_core.history.models import VersionMixin
 from apis_core.relations.models import Relation
 
 
-class Profession(GenericModel, models.Model):
+class Profession(VersionMixin, GenericModel, models.Model):
     name = models.CharField(blank=True, default="", max_length=1024)
 
     def __str__(self):
