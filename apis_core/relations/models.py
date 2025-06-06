@@ -5,6 +5,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Case, When
 from django.db.models.base import ModelBase
 from model_utils.managers import InheritanceManager
 
@@ -27,6 +28,22 @@ class RelationManager(InheritanceManager):
         )
         logger.debug("Created relation %s between %s and %s", rel.name(), subj, obj)
         return rel
+
+    def to_content_type_with_targets(self, content_type):
+        """
+        Return the queryset annotated with the target content type
+        and object id, based on the content_type that is passed.
+        """
+        return self.annotate(
+            target_content_type=Case(
+                When(subj_content_type=content_type, then="obj_content_type"),
+                default="subj_content_type",
+            ),
+            target_id=Case(
+                When(subj_content_type=content_type, then="obj_object_id"),
+                default="subj_object_id",
+            ),
+        )
 
 
 # This ModelBase is simply there to check if the needed attributes
