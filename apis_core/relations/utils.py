@@ -98,3 +98,21 @@ def get_all_relation_subj_and_obj() -> list[ContentType]:
         related_models.update(rel.model_class().subj_list())
         related_models.update(rel.model_class().obj_list())
     return [ContentType.objects.get_for_model(item) for item in related_models]
+
+
+@functools.cache
+def get_relation_targets_from_model(model) -> list[ContentType]:
+    """
+    Return all the ContentTypes of the models that are somehow connected
+    to the model passed as an argument.
+    """
+    relations = relation_content_types(any_model=model)
+    types = set()
+    for relation in [relation.model_class() for relation in relations]:
+        if model in relation.obj_list():
+            types.update(relation.subj_list())
+        if model in relation.subj_list():
+            types.update(relation.obj_list())
+    return sorted(
+        list(map(ContentType.objects.get_for_model, types)), key=lambda x: x.name
+    )
