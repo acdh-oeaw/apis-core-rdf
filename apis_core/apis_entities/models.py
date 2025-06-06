@@ -1,12 +1,16 @@
 import functools
 import logging
 import re
+from collections import defaultdict
 
 from django.conf import settings
+from django.db.models import Case, Q, When
 from django.db.models.base import ModelBase
 from django.urls import NoReverseMatch, reverse
 
 from apis_core.apis_metainfo.models import RootObject
+from apis_core.relations.models import Relation
+from apis_core.relations.utils import get_relation_targets_from_model
 from apis_core.utils.settings import apis_base_uri
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
@@ -97,3 +101,30 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
             route = reverse("apis_core:GetEntityGeneric", kwargs={"pk": self.pk})
         base = apis_base_uri().strip("/")
         return f"{base}{route}"
+
+    @classmethod
+    def get_facets(cls, queryset):
+        facets = defaultdict(dict)
+        if getattr(cls, "enable_facets", False):
+            for ct in get_relation_targets_from_model(cls):
+                facetname = "relation_to_" + ct.name
+                rels = Relation.objects.filter(
+                    Q(obj_content_type=ct.id, subj_object_id__in=queryset)
+                    | Q(subj_content_type=ct.id, obj_object_id__in=queryset)
+                )
+                rels = rels.annotate(
+                    target=Case(
+                        When(**{"obj_content_type": ct.id, "then": "obj_object_id"}),
+                        When(**{"subj_content_type": ct.id, "then": "subj_object_id"}),
+                    )
+                )
+                related_ids = [x.target for x in rels]
+                instances = ct.model_class().objects.filter(pk__in=related_ids)
+
+                for obj in instances:
+                    related_ids = [x for x in rels if x.target == obj.id]
+                    facets[facetname][obj.id] = {
+                        "name": str(obj),
+                        "count": len(set(related_ids)),
+                    }
+        return facets
