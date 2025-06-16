@@ -313,7 +313,7 @@ class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
 
 
 class Duplicate(GenericModelMixin, PermissionRequiredMixin, View):
-    permission_action_required = "create"
+    permission_action_required = "add"
 
     def get(self, request, *args, **kwargs):
         source_obj = get_object_or_404(self.model, pk=kwargs["pk"])
@@ -435,7 +435,7 @@ class SelectMergeOrEnrich(GenericModelMixin, PermissionRequiredMixin, FormView):
     """
 
     template_name_suffix = "_selectmergeorenrich"
-    permission_action_required = "create"
+    permission_action_required = "add"
     form_class = GenericSelectMergeOrEnrichForm
 
     def get_object(self, *args, **kwargs):
