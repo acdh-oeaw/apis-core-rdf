@@ -4,7 +4,6 @@ from dal import autocomplete
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.http import urlencode
 
@@ -116,17 +115,6 @@ class RelationForm(GenericModelForm):
             self.obj_instance = instance.obj
             subj_object_id = getattr(instance.subj, "id", None)
             obj_object_id = getattr(instance.obj, "id", None)
-        else:
-            if subj_content_type and subj_object_id:
-                model = get_object_or_404(ContentType, pk=subj_content_type)
-                self.subj_instance = get_object_or_404(
-                    model.model_class(), pk=subj_object_id
-                )
-            if obj_content_type and obj_object_id:
-                model = get_object_or_404(ContentType, pk=obj_content_type)
-                self.obj_instance = get_object_or_404(
-                    model.model_class(), pk=obj_object_id
-                )
 
         self.fields["subj_object_id"].required = False
         self.fields["subj_content_type"].required = False
@@ -157,13 +145,19 @@ class RelationForm(GenericModelForm):
                     attrs={"data-html": True},
                     url=self.__subj_autocomplete_url(),
                 )
-                if self.subj_instance:
-                    content_type = ContentType.objects.get_for_model(self.subj_instance)
-                    select_identifier = f"{content_type.id}_{self.subj_instance.id}"
-                    self.fields["subj_ct_and_id"].initial = select_identifier
-                    self.fields["subj_ct_and_id"].choices = [
-                        (select_identifier, self.subj_instance)
-                    ]
+
+        if self.subj_instance:
+            self.fields["subj_ct_and_id"] = CustomSelect2ListChoiceField()
+            self.fields["subj_ct_and_id"].widget = ApisListSelect2(
+                attrs={"data-html": True},
+                url=self.__subj_autocomplete_url(),
+            )
+            content_type = ContentType.objects.get_for_model(self.subj_instance)
+            select_identifier = f"{content_type.id}_{self.subj_instance.id}"
+            self.fields["subj_ct_and_id"].initial = select_identifier
+            self.fields["subj_ct_and_id"].choices = [
+                (select_identifier, self.subj_instance)
+            ]
 
         self.fields["obj_object_id"].required = False
         self.fields["obj_content_type"].required = False
@@ -194,13 +188,19 @@ class RelationForm(GenericModelForm):
                     attrs={"data-html": True},
                     url=self.__obj_autocomplete_url(),
                 )
-                if self.obj_instance:
-                    content_type = ContentType.objects.get_for_model(self.obj_instance)
-                    select_identifier = f"{content_type.id}_{self.obj_instance.id}"
-                    self.fields["obj_ct_and_id"].initial = select_identifier
-                    self.fields["obj_ct_and_id"].choices = [
-                        (select_identifier, self.obj_instance)
-                    ]
+
+        if self.obj_instance:
+            self.fields["obj_ct_and_id"] = CustomSelect2ListChoiceField()
+            self.fields["obj_ct_and_id"].widget = ApisListSelect2(
+                attrs={"data-html": True},
+                url=self.__obj_autocomplete_url(),
+            )
+            content_type = ContentType.objects.get_for_model(self.obj_instance)
+            select_identifier = f"{content_type.id}_{self.obj_instance.id}"
+            self.fields["obj_ct_and_id"].initial = select_identifier
+            self.fields["obj_ct_and_id"].choices = [
+                (select_identifier, self.obj_instance)
+            ]
 
         self.order_fields(self.field_order)
         self.helper = FormHelper(self)
