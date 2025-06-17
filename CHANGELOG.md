@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.48.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.48.0...v0.48.1) (2025-06-17)
+
+
+### Bug Fixes
+
+* **documentation:** revert inadvertently translated material symbol ([c255957](https://github.com/acdh-oeaw/apis-core-rdf/commit/c25595718ed599fd4a5dcf339276c3605f327d16)), closes [#1921](https://github.com/acdh-oeaw/apis-core-rdf/issues/1921)
+* **generic:** use correct permission name for duplicate & merge ([304cd9e](https://github.com/acdh-oeaw/apis-core-rdf/commit/304cd9e60db7eb09f82c915f4a6ea0b0f62c77bd))
+* **history:** revert "feat(history): use history queryset for views" ([8619ab3](https://github.com/acdh-oeaw/apis-core-rdf/commit/8619ab3997c246182fe9ef7bad570065ec807b48)), closes [#1919](https://github.com/acdh-oeaw/apis-core-rdf/issues/1919)
+
 ## [0.48.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.47.1...v0.48.0) (2025-06-04)
 
 
