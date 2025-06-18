@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.48.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.48.1...v0.48.2) (2025-06-18)
+
+
+### Bug Fixes
+
+* **core:** update alert close button to bootstrap 5 syntax ([17aa9a0](https://github.com/acdh-oeaw/apis-core-rdf/commit/17aa9a06fe7db180ca2c87cb026837aa7af520f8))
+* **generic:** use first element of list for enriching entities ([3e50265](https://github.com/acdh-oeaw/apis-core-rdf/commit/3e502653d018b2805970928ffcdd8a09cb56fb7c))
+
 ## [0.48.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.48.0...v0.48.1) (2025-06-17)
 
 
