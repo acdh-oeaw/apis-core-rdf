@@ -90,7 +90,7 @@ class GenericModelImporter:
             fields = data.keys()
         for field in fields:
             if hasattr(instance, field) and field in data.keys():
-                setattr(instance, field, data[field])
+                setattr(instance, field, data[field][0])
         instance.save()
 
     def create_instance(self):
