@@ -33,6 +33,13 @@ class RelationModelBase(ModelBase):
                         % name
                     )
 
+                # `subj_model` or `obj_model` being a list was supported in an earlier
+                # version of apis, but it is not anymore
+                if isinstance(getattr(new_class, "subj_model", None), list):
+                    raise ValueError("%s.subj_model must not be a list" % name)
+                if isinstance(getattr(new_class, "obj_model", None), list):
+                    raise ValueError("%s.obj_model mut not be a list" % name)
+
             if not new_class._meta.ordering:
                 logger.warning(
                     f"{name} inherits from Relation but does not specify 'ordering' in its Meta class. "
