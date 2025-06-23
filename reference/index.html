@@ -3953,31 +3953,36 @@ methods or simply write their own from scratch.</p>
             related_model = related_content_type.model_class()
 
             for related_uri in details["curies"]:
-                related_instance = create_object_from_uri(
-                    uri=related_uri, model=related_model
-                )
-                if details.get("obj"):
-                    subj_object_id = instance.pk
-                    subj_content_type = content_type
-                    obj_object_id = related_instance.pk
-                    obj_content_type = related_content_type
-                else:
-                    obj_object_id = instance.pk
-                    obj_content_type = content_type
-                    subj_object_id = related_instance.pk
-                    subj_content_type = related_content_type
-                rel, _ = relation_model.objects.get_or_create(
-                    subj_object_id=subj_object_id,
-                    subj_content_type=subj_content_type,
-                    obj_object_id=obj_object_id,
-                    obj_content_type=obj_content_type,
-                )
-                logger.debug(
-                    "Created relation %s between %s and %s",
-                    relation_model.name(),
-                    rel.subj,
-                    rel.obj,
-                )
+                try:
+                    related_instance = create_object_from_uri(
+                        uri=related_uri, model=related_model
+                    )
+                    if details.get("obj"):
+                        subj_object_id = instance.pk
+                        subj_content_type = content_type
+                        obj_object_id = related_instance.pk
+                        obj_content_type = related_content_type
+                    else:
+                        obj_object_id = instance.pk
+                        obj_content_type = content_type
+                        subj_object_id = related_instance.pk
+                        subj_content_type = related_content_type
+                    rel, _ = relation_model.objects.get_or_create(
+                        subj_object_id=subj_object_id,
+                        subj_content_type=subj_content_type,
+                        obj_object_id=obj_object_id,
+                        obj_content_type=obj_content_type,
+                    )
+                    logger.debug(
+                        "Created relation %s between %s and %s",
+                        relation_model.name(),
+                        rel.subj,
+                        rel.obj,
+                    )
+                except Exception as e:
+                    logger.error(
+                        "Could not create relation to %s due to %s", related_uri, e
+                    )
         return instance</code></pre>
               </details>
 
