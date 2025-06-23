@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.49.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.48.2...v0.49.0) (2025-06-23)
+
+
+### Features
+
+* **history:** flatten many-to-many relations in ModelChanges ([f58e371](https://github.com/acdh-oeaw/apis-core-rdf/commit/f58e3717a5f2568b7a0f98661f3f4f8285cc39e0))
+* **history:** set the `foreign_keys_are_objs` argument to True ([b077fc2](https://github.com/acdh-oeaw/apis-core-rdf/commit/b077fc2b83782fc4cba8e74c4746874c78db52f8))
+* **relations:** allow subj_object_id and obj_object_id to be null ([8ae4335](https://github.com/acdh-oeaw/apis-core-rdf/commit/8ae4335ec5228fceb56cf3970be97050250d5660))
+* **relations:** implement signal to nullify relation ids ([4ca4c41](https://github.com/acdh-oeaw/apis-core-rdf/commit/4ca4c41802ea2b26b15bf33a98e87e6b766661ea))
+* **relations:** update template to reflect targets that are None ([81d0a8c](https://github.com/acdh-oeaw/apis-core-rdf/commit/81d0a8c9323224a0adb899f20fee01706be99529))
+* **relations:** warn user when obj_model or subj_model are lists ([765a5a1](https://github.com/acdh-oeaw/apis-core-rdf/commit/765a5a1e65edc6338f3e13bb94ccbba9e84f0dd3)), closes [#1923](https://github.com/acdh-oeaw/apis-core-rdf/issues/1923)
+* **sample_project:** add versionperson_profession entries to fixtures ([be56610](https://github.com/acdh-oeaw/apis-core-rdf/commit/be566103fa23c1992de64227694bb7911aeba61f))
+* **sample_project:** use VersionMixin on Profession ([cf6c991](https://github.com/acdh-oeaw/apis-core-rdf/commit/cf6c9917631ae2773c5616f77e8006c359996274))
+
+
+### Bug Fixes
+
+* **core:** drop `modal` block ([efc2c82](https://github.com/acdh-oeaw/apis-core-rdf/commit/efc2c82acf23ba4b3e22e730552c12b27df51a69)), closes [#1917](https://github.com/acdh-oeaw/apis-core-rdf/issues/1917)
+* **generic:** catch exception if relation could not be imported ([737f328](https://github.com/acdh-oeaw/apis-core-rdf/commit/737f328ea5952335fae627013e1a79a24c56e91a))
+* **generic:** only run importer if there is something to import from ([0b5b477](https://github.com/acdh-oeaw/apis-core-rdf/commit/0b5b4772e050ab274ccc48f83fb1d87bef519381))
+* **relations:** adapt relation form for targets that are None ([22a6966](https://github.com/acdh-oeaw/apis-core-rdf/commit/22a69667a8f20153396aaaeab217d9d0cbd09ce0))
+* **relations:** make relation field editable again ([7ed19c9](https://github.com/acdh-oeaw/apis-core-rdf/commit/7ed19c9ae44993c3b66e794e52a3922aa7f4722a)), closes [#1922](https://github.com/acdh-oeaw/apis-core-rdf/issues/1922)
+* **sample_project:** add `feature_code` to place entities ([c3a78ef](https://github.com/acdh-oeaw/apis-core-rdf/commit/c3a78efa9942c2dee028c800371111dd332d67e6))
+
 ## [0.48.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.48.1...v0.48.2) (2025-06-18)
 
 
