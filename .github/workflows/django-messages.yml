@@ -15,6 +15,6 @@ jobs:
       - name: Install gettext
         run: sudo apt-get update && sudo apt-get -f install gettext
       - name: Make messages
-        run: uv run ./manage.py makemessages -l de --add-location file
+        run: uv run --frozen ./manage.py makemessages -l de --add-location file
       - name: Check changes using git-diff
         run: git diff --exit-code
