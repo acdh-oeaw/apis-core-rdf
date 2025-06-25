@@ -562,7 +562,7 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         messages.info(self.request, f"Updated fields {update_fields}")
         content_type = ContentType.objects.get_for_model(self.model)
         uri, created = Uri.objects.get_or_create(
-            uri=self.uri,
+            uri=importer.get_uri,
             content_type=content_type,
             object_id=self.object.id,
         )
