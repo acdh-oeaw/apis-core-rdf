@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.49.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.49.0...v0.49.1) (2025-06-25)
+
+
+### Bug Fixes
+
+* **generic:** use the cleaned url from importer when enriching ([c166406](https://github.com/acdh-oeaw/apis-core-rdf/commit/c166406d8ea6bc8c0c0352250fabc6196989ff90))
+* **relations:** use `.pk` instead of `.id` ([11af495](https://github.com/acdh-oeaw/apis-core-rdf/commit/11af495b2dd83de0eea4ec8764c70fde4b8b52a6))
+
 ## [0.49.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.48.2...v0.49.0) (2025-06-23)
 
 
