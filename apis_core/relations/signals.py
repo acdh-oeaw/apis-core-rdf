@@ -48,7 +48,7 @@ def merge_relations(sender, instance, entities, **kwargs):
 @receiver(post_delete)
 def set_relations_null(sender, instance, using, origin, **kwargs):
     content_type = ContentType.objects.get_for_model(instance)
-    object_id = instance.id
+    object_id = instance.pk
     if isinstance(object_id, int):
         Relation.objects.filter(
             subj_content_type=content_type, subj_object_id=object_id
