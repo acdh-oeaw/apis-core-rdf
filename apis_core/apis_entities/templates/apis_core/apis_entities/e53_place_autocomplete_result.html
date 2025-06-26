@@ -8,4 +8,4 @@
 {% endif %}
 {{ result }}
 {% if result.kind %}<i>({{ result.kind }})</i>{% endif %}
-<a href="{{ result.uri }}">{% translate "local result" %}</a>
+<a href="{{ result.get_absolute_url }}">{% translate "local result" %}</a>
