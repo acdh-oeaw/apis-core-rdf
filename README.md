@@ -115,4 +115,4 @@ Now start using your Django project
 ./manage.py runserver
 ```
 
-Now you should be ready to roll. Start [creating your ontology](https://acdh-oeaw.github.io/apis-core-rdf/ontology.html).
+Now you should be ready to roll. Start [creating your ontology](https://acdh-oeaw.github.io/apis-core-rdf/ontology).
