@@ -70,6 +70,26 @@ class Relation(models.Model, GenericModel, metaclass=RelationModelBase):
 
     objects = InheritanceManager()
 
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=["subj_content_type"], name="relations_r_subj_content_type"
+            ),
+            models.Index(fields=["subj_object_id"], name="relations_r_subj_object_id"),
+            models.Index(
+                fields=["obj_content_type"], name="relations_r_obj_content_type"
+            ),
+            models.Index(fields=["obj_object_id"], name="relations_r_obj_object_id"),
+            models.Index(
+                fields=["subj_content_type", "subj_object_id"],
+                name="relations_r_subj_c_t_o_i",
+            ),
+            models.Index(
+                fields=["obj_content_type", "obj_object_id"],
+                name="relations_r_obj_c_t_o_i",
+            ),
+        ]
+
     def save(self, *args, **kwargs):
         if self.subj_content_type:
             if self.subj_content_type.model_class() not in self.subj_list():
