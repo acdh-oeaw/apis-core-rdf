@@ -2,12 +2,12 @@
 <h5 class="card-title">Linked Open Data</h5>
 {% if object.uri_set %}
   {% for uri in object.uri_set.all %}
-    <div class="btn-group mb-2">
-      <a class="btn btn-sm btn-outline-secondary"
-         target="_blank"
-         href="{{ uri.uri }}">{{ uri.short_label }}</a>
-      {% if object.get_change_permission in perms %}
-        {% if not uri.internal %}
+    {% if not uri.internal %}
+      <div class="btn-group mb-2">
+        <a class="btn btn-sm btn-outline-secondary"
+           target="_blank"
+           href="{{ uri.uri }}">{{ uri.short_label }}</a>
+        {% if object.get_change_permission in perms %}
           <button type="button"
                   class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split"
                   data-bs-toggle="dropdown"
@@ -21,7 +21,7 @@
             </li>
           </ul>
         {% endif %}
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
   {% endfor %}
 {% endif %}
