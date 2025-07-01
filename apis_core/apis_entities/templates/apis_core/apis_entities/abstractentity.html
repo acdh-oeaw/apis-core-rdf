@@ -22,6 +22,9 @@
               <h2>
                 {% include "apis_entities/partials/listview_url.html" %}
                 {{ object }}
+                <a href="{{ object.get_absolute_url }}">
+                  <span class="material-symbols-outlined">link</span>
+                </a>
 
                 {% block object-actions %}
                 {% endblock object-actions %}
