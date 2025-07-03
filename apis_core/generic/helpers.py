@@ -70,8 +70,9 @@ def mro_paths(model):
     paths = []
     if model is not None:
         for cls in filter(lambda x: x not in Model.mro(), model.mro()):
-            paths.append(cls.__module__.split(".")[:-1] + [cls.__name__])
-    return paths
+            paths.append(tuple([cls.__module__.split(".")[-2], cls.__name__]))
+            paths.append(tuple(cls.__module__.split(".")[:-1] + [cls.__name__]))
+    return [list(path) for path in list(dict.fromkeys(paths))]
 
 
 @functools.lru_cache
