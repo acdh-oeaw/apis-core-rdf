@@ -8,7 +8,8 @@
 {% if object %}
 
   {% block col %}
-    {% include "generic/partials/object_card.html" %}
+    {% template_list object "_card.html" as template_list %}
+    {% include template_list %}
   {% endblock col %}
 
 {% endif %}
