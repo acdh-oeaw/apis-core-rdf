@@ -1,0 +1,9 @@
+{% extends "apis_core/generic/genericmodel_card.html" %}
+
+{% block card-header %}
+  <div class="text-center">
+    {% if object.subj %}<a href="{{ object.subj.get_absolute_url }}">{{ object.subj }}</a>{% endif %}
+    {{ object.name }}
+    {% if object.obj %}<a href="{{ object.obj.get_absolute_url }}">{{ object.obj }}</a>{% endif %}
+  </div>
+{% endblock card-header %}

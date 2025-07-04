@@ -1,0 +1,18 @@
+{% load generic %}
+<div class="card">
+  <div class="card-header">
+
+    {% block card-header %}
+      {{ object }}
+    {% endblock card-header %}
+
+  </div>
+  <div class="card-body">
+
+    {% block card-body %}
+      {% template_list object "_card_table.html" as template_list %}
+      {% include template_list %}
+    {% endblock card-body %}
+
+  </div>
+</div>

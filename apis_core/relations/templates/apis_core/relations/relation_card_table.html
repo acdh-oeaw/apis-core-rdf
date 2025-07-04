@@ -1,0 +1,24 @@
+{% load generic %}
+<table class="table table-hover">
+  <tr>
+    <th>Subject</th>
+    <td>
+      {% if object.subj %}<a href="{{ object.subj.get_absolute_url }}">{{ object.subj }}</a>{% endif %}
+    </td>
+  </tr>
+  <tr>
+    <th>Object</th>
+    <td>
+      {% if object.obj %}<a href="{{ object.obj.get_absolute_url }}">{{ object.obj }}</a>{% endif %}
+    </td>
+  </tr>
+  {% with "subj_content_type subj_object_id obj_content_type obj_object_id" as exclude_list %}
+    {% modeldict object as d %}
+    {% for key, value in d.items %}
+      {% if key.name not in exclude_list %}
+        {% model_field_template_lookup_list object key "table_row" as template_list %}
+        {% include template_list %}
+      {% endif %}
+    {% endfor %}
+  {% endwith %}
+</table>
