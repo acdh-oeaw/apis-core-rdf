@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.http import urlencode
+from django.utils.translation import gettext_lazy as _
 
 from apis_core.core.fields import ApisListSelect2
 from apis_core.generic.forms import GenericFilterSetForm, GenericModelForm
@@ -140,14 +141,18 @@ class RelationForm(GenericModelForm):
                 field that autocompletes any content type the relation can have as a
                 subject.
                 """
-                self.fields["subj_ct_and_id"] = CustomSelect2ListChoiceField()
+                self.fields["subj_ct_and_id"] = CustomSelect2ListChoiceField(
+                    label=_("Subject")
+                )
                 self.fields["subj_ct_and_id"].widget = ApisListSelect2(
                     attrs={"data-html": True},
                     url=self.__subj_autocomplete_url(),
                 )
 
         if self.subj_instance:
-            self.fields["subj_ct_and_id"] = CustomSelect2ListChoiceField()
+            self.fields["subj_ct_and_id"] = CustomSelect2ListChoiceField(
+                label=_("Subject")
+            )
             self.fields["subj_ct_and_id"].widget = ApisListSelect2(
                 attrs={"data-html": True},
                 url=self.__subj_autocomplete_url(),
@@ -183,14 +188,18 @@ class RelationForm(GenericModelForm):
                 field that autocompletes any content type the relation can have as a
                 object.
                 """
-                self.fields["obj_ct_and_id"] = CustomSelect2ListChoiceField()
+                self.fields["obj_ct_and_id"] = CustomSelect2ListChoiceField(
+                    label=_("Object")
+                )
                 self.fields["obj_ct_and_id"].widget = ApisListSelect2(
                     attrs={"data-html": True},
                     url=self.__obj_autocomplete_url(),
                 )
 
         if self.obj_instance:
-            self.fields["obj_ct_and_id"] = CustomSelect2ListChoiceField()
+            self.fields["obj_ct_and_id"] = CustomSelect2ListChoiceField(
+                label=_("Object")
+            )
             self.fields["obj_ct_and_id"].widget = ApisListSelect2(
                 attrs={"data-html": True},
                 url=self.__obj_autocomplete_url(),
