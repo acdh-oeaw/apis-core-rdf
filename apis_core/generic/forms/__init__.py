@@ -73,7 +73,9 @@ class GenericModelForm(forms.ModelForm):
         try:
             skoscollection = apps.get_model("collections.SkosCollection")
             self.fields["collections"] = forms.ModelMultipleChoiceField(
-                required=False, queryset=skoscollection.objects.all()
+                required=False,
+                queryset=skoscollection.objects.all(),
+                label=_("Collections"),
             )
             if instance := kwargs.get("instance"):
                 self.fields["collections"].initial = skoscollection.objects.by_instance(
