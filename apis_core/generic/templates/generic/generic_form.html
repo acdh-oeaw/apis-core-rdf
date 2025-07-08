@@ -4,7 +4,7 @@
 
 {% block title %}
   {% if object %}
-    {% translate "Edit" %} {{ object }}
+    {% blocktrans with object as object %}Edit {{ object }}{% endblocktrans %}
   {% else %}
     {% translate "Create" %}
   {% endif %}
@@ -14,7 +14,7 @@
   <div class="card">
     <div class="card-header">
       {% if object %}
-        {% translate "Edit" %} {{ object }}
+        {% blocktrans with object as object %}Edit {{ object }}{% endblocktrans %}
       {% else %}
         {% translate "Create" %}
       {% endif %}
