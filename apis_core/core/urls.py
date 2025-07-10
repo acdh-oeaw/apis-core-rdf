@@ -1,9 +1,12 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from apis_core.core.views import Dumpdata
+from apis_core.core.views import Dumpdata, PasswordChangeView
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="base.html"), name="apis_index"),
     path("api/dumpdata", Dumpdata.as_view()),
+    path(
+        "profile/password-change/", PasswordChangeView.as_view(), name="password-change"
+    ),
 ]
