@@ -4,8 +4,19 @@
 {% block main-menu %}
   {{ block.super }}
   <li class="nav-item dropdown">
-    <a href="{% url "apis_core:generic:list" "collections.skoscollection" %}"
-       class="nav-link"
-       role="button">{% translate "Collections" %}</a>
+    <a href="#"
+       class="nav-link dropdown-toggle"
+       data-bs-toggle="dropdown"
+       role="button"
+       aria-haspopup="true"
+       aria-expanded="false">{% translate "Collections" %}
+      <span class="caret" />
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item"
+         href="{% url "apis_core:generic:list" "collections.skoscollection" %}">{% translate "All collections" %}</a>
+      <a class="dropdown-item"
+         href="{% url "apis_core:generic:list" "collections.skoscollectioncontentobject" %}">{% translate "Collection linked objects" %}</a>
+    </div>
   </li>
 {% endblock main-menu %}
