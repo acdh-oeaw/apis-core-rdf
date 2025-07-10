@@ -1,5 +1,9 @@
 import json
 
+from django.contrib import messages
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import OpenApiParameter, extend_schema, inline_serializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -30,3 +34,16 @@ class Dumpdata(APIView):
         if app_labels:
             app_labels = app_labels.split(",")
         return Response(json.loads(datadump_serializer(app_labels, "json")))
+
+
+class PasswordChangeView(auth_views.PasswordChangeView):
+    template_name = "profile/password-change.html"
+    success_url = reverse_lazy("apis_core:password-change")
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        messages.success(
+            self.request,
+            _("Password for %(user)s changed.").format(user=self.request.user),
+        )
+        return ret

@@ -128,12 +128,13 @@
                         <div class="dropdown-item">
                           <form action="{% url 'apis_core:logout' %}?next=/" method="post">
                             {% csrf_token %}
-                            <button type="submit" class="btn">
+                            <button type="submit" class="btn px-0">
                               <span class="material-symbols-outlined material-symbols-align">logout</span>
                               {% translate "log out" %}
                             </button>
                           </form>
                         </div>
+                        <a class="dropdown-item" href="{% url 'apis_core:password-change' %}">{% translate "change password" %}</a>
                       {% endblock user-menu-items %}
 
                     </div>
