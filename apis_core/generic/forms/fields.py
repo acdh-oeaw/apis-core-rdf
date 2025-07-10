@@ -8,9 +8,11 @@ from apis_core.apis_metainfo.utils import create_object_from_uri
 class ModelImportChoiceField(ModelChoiceField):
     def to_python(self, value):
         result = None
-        if value:
+        if value.startswith(("http://", "https://")):
             try:
-                result = create_object_from_uri(value, self.queryset.model)
+                result = create_object_from_uri(
+                    value, self.queryset.model, raise_on_fail=True
+                )
             except Exception as e:
                 raise ValidationError(
                     _("Could not import %(value)s: %(exception)s"),
