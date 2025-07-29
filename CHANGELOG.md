@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.50.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.49.1...v0.50.0) (2025-07-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** We replace the `generic/partials/object_card.html` with `apis_core/generic/genericmodel_card.html`. Please adapt your templates accordingly.
+
+### Features
+
+* **apis_entities:** add absolute url link next to object title ([80c535e](https://github.com/acdh-oeaw/apis-core-rdf/commit/80c535e3b9729058a9a929496a1f85a15ea55711))
+* **apis_entities:** only show external URIs in LOD section ([815ec76](https://github.com/acdh-oeaw/apis-core-rdf/commit/815ec76e28ce59b14e34f94d986a79106ed05f3a))
+* **collections:** add custom filterset for SkosCollectionContentObject ([2be3eb5](https://github.com/acdh-oeaw/apis-core-rdf/commit/2be3eb5cc7647e8033b979fbf46d699d4270957a))
+* **collections:** change menu to link also to list of linked objects ([178e476](https://github.com/acdh-oeaw/apis-core-rdf/commit/178e47614b1a58c1dbf95cef2be3db674c0f9ca1))
+* **collections:** only show collection menu if permission exist ([081c8ba](https://github.com/acdh-oeaw/apis-core-rdf/commit/081c8ba7f84a7cfae3deb287f716b054c70f0e80)), closes [#1924](https://github.com/acdh-oeaw/apis-core-rdf/issues/1924)
+* **core:** add password-change link to user menu ([ceb784b](https://github.com/acdh-oeaw/apis-core-rdf/commit/ceb784b78da3b64771ebe331ee59c6d87fc142a6))
+* **core:** introduce a `password-change` interface ([6038fed](https://github.com/acdh-oeaw/apis-core-rdf/commit/6038feddca919ee645f3def9fbae79e506e6f38d))
+* **generic:** add options to mro_paths ([0845664](https://github.com/acdh-oeaw/apis-core-rdf/commit/08456646c77c0171bf4bc9e0502957b8e0085f9a))
+* **generic:** make ModelImportChoiceField more robust ([e4b747d](https://github.com/acdh-oeaw/apis-core-rdf/commit/e4b747dea14d1cabc16c5355a09c71b56177b679))
+* **generic:** use `template_list` templatetag in `generic_detail.html` ([9098e19](https://github.com/acdh-oeaw/apis-core-rdf/commit/9098e19ce6b1c5a032fb03fc987563f588420250))
+* **generic:** use custom properties for the action colors ([44905bc](https://github.com/acdh-oeaw/apis-core-rdf/commit/44905bc44fdc91ff437f1f279bb1cb4201ddb7a6)), closes [#1953](https://github.com/acdh-oeaw/apis-core-rdf/issues/1953)
+* **relations:** introduce a `relation_card_table.html` template ([e093d86](https://github.com/acdh-oeaw/apis-core-rdf/commit/e093d86ae942967d8c8871996d54582d29fdafdc))
+* **relations:** introduce a `relation_card.html` template ([b6cb9d3](https://github.com/acdh-oeaw/apis-core-rdf/commit/b6cb9d38fc370e236cb8a613b85470fbf5cd4745)), closes [#1728](https://github.com/acdh-oeaw/apis-core-rdf/issues/1728)
+* **relations:** introduce indexes for the relation model ([3942587](https://github.com/acdh-oeaw/apis-core-rdf/commit/3942587a5d92747e32075e31a0cdfc0555742e7f)), closes [#1952](https://github.com/acdh-oeaw/apis-core-rdf/issues/1952)
+* **relations:** refactor the whole relations form ([8ef00b1](https://github.com/acdh-oeaw/apis-core-rdf/commit/8ef00b1d75fc2871b217984b5829775aa7835ee5))
+
+
+### Bug Fixes
+
+* **apis_entities:** link to absolute url in local autocomplete results ([6de589f](https://github.com/acdh-oeaw/apis-core-rdf/commit/6de589fd002a4b394cb9ff2350e5054cbdec13e0))
+* **generic:** add label to collection form field ([0ab326e](https://github.com/acdh-oeaw/apis-core-rdf/commit/0ab326eebb9dcda4a459f6b826af95faf8f741e6))
+* **relations:** adapt template translation to include object ([2957cc3](https://github.com/acdh-oeaw/apis-core-rdf/commit/2957cc35300047219bfbcde4cda88f15ebb9314b))
+
+
+### Documentation
+
+* **readme:** correct link to creating your ontology ([eca13fd](https://github.com/acdh-oeaw/apis-core-rdf/commit/eca13fd7ec8befd11af2df09df939b009b25f23c))
+
 ## [0.49.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.49.0...v0.49.1) (2025-06-25)
 
 
