@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_b98ef7dc8a4f2930_views_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2025-07-29 05:59 +0000
+            created at 2025-07-29 06:02 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -83,12 +83,15 @@
     <p class="run"><span class="n"><a id="t1" href="#t1">1</a></span><span class="t"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">urls</span> <span class="key">import</span> <span class="nam">path</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t2" href="#t2">2</a></span><span class="t"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">views</span><span class="op">.</span><span class="nam">generic</span> <span class="key">import</span> <span class="nam">TemplateView</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t4" href="#t4">4</a></span><span class="t"><span class="key">from</span> <span class="nam">apis_core</span><span class="op">.</span><span class="nam">core</span><span class="op">.</span><span class="nam">views</span> <span class="key">import</span> <span class="nam">Dumpdata</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t4" href="#t4">4</a></span><span class="t"><span class="key">from</span> <span class="nam">apis_core</span><span class="op">.</span><span class="nam">core</span><span class="op">.</span><span class="nam">views</span> <span class="key">import</span> <span class="nam">Dumpdata</span><span class="op">,</span> <span class="nam">PasswordChangeView</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t5" href="#t5">5</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t"><span class="nam">urlpatterns</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t7" href="#t7">7</a></span><span class="t">    <span class="nam">path</span><span class="op">(</span><span class="str">""</span><span class="op">,</span> <span class="nam">TemplateView</span><span class="op">.</span><span class="nam">as_view</span><span class="op">(</span><span class="nam">template_name</span><span class="op">=</span><span class="str">"base.html"</span><span class="op">)</span><span class="op">,</span> <span class="nam">name</span><span class="op">=</span><span class="str">"apis_index"</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t">    <span class="nam">path</span><span class="op">(</span><span class="str">"api/dumpdata"</span><span class="op">,</span> <span class="nam">Dumpdata</span><span class="op">.</span><span class="nam">as_view</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t"><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t">    <span class="nam">path</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t">        <span class="str">"profile/password-change/"</span><span class="op">,</span> <span class="nam">PasswordChangeView</span><span class="op">.</span><span class="nam">as_view</span><span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="nam">name</span><span class="op">=</span><span class="str">"password-change"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t">    <span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -98,7 +101,7 @@
             <a class="nav" href="z_b98ef7dc8a4f2930_views_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2025-07-29 05:59 +0000
+            created at 2025-07-29 06:02 +0000
         </p>
     </div>
 </footer>
