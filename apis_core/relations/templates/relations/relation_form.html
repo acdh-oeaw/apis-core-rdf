@@ -1,0 +1,10 @@
+{% extends "generic/generic_form.html" %}
+{% load i18n %}
+
+{% block card-header-content %}
+  {% if object %}
+    {% translate "Edit relation" %}: <span class="fst-italic">{{ object.subj }}</span> "{{ object.name }}" <span class="fst-italic">{{ object.obj }}</span>
+  {% else %}
+    {% translate "Create" %}
+  {% endif %}
+{% endblock card-header-content %}
