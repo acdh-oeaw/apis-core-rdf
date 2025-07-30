@@ -6,6 +6,7 @@ from apis_core.apis_metainfo.models import RootObject
 from apis_core.generic.filtersets import GenericFilterSet
 from apis_core.generic.helpers import generate_search_filter
 from apis_core.relations.forms import RelationFilterSetForm
+from apis_core.relations.models import Relation
 from apis_core.relations.utils import get_all_relation_subj_and_obj
 
 
@@ -91,6 +92,8 @@ class RelationFilterSet(GenericFilterSet):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if model := getattr(self.Meta, "model", False):
+            if model is Relation:
+                del self.filters["collections"]
             all_models = [ct.model_class() for ct in get_all_relation_subj_and_obj()]
             subj_models = getattr(model, "subj_model", all_models)
             obj_models = getattr(model, "obj_model", all_models)
