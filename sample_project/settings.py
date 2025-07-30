@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # ui stuff used by APIS
     "crispy_forms",
-    "crispy_bootstrap4",
     "crispy_bootstrap5",
     "django_filters",
     "django_tables2",
