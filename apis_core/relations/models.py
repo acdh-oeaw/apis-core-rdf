@@ -91,16 +91,12 @@ class Relation(models.Model, GenericModel, metaclass=RelationModelBase):
         ]
 
     def save(self, *args, **kwargs):
-        if self.subj_content_type:
-            if self.subj_content_type.model_class() not in self.subj_list():
-                raise ValidationError(
-                    f"{self.subj} is not of any type in {self.subj_list()}"
-                )
-        if self.obj_content_type:
-            if self.obj_content_type.model_class() not in self.obj_list():
-                raise ValidationError(
-                    f"{self.obj} is not of any type in {self.obj_list()}"
-                )
+        subj_model = getattr(self, "subj_model", None)
+        if subj_model and self.subj_content_type is subj_model:
+            raise ValidationError(f"{self.subj} is not of type {subj_model}")
+        obj_model = getattr(self, "obj_model", None)
+        if obj_model and self.obj_content_type is obj_model:
+            raise ValidationError(f"{self.obj} is not of type {obj_model}")
         super().save(*args, **kwargs)
 
     @property
