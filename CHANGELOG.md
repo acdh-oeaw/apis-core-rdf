@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.50.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.0...v0.50.1) (2025-07-31)
+
+
+### Bug Fixes
+
+* **collections:** check for filter existence before removing ([0bc979e](https://github.com/acdh-oeaw/apis-core-rdf/commit/0bc979ec659dae52f95f1c019699753687039ede)), closes [#1978](https://github.com/acdh-oeaw/apis-core-rdf/issues/1978)
+* **relations:** make subj & obj check in Relation.save less strict ([b687a4e](https://github.com/acdh-oeaw/apis-core-rdf/commit/b687a4e04cc6a93d9cd3440a883690f4b8404ffc)), closes [#1896](https://github.com/acdh-oeaw/apis-core-rdf/issues/1896)
+* **relations:** remove collections filter from relations filterset ([13a9b59](https://github.com/acdh-oeaw/apis-core-rdf/commit/13a9b5974aed506b403f1c391c567c8ea5e10443)), closes [#1970](https://github.com/acdh-oeaw/apis-core-rdf/issues/1970)
+
 ## [0.50.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.49.1...v0.50.0) (2025-07-29)
 
 
