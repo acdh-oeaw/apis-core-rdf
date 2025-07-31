@@ -19,6 +19,12 @@
               <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}"
                  class="dropdown-item small">{% translate "... merge data" %}</a>
             </li>
+            {% if uri.get_delete_permission in perms %}
+              <li>
+                <a href="{{ uri.get_delete_url }}?redirect={{ request.path }}"
+                   class="dropdown-item small">{% translate "delete uri" %}</a>
+              </li>
+            {% endif %}
           </ul>
         {% endif %}
       </div>
