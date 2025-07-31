@@ -119,6 +119,10 @@ class GenericModel:
     def get_verbose_name_plural(cls):
         return cls._meta.verbose_name_plural
 
+    @classmethod
+    def get_verbose_name(cls):
+        return cls._meta.verbose_name
+
     def get_merge_charfield_value(self, other: CharField, field: CharField):
         res = getattr(self, field.name)
         if not field.choices:
