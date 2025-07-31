@@ -277,6 +277,8 @@ class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
     permission_action_required = "delete"
 
     def get_success_url(self):
+        if redirect := self.request.GET.get("redirect"):
+            return redirect
         return reverse(
             "apis_core:generic:list",
             args=[self.request.resolver_match.kwargs["contenttype"]],
