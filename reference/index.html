@@ -7356,6 +7356,8 @@ to relations (this does only work for instances inheriting from RootObject).</p>
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if model := getattr(self.Meta, "model", False):
+            if model is Relation:
+                del self.filters["collections"]
             all_models = [ct.model_class() for ct in get_all_relation_subj_and_obj()]
             subj_models = getattr(model, "subj_model", all_models)
             obj_models = getattr(model, "obj_model", all_models)
