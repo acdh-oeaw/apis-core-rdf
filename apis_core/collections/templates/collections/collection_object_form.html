@@ -1,0 +1,10 @@
+{% extends basetemplate|default:"base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="container">
+    <h1>Manage collections of {{ object.get_verbose_name }}: {{ object }}</h1>
+    {% crispy form form.helper %}
+  </div>
+{% endblock content %}
