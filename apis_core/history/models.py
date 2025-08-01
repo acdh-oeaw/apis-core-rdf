@@ -65,7 +65,11 @@ class APISHistoryTableBase(models.Model, GenericModel):
         containing a mapping between the model instance string representation
         and the string representations of the connected model instances.
         """
-        if isinstance(obj, list) and all(isinstance(el, dict) for el in obj):
+        if (
+            isinstance(obj, list)
+            and all(isinstance(el, dict) for el in obj)
+            and all(len(el.values()) == 2 for el in obj)
+        ):
             ret = []
             for el in obj:
                 key, val = el.values()
@@ -93,11 +97,19 @@ class APISHistoryTableBase(models.Model, GenericModel):
         # To flatten the many-to-many representation of those ModelChanges
         # we use a separate list containing the changed values
         newchanges = []
+        concrete_fields = {
+            field.name for field in self.instance_type._meta.concrete_fields
+        }
         for change in changes:
+            # run flattening only on m2m fields
             change = dataclasses.replace(
                 change,
-                old=self._flatten_modelchange_many_to_many(change.old),
-                new=self._flatten_modelchange_many_to_many(change.new),
+                old=change.old
+                if change.field in concrete_fields
+                else self._flatten_modelchange_many_to_many(change.old),
+                new=change.new
+                if change.field in concrete_fields
+                else self._flatten_modelchange_many_to_many(change.new),
             )
             newchanges.append(change)
         return sorted(newchanges, key=lambda change: change.field)
