@@ -1,9 +1,13 @@
+from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
 
 from .models import SkosCollection, SkosCollectionContentObject
+
+from apis_core.collections.forms import CollectionObjectForm
 
 
 class ContentObjectMixin:
@@ -14,16 +18,39 @@ class ContentObjectMixin:
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
-        self.content_type = get_object_or_404(ContentType, pk=kwargs["content_type_id"])
+        content_type = get_object_or_404(ContentType, pk=kwargs["content_type_id"])
         self.object = get_object_or_404(
-            self.content_type.model_class(), pk=kwargs["object_id"]
+            content_type.model_class(), pk=kwargs["object_id"]
         )
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["content_type"] = self.content_type
+        #context["content_type"] = self.content_type
         context["object"] = self.object
         return context
+
+
+class CollectionObjectFormView(ContentObjectMixin, FormView):
+    template_name = "collections/collection_object_form.html"
+    form_class = CollectionObjectForm
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["collections"] = SkosCollection.objects.by_instance(self.object).values_list("pk", flat=True)
+        return initial
+
+    def get_success_url(self):
+        return reverse("apis_core:collections:collectionobjectformview", args=[self.object.content_type.id, self.object.id])
+
+    def form_valid(self, form):
+        instance = self.object
+        if collections := form.cleaned_data.get("collections"):
+            for collection in SkosCollection.objects.exclude(pk__in=collections):
+                collection.remove(instance)
+            for collection in SkosCollection.objects.filter(pk__in=collections):
+                collection.add(instance)
+        print(instance)
+        return super().form_valid(form)
 
 
 class CollectionToggle(LoginRequiredMixin, ContentObjectMixin, TemplateView):

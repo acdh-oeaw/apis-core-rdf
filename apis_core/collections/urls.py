@@ -5,6 +5,10 @@ from . import views
 app_name = "collections"
 
 urlpatterns = [
+    path("collectionobjectform/<int:content_type_id>/<int:object_id>",
+         views.CollectionObjectFormView.as_view(),
+         name="collectionobjectformview"
+    ),
     path(
         "collectionobjecttoggle/<int:content_type_id>/<int:object_id>/<int:collection>",
         views.CollectionToggle.as_view(),
