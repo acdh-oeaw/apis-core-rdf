@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.50.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.1...v0.50.2) (2025-08-04)
+
+
+### Bug Fixes
+
+* **collections:** rename view attribute to `obj_content_type` ([64fcca8](https://github.com/acdh-oeaw/apis-core-rdf/commit/64fcca8bb30e0fb54a7f6878933ec1cc1d4bdbce))
+* **generic:** also add/remove collections if they are an empty list ([775bb59](https://github.com/acdh-oeaw/apis-core-rdf/commit/775bb59a45bffdad0c2567f8e900f2bd6764f0dd))
+* **history:** run flattening on m2m fields only ([79fb332](https://github.com/acdh-oeaw/apis-core-rdf/commit/79fb332e25186aead636fe282cf98dcfed4adc8a))
+
 ## [0.50.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.0...v0.50.1) (2025-07-31)
 
 
