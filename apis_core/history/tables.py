@@ -1,4 +1,5 @@
 import django_tables2 as tables
+from django.apps import apps
 
 from apis_core.generic.tables import ActionColumn, CustomTemplateColumn, ViewColumn
 
@@ -62,3 +63,11 @@ class HistoryGenericTable(tables.Table):
 
     def render_model(self, record):
         return record.instance.__class__.__name__
+
+    def __init__(self, *args, **kwargs):
+        print(kwargs)
+        if apps.is_installed("apis_core.collections"):
+            from apis_core.collections.columns import CollectionsColumn
+
+            kwargs["extra_columns"] = [("collections", CollectionsColumn())]
+        super().__init__(*args, **kwargs)
