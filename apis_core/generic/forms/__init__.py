@@ -111,7 +111,8 @@ class GenericModelForm(forms.ModelForm):
         instance = super().save(*args, **kwargs)
         try:
             skoscollection = apps.get_model("collections.SkosCollection")
-            if collections := self.cleaned_data.get("collections"):
+            if "collections" in self.cleaned_data:
+                collections = self.cleaned_data.get("collections")
                 for collection in skoscollection.objects.exclude(pk__in=collections):
                     collection.remove(instance)
                 for collection in skoscollection.objects.filter(pk__in=collections):
