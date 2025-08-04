@@ -1,4 +1,5 @@
 from django.db import models
+from django_json_editor_field.fields import JSONEditorField
 
 from apis_core.apis_entities.abc import E21_Person, E53_Place, E74_Group
 from apis_core.apis_entities.models import AbstractEntity
@@ -15,6 +16,68 @@ class Profession(VersionMixin, GenericModel, models.Model):
 
 
 class Person(VersionMixin, E21_Person, AbstractEntity):
+    schema = {
+        "title": "Alternative Labels",
+        "type": "array",
+        "format": "table",
+        "items": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string",
+                    "pattern": "^.+$",
+                    "options": {
+                        "inputAttributes": {
+                            "required": True,
+                        },
+                    },
+                },
+                "lang": {
+                    "type": "string",
+                    "enum": ["de", "en"],
+                },
+                "typ": {
+                    "type": "string",
+                    "enum": ["pref", "alt"],
+                },
+                "start": {
+                    "type": "string",
+                    "pattern": "^$|^\d\d\d\d$",
+                    "options": {
+                        "inputAttributes": {
+                            "placeholder": "YYYY",
+                        },
+                        "containerAttributes": {
+                            "class": "yearinput",
+                        },
+                    },
+                },
+                "end": {
+                    "type": "string",
+                    "pattern": "^$|^\d\d\d\d$",
+                    "options": {
+                        "inputAttributes": {
+                            "placeholder": "YYYY",
+                        },
+                        "containerAttributes": {
+                            "class": "yearinput",
+                        },
+                    },
+                },
+            },
+        },
+    }
+    options = {
+        "theme": "bootstrap4",
+        "disable_collapse": True,
+        "disable_edit_json": True,
+        "disable_properties": True,
+        "disable_array_reorder": True,
+        "disable_array_delete_last_row": True,
+        "disable_array_delete_all_rows": True,
+        "prompt_before_delete": False,
+    }
+    alternative_labels = JSONEditorField(schema=schema, options=options, null=True)
     profession = models.ManyToManyField(Profession, blank=True)
 
 
