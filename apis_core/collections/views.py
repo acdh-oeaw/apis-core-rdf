@@ -14,14 +14,16 @@ class ContentObjectMixin:
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
-        self.content_type = get_object_or_404(ContentType, pk=kwargs["content_type_id"])
+        self.obj_content_type = get_object_or_404(
+            ContentType, pk=kwargs["content_type_id"]
+        )
         self.object = get_object_or_404(
-            self.content_type.model_class(), pk=kwargs["object_id"]
+            self.obj_content_type.model_class(), pk=kwargs["object_id"]
         )
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["content_type"] = self.content_type
+        context["content_type"] = self.obj_content_type
         context["object"] = self.object
         return context
 
@@ -47,7 +49,7 @@ class CollectionToggle(LoginRequiredMixin, ContentObjectMixin, TemplateView):
     def get(self, *args, **kwargs):
         scco, self.created = SkosCollectionContentObject.objects.get_or_create(
             collection=self.collection,
-            content_type=self.content_type,
+            content_type=self.obj_content_type,
             object_id=self.object.id,
         )
         if not self.created:
