@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # and extend their templates
     "apis_core.core",
     "apis_core.documentation",
+    "django_json_editor_field",
 ]
 
 MIDDLEWARE = [
