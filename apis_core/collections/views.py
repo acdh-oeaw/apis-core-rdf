@@ -1,7 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
+
+from apis_core.collections.forms import CollectionObjectForm
+from apis_core.generic.views import GenericModelMixin
 
 from .models import SkosCollection, SkosCollectionContentObject
 
@@ -25,6 +30,41 @@ class ContentObjectMixin:
         context = super().get_context_data(*args, **kwargs)
         context["content_type"] = self.obj_content_type
         context["object"] = self.object
+        return context
+
+
+class CollectionObjectFormView(LoginRequiredMixin, GenericModelMixin, FormView):
+    template_name = "collections/collection_object_form.html"
+    form_class = CollectionObjectForm
+
+    def get_object(self):
+        return self.queryset.get(pk=self.kwargs.get("pk"))
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["collections"] = SkosCollection.objects.by_instance(
+            self.get_object()
+        ).values_list("pk", flat=True)
+        return initial
+
+    def get_success_url(self):
+        return reverse(
+            "apis_core:collections:collectionobjectformview",
+            args=[self.kwargs.get("contenttype"), self.get_object().id],
+        )
+
+    def form_valid(self, form):
+        instance = self.get_object()
+        collections = form.cleaned_data.get("collections", [])
+        for collection in SkosCollection.objects.exclude(pk__in=collections):
+            collection.remove(instance)
+        for collection in SkosCollection.objects.filter(pk__in=collections):
+            collection.add(instance)
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["object"] = self.get_object()
         return context
 
 

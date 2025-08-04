@@ -6,6 +6,11 @@ app_name = "collections"
 
 urlpatterns = [
     path(
+        "<contenttype:contenttype>/<int:pk>/collections",
+        views.CollectionObjectFormView.as_view(),
+        name="collectionobjectformview",
+    ),
+    path(
         "collectionobjecttoggle/<int:content_type_id>/<int:object_id>/<int:collection>",
         views.CollectionToggle.as_view(),
         name="collectiontoggle",
