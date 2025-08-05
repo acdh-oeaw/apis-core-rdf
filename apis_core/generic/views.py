@@ -15,7 +15,7 @@ from django.forms.utils import pretty_name
 from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.utils.html import format_html
 from django.views import View
 from django.views.generic import DetailView
@@ -283,16 +283,6 @@ class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
             "apis_core:generic:list",
             args=[self.request.resolver_match.kwargs["contenttype"]],
         )
-
-    def delete(self, *args, **kwargs):
-        if "HX-Request" in self.request.headers:
-            return (
-                reverse_lazy(
-                    "apis_core:generic:list",
-                    args=[self.request.resolver_match.kwargs["contenttype"]],
-                ),
-            )
-        return super().delete(*args, **kwargs)
 
 
 class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
