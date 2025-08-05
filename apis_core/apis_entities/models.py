@@ -1,8 +1,10 @@
 import functools
 import logging
 import re
+import ast
 
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.base import ModelBase
 from django.db.models.signals import post_save
@@ -17,8 +19,54 @@ NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 logger = logging.getLogger(__name__)
 
 
+def proc_ast_node(node, res):
+    for ent in node.body:
+        if isinstance(ent, ast.Assign):
+            match ent.targets[0].id:
+                case "subj_model":
+                    res["forward"].setdefault(ent.value.id, []).append(node.name)
+                case "obj_model":
+                    res["reverse"].setdefault(ent.value.id, []).append(node.name)
+    return res
+
+
+@functools.cache
+def get_relations_from_module(module):
+    res = {"forward": {}, "reverse": {}}
+    imp_path = "/".join(module.split(".")) + ".py"
+    with open(imp_path, "r") as inp:
+        tree = ast.parse(inp.read())
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.ClassDef):
+                continue
+            base_cls = [
+                cl.id.lower() if hasattr(cl, "id") else None for cl in node.bases
+            ]
+            if not "relation" in base_cls:
+                continue
+            res = proc_ast_node(node, res)
+    return res
+
+
 class AbstractEntityModelBase(ModelBase):
     def __new__(metacls, name, bases, attrs):
+        base_cls = [cl._meta.model_name for cl in bases]
+        if "abstractentity" in base_cls:
+            dict_cls = get_relations_from_module(attrs["__module__"])
+            if name in dict_cls["forward"]:
+                for cl in dict_cls["forward"][name]:
+                    attrs[f"rel_{cl.lower()}"] = GenericRelation(
+                        cl,
+                        object_id_field="subj_object_id",
+                        content_type_field="subj_content_type",
+                    )
+            if name in dict_cls["reverse"]:
+                for cl in dict_cls["reverse"][name]:
+                    attrs[f"rel_rev_{cl.lower()}"] = GenericRelation(
+                        cl,
+                        object_id_field="obj_object_id",
+                        content_type_field="obj_content_type",
+                    )
         if name == "AbstractEntity":
             return super().__new__(metacls, name, bases, attrs)
         else:
