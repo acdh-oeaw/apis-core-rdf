@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.validators import URLValidator
 from django.db.models.fields.related import ManyToManyRel
@@ -248,7 +249,9 @@ class Detail(GenericModelMixin, PermissionRequiredMixin, DetailView):
     permission_action_required = "view"
 
 
-class Create(GenericModelMixin, PermissionRequiredMixin, CreateView):
+class Create(
+    GenericModelMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView
+):
     """
     Create view for a generic model.
     Access requires the `<model>_add` permission.
@@ -263,6 +266,13 @@ class Create(GenericModelMixin, PermissionRequiredMixin, CreateView):
         form_modules = module_paths(self.model, path="forms", suffix="Form")
         form_class = first_member_match(form_modules, GenericModelForm)
         return modelform_factory(self.model, form_class)
+
+    def get_success_message(self, cleaned_data):
+        message_templates = template_names_via_mro(
+            self.model, "_create_success_message.html"
+        )
+        template = select_template(message_templates)
+        return template.render({"object": self.object})
 
     def get_success_url(self):
         return self.object.get_create_success_url()
@@ -285,7 +295,9 @@ class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
         )
 
 
-class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
+class Update(
+    GenericModelMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
     """
     Update view for a generic model.
     Access requires the `<model>_change` permission.
@@ -299,6 +311,13 @@ class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
         form_modules = module_paths(self.model, path="forms", suffix="Form")
         form_class = first_member_match(form_modules, GenericModelForm)
         return modelform_factory(self.model, form_class)
+
+    def get_success_message(self, cleaned_data):
+        message_templates = template_names_via_mro(
+            self.model, "_update_success_message.html"
+        )
+        template = select_template(message_templates)
+        return template.render({"object": self.object})
 
     def get_success_url(self):
         return self.object.get_update_success_url()
