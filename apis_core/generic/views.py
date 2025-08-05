@@ -256,7 +256,7 @@ class Create(GenericModelMixin, PermissionRequiredMixin, CreateView):
     the `first_member_match` helper.
     """
 
-    template_name = "generic/generic_form.html"
+    template_name_suffix = "_create"
     permission_action_required = "add"
 
     def get_form_class(self):
