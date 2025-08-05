@@ -25,8 +25,8 @@ urlpatterns = [
 router = CustomDefaultRouter()
 
 
-if "apis_core.apis_metainfo" in settings.INSTALLED_APPS:
-    from apis_core.apis_metainfo.urls import router as apis_metainfo_router
+if "apis_core.metainfo" in settings.INSTALLED_APPS:
+    from apis_core.metainfo.urls import router as apis_metainfo_router
 
     router.registry.extend(apis_metainfo_router.registry)
 
