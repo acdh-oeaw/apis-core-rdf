@@ -7,8 +7,8 @@ from django.dispatch import receiver
 from django.urls import NoReverseMatch, reverse
 
 from apis_core.apis_entities.models import AbstractEntity
-from apis_core.apis_metainfo.models import Uri
 from apis_core.generic.signals import post_merge_with
+from apis_core.uris.models import Uri
 from apis_core.utils.settings import apis_base_uri
 
 logger = logging.getLogger(__name__)
