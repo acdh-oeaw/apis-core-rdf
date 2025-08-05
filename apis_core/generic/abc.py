@@ -177,7 +177,7 @@ class GenericModel:
 
         # TODO: check if these imports can be put to top of module without
         #  causing circular import issues.
-        from apis_core.apis_metainfo.models import Uri
+        from apis_core.uris.models import Uri
 
         e_a = type(self).__name__
         self_model_class = ContentType.objects.get(model__iexact=e_a).model_class()
@@ -256,7 +256,7 @@ class GenericModel:
     def uri_set(self):
         ct = ContentType.objects.get_for_model(self)
         return (
-            ContentType.objects.get(app_label="apis_metainfo", model="uri")
+            ContentType.objects.get(app_label="uris", model="uri")
             .model_class()
             .objects.filter(content_type=ct, object_id=self.id)
             .all()

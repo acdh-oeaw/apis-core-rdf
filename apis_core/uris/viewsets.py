@@ -4,7 +4,7 @@ from drf_spectacular.utils import OpenApiParameter, OpenApiTypes, extend_schema
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from apis_core.apis_metainfo.models import Uri
+from apis_core.uris.models import Uri
 
 
 class UriToObjectViewSet(viewsets.ViewSet):
