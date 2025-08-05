@@ -1,0 +1,34 @@
+{% block footer %}
+  <footer class="border-top p-2 bg-light">
+    <div class="row m-0">
+      <div class="col text-start">
+
+        {% block footer-left %}
+          {% include "partials/footer-left.html" %}
+        {% endblock footer-left %}
+
+      </div>
+      <div class="col text-center">
+
+        {% block footer-center %}
+          <a href="https://www.oeaw.ac.at/acdh/" target="_blank">
+            <img id="logo"
+                 class="icon"
+                 alt="ACDH Logo"
+                 title="Austrian Centre for Digital Humanities (ACDH) of the Austrian Academy of Sciences"
+                 src="https://fundament.acdh.oeaw.ac.at/common-assets/images/acdh_logo.svg" />
+          </a>
+        {% endblock footer-center %}
+
+      </div>
+      <div class="col text-end">
+
+        {% block footer-right %}
+          {% block imprint %}
+          {% endblock imprint %}
+        {% endblock footer-right %}
+
+      </div>
+    </div>
+  </footer>
+{% endblock footer %}
