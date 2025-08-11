@@ -1,10 +1,36 @@
-from rest_framework import viewsets
+from rest_framework import pagination, viewsets
 
 from apis_core.generic.schema import GenericAutoSchema
 
 from .filterbackends import GenericFilterBackend
 from .helpers import first_member_match, makeclassprefix, module_paths
 from .serializers import GenericHyperlinkedModelSerializer, serializer_factory
+
+
+class InjectFacetsLimitOffsetPagination(pagination.LimitOffsetPagination):
+    """
+    This pagination class injects a `facets` dict into the API response object.
+    It looks for a `get_facets` method in the models class and if this
+    method exists it uses its return value as the value of the `facets` key in
+    the API response.
+    To make the API response always paginated, we have to set the `default_limit`
+    attribute to something other than None.
+    """
+
+    default_limit = 20
+    facets = None
+
+    def paginate_queryset(self, queryset, request, view=None):
+        if hasattr(queryset.model, "get_facets"):
+            self.facets = queryset.model.get_facets(queryset)
+        return super().paginate_queryset(queryset, request, view)
+
+    def get_paginated_response(self, data):
+        response = super().get_paginated_response(data)
+        if self.facets is not None:
+            response.data.update({"facets": self.facets})
+            response.data = dict(sorted(response.data.items()))
+        return response
 
 
 class ModelViewSet(viewsets.ModelViewSet):
@@ -18,6 +44,7 @@ class ModelViewSet(viewsets.ModelViewSet):
 
     filter_backends = [GenericFilterBackend]
     schema = GenericAutoSchema()
+    pagination_class = InjectFacetsLimitOffsetPagination
 
     def dispatch(self, *args, **kwargs):
         self.model = kwargs.get("contenttype").model_class()
