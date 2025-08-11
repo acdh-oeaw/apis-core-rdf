@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.50.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.2...v0.50.3) (2025-08-11)
+
+
+### Bug Fixes
+
+* **relations:** readd option to allow obj creation in relation form ([9e62215](https://github.com/acdh-oeaw/apis-core-rdf/commit/9e622157e91e4a1076ee6c8081fb439e6d707d2f))
+
 ## [0.50.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.1...v0.50.2) (2025-08-04)
 
 
