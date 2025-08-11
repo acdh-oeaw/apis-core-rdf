@@ -109,6 +109,19 @@
               {% block main-menu-extra %}
               {% endblock main-menu-extra %}
 
+              {% block main-menu-search %}
+                <form class="d-flex align-items-center"
+                      method="get"
+                      action="{% url 'apis_core:search' %}">
+                  <input class="form-control form-control-sm me-2"
+                         type="search"
+                         name="search"
+                         placeholder="{% translate "Search" %}"
+                         aria-label="Search">
+                  <button class="btn btn-outline-success btn-sm" type="submit" name="submit">{% translate "Search" %}</button>
+                </form>
+              {% endblock main-menu-search %}
+
             </ul>
 
             {% block userlogin-menu %}
