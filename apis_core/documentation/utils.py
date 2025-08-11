@@ -24,12 +24,29 @@ class Datamodel:
         edges = defaultdict(list)
         for rel in self.relations:
             for subj_class in rel.model_class().subj_list():
+                subj_name = ContentType.objects.get_for_model(subj_class).name
                 for obj_class in rel.model_class().obj_list():
-                    key = (
-                        ContentType.objects.get_for_model(subj_class).name,
-                        ContentType.objects.get_for_model(obj_class).name,
-                    )
-                    edges[key].append(force_str(rel.model_class().name()))
+                    obj_name = ContentType.objects.get_for_model(obj_class).name
+
+                    original_pair = (subj_name, obj_name)
+                    key = tuple(sorted(original_pair))
+
+                    rel_model = rel.model_class()
+                    rel_label = ""
+                    if key == original_pair:
+                        rel_label = (
+                            f"{force_str(rel_model.name())}/{force_str(rel_model.reverse_name())}"
+                            if rel_model.name() != rel_model.reverse_name()
+                            else rel_model.name()
+                        )
+                    else:
+                        rel_label = (
+                            f"{force_str(rel_model.reverse_name())}/{force_str(rel_model.name())}"
+                            if rel_model.name() != rel_model.reverse_name()
+                            else rel_model.name()
+                        )
+
+                    edges[key].append(rel_label)
         return edges
 
     def make_graph(self):
@@ -49,7 +66,7 @@ class Datamodel:
                 node.set_style("filled")
                 graph.add_node(node)
             for (subj, obj), names in self.edges().items():
-                e = Edge(subj, obj, label="\n".join(names))
+                e = Edge(subj, obj, label="\n".join(names), fontsize="11")
                 graph.add_edge(e)
             self.graph = {"svg": graph.create_svg().decode(), "dot": graph.to_string()}
         except ImportError as e:
