@@ -1,7 +1,7 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
 
-from apis_core.apis_entities.models import AbstractEntity
+from apis_core.apis_metainfo.models import Entity
 
 register = template.Library()
 
@@ -16,7 +16,7 @@ def url_replace(request, field, value):
 
 def is_entity(content_type: ContentType):
     model_class = content_type.model_class()
-    return model_class is not None and issubclass(model_class, AbstractEntity)
+    return model_class is not None and issubclass(model_class, Entity) and model_class is not Entity
 
 
 @register.simple_tag

@@ -2,7 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django_filters import CharFilter, MultipleChoiceFilter
 
-from apis_core.apis_metainfo.models import RootObject
+from apis_core.apis_metainfo.models import Entity
 from apis_core.generic.filtersets import GenericFilterSet
 from apis_core.generic.helpers import generate_search_filter
 from apis_core.relations.forms import RelationFilterSetForm
@@ -13,14 +13,14 @@ from apis_core.relations.utils import get_all_relation_subj_and_obj
 class EntityFilter(CharFilter):
     """
     Custom CharFilter that uses the generate_search_filter helper
-    to search in all instances inheriting from RootObject and then
+    to search in all instances inheriting from Entity and then
     uses those results to only list relations that point to one of
     the results.
     """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.extra["help_text"] = "Searches in subclasses of RootObject"
+        self.extra["help_text"] = "Searches in subclasses of Entity"
 
     def _search_all_entities(self, value) -> list[str]:
         q = Q()
@@ -29,7 +29,7 @@ class EntityFilter(CharFilter):
             q |= Q(**{f"{name}__isnull": False}) & generate_search_filter(
                 content_type.model_class(), value, prefix=f"{name}__"
             )
-        return RootObject.objects_inheritance.filter(q).values_list("pk", flat=True)
+        return Entity.objects_inheritance.filter(q).values_list("pk", flat=True)
 
     def filter(self, qs, value):
         if value:
@@ -68,7 +68,7 @@ class RelationFilterSet(GenericFilterSet):
     only lists those choices that actually exists (meaning the classes that are
     actually set as subj or obj in some relation).
     Additionaly, we add a search filter, that searches in instances connected
-    to relations (this does only work for instances inheriting from RootObject).
+    to relations (this does only work for instances inheriting from Entity).
     """
 
     subj_search = EntityFilter(
