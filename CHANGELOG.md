@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.50.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.3...v0.50.4) (2025-08-12)
+
+
+### Bug Fixes
+
+* **relations:** check for filter existence before removal ([26b01f3](https://github.com/acdh-oeaw/apis-core-rdf/commit/26b01f30ec48edc64052d700fe27095f62736cc7)), closes [#2014](https://github.com/acdh-oeaw/apis-core-rdf/issues/2014)
+* **relations:** remove leading slashes from links to static files ([45a26d3](https://github.com/acdh-oeaw/apis-core-rdf/commit/45a26d3ceb89441c0424d59d2c12e12a77f7602b)), closes [#2010](https://github.com/acdh-oeaw/apis-core-rdf/issues/2010)
+
 ## [0.50.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.2...v0.50.3) (2025-08-11)
 
 
