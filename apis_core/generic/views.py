@@ -17,7 +17,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
 from django.urls import reverse
-from django.utils.html import format_html
 from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
@@ -330,14 +329,11 @@ class Duplicate(GenericModelMixin, PermissionRequiredMixin, View):
         source_obj = get_object_or_404(self.model, pk=kwargs["pk"])
         newobj = source_obj.duplicate()
 
-        messages.success(
-            request,
-            format_html(
-                "<a href={}>{}</a> was successfully duplicated to the current object:",
-                source_obj.get_absolute_url(),
-                source_obj,
-            ),
+        message_templates = template_names_via_mro(
+            self.model, "_duplicate_success_message.html"
         )
+        template = select_template(message_templates)
+        messages.success(request, template.render({"object": source_obj}))
         return redirect(newobj.get_edit_url())
 
 
