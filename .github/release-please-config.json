@@ -6,14 +6,14 @@
   "packages": {
     ".": {
       "package-name": "apis-core-rdf",
-      "extra-files": ["apis_core/__init__.py"]
+      "extra-files": [
+        "apis_core/__init__.py",
+        {
+          "path": "uv.lock",
+          "type": "toml",
+          "jsonpath": "$.package[?(@.name.value=='apis-core-rdf')].version"
+        }
+      ]
     }
-  },
-  "extra-files": [
-    {
-      "path": "uv.lock",
-      "type": "toml",
-      "jsonpath": "$.package[?(@.name.value=='apis-core-rdf')].version"
-    }
-  ]
+  }
 }
