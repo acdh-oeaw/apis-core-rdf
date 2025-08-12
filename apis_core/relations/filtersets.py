@@ -92,7 +92,7 @@ class RelationFilterSet(GenericFilterSet):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if model := getattr(self.Meta, "model", False):
-            if model is Relation:
+            if model is Relation and "collections" in self.filters:
                 del self.filters["collections"]
             all_models = [ct.model_class() for ct in get_all_relation_subj_and_obj()]
             subj_models = getattr(model, "subj_model", all_models)
