@@ -8,6 +8,7 @@ from django.urls import NoReverseMatch, reverse
 
 from apis_core.apis_entities.models import AbstractEntity
 from apis_core.apis_metainfo.models import Uri
+from apis_core.generic.signals import post_merge_with
 from apis_core.utils.settings import apis_base_uri
 
 logger = logging.getLogger(__name__)
@@ -48,3 +49,20 @@ def create_default_uri(sender, instance, created, raw, using, update_fields, **k
                 content_type=content_type,
                 object_id=instance.id,
             )
+
+
+@receiver(post_merge_with)
+def merge_uris(sender, instance, entities, *args, **kwargs):
+    instance_content_type = ContentType.objects.get_for_model(instance)
+    for entity in entities:
+        content_type = ContentType.objects.get_for_model(entity)
+        for uri in Uri.objects.filter(content_type=content_type, object_id=entity.id):
+            logger.info(
+                "Updating uri %s to point to %s as a result of merging %s",
+                repr(uri),
+                repr(instance),
+                repr(entity),
+            )
+            uri.content_type = instance_content_type
+            uri.object_id = instance.id
+            uri.save()

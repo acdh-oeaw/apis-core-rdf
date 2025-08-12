@@ -181,10 +181,6 @@ class GenericModel:
         origin = self.__class__
         pre_merge_with.send(sender=origin, instance=self, entities=entities)
 
-        # TODO: check if these imports can be put to top of module without
-        #  causing circular import issues.
-        from apis_core.apis_metainfo.models import Uri
-
         e_a = type(self).__name__
         self_model_class = ContentType.objects.get(model__iexact=e_a).model_class()
         if isinstance(entities, int):
@@ -205,11 +201,6 @@ class GenericModel:
                     for s in getattr(ent, f.name).all():
                         if s not in sl:
                             getattr(self, f.name).add(s)
-            self_content_type = ContentType.objects.get_for_model(self)
-            ent_content_type = ContentType.objects.get_for_model(ent)
-            Uri.objects.filter(content_type=ent_content_type, object_id=ent.id).update(
-                content_type=self_content_type, object_id=self.id
-            )
 
         for ent in entities:
             self.merge_fields(ent)
