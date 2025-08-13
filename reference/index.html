@@ -5334,7 +5334,7 @@ but this is expected and we raise a more useful exception.</p>
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="GenericModelMixin (apis_core.generic.views.GenericModelMixin)" href="#apis_core.generic.views.GenericModelMixin">GenericModelMixin</a></code>, <code><span title="django.contrib.auth.mixins.PermissionRequiredMixin">PermissionRequiredMixin</span></code>, <code><span title="django.views.generic.edit.CreateView">CreateView</span></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="GenericModelMixin (apis_core.generic.views.GenericModelMixin)" href="#apis_core.generic.views.GenericModelMixin">GenericModelMixin</a></code>, <code><span title="django.contrib.auth.mixins.PermissionRequiredMixin">PermissionRequiredMixin</span></code>, <code><span title="django.contrib.messages.views.SuccessMessageMixin">SuccessMessageMixin</span></code>, <code><span title="django.views.generic.edit.CreateView">CreateView</span></code></p>
 
 
         <p>Create view for a generic model.
@@ -5350,7 +5350,9 @@ the <code>first_member_match</code> helper.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <pre class="highlight"><code class="language-python">class Create(GenericModelMixin, PermissionRequiredMixin, CreateView):
+                <pre class="highlight"><code class="language-python">class Create(
+    GenericModelMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView
+):
     """
     Create view for a generic model.
     Access requires the `&lt;model&gt;_add` permission.
@@ -5365,6 +5367,13 @@ the <code>first_member_match</code> helper.</p>
         form_modules = module_paths(self.model, path="forms", suffix="Form")
         form_class = first_member_match(form_modules, GenericModelForm)
         return modelform_factory(self.model, form_class)
+
+    def get_success_message(self, cleaned_data):
+        message_templates = template_names_via_mro(
+            self.model, "_create_success_message.html"
+        )
+        template = select_template(message_templates)
+        return template.render({"object": self.object})
 
     def get_success_url(self):
         return self.object.get_create_success_url()</code></pre>
@@ -6259,7 +6268,7 @@ external sources, if set up) and on form submit redirects to the Enrich view.</p
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="GenericModelMixin (apis_core.generic.views.GenericModelMixin)" href="#apis_core.generic.views.GenericModelMixin">GenericModelMixin</a></code>, <code><span title="django.contrib.auth.mixins.PermissionRequiredMixin">PermissionRequiredMixin</span></code>, <code><span title="django.views.generic.edit.UpdateView">UpdateView</span></code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="GenericModelMixin (apis_core.generic.views.GenericModelMixin)" href="#apis_core.generic.views.GenericModelMixin">GenericModelMixin</a></code>, <code><span title="django.contrib.auth.mixins.PermissionRequiredMixin">PermissionRequiredMixin</span></code>, <code><span title="django.contrib.messages.views.SuccessMessageMixin">SuccessMessageMixin</span></code>, <code><span title="django.views.generic.edit.UpdateView">UpdateView</span></code></p>
 
 
         <p>Update view for a generic model.
@@ -6275,7 +6284,9 @@ the <code>first_member_match</code> helper.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <pre class="highlight"><code class="language-python">class Update(GenericModelMixin, PermissionRequiredMixin, UpdateView):
+                <pre class="highlight"><code class="language-python">class Update(
+    GenericModelMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+):
     """
     Update view for a generic model.
     Access requires the `&lt;model&gt;_change` permission.
@@ -6289,6 +6300,13 @@ the <code>first_member_match</code> helper.</p>
         form_modules = module_paths(self.model, path="forms", suffix="Form")
         form_class = first_member_match(form_modules, GenericModelForm)
         return modelform_factory(self.model, form_class)
+
+    def get_success_message(self, cleaned_data):
+        message_templates = template_names_via_mro(
+            self.model, "_update_success_message.html"
+        )
+        template = select_template(message_templates)
+        return template.render({"object": self.object})
 
     def get_success_url(self):
         return self.object.get_update_success_url()</code></pre>
