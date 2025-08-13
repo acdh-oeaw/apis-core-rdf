@@ -28,8 +28,8 @@ from django_tables2.columns import library
 from django_tables2.export.views import ExportMixin
 from django_tables2.tables import table_factory
 
-from apis_core.apis_metainfo.models import Uri
-from apis_core.apis_metainfo.utils import create_object_from_uri
+from apis_core.uris.models import Uri
+from apis_core.uris.utils import create_object_from_uri
 from apis_core.utils.helpers import get_importer_for_model
 
 from .filtersets import GenericFilterSet

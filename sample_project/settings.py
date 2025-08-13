@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # SKOS collections and allow tagging of content
     "apis_core.collections",
     "apis_core.apis_metainfo",
+    "apis_core.uris",
     "apis_core.relations",
     "apis_core.history",
     "apis_core.apis_entities",

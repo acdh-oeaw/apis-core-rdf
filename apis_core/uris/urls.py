@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from apis_core.apis_metainfo.viewsets import UriToObjectViewSet
+from apis_core.uris.viewsets import UriToObjectViewSet
 
 router = DefaultRouter()
 

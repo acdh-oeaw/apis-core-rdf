@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
-from apis_core.apis_metainfo.models import Uri
+from apis_core.uris.models import Uri
 
 logger = logging.getLogger(__name__)
 

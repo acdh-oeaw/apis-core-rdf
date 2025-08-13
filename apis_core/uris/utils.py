@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
 
-from apis_core.apis_metainfo.models import Uri
+from apis_core.uris.models import Uri
 from apis_core.utils.helpers import get_importer_for_model
 
 

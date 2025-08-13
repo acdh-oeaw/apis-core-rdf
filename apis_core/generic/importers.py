@@ -8,8 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
 from django.db.utils import IntegrityError
 
-from apis_core.apis_metainfo.models import Uri
-from apis_core.apis_metainfo.utils import create_object_from_uri
+from apis_core.uris.models import Uri
+from apis_core.uris.utils import create_object_from_uri
 from apis_core.utils.rdf import get_something_from_uri
 
 logger = logging.getLogger(__name__)

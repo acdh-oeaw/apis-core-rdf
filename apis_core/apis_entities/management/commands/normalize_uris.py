@@ -2,7 +2,7 @@ from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from apis_core.apis_metainfo.models import Uri
+from apis_core.uris.models import Uri
 
 
 class Command(BaseCommand):

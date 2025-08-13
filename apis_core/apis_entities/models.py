@@ -9,7 +9,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import NoReverseMatch, reverse
 
-from apis_core.apis_metainfo.models import RootObject, Uri
+from apis_core.apis_metainfo.models import RootObject
+from apis_core.uris.models import Uri
 from apis_core.utils.settings import apis_base_uri
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
