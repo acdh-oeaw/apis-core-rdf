@@ -463,7 +463,7 @@ class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
 
     permission_action_required = "change"
     form_class = GenericMergeWithForm
-    template_name = "generic/generic_merge.html"
+    template_name_suffix = "_merge"
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
