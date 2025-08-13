@@ -416,7 +416,6 @@ class Autocomplete(
 
 
 class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
-    template_name = "generic/generic_import_form.html"
     template_name_suffix = "_import"
     permission_action_required = "add"
 
