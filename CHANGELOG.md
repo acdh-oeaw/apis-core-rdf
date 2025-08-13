@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.51.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.4...v0.51.0) (2025-08-13)
+
+
+### Features
+
+* add simple view for adding something to collections ([f8a3d2a](https://github.com/acdh-oeaw/apis-core-rdf/commit/f8a3d2ad8163a74c811beebf349fa09de577fd44))
+* **apis_entities:** add an option to delete a linked URI from an entity ([d887e86](https://github.com/acdh-oeaw/apis-core-rdf/commit/d887e861892d35f9a7ab4bed69dab334c2ec2d14))
+* **apis_metainfo:** override URI confirm delete template ([2f30203](https://github.com/acdh-oeaw/apis-core-rdf/commit/2f302035859582a3cc1c9246fc60911628815ba4))
+* **collections:** add a column that links to the collections view ([5a0d936](https://github.com/acdh-oeaw/apis-core-rdf/commit/5a0d936a498c08f8cf3aab4d9e1e36264e9f80d3))
+* **core:** open footer links in new window ([3d42c5f](https://github.com/acdh-oeaw/apis-core-rdf/commit/3d42c5f534f86015e271d5e2a7909f50db22ec22)), closes [#1955](https://github.com/acdh-oeaw/apis-core-rdf/issues/1955)
+* **generic:** add card-header-content block in template form template ([3570640](https://github.com/acdh-oeaw/apis-core-rdf/commit/3570640d533a6ee11fb8da812a45c7563754c3b5))
+* **generic:** add info messages for create and update view ([6af3a77](https://github.com/acdh-oeaw/apis-core-rdf/commit/6af3a770758bce294acc813ee0f8094518066458))
+* **generic:** implement redirect to `?redirect=` argument in Delete ([d149289](https://github.com/acdh-oeaw/apis-core-rdf/commit/d1492896cd9afe6a23b0934f7282465c0b09221c))
+* **generic:** introduce `get_verbose_name` class method ([a394793](https://github.com/acdh-oeaw/apis-core-rdf/commit/a3947931d2a3b801c568718355fc45836e6ca264))
+* **generic:** use template lookup for create view ([52e771f](https://github.com/acdh-oeaw/apis-core-rdf/commit/52e771fdad0703e860ede9474139b40c4640b37d))
+* **generic:** use template lookup instead of hardcoding duplicate msg ([9f36fc0](https://github.com/acdh-oeaw/apis-core-rdf/commit/9f36fc09b504e08a25e2b54cacf4fb82aa592ff9)), closes [#2003](https://github.com/acdh-oeaw/apis-core-rdf/issues/2003)
+* **history:** add a column that links to collections mgmt view ([67e9703](https://github.com/acdh-oeaw/apis-core-rdf/commit/67e9703306b605b255cfab515a812a3ec6307c93))
+* **relations:** highlight relation elements in edit form heading ([4635673](https://github.com/acdh-oeaw/apis-core-rdf/commit/463567355f2896c27858faf1eb65f350463b060b))
+
 ## [0.50.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.3...v0.50.4) (2025-08-12)
 
 
