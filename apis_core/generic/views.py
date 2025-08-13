@@ -505,7 +505,7 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
     """
 
     permission_action_required = "change"
-    template_name = "generic/generic_enrich.html"
+    template_name_suffix = "_enrich"
     form_class = GenericEnrichForm
     importer_class = None
 
