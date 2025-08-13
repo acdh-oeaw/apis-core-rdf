@@ -85,9 +85,7 @@ class GenericModelMixin:
         suffix = ".html"
         if hasattr(self, "template_name_suffix"):
             suffix = self.template_name_suffix + ".html"
-        additional_templates = template_names_via_mro(self.model, suffix) + [
-            f"generic/generic{suffix}"
-        ]
+        additional_templates = template_names_via_mro(self.model, suffix)
         template_names += filter(
             lambda template: template not in template_names, additional_templates
         )
@@ -418,7 +416,6 @@ class Autocomplete(
 
 
 class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
-    template_name = "generic/generic_import_form.html"
     template_name_suffix = "_import"
     permission_action_required = "add"
 
@@ -466,7 +463,7 @@ class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
 
     permission_action_required = "change"
     form_class = GenericMergeWithForm
-    template_name = "generic/generic_merge.html"
+    template_name_suffix = "_merge"
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
@@ -508,7 +505,7 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
     """
 
     permission_action_required = "change"
-    template_name = "generic/generic_enrich.html"
+    template_name_suffix = "_enrich"
     form_class = GenericEnrichForm
     importer_class = None
 
