@@ -85,9 +85,7 @@ class GenericModelMixin:
         suffix = ".html"
         if hasattr(self, "template_name_suffix"):
             suffix = self.template_name_suffix + ".html"
-        additional_templates = template_names_via_mro(self.model, suffix) + [
-            f"generic/generic{suffix}"
-        ]
+        additional_templates = template_names_via_mro(self.model, suffix)
         template_names += filter(
             lambda template: template not in template_names, additional_templates
         )
