@@ -74,6 +74,11 @@
       <script src="{% static 'js/E53_Place_popover.js' %}"></script>
       <script src="{% static 'js/apis_select2.js' %}"></script>
       <script src="{% static 'autocomplete_light/autocomplete_light.js' %}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+              integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+              crossorigin="anonymous"
+              defer></script>
+      <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
     {% endblock scriptHeader %}
 
   </head>
@@ -186,10 +191,6 @@
     {% include "partials/footer.html" %}
 
     {% block scripts %}
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-              integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-              crossorigin="anonymous"></script>
-      <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     {% endblock scripts %}
 
     <button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top">
