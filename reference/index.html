@@ -5431,17 +5431,7 @@ Access requires the <code>&lt;model&gt;_delete</code> permission.</p>
         return reverse(
             "apis_core:generic:list",
             args=[self.request.resolver_match.kwargs["contenttype"]],
-        )
-
-    def delete(self, *args, **kwargs):
-        if "HX-Request" in self.request.headers:
-            return (
-                reverse_lazy(
-                    "apis_core:generic:list",
-                    args=[self.request.resolver_match.kwargs["contenttype"]],
-                ),
-            )
-        return super().delete(*args, **kwargs)</code></pre>
+        )</code></pre>
               </details>
 
 
