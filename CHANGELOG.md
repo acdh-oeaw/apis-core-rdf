@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.51.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.51.0...v0.51.1) (2025-08-14)
+
+
+### Bug Fixes
+
+* **generic:** fix the request logic of the importer ([46a3c6a](https://github.com/acdh-oeaw/apis-core-rdf/commit/46a3c6a1207b242d00fd563736a2741723c2adbc))
+
 ## [0.51.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.50.4...v0.51.0) (2025-08-13)
 
 
