@@ -43,22 +43,24 @@ class GenericModelImporter:
 
     @cache
     def request(self, uri):
-        # we first try to use the RDF parser
-        try:
-            data = get_something_from_uri(
-                uri,
-                [self.model],
-            )
-            return data
-        except Exception as e:
-            logger.debug(e)
-        # if everything else fails, try parsing JSON
-        # if even that does not help, return an empty dict
-        try:
-            return json.loads(urllib.request.urlopen(uri).read())
-        except Exception as e:
-            logger.debug(e)
-        return {}
+        data = None
+        # We first try to use the RDF parser
+        if not data:
+            try:
+                data = get_something_from_uri(
+                    uri,
+                    [self.model],
+                )
+            except Exception as e:
+                logger.debug(e)
+        # If there is no data yet, try parsing JSON
+        if not data:
+            try:
+                data = json.loads(urllib.request.urlopen(uri).read())
+            except Exception as e:
+                logger.debug(e)
+        # Return the fetched data or an empty dict if there is none
+        return data or {}
 
     def mangle_data(self, data):
         return data
