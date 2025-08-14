@@ -24,11 +24,11 @@ jobs:
 
     - name: Install uv
       uses: astral-sh/setup-uv@v6
+    - name: Test
+      run: uv run pytest
     - name: Make migrations
       run: uv run ./manage.py makemigrations
     - name: Migrate
       run: uv run ./manage.py migrate
-    - name: Test
-      run: uv run ./manage.py test
     - name: Schema generation test
       run: uv run ./manage.py spectacular --fail-on-warn
