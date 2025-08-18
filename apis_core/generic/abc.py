@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
 from django.db.models import BooleanField, CharField, TextField
 from django.db.models.fields.related import ForeignKey, ManyToManyField
 from django.db.models.query import QuerySet
@@ -19,7 +20,10 @@ from apis_core.utils.settings import apis_base_uri, rdf_namespace_prefix
 logger = logging.getLogger(__name__)
 
 
-class GenericModel:
+class GenericModel(models.Model):
+    class Meta:
+        abstract = True
+
     def __repr__(self):
         if id := getattr(self, "id", None):
             return super().__repr__() + f" (ID: {id})"
