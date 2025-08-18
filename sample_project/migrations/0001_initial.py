@@ -5,8 +5,6 @@ import simple_history.models
 from django.conf import settings
 from django.db import migrations, models
 
-import apis_core.generic.abc
-
 
 class Migration(migrations.Migration):
     initial = True
@@ -76,7 +74,7 @@ class Migration(migrations.Migration):
                 ),
                 ("name", models.CharField(blank=True, default="", max_length=1024)),
             ],
-            bases=(apis_core.generic.abc.GenericModel, models.Model),
+            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name="Person",
@@ -175,7 +173,6 @@ class Migration(migrations.Migration):
             bases=(
                 simple_history.models.HistoricalChanges,
                 models.Model,
-                apis_core.generic.abc.GenericModel,
             ),
         ),
         migrations.CreateModel(
@@ -250,7 +247,6 @@ class Migration(migrations.Migration):
             bases=(
                 simple_history.models.HistoricalChanges,
                 models.Model,
-                apis_core.generic.abc.GenericModel,
             ),
         ),
         migrations.CreateModel(
@@ -371,7 +367,6 @@ class Migration(migrations.Migration):
             bases=(
                 simple_history.models.HistoricalChanges,
                 models.Model,
-                apis_core.generic.abc.GenericModel,
             ),
         ),
     ]
