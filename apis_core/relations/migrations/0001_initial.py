@@ -3,8 +3,6 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-import apis_core.generic.abc
-
 
 class Migration(migrations.Migration):
     initial = True
@@ -45,6 +43,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            bases=(models.Model, apis_core.generic.abc.GenericModel),
+            bases=(models.Model,),
         ),
     ]
