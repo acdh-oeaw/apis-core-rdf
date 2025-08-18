@@ -43,7 +43,7 @@ class APISHistoricalRecords(HistoricalRecords, GenericModel):
         )
 
 
-class APISHistoryTableBase(models.Model, GenericModel):
+class APISHistoryTableBase(GenericModel, models.Model):
     class Meta:
         abstract = True
 
