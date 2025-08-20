@@ -134,6 +134,8 @@ class GenericModel:
     def get_merge_textfield_value(self, other: TextField, field: TextField):
         res = getattr(self, field.name)
         if getattr(other, field.name):
+            # if own value is None, fallback to empty string
+            res = res or ""
             res += "\n" + f"Merged from {other}:\n" + getattr(other, field.name)
         return res
 
