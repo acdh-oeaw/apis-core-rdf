@@ -3125,16 +3125,7 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
 <span class="normal">257</span>
 <span class="normal">258</span>
 <span class="normal">259</span>
-<span class="normal">260</span>
-<span class="normal">261</span>
-<span class="normal">262</span>
-<span class="normal">263</span>
-<span class="normal">264</span>
-<span class="normal">265</span>
-<span class="normal">266</span>
-<span class="normal">267</span>
-<span class="normal">268</span>
-<span class="normal">269</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericModel</span><span class="p">:</span>
+<span class="normal">260</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericModel</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">id</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; (ID: </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">)&quot;</span>
@@ -3296,10 +3287,6 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
         <span class="n">origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
         <span class="n">pre_merge_with</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="o">=</span><span class="n">entities</span><span class="p">)</span>
 
-        <span class="c1"># TODO: check if these imports can be put to top of module without</span>
-        <span class="c1">#  causing circular import issues.</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">apis_core.apis_metainfo.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Uri</span>
-
         <span class="n">e_a</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="n">self_model_class</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model__iexact</span><span class="o">=</span><span class="n">e_a</span><span class="p">)</span><span class="o">.</span><span class="n">model_class</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -3320,11 +3307,6 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
                     <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ent</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
                         <span class="k">if</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">:</span>
                             <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-            <span class="n">self_content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-            <span class="n">ent_content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">ent</span><span class="p">)</span>
-            <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="n">ent_content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">ent</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                <span class="n">content_type</span><span class="o">=</span><span class="n">self_content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span>
-            <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">merge_fields</span><span class="p">(</span><span class="n">ent</span><span class="p">)</span>
