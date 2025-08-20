@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.51.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.51.1...v0.51.2) (2025-08-20)
+
+
+### Bug Fixes
+
+* **generic:** merge Charfields only if other field has a value ([a8b58e1](https://github.com/acdh-oeaw/apis-core-rdf/commit/a8b58e1ef1ff0f1d7184e1c4fc11f176fe6440fa))
+* **generic:** use empty string as value if self is None ([1ec6da6](https://github.com/acdh-oeaw/apis-core-rdf/commit/1ec6da6df8e80f64808b7cb51d90bc714c0abe6b))
+
 ## [0.51.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.51.0...v0.51.1) (2025-08-14)
 
 
