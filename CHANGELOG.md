@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.52.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.51.2...v0.52.0) (2025-08-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **metainfo:** The Uri model now resides in the `uris` app, so you'll have to add `apis_core.uris` to the INSTALLED_APPS
+* **generic:** We drop the `generic{suffix}` fallback of the generic template lookup and use `genericmodel{suffix}` instead. All the `generic_` templates were renamed accordingly. If you extend from one of those, please adapt your templates accordingly.
+
+### Features
+
+* **apis_entities:** drop useless template override ([9dcfdfe](https://github.com/acdh-oeaw/apis-core-rdf/commit/9dcfdfe741164c268594a4b96068928aa8f69701))
+* **apis_metainfo:** introduce signal to retarget Uris on merge ([d4416b2](https://github.com/acdh-oeaw/apis-core-rdf/commit/d4416b27892ea9432e0b4043f0ef0f81a5903172)), closes [#2005](https://github.com/acdh-oeaw/apis-core-rdf/issues/2005)
+* **apis_metainfo:** move signal receiver to correct app ([74e17a3](https://github.com/acdh-oeaw/apis-core-rdf/commit/74e17a3116a67e53c873d2cd78d0080d3c6f994e)), closes [#2006](https://github.com/acdh-oeaw/apis-core-rdf/issues/2006)
+* **generic:** drop `generic{suffix}` as template fallback value ([3edf16a](https://github.com/acdh-oeaw/apis-core-rdf/commit/3edf16a643c11670202e6743d87aee67f0355a6c))
+* **generic:** use template lookup instead of hardcoded template_name ([5db8acf](https://github.com/acdh-oeaw/apis-core-rdf/commit/5db8acfa7cec5edd1334014513dd1fd1ddc90512))
+* **generic:** use template lookup instead of hardcoded template_name ([11aaf96](https://github.com/acdh-oeaw/apis-core-rdf/commit/11aaf96e30fd965dec1c82c51c1d8155ee57f898))
+* **metainfo:** move Uri to new `uris` app ([edb8999](https://github.com/acdh-oeaw/apis-core-rdf/commit/edb8999213f116e53648e7579ac68aac975cd064))
+* **relations:** surround relations menu in a block ([4c4dbf0](https://github.com/acdh-oeaw/apis-core-rdf/commit/4c4dbf0141ea62982e9a843460bdf94bdc5fb71f))
+
+
+### Bug Fixes
+
+* **core:** move remainig script tags to header & use defer ([dcee623](https://github.com/acdh-oeaw/apis-core-rdf/commit/dcee623a4e5edf56147893d25c4c1fe8b35c5d43)), closes [#1240](https://github.com/acdh-oeaw/apis-core-rdf/issues/1240)
+* **generic:** drop unused class variable ([b3c1504](https://github.com/acdh-oeaw/apis-core-rdf/commit/b3c1504eab330c8bbd05f8be1b5194054b6edb94))
+
 ## [0.51.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.51.1...v0.51.2) (2025-08-20)
 
 
