@@ -127,7 +127,7 @@ class GenericModel:
         res = getattr(self, field.name)
         if not field.choices:
             otherres = getattr(other, field.name, res)
-            if otherres != res:
+            if otherres and otherres != res:
                 res += f" ({otherres})"
         return res
 
