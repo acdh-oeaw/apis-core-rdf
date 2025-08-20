@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for apis_core/apis_metainfo/signals.py: 98%</title>
+    <title>Coverage for apis_core/uris/signals.py: 98%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -11,7 +11,7 @@
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>apis_core/apis_metainfo/signals.py</b>:
+            <span class="text">Coverage for </span><b>apis_core/uris/signals.py</b>:
             <span class="pc_cov">98%</span>
         </h1>
         <aside id="help_panel_wrapper">
@@ -60,12 +60,12 @@
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
-            <a id="prevFileLink" class="nav" href="z_49ff5da25a66209a_serializers_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a id="prevFileLink" class="nav" href="z_b623ea8068d48999_models_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
-            <a id="nextFileLink" class="nav" href="z_49ff5da25a66209a_tables_py.html">&#xbb; next</a>
+            <a id="nextFileLink" class="nav" href="z_b623ea8068d48999_utils_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2025-08-20 10:49 +0000
+            created at 2025-08-20 11:02 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -89,8 +89,8 @@
     <p class="run"><span class="n"><a id="t7" href="#t7">7</a></span><span class="t"><span class="key">from</span> <span class="nam">django</span><span class="op">.</span><span class="nam">urls</span> <span class="key">import</span> <span class="nam">NoReverseMatch</span><span class="op">,</span> <span class="nam">reverse</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t"><span class="key">from</span> <span class="nam">apis_core</span><span class="op">.</span><span class="nam">apis_entities</span><span class="op">.</span><span class="nam">models</span> <span class="key">import</span> <span class="nam">AbstractEntity</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t"><span class="key">from</span> <span class="nam">apis_core</span><span class="op">.</span><span class="nam">apis_metainfo</span><span class="op">.</span><span class="nam">models</span> <span class="key">import</span> <span class="nam">Uri</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t"><span class="key">from</span> <span class="nam">apis_core</span><span class="op">.</span><span class="nam">generic</span><span class="op">.</span><span class="nam">signals</span> <span class="key">import</span> <span class="nam">post_merge_with</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t"><span class="key">from</span> <span class="nam">apis_core</span><span class="op">.</span><span class="nam">generic</span><span class="op">.</span><span class="nam">signals</span> <span class="key">import</span> <span class="nam">post_merge_with</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t"><span class="key">from</span> <span class="nam">apis_core</span><span class="op">.</span><span class="nam">uris</span><span class="op">.</span><span class="nam">models</span> <span class="key">import</span> <span class="nam">Uri</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="key">from</span> <span class="nam">apis_core</span><span class="op">.</span><span class="nam">utils</span><span class="op">.</span><span class="nam">settings</span> <span class="key">import</span> <span class="nam">apis_base_uri</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t"><span class="nam">logger</span> <span class="op">=</span> <span class="nam">logging</span><span class="op">.</span><span class="nam">getLogger</span><span class="op">(</span><span class="nam">__name__</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -152,12 +152,12 @@
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="z_49ff5da25a66209a_serializers_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a class="nav" href="z_b623ea8068d48999_models_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
-            <a class="nav" href="z_49ff5da25a66209a_tables_py.html">&#xbb; next</a>
+            <a class="nav" href="z_b623ea8068d48999_utils_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2025-08-20 10:49 +0000
+            created at 2025-08-20 11:02 +0000
         </p>
     </div>
 </footer>
