@@ -2430,13 +2430,15 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
         res = getattr(self, field.name)
         if not field.choices:
             otherres = getattr(other, field.name, res)
-            if otherres != res:
+            if otherres and otherres != res:
                 res += f" ({otherres})"
         return res
 
     def get_merge_textfield_value(self, other: TextField, field: TextField):
         res = getattr(self, field.name)
         if getattr(other, field.name):
+            # if own value is None, fallback to empty string
+            res = res or ""
             res += "\n" + f"Merged from {other}:\n" + getattr(other, field.name)
         return res
 
