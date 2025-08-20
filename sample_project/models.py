@@ -1,7 +1,7 @@
 from django.db import models
 
 from apis_core.apis_entities.abc import E21_Person, E53_Place, E74_Group
-from apis_core.apis_entities.models import AbstractEntity
+from apis_core.entities.models import Entity
 from apis_core.generic.abc import GenericModel
 from apis_core.history.models import VersionMixin
 from apis_core.relations.models import Relation
@@ -14,15 +14,15 @@ class Profession(VersionMixin, GenericModel, models.Model):
         return self.name
 
 
-class Person(VersionMixin, E21_Person, AbstractEntity):
+class Person(VersionMixin, E21_Person, Entity):
     profession = models.ManyToManyField(Profession, blank=True)
 
 
-class Place(VersionMixin, E53_Place, AbstractEntity):
+class Place(VersionMixin, E53_Place, Entity):
     pass
 
 
-class Group(VersionMixin, E74_Group, AbstractEntity):
+class Group(VersionMixin, E74_Group, Entity):
     pass
 
 
