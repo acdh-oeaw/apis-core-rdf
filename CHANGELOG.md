@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.52.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.52.0...v0.52.1) (2025-08-21)
+
+
+### Bug Fixes
+
+* **uris:** let template inherit from the correct base template ([81ebe2e](https://github.com/acdh-oeaw/apis-core-rdf/commit/81ebe2ef85cdee6e20a7d464f9f082c8f8d8930c))
+* **uris:** move template & translation to correct app folder ([20b55d3](https://github.com/acdh-oeaw/apis-core-rdf/commit/20b55d3df350a0dd62e6f7925430b84db69356d4))
+
 ## [0.52.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.51.2...v0.52.0) (2025-08-20)
 
 
