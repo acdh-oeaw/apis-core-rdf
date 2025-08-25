@@ -17,6 +17,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
@@ -217,6 +218,31 @@ class List(
                 initial=self._get_columns_initial(columns_exclude),
             )
             filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
+        # If the filterset form contains form data
+        # we add a div with a class around the label
+        # to mark emphasize the fields that are used
+        # thats a workaround, because its not that easy
+        # to add a css class to a form field label.
+        # To be able to compare the fields with the form
+        # data, we create a temporary mapping between
+        # widget_names and fields
+        fields = {}
+        for name, field in filterset.form.fields.items():
+            fields[name] = name
+            if hasattr(field.widget, "widgets_names"):
+                for widget_name in field.widget.widgets_names:
+                    fields[name + widget_name] = name
+        if data := filterset.form.data:
+            for field, value in data.items():
+                if field in fields.keys() and value:
+                    field_name = fields[field]
+                    label = (
+                        filterset.form.fields[field_name].label
+                        or field_name.capitalize()
+                    )
+                    filterset.form.fields[field_name].label = mark_safe(
+                        f"<div class='filter-input-selected'>{label}</div>"
+                    )
 
         return filterset
 
