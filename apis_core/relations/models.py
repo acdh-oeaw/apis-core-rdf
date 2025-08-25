@@ -56,7 +56,7 @@ def get_by_natural_key(natural_key: str):
     return ContentType.objects.get_by_natural_key(app_label, name).model_class()
 
 
-class Relation(models.Model, GenericModel, metaclass=RelationModelBase):
+class Relation(GenericModel, models.Model, metaclass=RelationModelBase):
     subj_content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, related_name="relation_subj_set"
     )
