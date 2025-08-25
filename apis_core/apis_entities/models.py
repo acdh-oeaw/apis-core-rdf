@@ -4,8 +4,10 @@ import re
 
 from django.conf import settings
 from django.db.models.base import ModelBase
+from django.urls import NoReverseMatch, reverse
 
 from apis_core.apis_metainfo.models import RootObject
+from apis_core.utils.settings import apis_base_uri
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
@@ -87,3 +89,11 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
             if next_instance is not None:
                 return next_instance.id
         return False
+
+    def get_default_uri(self):
+        try:
+            route = reverse("GetEntityGenericRoot", kwargs={"pk": self.pk})
+        except NoReverseMatch:
+            route = reverse("apis_core:GetEntityGeneric", kwargs={"pk": self.pk})
+        base = apis_base_uri().strip("/")
+        return f"{base}{route}"
