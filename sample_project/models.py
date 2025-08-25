@@ -14,15 +14,15 @@ class Profession(VersionMixin, GenericModel, models.Model):
         return self.name
 
 
-class Person(VersionMixin, E21_Person, AbstractEntity):
+class Person(E21_Person, VersionMixin, AbstractEntity):
     profession = models.ManyToManyField(Profession, blank=True)
 
 
-class Place(VersionMixin, E53_Place, AbstractEntity):
+class Place(E53_Place, VersionMixin, AbstractEntity):
     pass
 
 
-class Group(VersionMixin, E74_Group, AbstractEntity):
+class Group(E74_Group, VersionMixin, AbstractEntity):
     pass
 
 
