@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.52.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.52.1...v0.52.2) (2025-08-25)
+
+
+### Bug Fixes
+
+* **relations:** let template inherit from correct template ([4eeb437](https://github.com/acdh-oeaw/apis-core-rdf/commit/4eeb4376ca73fdf55cfa9d36a94cf148e8e8a2fe))
+* **uris:** move mgmt command to correct app ([8299621](https://github.com/acdh-oeaw/apis-core-rdf/commit/8299621131dce81f65092af1bd17a64b5016b13f))
+
 ## [0.52.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.52.0...v0.52.1) (2025-08-21)
 
 
