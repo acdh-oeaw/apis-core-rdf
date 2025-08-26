@@ -1,6 +1,7 @@
 from collections import namedtuple
 from copy import copy
 
+from crispy_forms.layout import Field
 from dal import autocomplete
 from django import forms, http
 from django.conf import settings
@@ -217,6 +218,25 @@ class List(
                 initial=self._get_columns_initial(columns_exclude),
             )
             filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
+        # If the filterset form contains form data
+        # we add a CSS class to the element wrapping
+        # that field in HTML. This CSS class can be
+        # used to emphasize the fields that are used.
+        # To be able to compare the fields with the form
+        # data, we create a temporary mapping between
+        # widget_names and fields
+        fields = {}
+        for name, field in filterset.form.fields.items():
+            fields[name] = name
+            if hasattr(field.widget, "widgets_names"):
+                for widget_name in field.widget.widgets_names:
+                    fields[name + widget_name] = name
+        if data := filterset.form.data:
+            for param in [param for param, value in data.items() if value]:
+                if fieldname := fields.get(param, None):
+                    filterset.form.helper[fieldname].wrap(
+                        Field, wrapper_class="filter-input-selected"
+                    )
 
         return filterset
 
