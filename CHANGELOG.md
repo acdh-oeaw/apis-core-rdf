@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.52.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.52.2...v0.52.3) (2025-08-26)
+
+
+### Bug Fixes
+
+* **apis_entities:** update base template for place templates ([aaf014b](https://github.com/acdh-oeaw/apis-core-rdf/commit/aaf014beaeeac52ddbab8f47ef3fac930e2775fa))
+
 ## [0.52.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.52.1...v0.52.2) (2025-08-25)
 
 
