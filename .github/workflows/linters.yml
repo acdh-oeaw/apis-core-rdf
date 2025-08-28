@@ -48,7 +48,7 @@ jobs:
       - name: Install the project
         run: uv sync --only-dev
 
-      - name: Run ruff check
+      - name: Run djLint formatter
         run: uv run djlint --check apis_core sample_project
 
   djlint-linter:
@@ -63,7 +63,7 @@ jobs:
       - name: Install the project
         run: uv sync --only-dev
 
-      - name: Run ruff check
+      - name: Run djLint linter
         run: uv run djlint --lint apis_core sample_project
 
   deptry:
@@ -78,5 +78,5 @@ jobs:
       - name: Install the project
         run: uv sync --only-dev
 
-      - name: Run ruff check
+      - name: Run deptry
         run: uv run deptry .
