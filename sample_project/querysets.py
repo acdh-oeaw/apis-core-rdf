@@ -7,6 +7,17 @@ from apis_core.utils.autocomplete import (
 )
 
 
+class GroupExternalAutocomplete(ExternalAutocomplete):
+    adapters = [
+        LobidAutocompleteAdapter(
+            params={
+                "filter": "type:CorporateBody",
+                "format": "json:preferredName,geographicAreaCode,dateOfEstablishment,broaderTermInstantial",
+            }
+        ),
+    ]
+
+
 class PlaceExternalAutocomplete(ExternalAutocomplete):
     adapters = [
         TypeSenseAutocompleteAdapter(
