@@ -4,12 +4,9 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from django.urls import NoReverseMatch, reverse
 
-from apis_core.apis_entities.models import AbstractEntity
 from apis_core.generic.signals import post_merge_with
 from apis_core.uris.models import Uri
-from apis_core.utils.settings import apis_base_uri
 
 logger = logging.getLogger(__name__)
 
@@ -31,23 +28,31 @@ def create_default_uri(sender, instance, created, raw, using, update_fields, **k
     # disable the handler during fixture loading
     if raw:
         return
-    create_default_uri = getattr(settings, "CREATE_DEFAULT_URI", True)
+    # The list of Uris that should be created
+    uris = getattr(instance, "_uris", [])
+
+    # If this is a new object (created) we ask the model for its
+    # default Uri and add that to the list of Uris
     skip_default_uri = getattr(instance, "skip_default_uri", False)
-    if create_default_uri and not skip_default_uri:
-        if isinstance(instance, AbstractEntity) and created:
-            base = apis_base_uri().strip("/")
-            try:
-                route = reverse("GetEntityGenericRoot", kwargs={"pk": instance.pk})
-            except NoReverseMatch:
-                route = reverse(
-                    "apis_core:GetEntityGeneric", kwargs={"pk": instance.pk}
-                )
-            uri = f"{base}{route}"
-            content_type = ContentType.objects.get_for_model(instance)
-            Uri.objects.create(
-                uri=uri,
-                content_type=content_type,
-                object_id=instance.id,
+    create_default_uri = getattr(settings, "CREATE_DEFAULT_URI", True)
+    if created and create_default_uri and not skip_default_uri:
+        try:
+            uris.append(instance.get_default_uri())
+        except AttributeError:
+            pass
+
+    # We first check if there are even any Uris to create before we
+    # lookup the content_type. This is a bit of a workaround, because
+    # during migration the signal is triggered, but the lookup would
+    # fail.
+    if uris:
+        content_type = ContentType.objects.get_for_model(instance)
+        for uri in uris:
+            logger.info(
+                "Creating uri %s as a result of saving %s", repr(uri), repr(instance)
+            )
+            Uri.objects.get_or_create(
+                uri=uri, content_type=content_type, object_id=instance.id
             )
 
 
