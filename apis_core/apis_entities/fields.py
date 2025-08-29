@@ -7,6 +7,8 @@ from dal.autocomplete import TagSelect2 as DALTagSelect2
 from dal_select2.widgets import Select2WidgetMixin as DALSelect2WidgetMixin
 from django import forms
 
+from apis_core.apis_entities.widgets import PlaceLookup
+
 
 # "Rewrite" select2 widgets from Django Autocomplete Light so
 # that they don't use Django's admin-provided jQuery, which
@@ -73,3 +75,7 @@ class ModelSelect2(Select2WidgetMixin, DALModelSelect2):
 
 class ModelSelect2Multiple(Select2WidgetMixin, DALModelSelect2Multiple):
     pass
+
+
+class PlaceLookupField(forms.CharField):
+    widget = PlaceLookup
