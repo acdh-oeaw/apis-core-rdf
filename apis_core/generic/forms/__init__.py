@@ -47,7 +47,7 @@ class GenericFilterSetForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.helper = FormHelper()
+        self.helper = FormHelper(self)
         self.helper.form_method = "GET"
         self.helper.add_input(Submit("submit", _("Submit")))
 
