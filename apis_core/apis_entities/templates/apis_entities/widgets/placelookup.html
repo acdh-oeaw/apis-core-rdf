@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="row">
+  <div class="col">
+    <input type="{{ widget.type }}"
+           name="{{ widget.name }}"
+           {% if widget.value != None %}value="{{ widget.value|stringformat:'s' }}"{% endif %}
+           {% include "django/forms/widgets/attrs.html" %}>
+  </div>
+  <div class="col">
+    <button class="btn btn-primary"
+            type="button"
+            onclick='fetchResults("{{ widget.attrs.id }}")'>{% translate "Search" %}</button>
+  </div>
+</div>
+<div class="mt-2" id="map"></div>
