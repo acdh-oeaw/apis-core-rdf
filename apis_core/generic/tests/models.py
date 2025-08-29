@@ -3,7 +3,7 @@ from django.db import models
 from apis_core.generic.abc import GenericModel
 
 
-class Person(models.Model, GenericModel):
+class Person(GenericModel, models.Model):
     first_name = models.CharField()
     last_name = models.CharField()
 
@@ -11,5 +11,5 @@ class Person(models.Model, GenericModel):
         return f"{self.first_name} {self.last_name}"
 
 
-class Dummy(models.Model, GenericModel):
+class Dummy(GenericModel, models.Model):
     pass
