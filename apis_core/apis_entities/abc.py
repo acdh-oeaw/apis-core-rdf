@@ -67,7 +67,7 @@ class E53_Place(models.Model):
         default="",
         max_length=16,
         verbose_name=_("feature code"),
-        help_text='<a href="https://www.geonames.org/export/codes.html">Geonames Feature Code List</a>',
+        help_text='<a href="https://www.geonames.org/export/codes.html" target="_blank">Geonames Feature Code List</a>',
     )
 
     class Meta:
