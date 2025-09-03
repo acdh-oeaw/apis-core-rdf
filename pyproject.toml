@@ -92,3 +92,8 @@ acdh-arche-assets = "AcdhArcheAssets"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "sample_project.settings"
+
+[tool.coverage.run]
+command_line = "-m pytest"
+source = ["."]
+omit = ["**/tests/*"]
