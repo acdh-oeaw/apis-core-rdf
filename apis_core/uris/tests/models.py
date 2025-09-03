@@ -1,9 +1,7 @@
 from django.db import models
 
-from apis_core.generic.abc import GenericModel
 
-
-class Person(models.Model, GenericModel):
+class Person(models.Model):
     first_name = models.CharField()
     last_name = models.CharField()
 
@@ -14,5 +12,5 @@ class Person(models.Model, GenericModel):
         return f"https://www.example.org/id/{self.pk}"
 
 
-class Dummy(models.Model, GenericModel):
+class Dummy(models.Model):
     pass
