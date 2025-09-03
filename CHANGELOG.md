@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.53.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.52.3...v0.53.0) (2025-09-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** GenericModel is now an abstract model, so projects have to adapt their migrations (and remove GenericModel from the bases) and maybe also their models.py (and reorder class inheritance)
+
+### Features
+
+* **apis_entities:** implement `get_default_uri` in AbstractEntity ([58619af](https://github.com/acdh-oeaw/apis-core-rdf/commit/58619af1c8db23a404066f643fdb849f287f312d))
+* **apis_entities:** introduce a form field for looking up a place ([cd6936c](https://github.com/acdh-oeaw/apis-core-rdf/commit/cd6936cc3aba3f26c61a9f84a0cd8f21c3eb9b06))
+* **apis_entities:** use PlaceLookupField in E53_PlaceForm ([cef2dae](https://github.com/acdh-oeaw/apis-core-rdf/commit/cef2dae94f281ef36facf7bf19a510ec43ebbf79))
+* **entities:** open geonames link in a new tab ([1018fc5](https://github.com/acdh-oeaw/apis-core-rdf/commit/1018fc50558d2d6dfe0a11b378d7e69aa42c1fe9))
+* **generic:** add a css class for the selected filter values ([921fdc1](https://github.com/acdh-oeaw/apis-core-rdf/commit/921fdc153d9010aabc54862ca601c2153814b7cc))
+* **generic:** add a custom class to surrounding block of fields ([a74c715](https://github.com/acdh-oeaw/apis-core-rdf/commit/a74c715584e4cb60e71811ca515aa96e811ec560))
+* **generic:** make GenericModel a real abstract model ([34a28fa](https://github.com/acdh-oeaw/apis-core-rdf/commit/34a28fab9e374b528f7b3ae6abe384dd1c270c53))
+* **generic:** pass the form to FormHelper ([93c2bcc](https://github.com/acdh-oeaw/apis-core-rdf/commit/93c2bccd1c2ccf38c2c878688580dbcc308b60a4))
+* **sample_project:** add autocomplete queryset for Group ([442ae8b](https://github.com/acdh-oeaw/apis-core-rdf/commit/442ae8ba7831684e4dd3453eabb7952dcf85bcfa)), closes [#2049](https://github.com/acdh-oeaw/apis-core-rdf/issues/2049)
+* **uris:** refactor Uri creation signal ([9b1bc01](https://github.com/acdh-oeaw/apis-core-rdf/commit/9b1bc01df3a975f4773c6ba73a791ab18ba76d4e))
+
+
+### Bug Fixes
+
+* **generic:** adapt model inheritance of test models ([e0da743](https://github.com/acdh-oeaw/apis-core-rdf/commit/e0da7433048640445881b156bc2bb644c53792be))
+* **sample_project:** remove occurrences of GenericModel from migrations ([b9c18c4](https://github.com/acdh-oeaw/apis-core-rdf/commit/b9c18c4ddee8003c451d6f911d5de93aaf532137))
+* **sample_project:** reorder parent classes on entities ([dc88f59](https://github.com/acdh-oeaw/apis-core-rdf/commit/dc88f59a82d5d75c66dce10a974001aa86d05aa5))
+
 ## [0.52.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.52.2...v0.52.3) (2025-08-26)
 
 
