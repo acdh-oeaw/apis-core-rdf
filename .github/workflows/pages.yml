@@ -30,7 +30,7 @@ jobs:
        run: uv run --group docs mkdocs build -f docs/mkdocs.yml -d _build
      - name: Build coverage
        run: |
-         uv run --group docs coverage run --source="." manage.py test
+         uv run --group docs coverage run
          uv run --group docs coverage html
      - uses: actions/checkout@v5
        with:
