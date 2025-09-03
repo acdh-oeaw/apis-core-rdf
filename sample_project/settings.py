@@ -65,6 +65,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "crum.CurrentRequestUserMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
+    "apis_core.generic.middleware.HtmxMessageMiddleware",
 ]
 
 # ROOT_URLCONF = "apis_core.urls"
