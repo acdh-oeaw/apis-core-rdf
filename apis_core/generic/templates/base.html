@@ -3,6 +3,11 @@
 {% load i18n %}
 {% load static %}
 
+{% block scriptHeader %}
+  {{ block.super }}
+  <script src="{% static 'js/toast.js' %}" defer></script>
+{% endblock scriptHeader %}
+
 {% block styles %}
   {{ block.super }}
   <link href="{% static 'css/generic.css' %}" rel="stylesheet" />
@@ -34,3 +39,19 @@
     </li>
   {% endif %}
 {% endblock main-menu %}
+
+{% block messages %}
+  {% for message in messages %}
+    <dialog data-timeout-close="3000"
+            class="mytoast alert alert-{{ message.tags }}"
+            role="alert"
+            open>
+      {{ message }}
+    </dialog>
+  {% endfor %}
+  <dialog data-message-toast
+          data-timeout-close="3000"
+          class="mytoast alert"
+          role="alert">
+  </dialog>
+{% endblock messages %}

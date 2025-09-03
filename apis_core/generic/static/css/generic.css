@@ -27,3 +27,34 @@
     color: var(--filter-input-selected-color, #228b22);
     font-weight: bold;
 }
+
+.mytoast {
+    position: fixed;
+    bottom: 30px;
+    z-index: 1;
+    animation: fadein 0.5s, fadeout 0.5s 2.6s;
+}
+
+@keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
