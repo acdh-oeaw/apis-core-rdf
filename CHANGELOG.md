@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.53.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.53.0...v0.53.1) (2025-09-03)
+
+
+### Bug Fixes
+
+* **uris:** drop GenericModel from test model bases ([6d44aac](https://github.com/acdh-oeaw/apis-core-rdf/commit/6d44aac1c012e520f100ada8aa50badc5383e1da))
+
 ## [0.53.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.52.3...v0.53.0) (2025-09-03)
 
 
