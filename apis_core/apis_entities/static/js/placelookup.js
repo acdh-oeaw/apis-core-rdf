@@ -40,21 +40,60 @@ document.addEventListener('DOMContentLoaded', function() {
     );
     mapel = document.getElementById("map");
     if (mapel) {
-        mapel.map = L.map('map').setView([0, 0], 2);
+        [lng, lat, zoom, label] = [0, 0, 2, ""];
+        lng_input = document.getElementById("id_longitude");
+        if (lng_input && lng_input.value) {
+            lng = parseFloat(lng_input.value);
+        }
+        lat_input = document.getElementById("id_latitude");
+        if (lat_input && lat_input.value) {
+            lat = parseFloat(lat_input.value);
+        }
+        label_input = document.getElementById("id_label");
+        if (label_input && label_input.value) {
+            label = label_input.value;
+        }
+        if (lat && lng) {
+            zoom = 11
+        };
+
+        mapel.map = L.map('map').setView([lat, lng], zoom);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(mapel.map);
+        mapel.marker = new L.Marker([lat, lng]);
+        if (lat && lng) {
+            mapel.marker.addTo(mapel.map)
+        }
 
         mapel.map.on('popupopen', function(e) {
-            feature = e.popup._source.feature;
-            [longitude, latitude] = feature.geometry.coordinates;
-            label_input = document.getElementById("id_label");
-            label_input.value = feature.properties.display_name;
-            latitude_input = document.getElementById("id_latitude");
-            latitude_input.value = latitude;
-            longitude_input = document.getElementById("id_longitude");
-            longitude_input.value = longitude;
+            if (label_input && label == "") {
+                label_input.value = e.popup.getContent();
+            }
+
+            coordinates = e.popup.getLatLng();
+            if (lat_input) {
+                lat_input.value = coordinates.lat;
+            }
+            if (lng_input) {
+                lng_input.value = coordinates.lng;
+            }
+        });
+
+        mapel.map.on('contextmenu', function(e) {
+            mapel.marker.closePopup();
+            mapel.marker.setLatLng([e.latlng.lat, e.latlng.lng]);
+            mapel.marker.addTo(mapel.map);
+            display_name = "Unlabelled place: " + e.latlng.lat + ", " + e.latlng.lng;
+            fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + e.latlng.lat + "&lon=" + e.latlng.lng)
+                .then(response => response.json())
+                .then(data => {
+                    mapel.marker.bindPopup(data.display_name);
+                })
+                .catch(error => {
+                    mapel.marker.bindPopup(display_name)
+                });
         });
 
     }
