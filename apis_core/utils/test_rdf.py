@@ -100,3 +100,41 @@ class RdfTest(TestCase):
 
         attributes = rdf.get_something_from_uri(uri)
         self.assertEqual(oeaw["label"], attributes["label"])
+
+    def test_dnb_corporate_body(self):
+        expected = {
+            "label": ["Wiener Stadtbibliothek", "Stadtbibliothek (Wien)"]
+        }  # noqa: E501
+        # https://d-nb.info/gnd/4066009-6
+        uri = str(testdata / "wiener_stadtbibliothek.rdf")
+
+        attributes = rdf.get_something_from_uri(uri)
+
+        for label in expected["label"]:
+            self.assertIn(label, attributes["label"])
+
+        expected = {"label": ["Gebietsverband Lungau", "Lungau"]}
+        uri = str(testdata / "gebietsverband_lungau.rdf")
+        attributes = rdf.get_something_from_uri(uri)
+
+        for label in expected["label"]:
+            self.assertIn(label, attributes["label"])
+
+    def test_dnb_person_with_forename_and_surname(self):
+        expected = {"surname": "Einstein", "forename": "Albert"}
+        # https://d-nb.info/gnd/118529579
+        uri = str(testdata / "einstein.rdf")
+
+        attributes = rdf.get_something_from_uri(uri)
+        self.assertIn(expected["surname"], attributes["surname"])
+        self.assertIn(expected["forename"], attributes["forename"])
+
+    def test_dnb_person_with_only_personal_name(self):
+        expected = {"surname": "Sacher"}
+        # https://d-nb.info/gnd/1041944586
+        uri = str(testdata / "sacher.rdf")
+
+        attributes = rdf.get_something_from_uri(uri)
+
+        self.assertIn(expected["surname"], attributes["surname"])
+        self.assertEqual(len(attributes["forename"]), 0)
