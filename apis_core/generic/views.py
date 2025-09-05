@@ -250,9 +250,8 @@ class List(
     def get_table_pagination(self, table):
         """
         Override `get_table_pagination` from the tables2 TableMixinBase,
-        so we can set the paginate_by and the table_pagination value as attribute of the table.
+        so we can set the table_pagination value as attribute of the table.
         """
-        self.paginate_by = getattr(table, "paginate_by", None)
         self.table_pagination = getattr(table, "table_pagination", None)
         return super().get_table_pagination(table)
 
