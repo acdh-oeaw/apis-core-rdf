@@ -41,15 +41,15 @@ document.addEventListener('DOMContentLoaded', function() {
     mapel = document.getElementById("map");
     if (mapel) {
         [lng, lat, zoom, label] = [0, 0, 2, ""];
-        lng_input = document.getElementById("id_longitude");
+        lng_input = document.getElementById(mapel.dataset.longitudeId);
         if (lng_input && lng_input.value) {
             lng = parseFloat(lng_input.value);
         }
-        lat_input = document.getElementById("id_latitude");
+        lat_input = document.getElementById(mapel.dataset.latitudeId);
         if (lat_input && lat_input.value) {
             lat = parseFloat(lat_input.value);
         }
-        label_input = document.getElementById("id_label");
+        label_input = document.getElementById(mapel.dataset.labelId);
         if (label_input && label_input.value) {
             label = label_input.value;
         }

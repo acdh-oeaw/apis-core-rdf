@@ -12,4 +12,8 @@
             onclick='fetchResults("{{ widget.attrs.id }}")'>{% translate "Search" %}</button>
   </div>
 </div>
-<div class="mt-2" id="map"></div>
+<div class="mt-2"
+     id="map"
+     {% for name, value in widget.attrs.items %}{% if name|slice:5 == "data-" %}{{ name }}={{ value }}{% endif %}
+     {% endfor %}>
+</div>
