@@ -5,6 +5,7 @@ from pathlib import Path
 
 from django.test import TestCase
 
+from apis_core.apis_entities.abc import E53_Place
 from apis_core.utils import rdf
 
 # use `curl -H "Accept: application/rdf+xml" -L $URI` to fetch data
@@ -100,3 +101,14 @@ class RdfTest(TestCase):
 
         attributes = rdf.get_something_from_uri(uri)
         self.assertEqual(oeaw["label"], attributes["label"])
+
+    def test_dnb_geographic_unit(self):
+        expected = {"label": "Wutai Shan"}
+        # https://d-nb.info/gnd/4241848-3
+        uri = str(testdata / "wutaishan.rdf")
+
+        attributes = rdf.get_something_from_uri(uri, [E53_Place])
+        self.assertEqual(len(attributes.get("latitude", [])), 0)
+        self.assertEqual(len(attributes.get("longitude", [])), 0)
+
+        self.assertIn(expected["label"], attributes["label"])
