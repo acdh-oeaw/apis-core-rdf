@@ -119,3 +119,14 @@ class RdfTest(TestCase):
 
         self.assertIn(expected["surname"], attributes["surname"])
         self.assertEqual(len(attributes["forename"]), 0)
+
+    def test_dnb_place_without_coordinates(self):
+        expected = {"label": "Wutai Shan"}
+        # https://d-nb.info/gnd/4241848-3
+        uri = str(testdata / "wutaishan.rdf")
+
+        attributes = rdf.get_something_from_uri(uri)
+        self.assertEqual(len(attributes.get("latitude", [])), 0)
+        self.assertEqual(len(attributes.get("longitude", [])), 0)
+
+        self.assertIn(expected["label"], attributes["label"])
