@@ -1,11 +1,12 @@
 import logging
 
 from django.contrib.contenttypes.models import ContentType
-from django.db.models.signals import post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from apis_core.generic.signals import post_duplicate, post_merge_with
 from apis_core.relations.models import Relation
+from apis_core.uris.utils import create_object_from_uri
 
 logger = logging.getLogger(__name__)
 
@@ -56,3 +57,50 @@ def set_relations_null(sender, instance, using, origin, **kwargs):
         Relation.objects.filter(
             obj_content_type=content_type, obj_object_id=object_id
         ).update(obj_object_id=None)
+
+
+@receiver(post_save)
+def create_relations(sender, instance, created, raw, using, update_fields, **kwargs):
+    """
+    This signal looks at the `create_relations_to_uris` attribute of a model
+    instance. The attribute should contain a dict mapping between a relation
+    name and mapping between they key `obj` or `subj` and a list of URIs.
+    The signal then tries to create relations between the instance and the
+    subjects or objects listed in the relation dict mapping.
+    An example for the dict mapping would be:
+    "myapp.livesin" = {
+        curies = ["https://example.org/123"],
+        obj = "apis_ontology.place"
+    }
+    """
+
+    # disable the handler during fixture loading
+    if raw:
+        return
+    relations = getattr(instance, "create_relations_to_uris", {})
+    for relation, details in relations.items():
+        relation_model = ContentType.objects.get_by_natural_key(
+            *relation.split(".")
+        ).model_class()
+
+        target = details.get("obj", None) or details.get("subj", None)
+        target_content_type = ContentType.objects.get_by_natural_key(*target.split("."))
+        related_model = target_content_type.model_class()
+
+        for related_uri in details["curies"]:
+            try:
+                related_instance = create_object_from_uri(
+                    uri=related_uri, model=related_model
+                )
+                if details.get("obj"):
+                    relation_model.object.create_between_instances(
+                        instance, related_instance
+                    )
+                else:
+                    relation_model.object.create_between_instances(
+                        related_instance, instance
+                    )
+            except Exception as e:
+                logger.error(
+                    "Could not create relation to %s due to %s", related_uri, e
+                )
