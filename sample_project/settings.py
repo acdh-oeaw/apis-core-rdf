@@ -9,9 +9,9 @@ DEBUG = True
 # Django defaults if there are none set
 env_ah = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
 ALLOWED_HOSTS = list(filter(None, env_ah))
-env_csrf = os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
-CSRF_TRUSTED_ORIGINS = list(filter(None, env_csrf))
 
+# https://docs.djangoproject.com/en/stable/ref/settings/#std-setting-USE_X_FORWARDED_HOST
+USE_X_FORWARDED_HOST = True
 
 # Application definition
 
