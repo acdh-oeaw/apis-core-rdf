@@ -60,11 +60,6 @@ class in `your_app.tables`. The table class has to be named
 columns](https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#columns)
 that you might want to use.
 
-Your table can also contain a `paginate_by` attribute, which is then
-used by the list view to determine the number of items per page. When
-this is not set, the page size defaults to `25`. To disable pagination
-altogether, use `table_pagination = False`.
-
 The base queryset that is used in the list view, which is then filtered
 using the django-filters filter, is `model.objects.all()` - but you can
 override the queryset by creating a custom queryset for your model in
