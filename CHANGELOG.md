@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.54.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.53.1...v0.54.0) (2025-09-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** if you use `.paginate_by` in your tables, please switch to `Meta.per_page`
+
+### Features
+
+* **apis_entities:** add a helper method to list geonames featurecodes ([5891ccc](https://github.com/acdh-oeaw/apis-core-rdf/commit/5891cccf6110b55e7c4a3ba87fa68feb539841b9)), closes [#1670](https://github.com/acdh-oeaw/apis-core-rdf/issues/1670)
+* **apis_entities:** add NaturalGeographicUnit to place triple configs ([f5d3629](https://github.com/acdh-oeaw/apis-core-rdf/commit/f5d36292a584622d8a066807c472acc0f19018a8)), closes [#2074](https://github.com/acdh-oeaw/apis-core-rdf/issues/2074)
+* **apis_entities:** allow to override field names in placelookup field ([717d49d](https://github.com/acdh-oeaw/apis-core-rdf/commit/717d49d5673c09029012a9fbd251eefc9fcab2d1))
+* **apis_entities:** extend place lookup to show existing values ([8e43498](https://github.com/acdh-oeaw/apis-core-rdf/commit/8e43498cbfff37ee2a9613c1b4522b51dd6c9991)), closes [#2068](https://github.com/acdh-oeaw/apis-core-rdf/issues/2068)
+* **apis_entities:** override feature_code field in E53_PlaceForm ([7443262](https://github.com/acdh-oeaw/apis-core-rdf/commit/7443262ba0b92cf88ecf1662f7df3ad481393d4e))
+* **generic:** add a HtmxMessageMiddleware ([2f08c61](https://github.com/acdh-oeaw/apis-core-rdf/commit/2f08c613d6bd84ada1e68b3aee013e4650159374))
+* **generic:** display messages using JavaScript ([c601150](https://github.com/acdh-oeaw/apis-core-rdf/commit/c6011509588720db54c85feb2cc6c9fa6499b786))
+* **sample_project:** squash migrations ([925b91d](https://github.com/acdh-oeaw/apis-core-rdf/commit/925b91d4a321814e5b0b4f8da52f79cc2886cc84))
+* **sample_project:** use HtmxMessageMiddleware in sample_project ([301d843](https://github.com/acdh-oeaw/apis-core-rdf/commit/301d8432695582bfe4999ed96b155f46a9010f8c))
+
+
+### Bug Fixes
+
+* **generic:** drop the `paginate_by` override of tables ([2d83c69](https://github.com/acdh-oeaw/apis-core-rdf/commit/2d83c69f748716d744c95b674fdea088631c3fb6))
+
+
+### Documentation
+
+* **customization:** remove `paginate_by` paragraph ([644bd2a](https://github.com/acdh-oeaw/apis-core-rdf/commit/644bd2a228c6b03fc29b8656e46fd2051361ead5))
+
 ## [0.53.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.53.0...v0.53.1) (2025-09-03)
 
 
