@@ -196,10 +196,6 @@ class in <code>your_app.tables</code>. The table class has to be named
 <a class="autorefs autorefs-internal" title="GenericTable" href="../reference/#apis_core.generic.tables.GenericTable">apis_core.generic.tables.GenericTable</a> also contains a handful of useful <a href="https://django-tables2.readthedocs.io/en/latest/pages/api-reference.html#columns">django table
 columns</a>
 that you might want to use.</p>
-<p>Your table can also contain a <code>paginate_by</code> attribute, which is then
-used by the list view to determine the number of items per page. When
-this is not set, the page size defaults to <code>25</code>. To disable pagination
-altogether, use <code>table_pagination = False</code>.</p>
 <p>The base queryset that is used in the list view, which is then filtered
 using the django-filters filter, is <code>model.objects.all()</code> - but you can
 override the queryset by creating a custom queryset for your model in
