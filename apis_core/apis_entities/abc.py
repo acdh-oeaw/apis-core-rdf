@@ -37,7 +37,9 @@ class E21_Person(models.Model):
         ordering = ["surname", "forename"]
 
     def __str__(self):
-        return f"{self.forename} {self.surname}"
+        if self.forename and self.surname:
+            return f"{self.forename} {self.surname}"
+        return self.forename or self.surname or _("No name")
 
     @classmethod
     def rdf_configs(cls):
@@ -77,7 +79,7 @@ class E53_Place(models.Model):
         ordering = ["label"]
 
     def __str__(self):
-        return self.label
+        return self.label or _("No label")
 
     @classmethod
     def rdf_configs(cls):
@@ -108,7 +110,7 @@ class E74_Group(models.Model):
         ordering = ["label"]
 
     def __str__(self):
-        return self.label
+        return self.label or _("No label")
 
     @classmethod
     def rdf_configs(cls):
@@ -136,7 +138,7 @@ class SimpleLabelModel(models.Model):
         ordering = ["label"]
 
     def __str__(self):
-        return self.label
+        return self.label or _("No label")
 
     @classmethod
     def create_from_string(cls, string):
