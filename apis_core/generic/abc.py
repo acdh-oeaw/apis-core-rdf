@@ -1,5 +1,7 @@
 import logging
+import re
 
+from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import BooleanField, CharField, TextField
@@ -126,6 +128,38 @@ class GenericModel(models.Model):
     @classmethod
     def get_verbose_name(cls):
         return cls._meta.verbose_name
+
+    @classmethod
+    def fetch_from(cls, uri: str):
+        uri = get_normalized_uri(uri)
+        for regex, fn in getattr(cls, "import_definitions", {}).items():
+            if re.match(regex, uri):
+                return getattr(cls, fn)(uri)
+        raise ValueError(f"Import not configured for URI {uri}")
+
+    @classmethod
+    def import_from(cls, uri: str):
+        if data := cls.fetch_from(uri):
+            instance = cls()
+            instance.import_data(data)
+            return instance
+        raise ValueError(f"Could not fetch data to import from {uri}")
+
+    def create_from_dict_subset(self, **data):
+        """
+        Create an instance of this model from data in a dict.
+        Instead of simply passing the dict to the class, we
+        first create the class and then only use the values of
+        the dict that the class has as attributes.
+        """
+        if data:
+            for field in self._meta.fields:
+                if data.get(field.name, False):
+                    setattr(self, field.name, data[field.name][0])
+            self.save()
+
+    def import_data(self, data):
+        self.create_from_dict_subset(**data)
 
     def get_merge_charfield_value(self, other: CharField, field: CharField):
         res = getattr(self, field.name)
