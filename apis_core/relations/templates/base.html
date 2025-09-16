@@ -30,7 +30,7 @@
           {% get_relation_content_types as content_types %}
           {% for content_type in content_types %}
             <a class="dropdown-item relation-item"
-               href="{{ content_type.model_class.get_listview_url }}">{{ content_type.model_class.name }}</a>
+               href="{{ content_type.model_class.get_listview_url }}">{{ content_type.model_class.name_and_reverse_name }}</a>
           {% endfor %}
         </div>
       </div>
