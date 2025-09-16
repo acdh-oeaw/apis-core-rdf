@@ -1,6 +1,9 @@
 import logging
+import re
 
+from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.db.models import BooleanField, CharField, TextField
 from django.db.models.fields.related import ForeignKey, ManyToManyField
@@ -126,6 +129,67 @@ class GenericModel(models.Model):
     @classmethod
     def get_verbose_name(cls):
         return cls._meta.verbose_name
+
+    @classmethod
+    def fetch_from(cls, uri: str):
+        """
+        Fetch data from an URI. The exact fetching logic
+        is defined in a class method which is defined in the
+        `import_definitions` attribute of the class.
+        `import_definitions` has to be a dict, mapping a regex
+        matching the URI to a method name. The method is then
+        called with the URI as a parameter.
+        """
+        uri = get_normalized_uri(uri)
+        for regex, fn in getattr(cls, "import_definitions", {}).items():
+            if re.match(regex, uri):
+                return getattr(cls, fn)(uri) or {}
+        raise ImproperlyConfigured(f"Import not configured for URI {uri}")
+
+    @classmethod
+    def import_from(cls, uri: str, allow_empty: bool = True):
+        """
+        Fetch data from an URI and create a model instance using
+        that data. If the `allow_empty` argument is set, this also
+        creates a model instance if the data fetched was empty. This
+        might make sense if you still want to create an instance and
+        attach the URI to it.
+        """
+        uri = get_normalized_uri(uri)
+        data = cls.fetch_from(uri) or {}
+        if allow_empty or data:
+            instance = cls()
+            instance.import_data(data)
+            instance._uris = [uri]
+            instance.save()
+            return instance
+        raise ValueError(f"Could not fetch data to import from {uri}")
+
+    def import_from_dict_subset(self, **data) -> dict:
+        """
+        Import attributes of this instance from data in a dict.
+        We iterate through the individual values of the dict and
+        a) only set them if the instance has an attribute matching
+        the key and b) use the fields `clean` method to check if
+        the value validates. If it does not validate, we return
+        the validation error in the errors dict.
+        """
+        errors = {}
+        if data:
+            for field in self._meta.fields:
+                if data.get(field.name, False):
+                    value = str(data[field.name][0])
+                    try:
+                        field.clean(self, value)
+                    except Exception as e:
+                        errors[field.name] = str(e)
+                    else:
+                        setattr(self, field.name, value)
+            self.save()
+        return errors
+
+    def import_data(self, data) -> dict:
+        return self.import_from_dict_subset(**data)
 
     def get_merge_charfield_value(self, other: CharField, field: CharField):
         res = getattr(self, field.name)
