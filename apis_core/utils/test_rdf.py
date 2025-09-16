@@ -50,6 +50,7 @@ class RdfTest(TestCase):
                 "Rudolf",
                 "Rodolphe",
                 "...",
+                "Ramus, Pierre",
             ],
             "surname": ["Ramus", "Großmann", "Grossmann", "Grossman", "Libertarian"],
             "alternative_names": [
