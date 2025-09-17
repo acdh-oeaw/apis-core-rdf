@@ -110,16 +110,21 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
     @classmethod
     def annotate_with_facets(cls, queryset):
         """Annotate the queryset with facets."""
-        entity_sub =
-        rels = Relation.objects.filter(
-            Q(obj_object_id=OuterRef("id")) | Q(subj_object_id=OuterRef("id"))
-        ).annotate(
-            _facet=Case(
-                When(obj_object_id=OuterRef("id"), then=F("subj_object_id")),
-                default=F("obj_object_id"),
+        rels = (
+            Relation.objects.filter(
+                Q(obj_object_id=OuterRef("id")) | Q(subj_object_id=OuterRef("id"))
             )
-        ).values("_facet").annotate(_facet_count=Count("_facet")).values(json=JSONObject(facet="_facet", count="_facet_count"))
-        queryset= queryset.annotate(facets=ArraySubquery(rels))
+            .annotate(
+                _facet=Case(
+                    When(obj_object_id=OuterRef("id"), then=F("subj_object_id")),
+                    default=F("obj_object_id"),
+                )
+            )
+            .values("_facet")
+            .annotate(_facet_count=Count("_facet"))
+            .values(json=JSONObject(facet="_facet", count="_facet_count"))
+        )
+        queryset = queryset.annotate(facets=ArraySubquery(rels))
         return queryset
 
     @classmethod
