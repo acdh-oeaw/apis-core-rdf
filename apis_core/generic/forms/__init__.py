@@ -156,10 +156,13 @@ class GenericEnrichForm(forms.Form):
         super().__init__(*args, **kwargs)
         for key, value in data.items():
             update_key = f"update_{key}"
-            self.fields[update_key] = forms.BooleanField(
-                required=False,
-                label=f"Update {key} from {getattr(instance, key)} to {value}",
-            )
+            existing = getattr(instance, key, None)
+            if existing:
+                label = f"Update {key} from {existing} to {value}"
+            else:
+                label = f"Add {key} {value}"
+            if value:
+                self.fields[update_key] = forms.BooleanField(required=False, label=label)
 
             self.fields[key] = forms.CharField(initial=value, required=False)
             self.fields[key].widget = self.fields[key].hidden_widget()
