@@ -1,22 +1,19 @@
 import functools
 import logging
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 from django.conf import settings
-from django.db.models.base import ModelBase
-from django.db.models import F, Case, Q, When
-from django.db.models.aggregates import Count
-from django.urls import NoReverseMatch, reverse
-from django.db.models.expressions import Subquery
 from django.contrib.postgres.expressions import ArraySubquery
-from django.db.models.functions.json import JSONObject
+from django.db.models import Case, CharField, F, Q, Value, When
+from django.db.models.base import ModelBase
+from django.db.models.functions import Coalesce, Concat
 from django.db.models.sql.query import OuterRef
+from django.urls import NoReverseMatch, reverse
 
 from apis_core.apis_metainfo.models import RootObject
-from apis_core.utils.settings import apis_base_uri
 from apis_core.relations.models import Relation
-from apis_core.relations.utils import get_relation_targets_from_model
+from apis_core.utils.settings import apis_base_uri
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
@@ -98,7 +95,7 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
             if next_instance is not None:
                 return next_instance.id
         return False
-        
+
     def get_default_uri(self):
         try:
             route = reverse("GetEntityGenericRoot", kwargs={"pk": self.pk})
@@ -120,39 +117,91 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
                     default=F("obj_object_id"),
                 )
             )
-            .values("_facet")
-            .annotate(_facet_count=Count("_facet"))
-            .values(json=JSONObject(facet="_facet", count="_facet_count"))
+            .values_list("_facet", flat=True)
         )
         queryset = queryset.annotate(facets=ArraySubquery(rels))
         return queryset
 
+    @staticmethod
+    def create_when_clause_for_entity(entity_cls):
+        res = {f"{entity_cls.__name__.lower()}__isnull": False}
+        label = getattr(entity_cls, "facet_label", None)
+        if not label:
+            return When(
+                **res,
+                then=Concat(Value("no label, id: "), F("id"), output_field=CharField()),
+            )
+        elif isinstance(label, list):
+            return When(
+                **res,
+                then=Coalesce(
+                    *label,
+                    default=Concat(
+                        Value("no label, id: "), F("id"), output_field=CharField()
+                    ),
+                ),
+            )
+        elif isinstance(label, str):
+            return When(
+                **res,
+                then=Coalesce(
+                    F(f"{entity_cls.__name__.lower()}__{label}"),
+                    Value("no label"),
+                    default=Concat(
+                        Value("no label, id: "), F("id"), output_field=CharField()
+                    ),
+                ),
+            )
+        else:
+            raise ValueError(f"Invalid facet label type for {entity_cls}")
+
     @classmethod
-    def get_facets(cls, queryset):
+    def get_facets(cls, queryset, top=None):
         facets = defaultdict(dict)
-        queryset = cls.annotate_with_facets(queryset)
         if getattr(cls, "enable_facets", False):
-            for ct in get_relation_targets_from_model(cls):
-                facetname = "relation_to_" + ct.model
-                rels = Relation.objects.filter(
-                    Q(obj_content_type=ct.id, subj_object_id__in=queryset)
-                    | Q(subj_content_type=ct.id, obj_object_id__in=queryset)
-                )
-                rels = rels.annotate(
-                    target=Case(
-                        When(**{"obj_content_type": ct.id, "then": "obj_object_id"}),
-                        When(**{"subj_content_type": ct.id, "then": "subj_object_id"}),
-                    )
-                )
-                related_ids = [x.target for x in rels]
-                instances = ct.model_class().objects.filter(pk__in=related_ids)
+            from apis_core.apis_entities.utils import get_entity_classes
 
-                for obj in instances:
-                    related_ids = [x for x in rels if x.target == obj.id]
-                    facets[facetname][obj.id] = {
-                        "name": str(obj),
-                        "count": len(set(related_ids)),
-                    }
+            queryset = cls.annotate_with_facets(queryset)
+            all_facets = []
+            for facet_array in queryset.values_list("facets", flat=True):
+                all_facets.extend(facet_array)
+            when_clauses_entities = [
+                cls.create_when_clause_for_entity(entity_cls)
+                for entity_cls in get_entity_classes()
+            ]
+            when_clauses_classes = [
+                When(
+                    **{f"{cls.__name__.lower()}__isnull": False},
+                    then=Value(cls.__name__),
+                )
+                for cls in get_entity_classes()
+            ]
+            facet_data = (
+                RootObject.objects_inheritance.filter(id__in=set(all_facets))
+                .annotate(
+                    label_facet=Case(
+                        *when_clauses_entities,
+                        default=Concat(
+                            Value("ID: "), Value("test"), output_field=CharField()
+                        ),
+                    ),
+                    label_class=Case(
+                        *when_clauses_classes,
+                        default=Value("Unknown"),
+                    ),
+                )
+                .values("id", "label_facet", "label_class")
+            )
+
+            facet_dict = {
+                item["id"]: (item["label_facet"], item["label_class"])
+                for item in facet_data
+            }
+
+            counter = Counter(all_facets)
+            for facet, count in counter.most_common(top):
+                if facet in facet_dict:
+                    label_facet, label_class = facet_dict[facet]
+                    facets[label_class][label_facet] = count
+
         return facets
-
-
