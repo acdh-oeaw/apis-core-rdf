@@ -157,7 +157,8 @@ def get_something_from_uri(
 
     if config := find_graph_matching_config(graph, configs):
         result = defaultdict(list)
-        result["model"] = config["model"]
+        if model := config.get("model", False):
+            result["model"] = model
         result["relations"] = defaultdict(list)
 
         for attribute, curies in config.get("attributes", {}).items():
