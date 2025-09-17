@@ -5,8 +5,13 @@ from collections import defaultdict
 
 from django.conf import settings
 from django.db.models.base import ModelBase
-from django.db.models import Case, Q, When
+from django.db.models import F, Case, Q, When
+from django.db.models.aggregates import Count
 from django.urls import NoReverseMatch, reverse
+from django.db.models.expressions import Subquery
+from django.contrib.postgres.expressions import ArraySubquery
+from django.db.models.functions.json import JSONObject
+from django.db.models.sql.query import OuterRef
 
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.utils.settings import apis_base_uri
@@ -103,8 +108,24 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
         return f"{base}{route}"
 
     @classmethod
+    def annotate_with_facets(cls, queryset):
+        """Annotate the queryset with facets."""
+        entity_sub =
+        rels = Relation.objects.filter(
+            Q(obj_object_id=OuterRef("id")) | Q(subj_object_id=OuterRef("id"))
+        ).annotate(
+            _facet=Case(
+                When(obj_object_id=OuterRef("id"), then=F("subj_object_id")),
+                default=F("obj_object_id"),
+            )
+        ).values("_facet").annotate(_facet_count=Count("_facet")).values(json=JSONObject(facet="_facet", count="_facet_count"))
+        queryset= queryset.annotate(facets=ArraySubquery(rels))
+        return queryset
+
+    @classmethod
     def get_facets(cls, queryset):
         facets = defaultdict(dict)
+        queryset = cls.annotate_with_facets(queryset)
         if getattr(cls, "enable_facets", False):
             for ct in get_relation_targets_from_model(cls):
                 facetname = "relation_to_" + ct.model
