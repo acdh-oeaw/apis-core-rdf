@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.54.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.54.1...v0.54.2) (2025-09-17)
+
+
+### Bug Fixes
+
+* **generic:** rebuild the form layout after modification ([08ebeff](https://github.com/acdh-oeaw/apis-core-rdf/commit/08ebeffe49ee60c38e9c24ec57b887f4cd31f435))
+
 ## [0.54.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.54.0...v0.54.1) (2025-09-17)
 
 
