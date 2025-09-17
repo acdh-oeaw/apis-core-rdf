@@ -145,12 +145,15 @@ def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
     return list(dict.fromkeys(values))
 
 
-def get_something_from_uri(uri: str, models: list | None = None) -> dict | None:
+def get_something_from_uri(
+    uri: str, models: list | None = None, configs=[]
+) -> dict | None:
     uri = get_normalized_uri(uri)
     graph = Graph()
     graph.parse(uri)
 
-    configs = find_regex_matching_configs(uri, models)
+    if not configs:
+        configs = find_regex_matching_configs(uri, models)
 
     if config := find_graph_matching_config(graph, configs):
         result = defaultdict(list)
