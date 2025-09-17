@@ -7,7 +7,6 @@ from django import forms, http
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.validators import URLValidator
@@ -30,8 +29,6 @@ from django_tables2.export.views import ExportMixin
 from django_tables2.tables import table_factory
 
 from apis_core.uris.models import Uri
-from apis_core.uris.utils import create_object_from_uri
-from apis_core.utils.helpers import get_importer_for_model
 
 from .filtersets import GenericFilterSet
 from .forms import (
@@ -375,7 +372,7 @@ class Autocomplete(
         super().setup(*args, **kwargs)
         # We use a URI parameter to enable the create functionality in the
         # autocomplete dropdown. It is not important what the value of the
-        # `create_field` is, because we use create_object_from_uri anyway.
+        # `create_field` is, because we handle that in create_object anyway.
         self.create_field = self.request.GET.get("create", None)
         try:
             template = select_template(self.get_template_names())
@@ -419,9 +416,7 @@ class Autocomplete(
         """
         try:
             URLValidator()(value)
-            return create_object_from_uri(
-                value, self.queryset.model, raise_on_fail=True
-            )
+            return self.queryset.model.import_from(value)
         except ValidationError:
             pass
         try:
@@ -538,7 +533,6 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         self.uri = self.request.GET.get("uri")
         if not self.uri:
             messages.error(self.request, "No uri parameter specified.")
-        self.importer_class = get_importer_for_model(self.model)
 
     def get(self, *args, **kwargs):
         if self.uri.isdigit():
@@ -565,8 +559,7 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         kwargs = super().get_form_kwargs(*args, **kwargs)
         kwargs["instance"] = self.object
         try:
-            importer = self.importer_class(self.uri, self.model)
-            kwargs["data"] = importer.get_data()
+            kwargs["data"] = self.model.fetch_from(self.uri)
         except ImproperlyConfigured as e:
             messages.error(self.request, e)
         return kwargs
@@ -579,22 +572,15 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         Then use the importers `import_into_instance` method to set those
         fields values on the model instance.
         """
-        update_fields = [
-            key.removeprefix("update_")
+        data = {
+            key.removeprefix("update_"): value
             for (key, value) in self.request.POST.items()
             if key.startswith("update_") and value
-        ]
-        importer = self.importer_class(self.uri, self.model)
-        importer.import_into_instance(self.object, fields=update_fields)
-        messages.info(self.request, f"Updated fields {update_fields}")
-        content_type = ContentType.objects.get_for_model(self.model)
-        uri, created = Uri.objects.get_or_create(
-            uri=importer.get_uri,
-            content_type=content_type,
-            object_id=self.object.id,
-        )
-        if created:
-            messages.info(self.request, f"Added uri {self.uri} to {self.object}")
+        }
+        data._uris = [self.uri]
+        if data:
+            self.model.import_data(data)
+        messages.info(self.request, f"Updated fields {data.keys()}")
         return super().form_valid(form)
 
     def get_success_url(self):

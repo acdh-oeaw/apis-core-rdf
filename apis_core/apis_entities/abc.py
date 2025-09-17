@@ -1,7 +1,10 @@
+from pathlib import Path
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apis_core.generic.utils.rdf_namespace import CRM
+from apis_core.utils.rdf import get_something_from_uri, load_path
 
 #########################
 # Abstract base classes #
@@ -47,6 +50,19 @@ class E21_Person(models.Model):
             "https://d-nb.info/*|/.*.rdf": "E21_PersonFromDNB.toml",
             "http://www.wikidata.org/*|/.*.rdf": "E21_PersonFromWikidata.toml",
         }
+
+    import_definitions = {
+        "https://d-nb.info/*|/.*.rdf": "fetch_from_dnb",
+        "http://www.wikidata.org/*|/.*.rdf": "fetch_from_wikidata",
+    }
+
+    @classmethod
+    def fetch_from_dnb(cls, uri):
+        config_path = Path(__file__).parent / "triple_configs/E21_PersonFromDNB.toml"
+        config = load_path(config_path)
+        config["path"] = config_path
+        config["model"] = cls
+        return get_something_from_uri(uri, configs=[config])
 
     @classmethod
     def get_rdf_types(cls):
