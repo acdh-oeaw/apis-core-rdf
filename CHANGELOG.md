@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.54.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.54.0...v0.54.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* **apis_entities:** add fallback values for string reps of base classes ([371d82a](https://github.com/acdh-oeaw/apis-core-rdf/commit/371d82a5d83901e3d35887f476ea923615a58555)), closes [#2080](https://github.com/acdh-oeaw/apis-core-rdf/issues/2080)
+* **apis_entities:** filter for gndo:Company for Groups ([6d303ad](https://github.com/acdh-oeaw/apis-core-rdf/commit/6d303adf5ab8c6504cb0760be346fc4ce7b4ce44)), closes [#2084](https://github.com/acdh-oeaw/apis-core-rdf/issues/2084)
+* **apis_entities:** use preferredNameEntityForThePerson in importer ([f61af70](https://github.com/acdh-oeaw/apis-core-rdf/commit/f61af70e0f237a7baac4fac99c3150a8977b31ee)), closes [#2086](https://github.com/acdh-oeaw/apis-core-rdf/issues/2086)
+
 ## [0.54.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.53.1...v0.54.0) (2025-09-15)
 
 
