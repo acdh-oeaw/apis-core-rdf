@@ -260,9 +260,7 @@ listed on https://www.geonames.org/export/codes.html</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/apis_entities/abc.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
 <span class="normal">59</span>
@@ -302,7 +300,9 @@ listed on https://www.geonames.org/export/codes.html</p>
 <span class="normal">93</span>
 <span class="normal">94</span>
 <span class="normal">95</span>
-<span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">E53_Place</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">E53_Place</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The feature_code field refers to the geonames feature codes, as</span>
 <span class="sd">    listed on https://www.geonames.org/export/codes.html</span>
@@ -328,7 +328,7 @@ listed on https://www.geonames.org/export/codes.html</p>
         <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="ow">or</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;No label&quot;</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">rdf_configs</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
