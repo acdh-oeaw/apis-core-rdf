@@ -218,6 +218,10 @@ class List(
                 initial=self._get_columns_initial(columns_exclude),
             )
             filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
+        # rebuild the layout, now that the columns field was added
+        filterset.form.helper.layout = filterset.form.helper.build_default_layout(
+            filterset.form
+        )
         # If the filterset form contains form data
         # we add a CSS class to the element wrapping
         # that field in HTML. This CSS class can be
