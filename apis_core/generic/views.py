@@ -143,15 +143,18 @@ class List(
     def get_table_kwargs(self):
         kwargs = super().get_table_kwargs()
 
-        # we look at the selected columns and exclude
-        # all modelfields that are not part of that list
-        form = self.get_filterset(self.get_filterset_class()).form
-        initial = form.fields["columns"].initial if "columns" in form.fields else []
-        selected_columns = self.request.GET.getlist("columns", initial)
+        selected_columns = self.request.GET.getlist("columns", [])
         modelfields = self.model._meta.get_fields()
-        kwargs["exclude"] = [
-            field.name for field in modelfields if field.name not in selected_columns
-        ]
+        # if the form was submitted, we look at the selected
+        # columns and exclude all columns that are not part of that list
+        if self.request.GET:
+            columns_exclude = self.get_filterset_class().Meta.form.columns_exclude
+            other_columns = [
+                name for (name, field) in self._get_columns_choices(columns_exclude)
+            ]
+            kwargs["exclude"] = [
+                field for field in other_columns if field not in selected_columns
+            ]
 
         # now we look at the selected columns and
         # add all modelfields and annotated fields that
