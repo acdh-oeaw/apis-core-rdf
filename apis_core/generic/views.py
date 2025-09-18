@@ -14,6 +14,7 @@ from django.core.validators import URLValidator
 from django.db.models.fields.related import ManyToManyRel
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
+from django.http import QueryDict
 from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
@@ -204,6 +205,16 @@ class List(
             if field not in columns_exclude
         ]
 
+    def get_filterset_kwargs(self, filterset_class):
+        columns_exclude = filterset_class.Meta.form.columns_exclude
+        initial_columns = self._get_columns_initial(columns_exclude)
+        kwargs = super().get_filterset_kwargs(filterset_class)
+        if not kwargs.get("data"):
+            data = QueryDict(mutable=True)
+            data.setlist("columns", initial_columns)
+            kwargs["data"] = data
+        return kwargs
+
     def get_filterset(self, filterset_class):
         """
         We override the `get_filterset` method, so we can inject a
@@ -217,7 +228,6 @@ class List(
             columns = forms.MultipleChoiceField(
                 required=False,
                 choices=choices,
-                initial=self._get_columns_initial(columns_exclude),
             )
             filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
         # rebuild the layout, now that the columns field was added
