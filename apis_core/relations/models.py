@@ -13,6 +13,22 @@ from apis_core.generic.abc import GenericModel
 logger = logging.getLogger(__name__)
 
 
+class RelationManager(InheritanceManager):
+    def create_between_instances(self, subj, obj, *args, **kwargs):
+        subj_object_id = subj.pk
+        subj_content_type = ContentType.objects.get_for_model(subj)
+        obj_object_id = obj.pk
+        obj_content_type = ContentType.objects.get_for_model(obj)
+        rel = self.create(
+            subj_object_id=subj_object_id,
+            subj_content_type=subj_content_type,
+            obj_object_id=obj_object_id,
+            obj_content_type=obj_content_type,
+        )
+        logger.debug("Created relation %s between %s and %s", rel.name(), subj, obj)
+        return rel
+
+
 # This ModelBase is simply there to check if the needed attributes
 # are set in the Relation child classes.
 class RelationModelBase(ModelBase):
@@ -68,7 +84,7 @@ class Relation(GenericModel, models.Model, metaclass=RelationModelBase):
     obj_object_id = models.PositiveIntegerField(null=True)
     obj = GenericForeignKey("obj_content_type", "obj_object_id")
 
-    objects = InheritanceManager()
+    objects = RelationManager()
 
     class Meta:
         indexes = [

@@ -9,7 +9,6 @@ from django.core.exceptions import ImproperlyConfigured
 from django.db.utils import IntegrityError
 
 from apis_core.uris.models import Uri
-from apis_core.uris.utils import create_object_from_uri
 from apis_core.utils.rdf import get_something_from_uri
 
 logger = logging.getLogger(__name__)
@@ -122,48 +121,7 @@ class GenericModelImporter:
             Uri.objects.get_or_create(
                 uri=uri, content_type=content_type, object_id=instance.id
             )
-        for relation, details in data.get("relations", {}).items():
-            rel_app_label, rel_model = relation.split(".")
-            relation_model = ContentType.objects.get_by_natural_key(
-                app_label=rel_app_label, model=rel_model
-            ).model_class()
-
-            reld = details.get("obj", None) or details.get("subj", None)
-            reld_app_label, reld_model = reld.split(".")
-            related_content_type = ContentType.objects.get_by_natural_key(
-                app_label=reld_app_label, model=reld_model
-            )
-            related_model = related_content_type.model_class()
-
-            for related_uri in details["curies"]:
-                try:
-                    related_instance = create_object_from_uri(
-                        uri=related_uri, model=related_model
-                    )
-                    if details.get("obj"):
-                        subj_object_id = instance.pk
-                        subj_content_type = content_type
-                        obj_object_id = related_instance.pk
-                        obj_content_type = related_content_type
-                    else:
-                        obj_object_id = instance.pk
-                        obj_content_type = content_type
-                        subj_object_id = related_instance.pk
-                        subj_content_type = related_content_type
-                    rel, _ = relation_model.objects.get_or_create(
-                        subj_object_id=subj_object_id,
-                        subj_content_type=subj_content_type,
-                        obj_object_id=obj_object_id,
-                        obj_content_type=obj_content_type,
-                    )
-                    logger.debug(
-                        "Created relation %s between %s and %s",
-                        relation_model.name(),
-                        rel.subj,
-                        rel.obj,
-                    )
-                except Exception as e:
-                    logger.error(
-                        "Could not create relation to %s due to %s", related_uri, e
-                    )
+        if "relations" in data:
+            instance.create_relations_to_uris = data["relations"]
+            instance.save()
         return instance
