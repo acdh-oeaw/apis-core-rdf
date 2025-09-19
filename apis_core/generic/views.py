@@ -14,6 +14,7 @@ from django.core.validators import URLValidator
 from django.db.models.fields.related import ManyToManyRel
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
+from django.http import QueryDict
 from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
@@ -141,15 +142,18 @@ class List(
     def get_table_kwargs(self):
         kwargs = super().get_table_kwargs()
 
-        # we look at the selected columns and exclude
-        # all modelfields that are not part of that list
-        form = self.get_filterset(self.get_filterset_class()).form
-        initial = form.fields["columns"].initial if "columns" in form.fields else []
-        selected_columns = self.request.GET.getlist("columns", initial)
+        selected_columns = self.request.GET.getlist("columns", [])
         modelfields = self.model._meta.get_fields()
-        kwargs["exclude"] = [
-            field.name for field in modelfields if field.name not in selected_columns
-        ]
+        # if the form was submitted, we look at the selected
+        # columns and exclude all columns that are not part of that list
+        if self.request.GET:
+            columns_exclude = self.get_filterset_class().Meta.form.columns_exclude
+            other_columns = [
+                name for (name, field) in self._get_columns_choices(columns_exclude)
+            ]
+            kwargs["exclude"] = [
+                field for field in other_columns if field not in selected_columns
+            ]
 
         # now we look at the selected columns and
         # add all modelfields and annotated fields that
@@ -191,6 +195,8 @@ class List(
         ]
         # we add any annotated fields to that
         choices += [(key, key) for key in self.get_queryset().query.annotations.keys()]
+        # lets also add the custom table fields
+        choices += [(key.name, str(key)) for key in self.get_table().columns]
         # now we drop all the choices that are listed in columns_exclude
         choices = list(filter(lambda x: x[0] not in columns_exclude, choices))
         return choices
@@ -201,6 +207,16 @@ class List(
             for field in self.get_table().columns.names()
             if field not in columns_exclude
         ]
+
+    def get_filterset_kwargs(self, filterset_class):
+        columns_exclude = filterset_class.Meta.form.columns_exclude
+        initial_columns = self._get_columns_initial(columns_exclude)
+        kwargs = super().get_filterset_kwargs(filterset_class)
+        if not kwargs.get("data"):
+            data = QueryDict(mutable=True)
+            data.setlist("columns", initial_columns)
+            kwargs["data"] = data
+        return kwargs
 
     def get_filterset(self, filterset_class):
         """
@@ -215,7 +231,6 @@ class List(
             columns = forms.MultipleChoiceField(
                 required=False,
                 choices=choices,
-                initial=self._get_columns_initial(columns_exclude),
             )
             filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
         # rebuild the layout, now that the columns field was added

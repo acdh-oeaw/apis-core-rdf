@@ -2,6 +2,7 @@ import pytest
 from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
 from faker import Faker
+from pytest_django.asserts import assertContains
 
 from apis_core.generic.tests.models import Dummy, Person
 from apis_core.generic.tests.tables import DummyTable
@@ -189,3 +190,14 @@ class TestGeneric(object):
     def test_dummy_table_class(self, admin_client):
         request = admin_client.get("/generic_tests.dummy/")
         assert isinstance(request.context["table"], DummyTable)
+
+    def test_list_view_contains_columns(self, admin_client):
+        """Check if the columns selector is present & if some of the options are present"""
+        response = admin_client.get("/generic_tests.person/")
+        assertContains(
+            response,
+            '<select name="columns" class="selectmultiple form-select" id="id_columns" multiple>',
+        )
+        assertContains(response, '<option value="id" selected>ID</option>')
+        assertContains(response, '<option value="first_name">First name</option>')
+        assertContains(response, '<option value="last_name">Last name</option>')
