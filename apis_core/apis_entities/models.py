@@ -3,14 +3,16 @@ import logging
 import re
 from collections import defaultdict
 
+from django.apps import apps
 from django.conf import settings
-from django.db.models import Case, Q, When
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Case, CharField, F, Q, Value, When
 from django.db.models.base import ModelBase
+from django.db.models.functions import Concat
 from django.urls import NoReverseMatch, reverse
 
 from apis_core.apis_metainfo.models import RootObject
 from apis_core.relations.models import Relation
-from apis_core.relations.utils import get_relation_targets_from_model
 from apis_core.utils.settings import apis_base_uri
 
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
@@ -103,28 +105,81 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
         return f"{base}{route}"
 
     @classmethod
+    def get_facet_label(cls):
+        if "db_string" in cls._meta.get_fields():
+            return F("db_string")
+        return Concat(
+            Value(f"{cls._meta.verbose_name.title()} "),
+            F("pk"),
+            output_field=CharField(),
+        )
+
+    @classmethod
     def get_facets(cls, queryset):
         facets = defaultdict(dict)
-        if getattr(cls, "enable_facets", False):
-            for ct in get_relation_targets_from_model(cls):
-                facetname = "relation_to_" + ct.name
-                rels = Relation.objects.filter(
-                    Q(obj_content_type=ct.id, subj_object_id__in=queryset)
-                    | Q(subj_content_type=ct.id, obj_object_id__in=queryset)
-                )
-                rels = rels.annotate(
-                    target=Case(
-                        When(**{"obj_content_type": ct.id, "then": "obj_object_id"}),
-                        When(**{"subj_content_type": ct.id, "then": "subj_object_id"}),
-                    )
-                )
-                related_ids = [x.target for x in rels]
-                instances = ct.model_class().objects.filter(pk__in=related_ids)
+        if getattr(cls, "enable_facets", True):
+            my_content_type = ContentType.objects.get_for_model(queryset.model)
 
-                for obj in instances:
-                    related_ids = [x for x in rels if x.target == obj.id]
-                    facets[facetname][obj.id] = {
-                        "name": str(obj),
-                        "count": len(set(related_ids)),
-                    }
+            # we filter all the relations that are somehow connected to instances of this queryset
+            # we are only interested in the id and the type of the object the relations point to,
+            # so we store those in `target_id` and `target_content_type`
+            query_filter = Q(
+                subj_content_type=my_content_type, subj_object_id__in=queryset
+            ) | Q(obj_content_type=my_content_type, obj_object_id__in=queryset)
+            rels = (
+                Relation.objects.filter(query_filter)
+                .annotate(
+                    target_content_type=Case(
+                        When(
+                            **{
+                                "subj_content_type": my_content_type,
+                                "then": "obj_content_type",
+                            }
+                        ),
+                        default="subj_content_type",
+                    ),
+                    target_id=Case(
+                        When(
+                            **{
+                                "subj_content_type": my_content_type,
+                                "then": "obj_object_id",
+                            }
+                        ),
+                        default="subj_object_id",
+                    ),
+                )
+                .values("target_id", "target_content_type")
+            )
+
+            # we use the ids to get a the labels of the targets
+            # and we store those in an id: label dict
+            target_ids = [rel["target_id"] for rel in rels]
+            entity_classes = list(
+                filter(lambda x: issubclass(x, AbstractEntity), apps.get_models())
+            )
+            when_clauses_classes = [
+                When(
+                    **{f"{cls.__name__.lower()}__isnull": False},
+                    then=cls.get_facet_label(),
+                )
+                for cls in entity_classes
+            ]
+            identifiers = (
+                RootObject.objects_inheritance.filter(id__in=target_ids)
+                .select_subclasses()
+                .annotate(label=Case(*when_clauses_classes))
+                .values("pk", "label")
+            )
+            identifiers = {item["pk"]: item["label"] for item in identifiers}
+
+            for rel in rels:
+                _id = rel["target_id"]
+                content_type = rel["target_content_type"]
+                facetname = (
+                    "relation_to_" + ContentType.objects.get(pk=content_type).name
+                )
+                if _id in facets[facetname]:
+                    facets[facetname][_id]["count"] += 1
+                else:
+                    facets[facetname][_id] = {"count": 1, "name": identifiers[_id]}
         return facets
