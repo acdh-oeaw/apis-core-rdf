@@ -8,6 +8,7 @@ class DuplicateColumn(ActionColumn):
 
     template_name = "columns/duplicate.html"
     permission = "create"
+    verbose_name = "duplicate"
 
 
 class AbstractEntityTable(GenericTable):
