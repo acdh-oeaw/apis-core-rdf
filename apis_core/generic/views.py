@@ -86,7 +86,7 @@ class GenericModelMixin:
         suffix = ".html"
         if hasattr(self, "template_name_suffix"):
             suffix = self.template_name_suffix + ".html"
-        additional_templates = template_names_via_mro(self.model, suffix)
+        additional_templates = template_names_via_mro(self.model, suffix=suffix)
         template_names += filter(
             lambda template: template not in template_names, additional_templates
         )
@@ -289,7 +289,7 @@ class Create(
 
     def get_success_message(self, cleaned_data):
         message_templates = template_names_via_mro(
-            self.model, "_create_success_message.html"
+            self.model, suffix="_create_success_message.html"
         )
         template = select_template(message_templates)
         return template.render({"object": self.object})
@@ -334,7 +334,7 @@ class Update(
 
     def get_success_message(self, cleaned_data):
         message_templates = template_names_via_mro(
-            self.model, "_update_success_message.html"
+            self.model, suffix="_update_success_message.html"
         )
         template = select_template(message_templates)
         return template.render({"object": self.object})
@@ -351,7 +351,7 @@ class Duplicate(GenericModelMixin, PermissionRequiredMixin, View):
         newobj = source_obj.duplicate()
 
         message_templates = template_names_via_mro(
-            self.model, "_duplicate_success_message.html"
+            self.model, suffix="_duplicate_success_message.html"
         )
         template = select_template(message_templates)
         messages.success(request, template.render({"object": source_obj}))
