@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.54.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.54.2...v0.54.3) (2025-09-22)
+
+
+### Bug Fixes
+
+* **apis_entities:** use force_str on translated strings ([afed123](https://github.com/acdh-oeaw/apis-core-rdf/commit/afed12351c21088d7d2fd475a61f98afc74f36e4))
+
 ## [0.54.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.54.1...v0.54.2) (2025-09-17)
 
 
