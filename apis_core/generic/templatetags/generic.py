@@ -110,7 +110,7 @@ def content_type_count(content_type):
 
 @register.simple_tag
 def template_list(obj, suffix):
-    return template_names_via_mro(type(obj), suffix)
+    return template_names_via_mro(type(obj), suffix=suffix)
 
 
 @register.simple_tag(takes_context=True)

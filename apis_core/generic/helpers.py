@@ -75,13 +75,18 @@ def mro_paths(model):
     return [list(path) for path in list(dict.fromkeys(paths))]
 
 
-@functools.lru_cache
-def template_names_via_mro(model, suffix=""):
+def template_names_via_mro(model, folder="", prefix="", suffix=""):
     """
     Use the MRO to generate a list of template names for a model
     """
-    mro_prefix_list = ["/".join(prefix) for prefix in mro_paths(model)]
-    return [f"{prefix.lower()}{suffix}" for prefix in mro_prefix_list]
+    results = []
+    for path in mro_paths(model):
+        path = path.copy()  # copy, so we don't modify the original list
+        if folder:
+            path.insert(len(path) - 1, folder)
+        path[-1] = f"{prefix}{path[-1]}{suffix}"
+        results.append("/".join(path).lower())
+    return results
 
 
 @functools.lru_cache
