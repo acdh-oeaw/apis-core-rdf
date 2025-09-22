@@ -35,8 +35,7 @@ class ActionColumn(CustomTemplateColumn):
 
     orderable = False
     exclude_from_export = True
-    verbose_name = ""
-    attrs = {"td": {"style": "width:1%;"}}
+    attrs = {"td": {"style": "width:1%;"}, "th": {"style": "font-size: 0"}}
 
     def render(self, record, table, *args, **kwargs):
         if permission := getattr(self, "permission", False):
