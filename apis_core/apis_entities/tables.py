@@ -3,7 +3,7 @@ from apis_core.generic.tables import ActionColumn, GenericTable
 
 class DuplicateColumn(ActionColumn):
     """
-    A column showing a view button
+    A column showing a duplicate button
     """
 
     template_name = "columns/duplicate.html"
