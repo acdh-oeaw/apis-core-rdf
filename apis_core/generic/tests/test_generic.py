@@ -53,6 +53,8 @@ class TestGeneric(object):
         self.unique = Person.objects.create(
             first_name=unique_first_name, last_name=unique_last_name
         )
+        # Create a person without any attributes
+        Person.objects.create()
         self.person_count = Person.objects.count()
 
     def test_person_count(self, setup):
