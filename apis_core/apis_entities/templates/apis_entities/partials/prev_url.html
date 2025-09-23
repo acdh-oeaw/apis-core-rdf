@@ -1,8 +1,6 @@
 {% if object.get_prev_id %}
-  <h2>
-    <a class="prev-in-list"
-       href="{% url request.resolver_match.view_name request.resolver_match.kwargs.contenttype object.get_prev_id %}">
-      <span class="material-symbols-outlined">chevron_left</span>
-    </a>
-  </h2>
+  <a class="prev-in-list"
+     href="{% url request.resolver_match.view_name request.resolver_match.kwargs.contenttype object.get_prev_id %}">
+    <span class="material-symbols-outlined">chevron_left</span>
+  </a>
 {% endif %}
