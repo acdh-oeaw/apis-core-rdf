@@ -1,8 +1,6 @@
 {% if object.get_next_id %}
-  <h2>
-    <a class="next-in-list"
-       href="{% url request.resolver_match.view_name request.resolver_match.kwargs.contenttype object.get_next_id %}">
-      <span class="material-symbols-outlined">chevron_right</span>
-    </a>
-  </h2>
+  <a class="next-in-list"
+     href="{% url request.resolver_match.view_name request.resolver_match.kwargs.contenttype object.get_next_id %}">
+    <span class="material-symbols-outlined">chevron_right</span>
+  </a>
 {% endif %}
