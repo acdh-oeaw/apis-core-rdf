@@ -27,7 +27,7 @@ class GenericModel(models.Model):
     def __repr__(self):
         if id := getattr(self, "id", None):
             return super().__repr__() + f" (ID: {id})"
-        return super().__repr__()
+        return repr(super())
 
     @property
     def content_type(self):
