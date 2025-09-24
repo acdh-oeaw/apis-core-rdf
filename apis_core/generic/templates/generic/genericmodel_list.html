@@ -15,7 +15,13 @@
     <div class="card">
       <div class="card-header">
         <div class="row">
-          <div class="col">{{ object_list.model.get_verbose_name_plural|title }}</div>
+          <div class="col">
+
+            {% block listviewheader %}
+              {{ object_list.model.get_verbose_name_plural|title }}
+            {% endblock listviewheader %}
+
+          </div>
           <div class="col">
             {% if object_list.model.get_add_permission in perms %}
               <a class="btn btn-outline-success float-end btn-sm"
