@@ -197,7 +197,10 @@ class List(
         # we add any annotated fields to that
         choices += [(key, key) for key in self.get_queryset().query.annotations.keys()]
         # lets also add the custom table fields
-        choices += [(key.name, capfirst(key)) for key in self.get_table().columns]
+        choices += [
+            (key.name, capfirst(str(key) or key.name or "Nameless column"))
+            for key in self.get_table().columns
+        ]
         # now we drop all the choices that are listed in columns_exclude
         choices = list(filter(lambda x: x[0] not in columns_exclude, choices))
         return choices
