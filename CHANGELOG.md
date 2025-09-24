@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.55.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.54.3...v0.55.0) (2025-09-24)
+
+
+### Features
+
+* **core:** use custom font instead of shipping full font pack ([eb82fb2](https://github.com/acdh-oeaw/apis-core-rdf/commit/eb82fb27ae451ee72d8ebcf7610222f30a0f10cf)), closes [#2076](https://github.com/acdh-oeaw/apis-core-rdf/issues/2076)
+* **generic:** allow to pass folder & prefix to the template mro lookup ([a8549c8](https://github.com/acdh-oeaw/apis-core-rdf/commit/a8549c89f4ef8b3604f77830021a7d1a1ea2d0b8))
+* **generic:** also add table columns to column selector ([e6e1437](https://github.com/acdh-oeaw/apis-core-rdf/commit/e6e143759b661c2daa426e9e29d748ae002a9ad5)), closes [#1030](https://github.com/acdh-oeaw/apis-core-rdf/issues/1030)
+* **generic:** extract list view header block for overrides ([f15c3cd](https://github.com/acdh-oeaw/apis-core-rdf/commit/f15c3cd6b5d2ab92237c991acdb1d1b30d7624b9))
+* **generic:** replace importer logic with trigger to relation signal ([8546cb0](https://github.com/acdh-oeaw/apis-core-rdf/commit/8546cb0d0b0f08bf4fdda8a740106170170bd55f))
+* **relations:** add custom RelationManager for the Relation model ([cd5d2dd](https://github.com/acdh-oeaw/apis-core-rdf/commit/cd5d2dd979d3c3b7e5e1cff464e822afac40e887))
+* **relations:** allow automatic creation of relations using signal ([8d5d86a](https://github.com/acdh-oeaw/apis-core-rdf/commit/8d5d86ab2b509bd17c0ab77b6edfed7215924caa))
+* **relations:** provide relation label with forward and reverse names ([5d6dc50](https://github.com/acdh-oeaw/apis-core-rdf/commit/5d6dc506ba98f322b6cf0d6540933cbe4db9c776))
+* **relations:** show both forward and reverse names in the menu ([26d7a11](https://github.com/acdh-oeaw/apis-core-rdf/commit/26d7a110c59b841371d4a02d8927cbcb20b97e4a)), closes [#2094](https://github.com/acdh-oeaw/apis-core-rdf/issues/2094)
+* **relations:** show forward and reverse names in the listview title ([0e09449](https://github.com/acdh-oeaw/apis-core-rdf/commit/0e094493c4c01e3c9fb80bd6370c21adda1daadf)), closes [#2095](https://github.com/acdh-oeaw/apis-core-rdf/issues/2095)
+* **utils:** allow to pass a config to `get_something_from_uri` ([953cf5a](https://github.com/acdh-oeaw/apis-core-rdf/commit/953cf5a839aeaa7f87703a56e5243c1140a794a2))
+
+
+### Bug Fixes
+
+* **apis_entities:** override verbose name of duplicate column ([8f3d539](https://github.com/acdh-oeaw/apis-core-rdf/commit/8f3d539d7b9378910796d06a412a6a0ff6e4e831))
+* **core:** also include login icon in font ([fd1fbcf](https://github.com/acdh-oeaw/apis-core-rdf/commit/fd1fbcf562f4f5318662cdf5dc97861306fca104))
+* **generic:** add fallback if column has empty string representation ([97fa6a2](https://github.com/acdh-oeaw/apis-core-rdf/commit/97fa6a2ef1b2ef0fa8d81a6a497e57ee30f860de))
+* **generic:** only exclude unselected columns if the form was submitted ([59e92f7](https://github.com/acdh-oeaw/apis-core-rdf/commit/59e92f72f070bdb3520ae819b92e959ea91d8c0b))
+* **generic:** set font size to 0 instead of using empty string for name ([5cf1475](https://github.com/acdh-oeaw/apis-core-rdf/commit/5cf1475fb3af5d0afdc6d4b87feb58c8b002d44f))
+* **generic:** use filterset kwargs to pass initial columns ([b3056e5](https://github.com/acdh-oeaw/apis-core-rdf/commit/b3056e574f59efd71489be1868fae7a04990c31d))
+* **utils:** only copy the attribute if it really exists ([0160ff3](https://github.com/acdh-oeaw/apis-core-rdf/commit/0160ff360c091e3ba6f3f432cd3c2782f851853c))
+
+
+### Documentation
+
+* **apis_entities:** correct DuplicateColumn docstring… ([6efca9d](https://github.com/acdh-oeaw/apis-core-rdf/commit/6efca9de05957cf8028745d236c775be1d6f5f33))
+
 ## [0.54.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.54.2...v0.54.3) (2025-09-22)
 
 
