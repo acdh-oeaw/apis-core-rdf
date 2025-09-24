@@ -137,3 +137,14 @@ class Relation(GenericModel, models.Model, metaclass=RelationModelBase):
     @classmethod
     def reverse_name(cls) -> str:
         return cls._meta.verbose_name + " reverse"
+
+    @classmethod
+    def name_and_reverse_name(cls) -> str:
+        """
+        Return a string with both the name and the reverse name.
+
+        If they are identical, return only the name.
+        """
+        if cls.name() != cls.reverse_name():
+            return f"{cls.name()} - {cls.reverse_name()}"
+        return cls.name()
