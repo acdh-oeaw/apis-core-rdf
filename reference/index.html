@@ -800,13 +800,15 @@ So they are to be understood in that dynamic context.</p>
 <span class="normal"> 7</span>
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
-<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DuplicateColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DuplicateColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A column showing a view button</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;columns/duplicate.html&quot;</span>
     <span class="n">permission</span> <span class="o">=</span> <span class="s2">&quot;create&quot;</span>
+    <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;duplicate&quot;</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -5807,8 +5809,7 @@ for actions.</p>
 <span class="normal">41</span>
 <span class="normal">42</span>
 <span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ActionColumn</span><span class="p">(</span><span class="n">CustomTemplateColumn</span><span class="p">):</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ActionColumn</span><span class="p">(</span><span class="n">CustomTemplateColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A custom template column with some additional attributes</span>
 <span class="sd">    for actions.</span>
@@ -5816,8 +5817,7 @@ for actions.</p>
 
     <span class="n">orderable</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">exclude_from_export</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;td&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;width:1%;&quot;</span><span class="p">}}</span>
+    <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;td&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;width:1%;&quot;</span><span class="p">},</span> <span class="s2">&quot;th&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;font-size: 0&quot;</span><span class="p">}}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">permission</span> <span class="o">:=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;permission&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
@@ -5968,13 +5968,13 @@ override the attributes in child classes.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
+<span class="normal">48</span>
 <span class="normal">49</span>
 <span class="normal">50</span>
 <span class="normal">51</span>
 <span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DeleteColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
+<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DeleteColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A column showing a delete button</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -6030,13 +6030,13 @@ override the attributes in child classes.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">74</span>
+<span class="normal">75</span>
 <span class="normal">76</span>
 <span class="normal">77</span>
 <span class="normal">78</span>
 <span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DescriptionColumn</span><span class="p">(</span><span class="n">CustomTemplateColumn</span><span class="p">):</span>
+<span class="normal">80</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DescriptionColumn</span><span class="p">(</span><span class="n">CustomTemplateColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A column showing a model description</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -6092,13 +6092,13 @@ override the attributes in child classes.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">57</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
+<span class="normal">57</span>
 <span class="normal">58</span>
 <span class="normal">59</span>
 <span class="normal">60</span>
 <span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">EditColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
+<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">EditColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A column showing an edit button</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -6155,7 +6155,8 @@ and a description column</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">84</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">83</span>
+<span class="normal">84</span>
 <span class="normal">85</span>
 <span class="normal">86</span>
 <span class="normal">87</span>
@@ -6167,8 +6168,7 @@ and a description column</p>
 <span class="normal">93</span>
 <span class="normal">94</span>
 <span class="normal">95</span>
-<span class="normal">96</span>
-<span class="normal">97</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+<span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A generic table that contains an edit button column, a delete button column</span>
 <span class="sd">    and a description column</span>
@@ -6233,7 +6233,8 @@ which is replaced with a "Show less" link when expanded.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">100</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
+<span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
 <span class="normal">103</span>
@@ -6249,8 +6250,7 @@ which is replaced with a "Show less" link when expanded.</p>
 <span class="normal">113</span>
 <span class="normal">114</span>
 <span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MoreLessColumn</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">):</span>
+<span class="normal">116</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MoreLessColumn</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Useful for displaying long fields.</span>
 <span class="sd">    A preview is shown initially with a &quot;Show more&quot; link</span>
@@ -6317,13 +6317,13 @@ which is replaced with a "Show less" link when expanded.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">66</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
+<span class="normal">66</span>
 <span class="normal">67</span>
 <span class="normal">68</span>
 <span class="normal">69</span>
 <span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ViewColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
+<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ViewColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A column showing a view button</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -6508,8 +6508,7 @@ along <strong>package</strong>.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 36</span>
-<span class="normal"> 37</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 37</span>
 <span class="normal"> 38</span>
 <span class="normal"> 39</span>
 <span class="normal"> 40</span>
@@ -6663,7 +6662,19 @@ along <strong>package</strong>.</p>
 <span class="normal">188</span>
 <span class="normal">189</span>
 <span class="normal">190</span>
-<span class="normal">191</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">django_db</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">django_db</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">TestGeneric</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -6819,6 +6830,17 @@ along <strong>package</strong>.</p>
     <span class="k">def</span><span class="w"> </span><span class="nf">test_dummy_table_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
         <span class="n">request</span> <span class="o">=</span> <span class="n">admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/generic_tests.dummy/&quot;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;table&quot;</span><span class="p">],</span> <span class="n">DummyTable</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_list_view_contains_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the columns selector is present &amp; if some of the options are present&quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/generic_tests.person/&quot;</span><span class="p">)</span>
+        <span class="n">assertContains</span><span class="p">(</span>
+            <span class="n">response</span><span class="p">,</span>
+            <span class="s1">&#39;&lt;select name=&quot;columns&quot; class=&quot;selectmultiple form-select&quot; id=&quot;id_columns&quot; multiple&gt;&#39;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;&lt;option value=&quot;id&quot; selected&gt;ID&lt;/option&gt;&#39;</span><span class="p">)</span>
+        <span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;&lt;option value=&quot;first_name&quot;&gt;First name&lt;/option&gt;&#39;</span><span class="p">)</span>
+        <span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;&lt;option value=&quot;last_name&quot;&gt;Last name&lt;/option&gt;&#39;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -6850,13 +6872,13 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">70</span>
-<span class="normal">71</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">71</span>
 <span class="normal">72</span>
 <span class="normal">73</span>
 <span class="normal">74</span>
 <span class="normal">75</span>
-<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="n">route_parameters</span><span class="p">,</span> <span class="n">routes</span><span class="p">)</span>
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="n">route_parameters</span><span class="p">,</span> <span class="n">routes</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_admin_person_views</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">route</span><span class="p">,</span> <span class="n">permission</span><span class="p">,</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">admin_client</span>
 <span class="p">):</span>
@@ -6885,11 +6907,11 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
-<span class="normal">65</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span>
-<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="n">route_parameters</span><span class="p">,</span> <span class="n">routes</span><span class="p">)</span>
+<span class="normal">68</span>
+<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="n">route_parameters</span><span class="p">,</span> <span class="n">routes</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_anon_person_views</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">route</span><span class="p">,</span> <span class="n">permission</span><span class="p">,</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Anon user should not be able to access the person views&quot;&quot;&quot;</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">route</span><span class="p">)</span>
@@ -6916,13 +6938,54 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">184</span>
-<span class="normal">185</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">185</span>
 <span class="normal">186</span>
-<span class="normal">187</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_dummy_table_export_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rf</span><span class="p">,</span> <span class="n">admin_user</span><span class="p">):</span>
+<span class="normal">187</span>
+<span class="normal">188</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_dummy_table_export_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rf</span><span class="p">,</span> <span class="n">admin_user</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the dummy table provides the correct export filename&quot;&quot;&quot;</span>
     <span class="n">view</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">Dummy</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">view</span><span class="o">.</span><span class="n">get_export_filename</span><span class="p">(</span><span class="s2">&quot;ext&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;dummytable.ext&quot;</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="apis_core.generic.tests.test_generic.TestGeneric.test_list_view_contains_columns" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">test_list_view_contains_columns</span><span class="p">(</span><span class="n">admin_client</span><span class="p">)</span></code>
+
+</h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Check if the columns selector is present &amp; if some of the options are present</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_list_view_contains_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the columns selector is present &amp; if some of the options are present&quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/generic_tests.person/&quot;</span><span class="p">)</span>
+    <span class="n">assertContains</span><span class="p">(</span>
+        <span class="n">response</span><span class="p">,</span>
+        <span class="s1">&#39;&lt;select name=&quot;columns&quot; class=&quot;selectmultiple form-select&quot; id=&quot;id_columns&quot; multiple&gt;&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;&lt;option value=&quot;id&quot; selected&gt;ID&lt;/option&gt;&#39;</span><span class="p">)</span>
+    <span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;&lt;option value=&quot;first_name&quot;&gt;First name&lt;/option&gt;&#39;</span><span class="p">)</span>
+    <span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;&lt;option value=&quot;last_name&quot;&gt;Last name&lt;/option&gt;&#39;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -6945,8 +7008,7 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">166</span>
-<span class="normal">167</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">167</span>
 <span class="normal">168</span>
 <span class="normal">169</span>
 <span class="normal">170</span>
@@ -6956,7 +7018,8 @@ along <strong>package</strong>.</p>
 <span class="normal">174</span>
 <span class="normal">175</span>
 <span class="normal">176</span>
-<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_autocomplete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="normal">177</span>
+<span class="normal">178</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_autocomplete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if we find a person using autocomplete&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -6990,9 +7053,9 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the correct number of persons was created&quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">person_count</span>
 </code></pre></div></td></tr></table></div>
@@ -7017,8 +7080,7 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">112</span>
-<span class="normal">113</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">113</span>
 <span class="normal">114</span>
 <span class="normal">115</span>
 <span class="normal">116</span>
@@ -7027,7 +7089,8 @@ along <strong>package</strong>.</p>
 <span class="normal">119</span>
 <span class="normal">120</span>
 <span class="normal">121</span>
-<span class="normal">122</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="normal">122</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if we can create a person using the create route&quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;first_name&quot;</span><span class="p">:</span> <span class="n">fake</span><span class="o">.</span><span class="n">first_name</span><span class="p">(),</span>
@@ -7060,13 +7123,13 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">124</span>
-<span class="normal">125</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">125</span>
 <span class="normal">126</span>
 <span class="normal">127</span>
 <span class="normal">128</span>
 <span class="normal">129</span>
-<span class="normal">130</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="normal">130</span>
+<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if we can delete a person using the delete route&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/generic_tests.person/delete/</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">pk</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -7095,8 +7158,7 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">132</span>
-<span class="normal">133</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
 <span class="normal">134</span>
 <span class="normal">135</span>
 <span class="normal">136</span>
@@ -7104,7 +7166,8 @@ along <strong>package</strong>.</p>
 <span class="normal">138</span>
 <span class="normal">139</span>
 <span class="normal">140</span>
-<span class="normal">141</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_delete_confirmation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="normal">141</span>
+<span class="normal">142</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_delete_confirmation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if we can delete a person using the delete route&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
@@ -7136,14 +7199,14 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">143</span>
-<span class="normal">144</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">144</span>
 <span class="normal">145</span>
 <span class="normal">146</span>
 <span class="normal">147</span>
 <span class="normal">148</span>
 <span class="normal">149</span>
-<span class="normal">150</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_delete_redirect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="normal">150</span>
+<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_delete_redirect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if we can delete a person using the delete route&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
@@ -7173,12 +7236,12 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">105</span>
-<span class="normal">106</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
 <span class="normal">107</span>
 <span class="normal">108</span>
 <span class="normal">109</span>
-<span class="normal">110</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_detail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="normal">110</span>
+<span class="normal">111</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_detail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the details page of a person lists its details&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/generic_tests.person/</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">pk</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -7206,11 +7269,11 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
-<span class="normal">100</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
-<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="normal">103</span>
+<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the first_name of some person object is listed in the person list&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/generic_tests.person/&quot;</span><span class="p">)</span>
@@ -7237,10 +7300,10 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
-<span class="normal">180</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">180</span>
 <span class="normal">181</span>
-<span class="normal">182</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_table_export_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rf</span><span class="p">,</span> <span class="n">admin_user</span><span class="p">):</span>
+<span class="normal">182</span>
+<span class="normal">183</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_table_export_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rf</span><span class="p">,</span> <span class="n">admin_user</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the person table provides the correct export filename&quot;&quot;&quot;</span>
     <span class="n">view</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">Person</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">view</span><span class="o">.</span><span class="n">get_export_filename</span><span class="p">(</span><span class="s2">&quot;ext&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;table.ext&quot;</span>
@@ -7266,8 +7329,7 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">152</span>
-<span class="normal">153</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">153</span>
 <span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
@@ -7278,7 +7340,8 @@ along <strong>package</strong>.</p>
 <span class="normal">161</span>
 <span class="normal">162</span>
 <span class="normal">163</span>
-<span class="normal">164</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
+<span class="normal">164</span>
+<span class="normal">165</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_person_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">admin_client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if we can update a person&quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
@@ -7313,12 +7376,12 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">78</span>
-<span class="normal">79</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">79</span>
 <span class="normal">80</span>
 <span class="normal">81</span>
 <span class="normal">82</span>
-<span class="normal">83</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="n">route_parameters</span><span class="p">,</span> <span class="n">routes</span><span class="p">)</span>
+<span class="normal">83</span>
+<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="n">route_parameters</span><span class="p">,</span> <span class="n">routes</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_person_user_views</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">route</span><span class="p">,</span> <span class="n">permission</span><span class="p">,</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Normal user should not be able to access the person list&quot;&quot;&quot;</span>
     <span class="n">client</span><span class="o">.</span><span class="n">force_login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
@@ -7346,8 +7409,7 @@ along <strong>package</strong>.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/tests/test_generic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">85</span>
-<span class="normal">86</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">86</span>
 <span class="normal">87</span>
 <span class="normal">88</span>
 <span class="normal">89</span>
@@ -7356,7 +7418,8 @@ along <strong>package</strong>.</p>
 <span class="normal">92</span>
 <span class="normal">93</span>
 <span class="normal">94</span>
-<span class="normal">95</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="n">route_parameters</span><span class="p">,</span> <span class="n">routes</span><span class="p">)</span>
+<span class="normal">95</span>
+<span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="n">route_parameters</span><span class="p">,</span> <span class="n">routes</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_person_user_with_access</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">route</span><span class="p">,</span> <span class="n">permission</span><span class="p">,</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">client</span>
 <span class="p">):</span>
@@ -7580,19 +7643,7 @@ the <code>first_member_match</code> helper.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">361</span>
-<span class="normal">362</span>
-<span class="normal">363</span>
-<span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span>
-<span class="normal">367</span>
-<span class="normal">368</span>
-<span class="normal">369</span>
-<span class="normal">370</span>
-<span class="normal">371</span>
-<span class="normal">372</span>
-<span class="normal">373</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">373</span>
 <span class="normal">374</span>
 <span class="normal">375</span>
 <span class="normal">376</span>
@@ -7657,7 +7708,19 @@ the <code>first_member_match</code> helper.</p>
 <span class="normal">435</span>
 <span class="normal">436</span>
 <span class="normal">437</span>
-<span class="normal">438</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Autocomplete</span><span class="p">(</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Autocomplete</span><span class="p">(</span>
     <span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">autocomplete</span><span class="o">.</span><span class="n">Select2QuerySetView</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -7776,19 +7839,7 @@ but this is expected and we raise a more useful exception.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">406</span>
-<span class="normal">407</span>
-<span class="normal">408</span>
-<span class="normal">409</span>
-<span class="normal">410</span>
-<span class="normal">411</span>
-<span class="normal">412</span>
-<span class="normal">413</span>
-<span class="normal">414</span>
-<span class="normal">415</span>
-<span class="normal">416</span>
-<span class="normal">417</span>
-<span class="normal">418</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">418</span>
 <span class="normal">419</span>
 <span class="normal">420</span>
 <span class="normal">421</span>
@@ -7802,7 +7853,19 @@ but this is expected and we raise a more useful exception.</p>
 <span class="normal">429</span>
 <span class="normal">430</span>
 <span class="normal">431</span>
-<span class="normal">432</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    We try multiple approaches to create a model instance from a value:</span>
 <span class="sd">    * we first test if the value is an URL and if so we expect it to be</span>
@@ -7872,19 +7935,7 @@ the <code>first_member_match</code> helper.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">272</span>
-<span class="normal">273</span>
-<span class="normal">274</span>
-<span class="normal">275</span>
-<span class="normal">276</span>
-<span class="normal">277</span>
-<span class="normal">278</span>
-<span class="normal">279</span>
-<span class="normal">280</span>
-<span class="normal">281</span>
-<span class="normal">282</span>
-<span class="normal">283</span>
-<span class="normal">284</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">284</span>
 <span class="normal">285</span>
 <span class="normal">286</span>
 <span class="normal">287</span>
@@ -7898,7 +7949,19 @@ the <code>first_member_match</code> helper.</p>
 <span class="normal">295</span>
 <span class="normal">296</span>
 <span class="normal">297</span>
-<span class="normal">298</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Create</span><span class="p">(</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Create</span><span class="p">(</span>
     <span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">SuccessMessageMixin</span><span class="p">,</span> <span class="n">CreateView</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -7975,21 +8038,21 @@ Access requires the <code>&lt;model&gt;_delete</code> permission.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">301</span>
-<span class="normal">302</span>
-<span class="normal">303</span>
-<span class="normal">304</span>
-<span class="normal">305</span>
-<span class="normal">306</span>
-<span class="normal">307</span>
-<span class="normal">308</span>
-<span class="normal">309</span>
-<span class="normal">310</span>
-<span class="normal">311</span>
-<span class="normal">312</span>
-<span class="normal">313</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">313</span>
 <span class="normal">314</span>
-<span class="normal">315</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Delete</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">):</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Delete</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">DeleteView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delete view for a generic model.</span>
 <span class="sd">    Access requires the `&lt;model&gt;_delete` permission.</span>
@@ -8054,13 +8117,13 @@ Access requires the <code>&lt;model&gt;_view</code> permission.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">263</span>
-<span class="normal">264</span>
-<span class="normal">265</span>
-<span class="normal">266</span>
-<span class="normal">267</span>
-<span class="normal">268</span>
-<span class="normal">269</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Detail</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">DetailView</span><span class="p">):</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Detail</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">DetailView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Detail view for a generic model.</span>
 <span class="sd">    Access requires the `&lt;model&gt;_view` permission.</span>
@@ -8118,19 +8181,7 @@ provides the user with a form to select the fields that should be updated.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">523</span>
-<span class="normal">524</span>
-<span class="normal">525</span>
-<span class="normal">526</span>
-<span class="normal">527</span>
-<span class="normal">528</span>
-<span class="normal">529</span>
-<span class="normal">530</span>
-<span class="normal">531</span>
-<span class="normal">532</span>
-<span class="normal">533</span>
-<span class="normal">534</span>
-<span class="normal">535</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">535</span>
 <span class="normal">536</span>
 <span class="normal">537</span>
 <span class="normal">538</span>
@@ -8196,7 +8247,19 @@ provides the user with a form to select the fields that should be updated.</p>
 <span class="normal">598</span>
 <span class="normal">599</span>
 <span class="normal">600</span>
-<span class="normal">601</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Enrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="normal">601</span>
+<span class="normal">602</span>
+<span class="normal">603</span>
+<span class="normal">604</span>
+<span class="normal">605</span>
+<span class="normal">606</span>
+<span class="normal">607</span>
+<span class="normal">608</span>
+<span class="normal">609</span>
+<span class="normal">610</span>
+<span class="normal">611</span>
+<span class="normal">612</span>
+<span class="normal">613</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Enrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Enrich an entity with data from an external source</span>
 <span class="sd">    If so, it uses the proper Importer to get the data from the Uri and</span>
@@ -8310,19 +8373,7 @@ fields values on the model instance.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">574</span>
-<span class="normal">575</span>
-<span class="normal">576</span>
-<span class="normal">577</span>
-<span class="normal">578</span>
-<span class="normal">579</span>
-<span class="normal">580</span>
-<span class="normal">581</span>
-<span class="normal">582</span>
-<span class="normal">583</span>
-<span class="normal">584</span>
-<span class="normal">585</span>
-<span class="normal">586</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">586</span>
 <span class="normal">587</span>
 <span class="normal">588</span>
 <span class="normal">589</span>
@@ -8334,7 +8385,19 @@ fields values on the model instance.</p>
 <span class="normal">595</span>
 <span class="normal">596</span>
 <span class="normal">597</span>
-<span class="normal">598</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+<span class="normal">598</span>
+<span class="normal">599</span>
+<span class="normal">600</span>
+<span class="normal">601</span>
+<span class="normal">602</span>
+<span class="normal">603</span>
+<span class="normal">604</span>
+<span class="normal">605</span>
+<span class="normal">606</span>
+<span class="normal">607</span>
+<span class="normal">608</span>
+<span class="normal">609</span>
+<span class="normal">610</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Go through all the form fields and extract the ones that</span>
 <span class="sd">    start with `update_` and that are set (those are the checkboxes that</span>
@@ -8403,9 +8466,7 @@ to set the permission required to access the view for this specific model.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 60</span>
 <span class="normal"> 61</span>
 <span class="normal"> 62</span>
 <span class="normal"> 63</span>
@@ -8447,7 +8508,9 @@ to set the permission required to access the view for this specific model.</p>
 <span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
-<span class="normal">102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericModelMixin</span><span class="p">:</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericModelMixin</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A mixin providing the common functionality for all the views working</span>
 <span class="sd">    with `generic` models - that is models that are accessed via the</span>
@@ -8549,9 +8612,7 @@ the <code>first_member_match</code> helper.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
 <span class="normal">108</span>
 <span class="normal">109</span>
 <span class="normal">110</span>
@@ -8704,7 +8765,19 @@ the <code>first_member_match</code> helper.</p>
 <span class="normal">257</span>
 <span class="normal">258</span>
 <span class="normal">259</span>
-<span class="normal">260</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">List</span><span class="p">(</span>
     <span class="n">GenericModelMixin</span><span class="p">,</span>
     <span class="n">PermissionRequiredMixin</span><span class="p">,</span>
     <span class="n">ExportMixin</span><span class="p">,</span>
@@ -8743,15 +8816,18 @@ the <code>first_member_match</code> helper.</p>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_table_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_table_kwargs</span><span class="p">()</span>
 
-        <span class="c1"># we look at the selected columns and exclude</span>
-        <span class="c1"># all modelfields that are not part of that list</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_filterset_class</span><span class="p">())</span><span class="o">.</span><span class="n">form</span>
-        <span class="n">initial</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">initial</span> <span class="k">if</span> <span class="s2">&quot;columns&quot;</span> <span class="ow">in</span> <span class="n">form</span><span class="o">.</span><span class="n">fields</span> <span class="k">else</span> <span class="p">[]</span>
-        <span class="n">selected_columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">initial</span><span class="p">)</span>
+        <span class="n">selected_columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="n">modelfields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_fields</span><span class="p">()</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;exclude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">modelfields</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_columns</span>
-        <span class="p">]</span>
+        <span class="c1"># if the form was submitted, we look at the selected</span>
+        <span class="c1"># columns and exclude all columns that are not part of that list</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span>
+            <span class="n">columns_exclude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_filterset_class</span><span class="p">()</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">columns_exclude</span>
+            <span class="n">other_columns</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">name</span> <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_columns_choices</span><span class="p">(</span><span class="n">columns_exclude</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;exclude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">other_columns</span> <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_columns</span>
+            <span class="p">]</span>
 
         <span class="c1"># now we look at the selected columns and</span>
         <span class="c1"># add all modelfields and annotated fields that</span>
@@ -8793,16 +8869,24 @@ the <code>first_member_match</code> helper.</p>
         <span class="p">]</span>
         <span class="c1"># we add any annotated fields to that</span>
         <span class="n">choices</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="c1"># lets also add the custom table fields</span>
+        <span class="n">choices</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">key</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">capfirst</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
         <span class="c1"># now we drop all the choices that are listed in columns_exclude</span>
         <span class="n">choices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns_exclude</span><span class="p">,</span> <span class="n">choices</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">choices</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_get_columns_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns_exclude</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="n">field</span>
-            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">names</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns_exclude</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filterset_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">):</span>
+        <span class="n">columns_exclude</span> <span class="o">=</span> <span class="n">filterset_class</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">columns_exclude</span>
+        <span class="n">table_columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_table</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">initial_columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">col</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">table_columns</span> <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns_exclude</span>
         <span class="p">]</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_filterset_kwargs</span><span class="p">(</span><span class="n">filterset_class</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">QueryDict</span><span class="p">(</span><span class="n">mutable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">setlist</span><span class="p">(</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span> <span class="n">initial_columns</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -8817,7 +8901,6 @@ the <code>first_member_match</code> helper.</p>
             <span class="n">columns</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">MultipleChoiceField</span><span class="p">(</span>
                 <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">,</span>
-                <span class="n">initial</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_columns_initial</span><span class="p">(</span><span class="n">columns_exclude</span><span class="p">),</span>
             <span class="p">)</span>
             <span class="n">filterset</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="n">columns</span><span class="p">},</span> <span class="o">**</span><span class="n">filterset</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">fields</span><span class="p">}</span>
         <span class="c1"># rebuild the layout, now that the columns field was added</span>
@@ -8892,20 +8975,7 @@ the <code>first_member_match</code> helper.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
-<span class="normal">208</span>
-<span class="normal">209</span>
-<span class="normal">210</span>
-<span class="normal">211</span>
-<span class="normal">212</span>
-<span class="normal">213</span>
-<span class="normal">214</span>
-<span class="normal">215</span>
-<span class="normal">216</span>
-<span class="normal">217</span>
-<span class="normal">218</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">218</span>
 <span class="normal">219</span>
 <span class="normal">220</span>
 <span class="normal">221</span>
@@ -8932,7 +9002,19 @@ the <code>first_member_match</code> helper.</p>
 <span class="normal">242</span>
 <span class="normal">243</span>
 <span class="normal">244</span>
-<span class="normal">245</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">):</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_filterset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterset_class</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    We override the `get_filterset` method, so we can inject a</span>
 <span class="sd">    `columns` selector into the form</span>
@@ -8945,7 +9027,6 @@ the <code>first_member_match</code> helper.</p>
         <span class="n">columns</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">MultipleChoiceField</span><span class="p">(</span>
             <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">,</span>
-            <span class="n">initial</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_columns_initial</span><span class="p">(</span><span class="n">columns_exclude</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">filterset</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="n">columns</span><span class="p">},</span> <span class="o">**</span><span class="n">filterset</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">fields</span><span class="p">}</span>
     <span class="c1"># rebuild the layout, now that the columns field was added</span>
@@ -8996,13 +9077,13 @@ so we can set the table_pagination value as attribute of the table.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">254</span>
-<span class="normal">255</span>
-<span class="normal">256</span>
-<span class="normal">257</span>
-<span class="normal">258</span>
-<span class="normal">259</span>
-<span class="normal">260</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_table_pagination</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_table_pagination</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Override `get_table_pagination` from the tables2 TableMixinBase,</span>
 <span class="sd">    so we can set the table_pagination value as attribute of the table.</span>
@@ -9049,19 +9130,7 @@ so we can set the table_pagination value as attribute of the table.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">482</span>
-<span class="normal">483</span>
-<span class="normal">484</span>
-<span class="normal">485</span>
-<span class="normal">486</span>
-<span class="normal">487</span>
-<span class="normal">488</span>
-<span class="normal">489</span>
-<span class="normal">490</span>
-<span class="normal">491</span>
-<span class="normal">492</span>
-<span class="normal">493</span>
-<span class="normal">494</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">494</span>
 <span class="normal">495</span>
 <span class="normal">496</span>
 <span class="normal">497</span>
@@ -9087,7 +9156,19 @@ so we can set the table_pagination value as attribute of the table.</p>
 <span class="normal">517</span>
 <span class="normal">518</span>
 <span class="normal">519</span>
-<span class="normal">520</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MergeWith</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span>
+<span class="normal">525</span>
+<span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MergeWith</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generic merge view.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -9159,23 +9240,23 @@ a table with diffs</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">496</span>
-<span class="normal">497</span>
-<span class="normal">498</span>
-<span class="normal">499</span>
-<span class="normal">500</span>
-<span class="normal">501</span>
-<span class="normal">502</span>
-<span class="normal">503</span>
-<span class="normal">504</span>
-<span class="normal">505</span>
-<span class="normal">506</span>
-<span class="normal">507</span>
-<span class="normal">508</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">508</span>
 <span class="normal">509</span>
 <span class="normal">510</span>
 <span class="normal">511</span>
-<span class="normal">512</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="normal">512</span>
+<span class="normal">513</span>
+<span class="normal">514</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span>
+<span class="normal">518</span>
+<span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The context consists of the two objects that are merged as well</span>
 <span class="sd">    as a list of changes. Those changes are presented in the view as</span>
@@ -9233,19 +9314,7 @@ external sources, if set up) and on form submit redirects to the Enrich view.</p
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">458</span>
-<span class="normal">459</span>
-<span class="normal">460</span>
-<span class="normal">461</span>
-<span class="normal">462</span>
-<span class="normal">463</span>
-<span class="normal">464</span>
-<span class="normal">465</span>
-<span class="normal">466</span>
-<span class="normal">467</span>
-<span class="normal">468</span>
-<span class="normal">469</span>
-<span class="normal">470</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">470</span>
 <span class="normal">471</span>
 <span class="normal">472</span>
 <span class="normal">473</span>
@@ -9254,7 +9323,19 @@ external sources, if set up) and on form submit redirects to the Enrich view.</p
 <span class="normal">476</span>
 <span class="normal">477</span>
 <span class="normal">478</span>
-<span class="normal">479</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SelectMergeOrEnrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="normal">479</span>
+<span class="normal">480</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SelectMergeOrEnrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This view provides a simple form that allows to select other entities (also from</span>
 <span class="sd">    external sources, if set up) and on form submit redirects to the Enrich view.</span>
@@ -9328,19 +9409,7 @@ the <code>first_member_match</code> helper.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/views.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">318</span>
-<span class="normal">319</span>
-<span class="normal">320</span>
-<span class="normal">321</span>
-<span class="normal">322</span>
-<span class="normal">323</span>
-<span class="normal">324</span>
-<span class="normal">325</span>
-<span class="normal">326</span>
-<span class="normal">327</span>
-<span class="normal">328</span>
-<span class="normal">329</span>
-<span class="normal">330</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">330</span>
 <span class="normal">331</span>
 <span class="normal">332</span>
 <span class="normal">333</span>
@@ -9353,7 +9422,19 @@ the <code>first_member_match</code> helper.</p>
 <span class="normal">340</span>
 <span class="normal">341</span>
 <span class="normal">342</span>
-<span class="normal">343</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Update</span><span class="p">(</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Update</span><span class="p">(</span>
     <span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">PermissionRequiredMixin</span><span class="p">,</span> <span class="n">SuccessMessageMixin</span><span class="p">,</span> <span class="n">UpdateView</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
