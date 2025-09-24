@@ -16,7 +16,7 @@ jobs:
         run: uv sync --only-dev
       - name: Run css-beautify
         run: |
-          if find apis_core -name "*.css" -exec uv run css-beautify -rn {} \; | grep -v unchanged; then
+          if find apis_core -name "*.css" -exec uv run css-beautify -s 2 -rn {} \; | grep -v unchanged; then
             exit 1;
           else
             exit 0;
