@@ -16,7 +16,7 @@ from simple_history.models import HistoricalRecords
 from apis_core.generic.abc import GenericModel
 
 
-class APISHistoricalRecords(HistoricalRecords, GenericModel):
+class APISHistoricalRecords(HistoricalRecords):
     def get_m2m_fields_from_model(self, model):
         # Change the original simple history function to also return m2m fields
         m2m_fields = []
