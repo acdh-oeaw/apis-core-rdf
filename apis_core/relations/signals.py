@@ -6,7 +6,6 @@ from django.dispatch import receiver
 
 from apis_core.generic.signals import post_duplicate, post_merge_with
 from apis_core.relations.models import Relation
-from apis_core.uris.utils import create_object_from_uri
 
 logger = logging.getLogger(__name__)
 
@@ -89,9 +88,7 @@ def create_relations(sender, instance, created, raw, using, update_fields, **kwa
 
         for related_uri in details["curies"]:
             try:
-                related_instance = create_object_from_uri(
-                    uri=related_uri, model=related_model
-                )
+                related_instance = related_model.import_from(uri=related_uri)
                 if details.get("obj"):
                     relation_model.object.create_between_instances(
                         instance, related_instance
