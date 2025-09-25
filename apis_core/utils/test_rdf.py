@@ -5,12 +5,12 @@ from pathlib import Path
 
 from django.test import TestCase
 
-from apis_core.apis_entities.abc import E53_Place
 from apis_core.utils import rdf
 
 # use `curl -H "Accept: application/rdf+xml" -L $URI` to fetch data
 
 testdata = Path(__file__).parent / "testdata"
+rdf_configs = Path(__file__).parent.parent / "apis_entities/triple_configs"
 
 
 class RdfTest(TestCase):
@@ -22,8 +22,9 @@ class RdfTest(TestCase):
         }
         # https://www.geonames.org/2783029/achensee.html
         uri = str(testdata / "achensee.rdf")
+        config = rdf_configs / "E53_PlaceFromGeonames.toml"
 
-        attributes = rdf.get_something_from_uri(uri)
+        attributes = rdf.load_uri_using_path(uri, config)
         self.assertEqual(achensee["latitude"], attributes["latitude"])
         self.assertEqual(achensee["longitude"], attributes["longitude"])
         self.assertEqual(achensee["label"], attributes["label"])
@@ -36,8 +37,9 @@ class RdfTest(TestCase):
         }
         # https://d-nb.info/gnd/4066009-6
         uri = str(testdata / "wien.rdf")
+        config = rdf_configs / "E53_PlaceFromDNB.toml"
 
-        attributes = rdf.get_something_from_uri(uri)
+        attributes = rdf.load_uri_using_path(uri, config)
         self.assertEqual(wien["latitude"], attributes["latitude"])
         self.assertEqual(wien["longitude"], attributes["longitude"])
         self.assertEqual(wien["label"], attributes["label"])
@@ -67,8 +69,9 @@ class RdfTest(TestCase):
         }
         # https://d-nb.info/gnd/118833197
         uri = str(testdata / "ramus.rdf")
+        config = rdf_configs / "E21_PersonFromDNB.toml"
 
-        attributes = rdf.get_something_from_uri(uri)
+        attributes = rdf.load_uri_using_path(uri, config)
         self.assertEqual(pierre["forename"], attributes["forename"])
         self.assertEqual(pierre["surname"], attributes["surname"])
         # self.assertEqual(pierre["alternative_names"], attributes["alternative_names"])
@@ -85,8 +88,9 @@ class RdfTest(TestCase):
         }
         # https://d-nb.info/gnd/415006-5
         uri = str(testdata / "ramus_gesellschaft.rdf")
+        config = rdf_configs / "E74_GroupFromDNB.toml"
 
-        attributes = rdf.get_something_from_uri(uri)
+        attributes = rdf.load_uri_using_path(uri, config)
         self.assertEqual(pierre_ges["label"], attributes["label"])
 
     def test_get_definition_from_dict_institution_from_dnb2(self):
@@ -99,16 +103,18 @@ class RdfTest(TestCase):
         }
         # https://d-nb.info/gnd/35077-1
         uri = str(testdata / "oeaw.rdf")
+        config = rdf_configs / "E74_GroupFromDNB.toml"
 
-        attributes = rdf.get_something_from_uri(uri)
+        attributes = rdf.load_uri_using_path(uri, config)
         self.assertEqual(oeaw["label"], attributes["label"])
 
     def test_dnb_geographic_unit(self):
         expected = {"label": "Wutai Shan"}
         # https://d-nb.info/gnd/4241848-3
         uri = str(testdata / "wutaishan.rdf")
+        config = rdf_configs / "E53_PlaceFromDNB.toml"
 
-        attributes = rdf.get_something_from_uri(uri, [E53_Place])
+        attributes = rdf.load_uri_using_path(uri, config)
         self.assertEqual(len(attributes.get("latitude", [])), 0)
         self.assertEqual(len(attributes.get("longitude", [])), 0)
 

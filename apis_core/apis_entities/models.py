@@ -90,6 +90,16 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
                 return next_instance.id
         return False
 
+    def import_data(self, data):
+        errors = super().import_data(data)
+        if "same_as" in data:
+            self._uris = data["same_as"]
+            self.save()
+        if "relations" in data:
+            self.create_relations_to_uris = data["relations"]
+            self.save()
+        return errors
+
     def get_default_uri(self):
         try:
             route = reverse("GetEntityGenericRoot", kwargs={"pk": self.pk})
