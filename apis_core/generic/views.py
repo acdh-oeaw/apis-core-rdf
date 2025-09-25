@@ -7,7 +7,6 @@ from django import forms, http
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.validators import URLValidator
@@ -32,8 +31,6 @@ from django_tables2.export.views import ExportMixin
 from django_tables2.tables import table_factory
 
 from apis_core.uris.models import Uri
-from apis_core.uris.utils import create_object_from_uri
-from apis_core.utils.helpers import get_importer_for_model
 
 from .filtersets import GenericFilterSet
 from .forms import (
@@ -390,7 +387,7 @@ class Autocomplete(
         super().setup(*args, **kwargs)
         # We use a URI parameter to enable the create functionality in the
         # autocomplete dropdown. It is not important what the value of the
-        # `create_field` is, because we use create_object_from_uri anyway.
+        # `create_field` is, because we override create_object anyway.
         self.create_field = self.request.GET.get("create", None)
         try:
             template = select_template(self.get_template_names())
@@ -434,9 +431,7 @@ class Autocomplete(
         """
         try:
             URLValidator()(value)
-            return create_object_from_uri(
-                value, self.queryset.model, raise_on_fail=True
-            )
+            return self.queryset.model.import_from(value)
         except ValidationError:
             pass
         try:
@@ -538,8 +533,7 @@ class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
 class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
     """
     Enrich an entity with data from an external source
-    If so, it uses the proper Importer to get the data from the Uri and
-    provides the user with a form to select the fields that should be updated.
+    Provides the user with a form to select the fields that should be updated.
     """
 
     permission_action_required = "change"
@@ -553,7 +547,6 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         self.uri = self.request.GET.get("uri")
         if not self.uri:
             messages.error(self.request, "No uri parameter specified.")
-        self.importer_class = get_importer_for_model(self.model)
 
     def get(self, *args, **kwargs):
         if self.uri.isdigit():
@@ -580,8 +573,8 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         kwargs = super().get_form_kwargs(*args, **kwargs)
         kwargs["instance"] = self.object
         try:
-            importer = self.importer_class(self.uri, self.model)
-            kwargs["data"] = importer.get_data()
+            self.data = self.model.fetch_from(self.uri)
+            kwargs["data"] = self.data
         except ImproperlyConfigured as e:
             messages.error(self.request, e)
         return kwargs
@@ -591,25 +584,20 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         Go through all the form fields and extract the ones that
         start with `update_` and that are set (those are the checkboxes that
         select which fields to update).
-        Then use the importers `import_into_instance` method to set those
-        fields values on the model instance.
+        Create a dict from those values, add the uri and pass the dict on to
+        the models `import_data` method.
         """
-        update_fields = [
-            key.removeprefix("update_")
-            for (key, value) in self.request.POST.items()
-            if key.startswith("update_") and value
-        ]
-        importer = self.importer_class(self.uri, self.model)
-        importer.import_into_instance(self.object, fields=update_fields)
-        messages.info(self.request, f"Updated fields {update_fields}")
-        content_type = ContentType.objects.get_for_model(self.model)
-        uri, created = Uri.objects.get_or_create(
-            uri=importer.get_uri,
-            content_type=content_type,
-            object_id=self.object.id,
-        )
-        if created:
-            messages.info(self.request, f"Added uri {self.uri} to {self.object}")
+        data = {}
+        for key, values in self.request.POST.items():
+            if key.startswith("update_"):
+                key = key.removeprefix("update_")
+                data[key] = self.data[key]
+        data["_uris"] = [self.uri]
+        if data:
+            errors = self.object.import_data(data)
+            for field, error in errors.items():
+                messages.error(self.request, f"Could not update {field}: {error}")
+        messages.info(self.request, f"Updated fields {data.keys()}")
         return super().form_valid(form)
 
     def get_success_url(self):
