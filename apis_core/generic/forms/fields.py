@@ -2,17 +2,13 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelChoiceField, MultiValueField, MultiWidget
 from django.utils.translation import gettext as _
 
-from apis_core.uris.utils import create_object_from_uri
-
 
 class ModelImportChoiceField(ModelChoiceField):
     def to_python(self, value):
         result = None
         if value.startswith(("http://", "https://")):
             try:
-                result = create_object_from_uri(
-                    value, self.queryset.model, raise_on_fail=True
-                )
+                result = self.queryset.model.import_from(value)
             except Exception as e:
                 raise ValidationError(
                     _("Could not import %(value)s: %(exception)s"),
