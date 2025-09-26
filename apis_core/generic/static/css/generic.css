@@ -58,3 +58,25 @@
         opacity: 0;
     }
 }
+
+/* This is copied from the `alert-danger` class from Bootstrap
+ * Django uses `error` as a tag in the error messages - we could
+ * override this using the MESSAGE_TAGS Django setting, but simply
+ * setting the style here means less configuration for the projects.
+ */
+.alert-error {
+    --bs-alert-color: var(--bs-danger-text-emphasis);
+    --bs-alert-bg: var(--bs-danger-bg-subtle);
+    --bs-alert-border-color: var(--bs-danger-border-subtle);
+    --bs-alert-link-color: var(--bs-danger-text-emphasis);
+}
+
+/* Lets do the same also for the `debug` tag and reuse the settings
+ * from the `alert-secondary` class
+ */
+.alert-debug {
+    --bs-alert-color: var(--bs-secondary-text-emphasis);
+    --bs-alert-bg: var(--bs-secondary-bg-subtle);
+    --bs-alert-border-color: var(--bs-secondary-border-subtle);
+    --bs-alert-link-color: var(--bs-secondary-text-emphasis);
+}
