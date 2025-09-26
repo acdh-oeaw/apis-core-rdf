@@ -141,22 +141,6 @@ class Relation(GenericModel, models.Model, metaclass=RelationModelBase):
         return get_by_natural_key(model) if isinstance(model, str) else model
 
     @classmethod
-    def _get_models(cls, model):
-        models = model if isinstance(model, list) else [model]
-        return [
-            get_by_natural_key(model) if isinstance(model, str) else model
-            for model in models
-        ]
-
-    @classmethod
-    def subj_list(cls) -> list[models.Model]:
-        return cls._get_models(cls.subj_model)
-
-    @classmethod
-    def obj_list(cls) -> list[models.Model]:
-        return cls._get_models(cls.obj_model)
-
-    @classmethod
     def name(cls) -> str:
         return cls._meta.verbose_name
 
