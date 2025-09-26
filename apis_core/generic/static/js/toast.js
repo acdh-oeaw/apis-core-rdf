@@ -1,8 +1,8 @@
 window.addEventListener('load', () => {
-    document.querySelectorAll("[data-timeout-close]").forEach((element) => {
-        setTimeout(function() {
-            element.close();
-        }, element.dataset.timeoutClose);
+    document.querySelectorAll(".mytoast").forEach((element) => {
+        element.addEventListener('animationend', function(e) {
+            e.animationName == "fadeout" && element.close();
+        });
     });
 });
 
@@ -17,9 +17,9 @@ function createToast(message) {
     element.innerHTML = message.message
 
     element.show()
-    setTimeout(function() {
-        element.close();
-    }, element.dataset.timeoutClose);
+    element.addEventListener('animationend', function(e) {
+        e.animationName == "fadeout" && element.close();
+    });
 }
 
 htmx.on("messages", (event) => {
