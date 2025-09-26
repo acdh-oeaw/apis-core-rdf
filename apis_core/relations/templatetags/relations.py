@@ -20,10 +20,10 @@ def get_relation_targets_from(obj) -> list[ContentType]:
     relations = relation_content_types(any_model=type(obj))
     types = set()
     for model in [relation.model_class() for relation in relations]:
-        if type(obj) in model.obj_list():
-            types.update(model.subj_list())
-        if type(obj) in model.subj_list():
-            types.update(model.obj_list())
+        if isinstance(obj, model.obj_model_type()):
+            types.add(model.subj_model_type())
+        if isinstance(obj, model.subj_model_type()):
+            types.add(model.obj_model_type())
     return sorted(
         list(map(ContentType.objects.get_for_model, types)), key=lambda x: x.name
     )
