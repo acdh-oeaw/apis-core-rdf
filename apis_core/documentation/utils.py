@@ -23,13 +23,13 @@ class Datamodel:
     def edges(self):
         edges = defaultdict(list)
         for rel in self.relations:
-            for subj_class in rel.model_class().subj_list():
-                for obj_class in rel.model_class().obj_list():
-                    key = (
-                        ContentType.objects.get_for_model(subj_class).name,
-                        ContentType.objects.get_for_model(obj_class).name,
-                    )
-                    edges[key].append(force_str(rel.model_class().name()))
+            subj_class = rel.model_class().subj_model_type()
+            obj_class = rel.model_class().obj_model_type()
+            key = (
+                ContentType.objects.get_for_model(subj_class).name,
+                ContentType.objects.get_for_model(obj_class).name,
+            )
+            edges[key].append(force_str(rel.model_class().name()))
         return edges
 
     def make_graph(self):
