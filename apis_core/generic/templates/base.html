@@ -43,17 +43,11 @@
 {% block messages %}
   <div id="snackbar">
     {% for message in messages %}
-      <dialog data-timeout-close="3000"
-              class="mytoast alert alert-{{ message.tags }}"
-              role="alert"
-              open>
+      <dialog class="mytoast alert alert-{{ message.tags }}" role="alert" open>
         {{ message }}
       </dialog>
     {% endfor %}
-    <dialog data-message-toast
-            data-timeout-close="3000"
-            class="mytoast alert"
-            role="alert">
+    <dialog data-message-toast class="mytoast alert" role="alert">
     </dialog>
   </div>
 {% endblock messages %}
