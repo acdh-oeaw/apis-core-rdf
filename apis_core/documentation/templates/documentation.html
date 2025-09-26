@@ -20,15 +20,13 @@
         </a>
         <h3>{% translate "related via" %}</h3>
         {% for relation in datamodel.relations %}
-          {% with relation.model_class.subj_list|add:relation.model_class.obj_list as model_list %}
-            <ul>
-              {% if entity.model_class in model_list %}
-                <li>
-                  <a href="#relation-{{ relation.model }}">{{ relation.name }}</a>
-                </li>
-              {% endif %}
-            </ul>
-          {% endwith %}
+          <ul>
+            {% if entity.model_class is relation.model_class.subj_model_type or entity.model_class is relation.model_class.obj_model_type %}
+              <li>
+                <a href="#relation-{{ relation.model }}">{{ relation.name }}</a>
+              </li>
+            {% endif %}
+          </ul>
         {% endfor %}
         <h3>{% translate "attributes" %}</h3>
         <table class="table table-hover">
@@ -82,21 +80,21 @@
         <table class="table">
           <thead>
             <tr>
-              <th>{% translate "Subjects" %}</th>
-              <th>{% translate "Objects" %}</th>
+              <th>{% translate "Subject" %}</th>
+              <th>{% translate "Object" %}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
-                {% for cls in relation.model_class.subj_list %}
-                  {% with cls|contenttype as entity %}<a href="#entity-{{ entity.model }}">{{ entity.name }}</a>{% endwith %}
-                {% endfor %}
+                {% with relation.model_class.subj_model_type|contenttype as entity %}
+                  <a href="#entity-{{ entity.model }}">{{ entity.name }}</a>
+                {% endwith %}
               </td>
               <td>
-                {% for cls in relation.model_class.obj_list %}
-                  {% with cls|contenttype as entity %}<a href="#entity-{{ entity.model }}">{{ entity.name }}</a>{% endwith %}
-                {% endfor %}
+                {% with relation.model_class.obj_model_type|contenttype as entity %}
+                  <a href="#entity-{{ entity.model }}">{{ entity.name }}</a>
+                {% endwith %}
               </td>
             </tr>
           </tbody>

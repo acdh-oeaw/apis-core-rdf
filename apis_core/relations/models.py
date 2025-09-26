@@ -131,20 +131,14 @@ class Relation(GenericModel, models.Model, metaclass=RelationModelBase):
         return self.subj_to_obj_text
 
     @classmethod
-    def _get_models(cls, model):
-        models = model if isinstance(model, list) else [model]
-        return [
-            get_by_natural_key(model) if isinstance(model, str) else model
-            for model in models
-        ]
+    def subj_model_type(cls):
+        model = cls.subj_model
+        return get_by_natural_key(model) if isinstance(model, str) else model
 
     @classmethod
-    def subj_list(cls) -> list[models.Model]:
-        return cls._get_models(cls.subj_model)
-
-    @classmethod
-    def obj_list(cls) -> list[models.Model]:
-        return cls._get_models(cls.obj_model)
+    def obj_model_type(cls):
+        model = cls.obj_model
+        return get_by_natural_key(model) if isinstance(model, str) else model
 
     @classmethod
     def name(cls) -> str:
