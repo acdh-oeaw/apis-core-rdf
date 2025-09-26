@@ -10,7 +10,7 @@ function createToast(message) {
     const element = document.querySelector("[data-message-toast]").cloneNode(true)
     delete element.dataset.messagetoast
 
-    document.body.appendChild(element);
+    document.getElementById("snackbar").appendChild(element);
 
     element.className += " alert-" + message.tags
 
