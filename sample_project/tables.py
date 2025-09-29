@@ -1,9 +1,8 @@
-from apis_core.apis_entities.tables import AbstractEntityTable
-from apis_core.generic.tables import MoreLessColumn
+from apis_core.generic.tables import GenericTable, MoreLessColumn
 
 
-class PersonTable(AbstractEntityTable):
-    class Meta(AbstractEntityTable.Meta):
+class PersonTable(GenericTable):
+    class Meta(GenericTable.Meta):
         sequence = ["desc", "bio"]
 
     # example column to show preview and detail
