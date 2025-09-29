@@ -53,6 +53,16 @@ class DeleteColumn(ActionColumn):
     permission = "delete"
 
 
+class DuplicateColumn(ActionColumn):
+    """
+    A column showing a duplicate button
+    """
+
+    template_name = "columns/duplicate.html"
+    permission = "create"
+    verbose_name = "duplicate"
+
+
 class EditColumn(ActionColumn):
     """
     A column showing an edit button
@@ -90,10 +100,11 @@ class GenericTable(tables.Table):
     desc = DescriptionColumn()
     delete = DeleteColumn()
     view = ViewColumn()
+    noduplicate = DuplicateColumn()
 
     class Meta:
         fields = ["id", "desc"]
-        sequence = ("...", "view", "edit", "delete")
+        sequence = ("...", "view", "edit", "delete", "noduplicate")
 
 
 class MoreLessColumn(tables.TemplateColumn):
