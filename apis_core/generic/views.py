@@ -490,8 +490,14 @@ class SelectMergeOrEnrich(GenericModelMixin, PermissionRequiredMixin, FormView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs(*args, **kwargs)
-        kwargs["instance"] = self.get_object()
+        kwargs["content_type"] = ContentType.objects.get_for_model(self.model)
         return kwargs
+
+    def form_valid(self, form):
+        uri = form.cleaned_data["uri"]
+        if uri.isdigit():
+            return redirect(self.get_object().get_merge_url(uri))
+        return redirect(self.get_object().get_enrich_url() + f"?uri={uri}")
 
 
 class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
