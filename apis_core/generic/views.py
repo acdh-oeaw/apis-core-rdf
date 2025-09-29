@@ -147,7 +147,7 @@ class List(
         modelfields = self.model._meta.get_fields()
         # if the form was submitted, we look at the selected
         # columns and exclude all columns that are not part of that list
-        if self.request.GET:
+        if self.request.GET and "columns" in self.request.GET:
             columns_exclude = self.get_filterset_class().Meta.form.columns_exclude
             other_columns = [
                 name for (name, field) in self._get_columns_choices(columns_exclude)
@@ -212,8 +212,8 @@ class List(
             col.name for col in table_columns if col.name not in columns_exclude
         ]
         kwargs = super().get_filterset_kwargs(filterset_class)
-        if not kwargs.get("data"):
-            data = QueryDict(mutable=True)
+        data = (kwargs.get("data", QueryDict()) or QueryDict()).copy()
+        if not data.get("columns"):
             data.setlist("columns", initial_columns)
             kwargs["data"] = data
         return kwargs
