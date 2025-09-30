@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext as _
 
 from apis_core.apis_entities.abc import E21_Person, E53_Place, E74_Group
 from apis_core.apis_entities.models import AbstractEntity
@@ -27,36 +28,48 @@ class Group(E74_Group, VersionMixin, AbstractEntity):
 
 
 class IsCousinOf(Relation):
+    class Meta:
+        verbose_name = _("is cousin of")
+
     subj_model = Person
     obj_model = Person
 
     @classmethod
     def reverse_name(self) -> str:
-        return "is cousin of"
+        return _("is cousin of")
 
 
 class IsPartOf(Relation):
+    class Meta:
+        verbose_name = _("is part of")
+
     subj_model = Person
     obj_model = Group
 
     @classmethod
     def reverse_name(self) -> str:
-        return "consists of"
+        return _("consists of")
 
 
 class IsSiblingOf(Relation):
+    class Meta:
+        verbose_name = _("is sibling of")
+
     subj_model = Person
     obj_model = Person
 
     @classmethod
     def reverse_name(self) -> str:
-        return "is sibling of"
+        return _("is sibling of")
 
 
 class LivesIn(Relation):
+    class Meta:
+        verbose_name = _("lives in")
+
     subj_model = Person
     obj_model = Place
 
     @classmethod
     def reverse_name(self) -> str:
-        return "has inhabitant"
+        return _("has inhabitant")
