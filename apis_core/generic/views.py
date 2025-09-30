@@ -562,8 +562,6 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         self.importer_class = get_importer_for_model(self.model)
 
     def get(self, *args, **kwargs):
-        if self.uri.isdigit():
-            return redirect(self.object.get_merge_url(self.uri))
         try:
             uriobj = Uri.objects.get(uri=self.uri)
             if uriobj.object_id != self.object.id:
