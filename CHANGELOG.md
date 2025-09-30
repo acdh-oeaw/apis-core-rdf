@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.55.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.55.0...v0.55.1) (2025-09-30)
+
+
+### Bug Fixes
+
+* **generic:** set inital colums only if columns it not a GET parameter ([80d029f](https://github.com/acdh-oeaw/apis-core-rdf/commit/80d029f9f2d6f5c93bfc1bf71607d90aac53c804)), closes [#2140](https://github.com/acdh-oeaw/apis-core-rdf/issues/2140)
+* **history:** don't let APISHistoricalRecords inherit from GenericModel ([9119416](https://github.com/acdh-oeaw/apis-core-rdf/commit/91194169ce68785a00e682a98341a1bce1c9519c)), closes [#2089](https://github.com/acdh-oeaw/apis-core-rdf/issues/2089)
+
 ## [0.55.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.54.3...v0.55.0) (2025-09-24)
 
 
