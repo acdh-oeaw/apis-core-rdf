@@ -5,6 +5,7 @@ from crispy_forms.layout import Submit
 from django import forms
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -110,6 +111,12 @@ class GenericModelForm(forms.ModelForm):
                         url, attrs={"data-html": True}
                     )
                     self.fields[field].widget.choices = self.fields[field].choices
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not any(cleaned_data.values()):
+            raise ValidationError(_("Please fill out some of the form fields"))
+        return cleaned_data
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
