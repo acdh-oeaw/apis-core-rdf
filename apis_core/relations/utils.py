@@ -28,22 +28,25 @@ def relation_content_types(
     if subj_model is not None:
         relationcts = list(
             filter(
-                lambda contenttype: subj_model in contenttype.model_class().subj_list(),
+                lambda contenttype: subj_model
+                is contenttype.model_class().subj_model_type(),
                 relationcts,
             )
         )
     if obj_model is not None:
         relationcts = list(
             filter(
-                lambda contenttype: obj_model in contenttype.model_class().obj_list(),
+                lambda contenttype: obj_model
+                is contenttype.model_class().obj_model_type(),
                 relationcts,
             )
         )
     if any_model is not None:
         relationcts = list(
             filter(
-                lambda contenttype: any_model in contenttype.model_class().obj_list()
-                or any_model in contenttype.model_class().subj_list(),
+                lambda contenttype: any_model
+                is contenttype.model_class().obj_model_type()
+                or any_model is contenttype.model_class().subj_model_type(),
                 relationcts,
             )
         )
@@ -51,16 +54,17 @@ def relation_content_types(
         left, right = combination
         rels = list(
             filter(
-                lambda contenttype: right in contenttype.model_class().obj_list()
-                and left in contenttype.model_class().subj_list(),
+                lambda contenttype: right is contenttype.model_class().obj_model_type()
+                and left is contenttype.model_class().subj_model_type(),
                 relationcts,
             )
         )
         rels.extend(
             list(
                 filter(
-                    lambda contenttype: left in contenttype.model_class().obj_list()
-                    and right in contenttype.model_class().subj_list(),
+                    lambda contenttype: left
+                    is contenttype.model_class().obj_model_type()
+                    and right is contenttype.model_class().subj_model_type(),
                     relationcts,
                 )
             )
@@ -95,6 +99,6 @@ def get_all_relation_subj_and_obj() -> list[ContentType]:
     """
     related_models = set()
     for rel in relation_content_types():
-        related_models.update(rel.model_class().subj_list())
-        related_models.update(rel.model_class().obj_list())
+        related_models.add(rel.model_class().subj_model_type())
+        related_models.add(rel.model_class().obj_model_type())
     return [ContentType.objects.get_for_model(item) for item in related_models]

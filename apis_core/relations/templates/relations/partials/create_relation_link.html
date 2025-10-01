@@ -1,5 +1,5 @@
 {% url "apis_core:relations:create_relation_form" relation_type as baseurlform %}
-{% if object.content_type.model_class in relation_type.model_class.subj_list %}
+{% if object.content_type.model_class is relation_type.model_class.subj_model_type %}
   {% if linkify %}
     <a href="{{ relation_type.model_class.get_createview_url }}?subj_content_type={{ object.content_type.id }}&subj_object_id={{ object.id }}"
        class="text-decoration-none"
@@ -10,7 +10,7 @@
     <span class="forward{% if badge %} badge bg-secondary{% else %} btn btn-sm btn-outline-secondary{% endif %}">{{ relation_type.model_class.name }}</span>
     {% if linkify %}</a>{% endif %}
 {% endif %}
-{% if object.content_type.model_class in relation_type.model_class.obj_list %}
+{% if object.content_type.model_class is relation_type.model_class.obj_model_type %}
   {% if linkify %}
     <a href="{{ relation_type.model_class.get_createview_url }}?obj_content_type={{ object.content_type.id }}&sobj_object_id={{ object.id }}"
        class="text-decoration-none"
