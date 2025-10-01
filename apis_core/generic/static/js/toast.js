@@ -1,8 +1,8 @@
 window.addEventListener('load', () => {
-    document.querySelectorAll("[data-timeout-close]").forEach((element) => {
-        setTimeout(function() {
-            element.close();
-        }, element.dataset.timeoutClose);
+    document.querySelectorAll(".mytoast").forEach((element) => {
+        element.addEventListener('animationend', function(e) {
+            e.animationName == "fadeout" && element.close();
+        });
     });
 });
 
@@ -10,16 +10,16 @@ function createToast(message) {
     const element = document.querySelector("[data-message-toast]").cloneNode(true)
     delete element.dataset.messagetoast
 
-    document.body.appendChild(element);
+    document.getElementById("snackbar").appendChild(element);
 
     element.className += " alert-" + message.tags
 
     element.innerHTML = message.message
 
     element.show()
-    setTimeout(function() {
-        element.close();
-    }, element.dataset.timeoutClose);
+    element.addEventListener('animationend', function(e) {
+        e.animationName == "fadeout" && element.close();
+    });
 }
 
 htmx.on("messages", (event) => {
