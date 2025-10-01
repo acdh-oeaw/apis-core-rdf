@@ -8,7 +8,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from apis_core.core.fields import ApisModelSelect2, ApisModelSelect2Multiple
+from apis_core.core.fields import (
+    ApisListSelect2,
+    ApisModelSelect2,
+    ApisModelSelect2Multiple,
+)
 from apis_core.generic.abc import GenericModel
 from apis_core.generic.forms.fields import ModelImportChoiceField
 
@@ -124,22 +128,22 @@ class GenericModelForm(forms.ModelForm):
 
 class GenericSelectMergeOrEnrichForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        if "instance" in kwargs:
-            instance = kwargs.pop("instance")
+        if "content_type" in kwargs:
+            self.content_type = kwargs.pop("content_type")
         super().__init__(*args, **kwargs)
-        ct = ContentType.objects.get_for_model(instance)
-        self.fields["uri"] = forms.ModelChoiceField(
-            queryset=ct.model_class().objects.all()
-        )
-        uri = reverse("apis_core:generic:autocomplete", args=[ct])
+        self.fields["uri"] = forms.CharField()
+        uri = reverse("apis_core:generic:autocomplete", args=[self.content_type])
         attrs = {"data-html": True, "data-tags": 1}
-        self.fields["uri"].widget = ApisModelSelect2(uri, attrs=attrs)
-        self.fields["uri"].widget.choices = self.fields["uri"].choices
+        self.fields["uri"].widget = ApisListSelect2(uri, attrs=attrs)
         self.fields["uri"].label = "Select or paste URI"
         self.helper = FormHelper()
-        self.helper.form_method = "GET"
         self.helper.add_input(Submit("submit", _("Submit")))
-        self.helper.form_action = instance.get_enrich_url()
+
+    def clean_uri(self):
+        uri = self.cleaned_data["uri"]
+        if uri.isdigit() or self.content_type.model_class().valid_uri(uri):
+            return uri
+        raise ValueError(f"{uri} is neither an ID nor something we can import")
 
 
 class GenericMergeWithForm(forms.Form):
