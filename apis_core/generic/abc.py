@@ -1,6 +1,9 @@
 import logging
+import re
 
+from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.db.models import BooleanField, CharField, TextField
 from django.db.models.fields.related import ForeignKey, ManyToManyField
@@ -13,6 +16,7 @@ from apis_core.generic.signals import (
     post_duplicate,
     post_merge_with,
     pre_duplicate,
+    pre_import_from,
     pre_merge_with,
 )
 from apis_core.utils.settings import apis_base_uri, rdf_namespace_prefix
@@ -126,6 +130,88 @@ class GenericModel(models.Model):
     @classmethod
     def get_verbose_name(cls):
         return cls._meta.verbose_name
+
+    @classmethod
+    def valid_import_url(cls, uri: str):
+        """
+        Check if an URI is a can be imported.
+        The exact fetching logic for an URI is defined in the
+        `import_definitions` attribute of the class.
+        `import_definitions` has to be a dict, mapping a regex
+        matching the URI to a callable taking the URI as an argument.
+        This method check if there is a callable defined for this URI.
+        """
+        uri = get_normalized_uri(uri)
+        for regex, fn in getattr(cls, "import_definitions", {}).items():
+            if re.match(regex, uri):
+                return fn
+        return False
+
+    @classmethod
+    def fetch_from(cls, uri: str):
+        """
+        Fetch data from an URI. Check if there is import logic
+        configured for this URI and if so, use that import logic
+        to fetch the data.
+        """
+        uri = get_normalized_uri(uri)
+        if fn := cls.valid_import_url(uri):
+            return fn(uri) or {}
+        raise ImproperlyConfigured(f"Import not configured for URI {uri}")
+
+    @classmethod
+    def import_from(cls, uri: str, allow_empty: bool = True):
+        """
+        Fetch data from an URI and create a model instance using
+        that data. If the `allow_empty` argument is set, this also
+        creates a model instance if the data fetched was empty. This
+        might make sense if you still want to create an instance and
+        attach the URI to it.
+        """
+        uri = get_normalized_uri(uri)
+        # we allow other apps to injercept the import
+        # whatever they return will be used instead of
+        # creating a new object
+        for receiver, response in pre_import_from.send(sender=cls, uri=uri):
+            if response:
+                return response
+        data = cls.fetch_from(uri) or {}
+        if allow_empty or data:
+            instance = cls()
+            instance.import_data(data)
+            instance._uris = [uri]
+            instance.save()
+            return instance
+        raise ValueError(f"Could not fetch data to import from {uri}")
+
+    def import_from_dict_subset(self, **data) -> dict:
+        """
+        Import attributes of this instance from data in a dict.
+        We iterate through the individual values of the dict and
+        a) only set them if the instance has an attribute matching
+        the key and b) use the fields `clean` method to check if
+        the value validates. If it does not validate, we return
+        the validation error in the errors dict.
+        """
+        errors = {}
+        if data:
+            for field in self._meta.fields:
+                if data.get(field.name, False):
+                    value = str(data[field.name][0])
+                    try:
+                        field.clean(self, value)
+                    except Exception as e:
+                        logger.info(
+                            "Could not set %s on %s: %s", field.name, str(self), str(e)
+                        )
+                        errors[field.name] = str(e)
+                    else:
+                        setattr(self, field.name, value)
+            self.save()
+        return errors
+
+    def import_data(self, data) -> dict:
+        return self.import_from_dict_subset(**data)
 
     def get_merge_charfield_value(self, other: CharField, field: CharField):
         res = getattr(self, field.name)

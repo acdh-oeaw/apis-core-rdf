@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
-from apis_core.generic.signals import post_merge_with
+from apis_core.generic.signals import post_merge_with, pre_import_from
 from apis_core.uris.models import Uri
 
 logger = logging.getLogger(__name__)
@@ -71,3 +71,12 @@ def merge_uris(sender, instance, entities, *args, **kwargs):
             uri.content_type = instance_content_type
             uri.object_id = instance.id
             uri.save()
+
+
+@receiver(pre_import_from)
+def import_from(sender, uri, **kwargs):
+    try:
+        uri = Uri.objects.get(uri=uri)
+        return uri.content_object
+    except Uri.DoesNotExist:
+        pass

@@ -169,3 +169,9 @@ def get_something_from_uri(
             result["relations"][relation] = details
         return dict(result)
     return None
+
+
+def load_uri_using_path(uri, configfile: Path) -> dict:
+    config = load_path(configfile)
+    config["path"] = configfile
+    return get_something_from_uri(uri=uri, configs=[config])

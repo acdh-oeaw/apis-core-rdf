@@ -1,8 +1,11 @@
+from pathlib import Path
+
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from apis_core.generic.utils.rdf_namespace import CRM
+from apis_core.utils.rdf import load_uri_using_path
 
 #########################
 # Abstract base classes #
@@ -12,6 +15,8 @@ from apis_core.generic.utils.rdf_namespace import CRM
 # These abstract base classes are named after
 # CIDOC CRM entities, but we are *NOT*(!)
 # trying to implement CIDOC CRM in Django.
+
+RDF_CONFIG_FOLDER = Path(__file__).parent / "triple_configs"
 
 
 class E21_Person(models.Model):
@@ -42,12 +47,14 @@ class E21_Person(models.Model):
             return f"{self.forename} {self.surname}"
         return self.forename or self.surname or force_str(_("No name"))
 
-    @classmethod
-    def rdf_configs(cls):
-        return {
-            "https://d-nb.info/*|/.*.rdf": "E21_PersonFromDNB.toml",
-            "http://www.wikidata.org/*|/.*.rdf": "E21_PersonFromWikidata.toml",
-        }
+    import_definitions = {
+        "https://d-nb.info/*|/.*.rdf": lambda x: load_uri_using_path(
+            x, RDF_CONFIG_FOLDER / "E21_PersonFromDNB.toml"
+        ),
+        "http://www.wikidata.org/*|/.*.rdf": lambda x: load_uri_using_path(
+            x, RDF_CONFIG_FOLDER / "E21_PersonFromWikidata.toml"
+        ),
+    }
 
     @classmethod
     def get_rdf_types(cls):
@@ -82,13 +89,17 @@ class E53_Place(models.Model):
     def __str__(self):
         return self.label or force_str(_("No label"))
 
-    @classmethod
-    def rdf_configs(cls):
-        return {
-            "https://d-nb.info/*|/.*.rdf": "E53_PlaceFromDNB.toml",
-            "https://sws.geonames.org/*|/.*.rdf*": "E53_PlaceFromGeonames.toml",
-            "http://www.wikidata.org/*|/.*.rdf": "E53_PlaceFromWikidata.toml",
-        }
+    import_definitions = {
+        "https://d-nb.info/*|/.*.rdf": lambda x: load_uri_using_path(
+            x, RDF_CONFIG_FOLDER / "E53_PlaceFromDNB.toml"
+        ),
+        "https://sws.geonames.org/*|/.*.rdf*": lambda x: load_uri_using_path(
+            x, RDF_CONFIG_FOLDER / "E53_PlaceFromGeonames.toml"
+        ),
+        "http://www.wikidata.org/*|/.*.rdf": lambda x: load_uri_using_path(
+            x, RDF_CONFIG_FOLDER / "E53_PlaceFromWikidata.toml"
+        ),
+    }
 
     @classmethod
     def get_rdf_types(cls):
@@ -113,12 +124,14 @@ class E74_Group(models.Model):
     def __str__(self):
         return self.label or force_str(_("No label"))
 
-    @classmethod
-    def rdf_configs(cls):
-        return {
-            "https://d-nb.info/*|/.*.rdf": "E74_GroupFromDNB.toml",
-            "http://www.wikidata.org/*|/.*.rdf": "E74_GroupFromWikidata.toml",
-        }
+    import_definitions = {
+        "https://d-nb.info/*|/.*.rdf": lambda x: load_uri_using_path(
+            x, RDF_CONFIG_FOLDER / "E74_GroupFromDNB.toml"
+        ),
+        "http://www.wikidata.org/*|/.*.rdf": lambda x: load_uri_using_path(
+            x, RDF_CONFIG_FOLDER / "E74_GroupFromWikidata.toml"
+        ),
+    }
 
     @classmethod
     def get_rdf_types(cls):
