@@ -113,3 +113,16 @@ class RdfTest(TestCase):
         self.assertEqual(len(attributes.get("longitude", [])), 0)
 
         self.assertIn(expected["label"], attributes["label"])
+
+    def test_wikidata_geographic_unit(self):
+        # https://www.wikidata.org/wiki/Q82601
+        uri = str(testdata / "tierra_del_fugo.rdf")
+
+        attributes = rdf.get_something_from_uri(uri, [E53_Place])
+        self.assertEqual(["-70"], attributes["longitude"])
+        self.assertEqual(["-54"], attributes["latitude"])
+
+    def test_empty_rdf_file(self):
+        uri = str(testdata / "empty.rdf")
+        attributes = rdf.get_something_from_uri(uri)
+        self.assertEqual(attributes, None)

@@ -11,6 +11,7 @@ from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.apps import apps
 from django.template.utils import get_app_template_dirs
 from rdflib import RDF, BNode, Graph, URIRef
+from rdflib.exceptions import ParserError
 
 logger = logging.getLogger(__name__)
 
@@ -150,7 +151,10 @@ def get_something_from_uri(
 ) -> dict | None:
     uri = get_normalized_uri(uri)
     graph = Graph()
-    graph.parse(uri)
+    try:
+        graph.parse(uri)
+    except ParserError as e:
+        logger.info(e)
 
     if not configs:
         configs = find_regex_matching_configs(uri, models)
