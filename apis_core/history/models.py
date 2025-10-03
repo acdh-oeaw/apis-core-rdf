@@ -149,6 +149,14 @@ class VersionMixin(models.Model):
                     | Q(obj_object_id=self.id, obj_content_type=ct)
                 ).order_by("history_id"):
                     ret.add(historical_relation)
+        # If there is a newer version of a historical relation, also
+        # add it to the set. This can be the case when a relation subject
+        # or object was changed and the relation does not point to this
+        # object anymore. We still want to show the change to make it
+        # clear that the relation does not point to the object anymore.
+        for historical_relation in ret.copy():
+            if historical_relation.next_record:
+                ret.add(historical_relation.next_record)
         return ret
 
     def get_history_data(self):
