@@ -131,7 +131,7 @@ class VersionMixin(models.Model):
         return reverse("apis_core:history:history", args=[ct, self.id])
 
     def _get_historical_relations(self):
-        ret = []
+        ret = set()
         if "apis_core.relations" in settings.INSTALLED_APPS:
             from apis_core.relations.utils import relation_content_types
 
@@ -144,21 +144,27 @@ class VersionMixin(models.Model):
             ]
 
             for model in rel_history_models:
-                ret.append(
-                    model.history.filter(
-                        Q(subj_object_id=self.id, subj_content_type=ct)
-                        | Q(obj_object_id=self.id, obj_content_type=ct)
-                    ).order_by("history_id")
-                )
+                for historical_relation in model.history.filter(
+                    Q(subj_object_id=self.id, subj_content_type=ct)
+                    | Q(obj_object_id=self.id, obj_content_type=ct)
+                ).order_by("history_id"):
+                    ret.add(historical_relation)
+        # If there is a newer version of a historical relation, also
+        # add it to the set. This can be the case when a relation subject
+        # or object was changed and the relation does not point to this
+        # object anymore. We still want to show the change to make it
+        # clear that the relation does not point to the object anymore.
+        for historical_relation in ret.copy():
+            if historical_relation.next_record:
+                ret.add(historical_relation.next_record)
         return ret
 
     def get_history_data(self):
         data = []
         prev_entry = None
         queries = self._get_historical_relations()
-        flatten_queries = [entry for query in queries for entry in query]
 
-        for entry in flatten_queries:
+        for entry in queries:
             if prev_entry is not None:
                 if (
                     entry.history_date == prev_entry.history_date
