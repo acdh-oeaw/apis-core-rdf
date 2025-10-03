@@ -144,21 +144,19 @@ class VersionMixin(models.Model):
             ]
 
             for model in rel_history_models:
-                ret.append(
-                    model.history.filter(
-                        Q(subj_object_id=self.id, subj_content_type=ct)
-                        | Q(obj_object_id=self.id, obj_content_type=ct)
-                    ).order_by("history_id")
-                )
+                for historical_relation in model.history.filter(
+                    Q(subj_object_id=self.id, subj_content_type=ct)
+                    | Q(obj_object_id=self.id, obj_content_type=ct)
+                ).order_by("history_id"):
+                    ret.append(historical_relation)
         return ret
 
     def get_history_data(self):
         data = []
         prev_entry = None
         queries = self._get_historical_relations()
-        flatten_queries = [entry for query in queries for entry in query]
 
-        for entry in flatten_queries:
+        for entry in queries:
             if prev_entry is not None:
                 if (
                     entry.history_date == prev_entry.history_date
