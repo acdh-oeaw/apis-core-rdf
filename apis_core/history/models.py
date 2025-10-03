@@ -131,7 +131,7 @@ class VersionMixin(models.Model):
         return reverse("apis_core:history:history", args=[ct, self.id])
 
     def _get_historical_relations(self):
-        ret = []
+        ret = set()
         if "apis_core.relations" in settings.INSTALLED_APPS:
             from apis_core.relations.utils import relation_content_types
 
@@ -148,7 +148,7 @@ class VersionMixin(models.Model):
                     Q(subj_object_id=self.id, subj_content_type=ct)
                     | Q(obj_object_id=self.id, obj_content_type=ct)
                 ).order_by("history_id"):
-                    ret.append(historical_relation)
+                    ret.add(historical_relation)
         return ret
 
     def get_history_data(self):
