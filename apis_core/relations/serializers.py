@@ -1,15 +1,24 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework.serializers import SerializerMethodField
 
-from apis_core.generic.serializers import SimpleObjectSerializer, serializer_factory
+from apis_core.generic.serializers import (
+    GenericHyperlinkedModelSerializer,
+    SimpleObjectSerializer,
+    serializer_factory,
+)
 
 
-class RelationSerializer(SimpleObjectSerializer):
+class RelationSerializer(GenericHyperlinkedModelSerializer):
     subj = SerializerMethodField()
     obj = SerializerMethodField()
 
     class Meta:
-        fields = SimpleObjectSerializer.Meta.fields + ["subj", "obj"]
+        exclude = (
+            "subj_content_type",
+            "subj_object_id",
+            "obj_content_type",
+            "obj_object_id",
+        )
 
     @extend_schema_field(SimpleObjectSerializer())
     def get_subj(self, obj):
