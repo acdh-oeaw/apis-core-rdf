@@ -743,108 +743,6 @@ So they are to be understood in that dynamic context.</p>
 
 
 
-<h3 id="apis_core.apis_entities.tables" class="doc doc-heading">
-            <code>tables</code>
-
-
-</h3>
-
-    <div class="doc doc-contents ">
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-class">
-
-
-
-<h4 id="apis_core.apis_entities.tables.DuplicateColumn" class="doc doc-heading">
-            <code>DuplicateColumn</code>
-
-
-</h4>
-
-
-    <div class="doc doc-contents ">
-            <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-internal" title="ActionColumn (apis_core.generic.tables.ActionColumn)" href="#apis_core.generic.tables.ActionColumn">ActionColumn</a></code></p>
-
-
-        <p>A column showing a duplicate button</p>
-
-
-
-
-
-
-
-              <details class="quote">
-                <summary>Source code in <code>apis_core/apis_entities/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DuplicateColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A column showing a duplicate button</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;columns/duplicate.html&quot;</span>
-    <span class="n">permission</span> <span class="o">=</span> <span class="s2">&quot;create&quot;</span>
-    <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;duplicate&quot;</span>
-</code></pre></div></td></tr></table></div>
-              </details>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-module">
-
-
-
 <h3 id="apis_core.apis_entities.views" class="doc doc-heading">
             <code>views</code>
 
@@ -6036,19 +5934,83 @@ override the attributes in child classes.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DescriptionColumn</span><span class="p">(</span><span class="n">CustomTemplateColumn</span><span class="p">):</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DescriptionColumn</span><span class="p">(</span><span class="n">CustomTemplateColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A column showing a model description</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;columns/description.html&quot;</span>
     <span class="n">orderable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="apis_core.generic.tables.DuplicateColumn" class="doc doc-heading">
+            <code>DuplicateColumn</code>
+
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="ActionColumn (apis_core.generic.tables.ActionColumn)" href="#apis_core.generic.tables.ActionColumn">ActionColumn</a></code></p>
+
+
+        <p>A column showing a duplicate button</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DuplicateColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A column showing a duplicate button</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;columns/duplicate.html&quot;</span>
+    <span class="n">permission</span> <span class="o">=</span> <span class="s2">&quot;create&quot;</span>
+    <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;duplicate&quot;</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -6098,13 +6060,13 @@ override the attributes in child classes.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">EditColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">EditColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A column showing an edit button</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -6161,20 +6123,21 @@ and a description column</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span>
-<span class="normal">87</span>
-<span class="normal">88</span>
-<span class="normal">89</span>
-<span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span>
-<span class="normal">93</span>
-<span class="normal">94</span>
-<span class="normal">95</span>
-<span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericTable</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">Table</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A generic table that contains an edit button column, a delete button column</span>
 <span class="sd">    and a description column</span>
@@ -6184,10 +6147,11 @@ and a description column</p>
     <span class="n">desc</span> <span class="o">=</span> <span class="n">DescriptionColumn</span><span class="p">()</span>
     <span class="n">delete</span> <span class="o">=</span> <span class="n">DeleteColumn</span><span class="p">()</span>
     <span class="n">view</span> <span class="o">=</span> <span class="n">ViewColumn</span><span class="p">()</span>
+    <span class="n">noduplicate</span> <span class="o">=</span> <span class="n">DuplicateColumn</span><span class="p">()</span>
 
     <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;desc&quot;</span><span class="p">]</span>
-        <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;view&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">)</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;view&quot;</span><span class="p">,</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="s2">&quot;noduplicate&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -6239,24 +6203,24 @@ which is replaced with a "Show less" link when expanded.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
 <span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span>
 <span class="normal">114</span>
 <span class="normal">115</span>
-<span class="normal">116</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MoreLessColumn</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">):</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MoreLessColumn</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">TemplateColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Useful for displaying long fields.</span>
 <span class="sd">    A preview is shown initially with a &quot;Show more&quot; link</span>
@@ -6323,13 +6287,13 @@ which is replaced with a "Show less" link when expanded.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/tables.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ViewColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ViewColumn</span><span class="p">(</span><span class="n">ActionColumn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A column showing a view button</span>
 <span class="sd">    &quot;&quot;&quot;</span>
