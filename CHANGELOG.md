@@ -1,5 +1,47 @@
 # Changelog
 
+## [0.56.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.55.1...v0.56.0) (2025-10-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* **relations:** drop unused subj_list & obj_list class methods
+* **generic:** With the move to the new importer logic, the custom model based importer classes are not used anymore and the folders `triple_configs` or `rdf_configs`, which were previously used for looking up rdf import tomls are not searched anymore. The configs have to be set in the `import_definitions` attribute of the models.
+* **generic:** By moving the duplicate column to generic, we also drop the AbstractEntityTable, because it would otherwise be empty
+
+### Features
+
+* **apis_entities:** implement new import logic in abstract models ([8fea52e](https://github.com/acdh-oeaw/apis-core-rdf/commit/8fea52ee0ad2df2571668666947aaf4cd5b355ff))
+* **apis_entities:** override `import_data` in AbstractEntity ([e62a7f3](https://github.com/acdh-oeaw/apis-core-rdf/commit/e62a7f342733a3b59861e75ef61ed82936384fde))
+* **generic:** add a management command to export all GenericModels ([d559446](https://github.com/acdh-oeaw/apis-core-rdf/commit/d559446a66e0eea6ca8e4faaf8b82d5ce2bf54cc)), closes [#2104](https://github.com/acdh-oeaw/apis-core-rdf/issues/2104)
+* **generic:** add some helper function for importing ([5b997af](https://github.com/acdh-oeaw/apis-core-rdf/commit/5b997af1c0a1e7bbdc1ca2ba1b612ddcef11afd6))
+* **generic:** move duplicate column from apis_entities to generic ([5051b29](https://github.com/acdh-oeaw/apis-core-rdf/commit/5051b2965c945a07d4065791a51810435ff4009a))
+* **generic:** only show BooleanField if there is a value to update ([4109a91](https://github.com/acdh-oeaw/apis-core-rdf/commit/4109a91087917b47a55b2c7dad442aab2ee0fe4f))
+* **generic:** raise ValidationError if the form values are all empty ([51abcb3](https://github.com/acdh-oeaw/apis-core-rdf/commit/51abcb33e4a3afd259a3aa63acf68fb9d69daf0c)), closes [#2056](https://github.com/acdh-oeaw/apis-core-rdf/issues/2056)
+* **generic:** refactor the merge or enrich form ([374bd7c](https://github.com/acdh-oeaw/apis-core-rdf/commit/374bd7c8cef6c391ac6a47a34566fed165634146))
+* **history:** add relations that got "unconnected" to history data ([e896e41](https://github.com/acdh-oeaw/apis-core-rdf/commit/e896e413dd4e3021b9a31af319f62f38958a633f)), closes [#1722](https://github.com/acdh-oeaw/apis-core-rdf/issues/1722)
+* **history:** use set() instead of list ([bb30dd4](https://github.com/acdh-oeaw/apis-core-rdf/commit/bb30dd435bf94da2bc52b7a89fa9f74df056e072))
+* **relations:** add a `subj_model_type` & `obj_model_type` class method ([684fd63](https://github.com/acdh-oeaw/apis-core-rdf/commit/684fd63a470e7782dc5f1ce66196a9d8a1d7ef55))
+* **relations:** replace SimpleObjectSerializer in RelationSerializer ([e25df47](https://github.com/acdh-oeaw/apis-core-rdf/commit/e25df4704fb20867ad7d511a5f6d33ef7f0fa89f)), closes [#2167](https://github.com/acdh-oeaw/apis-core-rdf/issues/2167)
+* **relations:** use the `_model_type` methods of Relations in templates ([8860e78](https://github.com/acdh-oeaw/apis-core-rdf/commit/8860e7895812345cee79b8f1dcf832fec4eedcf4))
+* **uris:** add signal receiver for the `pre_import_from` signal ([9e42904](https://github.com/acdh-oeaw/apis-core-rdf/commit/9e42904f9d16ac545d88e7b81302369680d3e9ae))
+* **utils:** add method to get rdf data from URI using specific file ([7d540f1](https://github.com/acdh-oeaw/apis-core-rdf/commit/7d540f1db4a341fc1d5b6b3ea25d4b207e28d9fa))
+
+
+### Bug Fixes
+
+* **generic:** add missing classes for alert-error & alert-debug ([50e29ea](https://github.com/acdh-oeaw/apis-core-rdf/commit/50e29eaf307873c82b7fb2b6736d0a0ae639eea6)), closes [#2127](https://github.com/acdh-oeaw/apis-core-rdf/issues/2127)
+* **generic:** introduce snackbar as a toast container ([fdeaa72](https://github.com/acdh-oeaw/apis-core-rdf/commit/fdeaa72898221f944707fc0d9e6b9fb1d811e993)), closes [#2131](https://github.com/acdh-oeaw/apis-core-rdf/issues/2131)
+* **generic:** readd missing ContentType import ([c64298a](https://github.com/acdh-oeaw/apis-core-rdf/commit/c64298a67f8a57d6c54df682c946b2f39e2c2a58))
+* **relations:** drop unused subj_list & obj_list class methods ([a4dd88a](https://github.com/acdh-oeaw/apis-core-rdf/commit/a4dd88ada6795660d40cdaa59addb566fcf32a87)), closes [#2107](https://github.com/acdh-oeaw/apis-core-rdf/issues/2107)
+* **sample_project:** let PersonTable inherit from GenericTable ([bda0256](https://github.com/acdh-oeaw/apis-core-rdf/commit/bda02567dfc51ff876a5d3345d79d777d54d2d83))
+* **utils:** catch ParserErrors when creating an RDF graph ([d1a7c16](https://github.com/acdh-oeaw/apis-core-rdf/commit/d1a7c162e5592a8a5edec6dcf5a0d468bec2a812))
+
+
+### Code Refactoring
+
+* **generic:** adapt views to use new fetch/import logic ([9c117ea](https://github.com/acdh-oeaw/apis-core-rdf/commit/9c117eabb1c6ab30089b810e55d4e2371467f98f))
+
 ## [0.55.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.55.0...v0.55.1) (2025-09-30)
 
 
