@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_ef777899a9cfc89e_middleware_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2025-10-10 07:07 +0000
+            created at 2025-10-10 07:15 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -163,7 +163,7 @@
     <p class="run"><span class="n"><a id="t81" href="#t81">81</a></span><span class="t">            <span class="nam">data</span> <span class="op">=</span> <span class="op">{</span><span class="nam">key</span><span class="op">:</span> <span class="nam">data</span><span class="op">[</span><span class="nam">key</span><span class="op">]</span> <span class="key">for</span> <span class="nam">key</span> <span class="key">in</span> <span class="nam">data</span> <span class="key">if</span> <span class="nam">key</span> <span class="key">in</span> <span class="nam">modelfields</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">data</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t83" href="#t83">83</a></span><span class="t">            <span class="key">raise</span> <span class="nam">ImproperlyConfigured</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t">                <span class="str">f"Could not import {self.import_uri}. Data fetched was: {data}"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t">                <span class="fst">f"</span><span class="fst">Could not import </span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">import_uri</span><span class="op">}</span><span class="fst">. Data fetched was: </span><span class="op">{</span><span class="nam">data</span><span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t85" href="#t85">85</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t86" href="#t86">86</a></span><span class="t">        <span class="key">return</span> <span class="nam">data</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t87" href="#t87">87</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -186,8 +186,8 @@
     <p class="mis show_mis"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">            <span class="nam">root_set</span> <span class="op">=</span> <span class="nam">set</span><span class="op">(</span><span class="op">[</span><span class="nam">s</span><span class="op">.</span><span class="nam">content_object</span> <span class="key">for</span> <span class="nam">s</span> <span class="key">in</span> <span class="nam">sa</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">            <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">root_set</span><span class="op">)</span> <span class="op">></span> <span class="num">1</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t106" href="#t106">106</a></span><span class="t">                <span class="key">raise</span> <span class="nam">IntegrityError</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t107" href="#t107">107</a></span><span class="t">                    <span class="str">f"Multiple objects found for sameAs URIs {data['same_as']}. "</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t108" href="#t108">108</a></span><span class="t">                    <span class="str">f"This indicates a data integrity problem as these URIs should be unique."</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t107" href="#t107">107</a></span><span class="t">                    <span class="fst">f"</span><span class="fst">Multiple objects found for sameAs URIs </span><span class="op">{</span><span class="nam">data</span><span class="op">[</span><span class="str">'same_as'</span><span class="op">]</span><span class="op">}</span><span class="fst">. </span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t108" href="#t108">108</a></span><span class="t">                    <span class="fst">f"</span><span class="fst">This indicates a data integrity problem as these URIs should be unique.</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t109" href="#t109">109</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t110" href="#t110">110</a></span><span class="t">            <span class="nam">instance</span> <span class="op">=</span> <span class="nam">sa</span><span class="op">.</span><span class="nam">first</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">content_object</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t111" href="#t111">111</a></span><span class="t">            <span class="nam">logger</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">"Found existing instance %s"</span><span class="op">,</span> <span class="nam">instance</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -216,7 +216,7 @@
             <a class="nav" href="z_ef777899a9cfc89e_middleware_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2025-10-10 07:07 +0000
+            created at 2025-10-10 07:15 +0000
         </p>
     </div>
 </footer>
