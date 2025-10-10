@@ -10534,13 +10534,75 @@ the <code>first_member_match</code> helper.</p>
 
 
 
+<div class="doc doc-object doc-function">
+
+
+<h4 id="apis_core.history.tests.setup_test_app" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">setup_test_app</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Setup a Django test app for the provided package to allow test models
+tables to be created if the containing app has migrations.</p>
+<p>This function should be called from app.tests <strong>init</strong> module and pass
+along <strong>package</strong>.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>apis_core/history/tests/__init__.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">setup_test_app</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Setup a Django test app for the provided package to allow test models</span>
+<span class="sd">    tables to be created if the containing app has migrations.</span>
+
+<span class="sd">    This function should be called from app.tests __init__ module and pass</span>
+<span class="sd">    along __package__.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">app_config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+    <span class="n">app_config</span><span class="o">.</span><span class="n">apps</span> <span class="o">=</span> <span class="n">apps</span>
+    <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">containing_app_config</span> <span class="o">=</span> <span class="n">apps</span><span class="o">.</span><span class="n">get_containing_app_config</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">containing_app_config</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">_tests&quot;</span>
+    <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">apps</span><span class="o">.</span><span class="n">app_configs</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There&#39;s already an app registered with the &#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39; label.&quot;</span><span class="p">)</span>
+    <span class="n">app_config</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
+    <span class="n">apps</span><span class="o">.</span><span class="n">app_configs</span><span class="p">[</span><span class="n">app_config</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">app_config</span>
+    <span class="n">app_config</span><span class="o">.</span><span class="n">import_models</span><span class="p">()</span>
+    <span class="n">apps</span><span class="o">.</span><span class="n">clear_cache</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
 
 <div class="doc doc-object doc-module">
 
 
 
-<h4 id="apis_core.history.tests.test_simple_history" class="doc doc-heading">
-            <code>test_simple_history</code>
+<h4 id="apis_core.history.tests.test_history" class="doc doc-heading">
+            <code>test_history</code>
 
 
 </h4>
@@ -10568,8 +10630,8 @@ the <code>first_member_match</code> helper.</p>
 
 
 
-<h5 id="apis_core.history.tests.test_simple_history.SimpleHistoryTestCase" class="doc doc-heading">
-            <code>SimpleHistoryTestCase</code>
+<h5 id="apis_core.history.tests.test_history.TestHistory" class="doc doc-heading">
+            <code>TestHistory</code>
 
 
 </h5>
@@ -10577,10 +10639,8 @@ the <code>first_member_match</code> helper.</p>
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><span title="django.test.TestCase">TestCase</span></code></p>
+              Bases: <code><span title="object">object</span></code></p>
 
-
-        <p>Test of the simple_history package using the demo project</p>
 
 
 
@@ -10589,16 +10649,8 @@ the <code>first_member_match</code> helper.</p>
 
 
               <details class="quote">
-                <summary>Source code in <code>apis_core/history/tests/test_simple_history.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
+                <summary>Source code in <code>apis_core/history/tests/test_history.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
@@ -10651,68 +10703,80 @@ the <code>first_member_match</code> helper.</p>
 <span class="normal">66</span>
 <span class="normal">67</span>
 <span class="normal">68</span>
-<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SimpleHistoryTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test of the simple_history package using the demo project&quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Person</span> <span class="o">=</span> <span class="n">Person</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Place</span> <span class="o">=</span> <span class="n">Place</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Profession</span> <span class="o">=</span> <span class="n">Profession</span>
-
-        <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="n">surname</span><span class="o">=</span><span class="s2">&quot;Doe&quot;</span><span class="p">)</span>
-        <span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Steyr&quot;</span><span class="p">,</span> <span class="n">_history_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">django_db</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestHistory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_history_date_setter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test the date setter of the VersionMixin.&quot;&quot;&quot;</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">_history_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">last</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span>
+            <span class="o">==</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">test_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests the simple version of attributes changed on a models instance.&quot;&quot;&quot;</span>
-        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">)</span>
-        <span class="n">pers</span><span class="o">.</span><span class="n">forename</span> <span class="o">=</span> <span class="s2">&quot;Jane&quot;</span>
-        <span class="n">pers</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">forename</span><span class="p">,</span> <span class="s2">&quot;Jane&quot;</span><span class="p">)</span>
-        <span class="n">pers_history</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s2">&quot;Jane&quot;</span><span class="p">,</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">most_recent</span><span class="p">()</span><span class="o">.</span><span class="n">forename</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">forename</span><span class="p">)</span>
+        <span class="n">first_name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">first_name</span><span class="p">()</span>
+        <span class="n">last_name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">last_name</span><span class="p">()</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">first_name</span><span class="o">=</span><span class="n">first_name</span><span class="p">,</span> <span class="n">last_name</span><span class="o">=</span><span class="n">last_name</span><span class="p">)</span>
+        <span class="n">new_first_name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">first_name</span><span class="p">()</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">first_name</span> <span class="o">=</span> <span class="n">new_first_name</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">first_name</span> <span class="o">==</span> <span class="n">new_first_name</span>
+        <span class="n">person_history</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">most_recent</span><span class="p">()</span><span class="o">.</span><span class="n">first_name</span> <span class="o">==</span> <span class="n">new_first_name</span>
+        <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">first_name</span> <span class="o">==</span> <span class="n">first_name</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">test_history_delete_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests the deletion of an entry.&quot;&quot;&quot;</span>
-        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">)</span>
-        <span class="n">pers</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">test_history_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tests the merge function of the Place model. This is still expected to fail.&quot;&quot;&quot;</span>
-        <span class="n">pl1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-        <span class="n">pl2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="n">_history_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">pl1</span><span class="o">.</span><span class="n">merge_with</span><span class="p">([</span><span class="n">pl2</span><span class="p">])</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;save()&quot;</span><span class="p">)</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">Person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">test_m2m_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Test if m2m profession is saved correctly.&quot;&quot;&quot;</span>
-        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-            <span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">,</span>
-            <span class="n">_history_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">forename</span><span class="p">,</span> <span class="s2">&quot;John&quot;</span><span class="p">)</span>
-        <span class="n">pers_history</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-        <span class="n">prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Profession</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">)</span>
-        <span class="n">pers</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prof</span><span class="p">)</span>
-        <span class="n">pers</span><span class="o">.</span><span class="n">forename</span> <span class="o">=</span> <span class="s2">&quot;Jane&quot;</span>
-        <span class="n">pers</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="n">person_history</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">profession</span> <span class="o">=</span> <span class="n">Profession</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">fake</span><span class="o">.</span><span class="n">job</span><span class="p">())</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">profession</span><span class="p">)</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">test_history_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Test that history is set correctly when not manually set.&quot;&quot;&quot;</span>
-        <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-        <span class="n">pers</span><span class="o">.</span><span class="n">forename</span> <span class="o">=</span> <span class="s2">&quot;Jane&quot;</span>
-        <span class="n">pers</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span> <span class="o">&lt;</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">first_name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">first_name</span><span class="p">()</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span>
+            <span class="o">&lt;</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_relation_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="n">place</span> <span class="o">=</span> <span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">get_history_data</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">ppr</span> <span class="o">=</span> <span class="n">PersonPlaceRelation</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_between_instances</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">get_history_data</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="n">place</span> <span class="o">=</span> <span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="n">ppr</span><span class="o">.</span><span class="n">obj</span> <span class="o">=</span> <span class="n">place</span>
+        <span class="n">ppr</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">get_history_data</span><span class="p">())</span> <span class="o">==</span> <span class="mi">3</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -10731,7 +10795,7 @@ the <code>first_member_match</code> helper.</p>
 <div class="doc doc-object doc-function">
 
 
-<h6 id="apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history" class="doc doc-heading">
+<h6 id="apis_core.history.tests.test_history.TestHistory.test_history" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">test_history</span><span class="p">()</span></code>
 
 </h6>
@@ -10743,26 +10807,32 @@ the <code>first_member_match</code> helper.</p>
 
 
             <details class="quote">
-              <summary>Source code in <code>apis_core/history/tests/test_simple_history.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
+              <summary>Source code in <code>apis_core/history/tests/test_history.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
 <span class="normal">29</span>
-<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests the simple version of attributes changed on a models instance.&quot;&quot;&quot;</span>
-    <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">)</span>
-    <span class="n">pers</span><span class="o">.</span><span class="n">forename</span> <span class="o">=</span> <span class="s2">&quot;Jane&quot;</span>
-    <span class="n">pers</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">forename</span><span class="p">,</span> <span class="s2">&quot;Jane&quot;</span><span class="p">)</span>
-    <span class="n">pers_history</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s2">&quot;Jane&quot;</span><span class="p">,</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">most_recent</span><span class="p">()</span><span class="o">.</span><span class="n">forename</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">forename</span><span class="p">)</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">first_name</span><span class="p">()</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">last_name</span><span class="p">()</span>
+    <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">first_name</span><span class="o">=</span><span class="n">first_name</span><span class="p">,</span> <span class="n">last_name</span><span class="o">=</span><span class="n">last_name</span><span class="p">)</span>
+    <span class="n">new_first_name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">first_name</span><span class="p">()</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">first_name</span> <span class="o">=</span> <span class="n">new_first_name</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">first_name</span> <span class="o">==</span> <span class="n">new_first_name</span>
+    <span class="n">person_history</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">most_recent</span><span class="p">()</span><span class="o">.</span><span class="n">first_name</span> <span class="o">==</span> <span class="n">new_first_name</span>
+    <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">first_name</span> <span class="o">==</span> <span class="n">first_name</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -10772,7 +10842,7 @@ the <code>first_member_match</code> helper.</p>
 <div class="doc doc-object doc-function">
 
 
-<h6 id="apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_date" class="doc doc-heading">
+<h6 id="apis_core.history.tests.test_history.TestHistory.test_history_date" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">test_history_date</span><span class="p">()</span></code>
 
 </h6>
@@ -10784,18 +10854,24 @@ the <code>first_member_match</code> helper.</p>
 
 
             <details class="quote">
-              <summary>Source code in <code>apis_core/history/tests/test_simple_history.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
+              <summary>Source code in <code>apis_core/history/tests/test_history.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_history_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_history_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test that history is set correctly when not manually set.&quot;&quot;&quot;</span>
-    <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-    <span class="n">pers</span><span class="o">.</span><span class="n">forename</span> <span class="o">=</span> <span class="s2">&quot;Jane&quot;</span>
-    <span class="n">pers</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span> <span class="o">&lt;</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span>
+    <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">first_name</span> <span class="o">=</span> <span class="n">fake</span><span class="o">.</span><span class="n">first_name</span><span class="p">()</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span>
+        <span class="o">&lt;</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span>
+    <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -10805,7 +10881,46 @@ the <code>first_member_match</code> helper.</p>
 <div class="doc doc-object doc-function">
 
 
-<h6 id="apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_delete_entry" class="doc doc-heading">
+<h6 id="apis_core.history.tests.test_history.TestHistory.test_history_date_setter" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">test_history_date_setter</span><span class="p">()</span></code>
+
+</h6>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Test the date setter of the VersionMixin.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>apis_core/history/tests/test_history.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_history_date_setter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the date setter of the VersionMixin.&quot;&quot;&quot;</span>
+    <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">_history_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">last</span><span class="p">()</span><span class="o">.</span><span class="n">history_date</span>
+        <span class="o">==</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="apis_core.history.tests.test_history.TestHistory.test_history_delete_entry" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">test_history_delete_entry</span><span class="p">()</span></code>
 
 </h6>
@@ -10817,53 +10932,16 @@ the <code>first_member_match</code> helper.</p>
 
 
             <details class="quote">
-              <summary>Source code in <code>apis_core/history/tests/test_simple_history.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_history_delete_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests the deletion of an entry.&quot;&quot;&quot;</span>
-    <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">)</span>
-    <span class="n">pers</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h6 id="apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_history_merge" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">test_history_merge</span><span class="p">()</span></code>
-
-</h6>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Tests the merge function of the Place model. This is still expected to fail.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>apis_core/history/tests/test_simple_history.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
+              <summary>Source code in <code>apis_core/history/tests/test_history.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">42</span>
 <span class="normal">43</span>
 <span class="normal">44</span>
-<span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_history_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests the merge function of the Place model. This is still expected to fail.&quot;&quot;&quot;</span>
-    <span class="n">pl1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-    <span class="n">pl2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Place</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="n">_history_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">pl1</span><span class="o">.</span><span class="n">merge_with</span><span class="p">([</span><span class="n">pl2</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;save()&quot;</span><span class="p">)</span>
+<span class="normal">45</span>
+<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_history_delete_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests the deletion of an entry.&quot;&quot;&quot;</span>
+    <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">Person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -10873,7 +10951,7 @@ the <code>first_member_match</code> helper.</p>
 <div class="doc doc-object doc-function">
 
 
-<h6 id="apis_core.history.tests.test_simple_history.SimpleHistoryTestCase.test_m2m_save" class="doc doc-heading">
+<h6 id="apis_core.history.tests.test_history.TestHistory.test_m2m_save" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">test_m2m_save</span><span class="p">()</span></code>
 
 </h6>
@@ -10885,9 +10963,8 @@ the <code>first_member_match</code> helper.</p>
 
 
             <details class="quote">
-              <summary>Source code in <code>apis_core/history/tests/test_simple_history.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">47</span>
-<span class="normal">48</span>
+              <summary>Source code in <code>apis_core/history/tests/test_history.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
 <span class="normal">49</span>
 <span class="normal">50</span>
 <span class="normal">51</span>
@@ -10897,26 +10974,17 @@ the <code>first_member_match</code> helper.</p>
 <span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_m2m_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_m2m_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test if m2m profession is saved correctly.&quot;&quot;&quot;</span>
-    <span class="n">pers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-        <span class="n">forename</span><span class="o">=</span><span class="s2">&quot;John&quot;</span><span class="p">,</span>
-        <span class="n">_history_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
-    <span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">forename</span><span class="p">,</span> <span class="s2">&quot;John&quot;</span><span class="p">)</span>
-    <span class="n">pers_history</span> <span class="o">=</span> <span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
-    <span class="n">prof</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Profession</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">)</span>
-    <span class="n">pers</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prof</span><span class="p">)</span>
-    <span class="n">pers</span><span class="o">.</span><span class="n">forename</span> <span class="o">=</span> <span class="s2">&quot;Jane&quot;</span>
-    <span class="n">pers</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pers</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+    <span class="n">person_history</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person_history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="n">profession</span> <span class="o">=</span> <span class="n">Profession</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">fake</span><span class="o">.</span><span class="n">job</span><span class="p">())</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">profession</span><span class="p">)</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">latest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">earliest</span><span class="p">()</span><span class="o">.</span><span class="n">profession</span><span class="o">.</span><span class="n">all</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
