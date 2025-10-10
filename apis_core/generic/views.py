@@ -124,6 +124,23 @@ class List(
     template_name_suffix = "_list"
     permission_action_required = "view"
 
+    def setup(self, *args, **kwargs):
+        super().setup(*args, **kwargs)
+        content_type = ContentType.objects.get_for_model(self.model)
+        self.cookiename = f"{content_type.app_label}.{content_type.name}_list"
+        self.form_cookie = QueryDict()
+        if "reset" not in self.request.GET:
+            cookie = self.request.COOKIES.get(self.cookiename, "")
+            self.form_cookie = QueryDict(cookie)
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        if self.request.GET:
+            response.set_cookie(self.cookiename, self.request.GET.urlencode())
+        if self.request.GET.get("reset", False):
+            response.delete_cookie(self.cookiename)
+        return response
+
     def get_table_class(self):
         table_modules = module_paths(self.model, path="tables", suffix="Table")
         table_class = first_member_match(table_modules, GenericTable)
@@ -141,7 +158,9 @@ class List(
     def get_table_kwargs(self):
         kwargs = super().get_table_kwargs()
 
-        selected_columns = self.request.GET.getlist("columns", [])
+        selected_columns = self.request.GET.getlist(
+            "columns", self.form_cookie.getlist("columns", [])
+        )
         modelfields = self.model._meta.get_fields()
         # if the form was submitted, we look at the selected
         # columns and exclude all columns that are not part of that list
@@ -210,10 +229,10 @@ class List(
             col.name for col in table_columns if col.name not in columns_exclude
         ]
         kwargs = super().get_filterset_kwargs(filterset_class)
-        data = (kwargs.get("data", QueryDict()) or QueryDict()).copy()
+        data = (kwargs.get("data", self.form_cookie) or self.form_cookie).copy()
         if not data.get("columns"):
             data.setlist("columns", initial_columns)
-            kwargs["data"] = data
+        kwargs["data"] = data
         return kwargs
 
     def get_filterset(self, filterset_class):
