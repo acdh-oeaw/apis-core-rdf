@@ -123,12 +123,15 @@ class RdfTest(TestCase):
     def test_wikidata_geographic_unit(self):
         # https://www.wikidata.org/wiki/Q82601
         uri = str(testdata / "tierra_del_fugo.rdf")
+        config = rdf_configs / "E53_PlaceFromWikidata.toml"
 
-        attributes = rdf.get_something_from_uri(uri, [E53_Place])
+        attributes = rdf.load_uri_using_path(uri, config)
         self.assertEqual(["-70"], attributes["longitude"])
         self.assertEqual(["-54"], attributes["latitude"])
 
     def test_empty_rdf_file(self):
         uri = str(testdata / "empty.rdf")
-        attributes = rdf.get_something_from_uri(uri)
+        config = rdf_configs / "E53_PlaceFromWikidata.toml"
+
+        attributes = rdf.load_uri_using_path(uri, config)
         self.assertEqual(attributes, None)
