@@ -5,10 +5,12 @@ from apis_core.generic.helpers import permission_fullname
 
 class CustomTemplateColumn(tables.TemplateColumn):
     """
-    A custom template column - the `tables.TemplateColumn` class does not allow
-    to set attributes via class variables. Therefor we use this
-    CustomTemplateColumn to set some arguments based on class attributes and
-    override the attributes in child classes.
+    A custom template column.
+
+    Django-tables2's `tables.TemplateColumn` class does not allow to set
+    attributes via class variables. Therefore, we use this custom template
+    column to set some arguments based on class attributes and to override
+    these attributes in child classes.
     """
 
     template_name = None
