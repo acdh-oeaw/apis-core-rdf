@@ -134,12 +134,13 @@ class GenericModel(models.Model):
     @classmethod
     def valid_import_url(cls, uri: str):
         """
-        Check if an URI is a can be imported.
-        The exact fetching logic for an URI is defined in the
+        Check if a URI can be imported.
+
+        The exact fetching logic for a URI is defined in the
         `import_definitions` attribute of the class.
         `import_definitions` has to be a dict, mapping a regex
         matching the URI to a callable taking the URI as an argument.
-        This method check if there is a callable defined for this URI.
+        This method checks if there is a callable defined for this URI.
         """
         uri = get_normalized_uri(uri)
         for regex, fn in getattr(cls, "import_definitions", {}).items():
