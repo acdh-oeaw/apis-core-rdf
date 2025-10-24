@@ -16,6 +16,13 @@ from .tables import HistoryGenericTable
 class HistoryView(
     GenericModelMixin, GenericModelPermissionRequiredMixin, SingleTableMixin, DetailView
 ):
+    """
+    This view lists the historical data of one object.
+    The `GenericModel` this view acts upon is NOT the historical model, but the base model.
+    I.e. it is not the `VersionPerson`, but the `Person`. Therefore the permission required
+    to access this view refers to the `Person` model, NOT the `VersionPerson` model!
+    """
+
     template_name = "history/history.html"
     permission_action_required = "view"
 
@@ -31,6 +38,14 @@ class HistoryView(
 class HistoryReset(
     GenericModelMixin, GenericModelPermissionRequiredMixin, BaseDetailView, FormView
 ):
+    """
+    This view allows to reset a model instance to an earlier version.
+    The `GenericModel` this view acts upon IS the historical model, so the permission
+    required to access the view refers to the versioned model. For example for the
+    `Person` model, this view acts upon the `VersionPerson` model and therefore the
+    permission required is the `.versionperson_view` permission.
+    """
+
     form_class = Form
     template_name = "history/reset.html"
     permission_action_required = "change"
