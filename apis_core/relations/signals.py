@@ -76,7 +76,7 @@ def create_relations(sender, instance, created, raw, using, update_fields, **kwa
     # disable the handler during fixture loading
     if raw:
         return
-    relations = getattr(instance, "create_relations_to_uris", {})
+    relations = getattr(instance, "create_relations_to_uris", {}).copy()
     for relation, details in relations.items():
         relation_model = ContentType.objects.get_by_natural_key(
             *relation.split(".")
@@ -101,3 +101,4 @@ def create_relations(sender, instance, created, raw, using, update_fields, **kwa
                 logger.error(
                     "Could not create relation to %s due to %s", related_uri, e
                 )
+        del instance.create_relations_to_uris[relation]
