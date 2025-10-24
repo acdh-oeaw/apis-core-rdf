@@ -12478,7 +12478,8 @@ An example for the dict mapping would be:
 <span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
-<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">)</span>
+<span class="normal">103</span>
+<span class="normal">104</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_relations</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">using</span><span class="p">,</span> <span class="n">update_fields</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This signal looks at the `create_relations_to_uris` attribute of a model</span>
@@ -12496,7 +12497,7 @@ An example for the dict mapping would be:
     <span class="c1"># disable the handler during fixture loading</span>
     <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
         <span class="k">return</span>
-    <span class="n">relations</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s2">&quot;create_relations_to_uris&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">relations</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s2">&quot;create_relations_to_uris&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">relation</span><span class="p">,</span> <span class="n">details</span> <span class="ow">in</span> <span class="n">relations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">relation_model</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_by_natural_key</span><span class="p">(</span>
             <span class="o">*</span><span class="n">relation</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
@@ -12510,17 +12511,18 @@ An example for the dict mapping would be:
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">related_instance</span> <span class="o">=</span> <span class="n">related_model</span><span class="o">.</span><span class="n">import_from</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="n">related_uri</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;obj&quot;</span><span class="p">):</span>
-                    <span class="n">relation_model</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_between_instances</span><span class="p">(</span>
+                    <span class="n">relation_model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_between_instances</span><span class="p">(</span>
                         <span class="n">instance</span><span class="p">,</span> <span class="n">related_instance</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">relation_model</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_between_instances</span><span class="p">(</span>
+                    <span class="n">relation_model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_between_instances</span><span class="p">(</span>
                         <span class="n">related_instance</span><span class="p">,</span> <span class="n">instance</span>
                     <span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                     <span class="s2">&quot;Could not create relation to </span><span class="si">%s</span><span class="s2"> due to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">related_uri</span><span class="p">,</span> <span class="n">e</span>
                 <span class="p">)</span>
+        <span class="k">del</span> <span class="n">instance</span><span class="o">.</span><span class="n">create_relations_to_uris</span><span class="p">[</span><span class="n">relation</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
