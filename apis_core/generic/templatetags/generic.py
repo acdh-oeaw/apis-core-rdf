@@ -17,10 +17,10 @@ def contenttype(model):
 
 
 @register.simple_tag
-def modeldict(instance, fields=None, exclude=None):
+def modeldict(instance, fields=None, exclude=None, exclude_noneditable=True):
     data = {}
     for f in get_model_fields(instance):
-        if not getattr(f, "editable", False):
+        if not getattr(f, "editable", False) and exclude_noneditable:
             continue
         if fields is not None and f.name not in fields:
             continue
