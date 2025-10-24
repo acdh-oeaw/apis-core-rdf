@@ -8,7 +8,7 @@
 {% if object %}
 
   {% block col %}
-    {% template_list object "_card.html" as template_list %}
+    {% template_list object suffix="_card.html" as template_list %}
     {% include template_list %}
   {% endblock col %}
 
