@@ -90,11 +90,11 @@ def create_relations(sender, instance, created, raw, using, update_fields, **kwa
             try:
                 related_instance = related_model.import_from(uri=related_uri)
                 if details.get("obj"):
-                    relation_model.object.create_between_instances(
+                    relation_model.objects.create_between_instances(
                         instance, related_instance
                     )
                 else:
-                    relation_model.object.create_between_instances(
+                    relation_model.objects.create_between_instances(
                         related_instance, instance
                     )
             except Exception as e:
