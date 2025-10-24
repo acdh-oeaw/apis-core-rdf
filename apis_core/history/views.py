@@ -5,13 +5,19 @@ from django_tables2 import SingleTableMixin
 from django_tables2.tables import table_factory
 
 from apis_core.generic.helpers import first_member_match, module_paths
-from apis_core.generic.views import GenericModelMixin
+from apis_core.generic.views import (
+    GenericModelMixin,
+    GenericModelPermissionRequiredMixin,
+)
 
 from .tables import HistoryGenericTable
 
 
-class HistoryView(GenericModelMixin, SingleTableMixin, DetailView):
+class HistoryView(
+    GenericModelMixin, GenericModelPermissionRequiredMixin, SingleTableMixin, DetailView
+):
     template_name = "history/history.html"
+    permission_action_required = "view"
 
     def get_table_class(self):
         table_modules = module_paths(self.model, path="tables", suffix="HistoryTable")
@@ -22,9 +28,12 @@ class HistoryView(GenericModelMixin, SingleTableMixin, DetailView):
         return self.get_object().get_history_data()
 
 
-class HistoryReset(GenericModelMixin, BaseDetailView, FormView):
+class HistoryReset(
+    GenericModelMixin, GenericModelPermissionRequiredMixin, BaseDetailView, FormView
+):
     form_class = Form
     template_name = "history/reset.html"
+    permission_action_required = "change"
 
     def form_valid(self, form):
         self.get_object().instance.save()
