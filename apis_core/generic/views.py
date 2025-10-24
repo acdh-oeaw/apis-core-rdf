@@ -55,6 +55,33 @@ class Overview(TemplateView):
     template_name = "generic/overview.html"
 
 
+class GenericModelPermissionRequiredMixin(PermissionRequiredMixin):
+    """
+    Verify that the current user has the required permission for this model.
+    The model overrides the `PermissionRequiredMixin.get_permission_required`
+    method to generate the required permission name on the fly, based on a
+    verb (`permission_action_required`) and the model this view act upon.
+    This allows us to set `permission_action_required` simply to `add`, or
+    `view` and reuse the mixin for views that work with different models.
+    In addition, for the views that have `permission_action_required` set to
+    `view`, it check if there is the global setting `APIS_ANON_VIEWS_ALLOWED`
+    set to `True`, which permits anonymouse users access to the view.
+    """
+
+    def get_permission_required(self):
+        if not hasattr(self, "model"):
+            raise ImproperlyConfigured(
+                f"{self.__class__.__name__} is missing the model attribute"
+            )
+        if getattr(self, "permission_action_required", None) == "view" and getattr(
+            settings, "APIS_ANON_VIEWS_ALLOWED", False
+        ):
+            return []
+        if hasattr(self, "permission_action_required"):
+            return [permission_fullname(self.permission_action_required, self.model)]
+        return []
+
+
 class GenericModelMixin:
     """
     A mixin providing the common functionality for all the views working
@@ -92,19 +119,10 @@ class GenericModelMixin:
         )
         return template_names
 
-    def get_permission_required(self):
-        if getattr(self, "permission_action_required", None) == "view" and getattr(
-            settings, "APIS_ANON_VIEWS_ALLOWED", False
-        ):
-            return []
-        if hasattr(self, "permission_action_required"):
-            return [permission_fullname(self.permission_action_required, self.model)]
-        return []
-
 
 class List(
     GenericModelMixin,
-    PermissionRequiredMixin,
+    GenericModelPermissionRequiredMixin,
     ExportMixin,
     SingleTableMixin,
     FilterView,
@@ -273,7 +291,7 @@ class List(
         return super().get_table_pagination(table)
 
 
-class Detail(GenericModelMixin, PermissionRequiredMixin, DetailView):
+class Detail(GenericModelMixin, GenericModelPermissionRequiredMixin, DetailView):
     """
     Detail view for a generic model.
     Access requires the `<model>_view` permission.
@@ -283,7 +301,10 @@ class Detail(GenericModelMixin, PermissionRequiredMixin, DetailView):
 
 
 class Create(
-    GenericModelMixin, PermissionRequiredMixin, SuccessMessageMixin, CreateView
+    GenericModelMixin,
+    GenericModelPermissionRequiredMixin,
+    SuccessMessageMixin,
+    CreateView,
 ):
     """
     Create view for a generic model.
@@ -311,7 +332,7 @@ class Create(
         return self.object.get_create_success_url()
 
 
-class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
+class Delete(GenericModelMixin, GenericModelPermissionRequiredMixin, DeleteView):
     """
     Delete view for a generic model.
     Access requires the `<model>_delete` permission.
@@ -329,7 +350,10 @@ class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
 
 
 class Update(
-    GenericModelMixin, PermissionRequiredMixin, SuccessMessageMixin, UpdateView
+    GenericModelMixin,
+    GenericModelPermissionRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView,
 ):
     """
     Update view for a generic model.
@@ -356,7 +380,7 @@ class Update(
         return self.object.get_update_success_url()
 
 
-class Duplicate(GenericModelMixin, PermissionRequiredMixin, View):
+class Duplicate(GenericModelMixin, GenericModelPermissionRequiredMixin, View):
     permission_action_required = "add"
 
     def get(self, request, *args, **kwargs):
@@ -372,7 +396,9 @@ class Duplicate(GenericModelMixin, PermissionRequiredMixin, View):
 
 
 class Autocomplete(
-    GenericModelMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView
+    GenericModelMixin,
+    GenericModelPermissionRequiredMixin,
+    autocomplete.Select2QuerySetView,
 ):
     """
     Autocomplete view for a generic model.
@@ -449,7 +475,7 @@ class Autocomplete(
             return http.JsonResponse({"error": str(e)})
 
 
-class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
+class Import(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
     template_name_suffix = "_import"
     permission_action_required = "add"
 
@@ -466,7 +492,9 @@ class Import(GenericModelMixin, PermissionRequiredMixin, FormView):
         return self.object.get_absolute_url()
 
 
-class SelectMergeOrEnrich(GenericModelMixin, PermissionRequiredMixin, FormView):
+class SelectMergeOrEnrich(
+    GenericModelMixin, GenericModelPermissionRequiredMixin, FormView
+):
     """
     This view provides a simple form that allows to select other entities (also from
     external sources, if set up) and on form submit redirects to the Enrich view.
@@ -496,7 +524,7 @@ class SelectMergeOrEnrich(GenericModelMixin, PermissionRequiredMixin, FormView):
         return redirect(self.get_object().get_enrich_url() + f"?uri={uri}")
 
 
-class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
+class MergeWith(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
     """
     Generic merge view.
     """
@@ -537,7 +565,7 @@ class MergeWith(GenericModelMixin, PermissionRequiredMixin, FormView):
         return self.object.get_absolute_url()
 
 
-class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
+class Enrich(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
     """
     Enrich an entity with data from an external source
     Provides the user with a form to select the fields that should be updated.
