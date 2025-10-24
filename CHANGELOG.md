@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.56.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.1...v0.56.2) (2025-10-24)
+
+
+### Bug Fixes
+
+* **generic:** allow overriding uri during import ([b3f7a9e](https://github.com/acdh-oeaw/apis-core-rdf/commit/b3f7a9e223323ea8b2dd0b490d12ced86a91c719))
+* **generic:** set correct argument order in field cleaning during import ([aa1be21](https://github.com/acdh-oeaw/apis-core-rdf/commit/aa1be218c29671e3eb4fe75388741398bb71ed76))
+
 ## [0.56.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.0...v0.56.1) (2025-10-24)
 
 
