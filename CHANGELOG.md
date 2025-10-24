@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.56.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.0...v0.56.1) (2025-10-24)
+
+
+### Bug Fixes
+
+* **relations:** delete dict entry after creating relation ([287d9e5](https://github.com/acdh-oeaw/apis-core-rdf/commit/287d9e532f158e4441539c8be8456d403b65c51c))
+* **relations:** The manager is called `objects` not `object` ([6ac8509](https://github.com/acdh-oeaw/apis-core-rdf/commit/6ac8509a472075ecc34f4a0d3c0110491d23b333))
+
 ## [0.56.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.55.1...v0.56.0) (2025-10-10)
 
 
