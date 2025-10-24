@@ -1,4 +1,3 @@
-import dataclasses
 import inspect
 from typing import Any
 
@@ -11,9 +10,10 @@ from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 from simple_history import utils
-from simple_history.models import HistoricalRecords
+from simple_history.models import HistoricalRecords, ModelChange
 
 from apis_core.generic.abc import GenericModel
+from apis_core.generic.templatetags.generic import modeldict
 
 
 class APISHistoricalRecords(HistoricalRecords):
@@ -55,52 +55,33 @@ class APISHistoryTableBase(GenericModel, models.Model):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:history:reset", args=[ct, self.history_id])
 
-    def _flatten_modelchange_many_to_many(self, obj: Any) -> Any:
-        """
-        The `.diff_against` method of the `HistoricalChanges` model represent
-        changes in many-to-many fields as lists of dicts. Those dicts contain
-        a mapping of the model names to the model instances (i.e.
-        {'person': <Person1>, 'profession': <Profession2>}).
-        To make this a bit more readable, we flatten the dicts to one dict
-        containing a mapping between the model instance string representation
-        and the string representations of the connected model instances.
-        """
-        ret = []
-        for el in obj:
-            key, val = el.values()
-            ret.append(str(val))
-        return ret
-
     def get_diff(self, other_version=None):
         if self.history_type == "-":
             return None
-        version = other_version or self.prev_record
-        if version:
-            delta = self.diff_against(version, foreign_keys_are_objs=True)
-        else:
-            delta = self.diff_against(self.__class__(), foreign_keys_are_objs=True)
-        changes = list(
-            filter(
-                lambda x: (x.new != "" or x.old is not None)
-                and x.field != "id"
-                and not x.field.endswith("_ptr"),
-                delta.changes,
+
+        new_version_dict = modeldict(self.instance, exclude_noneditable=False)
+
+        old_version = other_version or self.prev_record or None
+        old_version_dict = dict()
+        if old_version:
+            old_version_dict = modeldict(
+                old_version.instance, exclude_noneditable=False
             )
-        )
-        # The changes consist of `ModelChange` classes, which are frozen
-        # To flatten the many-to-many representation of those ModelChanges
-        # we use a separate list containing the changed values
+
+        # the `modeldict` method uses the field as a dict key but we are only interested
+        # in the `.name` of the field, so lets replace the keys:
+        new_version_dict = {key.name: value for key, value in new_version_dict.items()}
+        old_version_dict = {key.name: value for key, value in old_version_dict.items()}
+
         newchanges = []
-        m2m_fields = {field.name for field in self.instance_type._meta.many_to_many}
-        for change in changes:
-            # run flattening only on m2m fields
-            if change.field in m2m_fields:
-                change = dataclasses.replace(
-                    change,
-                    old=self._flatten_modelchange_many_to_many(change.old),
-                    new=self._flatten_modelchange_many_to_many(change.new),
-                )
-            newchanges.append(change)
+        for field, value in new_version_dict.items():
+            old_value = old_version_dict.pop(field, None)
+            if (value or old_value) and value != old_value:
+                newchanges.append(ModelChange(field, old_value, value))
+        for field, value in old_version_dict.items():
+            if value is not None:
+                newchanges.append(ModelChange(field, value, None))
+
         return sorted(newchanges, key=lambda change: change.field)
 
 
