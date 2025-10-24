@@ -199,7 +199,7 @@ class GenericModel(models.Model):
                 if data.get(field.name, False):
                     value = str(data[field.name][0])
                     try:
-                        field.clean(self, value)
+                        field.clean(value, self)
                     except Exception as e:
                         logger.info(
                             "Could not set %s on %s: %s", field.name, str(self), str(e)
