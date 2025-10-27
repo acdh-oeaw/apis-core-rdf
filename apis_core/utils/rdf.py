@@ -2,13 +2,11 @@
 # SPDX-License-Identifier: MIT
 
 import logging
-import re
 import tomllib
 from collections import defaultdict
 from pathlib import Path
 
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
-from django.apps import apps
 from django.template.utils import get_app_template_dirs
 from rdflib import RDF, BNode, Graph, URIRef
 from rdflib.exceptions import ParserError
@@ -51,48 +49,25 @@ def load_path(path: str | Path) -> dict:
     return tomllib.loads(Path(path).read_text())
 
 
-def find_regex_matching_configs(uri: str, models: list | None = None) -> dict | None:
+def graph_matches_config(graph: Graph, configfile: Path) -> dict:
     """
-    Go through a list of models and return all the rdf configs
-    that are configured in those models that have a regex that
-    matches the given URI.
+    Check if a file contains a config that matches this
+    graph and if so, return the config as dict. Otherwise
+    return False
     """
-    models = models or apps.get_models()
-    models_with_config = [model for model in models if hasattr(model, "rdf_configs")]
-    configs = []
-    for model in models_with_config:
-        for regex, path in model.rdf_configs().items():
-            if re.match(regex, uri):
-                logger.debug(f"{uri} matched {regex}")
-                config = load_path(path)
-                config["path"] = path
-                config["model"] = model
-                configs.append(config)
-            else:
-                logger.debug(f"{uri} did not match {regex}")
-    return configs
-
-
-def find_graph_matching_config(graph: Graph, configs: list[dict] = []) -> dict | None:
-    """
-    Go through al list of RDF import configs and return the
-    ones that have filters defined that match the given graph.
-    """
-    for config in configs:
-        for _filter in config.get("filters", [{None: None}]):
-            try:
-                triples = []
-                for predicate, obj in _filter.items():
-                    triples.append(
-                        (None, resolve(predicate, graph), resolve(obj, graph))
-                    )
-                triples = [triple in graph for triple in triples]
-                if all(triples):
-                    logger.debug("Using %s for parsing graph", config["path"])
-                    return config
-            except ValueError as e:
-                logger.debug("Filter %s does not match: %s", _filter, e)
-    return None
+    config = load_path(configfile)
+    for _filter in config.get("filters", [{None: None}]):
+        try:
+            triples = []
+            for predicate, obj in _filter.items():
+                triples.append((None, resolve(predicate, graph), resolve(obj, graph)))
+            triples = [triple in graph for triple in triples]
+            if all(triples):
+                logger.debug("Using %s for parsing graph", configfile)
+                return config
+        except ValueError as e:
+            logger.debug("Filter %s does not match: %s", _filter, e)
+    return {}
 
 
 def build_sparql_query(curie: str) -> str:
@@ -146,9 +121,7 @@ def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
     return list(dict.fromkeys(values))
 
 
-def get_something_from_uri(
-    uri: str, models: list | None = None, configs=[]
-) -> dict | None:
+def load_uri_using_path(uri, configfile: Path) -> dict:
     uri = get_normalized_uri(uri)
     graph = Graph()
     try:
@@ -156,15 +129,9 @@ def get_something_from_uri(
     except ParserError as e:
         logger.info(e)
 
-    if not configs:
-        configs = find_regex_matching_configs(uri, models)
-
-    if config := find_graph_matching_config(graph, configs):
+    if config := graph_matches_config(graph, configfile):
         result = defaultdict(list)
-        if model := config.get("model", False):
-            result["model"] = model
         result["relations"] = defaultdict(list)
-
         for attribute, curies in config.get("attributes", {}).items():
             values = get_value_graph(graph, curies)
             result[attribute].extend(values)
@@ -173,9 +140,3 @@ def get_something_from_uri(
             result["relations"][relation] = details
         return dict(result)
     return None
-
-
-def load_uri_using_path(uri, configfile: Path) -> dict:
-    config = load_path(configfile)
-    config["path"] = configfile
-    return get_something_from_uri(uri=uri, configs=[config])
