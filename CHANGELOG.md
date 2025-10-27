@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.56.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.2...v0.56.3) (2025-10-27)
+
+
+### Bug Fixes
+
+* **generic:** use correct method in GenericSelectMergeOrEnrichForm ([9826937](https://github.com/acdh-oeaw/apis-core-rdf/commit/9826937d03987f196bb49c76b281bcf24a462ad7))
+
 ## [0.56.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.1...v0.56.2) (2025-10-24)
 
 
