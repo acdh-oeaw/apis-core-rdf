@@ -2,10 +2,7 @@ import difflib
 
 from django.apps import apps
 from django.core import serializers
-from django.core.exceptions import ImproperlyConfigured
 from django.db import DEFAULT_DB_ALIAS, router
-
-from apis_core.generic.helpers import first_member_match, module_paths
 
 
 def datadump_get_objects(models: list = [], *args, **kwargs):
@@ -60,13 +57,6 @@ def datadump_serializer(additional_app_labels: list = [], serialier_format="json
         datadump_get_queryset(additional_app_labels),
         use_natural_foreign_keys=True,
     )
-
-
-def get_importer_for_model(model: object):
-    importer_paths = module_paths(model, path="importers", suffix="Importer")
-    if importer := first_member_match(importer_paths):
-        return importer
-    raise ImproperlyConfigured(f"No suitable importer found for {model}")
 
 
 def get_html_diff(a, b, show_a=True, show_b=True, shorten=0):
