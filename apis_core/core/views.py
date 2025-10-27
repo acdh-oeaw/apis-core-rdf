@@ -4,11 +4,14 @@ from django.contrib import messages
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from django.views.generic.edit import FormView
 from drf_spectacular.utils import OpenApiParameter, extend_schema, inline_serializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apis_core.core.forms import SearchForm
+from apis_core.core.utils import search
 from apis_core.utils.helpers import datadump_serializer
 
 
@@ -47,3 +50,17 @@ class PasswordChangeView(auth_views.PasswordChangeView):
             _("Password for %(user)s changed.").format(user=self.request.user),
         )
         return ret
+
+
+class SearchView(FormView):
+    form_class = SearchForm
+    template_name = "search.html"
+
+    def get_form_kwargs(self, *args, **kwargs):
+        return {"initial": self.request.GET}
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        if query := self.request.GET.get("search"):
+            context["objects"] = search(query, self.request.user)
+        return context
