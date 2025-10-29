@@ -51,7 +51,7 @@ class CreateRelationForm(RelationParamsMixin, CreateRelation):
         kwargs["params"] = self.params
         content_type = ContentType.objects.get_for_model(self.model)
         kwargs["params"]["hx_post_route"] = reverse(
-            "apis_core:relations:create_relation_form", args=[content_type]
+            "relations:create_relation_form", args=[content_type]
         )
         return kwargs
 
@@ -62,7 +62,7 @@ class CreateRelationForm(RelationParamsMixin, CreateRelation):
             k: self.params[k] for k in ["relation_types", "replace_id", "table_suffix"]
         }
         params = "?" + urlencode(params, doseq=True)
-        return reverse("apis_core:relations:list_relations", args=args) + params
+        return reverse("relations:list_relations", args=args) + params
 
 
 class ListRelations(

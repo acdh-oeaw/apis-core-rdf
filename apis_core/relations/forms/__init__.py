@@ -63,7 +63,7 @@ class RelationForm(GenericModelForm):
                 )
                 self.fields["subj_object_id"].widget = ApisListSelect2(
                     attrs={"data-html": True},
-                    url=reverse("apis_core:generic:autocomplete", args=[subj_ct])
+                    url=reverse("generic:autocomplete", args=[subj_ct])
                     + "?create=True",
                 )
                 self.fields["subj_object_id"].widget.choices = self.fields[
@@ -83,8 +83,7 @@ class RelationForm(GenericModelForm):
                 )
                 self.fields["obj_object_id"].widget = ApisListSelect2(
                     attrs={"data-html": True},
-                    url=reverse("apis_core:generic:autocomplete", args=[obj_ct])
-                    + "?create=True",
+                    url=reverse("generic:autocomplete", args=[obj_ct]) + "?create=True",
                 )
                 self.fields["obj_object_id"].widget.choices = self.fields[
                     "obj_object_id"
