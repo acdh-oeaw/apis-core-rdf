@@ -131,7 +131,7 @@
 
                       {% block user-menu-items %}
                         <div class="dropdown-item">
-                          <form action="{% url 'apis_core:logout' %}?next=/" method="post">
+                          <form action="{% url 'logout' %}?next=/" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn px-0">
                               <span class="material-symbols-outlined material-symbols-align">logout</span>
@@ -139,7 +139,7 @@
                             </button>
                           </form>
                         </div>
-                        <a class="dropdown-item" href="{% url 'apis_core:password-change' %}">{% translate "change password" %}</a>
+                        <a class="dropdown-item" href="{% url 'core:password-change' %}">{% translate "change password" %}</a>
                       {% endblock user-menu-items %}
 
                     </div>
@@ -147,7 +147,7 @@
                 {% else %}
                   <li class="nav-item dropdown ml-auto">
                     <a class="nav-link p-0"
-                       href="{% url 'apis_core:login' %}?next={{ request.path|urlencode }}">
+                       href="{% url 'login' %}?next={{ request.path|urlencode }}">
                       <span class="material-symbols-outlined">login</span>
                     </a>
                   </li>
