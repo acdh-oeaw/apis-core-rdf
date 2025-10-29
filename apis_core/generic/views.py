@@ -597,7 +597,7 @@ class Enrich(GenericModelMixin, PermissionRequiredMixin, FormView):
             if key.startswith("update_"):
                 key = key.removeprefix("update_")
                 data[key] = self.data[key]
-        data["_uris"] = [self.uri]
+        data["same_as"] = [self.uri] + data.get("same_as", [])
         if data:
             errors = self.object.import_data(data)
             for field, error in errors.items():
