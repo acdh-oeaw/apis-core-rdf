@@ -323,7 +323,7 @@ class Delete(GenericModelMixin, PermissionRequiredMixin, DeleteView):
         if redirect := self.request.GET.get("redirect"):
             return redirect
         return reverse(
-            "apis_core:generic:list",
+            "generic:list",
             args=[self.request.resolver_match.kwargs["contenttype"]],
         )
 
