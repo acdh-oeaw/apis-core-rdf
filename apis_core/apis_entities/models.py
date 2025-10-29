@@ -103,6 +103,6 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
         try:
             route = reverse("GetEntityGenericRoot", kwargs={"pk": self.pk})
         except NoReverseMatch:
-            route = reverse("apis_core:GetEntityGeneric", kwargs={"pk": self.pk})
+            route = reverse("GetEntityGeneric", kwargs={"pk": self.pk})
         base = apis_base_uri().strip("/")
         return f"{base}{route}"
