@@ -135,3 +135,42 @@ class RdfTest(TestCase):
 
         attributes = rdf.load_uri_using_path(uri, config)
         self.assertEqual(attributes, None)
+
+    def test_dnb_MusicalCorporateBody(self):
+        # https://d-nb.info/gnd/2098220-3
+        uri = str(testdata / "groups/Salzburger_Marionettentheater.ttl")
+        config = rdf_configs / "E74_GroupFromDNB.toml"
+
+        attributes = rdf.load_uri_using_path(uri, config)
+        label = [
+            "Salzburger Marionettentheater",
+            "Salzburger Marionettentheater Gesellschaft m.b.H.",
+            "Salzburger Marionettentheater Ges.m.b.H.",
+            "Salzburger Marionettentheater GmbH",
+            "Marionettentheater (Salzburger Marionettentheater)",
+            "Salzburger Marionetten (Körperschaft)",
+            "Aichlers Marionettentheater",
+            "Marionette Theatre Salzburg",
+            "Salzburg Marionette Theatre",
+            "Marionettentheater Salzburg",
+        ]
+        sameas = [
+            "http://viaf.org/viaf/149602965",
+            "https://isni.org/isni/0000000115374839",
+            "http://www.wikidata.org/entity/Q2215994",
+            "http://id.loc.gov/rwo/agents/n86090792",
+            "https://d-nb.info/gnd/4198684-2",
+        ]
+        self.assertEqual(attributes["label"], label)
+        self.assertEqual(attributes["sameas"], sameas)
+
+    def test_dnb_OrganOfCorporateBody(self):
+        # https://d-nb.info/gnd/4257718-4
+        uri = str(testdata / "groups/Landgericht_Meran.ttl")
+        config = rdf_configs / "E74_GroupFromDNB.toml"
+
+        attributes = rdf.load_uri_using_path(uri, config)
+        label = ["Meran. Landgericht Meran"]
+        sameas = ["http://viaf.org/viaf/248639199"]
+        self.assertEqual(attributes["label"], label)
+        self.assertEqual(attributes["sameas"], sameas)
