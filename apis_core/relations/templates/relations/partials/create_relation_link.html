@@ -1,4 +1,4 @@
-{% url "apis_core:relations:create_relation_form" relation_type as baseurlform %}
+{% url "relations:create_relation_form" relation_type as baseurlform %}
 {% if object.content_type.model_class is relation_type.model_class.subj_model_type %}
   {% if linkify %}
     <a href="{{ relation_type.model_class.get_createview_url }}?subj_content_type={{ object.content_type.id }}&subj_object_id={{ object.id }}"
