@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.56.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.3...v0.56.4) (2025-10-29)
+
+
+### Bug Fixes
+
+* **generic:** fix typo in enrich view ([40474a4](https://github.com/acdh-oeaw/apis-core-rdf/commit/40474a4c9224593d9ebdc6129029a09dc24a9ddf)), closes [#2204](https://github.com/acdh-oeaw/apis-core-rdf/issues/2204)
+
 ## [0.56.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.2...v0.56.3) (2025-10-27)
 
 
