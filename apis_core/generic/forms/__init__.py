@@ -150,7 +150,7 @@ class GenericSelectMergeOrEnrichForm(forms.Form):
         uri = self.cleaned_data["uri"]
         if uri.isdigit() or self.content_type.model_class().valid_import_url(uri):
             return uri
-        raise ValueError(f"{uri} is neither an ID nor something we can import")
+        raise ValidationError(f"{uri} is neither an ID nor something we can import")
 
 
 class GenericMergeWithForm(forms.Form):
