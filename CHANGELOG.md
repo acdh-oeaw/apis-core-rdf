@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.57.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.4...v0.57.0) (2025-10-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** drop `Importer` module
+* **utils:** drop `get_importer_for_model` method
+* **uris:** drop `create_object_from_uri` method
+
+### Features
+
+* **apis_entities:** adapt `template_list` arguments ([671bf52](https://github.com/acdh-oeaw/apis-core-rdf/commit/671bf52400227681830f07f768945868e4c5ebdb))
+* **apis_entities:** add additional GND subclasses to group import ([468c24c](https://github.com/acdh-oeaw/apis-core-rdf/commit/468c24c31010adf88a107e021b9da1c3d84dcf37)), closes [#2161](https://github.com/acdh-oeaw/apis-core-rdf/issues/2161) [#2162](https://github.com/acdh-oeaw/apis-core-rdf/issues/2162)
+* **generic:** adapt `template_list` arguments ([1458a7e](https://github.com/acdh-oeaw/apis-core-rdf/commit/1458a7ef729721ae4c44dc0294cb06ddfd302ca9))
+* **generic:** add GenericModel method that lists importable urls ([d538ade](https://github.com/acdh-oeaw/apis-core-rdf/commit/d538adedd6e3d63519c1f0a8fd514c451ce21734))
+* **generic:** allow to include noneditable fields in modeldict ([6a55bbb](https://github.com/acdh-oeaw/apis-core-rdf/commit/6a55bbb4a0124d11511bb8fadbbff6620196eaea))
+* **generic:** allow to pass folder & prefix to `template_list` tag ([3e6ba6d](https://github.com/acdh-oeaw/apis-core-rdf/commit/3e6ba6d4ca8f4a1e29eb5678a5948ac62409fb15))
+* **generic:** create GenericModelPermissionRequiredMixin ([fad80de](https://github.com/acdh-oeaw/apis-core-rdf/commit/fad80de7b5812b910b553eb1f762fd775c45629a))
+* **generic:** switch from row to flex-row ([a3ea1c7](https://github.com/acdh-oeaw/apis-core-rdf/commit/a3ea1c7ac89c046ef9d2afb4071a593a002d92fa))
+* **generic:** use flex-grow instead of hardcoding width ([6ec9fd8](https://github.com/acdh-oeaw/apis-core-rdf/commit/6ec9fd82013ddb8579b3e629bf164110e1d7c80c))
+* **history:** adapt `template_list` arguments ([d4ffa31](https://github.com/acdh-oeaw/apis-core-rdf/commit/d4ffa311650887d05125b091ccb763da444fc324))
+* **history:** create custom diff instead of using `.diff_against` ([c88c267](https://github.com/acdh-oeaw/apis-core-rdf/commit/c88c267f973d17eaa3f4c1478d40be8d70ca0ab0)), closes [#2177](https://github.com/acdh-oeaw/apis-core-rdf/issues/2177)
+* **history:** use `GenericModelPermissionRequiredMixin` in views ([f7d8e33](https://github.com/acdh-oeaw/apis-core-rdf/commit/f7d8e333ceca2fbaf8fb484a3fca4b5c91df16b9))
+
+
+### Bug Fixes
+
+* **apis_entities:** dropping float CSS rules ([8413b5f](https://github.com/acdh-oeaw/apis-core-rdf/commit/8413b5fb4430acb3c03e6813e249ac99cf39797a)), closes [#1540](https://github.com/acdh-oeaw/apis-core-rdf/issues/1540)
+* **apis_entities:** only allow to enrich if its an importable URI ([59d2f3c](https://github.com/acdh-oeaw/apis-core-rdf/commit/59d2f3cf5421605f0ad1c72807e2801814a5ea3c))
+* **generic:** raise ValidationError instead of ValueError ([696cd6f](https://github.com/acdh-oeaw/apis-core-rdf/commit/696cd6f9bccb8077d0460133b946bf0f3d33d275)), closes [#2199](https://github.com/acdh-oeaw/apis-core-rdf/issues/2199) [#2142](https://github.com/acdh-oeaw/apis-core-rdf/issues/2142)
+* **relations:** don't list symmetric relations twice ([caeb8e5](https://github.com/acdh-oeaw/apis-core-rdf/commit/caeb8e57ff8859290fcbed73a815a56578d9a9a7)), closes [#1448](https://github.com/acdh-oeaw/apis-core-rdf/issues/1448)
+
+
+### Documentation
+
+* **history:** add docstrings to history views ([d749252](https://github.com/acdh-oeaw/apis-core-rdf/commit/d749252f0e235d1136681f661b001528d2788873))
+
+
+### Code Refactoring
+
+* **generic:** drop `Importer` module ([93ebb9a](https://github.com/acdh-oeaw/apis-core-rdf/commit/93ebb9a4ef262c0eedee63e05ced634e28cce73d))
+* **uris:** drop `create_object_from_uri` method ([1c99a21](https://github.com/acdh-oeaw/apis-core-rdf/commit/1c99a2180d86355c186e8af3ba0f37426e0d1eab))
+* **utils:** drop `get_importer_for_model` method ([1b5b2a2](https://github.com/acdh-oeaw/apis-core-rdf/commit/1b5b2a2a57291bc912ec97614b350992d984001a))
+
 ## [0.56.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.3...v0.56.4) (2025-10-29)
 
 
