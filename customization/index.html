@@ -301,7 +301,7 @@ The importers task is then to create a model instance from this URI,
 usually by fetching data from the URI, parsing it and extracting the
 needed fields. The instance should then be returned by the
 <code>create_instance</code> method of the importer. There is
-<a class="autorefs autorefs-internal" title="GenericModelImporter" href="../reference/#apis_core.generic.importers.GenericModelImporter">apis_core.generic.importers.GenericModelImporter</a> which you can inherit from. It is used by default if no
+[apis_core.generic.importers.GenericModelImporter][] which you can inherit from. It is used by default if no
 other importer is defined for the model and tries to do the right
 thing out of the box: it first looks if there is an RDF configuration
 for the URI and if that fails tries to parse the URI response as JSON.</p>
@@ -311,7 +311,7 @@ for the URI and if that fails tries to parse the URI response as JSON.</p>
 It checks if the passed value starts with <code>http</code> and if so, it uses the
 importer that fits the model and uses it to create the model instance.</p>
 <h1 id="using-the-genericmodelimporter-to-import-rdf">Using the GenericModelImporter to import RDF</h1>
-<p>The <a class="autorefs autorefs-internal" title="GenericModelImporter" href="../reference/#apis_core.generic.importers.GenericModelImporter">apis_core.generic.importers.GenericModelImporter</a>
+<p>The [apis_core.generic.importers.GenericModelImporter][]
 tries to parse the passed URI using the
 <a class="autorefs autorefs-internal" title="rdf" href="../reference/#apis_core.utils.rdf">apis_core.utils.rdf</a> module. This
 module looks at all the existing models and uses the models

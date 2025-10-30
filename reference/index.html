@@ -5069,383 +5069,6 @@ creates a list ["foo.bar", "bar.faz", "faz.foo"]</p>
 
 
 
-<h3 id="apis_core.generic.importers" class="doc doc-heading">
-            <code>importers</code>
-
-
-</h3>
-
-    <div class="doc doc-contents ">
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-class">
-
-
-
-<h4 id="apis_core.generic.importers.GenericModelImporter" class="doc doc-heading">
-            <code>GenericModelImporter</code>
-
-
-</h4>
-
-
-    <div class="doc doc-contents ">
-
-
-        <p>A generic importer class which provides methods for
-importing data from a URI and creating a model instance from it.</p>
-<p>By default, it fetches a resource and first tries to parse it using
-our RDF parser. If that fails, it tries to parse it using JSON and
-then extracts the fields whose keys match the model field names.
-Projects can inherit from this class and override the default
-methods or simply write their own from scratch.</p>
-
-
-
-
-
-
-
-              <details class="quote">
-                <summary>Source code in <code>apis_core/generic/importers.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 17</span>
-<span class="normal"> 18</span>
-<span class="normal"> 19</span>
-<span class="normal"> 20</span>
-<span class="normal"> 21</span>
-<span class="normal"> 22</span>
-<span class="normal"> 23</span>
-<span class="normal"> 24</span>
-<span class="normal"> 25</span>
-<span class="normal"> 26</span>
-<span class="normal"> 27</span>
-<span class="normal"> 28</span>
-<span class="normal"> 29</span>
-<span class="normal"> 30</span>
-<span class="normal"> 31</span>
-<span class="normal"> 32</span>
-<span class="normal"> 33</span>
-<span class="normal"> 34</span>
-<span class="normal"> 35</span>
-<span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
-<span class="normal"> 41</span>
-<span class="normal"> 42</span>
-<span class="normal"> 43</span>
-<span class="normal"> 44</span>
-<span class="normal"> 45</span>
-<span class="normal"> 46</span>
-<span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericModelImporter</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A generic importer class which provides methods for</span>
-<span class="sd">    importing data from a URI and creating a model instance from it.</span>
-
-<span class="sd">    By default, it fetches a resource and first tries to parse it using</span>
-<span class="sd">    our RDF parser. If that fails, it tries to parse it using JSON and</span>
-<span class="sd">    then extracts the fields whose keys match the model field names.</span>
-<span class="sd">    Projects can inherit from this class and override the default</span>
-<span class="sd">    methods or simply write their own from scratch.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">import_uri</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clean_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">clean_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">get_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-
-    <span class="nd">@cache</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1"># We first try to use the RDF parser</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">get_something_from_uri</span><span class="p">(</span>
-                    <span class="n">uri</span><span class="p">,</span>
-                    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">],</span>
-                <span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-        <span class="c1"># If there is no data yet, try parsing JSON</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-        <span class="c1"># Return the fetched data or an empty dict if there is none</span>
-        <span class="k">return</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">mangle_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">data</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drop_unknown_fields</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Fetch the data using the `request` method and</span>
-<span class="sd">        mangle it using the `mangle_data` method.</span>
-
-<span class="sd">        If the `drop_unknown_fields` argument is True,</span>
-<span class="sd">        remove all fields from the data dict that do not</span>
-<span class="sd">        have an equivalent field in the model.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mangle_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">drop_unknown_fields</span><span class="p">:</span>
-            <span class="c1"># we are dropping all fields that are not part of the model</span>
-            <span class="n">modelfields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">modelfields</span><span class="p">}</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Could not import </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="si">}</span><span class="s2">. Data fetched was: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">data</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">import_into_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="s2">&quot;__all__&quot;</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">fields</span> <span class="o">==</span> <span class="s2">&quot;__all__&quot;</span><span class="p">:</span>
-            <span class="n">fields</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span> <span class="ow">and</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">create_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create instance from URI </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">drop_unknown_fields</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">same_as</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;same_as&quot;</span><span class="p">,</span> <span class="p">[])</span>
-        <span class="n">same_as</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">same_as</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">sa</span> <span class="o">:=</span> <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">uri__in</span><span class="o">=</span><span class="n">same_as</span><span class="p">):</span>
-            <span class="n">root_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">content_object</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sa</span><span class="p">])</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root_set</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">IntegrityError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Multiple objects found for sameAs URIs </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;same_as&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;This indicates a data integrity problem as these URIs should be unique.&quot;</span>
-                <span class="p">)</span>
-            <span class="n">instance</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">content_object</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Found existing instance </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="p">:</span>
-            <span class="n">attributes</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-                    <span class="n">attributes</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">attributes</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Created instance </span><span class="si">%s</span><span class="s2"> from attributes </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span>
-        <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">same_as</span><span class="p">:</span>
-            <span class="n">Uri</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
-                <span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">id</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;relations&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">instance</span><span class="o">.</span><span class="n">create_relations_to_uris</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;relations&quot;</span><span class="p">]</span>
-            <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">instance</span>
-</code></pre></div></td></tr></table></div>
-              </details>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h5 id="apis_core.generic.importers.GenericModelImporter.get_data" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_data</span><span class="p">(</span><span class="n">drop_unknown_fields</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
-
-</h5>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Fetch the data using the <code>request</code> method and
-mangle it using the <code>mangle_data</code> method.</p>
-<p>If the <code>drop_unknown_fields</code> argument is True,
-remove all fields from the data dict that do not
-have an equivalent field in the model.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>apis_core/generic/importers.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drop_unknown_fields</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Fetch the data using the `request` method and</span>
-<span class="sd">    mangle it using the `mangle_data` method.</span>
-
-<span class="sd">    If the `drop_unknown_fields` argument is True,</span>
-<span class="sd">    remove all fields from the data dict that do not</span>
-<span class="sd">    have an equivalent field in the model.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mangle_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">drop_unknown_fields</span><span class="p">:</span>
-        <span class="c1"># we are dropping all fields that are not part of the model</span>
-        <span class="n">modelfields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">modelfields</span><span class="p">}</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">ImproperlyConfigured</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Could not import </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">import_uri</span><span class="si">}</span><span class="s2">. Data fetched was: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-    <span class="k">return</span> <span class="n">data</span>
-</code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-module">
-
-
-
 <h3 id="apis_core.generic.middleware" class="doc doc-heading">
             <code>middleware</code>
 
@@ -14546,7 +14169,17 @@ E.g.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/utils/helpers.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">119</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
 <span class="normal">120</span>
 <span class="normal">121</span>
 <span class="normal">122</span>
@@ -14569,17 +14202,7 @@ E.g.</p>
 <span class="normal">139</span>
 <span class="normal">140</span>
 <span class="normal">141</span>
-<span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="normal">142</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">construct_lookup</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper method to parse input values and construct field lookups</span>
 <span class="sd">    (https://docs.djangoproject.com/en/4.2/ref/models/querysets/#field-lookups)</span>
@@ -14638,7 +14261,10 @@ Data exported this way can be reimported into a newly created Django APIS app</p
 
             <details class="quote">
               <summary>Source code in <code>apis_core/utils/helpers.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
@@ -14668,10 +14294,7 @@ Data exported this way can be reimported into a newly created Django APIS app</p
 <span class="normal">48</span>
 <span class="normal">49</span>
 <span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span>
-<span class="normal">53</span>
-<span class="normal">54</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">datadump_get_queryset</span><span class="p">(</span><span class="n">additional_app_labels</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]):</span>
+<span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">datadump_get_queryset</span><span class="p">(</span><span class="n">additional_app_labels</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method is loosely based on the `dumpdata` admin command.</span>
 <span class="sd">    It iterates throug the relevant app models and exports them using</span>
@@ -14730,7 +14353,17 @@ The value of <code>shorten</code> defines if long parts of strings that contains
 
             <details class="quote">
               <summary>Source code in <code>apis_core/utils/helpers.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 72</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
 <span class="normal"> 73</span>
 <span class="normal"> 74</span>
 <span class="normal"> 75</span>
@@ -14764,17 +14397,7 @@ The value of <code>shorten</code> defines if long parts of strings that contains
 <span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_html_diff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">show_a</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_b</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shorten</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="normal">106</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_html_diff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">show_a</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_b</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shorten</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create an colorized html represenation of the difference of two values a and b</span>
 <span class="sd">    If `show_a` is True, colorize deletions in `a`</span>
