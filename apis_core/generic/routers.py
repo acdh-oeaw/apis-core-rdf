@@ -20,7 +20,7 @@ class CustomAPIRootView(APIRootView):
             if content_type.model_class() is not None and issubclass(
                 content_type.model_class(), GenericModel
             ):
-                route = "apis_core:generic:genericmodelapi-list"
+                route = "generic:genericmodelapi-list"
                 response.data[reverse(route, args=[content_type]).strip("/")] = reverse(
                     route,
                     args=[content_type],
