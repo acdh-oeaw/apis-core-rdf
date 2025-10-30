@@ -348,3 +348,6 @@ class GenericModel(models.Model):
             .objects.filter(content_type=ct, object_id=self.id)
             .all()
         )
+
+    def uri_set_with_importer(self):
+        return [uri for uri in self.uri_set() if self.valid_import_url(uri.uri)]
