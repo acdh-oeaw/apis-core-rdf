@@ -16,8 +16,12 @@
           </button>
           <ul class="dropdown-menu">
             <li>
-              <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}"
-                 class="dropdown-item small">{% translate "... merge data" %}</a>
+              {% if uri in object.uri_set_with_importer %}
+                <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}"
+                   class="dropdown-item small">{% translate "... merge data" %}</a>
+              {% else %}
+                <a class="dropdown-item small disabled">{% translate "... not importable" %}</a>
+              {% endif %}
             </li>
             {% if uri.get_delete_permission in perms %}
               <li>
