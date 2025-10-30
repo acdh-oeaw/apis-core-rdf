@@ -33,12 +33,20 @@
         </div>
       </div>
       <div class="card-body">
-        {% if filter.form.errors %}<div class="alert alert-warning">{{ filter.form.errors }}</div>{% endif %}
+        <form method="get">
+          {% crispy columns_selector columns_selector.helper %}
+          {% if filter.form.errors %}<div class="alert alert-warning">{{ filter.form.errors }}</div>{% endif %}
 
-        {% block filter %}
-          {% crispy filter.form filter.form.helper %}
-        {% endblock filter %}
+          {% block filter %}
+            {% crispy filter.form filter.form.helper %}
+          {% endblock filter %}
 
+          <input type="submit"
+                 name="submit"
+                 value="Submit"
+                 class="btn btn-primary"
+                 id="submit-id-submit">
+        </form>
       </div>
       <div class="card-footer text-muted">
         <a class="btn btn-outline-secondary"  href=".">{% translate "Reset filter" %}</a>
