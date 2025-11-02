@@ -7,9 +7,11 @@
 
 {% if object %}
 
-  {% block col %}
-    {% template_list object suffix="_card.html" as template_list %}
-    {% include template_list %}
-  {% endblock col %}
+  {% block content %}
+    <div class="container-fluid">
+      {% template_list object suffix="_card.html" as template_list %}
+      {% include template_list %}
+    </div>
+  {% endblock content %}
 
 {% endif %}

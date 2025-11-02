@@ -10,19 +10,21 @@
   {% endif %}
 {% endblock title %}
 
-{% block col %}
-  <div class="card">
-    <div class="card-header">
+{% block content %}
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
 
-      {% block card-header-content %}
-        {% if object %}
-          {% blocktrans with object as object %}Edit {{ object }}{% endblocktrans %}
-        {% else %}
-          {% translate "Create" %}
-        {% endif %}
-      {% endblock card-header-content %}
+        {% block card-header-content %}
+          {% if object %}
+            {% blocktrans with object as object %}Edit {{ object }}{% endblocktrans %}
+          {% else %}
+            {% translate "Create" %}
+          {% endif %}
+        {% endblock card-header-content %}
 
+      </div>
+      <div class="card-body">{% crispy form form.helper %}</div>
     </div>
-    <div class="card-body">{% crispy form form.helper %}</div>
   </div>
-{% endblock col %}
+{% endblock content %}
