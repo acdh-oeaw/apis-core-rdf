@@ -1,25 +1,27 @@
 {% extends "generic/generic_content.html" %}
 {% load generic %}
 
-{% block col %}
-  <div class="card">
-    <div class="card-header">Overview</div>
-    <div class="card-body text-center">
-      {% genericmodel_content_types as contenttypes %}
-      {% regroup contenttypes|dictsort:"app_label" by app_label as contenttypes_by_app %}
-      {% for app in contenttypes_by_app %}
-        <div class="mb-5">
-          <h3>{{ app.grouper }}</h3>
-          {% for contenttype in app.list %}
-            <a href="{% url 'apis_core:generic:list' contenttype %}">
-              <button type="button" class="btn btn-outline-dark m-2">
-                {{ contenttype.name|capfirst }}
-                {{ contenttype|content_type_count }}
-              </button>
-            </a>
-          {% endfor %}
-        </div>
-      {% endfor %}
+{% block content %}
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">Overview</div>
+      <div class="card-body text-center">
+        {% genericmodel_content_types as contenttypes %}
+        {% regroup contenttypes|dictsort:"app_label" by app_label as contenttypes_by_app %}
+        {% for app in contenttypes_by_app %}
+          <div class="mb-5">
+            <h3>{{ app.grouper }}</h3>
+            {% for contenttype in app.list %}
+              <a href="{% url 'apis_core:generic:list' contenttype %}">
+                <button type="button" class="btn btn-outline-dark m-2">
+                  {{ contenttype.name|capfirst }}
+                  {{ contenttype|content_type_count }}
+                </button>
+              </a>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
-{% endblock col %}
+{% endblock content %}

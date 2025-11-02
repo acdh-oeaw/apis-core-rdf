@@ -6,9 +6,11 @@
   {% translate "Create" %}
 {% endblock title %}
 
-{% block col %}
-  <div class="card">
-    <div class="card-header">{% translate "Create" %}</div>
-    <div class="card-body">{% crispy form form.helper %}</div>
+{% block content %}
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">{% translate "Create" %}</div>
+      <div class="card-body">{% crispy form form.helper %}</div>
+    </div>
   </div>
-{% endblock col %}
+{% endblock content %}
