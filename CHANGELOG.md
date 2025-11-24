@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.57.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.1...v0.57.2) (2025-11-24)
+
+
+### Bug Fixes
+
+* **generic:** place header outside of `if` & add error message ([d63ad57](https://github.com/acdh-oeaw/apis-core-rdf/commit/d63ad57d7eb890fb12c0cc8eb9cdefbe6721ec03)), closes [#2220](https://github.com/acdh-oeaw/apis-core-rdf/issues/2220)
+
 ## [0.57.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.0...v0.57.1) (2025-11-24)
 
 
