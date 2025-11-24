@@ -20,6 +20,19 @@ from apis_core.generic.forms.fields import ModelImportChoiceField
 logger = logging.getLogger(__name__)
 
 
+class ColumnsSelectorForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop("choices", [])
+        super().__init__(*args, **kwargs)
+        initial = kwargs.get("initial", {}).get("choices", [])
+        self.fields["columns"] = forms.MultipleChoiceField(
+            required=False, choices=choices, initial=initial
+        )
+        self.helper = FormHelper()
+        self.helper.form_method = "GET"
+        self.helper.form_tag = False
+
+
 class GenericImportForm(forms.Form):
     class Meta:
         fields = []
@@ -43,23 +56,15 @@ class GenericFilterSetForm(forms.Form):
     """
     FilterSet form for generic models
     Adds a submit button using the django crispy form helper
-    Adds a `columns` selector that lists all the fields from
-    the model
     """
 
     columns_exclude = []
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.helper = FormHelper(self)
         self.helper.form_method = "GET"
-        self.helper.add_input(Submit("submit", _("Submit")))
-
-    def clean(self):
-        self.cleaned_data = super().clean()
-        self.cleaned_data.pop("columns", None)
-        return self.cleaned_data
+        self.helper.form_tag = False
 
 
 class GenericModelForm(forms.ModelForm):

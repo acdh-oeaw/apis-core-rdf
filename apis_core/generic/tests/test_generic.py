@@ -198,7 +198,7 @@ class TestGeneric(object):
         response = admin_client.get("/generic_tests.person/")
         assertContains(
             response,
-            '<select name="columns" class="selectmultiple form-select" id="id_columns" multiple>',
+            '<select name="choices-columns" class="selectmultiple form-select" id="id_choices-columns" multiple>',
         )
         assertContains(response, '<option value="id" selected>ID</option>')
         assertContains(response, '<option value="first_name">First name</option>')

@@ -3,7 +3,7 @@ from copy import copy
 
 from crispy_forms.layout import Field
 from dal import autocomplete
-from django import forms, http
+from django import http
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -14,7 +14,6 @@ from django.core.validators import URLValidator
 from django.db.models.fields.related import ManyToManyRel
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
-from django.http import QueryDict
 from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
@@ -35,6 +34,7 @@ from apis_core.uris.models import Uri
 
 from .filtersets import GenericFilterSet
 from .forms import (
+    ColumnsSelectorForm,
     GenericEnrichForm,
     GenericImportForm,
     GenericMergeWithForm,
@@ -159,11 +159,11 @@ class List(
     def get_table_kwargs(self):
         kwargs = super().get_table_kwargs()
 
-        selected_columns = self.request.GET.getlist("columns", [])
+        selected_columns = self.request.GET.getlist("choices-columns", [])
         modelfields = self.model._meta.get_fields()
         # if the form was submitted, we look at the selected
         # columns and exclude all columns that are not part of that list
-        if self.request.GET and "columns" in self.request.GET:
+        if self.request.GET and "choices-columns" in self.request.GET:
             columns_exclude = self.get_filterset_class().Meta.form.columns_exclude
             other_columns = [
                 name for (name, field) in self._get_columns_choices(columns_exclude)
@@ -203,56 +203,42 @@ class List(
         return filterset_factory(self.model, filterset_class)
 
     def _get_columns_choices(self, columns_exclude):
-        # we start with the model fields
-        choices = [
-            (field.name, pretty_name(getattr(field, "verbose_name", field.name)))
+        # lets start with the custom table fields
+        choices = {
+            key.name: capfirst(str(key) or key.name or "Nameless column")
+            for key in self.get_table().columns
+        }
+        # then add the model fields, but only the ones
+        # that are not automatically created (parent keys)
+        # and not the m2m relations and not any that are
+        # already part of the choices
+        choices |= {
+            field.name: pretty_name(getattr(field, "verbose_name", field.name))
             for field in self.model._meta.get_fields()
             if not getattr(field, "auto_created", False)
             and not isinstance(field, ManyToManyRel)
-        ]
-        # we add any annotated fields to that
-        choices += [(key, key) for key in self.get_queryset().query.annotations.keys()]
-        # lets also add the custom table fields
-        choices += [
-            (key.name, capfirst(str(key) or key.name or "Nameless column"))
-            for key in self.get_table().columns
-        ]
+            and field.name not in choices.keys()
+        }
+        # finally we add any annotated fields
+        choices |= {key: key for key in self.get_queryset().query.annotations.keys()}
         # now we drop all the choices that are listed in columns_exclude
-        choices = list(filter(lambda x: x[0] not in columns_exclude, choices))
-        return choices
+        choices = {
+            key: value for key, value in choices.items() if key not in columns_exclude
+        }
+        return choices.items()
 
     def get_filterset_kwargs(self, filterset_class):
-        columns_exclude = filterset_class.Meta.form.columns_exclude
-        table_columns = self.get_table().columns
-        initial_columns = [
-            col.name for col in table_columns if col.name not in columns_exclude
-        ]
         kwargs = super().get_filterset_kwargs(filterset_class)
-        data = (kwargs.get("data", QueryDict()) or QueryDict()).copy()
-        if not data.get("columns"):
-            data.setlist("columns", initial_columns)
-            kwargs["data"] = data
+        kwargs["prefix"] = "filterset"
         return kwargs
 
     def get_filterset(self, filterset_class):
         """
-        We override the `get_filterset` method, so we can inject a
-        `columns` selector into the form
+        We override the `get_filterset` method, so we can add a
+        css class to the the selected filters
         """
         filterset = super().get_filterset(filterset_class)
-        columns_exclude = filterset.form.columns_exclude
 
-        # we inject a `columns` selector in the beginning of the form
-        if choices := self._get_columns_choices(columns_exclude):
-            columns = forms.MultipleChoiceField(
-                required=False,
-                choices=choices,
-            )
-            filterset.form.fields = {**{"columns": columns}, **filterset.form.fields}
-        # rebuild the layout, now that the columns field was added
-        filterset.form.helper.layout = filterset.form.helper.build_default_layout(
-            filterset.form
-        )
         # If the filterset form contains form data
         # we add a CSS class to the element wrapping
         # that field in HTML. This CSS class can be
@@ -266,7 +252,8 @@ class List(
             if hasattr(field.widget, "widgets_names"):
                 for widget_name in field.widget.widgets_names:
                     fields[name + widget_name] = name
-        if data := filterset.form.data:
+        if filterset.form.is_valid():
+            data = filterset.form.cleaned_data
             for param in [param for param, value in data.items() if value]:
                 if fieldname := fields.get(param, None):
                     filterset.form.helper[fieldname].wrap(
@@ -289,6 +276,23 @@ class List(
         """
         self.table_pagination = getattr(table, "table_pagination", None)
         return super().get_table_pagination(table)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        table = context.get("table", None)
+        filterset = context.get("filter", None)
+        if table and filterset:
+            columns_exclude = filterset.form.columns_exclude
+            initial_columns = [
+                col.name for col in table.columns if col.name not in columns_exclude
+            ]
+            if choices := self._get_columns_choices(columns_exclude=columns_exclude):
+                context["columns_selector"] = ColumnsSelectorForm(
+                    choices=choices,
+                    initial={"choices": initial_columns},
+                    prefix="choices",
+                )
+        return context
 
 
 class Detail(GenericModelMixin, GenericModelPermissionRequiredMixin, DetailView):
