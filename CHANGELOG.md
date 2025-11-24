@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.57.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.0...v0.57.1) (2025-11-24)
+
+
+### Bug Fixes
+
+* **generic:** override content instead of col in templates ([3484141](https://github.com/acdh-oeaw/apis-core-rdf/commit/348414122e9a2bee98b878302bd617ef9dc05579)), closes [#2218](https://github.com/acdh-oeaw/apis-core-rdf/issues/2218)
+
 ## [0.57.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.56.4...v0.57.0) (2025-10-30)
 
 
