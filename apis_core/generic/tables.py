@@ -103,15 +103,12 @@ class GenericTable(tables.Table):
     and a description column
     """
 
-    edit = EditColumn()
     desc = DescriptionColumn()
-    delete = DeleteColumn()
-    view = ViewColumn()
-    noduplicate = DuplicateColumn()
+    actions = ActionsColumn()
 
     class Meta:
         fields = ["id", "desc"]
-        sequence = ("...", "view", "edit", "delete", "noduplicate")
+        sequence = ("...", "actions")
 
 
 class MoreLessColumn(tables.TemplateColumn):
