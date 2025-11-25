@@ -6,6 +6,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.base import ModelBase
+from django.utils.functional import Promise
+from django.utils.text import format_lazy
+from django.utils.translation import gettext as _
 from model_utils.managers import InheritanceManager
 
 from apis_core.generic.abc import GenericModel
@@ -141,20 +144,21 @@ class Relation(GenericModel, models.Model, metaclass=RelationModelBase):
         return get_by_natural_key(model) if isinstance(model, str) else model
 
     @classmethod
-    def name(cls) -> str:
-        return cls._meta.verbose_name
+    def name(cls) -> Promise:
+        return _(cls._meta.verbose_name)
 
     @classmethod
-    def reverse_name(cls) -> str:
-        return cls._meta.verbose_name + " reverse"
+    def reverse_name(cls) -> Promise:
+        return format_lazy("{} {}", _(cls._meta.verbose_name), _("reverse"))
 
     @classmethod
-    def name_and_reverse_name(cls) -> str:
+    def name_and_reverse_name(cls) -> Promise:
         """
         Return a string with both the name and the reverse name.
 
         If they are identical, return only the name.
         """
-        if cls.name() != cls.reverse_name():
-            return f"{cls.name()} - {cls.reverse_name()}"
+        if str(cls.name()) != str(cls.reverse_name()):
+            return format_lazy("{} - {}", cls.name(), cls.reverse_name())
+
         return cls.name()
