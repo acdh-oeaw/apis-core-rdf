@@ -1,7 +1,6 @@
 import logging
 import re
 
-from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
@@ -19,6 +18,7 @@ from apis_core.generic.signals import (
     pre_import_from,
     pre_merge_with,
 )
+from apis_core.generic.utils import get_autocomplete_data_and_normalized_uri
 from apis_core.utils.settings import apis_base_uri, rdf_namespace_prefix
 
 logger = logging.getLogger(__name__)
@@ -141,7 +141,7 @@ class GenericModel(models.Model):
         matching the URI to a callable taking the URI as an argument.
         This method check if there is a callable defined for this URI.
         """
-        uri = get_normalized_uri(uri)
+        _, uri = get_autocomplete_data_and_normalized_uri(uri)
         for regex, fn in getattr(cls, "import_definitions", {}).items():
             if re.match(regex, uri):
                 return fn
@@ -150,13 +150,22 @@ class GenericModel(models.Model):
     @classmethod
     def fetch_from(cls, uri: str):
         """
-        Fetch data from an URI. Check if there is import logic
-        configured for this URI and if so, use that import logic
-        to fetch the data.
+        Normalize the URI and extract the autocomplete data.
+        Then try to fetch data from an URI:
+        Check if there is import logic configured for this URI and if
+        so, use that import logic to fetch the data.
+        Finally, combine the fetched data and the autocomplete data.
         """
-        uri = get_normalized_uri(uri)
-        if fn := cls.valid_import_url(uri):
-            return fn(uri) or {}
+        logger.debug("Fetch from %s", uri)
+        data, nuri = get_autocomplete_data_and_normalized_uri(uri)
+        if fn := cls.valid_import_url(nuri):
+            fetcheddata = fn(nuri) or {}
+            # merge the two dicts
+            ret = fetcheddata | data
+            # combine values that exist in both dicts
+            for key in set(fetcheddata).intersection(data):
+                ret[key] = fetcheddata[key] + data[key]
+            return ret
         raise ImproperlyConfigured(f"Import not configured for URI {uri}")
 
     @classmethod
@@ -168,11 +177,11 @@ class GenericModel(models.Model):
         might make sense if you still want to create an instance and
         attach the URI to it.
         """
-        uri = get_normalized_uri(uri)
         # we allow other apps to injercept the import
         # whatever they return will be used instead of
         # creating a new object
-        for receiver, response in pre_import_from.send(sender=cls, uri=uri):
+        _, nuri = get_autocomplete_data_and_normalized_uri(uri)
+        for receiver, response in pre_import_from.send(sender=cls, uri=nuri):
             if response:
                 return response
         data = cls.fetch_from(uri) or {}
