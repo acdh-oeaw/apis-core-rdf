@@ -1,0 +1,28 @@
+{% load i18n %}
+<div class="actions-column">
+  {% if record.get_change_permission in perms %}
+    <a title="{% translate "edit" %}"
+       href="{{ record.get_edit_url }}"
+       class="object-edit"><span class="material-symbols-outlined">edit</span></a>
+  {% endif %}
+  {% if record.get_delete_permission in perms %}
+    <a title="{% translate "delete" %}"
+       hx-delete="{{ record.get_api_detail_endpoint }}"
+       hx-confirm="{% blocktranslate %}Are your sure you want to delete {{ record }}?{% endblocktranslate %}"
+       hx-target="closest tr"
+       hx-swap="outerHTML swap:0.3s"
+       href="{{ record.get_delete_url }}"
+       class="object-delete"><span class="material-symbols-outlined">delete</span></a>
+  {% endif %}
+  {% if record.get_view_permission in perms %}
+    <a title="{% translate "view" %}"
+       href="{{ record.get_absolute_url }}"
+       class="object-view"><span class="material-symbols-outlined">visibility</span></a>
+  {% endif %}
+  {% if record.get_add_permission in perms %}
+    <a title="{% translate "duplicate" %}"
+       class="object-duplicate"
+       href="{{ record.get_duplicate_url }}">
+      <span class="material-symbols-outlined">content_copy</span></a>
+  {% endif %}
+</div>
