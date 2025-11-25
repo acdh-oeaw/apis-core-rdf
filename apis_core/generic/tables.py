@@ -44,6 +44,13 @@ class ActionColumn(CustomTemplateColumn):
         return super().render(record, table, *args, **kwargs)
 
 
+class ActionsColumn(CustomTemplateColumn):
+    orderable = False
+    exclude_from_export = True
+    template_name = "columns/actions.html"
+    attrs = {"td": {"style": "width:8em;"}, "th": {"style": "font-size: 0"}}
+
+
 class DeleteColumn(ActionColumn):
     """
     A column showing a delete button
