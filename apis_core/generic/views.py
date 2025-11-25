@@ -212,10 +212,13 @@ class List(
         ]
         # we add any annotated fields to that
         choices += [(key, key) for key in self.get_queryset().query.annotations.keys()]
-        # lets also add the custom table fields
+        # add custom table columns whose names do not match model field names;
+        # this covers columns for extra (non-field) data but also applies to
+        # columns for fields which are set on the table using different names
         choices += [
             (key.name, capfirst(str(key) or key.name or "Nameless column"))
             for key in self.get_table().columns
+            if key.name not in [f[0] for f in choices]
         ]
         # now we drop all the choices that are listed in columns_exclude
         choices = list(filter(lambda x: x[0] not in columns_exclude, choices))
