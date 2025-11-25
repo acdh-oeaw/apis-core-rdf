@@ -44,6 +44,13 @@ class ActionColumn(CustomTemplateColumn):
         return super().render(record, table, *args, **kwargs)
 
 
+class ActionsColumn(CustomTemplateColumn):
+    orderable = False
+    exclude_from_export = True
+    template_name = "columns/actions.html"
+    attrs = {"td": {"style": "width:8em;"}, "th": {"style": "font-size: 0"}}
+
+
 class DeleteColumn(ActionColumn):
     """
     A column showing a delete button
@@ -96,15 +103,12 @@ class GenericTable(tables.Table):
     and a description column
     """
 
-    edit = EditColumn()
     desc = DescriptionColumn()
-    delete = DeleteColumn()
-    view = ViewColumn()
-    noduplicate = DuplicateColumn()
+    actions = ActionsColumn()
 
     class Meta:
         fields = ["id", "desc"]
-        sequence = ("...", "view", "edit", "delete", "noduplicate")
+        sequence = ("...", "actions")
 
 
 class MoreLessColumn(tables.TemplateColumn):
