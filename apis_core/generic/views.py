@@ -31,6 +31,7 @@ from django_tables2.columns import library
 from django_tables2.export.views import ExportMixin
 from django_tables2.tables import table_factory
 
+from apis_core.generic.utils import get_autocomplete_data_and_normalized_uri
 from apis_core.uris.models import Uri
 
 from .filtersets import GenericFilterSet
@@ -585,7 +586,9 @@ class Enrich(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
         self.object = get_object_or_404(self.model, pk=self.kwargs["pk"])
-        self.uri = self.request.GET.get("uri")
+        _, self.uri = get_autocomplete_data_and_normalized_uri(
+            self.request.GET.get("uri")
+        )
         if not self.uri:
             messages.error(self.request, "No uri parameter specified.")
 
@@ -612,7 +615,7 @@ class Enrich(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
         kwargs = super().get_form_kwargs(*args, **kwargs)
         kwargs["instance"] = self.object
         try:
-            self.data = self.model.fetch_from(self.uri)
+            self.data = self.model.fetch_from(self.request.GET.get("uri"))
             kwargs["data"] = self.data
         except ImproperlyConfigured as e:
             messages.error(self.request, e)
