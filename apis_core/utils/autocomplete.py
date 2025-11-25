@@ -1,5 +1,7 @@
+import base64
 import json
 import logging
+from urllib.parse import urlparse
 
 import httpx
 from django.template.loader import render_to_string
@@ -41,6 +43,39 @@ class ExternalAutocompleteAdapter:
 
     def __init__(self, *args, **kwargs):
         self.template = kwargs.get("template", None)
+        self.data_mapping = kwargs.get("data_mapping", {})
+
+    def _nested_get(self, dict_, keys):
+        """
+        Get a nested value from a dict by poviding the
+        path as a list of keys
+        """
+        for index, key in enumerate(keys):
+            if index == len(keys) - 1:
+                return [dict_.get(key, "")]
+            dict_ = dict_.get(key, {})
+
+    def map_data(self, result) -> dict:
+        """
+        Map data from the result to a a new dict. The new dict
+        is built using the settings in `.data_mapping`, which
+        should be a mapping of keys to be created in the result
+        dict to paths in the `result` item.
+        """
+        data = {}
+        for key, val in self.data_mapping.items():
+            if isinstance(val, str):
+                val = [val]
+            data[key] = self._nested_get(result, val)
+        return data
+
+    def add_data_to_uri(self, uri, data):
+        b64_data = base64.b64encode(json.dumps(data).encode()).decode("ascii")
+        if urlparse(uri).query:
+            uri += f"&anero_ac_data={b64_data}"
+        else:
+            uri += f"?anero_ac_data={b64_data}"
+        return uri
 
     def default_template(self, result):
         return f'{result["label"]} <a href="{result["id"]}">{result["id"]}</a>'
@@ -75,8 +110,10 @@ class TypeSenseAutocompleteAdapter(ExternalAutocompleteAdapter):
 
     def extract(self, res):
         if res.get("document"):
+            data = self.map_data(res)
+            uri = self.add_data_to_uri(res["document"]["id"], data)
             return {
-                "id": res["document"]["id"],
+                "id": uri,
                 "text": self.get_result_label(res),
                 "selected_text": self.get_result_label(res),
             }
@@ -130,8 +167,10 @@ class LobidAutocompleteAdapter(ExternalAutocompleteAdapter):
         self.params = kwargs.get("params", {})
 
     def extract(self, res):
+        data = self.map_data(res)
+        uri = self.add_data_to_uri(res["id"], data)
         return {
-            "id": res["id"],
+            "id": uri,
             "text": self.get_result_label(res),
             "selected_text": self.get_result_label(res),
         }
