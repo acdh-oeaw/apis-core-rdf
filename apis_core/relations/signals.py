@@ -88,7 +88,7 @@ def create_relations(sender, instance, created, raw, using, update_fields, **kwa
 
         for related_uri in details["curies"]:
             try:
-                related_instance = related_model.import_from(uri=related_uri)
+                related_instance, errors = related_model.import_from(uri=related_uri)
                 if details.get("obj"):
                     relation_model.objects.create_between_instances(
                         instance, related_instance

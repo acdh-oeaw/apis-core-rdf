@@ -458,7 +458,8 @@ class Autocomplete(
         """
         try:
             URLValidator()(value)
-            return self.queryset.model.import_from(value)
+            instance, errors = self.queryset.model.import_from(value)
+            return instance
         except ValidationError:
             pass
         try:

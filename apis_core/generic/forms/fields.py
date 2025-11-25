@@ -8,7 +8,7 @@ class ModelImportChoiceField(ModelChoiceField):
         result = None
         if value.startswith(("http://", "https://")):
             try:
-                result = self.queryset.model.import_from(value)
+                result, errors = self.queryset.model.import_from(value)
             except Exception as e:
                 raise ValidationError(
                     _("Could not import %(value)s: %(exception)s"),

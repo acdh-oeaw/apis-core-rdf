@@ -160,7 +160,7 @@ class GenericModel(models.Model):
         raise ImproperlyConfigured(f"Import not configured for URI {uri}")
 
     @classmethod
-    def import_from(cls, uri: str, allow_empty: bool = True):
+    def import_from(cls, uri: str, allow_empty: bool = True) -> [object, dict]:
         """
         Fetch data from an URI and create a model instance using
         that data. If the `allow_empty` argument is set, this also
@@ -174,14 +174,14 @@ class GenericModel(models.Model):
         # creating a new object
         for receiver, response in pre_import_from.send(sender=cls, uri=uri):
             if response:
-                return response
+                return response, {}
         data = cls.fetch_from(uri) or {}
         if allow_empty or data:
             instance = cls()
-            instance.import_data(data)
+            errors = instance.import_data(data)
             instance._uris = [data.get("uri", uri)]
             instance.save()
-            return instance
+            return instance, errors
         raise ValueError(f"Could not fetch data to import from {uri}")
 
     def import_from_dict_subset(self, **data) -> dict:
