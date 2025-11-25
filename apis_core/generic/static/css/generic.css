@@ -80,3 +80,42 @@
     --bs-alert-border-color: var(--bs-secondary-border-subtle);
     --bs-alert-link-color: var(--bs-secondary-text-emphasis);
 }
+
+.actions-column {
+    details {
+        position: relative;
+
+        summary {
+            list-style: none;
+            cursor: pointer;
+        }
+
+        summary:hover {
+            font-weight: bold;
+        }
+
+        .details-content {
+            display: block;
+            position: absolute;
+            background: white;
+            border: 1px solid gray;
+            z-index: 100;
+            border-radius: .2em;
+            padding: .3em;
+        }
+
+        .details-content a:hover {
+            filter: brightness(50%);
+        }
+    }
+
+    details[open] summary::before {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        content: "";
+        cursor: default;
+    }
+}
