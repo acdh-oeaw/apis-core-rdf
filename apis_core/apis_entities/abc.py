@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -15,8 +13,6 @@ from apis_core.utils.rdf import load_uri_using_path
 # These abstract base classes are named after
 # CIDOC CRM entities, but we are *NOT*(!)
 # trying to implement CIDOC CRM in Django.
-
-RDF_CONFIG_FOLDER = Path(__file__).parent / "triple_configs"
 
 
 class E21_Person(models.Model):
@@ -49,10 +45,10 @@ class E21_Person(models.Model):
 
     import_definitions = {
         "https://d-nb.info/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, RDF_CONFIG_FOLDER / "E21_PersonFromDNB.toml"
+            x, "triple_configs/E21_PersonFromDNB.toml"
         ),
         "http://www.wikidata.org/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, RDF_CONFIG_FOLDER / "E21_PersonFromWikidata.toml"
+            x, "triple_configs/E21_PersonFromWikidata.toml"
         ),
     }
 
@@ -91,13 +87,13 @@ class E53_Place(models.Model):
 
     import_definitions = {
         "https://d-nb.info/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, RDF_CONFIG_FOLDER / "E53_PlaceFromDNB.toml"
+            x, "triple_configs/E53_PlaceFromDNB.toml"
         ),
         "https://sws.geonames.org/*|/.*.rdf*": lambda x: load_uri_using_path(
-            x, RDF_CONFIG_FOLDER / "E53_PlaceFromGeonames.toml"
+            x, "triple_configs/E53_PlaceFromGeonames.toml"
         ),
         "http://www.wikidata.org/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, RDF_CONFIG_FOLDER / "E53_PlaceFromWikidata.toml"
+            x, "triple_configs/E53_PlaceFromWikidata.toml"
         ),
     }
 
@@ -126,10 +122,10 @@ class E74_Group(models.Model):
 
     import_definitions = {
         "https://d-nb.info/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, RDF_CONFIG_FOLDER / "E74_GroupFromDNB.toml"
+            x, "triple_configs/E74_GroupFromDNB.toml"
         ),
         "http://www.wikidata.org/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, RDF_CONFIG_FOLDER / "E74_GroupFromWikidata.toml"
+            x, "triple_configs/E74_GroupFromWikidata.toml"
         ),
     }
 
