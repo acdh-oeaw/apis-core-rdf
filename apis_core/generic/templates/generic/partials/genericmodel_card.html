@@ -10,7 +10,7 @@
   <div class="card-body">
 
     {% block card-body %}
-      {% template_list object suffix="_card_table.html" as template_list %}
+      {% template_list object prefix="partials/" suffix="_card_table.html" as template_list %}
       {% include template_list %}
     {% endblock card-body %}
 
