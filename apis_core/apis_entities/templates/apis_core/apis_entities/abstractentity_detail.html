@@ -3,7 +3,7 @@
 
 {% block col-zero %}
   <div class="card">
-    {% template_list object suffix="_card_table.html" as template_list %}
+    {% template_list object prefix="partials/" suffix="_card_table.html" as template_list %}
     <div class="card-body">{% include template_list %}</div>
     <div class="card-footer">{% include "apis_entities/partials/linked_open_data.html" %}</div>
   </div>
