@@ -486,7 +486,16 @@ class Import(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
         return modelform_factory(self.model, form_class)
 
     def form_valid(self, form):
-        self.object = form.cleaned_data["url"]
+        """
+        Use the valid URI from the form to create a model instance
+        """
+        uri = form.cleaned_data["uri"]
+        try:
+            self.object, errors = self.model.import_from(uri)
+            for field, error in errors.items():
+                messages.error(self.request, f"Could not import {field}: {error}")
+        except ImproperlyConfigured as e:
+            messages.error(self.request, e)
         return super().form_valid(form)
 
     def get_success_url(self):

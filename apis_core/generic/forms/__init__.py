@@ -15,7 +15,6 @@ from apis_core.core.fields import (
     ApisModelSelect2Multiple,
 )
 from apis_core.generic.abc import GenericModel
-from apis_core.generic.forms.fields import ModelImportChoiceField
 
 logger = logging.getLogger(__name__)
 
@@ -26,17 +25,20 @@ class GenericImportForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["url"] = ModelImportChoiceField(
-            queryset=self.Meta.model.objects.all()
-        )
+        self.fields["uri"] = forms.CharField()
         ct = ContentType.objects.get_for_model(self.Meta.model)
-        url = reverse("apis_core:generic:autocompleteexternalonly", args=[ct])
-        self.fields["url"].widget = ApisModelSelect2(
-            url, attrs={"data-html": True, "data-tags": 1}
-        )
-        self.fields["url"].widget.choices = self.fields["url"].choices
+        uri = reverse("apis_core:generic:autocompleteexternalonly", args=[ct])
+        attrs = {"data-html": True, "data-tags": 1}
+        self.fields["uri"].widget = ApisListSelect2(uri, attrs=attrs)
+        self.fields["uri"].label = "Select or paste URI"
         self.helper = FormHelper()
         self.helper.add_input(Submit("submit", _("Submit")))
+
+    def clean_uri(self):
+        uri = self.cleaned_data["uri"]
+        if self.Meta.model.valid_import_url(uri):
+            return uri
+        raise ValidationError(f"{uri} is not something we can import")
 
 
 class GenericFilterSetForm(forms.Form):
