@@ -13,7 +13,8 @@ class GroupExternalAutocomplete(ExternalAutocomplete):
             params={
                 "filter": "type:CorporateBody",
                 "format": "json:preferredName,geographicAreaCode,dateOfEstablishment,broaderTermInstantial",
-            }
+            },
+            data_mapping={"label": "label"},
         ),
     ]
 
@@ -27,12 +28,14 @@ class PlaceExternalAutocomplete(ExternalAutocomplete):
             ],
             token=os.getenv("TYPESENSE_TOKEN", None),
             server=os.getenv("TYPESENSE_SERVER", None),
+            data_mapping={"label": ["document", "label"]},
         ),
         LobidAutocompleteAdapter(
             params={
                 "filter": "type:PlaceOrGeographicName",
                 "format": "json:preferredName",
-            }
+            },
+            data_mapping={"label": "label"},
         ),
     ]
 
@@ -48,6 +51,7 @@ class PersonExternalAutocomplete(ExternalAutocomplete):
             params={
                 "filter": "type:Person",
                 "format": "json:preferredName,professionOrOccupation",
-            }
+            },
+            data_mapping={"surname": "label"},
         ),
     ]
