@@ -493,6 +493,8 @@ class Import(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
 
     def form_valid(self, form):
         self.object = form.cleaned_data["url"]
+        for field, error in getattr(self.object, "_import_errors").items():
+            messages.error(self.request, f"Could not set {field}: {error}")
         return super().form_valid(form)
 
     def get_success_url(self):
