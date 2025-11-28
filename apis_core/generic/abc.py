@@ -193,7 +193,7 @@ class GenericModel(models.Model):
             return instance
         raise ValueError(f"Could not fetch data to import from {uri}")
 
-    def import_from_dict_subset(self, **data) -> dict:
+    def import_from_dict_subset(self, **data):
         """
         Import attributes of this instance from data in a dict.
         We iterate through the individual values of the dict and
@@ -202,7 +202,7 @@ class GenericModel(models.Model):
         the value validates. If it does not validate, we return
         the validation error in the errors dict.
         """
-        errors = {}
+        self._import_errors = {}
         if data:
             for field in self._meta.fields:
                 if data.get(field.name, False):
@@ -213,14 +213,13 @@ class GenericModel(models.Model):
                         logger.info(
                             "Could not set %s on %s: %s", field.name, str(self), str(e)
                         )
-                        errors[field.name] = str(e)
+                        self._import_errors[field.name] = str(e)
                     else:
                         setattr(self, field.name, value)
             self.save()
-        return errors
 
-    def import_data(self, data) -> dict:
-        return self.import_from_dict_subset(**data)
+    def import_data(self, data):
+        self.import_from_dict_subset(**data)
 
     def get_merge_charfield_value(self, other: CharField, field: CharField):
         res = getattr(self, field.name)
