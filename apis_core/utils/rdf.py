@@ -124,8 +124,12 @@ def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
 def load_uri_using_path(uri, configfile: Path) -> dict:
     uri = get_normalized_uri(uri)
     graph = Graph()
+    # workaround for a bug in d-nb: with the default list of accept
+    # headers of rdflib, d-nb sometimes returns json-ld and sometimes turtle
+    # with json-ld, rdflib has problems finding the namespaces
+    format = "turtle" if uri.startswith("https://d-nb.info/gnd/") else None
     try:
-        graph.parse(uri)
+        graph.parse(uri, format=format)
     except ParserError as e:
         logger.info(e)
 
