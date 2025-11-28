@@ -486,6 +486,8 @@ class Import(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
 
     def form_valid(self, form):
         self.object = form.cleaned_data["url"]
+        for field, error in getattr(self.object, "_import_errors").items():
+            messages.error(self.request, f"Could not set {field}: {error}")
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -627,8 +629,8 @@ class Enrich(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
                 data[key] = self.data[key]
         data["same_as"] = [self.uri] + data.get("same_as", [])
         if data:
-            errors = self.object.import_data(data)
-            for field, error in errors.items():
+            self.object.import_data(data)
+            for field, error in getattr(self.object, "_import_errors").items():
                 messages.error(self.request, f"Could not update {field}: {error}")
         messages.info(self.request, f"Updated fields {data.keys()}")
         return super().form_valid(form)
