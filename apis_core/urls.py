@@ -24,6 +24,9 @@ urlpatterns = [
 
 router = CustomDefaultRouter()
 
+if "apis_core.entities" in settings.INSTALLED_APPS:
+    urlpatterns.append(path("", include("apis_core.entities.urls")))
+
 
 if "apis_core.uri" in settings.INSTALLED_APPS:
     from apis_core.uri.urls import router as apis_uris_router
