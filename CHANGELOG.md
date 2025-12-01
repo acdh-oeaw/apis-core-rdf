@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.57.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.2...v0.57.3) (2025-12-01)
+
+
+### Bug Fixes
+
+* **utils:** implement workaround for gnd problem in rdf parsing ([cf48249](https://github.com/acdh-oeaw/apis-core-rdf/commit/cf48249ea123de67711d65cbc84bd91e78c390c5))
+
 ## [0.57.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.1...v0.57.2) (2025-11-24)
 
 
