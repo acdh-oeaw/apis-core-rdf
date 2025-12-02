@@ -178,9 +178,9 @@ class GenericModel(models.Model):
         data = cls.fetch_from(uri) or {}
         if allow_empty or data:
             instance = cls()
-            instance.import_data(data)
             instance._uris = [data.get("uri", uri)]
             instance.save()
+            instance.import_data(data)
             return instance
         raise ValueError(f"Could not fetch data to import from {uri}")
 
