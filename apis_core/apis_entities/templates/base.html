@@ -4,22 +4,25 @@
 
 {% block main-menu %}
   {{ block.super }}
-  <li class="nav-item dropdown">
-    <a href="#"
-       class="nav-link dropdown-toggle"
-       data-bs-toggle="dropdown"
-       role="button"
-       aria-haspopup="true"
-       aria-expanded="false">
-      {% translate "Entities" %}
-      <span class="caret" />
-    </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-      {% entities_content_types as content_types %}
-      {% for content_type in content_types|dictsort:"name" %}
-        <a class="dropdown-item"
-           href="{{ content_type.model_class.get_listview_url }}">{{ content_type.model_class.get_verbose_name_plural|capfirst }}</a>
-      {% endfor %}
-    </div>
-  </li>
+
+  {% block entities-menu %}
+    <li class="nav-item dropdown">
+      <a href="#"
+         class="nav-link dropdown-toggle"
+         data-bs-toggle="dropdown"
+         role="button"
+         aria-haspopup="true"
+         aria-expanded="false">
+        {% translate "Entities" %}
+        <span class="caret" />
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        {% entities_content_types as content_types %}
+        {% for content_type in content_types|dictsort:"name" %}
+          <a class="dropdown-item"
+             href="{{ content_type.model_class.get_listview_url }}">{{ content_type.model_class.get_verbose_name_plural|capfirst }}</a>
+        {% endfor %}
+      </div>
+    </li>
+  {% endblock entities-menu %}
 {% endblock main-menu %}
