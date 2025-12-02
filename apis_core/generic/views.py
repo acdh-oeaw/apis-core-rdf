@@ -11,6 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.validators import URLValidator
+from django.db import transaction
 from django.db.models.fields.related import ManyToManyRel
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
@@ -470,7 +471,8 @@ class Autocomplete(
 
     def post(self, request, *args, **kwargs):
         try:
-            return super().post(request, *args, **kwargs)
+            with transaction.atomic():
+                return super().post(request, *args, **kwargs)
         except Exception as e:
             return http.JsonResponse({"error": str(e)})
 
