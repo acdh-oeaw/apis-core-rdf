@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.57.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.3...v0.57.4) (2025-12-02)
+
+
+### Bug Fixes
+
+* **generic:** make the whole autocomplete post atomic ([6e760a9](https://github.com/acdh-oeaw/apis-core-rdf/commit/6e760a91341bb94d4d91ddcfbbef142d108c9bff))
+* **generic:** set the import uri before importing further data ([a996045](https://github.com/acdh-oeaw/apis-core-rdf/commit/a996045c090e5d05af80956b68ca3ad89c11aa04))
+
 ## [0.57.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.2...v0.57.3) (2025-12-01)
 
 
