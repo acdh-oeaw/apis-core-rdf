@@ -1,3 +1,5 @@
+import logging
+import traceback
 from collections import namedtuple
 from copy import copy
 
@@ -51,6 +53,8 @@ from .helpers import (
     template_names_via_mro,
 )
 from .tables import GenericTable
+
+logger = logging.getLogger(__name__)
 
 
 class Overview(TemplateView):
@@ -479,6 +483,7 @@ class Autocomplete(
             with transaction.atomic():
                 return super().post(request, *args, **kwargs)
         except Exception as e:
+            logger.debug(traceback.format_exc())
             return http.JsonResponse({"error": str(e)})
 
 
