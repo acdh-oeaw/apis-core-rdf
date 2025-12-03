@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.58.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.58.0...v0.58.1) (2025-12-03)
+
+
+### Bug Fixes
+
+* **generic:** fallback to empty dict if `_import_errors` not set ([948361d](https://github.com/acdh-oeaw/apis-core-rdf/commit/948361ddf6a1d77cce3f12f2013bfe720ff0066b))
+* **generic:** use nur instead of uri when setting the import uri ([b1459ba](https://github.com/acdh-oeaw/apis-core-rdf/commit/b1459baaf187f830969695f25ad5d3b1048a92ea))
+
 ## [0.58.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.4...v0.58.0) (2025-12-03)
 
 
