@@ -1,5 +1,43 @@
 # Changelog
 
+## [0.58.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.4...v0.58.0) (2025-12-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **utils:** drop TokenAuthSupportQueryString
+* **history:** drop history serializers
+* **history:** drop history API views
+* **generic:** the `apis_core/generic/genericmodel_card*.html` templates were moved to `generic/partials/genericmodel_card*.html`. If you extend from them, you'll have to update your templates.
+
+### Features
+
+* **apis_entities:** include triple_configs as templates ([d255931](https://github.com/acdh-oeaw/apis-core-rdf/commit/d255931fcf1d7ddeeee0e9072a8a7b88a8a6a3fb))
+* **apis_entities:** restore entities menu block wrapper ([56b52cc](https://github.com/acdh-oeaw/apis-core-rdf/commit/56b52ccc0a1b722165bb05f47f79a0826887328b))
+* **apis_entities:** switch triple configs to triple "template" configs ([2f88df0](https://github.com/acdh-oeaw/apis-core-rdf/commit/2f88df04aa84ce7ffbea5d4de4be30e42acb046a))
+* **generic:** add basic logging to generic views ([6106658](https://github.com/acdh-oeaw/apis-core-rdf/commit/6106658d5696f769d4d9daf40d392d61f65cbdf8))
+* **generic:** allow to pass additional data to import URIs ([b1b8200](https://github.com/acdh-oeaw/apis-core-rdf/commit/b1b82008d0f8bdf61c5f8b7ebf8823ae44c9669a))
+* **generic:** set error messages if there were errors during import ([7255e05](https://github.com/acdh-oeaw/apis-core-rdf/commit/7255e054243ff13357f8238a811cb2c148ea12f7))
+* **sample_project:** define a data_mapping argument for autocompletes ([bc0e564](https://github.com/acdh-oeaw/apis-core-rdf/commit/bc0e564bd0fbe42ae40322faa3b8505c8bad5487))
+* **utils:** allow ExternalAutocompleteAdapter to append data to URI ([31b73c9](https://github.com/acdh-oeaw/apis-core-rdf/commit/31b73c9d81c9467f3265f1dd108f9dba52d682d7))
+* **utils:** try to load the import config from templates ([9ea72d5](https://github.com/acdh-oeaw/apis-core-rdf/commit/9ea72d51835ae8020bac814bd94165ca0e52f43f)), closes [#2179](https://github.com/acdh-oeaw/apis-core-rdf/issues/2179)
+
+
+### Bug Fixes
+
+* **apis_entities:** add argument to templatetag to reflect new path ([0d1e0b6](https://github.com/acdh-oeaw/apis-core-rdf/commit/0d1e0b69b795310cce7469024640365a17fc04cb))
+* **apis_entities:** use heading only where relevant ([a1362c7](https://github.com/acdh-oeaw/apis-core-rdf/commit/a1362c7b5a00953ff59fdce8a6f3122364400581)), closes [#2120](https://github.com/acdh-oeaw/apis-core-rdf/issues/2120)
+* **generic:** add argument to templatetag to reflect new path ([eac79d5](https://github.com/acdh-oeaw/apis-core-rdf/commit/eac79d55ee3e5fab9089ef027c6b3b0e5503e6eb))
+* **history:** add argument to templatetag to reflect new path ([1a40780](https://github.com/acdh-oeaw/apis-core-rdf/commit/1a4078015ca93394ff8c88205a7febce6d6626a1))
+
+
+### Code Refactoring
+
+* **generic:** move template files to generic folder ([8756e2d](https://github.com/acdh-oeaw/apis-core-rdf/commit/8756e2d40a8ce716127a8915a1ab91db810d5baa))
+* **history:** drop history API views ([afb4538](https://github.com/acdh-oeaw/apis-core-rdf/commit/afb45388ffddfe16ae8274111e42960c460c7896)), closes [#2189](https://github.com/acdh-oeaw/apis-core-rdf/issues/2189)
+* **history:** drop history serializers ([51a4b6f](https://github.com/acdh-oeaw/apis-core-rdf/commit/51a4b6f78ddde8b26268896fc27a28027bb9bb1c))
+* **utils:** drop TokenAuthSupportQueryString ([e52d123](https://github.com/acdh-oeaw/apis-core-rdf/commit/e52d1235a0c5a563223048710b6299e5153c1aec)), closes [#2216](https://github.com/acdh-oeaw/apis-core-rdf/issues/2216)
+
 ## [0.57.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.57.3...v0.57.4) (2025-12-02)
 
 
