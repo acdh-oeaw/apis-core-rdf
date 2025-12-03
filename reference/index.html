@@ -3034,7 +3034,7 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fetch_from</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">allow_empty</span> <span class="ow">or</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
-            <span class="n">instance</span><span class="o">.</span><span class="n">_uris</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">uri</span><span class="p">)]</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">_uris</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">nuri</span><span class="p">)]</span>
             <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="n">instance</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">instance</span>
@@ -3422,7 +3422,7 @@ attach the URI to it.</p>
     <span class="n">data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fetch_from</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">allow_empty</span> <span class="ow">or</span> <span class="n">data</span><span class="p">:</span>
         <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
-        <span class="n">instance</span><span class="o">.</span><span class="n">_uris</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">uri</span><span class="p">)]</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">_uris</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">nuri</span><span class="p">)]</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">instance</span>
