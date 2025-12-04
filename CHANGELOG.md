@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.58.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.58.1...v0.58.2) (2025-12-04)
+
+
+### Bug Fixes
+
+* **apis_entities:** fix typo in E74_GroupFromDNB config ([46f0943](https://github.com/acdh-oeaw/apis-core-rdf/commit/46f0943196c1d3dd5b8888a3cd6c6e0bd401ff0b)), closes [#2245](https://github.com/acdh-oeaw/apis-core-rdf/issues/2245)
+
 ## [0.58.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.58.0...v0.58.1) (2025-12-03)
 
 
