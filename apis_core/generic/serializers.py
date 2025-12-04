@@ -25,7 +25,7 @@ class GenericHyperlinkedRelatedField(HyperlinkedRelatedField):
         contenttype = ContentType.objects.get_for_model(obj, for_concrete_model=True)
         url_kwargs = {"contenttype": contenttype, "pk": obj.pk}
         return reverse(
-            "apis_core:generic:genericmodelapi-detail",
+            "generic:genericmodelapi-detail",
             kwargs=url_kwargs,
             request=request,
             format=format,
@@ -80,9 +80,7 @@ class ContentTypeInstanceSerializer(Serializer):
 
 
 class SimpleObjectSerializer(Serializer):
-    url = GenericHyperlinkedIdentityField(
-        view_name="apis_core:generic:genericmodelapi-detail"
-    )
+    url = GenericHyperlinkedIdentityField(view_name="generic:genericmodelapi-detail")
     label = SerializerMethodField()
     content_type_key = SerializerMethodField()
     content_type_name = SerializerMethodField()

@@ -13,8 +13,6 @@ from drf_spectacular.views import (
 
 from apis_core.generic.routers import CustomDefaultRouter
 
-app_name = "apis_core"
-
 urlpatterns = [
     path("", include("apis_core.core.urls")),
     path("", include("apis_core.generic.urls")),
@@ -62,14 +60,14 @@ urlpatterns.append(path("swagger/schema/", SpectacularAPIView.as_view(), name="s
 urlpatterns.append(
     path(
         "swagger/schema/swagger-ui/",
-        SpectacularSwaggerView.as_view(url_name="apis_core:schema"),
+        SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     )
 )
 urlpatterns.append(
     path(
         "swagger/schema/redoc/",
-        SpectacularRedocView.as_view(url_name="apis_core:schema"),
+        SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     )
 )

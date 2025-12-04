@@ -43,7 +43,7 @@ class GenericImportForm(forms.Form):
             queryset=self.Meta.model.objects.all()
         )
         ct = ContentType.objects.get_for_model(self.Meta.model)
-        url = reverse("apis_core:generic:autocompleteexternalonly", args=[ct])
+        url = reverse("generic:autocompleteexternalonly", args=[ct])
         self.fields["url"].widget = ApisModelSelect2(
             url, attrs={"data-html": True, "data-tags": 1}
         )
@@ -111,7 +111,7 @@ class GenericModelForm(forms.ModelForm):
                     self.fields[field]._queryset.model
                 )
                 if issubclass(ct.model_class(), GenericModel):
-                    url = reverse("apis_core:generic:autocomplete", args=[ct])
+                    url = reverse("generic:autocomplete", args=[ct])
                     self.fields[field].widget = override_fieldtypes[clsname](
                         url, attrs={"data-html": True}
                     )
@@ -144,7 +144,7 @@ class GenericSelectMergeOrEnrichForm(forms.Form):
             self.content_type = kwargs.pop("content_type")
         super().__init__(*args, **kwargs)
         self.fields["uri"] = forms.CharField()
-        uri = reverse("apis_core:generic:autocomplete", args=[self.content_type])
+        uri = reverse("generic:autocomplete", args=[self.content_type])
         attrs = {"data-html": True, "data-tags": 1}
         self.fields["uri"].widget = ApisListSelect2(uri, attrs=attrs)
         self.fields["uri"].label = "Select or paste URI"

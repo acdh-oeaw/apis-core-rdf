@@ -49,11 +49,11 @@ class APISHistoryTableBase(GenericModel, models.Model):
 
     def get_absolute_url(self):
         ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:generic:detail", args=[ct, self.history_id])
+        return reverse("generic:detail", args=[ct, self.history_id])
 
     def get_reset_url(self):
         ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:history:reset", args=[ct, self.history_id])
+        return reverse("history:reset", args=[ct, self.history_id])
 
     def get_diff(self, other_version=None):
         if self.history_type == "-":
@@ -109,7 +109,7 @@ class VersionMixin(models.Model):
 
     def get_history_url(self):
         ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:history:history", args=[ct, self.id])
+        return reverse("history:history", args=[ct, self.id])
 
     def _get_historical_relations(self):
         ret = set()
