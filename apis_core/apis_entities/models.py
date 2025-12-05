@@ -6,7 +6,8 @@ from collections import defaultdict
 from django.apps import apps
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Case, CharField, F, Q, Value, When
+from django.contrib.postgres.expressions import ArraySubquery, Subquery
+from django.db.models import Case, CharField, Count, F, OuterRef, Q, Value, When
 from django.db.models.base import ModelBase
 from django.db.models.functions import Concat
 from django.urls import NoReverseMatch, reverse
@@ -126,7 +127,7 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
 
     @classmethod
     def get_facets(cls, queryset):
-        facets = defaultdict(dict)
+        facets = {}
         if getattr(cls, "enable_facets", False):
             my_content_type = ContentType.objects.get_for_model(queryset.model)
 
@@ -135,7 +136,11 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
             # so we store those in `target_id` and `target_content_type`
             query_filter = Q(
                 subj_content_type=my_content_type, subj_object_id__in=queryset
-            ) | Q(obj_content_type=my_content_type, obj_object_id__in=queryset)
+            ) | Q(
+                Q(obj_content_type=my_content_type, obj_object_id__in=queryset),
+                ~Q(subj_content_type=my_content_type),
+            )
+
             rels = (
                 Relation.objects.to_content_type_with_targets(my_content_type).values(
                     "target_id", "target_content_type"
@@ -144,7 +149,6 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
 
             # we use the ids to get a the labels of the targets
             # and we store those in an id: label dict
-            target_ids = [rel["target_id"] for rel in rels]
             entity_classes = list(
                 filter(lambda x: issubclass(x, AbstractEntity), apps.get_models())
             )
@@ -158,25 +162,17 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
                 for cls in entity_classes
             ]
             identifiers = (
-                RootObject.objects_inheritance.filter(id__in=target_ids)
+                RootObject.objects_inheritance.filter(id=OuterRef("target_id"))
                 .select_subclasses()
                 .annotate(label=Case(*when_clauses_classes))
-                .values("pk", "label")
+                .values("label")
             )
-
-            identifiers = {item["pk"]: item["label"] for item in identifiers}
-
-            for rel in rels:
-                _id = rel["target_id"]
-                content_type = rel["target_content_type"]
-                facetname = (
-                    "relation_to_" + ContentType.objects.get_for_id(content_type).name
+            rels = rels.annotate(label=Subquery(identifiers))
+            for cls in entity_classes:
+                ct = ContentType.objects.get_for_model(cls)
+                facets[ct.name] = list(
+                    rels.filter(target_content_type=ct.id)
+                    .annotate(count=Count("target_id"))
+                    .values("target_id", "label", "count")
                 )
-                if _id in facets[facetname]:
-                    facets[facetname][_id]["count"] += 1
-                else:
-                    facets[facetname][_id] = {
-                        "count": 1,
-                        "name": identifiers.get(_id, "Unknown"),
-                    }
         return facets
