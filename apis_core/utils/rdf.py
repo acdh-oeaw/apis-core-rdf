@@ -127,7 +127,7 @@ def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
     return list(dict.fromkeys(values))
 
 
-def load_uri_using_path(uri, configfile: Path) -> dict:
+def load_uri_using_path(uri, configfile: Path | str) -> dict:
     uri = get_normalized_uri(uri)
     graph = Graph()
     # workaround for a bug in d-nb: with the default list of accept
