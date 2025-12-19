@@ -124,7 +124,7 @@ def any_view_permission(context, content_types):
 
 
 @register.simple_tag
-def content_types_by_natural_keys(natural_keys: tuple() = ()) -> [ContentType]:
+def content_types_by_natural_keys(natural_keys: tuple = ()) -> list[ContentType]:
     """
     Convert a list of natural keys to a list of ContentType models
     If any of the natural keys does not refer to an existing model, raise a 404
@@ -138,7 +138,7 @@ def content_types_by_natural_keys(natural_keys: tuple() = ()) -> [ContentType]:
 
 
 @register.simple_tag
-def natural_keys_by_content_types(content_types: tuple() = ()) -> [str]:
+def natural_keys_by_content_types(content_types: tuple = ()) -> list[str]:
     """
     Convert a list of ContentType models to their natural key
     """
@@ -149,16 +149,16 @@ def natural_keys_by_content_types(content_types: tuple() = ()) -> [str]:
 
 
 @register.filter
-def split(string: str = "", delimiter=",") -> [str]:
+def split(string: str = "", delimiter=",") -> list[str]:
     """
     Split a string by a specific delimiter and also strip the string of
     leading and trailing whitespaces.
     """
-    return map(str.strip, string.split(delimiter))
+    return list(map(str.strip, string.split(delimiter)))
 
 
 @register.simple_tag
-def model_field_template_lookup_list(model, field, suffix="") -> [str]:
+def model_field_template_lookup_list(model, field, suffix="") -> list[str]:
     """
     generate a template path based on the modelname, the fieldname and
     the suffix. return a list with this template path and a fallback
