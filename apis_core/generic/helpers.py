@@ -96,7 +96,7 @@ def permission_fullname(action: str, model: object) -> str:
 
 
 @functools.lru_cache
-def module_paths(model, path: str = "", suffix: str = "") -> list:
+def module_paths(model, path: str = "", suffix: str = "") -> tuple:
     paths = list(map(lambda x: x[:-1] + [path] + x[-1:], mro_paths(model)))
     prepends = []
     for prepend in getattr(settings, "ADDITIONAL_MODULE_LOOKUP_PATHS", []):
@@ -135,7 +135,7 @@ def first_member_match(dotted_path_list: tuple[str], fallback=None) -> object:
     return result or fallback
 
 
-def split_and_strip_parameter(params: [str]) -> [str]:
+def split_and_strip_parameter(params: list[str]) -> list[str]:
     """
     Clean a URI param list type
     This method iterates through a list of strings. It looks if
