@@ -1,6 +1,5 @@
 import functools
 import logging
-import re
 from collections import defaultdict
 
 from django.apps import apps
@@ -49,24 +48,6 @@ class AbstractEntity(RootObject, metaclass=AbstractEntityModelBase):
 
     class Meta:
         abstract = True
-
-    @classmethod
-    def get_or_create_uri(cls, uri):
-        uri = str(uri)
-        try:
-            if re.match(r"^[0-9]*$", uri):
-                p = cls.objects.get(pk=uri)
-            else:
-                p = cls.objects.get(uri__uri=uri)
-            return p
-        except Exception as e:
-            print("Found no object corresponding to given uri." + e)
-            return False
-
-    # TODO
-    @classmethod
-    def get_entity_list_filter(cls):
-        return None
 
     @functools.cached_property
     def get_prev_id(self):
