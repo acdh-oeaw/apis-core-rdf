@@ -8,9 +8,9 @@ from apis_core.apis_entities.utils import get_entity_content_types
 
 
 class Datamodel:
-    entities: [object]
-    relations: [object] = []
-    graph: dict() = {}
+    entities: list[object]
+    relations: list[object] = []
+    graph: dict = {}
 
     def __init__(self):
         self.entities = get_entity_content_types()
