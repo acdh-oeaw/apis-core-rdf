@@ -18,6 +18,7 @@ app_name = "apis_core"
 urlpatterns = [
     path("", include("apis_core.core.urls")),
     path("", include("apis_core.generic.urls")),
+    path("", include("apis_core.entities.urls")),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
 ]
