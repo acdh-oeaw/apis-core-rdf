@@ -60,3 +60,12 @@ class LivesIn(Relation):
     @classmethod
     def reverse_name(self) -> str:
         return "has inhabitant"
+
+
+class IsParentOf(Relation):
+    subj_model = Person
+    obj_model = Person
+
+    @classmethod
+    def reverse_name(self) -> str:
+        return "is child of"
