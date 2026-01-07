@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.59.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.58.2...v0.59.0) (2026-01-07)
+
+
+### Features
+
+* **apis_entities:** add a `get_facets` method to AbstractEntity ([a536dc3](https://github.com/acdh-oeaw/apis-core-rdf/commit/a536dc36d2082e286756d8c467f3c706a46bea9c))
+* **generic:** introduce the InjectFacetsLimitOffsetPagination class ([dbf8b3e](https://github.com/acdh-oeaw/apis-core-rdf/commit/dbf8b3ede9070e76938979c6913483c5f24cefb2))
+* **relations:** introduce `to_content_type_with_targets` manager method ([c3c7aea](https://github.com/acdh-oeaw/apis-core-rdf/commit/c3c7aea0424bca49f9a40adc7dec5b61b1ce7f2a))
+* **sample_project:** add more data ([8845e3b](https://github.com/acdh-oeaw/apis-core-rdf/commit/8845e3b1cfd8616ed6ceb67ef24c87b38539c22f))
+* **sample_project:** add parent/child relation ([bae3a26](https://github.com/acdh-oeaw/apis-core-rdf/commit/bae3a263f7363cd834a4df5d2544a0517586044e))
+
 ## [0.58.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.58.1...v0.58.2) (2025-12-04)
 
 
