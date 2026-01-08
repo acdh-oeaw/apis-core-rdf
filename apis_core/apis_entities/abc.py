@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
+from apis_core.apis_entities.rdfconfigs import group, person, place
 from apis_core.generic.utils.rdf_namespace import CRM
 from apis_core.utils.rdf import load_uri_using_path
 
@@ -45,10 +46,10 @@ class E21_Person(models.Model):
 
     import_definitions = {
         "https://d-nb.info/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, "triple_configs/E21_PersonFromDNB.toml"
+            x, person.E21_PersonFromDNB
         ),
         "http://www.wikidata.org/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, "triple_configs/E21_PersonFromWikidata.toml"
+            x, person.E21_PersonFromWikidata
         ),
     }
 
@@ -87,13 +88,13 @@ class E53_Place(models.Model):
 
     import_definitions = {
         "https://d-nb.info/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, "triple_configs/E53_PlaceFromDNB.toml"
+            x, place.E53_PlaceFromDNB
         ),
         "https://sws.geonames.org/*|/.*.rdf*": lambda x: load_uri_using_path(
-            x, "triple_configs/E53_PlaceFromGeonames.toml"
+            x, place.E53_PlaceFromGeonames
         ),
         "http://www.wikidata.org/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, "triple_configs/E53_PlaceFromWikidata.toml"
+            x, place.E53_PlaceFromWikidata
         ),
     }
 
@@ -122,10 +123,10 @@ class E74_Group(models.Model):
 
     import_definitions = {
         "https://d-nb.info/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, "triple_configs/E74_GroupFromDNB.toml"
+            x, group.E74_GroupFromDNB
         ),
         "http://www.wikidata.org/*|/.*.rdf": lambda x: load_uri_using_path(
-            x, "triple_configs/E74_GroupFromWikidata.toml"
+            x, group.E74_GroupFromWikidata
         ),
     }
 
