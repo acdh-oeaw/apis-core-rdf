@@ -17,6 +17,7 @@ from django.db import transaction
 from django.db.models.fields.related import ManyToManyRel
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
+from django.http import QueryDict
 from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
@@ -147,6 +148,28 @@ class List(
 
     template_name_suffix = "_list"
     permission_action_required = "view"
+
+    def setup(self, *args, **kwargs):
+        super().setup(*args, **kwargs)
+        content_type = ContentType.objects.get_for_model(self.model)
+        self.cookie_name = f"{content_type.app_label}.{content_type.model}-list"
+        cookie = QueryDict(self.request.COOKIES.get(self.cookie_name, ""))
+        get = self.request.GET.copy()
+        for prefix in ["filterset", "choices"]:
+            id_ = f"{prefix}-remember"
+            passed_prefix = any([prefix in key for key in self.request.GET.keys()])
+            use_cookie = cookie.get(id_, False) and not passed_prefix
+            if use_cookie:
+                for key in [key for key in cookie if key.startswith(prefix)]:
+                    get.setlist(key, cookie.getlist(key))
+        if "sort" not in get.keys() and "sort" in cookie.keys():
+            get["sort"] = cookie.get("sort")
+        self.request.GET = get
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        response.set_cookie(self.cookie_name, self.request.GET.urlencode())
+        return response
 
     def get_table_class(self):
         table_modules = module_paths(self.model, path="tables", suffix="Table")
@@ -287,16 +310,25 @@ class List(
         context = super().get_context_data(*args, **kwargs)
         table = context.get("table", None)
         filterset = context.get("filter", None)
+        context["filterset_remember"] = (
+            self.request.GET.get("filterset-remember", "") == "on"
+        )
         if table and filterset:
             columns_exclude = filterset.form.columns_exclude
             initial_columns = [
                 col.name for col in table.columns if col.name not in columns_exclude
             ]
+            data = (
+                self.request.GET
+                if any(["choices" in key for key in self.request.GET.keys()])
+                else None
+            )
             if choices := self._get_columns_choices(columns_exclude=columns_exclude):
                 context["columns_selector"] = ColumnsSelectorForm(
                     choices=choices,
                     initial={"choices": initial_columns},
                     prefix="choices",
+                    data=data,
                 )
         return context
 

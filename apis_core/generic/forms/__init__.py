@@ -21,13 +21,15 @@ logger = logging.getLogger(__name__)
 
 
 class ColumnsSelectorForm(forms.Form):
+    columns = forms.MultipleChoiceField(required=False)
+    remember = forms.BooleanField(required=False, label="Remember columns settings")
+
     def __init__(self, *args, **kwargs):
         choices = kwargs.pop("choices", [])
         super().__init__(*args, **kwargs)
         initial = kwargs.get("initial", {}).get("choices", [])
-        self.fields["columns"] = forms.MultipleChoiceField(
-            required=False, choices=choices, initial=initial
-        )
+        self.fields["columns"].choices = choices
+        self.fields["columns"].initial = initial
         self.helper = FormHelper()
         self.helper.form_method = "GET"
         self.helper.form_tag = False
