@@ -1,10 +1,13 @@
 # SPDX-FileCopyrightText: 2025 Birger Schacht
 # SPDX-License-Identifier: MIT
 
+import inspect
 import logging
 import tomllib
 from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Dict, List, Tuple, Union
 
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.template.exceptions import TemplateDoesNotExist
@@ -14,6 +17,22 @@ from rdflib import RDF, BNode, Graph, URIRef
 from rdflib.exceptions import ParserError
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class Attribute:
+    value: Union[str | list[str]]
+
+
+@dataclass
+class Relation:
+    name: str
+    value: Dict[str, str]
+
+
+@dataclass
+class Filter:
+    value: List[Tuple[str:str]]
 
 
 def resolve(obj, graph):
@@ -61,11 +80,25 @@ def graph_matches_config(graph: Graph, configfile: Path) -> dict:
     graph and if so, return the config as dict. Otherwise
     return False
     """
-    config = load_path(configfile)
-    for _filter in config.get("filters", [{None: None}]):
+    if inspect.isclass(configfile):
+        config = {"relations": {}, "filters": [], "attributes": {}}
+        for key in [att for att in dir(configfile) if not att.startswith("__")]:
+            value = getattr(configfile, key)
+            match value:
+                case Filter():
+                    config["filters"].append(value.value)
+                case Attribute():
+                    config["attributes"][key.lower()] = value.value
+                case Relation():
+                    config["relations"][value.name] = value.value
+    else:
+        config = load_path(configfile)
+    for _filter in config.get("filters", [[(None, None)]]):
+        if isinstance(_filter, dict):
+            _filter = _filter.items()
         try:
             triples = []
-            for predicate, obj in _filter.items():
+            for predicate, obj in _filter:
                 triples.append((None, resolve(predicate, graph), resolve(obj, graph)))
             triples = [triple in graph for triple in triples]
             if all(triples):
@@ -108,6 +141,8 @@ def build_sparql_query(curie: str) -> str:
 
 def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
     values = []
+    if curies is None:
+        return []
     if isinstance(curies, str):
         curies = [curies]
     for curie in curies:
