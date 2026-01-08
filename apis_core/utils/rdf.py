@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025 Birger Schacht
 # SPDX-License-Identifier: MIT
 
+import inspect
 import logging
 import tomllib
 from collections import defaultdict
@@ -61,7 +62,18 @@ def graph_matches_config(graph: Graph, configfile: Path) -> dict:
     graph and if so, return the config as dict. Otherwise
     return False
     """
-    config = load_path(configfile)
+    if inspect.isclass(configfile):
+        config = {}
+        for key in [att for att in dir(configfile) if not att.startswith("__")]:
+            value = getattr(configfile, key)
+            try:
+                config[key.lower()] = {
+                    k: v for k, v in vars(value).items() if not k.startswith("__")
+                }
+            except Exception:
+                config[key.lower()] = value
+    else:
+        config = load_path(configfile)
     for _filter in config.get("filters", [{None: None}]):
         try:
             triples = []
@@ -108,6 +120,8 @@ def build_sparql_query(curie: str) -> str:
 
 def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
     values = []
+    if curies is None:
+        return []
     if isinstance(curies, str):
         curies = [curies]
     for curie in curies:
