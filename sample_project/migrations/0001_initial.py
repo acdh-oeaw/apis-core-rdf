@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("apis_metainfo", "0012_remove_rootobject_deprecated_name"),
+        ("entities", "0001_initial"),
         ("contenttypes", "0002_remove_content_type_name"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
@@ -20,14 +20,14 @@ class Migration(migrations.Migration):
             name="Group",
             fields=[
                 (
-                    "rootobject_ptr",
+                    "entity_ptr",
                     models.OneToOneField(
                         auto_created=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         parent_link=True,
                         primary_key=True,
                         serialize=False,
-                        to="apis_metainfo.rootobject",
+                        to="entities.entity",
                     ),
                 ),
                 ("label", models.CharField(blank=True, default="", max_length=4096)),
@@ -35,20 +35,20 @@ class Migration(migrations.Migration):
             options={
                 "abstract": False,
             },
-            bases=("apis_metainfo.rootobject", models.Model),
+            bases=("entities.entity", models.Model),
         ),
         migrations.CreateModel(
             name="Place",
             fields=[
                 (
-                    "rootobject_ptr",
+                    "entity_ptr",
                     models.OneToOneField(
                         auto_created=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         parent_link=True,
                         primary_key=True,
                         serialize=False,
-                        to="apis_metainfo.rootobject",
+                        to="entities.entity",
                     ),
                 ),
                 ("label", models.CharField(blank=True, default="", max_length=4096)),
@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
             options={
                 "abstract": False,
             },
-            bases=("apis_metainfo.rootobject", models.Model),
+            bases=("entities.entity", models.Model),
         ),
         migrations.CreateModel(
             name="Profession",
@@ -80,14 +80,14 @@ class Migration(migrations.Migration):
             name="Person",
             fields=[
                 (
-                    "rootobject_ptr",
+                    "entity_ptr",
                     models.OneToOneField(
                         auto_created=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         parent_link=True,
                         primary_key=True,
                         serialize=False,
-                        to="apis_metainfo.rootobject",
+                        to="entities.entity",
                     ),
                 ),
                 ("forename", models.CharField(blank=True, default="", max_length=4096)),
@@ -103,13 +103,13 @@ class Migration(migrations.Migration):
             options={
                 "abstract": False,
             },
-            bases=("apis_metainfo.rootobject", models.Model),
+            bases=("entities.entity", models.Model),
         ),
         migrations.CreateModel(
             name="VersionGroup",
             fields=[
                 (
-                    "rootobject_ptr",
+                    "entity_ptr",
                     models.ForeignKey(
                         auto_created=True,
                         blank=True,
@@ -118,7 +118,7 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.DO_NOTHING,
                         parent_link=True,
                         related_name="+",
-                        to="apis_metainfo.rootobject",
+                        to="entities.entity",
                     ),
                 ),
                 (
@@ -179,7 +179,7 @@ class Migration(migrations.Migration):
             name="VersionPerson",
             fields=[
                 (
-                    "rootobject_ptr",
+                    "entity_ptr",
                     models.ForeignKey(
                         auto_created=True,
                         blank=True,
@@ -188,7 +188,7 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.DO_NOTHING,
                         parent_link=True,
                         related_name="+",
-                        to="apis_metainfo.rootobject",
+                        to="entities.entity",
                     ),
                 ),
                 (
@@ -301,7 +301,7 @@ class Migration(migrations.Migration):
             name="VersionPlace",
             fields=[
                 (
-                    "rootobject_ptr",
+                    "entity_ptr",
                     models.ForeignKey(
                         auto_created=True,
                         blank=True,
@@ -310,7 +310,7 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.DO_NOTHING,
                         parent_link=True,
                         related_name="+",
-                        to="apis_metainfo.rootobject",
+                        to="entities.entity",
                     ),
                 ),
                 (
