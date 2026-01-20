@@ -3,8 +3,8 @@
   <a class="btn btn-sm btn-outline-dark disabled">Could not create toggle button: {{ error }}</a>
 {% endif %}
 {% if content_type and object and collectionobject %}
-  <a href="{% url "apis_core:collections:collectionobjectparent" content_type.id object.id collectionobject.id %}?to={{ request.get_full_path }}"
-     hx-get="{% url "apis_core:collections:collectionobjectparent" content_type.id object.id collectionobject.id %}"
+  <a href="{% url "collections:collectionobjectparent" content_type.id object.id collectionobject.id %}?to={{ request.get_full_path }}"
+     hx-get="{% url "collections:collectionobjectparent" content_type.id object.id collectionobject.id %}"
      hx-swap="outerHTML"
      class="btn btn-sm btn-outline-dark col-{{ collectionobject.collection.name|slugify }} col-{{ collectionobject.collection.pk }}"
      title="{% blocktranslate with parent_name=collectionobject.collection.parent.name %}Click to change to {{ parent_name }}{% endblocktranslate %}"

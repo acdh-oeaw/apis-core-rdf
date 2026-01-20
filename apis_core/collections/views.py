@@ -49,7 +49,7 @@ class CollectionObjectFormView(LoginRequiredMixin, GenericModelMixin, FormView):
 
     def get_success_url(self):
         return reverse(
-            "apis_core:collections:collectionobjectformview",
+            "collections:collectionobjectformview",
             args=[self.kwargs.get("contenttype"), self.get_object().id],
         )
 
