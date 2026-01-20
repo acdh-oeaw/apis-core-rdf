@@ -64,3 +64,4 @@ jobs:
       PUBLIC_URL: ${{ vars.PUBLIC_URL }}
       APP_ROOT: "/"
       KUBE_NAMESPACE: ${{ vars.KUBE_NAMESPACE }}
+      HELM_UPGRADE_EXTRA_ARGS: --set extraLabel.timestamp=${{ needs.setup_workflow_env.outputs.datetime }}
