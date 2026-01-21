@@ -8,8 +8,8 @@ from apis_core.apis_entities.utils import get_entity_content_types
 
 
 class Datamodel:
-    entities: list[object]
-    relations: list[object] = []
+    entities: set[ContentType]
+    relations: set[ContentType] = set()
     graph: dict = {}
 
     def __init__(self):
