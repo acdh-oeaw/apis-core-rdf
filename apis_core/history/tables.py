@@ -65,7 +65,6 @@ class HistoryGenericTable(tables.Table):
         return record.instance.__class__.__name__
 
     def __init__(self, *args, **kwargs):
-        print(kwargs)
         if apps.is_installed("apis_core.collections"):
             from apis_core.collections.columns import CollectionsColumn
 
