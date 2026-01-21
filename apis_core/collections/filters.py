@@ -25,13 +25,13 @@ class CollectionsIncludeExcludeFilter(django_filters.filters.ModelMultipleChoice
             required=self.extra["required"],
         )
 
-    def filter(self, queryset, value):
+    def filter(self, qs, value):
         if not value:
-            return queryset
+            return qs
         include = exclude = []
         q = Q()
         try:
-            content_type = ContentType.objects.get_for_model(queryset.model)
+            content_type = ContentType.objects.get_for_model(qs.model)
             skoscollectioncontentobject = apps.get_model(
                 "collections.SkosCollectionContentObject"
             )
@@ -48,4 +48,4 @@ class CollectionsIncludeExcludeFilter(django_filters.filters.ModelMultipleChoice
                 q &= ~Q(pk__in=exclude_ids)
         except LookupError as e:
             logger.debug("Not filtering for collections: %s", e)
-        return queryset.filter(q)
+        return qs.filter(q)
