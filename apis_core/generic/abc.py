@@ -222,23 +222,23 @@ class GenericModel(models.Model):
         self.import_from_dict_subset(**data)
 
     def get_merge_charfield_value(self, other: CharField, field: CharField):
-        res = getattr(self, field.name)
+        res = getattr(self, str(field.name))
         if not field.choices:
-            otherres = getattr(other, field.name, res)
+            otherres = getattr(other, str(field.name), res)
             if otherres and otherres != res:
                 res += f" ({otherres})"
         return res
 
     def get_merge_textfield_value(self, other: TextField, field: TextField):
-        res = getattr(self, field.name)
-        if getattr(other, field.name):
+        res = getattr(self, str(field.name))
+        if getattr(other, str(field.name)):
             # if own value is None, fallback to empty string
             res = res or ""
-            res += "\n" + f"Merged from {other}:\n" + getattr(other, field.name)
+            res += "\n" + f"Merged from {other}:\n" + getattr(other, str(field.name))
         return res
 
     def get_merge_booleanfield(self, other: BooleanField, field: BooleanField):
-        return getattr(other, field.name)
+        return getattr(other, str(field.name))
 
     def get_field_value_after_merge(self, other, field):
         """
@@ -257,8 +257,8 @@ class GenericModel(models.Model):
         elif callable(getattr(self, f"get_merge_{fieldtype}_value", None)):
             return getattr(self, f"get_merge_{fieldtype}_value")(other, field)
         else:
-            if not getattr(self, field.name):
-                return getattr(other, field.name)
+            if not getattr(self, str(field.name)):
+                return getattr(other, str(field.name))
         return getattr(self, field.name)
 
     def merge_fields(self, other):
@@ -269,8 +269,8 @@ class GenericModel(models.Model):
         """
         for field in self._meta.fields:
             newval = self.get_field_value_after_merge(other, field)
-            if newval != getattr(self, field.name):
-                setattr(self, field.name, newval)
+            if newval != getattr(self, str(field.name)):
+                setattr(self, str(field.name), newval)
         self.save()
 
     def merge_with(self, entities):
