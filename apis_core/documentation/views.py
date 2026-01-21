@@ -6,7 +6,7 @@ from apis_core.documentation.utils import Datamodel
 class Documentation(TemplateView):
     template_name = "documentation.html"
 
-    def get_context_data(self):
+    def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx["datamodel"] = Datamodel()
         return ctx
