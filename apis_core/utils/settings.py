@@ -35,7 +35,7 @@ def dict_from_toml_directory(directory: str) -> dict:
 
 
 def internal_uris() -> list[str]:
-    return set([apis_base_uri()] + getattr(settings, "APIS_FORMER_BASE_URIS", []))
+    return list(set([apis_base_uri()] + getattr(settings, "APIS_FORMER_BASE_URIS", [])))
 
 
 def apis_base_uri() -> str:
@@ -46,4 +46,5 @@ def rdf_namespace_prefix() -> str:
     if hasattr(settings, "APIS_RDF_NAMESPACE_PREFIX"):
         return settings.APIS_RDF_NAMESPACE_PREFIX
     base_uri = urlparse(apis_base_uri())
-    return base_uri.hostname.split(".", 1)[0]
+    hostname = base_uri.hostname or "example.org"
+    return hostname.split(".", 1)[0]
