@@ -4,6 +4,7 @@
 import logging
 import tomllib
 from urllib.parse import urlparse
+from warnings import deprecated
 
 from django.conf import settings
 from django.template.utils import get_app_template_dirs
@@ -11,6 +12,7 @@ from django.template.utils import get_app_template_dirs
 logger = logging.getLogger(__name__)
 
 
+@deprecated("Not used anywhere, so it will be dropped.")
 def get_entity_settings_by_modelname(entity: str = None) -> dict:
     """
     return the settings for a specific entity or the dict for all entities
