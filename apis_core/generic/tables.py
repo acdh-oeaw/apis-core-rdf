@@ -44,41 +44,11 @@ class ActionColumn(CustomTemplateColumn):
         return super().render(record, table, *args, **kwargs)
 
 
-class DeleteColumn(ActionColumn):
-    """
-    A column showing a delete button
-    """
-
-    template_name = "columns/delete.html"
-    permission = "delete"
-
-
-class DuplicateColumn(ActionColumn):
-    """
-    A column showing a duplicate button
-    """
-
-    template_name = "columns/duplicate.html"
-    permission = "create"
-    verbose_name = "duplicate"
-
-
-class EditColumn(ActionColumn):
-    """
-    A column showing an edit button
-    """
-
-    template_name = "columns/edit.html"
-    permission = "change"
-
-
-class ViewColumn(ActionColumn):
-    """
-    A column showing a view button
-    """
-
-    template_name = "columns/view.html"
-    permission = "view"
+class ActionsColumn(CustomTemplateColumn):
+    orderable = False
+    exclude_from_export = True
+    template_name = "columns/actions.html"
+    attrs = {"td": {"style": "width:8em;"}, "th": {"style": "font-size: 0"}}
 
 
 class DescriptionColumn(CustomTemplateColumn):
@@ -96,15 +66,12 @@ class GenericTable(tables.Table):
     and a description column
     """
 
-    edit = EditColumn()
     desc = DescriptionColumn()
-    delete = DeleteColumn()
-    view = ViewColumn()
-    noduplicate = DuplicateColumn()
+    actions = ActionsColumn()
 
     class Meta:
         fields = ["id", "desc"]
-        sequence = ("...", "view", "edit", "delete", "noduplicate")
+        sequence = ("...", "actions")
 
 
 class MoreLessColumn(tables.TemplateColumn):

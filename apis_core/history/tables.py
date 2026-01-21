@@ -1,7 +1,7 @@
 import django_tables2 as tables
 from django.apps import apps
 
-from apis_core.generic.tables import ActionColumn, CustomTemplateColumn, ViewColumn
+from apis_core.generic.tables import ActionColumn, CustomTemplateColumn
 
 
 class DescriptionColumnHistory(CustomTemplateColumn):
@@ -30,6 +30,15 @@ class ResetColumn(ActionColumn):
 
     template_name = "history/columns/reset.html"
     permission = "change"
+
+
+class ViewColumn(ActionColumn):
+    """
+    A column showing a view button
+    """
+
+    template_name = "columns/view.html"
+    permission = "view"
 
 
 class APISHistoryTableBaseTable(tables.Table):
