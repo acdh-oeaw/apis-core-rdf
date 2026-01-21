@@ -15,4 +15,4 @@ class Command(BaseCommand):
         )
 
     def handle(self, *app_labels, **options):
-        print(datadump_serializer(app_labels, "json"))
+        print(datadump_serializer(list(app_labels), "json"))
