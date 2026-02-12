@@ -29,6 +29,7 @@ dependencies = [
     "tablib>=3.8.0,<=4.0",
     "httpx>=0.28.1",
     "pydantic>=2.13.4",
+    "psycopg[binary]~=3.0",
 ]
 
 [build-system]
@@ -75,7 +76,7 @@ lint.isort.known-first-party = ["apis_core"]
 extend_exclude = [".*/tests"]
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ["crispy-bootstrap4", "crispy-bootstrap5", "tablib"]
+DEP002 = ["crispy-bootstrap4", "crispy-bootstrap5", "tablib", "psycopg"]
 
 [tool.deptry.package_module_name_map]
 djangorestframework = "rest_framework"

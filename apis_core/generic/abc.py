@@ -36,6 +36,7 @@ class GenericModel(models.Model):
 
     class Config:
         overview_section = _("Generic models")
+        index_for_search = True
 
     @classmethod
     def check(cls, **kwargs):
