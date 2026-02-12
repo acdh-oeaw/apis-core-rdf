@@ -25,6 +25,10 @@ urlpatterns = [
 router = CustomDefaultRouter()
 
 
+if "apis_core.search" in settings.INSTALLED_APPS:
+    urlpatterns.append(path("", include("apis_core.search.urls")))
+
+
 if "apis_core.entities" in settings.INSTALLED_APPS:
     urlpatterns.append(path("", include("apis_core.entities.urls")))
 

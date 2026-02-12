@@ -49,6 +49,7 @@ class APISHistoryTableBase(GenericModel, models.Model):
 
     class Config(GenericModel.Config):
         overview_section = None
+        index_for_search = False
 
     def get_absolute_url(self):
         ct = ContentType.objects.get_for_model(self)
