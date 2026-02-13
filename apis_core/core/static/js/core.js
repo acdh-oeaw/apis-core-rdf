@@ -1,5 +1,5 @@
 //script that converts the multi select element
-$(document).ready(function() {
+/*$(document).ready(function() {
     $('select.selectmultiple').multiselect({
         includeSelectAllOption: true,
         enableFiltering: true,
@@ -9,7 +9,7 @@ $(document).ready(function() {
             button: '<button type="button" class="multiselect dropdown-toggle form-control" data-bs-toggle="dropdown" aria-expanded="false"><span class="multiselect-selected-text"></span></button>'
         }
     });
-})
+})*/
 
 window.addEventListener('load', () => {
     // scroll-to-top button
