@@ -1,16 +1,21 @@
 {% extends "generic/generic_content.html" %}
 {% load crispy_forms_tags %}
 {% load i18n %}
+{% load render_form from formsetify %}
 
 {% block title %}
   {% translate "Create" %}
 {% endblock title %}
 
 {% block content %}
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-header">{% translate "Create" %}</div>
-      <div class="card-body">{% crispy form form.helper %}</div>
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-body">
+<django-formset endpoint="{{ request.path }}" csrf-token="{{ csrf_token }}">
+  {% render_form form "bootstrap"  %}
+  <button type="button" df-click="submit -> proceed">Submit</button>
+</django-formset>
     </div>
   </div>
+</div>
 {% endblock content %}
