@@ -10,8 +10,6 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
-from django.template.exceptions import TemplateDoesNotExist
-from django.template.loader import render_to_string
 from django.template.utils import get_app_template_dirs
 from rdflib import RDF, BNode, Graph, URIRef
 from rdflib.exceptions import ParserError
@@ -58,10 +56,6 @@ def load_path(path: str | Path) -> dict:
     Load a tomlfile either from a path or from the directory
     `triple_configs` in any of the app directories.
     """
-    try:
-        return tomllib.loads(render_to_string(path))
-    except TemplateDoesNotExist:
-        logger.debug("Tried to load template %s but it does not exist", path)
     if isinstance(path, str):
         files = [
             directory / path for directory in get_app_template_dirs("triple_configs")
