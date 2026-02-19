@@ -8,6 +8,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
+from warnings import deprecated
 
 from AcdhArcheAssets.uri_norm_rules import get_normalized_uri
 from django.template.utils import get_app_template_dirs
@@ -51,6 +52,7 @@ def resolve(obj, graph):
     return obj
 
 
+@deprecated("Please switch to using objects instead of toml files.")
 def load_path(path: str | Path) -> dict:
     """
     Load a tomlfile either from a path or from the directory
