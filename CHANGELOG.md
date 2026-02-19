@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.60.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.59.0...v0.60.0) (2026-02-19)
+
+
+### Features
+
+* **apis_entites:** add configs for class based rdfconfigs ([a39c4e0](https://github.com/acdh-oeaw/apis-core-rdf/commit/a39c4e066ef09f376a50f9c3c3e4021900d31071))
+* **apis_entities:** switch to class based rdf configs ([2a9dbef](https://github.com/acdh-oeaw/apis-core-rdf/commit/2a9dbef22f4bfbe0601ff29fb4323edf8a8b2a69))
+* **generic:** add a `left-column` class to first div in the container ([642204b](https://github.com/acdh-oeaw/apis-core-rdf/commit/642204be85f3ce68a63af28e8f7fc49db9f4d92c))
+* **utils:** allow rdfparser to use Python models as config ([a5631e8](https://github.com/acdh-oeaw/apis-core-rdf/commit/a5631e8a9d647ac970e83d0ace420d276f130332))
+
+
+### Bug Fixes
+
+* **collections:** fix `filter` function override ([f4a3f52](https://github.com/acdh-oeaw/apis-core-rdf/commit/f4a3f52c1114b0d1b39c68518dac676773865a7a))
+* **core:** make function argument the correct type ([fa3944f](https://github.com/acdh-oeaw/apis-core-rdf/commit/fa3944f7267775d1b111dd4f33f36f4799c34ea5))
+* **documentation:** set the correct type for attributes ([a2dafe7](https://github.com/acdh-oeaw/apis-core-rdf/commit/a2dafe74d263f0805df88f18bbfbcd4aa79e9b78))
+* **documentation:** use correct function arguments ([a2c61e7](https://github.com/acdh-oeaw/apis-core-rdf/commit/a2c61e7571d3d3caa8403830fb3de307ba0227e6))
+* **generic:** cast field type before passing to `getattr` & `setattr` ([45f520a](https://github.com/acdh-oeaw/apis-core-rdf/commit/45f520abc8588075d77d079be1ab60c8cc500b79))
+* **generic:** set the max-width of the left column to 20vw ([b2c3a95](https://github.com/acdh-oeaw/apis-core-rdf/commit/b2c3a95735a4dd6fd29c63d00b74b90e3cfd0577)), closes [#2265](https://github.com/acdh-oeaw/apis-core-rdf/issues/2265)
+* **utils:** add deprecation warning to method ([4ba3baa](https://github.com/acdh-oeaw/apis-core-rdf/commit/4ba3baa97c62564870088f92bb26233db67c7ce7))
+* **utils:** return correct types ([0f6b6b1](https://github.com/acdh-oeaw/apis-core-rdf/commit/0f6b6b1d976862ad1da53c0d5700e1194fa71efd))
+
 ## [0.59.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.58.2...v0.59.0) (2026-01-07)
 
 
