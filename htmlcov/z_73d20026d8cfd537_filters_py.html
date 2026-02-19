@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_73d20026d8cfd537_filtersets_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2026-02-19 10:24 +0000
+            created at 2026-02-19 10:26 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -107,13 +107,13 @@
     <p class="pln"><span class="n"><a id="t25" href="#t25">25</a></span><span class="t">            <span class="nam">required</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">extra</span><span class="op">[</span><span class="str">"required"</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t26" href="#t26">26</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t27" href="#t27">27</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t28" href="#t28">28</a></span><span class="t">    <span class="key">def</span> <span class="nam">filter</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">queryset</span><span class="op">,</span> <span class="nam">value</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t28" href="#t28">28</a></span><span class="t">    <span class="key">def</span> <span class="nam">filter</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">qs</span><span class="op">,</span> <span class="nam">value</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t29" href="#t29">29</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">value</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t">            <span class="key">return</span> <span class="nam">queryset</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t">            <span class="key">return</span> <span class="nam">qs</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t">        <span class="nam">include</span> <span class="op">=</span> <span class="nam">exclude</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t32" href="#t32">32</a></span><span class="t">        <span class="nam">q</span> <span class="op">=</span> <span class="nam">Q</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t">        <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">            <span class="nam">content_type</span> <span class="op">=</span> <span class="nam">ContentType</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">get_for_model</span><span class="op">(</span><span class="nam">queryset</span><span class="op">.</span><span class="nam">model</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">            <span class="nam">content_type</span> <span class="op">=</span> <span class="nam">ContentType</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">get_for_model</span><span class="op">(</span><span class="nam">qs</span><span class="op">.</span><span class="nam">model</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t">            <span class="nam">skoscollectioncontentobject</span> <span class="op">=</span> <span class="nam">apps</span><span class="op">.</span><span class="nam">get_model</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t">                <span class="str">"collections.SkosCollectionContentObject"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -130,7 +130,7 @@
     <p class="mis show_mis"><span class="n"><a id="t48" href="#t48">48</a></span><span class="t">                <span class="nam">q</span> <span class="op">&amp;=</span> <span class="op">~</span><span class="nam">Q</span><span class="op">(</span><span class="nam">pk__in</span><span class="op">=</span><span class="nam">exclude_ids</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">        <span class="key">except</span> <span class="nam">LookupError</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t">            <span class="nam">logger</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">"Not filtering for collections: %s"</span><span class="op">,</span> <span class="nam">e</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">        <span class="key">return</span> <span class="nam">queryset</span><span class="op">.</span><span class="nam">filter</span><span class="op">(</span><span class="nam">q</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">        <span class="key">return</span> <span class="nam">qs</span><span class="op">.</span><span class="nam">filter</span><span class="op">(</span><span class="nam">q</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -140,7 +140,7 @@
             <a class="nav" href="z_73d20026d8cfd537_filtersets_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2026-02-19 10:24 +0000
+            created at 2026-02-19 10:26 +0000
         </p>
     </div>
 </footer>
