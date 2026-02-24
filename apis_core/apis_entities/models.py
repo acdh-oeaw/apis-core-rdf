@@ -1,24 +1,22 @@
 import re
-import re
 import unicodedata
 
-from django.contrib.contenttypes.models import ContentType
-from django.apps import apps
 import reversion
+from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models.signals import m2m_changed, post_save
+from django.db.models.query import QuerySet
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from model_utils.managers import InheritanceManager
-from django.db.models.query import QuerySet
 
-from apis_core.utils import caching
-from apis_core.utils import DateParser
-from apis_core.apis_metainfo.models import RootObject, Collection
-from apis_core.apis_relations.models import TempTriple
 from apis_core.apis_entities import signals
+from apis_core.apis_metainfo.models import RootObject
+from apis_core.apis_relations.models import TempTriple
+from apis_core.utils import DateParser, caching
 
 BASE_URI = getattr(settings, "APIS_BASE_URI", "http://apis.info/")
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
@@ -327,8 +325,8 @@ class TempEntityClass(AbstractEntity):
         # TODO: check if these imports can be put to top of module without
         #  causing circular import issues.
         from apis_core.apis_labels.models import Label
-        from apis_core.apis_vocabularies.models import LabelType
         from apis_core.apis_metainfo.models import Uri
+        from apis_core.apis_vocabularies.models import LabelType
 
         e_a = type(self).__name__
         self_model_class = ContentType.objects.get(model__iexact=e_a).model_class()

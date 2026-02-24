@@ -153,10 +153,10 @@ urlpatterns = [
         "relations/",
         include("apis_core.apis_relations.urls", namespace="apis_relations"),
     ),
-    path(
-        "vocabularies/",
-        include("apis_core.apis_vocabularies.urls", namespace="apis_vocabularies"),
-    ),
+    #path(
+    #    "vocabularies/",
+    #    include("apis_core.apis_vocabularies.urls", namespace="apis_vocabularies"),
+    #),
     path(
         "metainfo/",
         include("apis_core.apis_metainfo.urls", namespace="apis_metainfo"),

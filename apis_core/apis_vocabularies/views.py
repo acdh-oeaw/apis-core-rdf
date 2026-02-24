@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 
-
+"""
 @login_required
 def dl_vocabs_as_csv(request, model_name):
     kwargs = {"app_label": "apis_vocabularies", "entity": model_name}
@@ -21,5 +21,5 @@ def dl_vocabs_as_csv(request, model_name):
 
     return response
 
-
+"""
 # Create your views here.

@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+""" from django.urls import path, re_path
 
 from apis_core.apis_entities.autocomplete3 import GenericVocabulariesAutocomplete
 from apis_core.apis_vocabularies import views
@@ -15,3 +15,4 @@ urlpatterns = [
         name="generic_vocabularies_autocomplete",
     ),
 ]
+ """
