@@ -1,8 +1,8 @@
+import copy
+import importlib
 import re
 from difflib import SequenceMatcher
 from math import inf
-import copy
-import importlib
 
 import requests
 
@@ -11,21 +11,21 @@ import reversion
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
+from django.db.models.fields.related import ForeignKey, ManyToManyField
 from django.db.models.fields.reverse_related import ManyToOneRel
-from django.db.models.fields.related import OneToOneField, ForeignKey, ManyToManyField
 from django.forms import model_to_dict
 from django.urls import reverse
 from django.utils.functional import cached_property
 from model_utils.managers import InheritanceManager
-from apis_core.utils.normalize import clean_uri
-from django.core.exceptions import ValidationError, ImproperlyConfigured
+
+from apis_core.apis_metainfo import signals
 
 # from django.contrib.contenttypes.fields import GenericRelation
 # from utils.highlighter import highlight_text
 from apis_core.utils import caching, rdf
-
-from apis_core.apis_metainfo import signals
+from apis_core.utils.normalize import clean_uri
 
 # from apis_core.apis_entities.serializers_generic import EntitySerializer
 # from apis_core.apis_labels.models import Label
@@ -42,7 +42,7 @@ else:
 NEXT_PREV = getattr(settings, "APIS_NEXT_PREV", True)
 
 if "apis_highlighter" in settings.INSTALLED_APPS:
-    from apis_highlighter.models import Annotation
+    pass
 
 
 class RootObject(models.Model):
@@ -51,7 +51,7 @@ class RootObject(models.Model):
     By having one overarching super class we gain the advantage of unique identifiers.
     """
 
-    name = models.TextField(verbose_name="Label")
+    name = models.CharField(max_length=5000, verbose_name="Label")
     # self_contenttype: a foreign key to the respective contenttype comes in handy when querying for
     # triples where the subject's or object's contenttype must be respected (e.g. get all triples
     # where the subject is a Person)

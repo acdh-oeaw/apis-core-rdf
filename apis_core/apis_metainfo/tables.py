@@ -26,6 +26,10 @@ from .models import Uri
 # the table class thus must have a method / class variable 'order_start_date_written = generic_order_start_date_written'
 
 
+def generic_name(self, queryset):
+    print("GENERIC_NAME", queryset)
+    return (queryset, True)
+
 def generic_order_start_date_written(self, queryset, is_descending):
     if is_descending:
         queryset = queryset.order_by(

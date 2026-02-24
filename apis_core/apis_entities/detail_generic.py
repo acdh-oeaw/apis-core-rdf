@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
+from django.db.models import Q, Case, When, Value
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import select_template
 from django.views import View
 from django_tables2 import RequestConfig
+from django.db import models
 
 from apis_core.apis_labels.models import Label
 from apis_core.apis_metainfo.models import Uri
@@ -49,6 +50,7 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
                 (Q(subj__self_contenttype=entity_content_type) & Q(obj__pk=self.pk))
                 | (Q(obj__self_contenttype=entity_content_type) & Q(subj__pk=self.pk))
             )
+            
 
             table = get_generic_triple_table(
                 other_entity_class_name=other_entity_class_name,
@@ -61,6 +63,7 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
             match = [prefix]
             tb_object = table(data=triples_related_by_entity, prefix=prefix)
             tb_object_open = request.GET.get(prefix + "page", None)
+          
             RequestConfig(request, paginate={"per_page": 10}).configure(tb_object)
             side_bar.append(
                 (
@@ -78,6 +81,7 @@ class GenericEntitiesDetailView(ViewPassesTestMixin, EntityInstanceMixin, View):
         tb_label = LabelTableBase(data=object_labels, prefix=entity.title()[:2] + "L-")
         tb_label_open = request.GET.get("PL-page", None)
         side_bar.append(("Label", tb_label, "PersonLabel", tb_label_open))
+       
         RequestConfig(request, paginate={"per_page": 10}).configure(tb_label)
         template = select_template(
             [
