@@ -14,14 +14,14 @@ class E53_PlaceFromDNB:
     SELECT ?longitude
     WHERE {
       ?subject geo:hasGeometry/geo:asWKT ?point .
-      BIND(REPLACE(str(?point), "Point \\( \\+?(-?\\d+.\\d+).*", "$1") as ?longitude)
+      BIND(REPLACE(str(?point), "Point \\\\( \\\\+?(-?\\\\d+.\\\\d+).*", "$1") as ?longitude)
     }
     """)
     latitude = Attribute("""
     SELECT ?latitude
     WHERE {
       ?subject geo:hasGeometry/geo:asWKT ?point .
-      BIND(REPLACE(str(?point), "^Point\\s*\\(\\s*[+-]?\\d+\\.\\d+\\s+([+-]?\\d+\\.\\d+)\\s*\\)$", "$1") as ?latitude)
+      BIND(REPLACE(str(?point), "^Point\\\\s*\\\\(\\\\s*[+-]?\\\\d+\\\\.\\\\d+\\\\s+([+-]?\\\\d+\\\\.\\\\d+)\\\\s*\\\\)$", "$1") as ?latitude)
     }
     """)
     same_as = Attribute("owl:sameAs")
@@ -51,14 +51,14 @@ class E53_PlaceFromWikidata:
     SELECT ?longitude
     WHERE {
       ?subject wdt:P625 ?geo1 .
-      BIND(REPLACE(str(?geo1), "Point\\(([-+]?\\d+\\.?\\d+).*$", "$1") as ?longitude)
+      BIND(REPLACE(str(?geo1), "Point\\\\(([-+]?\\\\d+\\\\.?\\\\d+).*$", "$1") as ?longitude)
       }
     """)
     latitude = Attribute("""
     SELECT ?latitude
     WHERE {
       ?subject wdt:P625 ?geo1 .
-      BIND(REPLACE(str(?geo1), "Point\\(([-+]?\\d+\\.?\\d+) ([-+]?\\d+\\.?\\d+).*$", "$2") as ?latitude)
+      BIND(REPLACE(str(?geo1), "Point\\\\(([-+]?\\\\d+\\\\.?\\\\d+) ([-+]?\\\\d+\\\\.?\\\\d+).*$", "$2") as ?latitude)
       }
     """)
     same_as = Attribute(
