@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.60.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.60.0...v0.60.1) (2026-02-25)
+
+
+### Bug Fixes
+
+* **apis_entities:** add `E53` prefix before rdfconfig class name ([8fe43d2](https://github.com/acdh-oeaw/apis-core-rdf/commit/8fe43d2901c2aac7ee311d661e04868c36d15154))
+* **apis_entities:** add correct number of escaping slashes to rdf config ([ac7a238](https://github.com/acdh-oeaw/apis-core-rdf/commit/ac7a2389a3a1c03c1ca1b4371f81e25e370bc887))
+
 ## [0.60.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.59.0...v0.60.0) (2026-02-19)
 
 
