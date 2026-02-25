@@ -1,7 +1,7 @@
 from apis_core.utils.rdf import Attribute, Filter
 
 
-class PlaceFromDNB:
+class E53_PlaceFromDNB:
     filter_type_is_naturalgeographicunit = Filter(
         [("rdf:type", "gndo:NaturalGeographicUnit")]
     )
@@ -27,7 +27,7 @@ class PlaceFromDNB:
     same_as = Attribute("owl:sameAs")
 
 
-class PlaceFromGeonames:
+class E53_PlaceFromGeonames:
     filter_type_is_feature = Filter([("rdf:type", "gn:Feature")])
 
     label = Attribute(["gn:name", "gn:officialName", "gn:alternateName"])
@@ -36,7 +36,7 @@ class PlaceFromGeonames:
     same_as = Attribute(["rdfs:seeAlso", "gn:wikipediaArticle"])
 
 
-class PlaceFromWikidata:
+class E53_PlaceFromWikidata:
     filter_p625_must_exist = Filter([("wdt:P625", True)])
 
     label = Attribute(
