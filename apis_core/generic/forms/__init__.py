@@ -66,6 +66,25 @@ class GenericFilterSetForm(forms.Form):
         self.helper.form_method = "GET"
         self.helper.form_tag = False
 
+        # override the fields pointing to other models,
+        # to make them use the autocomplete widgets
+        override_fieldtypes = {
+            "ModelMultipleChoiceField": ApisModelSelect2Multiple,
+            "ModelChoiceField": ApisModelSelect2,
+        }
+        for field in self.fields:
+            clsname = self.fields[field].__class__.__name__
+            if clsname in override_fieldtypes.keys():
+                ct = ContentType.objects.get_for_model(
+                    self.fields[field]._queryset.model
+                )
+                if issubclass(ct.model_class(), GenericModel):
+                    url = reverse("apis_core:generic:autocomplete", args=[ct])
+                    self.fields[field].widget = override_fieldtypes[clsname](
+                        url, attrs={"data-html": True}
+                    )
+                    self.fields[field].widget.choices = self.fields[field].choices
+
 
 class GenericModelForm(forms.ModelForm):
     """
