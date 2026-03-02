@@ -30,8 +30,12 @@ dependencies = [
     "httpx>=0.28.1",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
     "coverage==7.5.3",
     "deptry==0.23",
     "djlint==1.36.4",
@@ -39,12 +43,6 @@ dev-dependencies = [
     "ruff==0.11.2",
     "pytest-django>=4.11.1",
 ]
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[dependency-groups]
 docs = [
     "markdown-include>=0.8.1",
     "mkdocs>=1.6.1",
