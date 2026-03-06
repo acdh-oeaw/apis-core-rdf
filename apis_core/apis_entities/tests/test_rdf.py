@@ -16,7 +16,7 @@ from apis_core.apis_entities.rdfconfigs.place import (
     E53_PlaceFromGeonames,
     E53_PlaceFromWikidata,
 )
-from apis_core.utils import rdf
+from apis_core.apis_entities.utils import rdf
 
 # use `curl -H "Accept: application/rdf+xml" -L $URI` to fetch data
 
