@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.61.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.60.1...v0.61.0) (2026-03-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **utils:** don't try to load triple configs via template lookup
+* **utils:** drop deprecated function `get_entity_settings_by_modelname`
+* **core:** drop `shared_url` templatetag
+* **core:** drop favicons block in base template
+* **generic:** The columns `DeleteColumn`, `DuplicateColumn`, `EditColumn` or `ViewColumn` from `generic.tables` are being dropped.
+
+### Features
+
+* **generic:** add an `ActionsColumn` that combines individual actions ([808b541](https://github.com/acdh-oeaw/apis-core-rdf/commit/808b54137fa76cef1b4602d7d2319f0870bbe899))
+* **generic:** replace indiv. cols with `ActionsColumn` in GenericTable ([415234c](https://github.com/acdh-oeaw/apis-core-rdf/commit/415234c56f863b7e9ee053316b4cd110f5bd3c6e))
+* **history:** include ViewColumn, so it can be dropped from generic ([a3f1337](https://github.com/acdh-oeaw/apis-core-rdf/commit/a3f1337d26a3a94b648a50d46e6be9c362320e8a))
+
+
+### Bug Fixes
+
+* **apis_entities:** use correct heading size ([879afd1](https://github.com/acdh-oeaw/apis-core-rdf/commit/879afd198a79c0392588b73d8f2a200367a9dc6f)), closes [#2116](https://github.com/acdh-oeaw/apis-core-rdf/issues/2116)
+* **utils:** add deprecation warning to function ([1b74fc9](https://github.com/acdh-oeaw/apis-core-rdf/commit/1b74fc9a428e2bae8f173ddc725adb3169180d3c))
+* **utils:** don't try to load triple configs via template lookup ([83ccf68](https://github.com/acdh-oeaw/apis-core-rdf/commit/83ccf68f967c2a3bbbc54bf95a5958dea97ba095))
+* **utils:** drop deprecated function `get_entity_settings_by_modelname` ([d80fd78](https://github.com/acdh-oeaw/apis-core-rdf/commit/d80fd78b652639ffb04b9e610d9b94f4c1cf9b46))
+
+
+### Code Refactoring
+
+* **core:** drop `shared_url` templatetag ([9f0a3f9](https://github.com/acdh-oeaw/apis-core-rdf/commit/9f0a3f9f9d2328cbcb331ea601fd148999ff65b4))
+* **core:** drop favicons block in base template ([e755f3e](https://github.com/acdh-oeaw/apis-core-rdf/commit/e755f3e88f562c2dbd2d8b61e1cd97f88c2c6d95))
+* **generic:** drop individual action columns from tables module ([097f006](https://github.com/acdh-oeaw/apis-core-rdf/commit/097f006de0711f2c9b3eb6625d2ea70137d36e52))
+
 ## [0.60.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.60.0...v0.60.1) (2026-02-25)
 
 
