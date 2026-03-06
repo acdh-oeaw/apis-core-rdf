@@ -41,15 +41,20 @@
             {% crispy filter.form filter.form.helper %}
           {% endblock filter %}
 
+          <div id="div_id_filterset-remember" class="form-check">
+            <input type="checkbox"
+                   name="filterset-remember"
+                   class="checkboxinput form-check-input"
+                   id="id_filterset-remember"
+                   {% if filterset_remember %}checked{% endif %}>
+            <label for="id_filterset-remember" class="form-check-label">Remember filters</label>
+          </div>
           <input type="submit"
                  name="submit"
                  value="Submit"
                  class="btn btn-primary"
                  id="submit-id-submit">
         </form>
-      </div>
-      <div class="card-footer text-muted">
-        <a class="btn btn-outline-secondary"  href=".">{% translate "Reset filter" %}</a>
       </div>
     </div>
   {% endblock col %}
