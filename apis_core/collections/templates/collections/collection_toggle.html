@@ -1,4 +1,4 @@
-<a href="{% url "apis_core:collections:collectiontoggle" content_type.id object.id collection.id %}?to={{ request.get_full_path }}"
-   hx-get="{% url "apis_core:collections:collectiontoggle" content_type.id object.id collection.id %}"
+<a href="{% url "collections:collectiontoggle" content_type.id object.id collection.id %}?to={{ request.get_full_path }}"
+   hx-get="{% url "collections:collectiontoggle" content_type.id object.id collection.id %}"
    hx-swap="outerHTML"
    class="btn btn-sm {% if exists %}btn-success{% else %}btn-outline-secondary{% endif %} col-{{ collection.name|slugify }}">{{ collection.name }}</a>
