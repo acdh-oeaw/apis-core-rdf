@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "apis_core.relations",
     "apis_core.history",
     "apis_core.apis_entities",
+    "apis_core.entities",
     # APIS history modules tracks changes of instances over
     # time and lets you revert changes
     # The core APIS apps come last, so other apps can override
