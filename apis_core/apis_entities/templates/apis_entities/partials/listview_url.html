@@ -1,5 +1,5 @@
 {% if object.get_listview_url %}
-  <a href="{{ object.get_listview_url }}"><small>{{ object.get_verbose_name_plural }}</small></a>
+  <a href="{{ object.get_listview_url }}">{{ object.get_verbose_name_plural }}</a>
 {% else %}
-  <small>{{ object.get_verbose_name_plural }}</small>
+  {{ object.get_verbose_name_plural }}
 {% endif %}
