@@ -25,7 +25,8 @@ from django.utils.text import capfirst
 from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from formset.views import FormView, IncompleteSelectResponseMixin
 from django_filters.filterset import filterset_factory
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
@@ -315,6 +316,7 @@ class Create(
     GenericModelPermissionRequiredMixin,
     SuccessMessageMixin,
     CreateView,
+    FormView
 ):
     """
     Create view for a generic model.
@@ -325,6 +327,10 @@ class Create(
 
     template_name_suffix = "_create"
     permission_action_required = "add"
+
+    def setup(self, *args, **kwargs):
+        super().setup(*args, **kwargs)
+        self.form_class = self.get_form_class()
 
     def get_form_class(self):
         form_modules = module_paths(self.model, path="forms", suffix="Form")

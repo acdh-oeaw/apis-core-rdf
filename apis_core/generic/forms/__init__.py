@@ -16,6 +16,7 @@ from apis_core.core.fields import (
 )
 from apis_core.generic.abc import GenericModel
 from apis_core.generic.forms.fields import ModelImportChoiceField
+from formset.widgets import DualSelector, Selectize, SelectizeMultiple
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +78,7 @@ class GenericModelForm(forms.ModelForm):
 
     class Meta:
         fields = "__all__"
+        widgets = {"profession": SelectizeMultiple(search_lookup="name__icontains")}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -94,13 +96,13 @@ class GenericModelForm(forms.ModelForm):
         except LookupError as e:
             logger.debug("Not adding collections to form: %s", e)
 
-        self.helper = FormHelper(self)
-        self.helper.add_input(Submit("submit", _("Submit")))
+        #self.helper = FormHelper(self)
+        #self.helper.add_input(Submit("submit", _("Submit")))
 
         # override the fields pointing to other models,
         # to make them use the autocomplete widgets
         override_fieldtypes = {
-            "ModelMultipleChoiceField": ApisModelSelect2Multiple,
+            "ModelMultipleChoiceField": SelectizeMultiple,
             "ModelChoiceField": ApisModelSelect2,
             "ModelImportChoiceField": ApisModelSelect2,
         }
@@ -112,10 +114,8 @@ class GenericModelForm(forms.ModelForm):
                 )
                 if issubclass(ct.model_class(), GenericModel):
                     url = reverse("apis_core:generic:autocomplete", args=[ct])
-                    self.fields[field].widget = override_fieldtypes[clsname](
-                        url, attrs={"data-html": True}
-                    )
-                    self.fields[field].widget.choices = self.fields[field].choices
+                    self.fields[field].widget = override_fieldtypes[clsname](search_lookup="name__icontains")
+                    self.fields[field].queryset = ct.model_class().objects.all()
 
     def clean(self):
         cleaned_data = super().clean()

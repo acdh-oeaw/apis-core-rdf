@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # and extend their templates
     "apis_core.core",
     "apis_core.documentation",
+    "formset",
 ]
 
 MIDDLEWARE = [
