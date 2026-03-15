@@ -17,6 +17,7 @@ from django.db import transaction
 from django.db.models.fields.related import ManyToManyRel
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
+from django.http import QueryDict
 from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
@@ -148,6 +149,52 @@ class List(
     template_name_suffix = "_list"
     permission_action_required = "view"
 
+    def setup(self, *args, **kwargs):
+        super().setup(*args, **kwargs)
+        content_type = ContentType.objects.get_for_model(self.model)
+        self.cookie_name = f"{content_type.app_label}.{content_type.model}"
+        self.params = self.request.GET.copy()
+
+    def _get_prefix_params(self, prefix: str):
+        """
+        Get the request parameters with a specific prefix.
+        If there are no request parameters with that prefix,
+        fall back to the cookie for that prefix.
+        """
+        params = self.params.copy()
+        for key in self.params:
+            if not key.startswith(prefix):
+                del params[key]
+        cookie_name = f"{self.cookie_name}_{prefix}"
+        return params or QueryDict(self.request.COOKIES.get(cookie_name, ""))
+
+    def _remember_fields(self, prefix: str) -> bool:
+        remember_field_name = f"{prefix}-remember"
+        params = self._get_prefix_params(prefix)
+        return params.get(remember_field_name, "off") == "on"
+
+    def _set_form_cookie(self, response, prefix: str):
+        """
+        Update the cookie with the current request params.
+        Unless the `remember` parameter was sent for the given
+        prefix, tell the client to delete the cookie.
+        """
+        cookie_name = f"{self.cookie_name}_{prefix}"
+        params = self._get_prefix_params(prefix)
+        if params:
+            response.set_cookie(cookie_name, params.urlencode())
+
+        if not self._remember_fields(prefix):
+            response.delete_cookie(cookie_name)
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+
+        self._set_form_cookie(response, "filterset")
+        self._set_form_cookie(response, "choices")
+
+        return response
+
     def get_table_class(self):
         table_modules = module_paths(self.model, path="tables", suffix="Table")
         table_class = first_member_match(table_modules, GenericTable)
@@ -165,11 +212,13 @@ class List(
     def get_table_kwargs(self):
         kwargs = super().get_table_kwargs()
 
-        selected_columns = self.request.GET.getlist("choices-columns", [])
+        selected_columns = self._get_prefix_params("choices").getlist(
+            "choices-columns", []
+        )
         modelfields = self.model._meta.get_fields()
         # if the form was submitted, we look at the selected
         # columns and exclude all columns that are not part of that list
-        if self.request.GET and "choices-columns" in self.request.GET:
+        if self.params and selected_columns:
             columns_exclude = self.get_filterset_class().Meta.form.columns_exclude
             other_columns = [
                 name for (name, field) in self._get_columns_choices(columns_exclude)
@@ -236,6 +285,7 @@ class List(
     def get_filterset_kwargs(self, filterset_class):
         kwargs = super().get_filterset_kwargs(filterset_class)
         kwargs["prefix"] = "filterset"
+        kwargs["data"] = self._get_prefix_params("filterset")
         return kwargs
 
     def get_filterset(self, filterset_class):
@@ -287,6 +337,7 @@ class List(
         context = super().get_context_data(*args, **kwargs)
         table = context.get("table", None)
         filterset = context.get("filter", None)
+        context["filterset_remember"] = self._remember_fields("filterset")
         if table and filterset:
             columns_exclude = filterset.form.columns_exclude
             initial_columns = [
@@ -297,6 +348,7 @@ class List(
                     choices=choices,
                     initial={"choices": initial_columns},
                     prefix="choices",
+                    data=self._get_prefix_params("choices") or None,
                 )
         return context
 
