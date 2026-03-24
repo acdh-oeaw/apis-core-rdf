@@ -1,5 +1,10 @@
 {% load i18n %}
 <div class="actions-column">
+  {% if record.get_view_permission in perms %}
+    <a title="{% translate "view" %}"
+       href="{{ record.get_absolute_url }}"
+       class="object-view"><span class="material-symbols-outlined">visibility</span></a>
+  {% endif %}
   {% if record.get_change_permission in perms %}
     <a title="{% translate "edit" %}"
        href="{{ record.get_edit_url }}"
@@ -13,11 +18,6 @@
        hx-swap="outerHTML swap:0.3s"
        href="{{ record.get_delete_url }}"
        class="object-delete"><span class="material-symbols-outlined">delete</span></a>
-  {% endif %}
-  {% if record.get_view_permission in perms %}
-    <a title="{% translate "view" %}"
-       href="{{ record.get_absolute_url }}"
-       class="object-view"><span class="material-symbols-outlined">visibility</span></a>
   {% endif %}
   {% if record.get_add_permission in perms %}
     <a title="{% translate "duplicate" %}"
