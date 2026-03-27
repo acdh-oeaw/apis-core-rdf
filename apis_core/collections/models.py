@@ -84,6 +84,12 @@ class SkosCollection(GenericModel, models.Model):
             f'"{self}" is part of multiple collections'
         )
 
+    def list(self, content_type=None):
+        qs = SkosCollectionContentObject.objects.filter(collection=self)
+        if content_type is not None:
+            return qs.filter(content_type=content_type)
+        return qs
+
 
 class SkosCollectionContentObject(GenericModel, models.Model):
     """
