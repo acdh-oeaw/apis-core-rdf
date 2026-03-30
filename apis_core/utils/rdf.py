@@ -172,6 +172,7 @@ def load_uri_using_path(uri, configfile: Path | str) -> dict:
 
     if config := graph_matches_config(graph, configfile):
         result = defaultdict(list)
+        result["same_as"] = [uri]
         result["relations"] = defaultdict(list)
         for attribute, curies in config.get("attributes", {}).items():
             values = get_value_graph(graph, curies)
