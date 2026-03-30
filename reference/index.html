@@ -2665,8 +2665,7 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/generic/abc.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 27</span>
-<span class="normal"> 28</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 28</span>
 <span class="normal"> 29</span>
 <span class="normal"> 30</span>
 <span class="normal"> 31</span>
@@ -2999,7 +2998,12 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
 <span class="normal">358</span>
 <span class="normal">359</span>
 <span class="normal">360</span>
-<span class="normal">361</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericModel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GenericModel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
         <span class="n">abstract</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -3123,6 +3127,11 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data_and_normalized_uri</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">uri</span> <span class="o">=</span> <span class="n">get_autocomplete_data_and_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">uri</span>
+
+    <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">fetch_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Normalize the URI and extract the autocomplete data.</span>
@@ -3132,7 +3141,7 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
 <span class="sd">        Finally, combine the fetched data and the autocomplete data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetch from </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">uri</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">,</span> <span class="n">nuri</span> <span class="o">=</span> <span class="n">get_autocomplete_data_and_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">,</span> <span class="n">nuri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_data_and_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fn</span> <span class="o">:=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">valid_import_url</span><span class="p">(</span><span class="n">nuri</span><span class="p">):</span>
             <span class="n">fetcheddata</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">nuri</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
             <span class="c1"># merge the two dicts</span>
@@ -3155,14 +3164,13 @@ and collection does not exist, then create it. If it does exist, delete it.</p>
         <span class="c1"># we allow other apps to injercept the import</span>
         <span class="c1"># whatever they return will be used instead of</span>
         <span class="c1"># creating a new object</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">nuri</span> <span class="o">=</span> <span class="n">get_autocomplete_data_and_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">nuri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_data_and_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">receiver</span><span class="p">,</span> <span class="n">response</span> <span class="ow">in</span> <span class="n">pre_import_from</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">nuri</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">response</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">response</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fetch_from</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">allow_empty</span> <span class="ow">or</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
-            <span class="n">instance</span><span class="o">.</span><span class="n">_uris</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">nuri</span><span class="p">)]</span>
             <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="n">instance</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">instance</span>
@@ -3373,13 +3381,7 @@ Finally, combine the fetched data and the autocomplete data.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/abc.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
-<span class="normal">155</span>
-<span class="normal">156</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">156</span>
 <span class="normal">157</span>
 <span class="normal">158</span>
 <span class="normal">159</span>
@@ -3392,7 +3394,13 @@ Finally, combine the fetched data and the autocomplete data.</p>
 <span class="normal">166</span>
 <span class="normal">167</span>
 <span class="normal">168</span>
-<span class="normal">169</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalize the URI and extract the autocomplete data.</span>
@@ -3402,7 +3410,7 @@ Finally, combine the fetched data and the autocomplete data.</p>
 <span class="sd">    Finally, combine the fetched data and the autocomplete data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetch from </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">uri</span><span class="p">)</span>
-    <span class="n">data</span><span class="p">,</span> <span class="n">nuri</span> <span class="o">=</span> <span class="n">get_autocomplete_data_and_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">nuri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_data_and_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fn</span> <span class="o">:=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">valid_import_url</span><span class="p">(</span><span class="n">nuri</span><span class="p">):</span>
         <span class="n">fetcheddata</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">nuri</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="c1"># merge the two dicts</span>
@@ -3439,12 +3447,7 @@ in self is not set, otherwise it keeps the value in self.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/abc.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">243</span>
-<span class="normal">244</span>
-<span class="normal">245</span>
-<span class="normal">246</span>
-<span class="normal">247</span>
-<span class="normal">248</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">248</span>
 <span class="normal">249</span>
 <span class="normal">250</span>
 <span class="normal">251</span>
@@ -3458,7 +3461,12 @@ in self is not set, otherwise it keeps the value in self.</p>
 <span class="normal">259</span>
 <span class="normal">260</span>
 <span class="normal">261</span>
-<span class="normal">262</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_field_value_after_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_field_value_after_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method finds the value of a field after merging `other` into `self`.</span>
 <span class="sd">    It first tries to find a merge method that is specific to that field</span>
@@ -3508,13 +3516,7 @@ attach the URI to it.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/abc.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">171</span>
-<span class="normal">172</span>
-<span class="normal">173</span>
-<span class="normal">174</span>
-<span class="normal">175</span>
-<span class="normal">176</span>
-<span class="normal">177</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
 <span class="normal">178</span>
 <span class="normal">179</span>
 <span class="normal">180</span>
@@ -3531,7 +3533,12 @@ attach the URI to it.</p>
 <span class="normal">191</span>
 <span class="normal">192</span>
 <span class="normal">193</span>
-<span class="normal">194</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">import_from</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">allow_empty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fetch data from an URI and create a model instance using</span>
@@ -3543,14 +3550,13 @@ attach the URI to it.</p>
     <span class="c1"># we allow other apps to injercept the import</span>
     <span class="c1"># whatever they return will be used instead of</span>
     <span class="c1"># creating a new object</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">nuri</span> <span class="o">=</span> <span class="n">get_autocomplete_data_and_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">nuri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_data_and_normalized_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">receiver</span><span class="p">,</span> <span class="n">response</span> <span class="ow">in</span> <span class="n">pre_import_from</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">nuri</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">response</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">response</span>
     <span class="n">data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fetch_from</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">allow_empty</span> <span class="ow">or</span> <span class="n">data</span><span class="p">:</span>
         <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
-        <span class="n">instance</span><span class="o">.</span><span class="n">_uris</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">nuri</span><span class="p">)]</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">instance</span>
@@ -3582,12 +3588,7 @@ the validation error in the errors dict.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/abc.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span>
-<span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">201</span>
 <span class="normal">202</span>
 <span class="normal">203</span>
 <span class="normal">204</span>
@@ -3605,7 +3606,12 @@ the validation error in the errors dict.</p>
 <span class="normal">216</span>
 <span class="normal">217</span>
 <span class="normal">218</span>
-<span class="normal">219</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">import_from_dict_subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">):</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">import_from_dict_subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Import attributes of this instance from data in a dict.</span>
 <span class="sd">    We iterate through the individual values of the dict and</span>
@@ -3653,17 +3659,17 @@ It is called by the <code>merge_with</code> method.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/abc.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">264</span>
-<span class="normal">265</span>
-<span class="normal">266</span>
-<span class="normal">267</span>
-<span class="normal">268</span>
-<span class="normal">269</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">269</span>
 <span class="normal">270</span>
 <span class="normal">271</span>
 <span class="normal">272</span>
 <span class="normal">273</span>
-<span class="normal">274</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">merge_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">merge_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method iterates through the model fields and uses the</span>
 <span class="sd">    `get_field_value_after_merge` method to copy values from `other` to `self`.</span>
@@ -3705,8 +3711,7 @@ This method check if there is a callable defined for this URI.</p>
 
             <details class="quote">
               <summary>Source code in <code>apis_core/generic/abc.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">134</span>
-<span class="normal">135</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">135</span>
 <span class="normal">136</span>
 <span class="normal">137</span>
 <span class="normal">138</span>
@@ -3719,7 +3724,8 @@ This method check if there is a callable defined for this URI.</p>
 <span class="normal">145</span>
 <span class="normal">146</span>
 <span class="normal">147</span>
-<span class="normal">148</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="normal">148</span>
+<span class="normal">149</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">valid_import_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if an URI is a can be imported.</span>
@@ -8314,8 +8320,7 @@ Provides the user with a form to select the fields that should be updated.</p>
 <span class="normal">649</span>
 <span class="normal">650</span>
 <span class="normal">651</span>
-<span class="normal">652</span>
-<span class="normal">653</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Enrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">GenericModelPermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
+<span class="normal">652</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Enrich</span><span class="p">(</span><span class="n">GenericModelMixin</span><span class="p">,</span> <span class="n">GenericModelPermissionRequiredMixin</span><span class="p">,</span> <span class="n">FormView</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Enrich an entity with data from an external source</span>
 <span class="sd">    Provides the user with a form to select the fields that should be updated.</span>
@@ -8377,7 +8382,6 @@ Provides the user with a form to select the fields that should be updated.</p>
             <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;update_&quot;</span><span class="p">):</span>
                 <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;update_&quot;</span><span class="p">)</span>
                 <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;same_as&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;same_as&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">error</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="s2">&quot;_import_errors&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -8440,8 +8444,7 @@ the models <code>import_data</code> method.</p>
 <span class="normal">646</span>
 <span class="normal">647</span>
 <span class="normal">648</span>
-<span class="normal">649</span>
-<span class="normal">650</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+<span class="normal">649</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Go through all the form fields and extract the ones that</span>
 <span class="sd">    start with `update_` and that are set (those are the checkboxes that</span>
@@ -8454,7 +8457,6 @@ the models <code>import_data</code> method.</p>
         <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;update_&quot;</span><span class="p">):</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;update_&quot;</span><span class="p">)</span>
             <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;same_as&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;same_as&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">import_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">error</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="s2">&quot;_import_errors&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
