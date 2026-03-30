@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.62.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.61.0...v0.62.0) (2026-03-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* **apis_entities:** If you use the toml based rdf import configurations shipped in apis-core, please update your configuration
+
+### Features
+
+* **collection:** add a `list` method to the SkosCollection ([020e3de](https://github.com/acdh-oeaw/apis-core-rdf/commit/020e3de5b213b9d6d119ac2ff4cd81a280314dfd))
+* **collections:** add `contains` method to SkosCollection ([b41929c](https://github.com/acdh-oeaw/apis-core-rdf/commit/b41929c77400f65b501fe36c0e53309f47af9c8d))
+* **generic:** make a classmethod out of the url normalization ([588a925](https://github.com/acdh-oeaw/apis-core-rdf/commit/588a9258bde66d19bfa06d39ce4977c67a53ae2c))
+* **generic:** reorder action buttons ([fe4686b](https://github.com/acdh-oeaw/apis-core-rdf/commit/fe4686b421cb9cf59be2fe886cfe34e4b75a03a0))
+* **generic:** ship a custom `permission denied` page ([c743af8](https://github.com/acdh-oeaw/apis-core-rdf/commit/c743af8ccdabb7f63b539959efe12c9bc4524078)), closes [#2023](https://github.com/acdh-oeaw/apis-core-rdf/issues/2023)
+* **generic:** ship custom 403.html template ([813dd92](https://github.com/acdh-oeaw/apis-core-rdf/commit/813dd9220f538c83ffe86861d3daf894d9f9c0d6)), closes [#2023](https://github.com/acdh-oeaw/apis-core-rdf/issues/2023)
+* **relations:** set title of relation list vie page ([8e4ce6a](https://github.com/acdh-oeaw/apis-core-rdf/commit/8e4ce6aad2eaddd16e47b783e2f82a208e46906f)), closes [#2096](https://github.com/acdh-oeaw/apis-core-rdf/issues/2096)
+
+
+### Bug Fixes
+
+* add meta tag to use strict-origin-when-cross-origin referrer policy ([27a70a6](https://github.com/acdh-oeaw/apis-core-rdf/commit/27a70a630dcf3e9a31f9fba299a99b9365bd0bec)), closes [#2321](https://github.com/acdh-oeaw/apis-core-rdf/issues/2321)
+* **apis_entities:** don't use `<small>` for styling ([2c455ba](https://github.com/acdh-oeaw/apis-core-rdf/commit/2c455ba6593230b0916f75d3b5bf3ec309aaef7e)), closes [#2118](https://github.com/acdh-oeaw/apis-core-rdf/issues/2118)
+* **generic:** set the `same_as` link during `import_from` ([8f3d52b](https://github.com/acdh-oeaw/apis-core-rdf/commit/8f3d52b12e53d172e028546289ffc670cb20a8bc))
+
+
+### Code Refactoring
+
+* **apis_entities:** drop toml based rdf importer configs ([fef7dea](https://github.com/acdh-oeaw/apis-core-rdf/commit/fef7dea5c9d44d497c1c1a9d348ac61fc20bc05b))
+
 ## [0.61.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.60.1...v0.61.0) (2026-03-06)
 
 
