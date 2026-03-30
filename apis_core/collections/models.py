@@ -90,6 +90,12 @@ class SkosCollection(GenericModel, models.Model):
             return qs.filter(content_type=content_type)
         return qs
 
+    def contains(self, instance: object):
+        content_type = ContentType.objects.get_for_model(instance)
+        return SkosCollectionContentObject.objects.filter(
+            collection=self, content_type=content_type, object_id=instance.pk
+        ).exists()
+
 
 class SkosCollectionContentObject(GenericModel, models.Model):
     """
