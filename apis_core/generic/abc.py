@@ -1,5 +1,6 @@
 import logging
 import re
+from typing import Tuple
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
@@ -148,6 +149,11 @@ class GenericModel(models.Model):
         return False
 
     @classmethod
+    def get_data_and_normalized_uri(cls, uri: str) -> Tuple[dict, str]:
+        data, uri = get_autocomplete_data_and_normalized_uri(uri)
+        return data, uri
+
+    @classmethod
     def fetch_from(cls, uri: str):
         """
         Normalize the URI and extract the autocomplete data.
@@ -157,7 +163,7 @@ class GenericModel(models.Model):
         Finally, combine the fetched data and the autocomplete data.
         """
         logger.debug("Fetch from %s", uri)
-        data, nuri = get_autocomplete_data_and_normalized_uri(uri)
+        data, nuri = cls.get_data_and_normalized_uri(uri)
         if fn := cls.valid_import_url(nuri):
             fetcheddata = fn(nuri) or {}
             # merge the two dicts
@@ -180,7 +186,7 @@ class GenericModel(models.Model):
         # we allow other apps to injercept the import
         # whatever they return will be used instead of
         # creating a new object
-        _, nuri = get_autocomplete_data_and_normalized_uri(uri)
+        _, nuri = cls.get_data_and_normalized_uri(uri)
         for receiver, response in pre_import_from.send(sender=cls, uri=nuri):
             if response:
                 return response
