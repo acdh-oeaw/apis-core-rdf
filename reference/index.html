@@ -1522,7 +1522,19 @@ organization system reference. W3C recommendation (2009)."</p>
 <span class="normal">82</span>
 <span class="normal">83</span>
 <span class="normal">84</span>
-<span class="normal">85</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SkosCollection</span><span class="p">(</span><span class="n">GenericModel</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span>
+<span class="normal">97</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SkosCollection</span><span class="p">(</span><span class="n">GenericModel</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    SKOS collections are labeled and/or ordered groups of SKOS concepts.</span>
 <span class="sd">    Collections are useful where a group of concepts shares something in common,</span>
@@ -1589,6 +1601,18 @@ organization system reference. W3C recommendation (2009)."</p>
         <span class="k">raise</span> <span class="n">SkosCollection</span><span class="o">.</span><span class="n">MultipleObjectsReturned</span><span class="p">(</span>
             <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1">&quot; is part of multiple collections&#39;</span>
         <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="n">SkosCollectionContentObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">content_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qs</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">SkosCollectionContentObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">collection</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span> <span class="n">object_id</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">pk</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -1638,19 +1662,19 @@ organization system reference. W3C recommendation (2009)."</p>
 
               <details class="quote">
                 <summary>Source code in <code>apis_core/collections/models.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SkosCollectionContentObject</span><span class="p">(</span><span class="n">GenericModel</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SkosCollectionContentObject</span><span class="p">(</span><span class="n">GenericModel</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Throughtable* datamodel to connect collections to arbitrary content</span>
 <span class="sd">    &quot;&quot;&quot;</span>
