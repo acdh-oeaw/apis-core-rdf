@@ -3,8 +3,8 @@ from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from apis_core.apis_entities.rdfconfigs import group, person, place
+from apis_core.apis_entities.utils.rdf import load_uri_using_path
 from apis_core.generic.utils.rdf_namespace import CRM
-from apis_core.utils.rdf import load_uri_using_path
 
 #########################
 # Abstract base classes #

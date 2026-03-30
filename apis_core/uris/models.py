@@ -7,8 +7,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
 
+from apis_core.apis_entities.utils import rdf
 from apis_core.generic.abc import GenericModel
-from apis_core.utils import rdf
 from apis_core.utils import settings as apis_settings
 
 # Uri model

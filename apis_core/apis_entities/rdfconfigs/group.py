@@ -1,4 +1,4 @@
-from apis_core.utils.rdf import Attribute, Filter
+from apis_core.apis_entities.utils.rdf import Attribute, Filter
 
 
 class E74_GroupFromDNB:
