@@ -3,21 +3,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for apis_core/generic/api_views.py: 46%</title>
-    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
-    <script src="coverage_html_cb_6fb7b396.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
+    <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
+    <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>apis_core/generic/api_views.py</b>:
+            <span class="text">Coverage for </span><b>apis_core&#8201;/&#8201;generic&#8201;/&#8201;api_views.py</b>:
             <span class="pc_cov">46%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
+                <img id="keyboard_icon" src="keybd_closed_cb_900cfef5.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_ef777899a9cfc89e_filterbackends_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2026-03-30 14:15 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.5">coverage.py v7.13.5</a>,
+            created at 2026-03-30 14:22 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -134,32 +134,32 @@
     <p class="pln"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_queryset</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">        <span class="nam">queryset_methods</span> <span class="op">=</span> <span class="nam">module_paths</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">model</span><span class="op">,</span> <span class="nam">path</span><span class="op">=</span><span class="str">"querysets"</span><span class="op">,</span> <span class="nam">suffix</span><span class="op">=</span><span class="str">"ViewSetQueryset"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">model</span><span class="op">,</span> <span class="nam">path</span><span class="op">=</span><span class="str">"querysets"</span><span class="op">,</span> <span class="nam">suffix</span><span class="op">=</span><span class="str">"ViewSetQueryset"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">        <span class="nam">queryset</span> <span class="op">=</span> <span class="nam">first_member_match</span><span class="op">(</span><span class="nam">queryset_methods</span><span class="op">)</span> <span class="key">or</span> <span class="op">(</span><span class="key">lambda</span> <span class="nam">x</span><span class="op">:</span> <span class="nam">x</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">        <span class="key">return</span> <span class="nam">queryset</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">model</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">all</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_serializer_class</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">        <span class="nam">renderer</span> <span class="op">=</span> <span class="nam">getattr</span><span class="op">(</span><span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="str">"request"</span><span class="op">,</span> <span class="op">{</span><span class="op">}</span><span class="op">)</span><span class="op">,</span> <span class="str">"accepted_renderer"</span><span class="op">,</span> <span class="key">None</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">        <span class="nam">serializer_class_modules</span> <span class="op">=</span> <span class="nam">module_paths</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">model</span><span class="op">,</span> <span class="nam">path</span><span class="op">=</span><span class="str">"serializers"</span><span class="op">,</span> <span class="nam">suffix</span><span class="op">=</span><span class="str">"Serializer"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">model</span><span class="op">,</span> <span class="nam">path</span><span class="op">=</span><span class="str">"serializers"</span><span class="op">,</span> <span class="nam">suffix</span><span class="op">=</span><span class="str">"Serializer"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t65" href="#t65">65</a></span><span class="t">        <span class="key">if</span> <span class="nam">renderer</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">            <span class="nam">prefix</span> <span class="op">=</span> <span class="nam">makeclassprefix</span><span class="op">(</span><span class="nam">renderer</span><span class="op">.</span><span class="nam">format</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">            <span class="nam">serializer_class_modules</span> <span class="op">=</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">                <span class="nam">module_paths</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">                    <span class="nam">self</span><span class="op">.</span><span class="nam">model</span><span class="op">,</span> <span class="nam">path</span><span class="op">=</span><span class="str">"serializers"</span><span class="op">,</span> <span class="nam">suffix</span><span class="op">=</span><span class="fst">f"</span><span class="op">{</span><span class="nam">prefix</span><span class="op">}</span><span class="fst">Serializer</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">                <span class="op">+</span> <span class="nam">serializer_class_modules</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t72" href="#t72">72</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">                <span class="nam">module_paths</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">                    <span class="nam">self</span><span class="op">.</span><span class="nam">model</span><span class="op">,</span> <span class="nam">path</span><span class="op">=</span><span class="str">"serializers"</span><span class="op">,</span> <span class="nam">suffix</span><span class="op">=</span><span class="fst">f"</span><span class="op">{</span><span class="nam">prefix</span><span class="op">}</span><span class="fst">Serializer</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">                <span class="op">+</span> <span class="nam">serializer_class_modules</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t72" href="#t72">72</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t73" href="#t73">73</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t74" href="#t74">74</a></span><span class="t">        <span class="nam">serializer_class</span> <span class="op">=</span> <span class="nam">first_member_match</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t75" href="#t75">75</a></span><span class="t">            <span class="nam">serializer_class_modules</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">            <span class="nam">getattr</span><span class="op">(</span><span class="nam">renderer</span><span class="op">,</span> <span class="str">"serializer"</span><span class="op">,</span> <span class="nam">GenericHyperlinkedModelSerializer</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t77" href="#t77">77</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t75" href="#t75">75</a></span><span class="t">            <span class="nam">serializer_class_modules</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">            <span class="nam">getattr</span><span class="op">(</span><span class="nam">renderer</span><span class="op">,</span> <span class="str">"serializer"</span><span class="op">,</span> <span class="nam">GenericHyperlinkedModelSerializer</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t77" href="#t77">77</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t78" href="#t78">78</a></span><span class="t">        <span class="key">return</span> <span class="nam">serializer_factory</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">model</span><span class="op">,</span> <span class="nam">serializer</span><span class="op">=</span><span class="nam">serializer_class</span><span class="op">,</span> <span class="nam">action</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">action</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t80" href="#t80">80</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">model</span><span class="op">,</span> <span class="nam">serializer</span><span class="op">=</span><span class="nam">serializer_class</span><span class="op">,</span> <span class="nam">action</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">action</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t80" href="#t80">80</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -168,8 +168,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_ef777899a9cfc89e_filterbackends_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2026-03-30 14:15 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.5">coverage.py v7.13.5</a>,
+            created at 2026-03-30 14:22 +0000
         </p>
     </div>
 </footer>

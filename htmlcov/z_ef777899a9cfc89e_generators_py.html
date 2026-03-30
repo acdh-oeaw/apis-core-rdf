@@ -3,21 +3,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for apis_core/generic/generators.py: 36%</title>
-    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
-    <script src="coverage_html_cb_6fb7b396.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
+    <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
+    <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>apis_core/generic/generators.py</b>:
+            <span class="text">Coverage for </span><b>apis_core&#8201;/&#8201;generic&#8201;/&#8201;generators.py</b>:
             <span class="pc_cov">36%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
+                <img id="keyboard_icon" src="keybd_closed_cb_900cfef5.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_ef777899a9cfc89e_helpers_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2026-03-30 14:15 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.5">coverage.py v7.13.5</a>,
+            created at 2026-03-30 14:22 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -113,8 +113,8 @@
     <p class="pln"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t32" href="#t32">32</a></span><span class="t"><span class="key">class</span> <span class="nam">CustomEndpointEnumerator</span><span class="op">(</span><span class="nam">EndpointEnumerator</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t">    <span class="key">def</span> <span class="nam">_generate_content_type_endpoint</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">        <span class="nam">self</span><span class="op">,</span> <span class="nam">content_type</span><span class="op">:</span> <span class="nam">ContentType</span><span class="op">,</span> <span class="nam">method</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">"list"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t">    <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">        <span class="nam">self</span><span class="op">,</span> <span class="nam">content_type</span><span class="op">:</span> <span class="nam">ContentType</span><span class="op">,</span> <span class="nam">method</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">"list"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t">    <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t">        <span class="str">"""Create a endpoint tuple, usable by the SchemaGenerator of DRF spectacular"""</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t">        <span class="nam">path</span> <span class="op">=</span> <span class="nam">reverse</span><span class="op">(</span><span class="str">"apis_core:generic:genericmodelapi-list"</span><span class="op">,</span> <span class="nam">args</span><span class="op">=</span><span class="op">[</span><span class="nam">content_type</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t38" href="#t38">38</a></span><span class="t">        <span class="nam">cls</span> <span class="op">=</span> <span class="nam">resolve</span><span class="op">(</span><span class="nam">path</span><span class="op">)</span><span class="op">.</span><span class="nam">func</span><span class="op">.</span><span class="nam">cls</span>&nbsp;</span><span class="r"></span></p>
@@ -139,18 +139,18 @@
     <p class="pln"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">        <span class="nam">api_endpoints</span> <span class="op">=</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">get_api_endpoints</span><span class="op">(</span><span class="nam">patterns</span><span class="op">,</span> <span class="nam">prefix</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">        <span class="nam">api_endpoints</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">            <span class="nam">endpoint</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">            <span class="key">for</span> <span class="nam">endpoint</span> <span class="key">in</span> <span class="nam">api_endpoints</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">            <span class="key">if</span> <span class="str">"/api/{contenttype}/"</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">endpoint</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">        <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">            <span class="nam">endpoint</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">            <span class="key">for</span> <span class="nam">endpoint</span> <span class="key">in</span> <span class="nam">api_endpoints</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">            <span class="key">if</span> <span class="str">"/api/{contenttype}/"</span> <span class="key">not</span> <span class="key">in</span> <span class="nam">endpoint</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">        <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">        <span class="key">for</span> <span class="nam">content_type</span> <span class="key">in</span> <span class="nam">ContentType</span><span class="op">.</span><span class="nam">objects</span><span class="op">.</span><span class="nam">all</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t65" href="#t65">65</a></span><span class="t">            <span class="key">if</span> <span class="nam">content_type</span><span class="op">.</span><span class="nam">model_class</span><span class="op">(</span><span class="op">)</span> <span class="key">is</span> <span class="key">not</span> <span class="key">None</span> <span class="key">and</span> <span class="nam">issubclass</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">                <span class="nam">content_type</span><span class="op">.</span><span class="nam">model_class</span><span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="nam">GenericModel</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">            <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">                <span class="nam">content_type</span><span class="op">.</span><span class="nam">model_class</span><span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="nam">GenericModel</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">            <span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">                <span class="nam">api_endpoints</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">_generate_content_type_endpoint</span><span class="op">(</span><span class="nam">content_type</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">                <span class="nam">api_endpoints</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">                    <span class="nam">self</span><span class="op">.</span><span class="nam">_generate_content_type_endpoint</span><span class="op">(</span><span class="nam">content_type</span><span class="op">,</span> <span class="str">"detail"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">                    <span class="nam">self</span><span class="op">.</span><span class="nam">_generate_content_type_endpoint</span><span class="op">(</span><span class="nam">content_type</span><span class="op">,</span> <span class="str">"detail"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t72" href="#t72">72</a></span><span class="t">        <span class="key">return</span> <span class="nam">api_endpoints</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t73" href="#t73">73</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t74" href="#t74">74</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -164,8 +164,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_ef777899a9cfc89e_helpers_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2026-03-30 14:15 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.5">coverage.py v7.13.5</a>,
+            created at 2026-03-30 14:22 +0000
         </p>
     </div>
 </footer>

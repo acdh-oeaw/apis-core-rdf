@@ -3,21 +3,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for apis_core/generic/helpers.py: 84%</title>
-    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
-    <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
-    <script src="coverage_html_cb_6fb7b396.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_c827f16f.png">
+    <link rel="stylesheet" href="style_cb_9ff733b0.css" type="text/css">
+    <script src="coverage_html_cb_dd2e7eb5.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
     <div class="content">
         <h1>
-            <span class="text">Coverage for </span><b>apis_core/generic/helpers.py</b>:
+            <span class="text">Coverage for </span><b>apis_core&#8201;/&#8201;generic&#8201;/&#8201;helpers.py</b>:
             <span class="pc_cov">84%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
+                <img id="keyboard_icon" src="keybd_closed_cb_900cfef5.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_ef777899a9cfc89e_middleware_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2026-03-30 14:15 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.5">coverage.py v7.13.5</a>,
+            created at 2026-03-30 14:22 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -102,14 +102,14 @@
     <p class="pln"><span class="n"><a id="t20" href="#t20">20</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t">    <span class="nam">default_types</span> <span class="op">=</span> <span class="op">(</span><span class="nam">CharField</span><span class="op">,</span> <span class="nam">TextField</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t">    <span class="nam">fields</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t">        <span class="nam">field</span> <span class="key">for</span> <span class="nam">field</span> <span class="key">in</span> <span class="nam">model</span><span class="op">.</span><span class="nam">_meta</span><span class="op">.</span><span class="nam">get_fields</span><span class="op">(</span><span class="op">)</span> <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">field</span><span class="op">,</span> <span class="nam">default_types</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t">        <span class="nam">field</span> <span class="key">for</span> <span class="nam">field</span> <span class="key">in</span> <span class="nam">model</span><span class="op">.</span><span class="nam">_meta</span><span class="op">.</span><span class="nam">get_fields</span><span class="op">(</span><span class="op">)</span> <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">field</span><span class="op">,</span> <span class="nam">default_types</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t25" href="#t25">25</a></span><span class="t">    <span class="com"># check if the model has a `_default_search_fields`</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t26" href="#t26">26</a></span><span class="t">    <span class="com"># list and use that as searchfields</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t27" href="#t27">27</a></span><span class="t">    <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">getattr</span><span class="op">(</span><span class="nam">model</span><span class="op">,</span> <span class="str">"_default_search_fields"</span><span class="op">,</span> <span class="key">None</span><span class="op">)</span><span class="op">,</span> <span class="nam">list</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t28" href="#t28">28</a></span><span class="t">        <span class="nam">fields</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t29" href="#t29">29</a></span><span class="t">            <span class="nam">model</span><span class="op">.</span><span class="nam">_meta</span><span class="op">.</span><span class="nam">get_field</span><span class="op">(</span><span class="nam">field</span><span class="op">)</span> <span class="key">for</span> <span class="nam">field</span> <span class="key">in</span> <span class="nam">model</span><span class="op">.</span><span class="nam">_default_search_fields</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t">        <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t29" href="#t29">29</a></span><span class="t">            <span class="nam">model</span><span class="op">.</span><span class="nam">_meta</span><span class="op">.</span><span class="nam">get_field</span><span class="op">(</span><span class="nam">field</span><span class="op">)</span> <span class="key">for</span> <span class="nam">field</span> <span class="key">in</span> <span class="nam">model</span><span class="op">.</span><span class="nam">_default_search_fields</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t">        <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t">    <span class="com"># if `fields_to_search` is a list, use that</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t32" href="#t32">32</a></span><span class="t">    <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">field_names</span><span class="op">,</span> <span class="nam">list</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t">        <span class="nam">fields</span> <span class="op">=</span> <span class="op">[</span><span class="nam">model</span><span class="op">.</span><span class="nam">_meta</span><span class="op">.</span><span class="nam">get_field</span><span class="op">(</span><span class="nam">field</span><span class="op">)</span> <span class="key">for</span> <span class="nam">field</span> <span class="key">in</span> <span class="nam">field_names</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -129,18 +129,18 @@
     <p class="run"><span class="n"><a id="t47" href="#t47">47</a></span><span class="t">        <span class="nam">query</span> <span class="op">=</span> <span class="nam">query</span><span class="op">.</span><span class="nam">split</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t48" href="#t48">48</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">    <span class="nam">_fields_to_search</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t">        <span class="nam">field</span><span class="op">.</span><span class="nam">name</span> <span class="key">for</span> <span class="nam">field</span> <span class="key">in</span> <span class="nam">default_search_fields</span><span class="op">(</span><span class="nam">model</span><span class="op">,</span> <span class="nam">fields_to_search</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t">        <span class="nam">field</span><span class="op">.</span><span class="nam">name</span> <span class="key">for</span> <span class="nam">field</span> <span class="key">in</span> <span class="nam">default_search_fields</span><span class="op">(</span><span class="nam">model</span><span class="op">,</span> <span class="nam">fields_to_search</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t">    <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">    <span class="nam">q</span> <span class="op">=</span> <span class="nam">Q</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">    <span class="key">for</span> <span class="nam">token</span> <span class="key">in</span> <span class="nam">query</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">        <span class="nam">q</span> <span class="op">&amp;=</span> <span class="nam">functools</span><span class="op">.</span><span class="nam">reduce</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">            <span class="key">lambda</span> <span class="nam">acc</span><span class="op">,</span> <span class="nam">field_name</span><span class="op">:</span> <span class="nam">acc</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">            <span class="op">|</span> <span class="nam">Q</span><span class="op">(</span><span class="op">**</span><span class="op">{</span><span class="fst">f"</span><span class="op">{</span><span class="nam">prefix</span><span class="op">}</span><span class="op">{</span><span class="nam">field_name</span><span class="op">}</span><span class="fst">__icontains</span><span class="fst">"</span><span class="op">:</span> <span class="nam">token</span><span class="op">}</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">            <span class="nam">_fields_to_search</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">            <span class="nam">Q</span><span class="op">(</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">            <span class="key">lambda</span> <span class="nam">acc</span><span class="op">,</span> <span class="nam">field_name</span><span class="op">:</span> <span class="nam">acc</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">            <span class="op">|</span> <span class="nam">Q</span><span class="op">(</span><span class="op">**</span><span class="op">{</span><span class="fst">f"</span><span class="op">{</span><span class="nam">prefix</span><span class="op">}</span><span class="op">{</span><span class="nam">field_name</span><span class="op">}</span><span class="fst">__icontains</span><span class="fst">"</span><span class="op">:</span> <span class="nam">token</span><span class="op">}</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">            <span class="nam">_fields_to_search</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">            <span class="nam">Q</span><span class="op">(</span><span class="op">)</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run run2"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">    <span class="key">return</span> <span class="nam">q</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -183,8 +183,8 @@
     <p class="run"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">    <span class="nam">prepends</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t102" href="#t102">102</a></span><span class="t">    <span class="key">for</span> <span class="nam">prepend</span> <span class="key">in</span> <span class="nam">getattr</span><span class="op">(</span><span class="nam">settings</span><span class="op">,</span> <span class="str">"ADDITIONAL_MODULE_LOOKUP_PATHS"</span><span class="op">,</span> <span class="op">[</span><span class="op">]</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">        <span class="nam">prepends</span><span class="op">.</span><span class="nam">extend</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">            <span class="nam">list</span><span class="op">(</span><span class="nam">map</span><span class="op">(</span><span class="key">lambda</span> <span class="nam">x</span><span class="op">:</span> <span class="nam">prepend</span><span class="op">.</span><span class="nam">split</span><span class="op">(</span><span class="str">"."</span><span class="op">)</span> <span class="op">+</span> <span class="op">[</span><span class="nam">path</span><span class="op">]</span> <span class="op">+</span> <span class="nam">x</span><span class="op">[</span><span class="op">-</span><span class="num">1</span><span class="op">:</span><span class="op">]</span><span class="op">,</span> <span class="nam">mro_paths</span><span class="op">(</span><span class="nam">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">            <span class="nam">list</span><span class="op">(</span><span class="nam">map</span><span class="op">(</span><span class="key">lambda</span> <span class="nam">x</span><span class="op">:</span> <span class="nam">prepend</span><span class="op">.</span><span class="nam">split</span><span class="op">(</span><span class="str">"."</span><span class="op">)</span> <span class="op">+</span> <span class="op">[</span><span class="nam">path</span><span class="op">]</span> <span class="op">+</span> <span class="nam">x</span><span class="op">[</span><span class="op">-</span><span class="num">1</span><span class="op">:</span><span class="op">]</span><span class="op">,</span> <span class="nam">mro_paths</span><span class="op">(</span><span class="nam">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis mis2 show_mis"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t106" href="#t106">106</a></span><span class="t">    <span class="nam">classes</span> <span class="op">=</span> <span class="nam">tuple</span><span class="op">(</span><span class="str">"."</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="nam">prefix</span><span class="op">)</span> <span class="op">+</span> <span class="nam">suffix</span> <span class="key">for</span> <span class="nam">prefix</span> <span class="key">in</span> <span class="nam">prepends</span> <span class="op">+</span> <span class="nam">paths</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t107" href="#t107">107</a></span><span class="t">    <span class="key">return</span> <span class="nam">classes</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t108" href="#t108">108</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -246,8 +246,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_ef777899a9cfc89e_middleware_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2026-03-30 14:15 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.13.5">coverage.py v7.13.5</a>,
+            created at 2026-03-30 14:22 +0000
         </p>
     </div>
 </footer>
