@@ -5,6 +5,7 @@ import inspect
 import logging
 import tomllib
 from collections import defaultdict
+from copy import copy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
@@ -82,11 +83,11 @@ def graph_matches_config(graph: Graph, configfile: Path) -> dict:
             value = getattr(configfile, key)
             match value:
                 case Filter():
-                    config["filters"].append(value.value)
+                    config["filters"].append(copy(value.value))
                 case Attribute():
-                    config["attributes"][key.lower()] = value.value
+                    config["attributes"][key.lower()] = copy(value.value)
                 case Relation():
-                    config["relations"][value.name] = value.value
+                    config["relations"][value.name] = copy(value.value)
     else:
         config = load_path(configfile)
     for _filter in config.get("filters", [[(None, None)]]):
