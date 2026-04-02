@@ -142,7 +142,11 @@ def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
     if isinstance(curies, str):
         curies = [curies]
     for curie in curies:
-        results = graph.query(build_sparql_query(curie))
+        try:
+            results = graph.query(build_sparql_query(curie))
+        except Exception as e:
+            logger.debug("Could not parse query: %s", e)
+            results = []
         objects = [result[0] for result in results]
         for obj in objects:
             if isinstance(obj, BNode):
