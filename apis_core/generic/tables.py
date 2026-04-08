@@ -37,11 +37,13 @@ class ActionColumn(CustomTemplateColumn):
     exclude_from_export = True
     attrs = {"td": {"style": "width:1%;"}, "th": {"style": "font-size: 0"}}
 
-    def render(self, record, table, *args, **kwargs):
+    def render(self, table, **kwargs):
+        record = kwargs.get("record")
+
         if permission := getattr(self, "permission", False):
             if not table.request.user.has_perm(permission_fullname(permission, record)):
                 return ""
-        return super().render(record, table, *args, **kwargs)
+        return super().render(table, **kwargs)
 
 
 class ActionsColumn(CustomTemplateColumn):
@@ -88,7 +90,8 @@ class MoreLessColumn(tables.TemplateColumn):
         self.fulltext = fulltext
         super().__init__(template_name=self.template_name, *args, **kwargs)
 
-    def render(self, record, **kwargs):
+    def render(self, table, **kwargs):
+        record = kwargs.get("record")
         self.extra_context["preview"] = self.preview(record)
         self.extra_context["fulltext"] = self.fulltext(record)
-        return super().render(record, **kwargs)
+        return super().render(table, **kwargs)
