@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.62.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.62.0...v0.62.1) (2026-04-27)
+
+
+### Bug Fixes
+
+* **utils:** copy values from import config ([0fb7e2e](https://github.com/acdh-oeaw/apis-core-rdf/commit/0fb7e2ea99b70a16394462396bf22c33c8714dbb)), closes [#2339](https://github.com/acdh-oeaw/apis-core-rdf/issues/2339)
+* **utils:** handle unkown namespace exception ([b387f79](https://github.com/acdh-oeaw/apis-core-rdf/commit/b387f7933d753474eece5812c26ef9632b660250)), closes [#2340](https://github.com/acdh-oeaw/apis-core-rdf/issues/2340)
+
 ## [0.62.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.61.0...v0.62.0) (2026-03-30)
 
 
