@@ -5,16 +5,19 @@ from apis_core.core.fields import ApisListSelect2
 from apis_core.relations.utils import relation_content_types
 
 
-def list_relation_choices():
-    return [(rel.id, rel.model_class().name()) for rel in relation_content_types()]
+def list_relation_choices(model=None):
+    return [
+        (rel.id, rel.model_class().name())
+        for rel in relation_content_types(any_model=model)
+    ]
 
 
 class RelationMultiWidget(forms.MultiWidget):
     template_name = "relations/relation_multiwidget.html"
     use_fieldset = False
 
-    def __init__(self, attrs=None):
-        relation_choices = [(None, "---")] + list_relation_choices()
+    def __init__(self, attrs=None, choices=[]):
+        relation_choices = [(None, "---")] + choices
         widgets = [
             forms.widgets.Select(choices=relation_choices),
             ApisListSelect2(url=reverse("apis_core:apis_entities:autocomplete")),
@@ -26,10 +29,10 @@ class RelationMultiWidget(forms.MultiWidget):
 
 
 class RelationField(forms.MultiValueField):
-    widget = RelationMultiWidget()
-
-    def __init__(self, *args, **kwargs):
-        fields = (forms.ChoiceField(choices=list_relation_choices()), forms.CharField())
+    def __init__(self, model=None, *args, **kwargs):
+        choices = list_relation_choices(model)
+        self.widget = RelationMultiWidget(choices=choices)
+        fields = (forms.ChoiceField(choices=choices), forms.CharField())
         super().__init__(fields=fields, *args, **kwargs)
 
     def compress(self, data_list):
