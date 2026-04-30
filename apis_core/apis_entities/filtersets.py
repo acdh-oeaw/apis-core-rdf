@@ -68,4 +68,4 @@ class AbstractEntityFilterSet(GenericFilterSet):
         if apps.is_installed("apis_core.relations"):
             from apis_core.relations.filters import RelationFilter
 
-            self.filters["relation"] = RelationFilter()
+            self.filters["relation"] = RelationFilter(model=self.Meta.model)
