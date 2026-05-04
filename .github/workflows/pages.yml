@@ -32,22 +32,21 @@ jobs:
        run: |
          uv run --group docs coverage run
          uv run --group docs coverage html
-     - uses: actions/checkout@v6
+         mv htmlcov docs/_build/
+     - name: Upload static files as artifact
+       id: deployment
+       uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
        with:
-         path: apis-core-rdf-pages
-         ref: pages
-     - name: Commit new docs
-       run: |
-         cd apis-core-rdf-pages
-         git rm -rf *
-         cp -r $GITHUB_WORKSPACE/docs/_build/* .
-         cp -r $GITHUB_WORKSPACE/htmlcov .
-         rm -f htmlcov/.gitignore
-         touch .nojekyll
-         git config user.name github-actions
-         git config user.email github-actions@github.com
-         git add .
-         if ! git diff --staged --exit-code .; then
-           git commit -m "Updated documentation"
-           git push --set-upstream origin pages
-         fi
+         path: docs/_build/
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
