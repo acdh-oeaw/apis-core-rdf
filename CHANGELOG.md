@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.63.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.62.1...v0.63.0) (2026-05-04)
+
+
+### Features
+
+* **apis_entities:** limit relation types to relevant ones ([760e112](https://github.com/acdh-oeaw/apis-core-rdf/commit/760e112d32679466b1f9bf6e1a95cabd0030b4ac)), closes [#2088](https://github.com/acdh-oeaw/apis-core-rdf/issues/2088)
+* **generic:** add a reset checkbox to column and filterset forms ([67749b3](https://github.com/acdh-oeaw/apis-core-rdf/commit/67749b39d6783cb840e68c0c546cafaef6b5d88b))
+* **generic:** store list form data in cookie ([7022f21](https://github.com/acdh-oeaw/apis-core-rdf/commit/7022f21b84ec952b28a11a4c0c56d1d39f572fc8)), closes [#1564](https://github.com/acdh-oeaw/apis-core-rdf/issues/1564)
+* introduce new entity app ([c7af714](https://github.com/acdh-oeaw/apis-core-rdf/commit/c7af714d93ad948a24ec927413a8b0158f7810b6))
+* **relations:** introduce model parameter to RelationField ([3fe6a2a](https://github.com/acdh-oeaw/apis-core-rdf/commit/3fe6a2ad0989251df8e0445055333123fcd0863c))
+* **sample_project:** update fixtures with data for new entities app ([c8b1d38](https://github.com/acdh-oeaw/apis-core-rdf/commit/c8b1d38b9160f702ffe1b34c8cb8657056d22794))
+* **sample_project:** use new entities app in sample project ([7921213](https://github.com/acdh-oeaw/apis-core-rdf/commit/7921213e5aa6f168c94f5232211242b8fea3e670))
+
+
+### Bug Fixes
+
+* **generic:** don't allow to import empty data in ModelImportChoiceField ([b27425e](https://github.com/acdh-oeaw/apis-core-rdf/commit/b27425ebed39e410d0d3d6c63509940f0e32065c)), closes [#2347](https://github.com/acdh-oeaw/apis-core-rdf/issues/2347)
+
 ## [0.62.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.62.0...v0.62.1) (2026-04-27)
 
 
