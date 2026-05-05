@@ -17,10 +17,10 @@
 
         {% block card-header-content %}
           <div id="single-object-header" class="row">
-            <div class="col-md-2">{% include "apis_entities/partials/prev_url.html" %}</div>
+            <div class="col-md-2">{% include "entities/partials/prev_url.html" %}</div>
             <div class="col-md-8">
               <h1>
-                {% include "apis_entities/partials/listview_url.html" %}
+                {% include "entities/partials/listview_url.html" %}
                 {{ object }}
                 <a href="{{ object.get_absolute_url }}">
                   <span class="material-symbols-outlined">link</span>
@@ -31,13 +31,13 @@
 
               </h1>
             </div>
-            <div class="col-md-2">{% include "apis_entities/partials/next_url.html" %}</div>
+            <div class="col-md-2">{% include "entities/partials/next_url.html" %}</div>
           </div>
         {% endblock card-header-content %}
 
         {% block navigation %}
-          {% include "apis_entities/partials/entity_base_nav.html" %}
-          {% include "apis_entities/partials/entity_actions_nav.html" %}
+          {% include "entities/partials/entity_base_nav.html" %}
+          {% include "entities/partials/entity_actions_nav.html" %}
         {% endblock navigation %}
 
       </div>

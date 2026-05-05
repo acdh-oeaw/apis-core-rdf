@@ -1,10 +1,10 @@
-{% extends "apis_core/apis_entities/abstractentity.html" %}
+{% extends "entities/entity.html" %}
 {% load generic %}
 
 {% block col-zero %}
   <div class="card">
     {% template_list object prefix="partials/" suffix="_card_table.html" as template_list %}
     <div class="card-body">{% include template_list %}</div>
-    <div class="card-footer">{% include "apis_entities/partials/linked_open_data.html" %}</div>
+    <div class="card-footer">{% include "entities/partials/linked_open_data.html" %}</div>
   </div>
 {% endblock col-zero %}
