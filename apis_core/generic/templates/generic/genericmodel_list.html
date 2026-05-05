@@ -23,12 +23,14 @@
 
           </div>
           <div class="col">
-            {% if object_list.model.get_add_permission in perms %}
-              <a class="btn btn-outline-success float-end btn-sm"
-                 href="{{ object_list.model.get_createview_url }}">{% translate "Create" %}</a>
-              <a class="btn btn-outline-success float-end btn-sm me-1"
-                 href="{{ object_list.model.get_importview_url }}">{% translate "Import" %}</a>
-            {% endif %}
+            <div class="d-flex gap-2 justify-content-end">
+              {% if object_list.model.get_add_permission in perms %}
+                <a class="btn btn-outline-success btn-sm"
+                   href="{{ object_list.model.get_importview_url }}">{% translate "Import" %}</a>
+                <a class="btn btn-outline-success btn-sm"
+                   href="{{ object_list.model.get_createview_url }}">{% translate "Create" %}</a>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
