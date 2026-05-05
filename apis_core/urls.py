@@ -18,12 +18,15 @@ app_name = "apis_core"
 urlpatterns = [
     path("", include("apis_core.core.urls")),
     path("", include("apis_core.generic.urls")),
-    path("", include("apis_core.entities.urls")),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
 ]
 
 router = CustomDefaultRouter()
+
+
+if "apis_core.entities" in settings.INSTALLED_APPS:
+    urlpatterns.append(path("", include("apis_core.entities.urls")))
 
 
 if "apis_core.uri" in settings.INSTALLED_APPS:
