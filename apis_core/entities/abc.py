@@ -1,8 +1,9 @@
-from django.db import models
 from django.urls import reverse
 
+from apis_core.generic.abc import GenericModel
 
-class Entity(models.Model):
+
+class Entity(GenericModel):
     class Meta:
         abstract = True
 
