@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.63.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.63.0...v0.63.1) (2026-05-05)
+
+
+### Bug Fixes
+
+* only include entities urls if the entities app is activated ([6bf77ba](https://github.com/acdh-oeaw/apis-core-rdf/commit/6bf77ba340047c2aea83a5850c8cb76b41b615fb))
+
 ## [0.63.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.62.1...v0.63.0) (2026-05-04)
 
 
