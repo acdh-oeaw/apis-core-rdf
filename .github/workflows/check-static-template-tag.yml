@@ -1,0 +1,17 @@
+#SPDX-FileCopyrightText: 2026 Birger Schacht
+#SPDX-License-Identifier: MIT
+
+name: Check for leading slashes in static template tags
+on:
+  pull_request:
+    paths:
+      - "**.html"
+
+jobs:
+  check-slash-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Look for leading slashes
+        run: |
+          ! grep -r 'static "/' apis_core
