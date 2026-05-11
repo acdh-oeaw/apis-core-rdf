@@ -5,7 +5,7 @@
 {% block content %}
   <div class="container">
     <div class="mt-4">
-      <form method="post" action="{% url 'apis_core:login' %}">
+      <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
         {{ form|crispy }}
         <input type="submit" value="{% translate "login" %}">

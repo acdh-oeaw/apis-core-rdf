@@ -1,13 +1,13 @@
 {% load core %}
 {% load static %}
 {% load i18n %}
-{% url "apis_core:api-root" as api_root %}
+{% url "api-root" as api_root %}
 {% if api_root %}
   <a href="{{ api_root }}" title="API" target="_blank">
     <span class="material-symbols-outlined material-symbols-align icon">api</span>
   </a>
 {% endif %}
-{% url "apis_core:swagger-ui" as swagger_ui %}
+{% url "swagger-ui" as swagger_ui %}
 {% if swagger_ui %}
   <a href="{{ swagger_ui }}" title="Swagger UI" target="_blank">
     <img class="icon"

@@ -34,7 +34,7 @@ class CustomEndpointEnumerator(EndpointEnumerator):
         self, content_type: ContentType, method: str = "list"
     ):
         """Create a endpoint tuple, usable by the SchemaGenerator of DRF spectacular"""
-        path = reverse("apis_core:generic:genericmodelapi-list", args=[content_type])
+        path = reverse("generic:genericmodelapi-list", args=[content_type])
         cls = resolve(path).func.cls
 
         if method == "detail":

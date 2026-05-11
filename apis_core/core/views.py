@@ -38,7 +38,7 @@ class Dumpdata(APIView):
 
 class PasswordChangeView(auth_views.PasswordChangeView):
     template_name = "profile/password-change.html"
-    success_url = reverse_lazy("apis_core:password-change")
+    success_url = reverse_lazy("password-change")
 
     def form_valid(self, form):
         ret = super().form_valid(form)

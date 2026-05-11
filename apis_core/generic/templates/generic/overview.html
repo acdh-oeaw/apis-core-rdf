@@ -12,7 +12,7 @@
           <div class="mb-5">
             <h3>{{ app.grouper }}</h3>
             {% for contenttype in app.list %}
-              <a href="{% url 'apis_core:generic:list' contenttype %}">
+              <a href="{% url 'generic:list' contenttype %}">
                 <button type="button" class="btn btn-outline-dark m-2">
                   {{ contenttype.name|capfirst }}
                   {{ contenttype|content_type_count }}

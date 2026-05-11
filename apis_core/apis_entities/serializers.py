@@ -10,9 +10,7 @@ from apis_core.generic.utils.rdf_namespace import APPELLATION, CRM
 
 
 class MinimalEntitySerializer(serializers.Serializer):
-    uri = GenericHyperlinkedIdentityField(
-        view_name="apis_core:generic:genericmodelapi-detail"
-    )
+    uri = GenericHyperlinkedIdentityField(view_name="generic:genericmodelapi-detail")
     name = serializers.SerializerMethodField(method_name="get_name")
 
     def get_name(self, object) -> str:

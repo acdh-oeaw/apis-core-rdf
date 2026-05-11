@@ -4,6 +4,6 @@
 {% block table %}
   {{ block.super }}
   {% if object_list %}
-    <a href="{% url "apis_core:apis_entities:e53_place_map" object_list.model.content_type %}?{{ request.GET.urlencode }}">{% translate "Map" %}</a>
+    <a href="{% url "apis_entities:e53_place_map" object_list.model.content_type %}?{{ request.GET.urlencode }}">{% translate "Map" %}</a>
   {% endif %}
 {% endblock table %}

@@ -20,7 +20,7 @@ class RelationMultiWidget(forms.MultiWidget):
         relation_choices = [(None, "---")] + choices
         widgets = [
             forms.widgets.Select(choices=relation_choices),
-            ApisListSelect2(url=reverse("apis_core:apis_entities:autocomplete")),
+            ApisListSelect2(url=reverse("apis_entities:autocomplete")),
         ]
         super().__init__(widgets)
 
