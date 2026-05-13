@@ -7,7 +7,7 @@ from apis_core.entities.models import EntityID
 
 
 class Command(BaseCommand):
-    help = "Create entities for all entities"
+    help = "Create EntityIDs for all entities"
 
     def handle(self, *args, **options):
         for model in apps.get_models():
