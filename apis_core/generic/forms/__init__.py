@@ -21,7 +21,10 @@ logger = logging.getLogger(__name__)
 
 
 class ColumnsSelectorForm(forms.Form):
-    columns = forms.MultipleChoiceField(required=False)
+    columns = forms.MultipleChoiceField(
+        required=False,
+        label=_("Visible columns"),
+    )
     remember = forms.BooleanField(required=False, label="Remember selected columns")
 
     def __init__(self, *args, **kwargs):
