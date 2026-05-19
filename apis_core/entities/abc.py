@@ -8,4 +8,4 @@ class Entity(models.Model):
 
     @property
     def get_canonical_url(self):
-        return reverse("apis_core:canonical-entity", args=[self.id])
+        return reverse("apis_core:canonical-entity", args=[self.pk])
