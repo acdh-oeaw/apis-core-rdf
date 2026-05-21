@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.64.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.63.1...v0.64.0) (2026-05-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* **entities:** The following templates were moved to the `entities` app:
+    * apis_core/apis_entities/abstractentity.html -> entities/entity.html
+    * apis_core/apis_entities/abstractentity_detail.html -> entities/entity_detail.html
+    * apis_core/apis_entities/abstractentity_form.html -> entities/entity_form.html
+    * all the partials that were included in those apps.
+* **entities:** We move the `base.html` that injects the "Entities" menu entry from the deprecated `apis_entities` app to the `entities` app and adapt it to list `Entity` types instead of `AbstractEntitiy` types. This means project that do not yet inherit from `Entity` will not have Entites in the main menu anymore!
+
+### Features
+
+* **entites:** copy methods from AbstractEntity to Entity ([79f9277](https://github.com/acdh-oeaw/apis-core-rdf/commit/79f92777c3bbd9de89ff2f372d832b2fcf917234))
+* **entities:** add a templatetag that returns all Entity content types ([5aba359](https://github.com/acdh-oeaw/apis-core-rdf/commit/5aba3599e4b4545a6eecfd0220ca712931a91eae))
+* **entities:** let Entity inherit from GenericModel ([e85c148](https://github.com/acdh-oeaw/apis-core-rdf/commit/e85c148eae53e2cef976b6b33f441929b2fb032e))
+* **entities:** move base.html from `apis_entities` to `entities` ([79f7d87](https://github.com/acdh-oeaw/apis-core-rdf/commit/79f7d87d1d4cade06b3f0505908c2f55b476cb5c))
+* **entities:** move templates from `apis_entities` to `entities` app ([5faf4ea](https://github.com/acdh-oeaw/apis-core-rdf/commit/5faf4ea281370c62e9b8590826d7e159e9f14e86))
+* **generic:** add explicit label for columns selector ([d7bd6a5](https://github.com/acdh-oeaw/apis-core-rdf/commit/d7bd6a574bbf2adbd5d621c2aa76464933f6a5c1))
+* **sample_project:** add more fixture data ([5e63c66](https://github.com/acdh-oeaw/apis-core-rdf/commit/5e63c664e22be342564014fdb912622cd4278dc2)), closes [#1770](https://github.com/acdh-oeaw/apis-core-rdf/issues/1770)
+
+
+### Bug Fixes
+
+* **ci:** ensure deploy job has neede permissions ([e7e3906](https://github.com/acdh-oeaw/apis-core-rdf/commit/e7e39068dfbe8eab335b2c3daa42a9cba8f919ec))
+* **entities:** fix help string of `create_entity_ids` mgmt command ([4211c99](https://github.com/acdh-oeaw/apis-core-rdf/commit/4211c9966d90f7ceac0c22dd7e8e649907f574d3)), closes [#2374](https://github.com/acdh-oeaw/apis-core-rdf/issues/2374)
+* **entities:** use `pk` for attribute to make `ty` happy ([27052e4](https://github.com/acdh-oeaw/apis-core-rdf/commit/27052e406332508966a98489416df3c725f922bf))
+* **generic:** put buttons in flex div to show them side by side ([5eb89ef](https://github.com/acdh-oeaw/apis-core-rdf/commit/5eb89ef5e6a96df103e50048851662f88b8a93b7))
+
 ## [0.63.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.63.0...v0.63.1) (2026-05-05)
 
 
