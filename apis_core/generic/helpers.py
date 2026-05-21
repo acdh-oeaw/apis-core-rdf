@@ -54,8 +54,9 @@ def generate_search_filter(model, query, fields_to_search=None, prefix=""):
 
     for token in query:
         q &= functools.reduce(
-            lambda acc, field_name: acc
-            | Q(**{f"{prefix}{field_name}__icontains": token}),
+            lambda acc, field_name: (
+                acc | Q(**{f"{prefix}{field_name}__icontains": token})
+            ),
             _fields_to_search,
             Q(),
         )

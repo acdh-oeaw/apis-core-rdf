@@ -28,25 +28,28 @@ def relation_content_types(
     if subj_model is not None:
         relationcts = list(
             filter(
-                lambda contenttype: subj_model
-                is contenttype.model_class().subj_model_type(),
+                lambda contenttype: (
+                    subj_model is contenttype.model_class().subj_model_type()
+                ),
                 relationcts,
             )
         )
     if obj_model is not None:
         relationcts = list(
             filter(
-                lambda contenttype: obj_model
-                is contenttype.model_class().obj_model_type(),
+                lambda contenttype: (
+                    obj_model is contenttype.model_class().obj_model_type()
+                ),
                 relationcts,
             )
         )
     if any_model is not None:
         relationcts = list(
             filter(
-                lambda contenttype: any_model
-                is contenttype.model_class().obj_model_type()
-                or any_model is contenttype.model_class().subj_model_type(),
+                lambda contenttype: (
+                    any_model is contenttype.model_class().obj_model_type()
+                    or any_model is contenttype.model_class().subj_model_type()
+                ),
                 relationcts,
             )
         )
@@ -54,17 +57,20 @@ def relation_content_types(
         left, right = combination
         rels = list(
             filter(
-                lambda contenttype: right is contenttype.model_class().obj_model_type()
-                and left is contenttype.model_class().subj_model_type(),
+                lambda contenttype: (
+                    right is contenttype.model_class().obj_model_type()
+                    and left is contenttype.model_class().subj_model_type()
+                ),
                 relationcts,
             )
         )
         rels.extend(
             list(
                 filter(
-                    lambda contenttype: left
-                    is contenttype.model_class().obj_model_type()
-                    and right is contenttype.model_class().subj_model_type(),
+                    lambda contenttype: (
+                        left is contenttype.model_class().obj_model_type()
+                        and right is contenttype.model_class().subj_model_type()
+                    ),
                     relationcts,
                 )
             )
