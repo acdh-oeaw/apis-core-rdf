@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 class ColumnsSelectorForm(forms.Form):
     columns = forms.MultipleChoiceField(required=False)
-    remember = forms.BooleanField(required=False, label="Remember selected columns")
+    remember = forms.BooleanField(required=False, label=_("Remember selected columns"))
 
     def __init__(self, *args, **kwargs):
         choices = kwargs.pop("choices", [])
