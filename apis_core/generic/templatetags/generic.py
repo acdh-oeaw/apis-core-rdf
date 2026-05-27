@@ -87,6 +87,9 @@ def pure_genericmodel_content_types():
     if apps.is_installed("apis_core.apis_entities"):
         entities = apps.get_app_config("apis_entities")
         parents.append(entities.models_module.AbstractEntity)
+    if apps.is_installed("apis_core.entities"):
+        entities = apps.get_app_config("entities")
+        parents.append(entities.module.abc.Entity)
     genericmodels = [
         ct
         for ct in set(genericmodel_content_types())
