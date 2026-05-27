@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.64.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.0...v0.64.1) (2026-05-27)
+
+
+### Bug Fixes
+
+* **relations:** make relation validation do its job ([3b5cacc](https://github.com/acdh-oeaw/apis-core-rdf/commit/3b5cacc94e2f930221c955b13bd0f193b1ff9c5f)), closes [#2383](https://github.com/acdh-oeaw/apis-core-rdf/issues/2383)
+
 ## [0.64.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.63.1...v0.64.0) (2026-05-21)
 
 
