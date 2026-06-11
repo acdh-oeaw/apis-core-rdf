@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.64.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.1...v0.64.2) (2026-06-11)
+
+
+### Bug Fixes
+
+* **generic:** exclude new entity types from pure_genericmodel list ([e721596](https://github.com/acdh-oeaw/apis-core-rdf/commit/e72159679fb4d7d3904894d5c6d1699778ec2c51))
+
 ## [0.64.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.0...v0.64.1) (2026-05-27)
 
 
