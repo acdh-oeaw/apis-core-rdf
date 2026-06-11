@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.64.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.2...v0.64.3) (2026-06-11)
+
+
+### Bug Fixes
+
+* **history:** move template to correct directory ([5f95f62](https://github.com/acdh-oeaw/apis-core-rdf/commit/5f95f6269d5d27f2f139c17fa9c52f5c18780a40))
+
 ## [0.64.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.1...v0.64.2) (2026-06-11)
 
 
