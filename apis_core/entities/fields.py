@@ -1,6 +1,6 @@
 from django import forms
 
-from apis_core.apis_entities.widgets import PlaceLookup
+from apis_core.entities.widgets import PlaceLookup
 
 
 class PlaceLookupField(forms.CharField):
