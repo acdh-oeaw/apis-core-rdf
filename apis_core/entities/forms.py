@@ -1,8 +1,8 @@
 from django.forms.fields import ChoiceField
 from django.utils.translation import gettext_lazy as _
 
-from apis_core.apis_entities.fields import PlaceLookupField
-from apis_core.apis_entities.utils import get_feature_codes
+from apis_core.entities.fields import PlaceLookupField
+from apis_core.entities.utils import get_feature_codes
 from apis_core.generic.forms import GenericModelForm
 
 
