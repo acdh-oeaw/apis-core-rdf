@@ -5,13 +5,13 @@ from pathlib import Path
 
 from django.test import TestCase
 
-from apis_core.apis_entities.rdfconfigs.group import (
+from apis_core.entities.rdfconfigs.group import (
     E74_GroupFromDNB,
 )
-from apis_core.apis_entities.rdfconfigs.person import (
+from apis_core.entities.rdfconfigs.person import (
     E21_PersonFromDNB,
 )
-from apis_core.apis_entities.rdfconfigs.place import (
+from apis_core.entities.rdfconfigs.place import (
     E53_PlaceFromDNB,
     E53_PlaceFromGeonames,
     E53_PlaceFromWikidata,
