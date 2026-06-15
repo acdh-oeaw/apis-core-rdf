@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.64.5](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.4...v0.64.5) (2026-06-15)
+
+
+### Bug Fixes
+
+* **sample_project:** fix path to parent templates ([b3aa454](https://github.com/acdh-oeaw/apis-core-rdf/commit/b3aa4545e3193ffd1e1adfb5177241c717c8038e))
+
 ## [0.64.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.3...v0.64.4) (2026-06-11)
 
 
