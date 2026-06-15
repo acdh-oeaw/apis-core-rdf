@@ -41,7 +41,7 @@ def changed_since(queryset, name, value):
     return queryset.filter(pk__in=ids)
 
 
-class AbstractEntityFilterSet(GenericFilterSet):
+class EntityFilterSet(GenericFilterSet):
     class Meta(GenericFilterSet.Meta):
         filter_overrides = {
             models.CharField: {
