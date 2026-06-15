@@ -43,9 +43,9 @@ INSTALLED_APPS = [
     "apis_core.collections",
     "apis_core.apis_metainfo",
     "apis_core.uris",
-    "apis_core.entities",
     "apis_core.relations",
     "apis_core.history",
+    "apis_core.entities",
     "apis_core.apis_entities",
     # APIS history modules tracks changes of instances over
     # time and lets you revert changes
