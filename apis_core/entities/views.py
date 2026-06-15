@@ -4,6 +4,7 @@ from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
 
 from apis_core.entities.models import EntityID
+from apis_core.generic.views import List
 
 
 class CanonicalEntity(View, SingleObjectMixin):
@@ -23,3 +24,7 @@ class CanonicalEntity(View, SingleObjectMixin):
                     status_code=406,
                     headers={"Accept": ",".join(self.accepted_media_types)},
                 )
+
+
+class E53_PlaceMap(List):
+    template_name_suffix = "_map"
