@@ -6,6 +6,7 @@ from django.forms import DateInput
 from django.utils.encoding import force_str
 from simple_history.utils import get_history_manager_for_model
 
+from apis_core.entities.templatetags.entities import entities_content_types
 from apis_core.generic.filtersets import GenericFilterSet
 from apis_core.generic.helpers import default_search_fields, generate_search_filter
 
@@ -69,3 +70,9 @@ class EntityFilterSet(GenericFilterSet):
             from apis_core.relations.filters import RelationFilter
 
             self.filters["relation"] = RelationFilter(model=self.Meta.model)
+
+
+class EntityIDFilterSet(GenericFilterSet):
+    content_type = django_filters.ChoiceFilter(
+        choices=[(entity.pk, entity) for entity in entities_content_types()]
+    )
