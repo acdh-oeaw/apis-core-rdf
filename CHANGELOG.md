@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.65.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.5...v0.65.0) (2026-06-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* **entities:** The `apis_entities.css` file belongs to the template for entities, which was moved to the entity app. Therefore the css file is also moved to the entities app and renamed to `entities.css`.
+* **entities:** The `E21_PersonCidocSerializer` and the `E53_PlaceCidocSerializer` are beim moved to `apis_core.entities`
+* **entities:** The `AbstractEntityFilterSet` is moved to `entities.filtersets` and renamed to `EntityFilterSet`. Please update your filterset accordingly.
+* **entities:** We move the `apis_core.apis_entities.E53_PlaceMap` view to `entities` together with its url route and the `e53_place_map.html` template and the `E53_Place_map.js`
+* **entities:** We move `apis_core.apis_entities.forms.E53_PlaceForm` to `apis_core.entities`, together with all the dependends. This affects:
+    * `fields.PlaceLookupField`
+    * `widgets.PlaceLookup`
+    * `js/placelookup.js`
+    * `templates/apis_entities/widgets/placelookup.html`
+    * `featureCodes_en.txt`
+    * the `get_feature_codes()` method in `apis_core.apis_entities.utils`
+* **entities:** We move the base classes from `apis_entities.abc` to `entities.abc`. This affects
+    * `E21_Person`
+    * `E53_Place`
+    * `E74_Group`
+    * `SimpleLabelModel`
+    * All the rdf config classes in `apis_entities.rdfconfigs` are now
+      located in `entities.rdfconfigs`
+    * All the templates referring to `E53_Place`
+    Anyone inheriting from those classes has to update their imports.
+
+### Features
+
+* **entities:** limit content types in EntityIDFilterSet ([5afc379](https://github.com/acdh-oeaw/apis-core-rdf/commit/5afc379e334c3c6652e64a385e253626347e59fc))
+* **entities:** move `apis_entites.abc` classes to `entities.abc` ([f167a7a](https://github.com/acdh-oeaw/apis-core-rdf/commit/f167a7a665e0ca7ee93aed6d7dbe279e9bff8ac9))
+
+
+### Bug Fixes
+
+* **sample_project:** put `entities` after `relations` in INSTALLED_APPS ([748c942](https://github.com/acdh-oeaw/apis-core-rdf/commit/748c942033efa5e7b9264f76d76bfb7c0cba3cea))
+* **sample_project:** update imports for moved base classes ([1eb44fb](https://github.com/acdh-oeaw/apis-core-rdf/commit/1eb44fbcb7d0f8c0563a9c0f8cb677eb9ee7294c))
+
+
+### Code Refactoring
+
+* **entities:** move `apis_entities.css` to `entities.css` ([f8e8b9c](https://github.com/acdh-oeaw/apis-core-rdf/commit/f8e8b9c61ffd140f8383b19ee3f4d6768eb2a415))
+* **entities:** move `filtersets` to `entities.filtersets` ([69f492f](https://github.com/acdh-oeaw/apis-core-rdf/commit/69f492f47befb052fdd96e40127a3723de4a299a))
+* **entities:** move E53_PlaceForm to `apis_core.entities` ([1a0af91](https://github.com/acdh-oeaw/apis-core-rdf/commit/1a0af91d6b79db0970faed621406af9140fd9c32))
+* **entities:** move E53_PlaceMap to `entities.views` ([f192954](https://github.com/acdh-oeaw/apis-core-rdf/commit/f192954f6cc2dc2f833e82262553a3f310baa659))
+* **entities:** move serializers from apis_entities to entities ([e75fbab](https://github.com/acdh-oeaw/apis-core-rdf/commit/e75fbabf5bfaa3e937e0f8c3ab7107244915d124))
+
 ## [0.64.5](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.4...v0.64.5) (2026-06-15)
 
 
