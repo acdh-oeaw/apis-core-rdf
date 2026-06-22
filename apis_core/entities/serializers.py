@@ -1,4 +1,4 @@
-from rdflib import Literal, URIRef
+from rdflib import Literal, Namespace, URIRef
 from rdflib.namespace import GEO, RDF, RDFS
 
 from apis_core.generic.serializers import GenericModelCidocSerializer
@@ -45,6 +45,19 @@ class E21_PersonCidocSerializer(GenericModelCidocSerializer):
             )
             g.add((surname_uri, RDFS.label, Literal(instance.surname)))
 
+        PFPG = Namespace("https://pfp-schema.acdh.oeaw.ac.at/types/gender/#")
+        g.namespace_manager.bind("pfpg", PFPG, replace=True)
+        match getattr(instance, "gender", None):
+            case "male":
+                g.add((self.instance_uri, RDF.type, PFPG.male))
+            case "female":
+                g.add((self.instance_uri, RDF.type, PFPG.female))
+            case "non-binary":
+                g.add((self.instance_uri, RDF.type, PFPG["non-binary"]))
+            case "unknown":
+                g.add((self.instance_uri, RDF.type, PFPG.unknown))
+            case "non-applicable":
+                g.add((self.instance_uri, RDF.type, PFPG["non-applicable"]))
         return g
 
 
