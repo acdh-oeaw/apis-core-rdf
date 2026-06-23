@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.65.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.65.0...v0.65.1) (2026-06-23)
+
+
+### Bug Fixes
+
+* **entities:** drop namespace from map url ([58b2881](https://github.com/acdh-oeaw/apis-core-rdf/commit/58b2881a60621b9600784e4b7f7daa48156a1d54))
+
 ## [0.65.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.64.5...v0.65.0) (2026-06-19)
 
 
