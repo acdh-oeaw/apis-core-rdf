@@ -1,1 +1,5 @@
+---
+title: Home
+---
+
 {!../README.md!}
