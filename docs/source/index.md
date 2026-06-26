@@ -2,4 +2,4 @@
 title: Home
 ---
 
-{!../README.md!}
+{!../README.md!lines=3-150}
