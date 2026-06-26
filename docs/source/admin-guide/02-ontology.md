@@ -12,7 +12,7 @@ file of your APIS project.
 
 You can use the history plugin to version model
 instances, i.e. track changes to all objects of a given model in your
-ontology, by having the model inherit from [apis_core.models.VersionMixin][].
+ontology, by having the model inherit from [apis_core.history.models.VersionMixin][].
 
 # Entities
 
