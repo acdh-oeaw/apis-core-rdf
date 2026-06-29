@@ -6,7 +6,7 @@ from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from apis_core.entities.rdfconfigs import group, person, place
-from apis_core.generic.abc import GenericModel
+from apis_core.generic.abc import GenericModel, SimpleLabelModel
 from apis_core.generic.utils.rdf_namespace import CRM
 from apis_core.utils.rdf import load_uri_using_path
 
@@ -180,18 +180,6 @@ class E74_Group(Entity):
         return cls.objects.create(label=string)
 
 
-class SimpleLabelModel(Entity):
-    label = models.CharField(
-        blank=True, default="", max_length=4096, verbose_name=_("label")
-    )
-
-    class Meta:
+class SimpleLabelEntity(SimpleLabelModel, Entity):
+    class Meta(SimpleLabelModel.Meta):
         abstract = True
-        ordering = ["label"]
-
-    def __str__(self):
-        return self.label or force_str(_("No label"))
-
-    @classmethod
-    def create_from_string(cls, string):
-        return cls.objects.create(label=string)

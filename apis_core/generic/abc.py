@@ -10,6 +10,8 @@ from django.db.models.fields.related import ForeignKey, ManyToManyField
 from django.db.models.query import QuerySet
 from django.forms import model_to_dict
 from django.urls import reverse
+from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
 
 from apis_core.generic.helpers import mro_paths, permission_fullname
 from apis_core.generic.signals import (
@@ -364,3 +366,20 @@ class GenericModel(models.Model):
 
     def uri_set_with_importer(self):
         return [uri for uri in self.uri_set() if self.valid_import_url(uri.uri)]
+
+
+class SimpleLabelModel(GenericModel):
+    label = models.CharField(
+        blank=True, default="", max_length=4096, verbose_name=_("label")
+    )
+
+    class Meta:
+        abstract = True
+        ordering = ["label"]
+
+    def __str__(self):
+        return self.label or force_str(_("No label"))
+
+    @classmethod
+    def create_from_string(cls, string):
+        return cls.objects.create(label=string)
