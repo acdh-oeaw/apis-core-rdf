@@ -1,29 +1,25 @@
 import logging
-import traceback
 from collections import namedtuple
 from copy import copy
 
 from crispy_forms.layout import Field
-from dal import autocomplete
-from django import http
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.exceptions import ImproperlyConfigured, ValidationError
-from django.core.validators import URLValidator
-from django.db import transaction
+from django.core.exceptions import (
+    ImproperlyConfigured,
+)
 from django.db.models.fields.related import ManyToManyRel
 from django.forms import modelform_factory
 from django.forms.utils import pretty_name
 from django.http import QueryDict
 from django.shortcuts import get_object_or_404, redirect
-from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
 from django.utils.text import capfirst
 from django.views import View
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django_filters.filterset import filterset_factory
@@ -46,6 +42,7 @@ from .forms import (
     GenericSelectMergeOrEnrichForm,
 )
 from .helpers import (
+    create_object_from_string,
     first_member_match,
     generate_search_filter,
     module_paths,
@@ -431,86 +428,80 @@ class Duplicate(GenericModelMixin, GenericModelPermissionRequiredMixin, View):
         return redirect(newobj.get_edit_url())
 
 
-class Autocomplete(
-    GenericModelMixin,
-    GenericModelPermissionRequiredMixin,
-    autocomplete.Select2QuerySetView,
+class AutocompleteChoices(
+    GenericModelMixin, GenericModelPermissionRequiredMixin, ListView
 ):
-    """
-    Autocomplete view for a generic model.
-    Access requires the `<model>_view` permission.
-    The queryset is overridden by the first match from
-    the `first_member_match` helper.
-    """
-
     permission_action_required = "view"
-    template_name_suffix = "_autocomplete_result"
-
-    def setup(self, *args, **kwargs):
-        super().setup(*args, **kwargs)
-        # We use a URI parameter to enable the create functionality in the
-        # autocomplete dropdown. It is not important what the value of the
-        # `create_field` is, because we override create_object anyway.
-        self.create_field = self.request.GET.get("create", None)
-        try:
-            template = select_template(self.get_template_names())
-            self.template = template.template.name
-        except TemplateDoesNotExist:
-            self.template = None
+    template_name_suffix = "_autocomplete_choices"
+    paginate_by = 10
 
     def get_queryset(self):
-        queryset_methods = module_paths(
-            self.model, path="querysets", suffix="AutocompleteQueryset"
-        )
-        queryset = first_member_match(queryset_methods)
-        if queryset:
-            return queryset(self.model, self.q)
-        return self.model.objects.filter(generate_search_filter(self.model, self.q))
+        qs = super().get_queryset()
+        if q := self.request.GET.get("q", None):
+            qs = qs.filter(generate_search_filter(self.model, q))
+        return qs
 
-    def get_results(self, context):
-        external_only = self.kwargs.get("external_only", False)
-        results = [] if external_only else super().get_results(context)
-        queryset_methods = module_paths(
-            self.model, path="querysets", suffix="ExternalAutocomplete"
-        )
-        ExternalAutocomplete = first_member_match(queryset_methods)
-        if ExternalAutocomplete:
-            results.extend(ExternalAutocomplete().get_results(self.q))
-        return results
-
-    def create_object(self, value):
-        """
-        We try multiple approaches to create a model instance from a value:
-        * we first test if the value is an URL and if so we expect it to be
-        something that can be imported using one of the configured importers
-        and so we pass the value to the import logic.
-        * if the value is not a string, we try to pass it to the `create_from_string`
-        method of the model, if that does exist. Its the models responsibility to
-        implement this method and the method should somehow know how to create
-        model instance from the value...
-        * finally we pass the value to the `create_object` method from the DAL
-        view, which tries to pass it to `get_or_create` which likely also fails,
-        but this is expected and we raise a more useful exception.
-        """
-        try:
-            URLValidator()(value)
-            return self.queryset.model.import_from(value)
-        except ValidationError:
-            pass
-        try:
-            return self.queryset.model.create_from_string(value)
-        except AttributeError:
-            raise ImproperlyConfigured(
-                f'Model "{self.queryset.model._meta.verbose_name}" not configured to create from string'
+    def get_context_data(self):
+        ctx = super().get_context_data()
+        ctx["q"] = self.request.GET.get("q", None)
+        ctx["content_type"] = ContentType.objects.get_for_model(self.model)
+        ctx["fieldname"] = self.request.GET.get("fieldname", None)
+        ctx["external"] = []
+        if q := self.request.GET.get("q", False):
+            queryset_methods = module_paths(
+                self.model, path="querysets", suffix="ExternalAutocomplete"
             )
+            ExternalAutocomplete = first_member_match(queryset_methods)
+            if ExternalAutocomplete:
+                ctx["external"].extend(ExternalAutocomplete().get_results(q))
+        return ctx
 
-    def post(self, request, *args, **kwargs):
-        try:
-            with transaction.atomic():
-                return super().post(request, *args, **kwargs)
-        except Exception as e:
-            logger.debug(traceback.format_exc())
-            return http.JsonResponse({"error": str(e)})
+
+class AutocompleteSingleSelect(
+    GenericModelMixin,
+    GenericModelPermissionRequiredMixin,
+    DetailView,
+):
+    """The form field to get injected once an autocomplete suggestion gets selected"""
+
+    permission_action_required = "view"
+    template_name_suffix = "_autocomplete_single_select"
+
+    def get_object(self, queryset=None):
+        if pk := self.request.GET.get("pk", None):
+            return self.get_queryset().get(pk=pk)
+        if q := self.request.GET.get("q", None):
+            return create_object_from_string(self.queryset.model, q, self.request)
+        return super().get_object(queryset)
+
+
+class AutocompleteMultipleSelect(
+    GenericModelMixin, GenericModelPermissionRequiredMixin, ListView
+):
+    """The form field to get injected once an autocomplete suggestion gets selected"""
+
+    permission_action_required = "view"
+    template_name_suffix = "_autocomplete_multiple_select"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        ids = []
+        if q := self.request.GET.get("q", None):
+            newobj = create_object_from_string(self.queryset.model, q, self.request)
+            ids.append(newobj.pk)
+        if existing := self.request.GET.getlist(self.request.GET.get("fieldname")):
+            ids.extend(existing)
+        if toggle := self.request.GET.get("toggle"):
+            if toggle in ids:
+                ids.remove(toggle)
+            else:
+                ids.append(toggle)
+        return qs.filter(pk__in=ids)
+
+    def get_context_data(self):
+        ctx = super().get_context_data()
+        ctx["fieldname"] = self.request.GET.get("fieldname", None)
+        return ctx
 
 
 class Import(GenericModelMixin, GenericModelPermissionRequiredMixin, FormView):
