@@ -1,14 +1,18 @@
+import functools
+
 import django_filters
 from django.apps import apps
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.forms import DateInput
 from django.utils.encoding import force_str
 from simple_history.utils import get_history_manager_for_model
 
-from apis_core.entities.templatetags.entities import entities_content_types
 from apis_core.generic.filtersets import GenericFilterSet
 from apis_core.generic.helpers import default_search_fields, generate_search_filter
+
+from .models import EntityID
 
 
 class ModelSearchFilter(django_filters.CharFilter):
@@ -72,7 +76,12 @@ class EntityFilterSet(GenericFilterSet):
             self.filters["relation"] = RelationFilter(model=self.Meta.model)
 
 
+@functools.cache
+def content_type_ids() -> list[int]:
+    return EntityID.objects.all().values("content_type").distinct()
+
+
 class EntityIDFilterSet(GenericFilterSet):
-    content_type = django_filters.ChoiceFilter(
-        choices=[(entity.pk, entity) for entity in entities_content_types()]
+    content_type = django_filters.ModelMultipleChoiceFilter(
+        queryset=ContentType.objects.filter(pk__in=content_type_ids())
     )
