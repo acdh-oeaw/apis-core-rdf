@@ -1,0 +1,14 @@
+<div class="autocomplete-wrapper">
+  <div id="{{ widget.name }}-list-wrapper" class="selected-items">
+    {% include "generic/genericmodel_autocomplete_edit.html" with fieldname=widget.name object_list=widget.value %}
+  </div>
+  <input type="text"
+         id="{{ widget.name }}-autocomplete"
+         name="q"
+         autocomplete="off"
+         hx-get="{{ widget.url }}"
+         hx-target="next div"
+         hx-trigger="input changed delay:300ms, focus, click"
+         {% include "django/forms/widgets/attrs.html" %}>
+  <div class="suggestions-dropdown"></div>
+</div>

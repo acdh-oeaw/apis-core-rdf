@@ -12,10 +12,10 @@ from django.utils.translation import gettext_lazy as _
 from apis_core.core.fields import (
     ApisListSelect2,
     ApisModelSelect2,
-    ApisModelSelect2Multiple,
 )
 from apis_core.generic.abc import GenericModel
 from apis_core.generic.forms.fields import ModelImportChoiceField
+from apis_core.generic.widgets import Autocomplete, MultiSelect
 
 logger = logging.getLogger(__name__)
 
@@ -105,9 +105,9 @@ class GenericModelForm(forms.ModelForm):
         # override the fields pointing to other models,
         # to make them use the autocomplete widgets
         override_fieldtypes = {
-            "ModelMultipleChoiceField": ApisModelSelect2Multiple,
-            "ModelChoiceField": ApisModelSelect2,
-            "ModelImportChoiceField": ApisModelSelect2,
+            "ModelMultipleChoiceField": MultiSelect,
+            "ModelChoiceField": Autocomplete,
+            "ModelImportChoiceField": Autocomplete,
         }
         for field in self.fields:
             clsname = self.fields[field].__class__.__name__
@@ -116,11 +116,10 @@ class GenericModelForm(forms.ModelForm):
                     self.fields[field]._queryset.model
                 )
                 if issubclass(ct.model_class(), GenericModel):
-                    url = reverse("apis_core:generic:autocomplete", args=[ct])
+                    print(f"updating {field}")
                     self.fields[field].widget = override_fieldtypes[clsname](
-                        url, attrs={"data-html": True}
+                        self.fields[field]
                     )
-                    self.fields[field].widget.choices = self.fields[field].choices
 
     def clean(self):
         cleaned_data = super().clean()

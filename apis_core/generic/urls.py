@@ -61,7 +61,16 @@ urlpatterns = [
                     name="merge",
                 ),
                 path("enrich/<int:pk>", views.Enrich.as_view(), name="enrich"),
-                path("autocomplete", views.Autocomplete.as_view(), name="autocomplete"),
+                path(
+                    "autocomplete/<str:fieldname>",
+                    views.Autocomplete.as_view(),
+                    name="autocomplete",
+                ),
+                path(
+                    "autocomplete/edit/<str:fieldname>",
+                    views.AutocompleteEdit.as_view(),
+                    name="autocomplete-edit",
+                ),
                 path("import", views.Import.as_view(), name="import"),
                 path(
                     "autocomplete/externalonly",

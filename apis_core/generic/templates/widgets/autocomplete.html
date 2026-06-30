@@ -1,0 +1,12 @@
+<div class="autocomplete-wrapper {% if "is-invalid" in widget.attrs.class %}is-invalid{% endif %}">
+  <input type="hidden" name="{{ widget.name }}">
+  <input type="None"
+         id="autocomplete"
+         name="q"
+         autocomplete="off"
+         hx-trigger="input changed delay:300ms, focus, click"
+         hx-target="next div"
+         hx-get="{{ widget.url }}"
+         {% include "django/forms/widgets/attrs.html" %}>
+  <div class="suggestions-dropdown"></div>
+</div>

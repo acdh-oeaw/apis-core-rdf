@@ -1,0 +1,12 @@
+{% for object in page_obj %}
+  <div class="suggestion"
+       hx-get="{% url 'apis_core:generic:autocomplete-edit' object.content_type fieldname %}"
+       hx-include="previous .hidden"
+       hx-target="#{{ fieldname }}-list-wrapper"
+       hx-vals='{"add": "{{ object.pk }}"}'
+       hx-swap="outer-html">
+    <div {% if forloop.last and page_obj.next_page_number %}hx-get="{{ request.path }}{% querystring page=page_obj.next_page_number %}" hx-trigger="intersect once" hx-swap="afterend" hx-target="closest .suggestion" {% endif %}>
+      {{ object }}
+    </div>
+  </div>
+{% endfor %}

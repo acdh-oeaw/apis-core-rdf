@@ -1,0 +1,12 @@
+<input class="hidden"
+       type="hidden"
+       name="{{ fieldname }}"
+       value="{% for obj in object_list %}{{ obj.pk }}{% if not forloop.last %},{% endif %}{% endfor %}" />
+{% for object in object_list %}
+  <span class="selected-item"
+          hx-get="{% url 'apis_core:generic:autocomplete-edit' object.content_type fieldname %}"
+          hx-include="previous .hidden"
+          hx-target="#{{ fieldname }}-list-wrapper"
+          hx-vals='{"remove": "{{ object.pk }}"}'
+          hx-swap="innerHTML">{{ object }}</span>
+{% endfor %}
