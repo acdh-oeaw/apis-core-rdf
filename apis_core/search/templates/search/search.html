@@ -1,0 +1,70 @@
+{% extends basetemplate|default:"base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load search %}
+
+{% block styles %}
+  {{ block.super }}
+  <link href="{% static 'css/search.css' %}" rel="stylesheet" />
+{% endblock styles %}
+
+{% block content %}
+  <div class="container">
+    {% crispy form form.helper %}
+    <hr>
+    {% if object_list %}
+      {{ page_obj.paginator.count }} results
+      <ul class="search-results">
+        {% for result in object_list %}
+          <li>
+            {% with result.content_type_id|id_to_content_type as content_type %}
+              <a href="{% url 'apis_core:generic:detail' content_type result.object_id %}">{{ result.title|highlight_matches_string:form.query_str.value|safe }} ({{ result.frank|floatformat:2 }}, {{ result.title_rank|floatformat:2 }}, {{ result.content_rank|floatformat:2 }}, {{ result.contains }})</a>
+            {% endwith %}
+            {% if form.with_content.value %}
+              <p>
+                {% highlight_matches result.content form.query_str.value as matches %}
+                {% for key, value in matches.items %}
+                  {% if value.orig != result.title %}
+                    <b>{{ key }}</b>:
+                    {{ value.match|safe }}
+                  {% endif %}
+                {% endfor %}
+              </p>
+            {% endif %}
+            <div class="metadata">
+              {% with result.content_type_id|id_to_content_type as content_type %}
+                <span class="content-type">{{ content_type.model_class.get_verbose_name }}</span>
+              {% endwith %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+            <a class="page-link"
+               {% if page_obj.has_previous %}href="{% querystring page=page_obj.previous_page_number %}" {% else %}tabindex="-1" aria-disabled="true"{% endif %}>Previous</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+          </li>
+          <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+            <a class="page-link"
+               {% if page_obj.has_next %}href="{% querystring page=page_obj.next_page_number %}" {% else %}tabindex="-1" aria-disabled="true"{% endif %}>Next</a>
+          </li>
+        </ul>
+      </nav>
+    {% endif %}
+    <small>
+      <p>Caption:</p>
+      <ul>
+        <li>First number: the greater value of: (title rank * 2, content rank)</li>
+        <li>Second number: the title rank</li>
+        <li>Third number: the content rank</li>
+        <li>
+          Fourth number: 10: title contains, 9: title contains case insensitive, 8: title slug contains, 7: title slug contains case insensitive, 6: content text contains, 5: content text contains case insensitive; 4: content text slug contains, 3: content text slug contains case insensitive
+        </li>
+      </ul>
+    </small>
+  </div>
+{% endblock content %}
