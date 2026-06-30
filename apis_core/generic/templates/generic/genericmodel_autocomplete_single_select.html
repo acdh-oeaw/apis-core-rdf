@@ -1,0 +1,5 @@
+{{ object }}
+{% if request.GET.q %}<span class="created">Created ✔</span>{% endif %}
+<input type="hidden"
+       name="{{ request.GET.fieldname }}"
+       value="{{ object.pk }}">
