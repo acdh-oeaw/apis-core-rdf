@@ -21,7 +21,6 @@ from django.http import QueryDict
 from django.shortcuts import get_object_or_404, redirect
 from django.template.exceptions import TemplateDoesNotExist
 from django.template.loader import select_template
-from django.urls import reverse
 from django.utils.text import capfirst
 from django.views import View
 from django.views.generic import DetailView
@@ -383,12 +382,7 @@ class Delete(GenericModelMixin, GenericModelPermissionRequiredMixin, DeleteView)
     permission_action_required = "delete"
 
     def get_success_url(self):
-        if redirect := self.request.GET.get("redirect"):
-            return redirect
-        return reverse(
-            "apis_core:generic:list",
-            args=[self.request.resolver_match.kwargs["contenttype"]],
-        )
+        return self.object.get_delete_success_url(request=self.request)
 
 
 class Update(
