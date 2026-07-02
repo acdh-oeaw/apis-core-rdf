@@ -107,6 +107,9 @@ class GenericModel(models.Model):
     def get_update_success_url(self, request: Optional[HttpRequest] = None):
         return self.get_edit_url()
 
+    def get_delete_success_url(self, request: Optional[HttpRequest] = None):
+        return self.get_listview_url()
+
     def get_api_detail_endpoint(self):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:genericmodelapi-detail", args=[ct, self.id])
