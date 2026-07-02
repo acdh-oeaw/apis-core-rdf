@@ -1,5 +1,6 @@
 import functools
 import logging
+from typing import Optional
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -7,6 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Case, When
 from django.db.models.base import ModelBase
+from django.http.request import HttpRequest
 from model_utils.managers import InheritanceManager
 
 from apis_core.generic.abc import GenericModel
@@ -175,3 +177,8 @@ class Relation(GenericModel, models.Model, metaclass=RelationModelBase):
         if cls.name() != cls.reverse_name():
             return f"{cls.name()} - {cls.reverse_name()}"
         return cls.name()
+
+    def get_update_success_url(self, request: Optional[HttpRequest] = None):
+        if request and request.GET.get("redirect", False):
+            return super().get_update_success_url(request)
+        return self.get_absolute_url()
