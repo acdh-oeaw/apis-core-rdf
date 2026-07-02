@@ -100,12 +100,18 @@ class GenericModel(models.Model):
         return reverse("apis_core:generic:selectmergeorenrich", args=[ct, self.id])
 
     def get_create_success_url(self, request: Optional[HttpRequest] = None):
+        if request and request.GET.get("redirect", False):
+            return request.GET.get("redirect")
         return self.get_absolute_url()
 
     def get_update_success_url(self, request: Optional[HttpRequest] = None):
+        if request and request.GET.get("redirect", False):
+            return request.GET.get("redirect")
         return self.get_edit_url()
 
     def get_delete_success_url(self, request: Optional[HttpRequest] = None):
+        if request and request.GET.get("redirect", False):
+            return request.GET.get("redirect")
         return self.get_listview_url()
 
     def get_api_detail_endpoint(self):
