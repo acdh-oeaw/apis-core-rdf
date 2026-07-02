@@ -1,4 +1,8 @@
-from apis_core.generic.tables import CustomTemplateColumn, GenericTable
+from apis_core.generic.tables import ActionsColumn, CustomTemplateColumn, GenericTable
+
+
+class RelationActionsColumn(ActionsColumn):
+    template_name = "columns/relation_actions.html"
 
 
 class RelationColumn(CustomTemplateColumn):
@@ -8,6 +12,7 @@ class RelationColumn(CustomTemplateColumn):
 
 class RelationsListTable(GenericTable):
     relation = RelationColumn()
+    actions = RelationActionsColumn()
 
     class Meta:
         attrs = {"class": "table-sm"}
