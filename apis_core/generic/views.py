@@ -370,7 +370,7 @@ class Create(
         return template.render({"object": self.object})
 
     def get_success_url(self):
-        return self.object.get_create_success_url()
+        return self.object.get_create_success_url(request=self.request)
 
 
 class Delete(GenericModelMixin, GenericModelPermissionRequiredMixin, DeleteView):
@@ -413,7 +413,7 @@ class Update(
         return template.render({"object": self.object})
 
     def get_success_url(self):
-        return self.object.get_update_success_url()
+        return self.object.get_update_success_url(request=self.request)
 
 
 class Duplicate(GenericModelMixin, GenericModelPermissionRequiredMixin, View):
