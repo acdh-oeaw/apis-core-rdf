@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Tuple
+from typing import Optional, Tuple
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
@@ -9,6 +9,7 @@ from django.db.models import BooleanField, CharField, TextField
 from django.db.models.fields.related import ForeignKey, ManyToManyField
 from django.db.models.query import QuerySet
 from django.forms import model_to_dict
+from django.http.request import HttpRequest
 from django.urls import reverse
 
 from apis_core.generic.helpers import mro_paths, permission_fullname
@@ -98,10 +99,10 @@ class GenericModel(models.Model):
         ct = ContentType.objects.get_for_model(self)
         return reverse("apis_core:generic:selectmergeorenrich", args=[ct, self.id])
 
-    def get_create_success_url(self):
+    def get_create_success_url(self, request: Optional[HttpRequest] = None):
         return self.get_absolute_url()
 
-    def get_update_success_url(self):
+    def get_update_success_url(self, request: Optional[HttpRequest] = None):
         return self.get_edit_url()
 
     def get_api_detail_endpoint(self):
