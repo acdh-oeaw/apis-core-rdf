@@ -27,6 +27,10 @@ class UriManager(models.Manager):
     def get_queryset(self):
         return UriQuerySet(self.model)
 
+    def get_for_instance(self, instance):
+        content_type = ContentType.objects.get_for_model(instance)
+        return super().filter(content_type=content_type, object_id=instance.pk)
+
 
 class Uri(GenericModel, models.Model):
     """
