@@ -15,4 +15,10 @@
     {% endblock card-body %}
 
   </div>
+  <div class="card-footer">
+    {% app_templates suffix="/partials/card_footer.html" as detail_templates %}
+    {% for template in detail_templates %}
+      {% include template %}
+    {% endfor %}
+  </div>
 </div>
