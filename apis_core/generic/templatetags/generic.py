@@ -170,3 +170,24 @@ def model_field_template_lookup_list(model, field, suffix="") -> list[str]:
     content_type = ContentType.objects.get_for_model(model)
     path = f"{content_type.app_label}/partials/{content_type.model}_{field.name}_{suffix}.html"
     return [path, f"generic/partials/default_model_field_{suffix}.html"]
+
+
+def template_exists(value):
+    try:
+        template.loader.get_template(value)
+        return True
+    except template.TemplateDoesNotExist:
+        return False
+
+
+@register.simple_tag
+def app_templates(prefix: str = "", suffix: str = ""):
+    """
+    List templates found in the installed apps template folder.
+    The template path is prefixed with `prefix` and suffixed with
+    `suffix`
+    """
+    labels = [app.label for app in apps.get_app_configs()]
+    templates = [f"{prefix}{label}{suffix}" for label in labels]
+    existing = [template for template in templates if template_exists(template)]
+    return existing
