@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.66.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.65.1...v0.66.0) (2026-07-06)
+
+
+### Features
+
+* **entities:** add pfp gender type to person rdf serialization ([2db3ea7](https://github.com/acdh-oeaw/apis-core-rdf/commit/2db3ea712c8f5d27c350cdc801f4fc8a0c9b2fcb))
+* **entities:** make the content_type filter a ModelMultipleChoiceFilter ([488777a](https://github.com/acdh-oeaw/apis-core-rdf/commit/488777ac98aace7f0806c09e4faebe24aed07162))
+* **entities:** replace SimpleLabelModel with SimpleLabelEntity ([e09681e](https://github.com/acdh-oeaw/apis-core-rdf/commit/e09681e6dd5703583f51dcb5c478caeaaf7f68d2))
+* **generic:** implement SimpleLabelModel in generic ([77ec23c](https://github.com/acdh-oeaw/apis-core-rdf/commit/77ec23c9391328d59d4219b8237f3da47309d9cb))
+* **uris:** override the default content_type filter ([dce6416](https://github.com/acdh-oeaw/apis-core-rdf/commit/dce641632a953a2d5cc512b8f3dad36731bb1990))
+
+
+### Bug Fixes
+
+* **sample_project:** move documentation before core in the app list ([4f583a2](https://github.com/acdh-oeaw/apis-core-rdf/commit/4f583a2c4c71c066a6e41b53ff10a3d8c6ad76aa))
+
+
+### Documentation
+
+* **admin-guide:** move admin related docs to `admin-guide` ([aa07862](https://github.com/acdh-oeaw/apis-core-rdf/commit/aa078620c910cadde411f6ce7da4ad74ce149421))
+* **admin/ontology:** fix path to VersionMixin ([f8afb71](https://github.com/acdh-oeaw/apis-core-rdf/commit/f8afb71fd4f01f42036c228a5a70928fe8c931d2))
+* **development:** drop file that only lists dependencies ([104d70b](https://github.com/acdh-oeaw/apis-core-rdf/commit/104d70ba948104523758e399c5a832dbc7160be3))
+* **index:** add a title to the index page ([7adf874](https://github.com/acdh-oeaw/apis-core-rdf/commit/7adf874194a4aef8fa9ceb17cb2a8e9b40a6a626))
+* **index:** don't include the header of the README ([1c4282a](https://github.com/acdh-oeaw/apis-core-rdf/commit/1c4282afbd813557d33bbc99243513aac8bc2bbc))
+* **mkdocs:** add a custom css file ([df242ba](https://github.com/acdh-oeaw/apis-core-rdf/commit/df242ba4b945316151d1603f148d803ecaca7f50))
+* **mkdocs:** enable the md_in_html extension ([817ac74](https://github.com/acdh-oeaw/apis-core-rdf/commit/817ac748d4407e70e5dab64ff784e35c55e7c6d2))
+* **user-guide:** add a initial user-guide overview ([9f272b0](https://github.com/acdh-oeaw/apis-core-rdf/commit/9f272b00ed8640e9546372482e74c2c86958430d))
+
 ## [0.65.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.65.0...v0.65.1) (2026-06-23)
 
 
