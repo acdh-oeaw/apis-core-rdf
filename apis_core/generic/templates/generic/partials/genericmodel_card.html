@@ -5,7 +5,6 @@
     {% block card-header %}
       {{ object }}
     {% endblock card-header %}
-
   </div>
   <div class="card-body">
 
@@ -13,7 +12,6 @@
       {% model_mro_templates object prefix="partials/" suffix="_card_table.html" as template_list %}
       {% include template_list %}
     {% endblock card-body %}
-
   </div>
   <div class="card-footer">
     {% app_templates suffix="/partials/card_footer.html" as detail_templates %}
