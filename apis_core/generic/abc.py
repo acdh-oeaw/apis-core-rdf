@@ -38,7 +38,7 @@ class GenericModel(models.Model):
         return super().__repr__()
 
     @property
-    def content_type(self):
+    def get_self_content_type(self):
         return ContentType.objects.get_for_model(self)
 
     @classmethod
