@@ -57,7 +57,7 @@ class CreateRelationForm(RelationParamsMixin, CreateRelation):
 
     def get_success_url(self) -> str:
         obj = self.object.obj if self.params["reverse"] else self.object.subj
-        args = [obj.content_type, obj.id]
+        args = [obj.get_self_content_type, obj.id]
         params = {
             k: self.params[k] for k in ["relation_types", "replace_id", "table_suffix"]
         }
