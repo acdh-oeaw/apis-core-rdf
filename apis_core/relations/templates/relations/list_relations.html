@@ -12,7 +12,7 @@
       {% with object.id|stringformat:"i" as object_id %}
         {% with "rel_"|add:object_id|add:"_"|add:target.name as replace_id %}
           {% with target|model_meta:"object_name" as table_suffix %}
-            {% get_relation_between_content_types object.content_type target as relation_types %}
+            {% get_relation_between_content_types object.get_self_content_type target as relation_types %}
             {% relations_instances_from_relation_types relation_types as relations %}
             <div class="card-body">
               {% include "relations/partials/list_relations.html" %}
