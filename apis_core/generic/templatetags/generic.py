@@ -1,5 +1,6 @@
 from django import template
 from django.apps import apps
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
@@ -36,6 +37,19 @@ def modeldict(instance, fields=None, exclude=None, exclude_noneditable=True):
         if getattr(field, "m2m_field_name", False):
             values = getattr(instance, field.name).all()
             data[field] = ", ".join([str(value) for value in values])
+    # if there are generic foreign keys defined in the model,
+    # return the object they point to and remove the
+    # individual attributes they are composed of. if the
+    # generic fk does **not** resolve, keep everything as is
+    for field in filter(
+        lambda x: isinstance(x, GenericForeignKey), get_model_fields(instance)
+    ):
+        if getattr(instance, field.name):
+            data[field] = getattr(instance, field.name)
+            ct_field = instance._meta.get_field(field.ct_field)
+            del data[ct_field]
+            fk_field = instance._meta.get_field(field.fk_field)
+            del data[fk_field]
     return data
 
 
