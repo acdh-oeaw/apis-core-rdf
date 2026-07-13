@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from apis_core.generic.abc import GenericModel
 
@@ -30,6 +31,9 @@ class SkosCollection(GenericModel, models.Model):
 
     class Meta:
         ordering = ["name"]
+
+    class Config(GenericModel.Config):
+        overview_section = _("Collections")
 
     name = models.CharField(
         max_length=300,
@@ -101,6 +105,9 @@ class SkosCollectionContentObject(GenericModel, models.Model):
     """
     *Throughtable* datamodel to connect collections to arbitrary content
     """
+
+    class Config(GenericModel.Config):
+        overview_section = _("Collections")
 
     collection = models.ForeignKey(SkosCollection, on_delete=models.CASCADE)
 
