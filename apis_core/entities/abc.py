@@ -15,6 +15,9 @@ class Entity(GenericModel):
     class Meta:
         abstract = True
 
+    class Config(GenericModel.Config):
+        overview_section = _("Entities")
+
     @property
     def get_canonical_url(self):
         return reverse("apis_core:canonical-entity", args=[self.pk])
