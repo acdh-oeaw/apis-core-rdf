@@ -3,6 +3,7 @@ import re
 from typing import Optional, Tuple
 
 from django.contrib.contenttypes.models import ContentType
+from django.core.checks import Error
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.db.models import BooleanField, CharField, TextField
@@ -23,6 +24,7 @@ from apis_core.generic.signals import (
     pre_merge_with,
 )
 from apis_core.generic.utils import get_autocomplete_data_and_normalized_uri
+from apis_core.generic.utils.models import ConfigModel
 from apis_core.utils.settings import apis_base_uri, rdf_namespace_prefix
 
 logger = logging.getLogger(__name__)
@@ -31,6 +33,16 @@ logger = logging.getLogger(__name__)
 class GenericModel(models.Model):
     class Meta:
         abstract = True
+
+    class Config:
+        overview_section = _("Generic models")
+
+    @classmethod
+    def check(cls, **kwargs):
+        errors = super().check(**kwargs)
+        msgs = ConfigModel.validation_errors_to_error_messages(cls.Config)
+        errors.extend([Error(msg, obj=cls) for msg in msgs])
+        return errors
 
     def __repr__(self):
         if id := getattr(self, "id", None):
