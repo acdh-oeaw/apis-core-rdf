@@ -109,4 +109,6 @@ class SkosCollectionContentObject(GenericModel, models.Model):
     content_object = GenericForeignKey("content_type", "object_id")
 
     def __str__(self):
-        return f"{self.content_object} -> {self.collection}"
+        if self.content_object:
+            return f"{self.content_object} -> {self.collection}"
+        return super().__str__()
