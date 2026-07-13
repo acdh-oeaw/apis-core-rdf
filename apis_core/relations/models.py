@@ -9,6 +9,7 @@ from django.db import models
 from django.db.models import Case, When
 from django.db.models.base import ModelBase
 from django.http.request import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from model_utils.managers import InheritanceManager
 
 from apis_core.generic.abc import GenericModel
@@ -92,6 +93,9 @@ def get_by_natural_key(natural_key: str):
 
 
 class Relation(GenericModel, models.Model, metaclass=RelationModelBase):
+    class Config(GenericModel.Config):
+        overview_section = _("Relations")
+
     subj_content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, related_name="relation_subj_set"
     )
