@@ -1,8 +1,12 @@
+import functools
+from collections import defaultdict
+
 from django import template
 from django.apps import apps
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 from django.shortcuts import get_object_or_404
 
 from apis_core.core.templatetags.core import get_model_fields
@@ -205,3 +209,29 @@ def app_templates(prefix: str = "", suffix: str = ""):
     templates = [f"{prefix}{label}{suffix}" for label in labels]
     existing = [template for template in templates if template_exists(template)]
     return existing
+
+
+@register.simple_tag
+def get_genericmodels() -> list[GenericModel]:
+    """
+    Return a list of `GenericModel` models
+    """
+    return list(filter(lambda x: issubclass(x, GenericModel), apps.get_models()))
+
+
+@register.simple_tag
+def regroup_filter_empty(
+    models: list[models.Model], attribute: str
+) -> list[models.Model]:
+    """
+    Group a list of models based on the value of `attribute`. This is similar to the
+    [regroup](https://docs.djangoproject.com/en/dev/ref/templates/builtins/#regroup)
+    tag, but it filters out `None` values before grouping instead of breaking on them.
+    """
+    models = filter(
+        lambda x: functools.reduce(getattr, attribute.split("."), x), models
+    )
+    groups = defaultdict(list)
+    for model in models:
+        groups[functools.reduce(getattr, attribute.split("."), model)].append(model)
+    return dict(groups)
