@@ -59,44 +59,15 @@ django-admin startproject my_apis_instance
 
 Add apis-core-rdf as a dependency to your project.
 
-To use the APIS framework in your application, you will need to add the following dependencies to
-[`INSTALLED_APPS`](https://docs.djangoproject.com/en/stable/ref/settings/#installed-apps):
+To use the APIS framework in your application, you will need to add dependencies to
+[`INSTALLED_APPS`](https://docs.djangoproject.com/en/stable/ref/settings/#installed-apps).
+See
+[`sample_project/settings.py`](https://github.com/acdh-oeaw/apis-core-rdf/blob/main/sample_project/settings.py)
+for reference.
 
-```python
-INSTALLED_APPS = [
-    # our main app, containing the ontology (in the `models.py`)
-    # and our customizations
-    "sample_project",
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    # ui stuff used by APIS
-    "crispy_forms",
-    "crispy_bootstrap4",
-    "django_filters",
-    "django_tables2",
-    "dal",
-    "dal_select2",
-    # REST API
-    "rest_framework",
-    # swagger ui generation
-    "drf_spectacular",
-    # The APIS apps
-    "apis_core.core",
-    "apis_core.generic",
-    "apis_core.apis_metainfo",
-    "apis_core.apis_entities",
-    # APIS collections provide a collection model similar to
-    # SKOS collections and allow tagging of content
-    "apis_core.collections",
-    # APIS history modules tracks changes of instances over
-    # time and lets you revert changes
-    "apis_core.history",
-]
-```
+Additionally, you will need to configure the template packs used by
+`crispy_forms` and `django_tables2` by adding `CRISPY_ALLOWED_TEMPLATE_PACKS`,
+`CRISPY_TEMPLATE_PACK` and `DJANGO_TABLES2_TEMPLATE`. Consult [`sample_project/settings.py`](https://github.com/acdh-oeaw/apis-core-rdf/blob/main/sample_project/settings.py) for reference as well.
 
 Finally, add the APIS urls to your applications [URL Dispatcher](https://docs.djangoproject.com/en/stable/topics/http/urls/)
 
