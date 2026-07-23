@@ -112,7 +112,7 @@ def content_type_count(content_type):
 
 
 @register.simple_tag
-def template_list(obj, folder="", prefix="", suffix=""):
+def model_mro_templates(obj, folder="", prefix="", suffix=""):
     return template_names_via_mro(
         type(obj), folder=folder, prefix=prefix, suffix=suffix
     )
