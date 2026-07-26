@@ -4,6 +4,7 @@ import django_filters
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from django.utils.translation import pgettext
 
 from apis_core.generic.forms.fields import RowColumnMultiValueField
 
@@ -21,7 +22,10 @@ class CollectionsIncludeExcludeFilter(django_filters.filters.ModelMultipleChoice
     def field(self):
         return RowColumnMultiValueField(
             fields=[super().field, super().field],
-            labels=["include", "exclude"],
+            labels=[
+                pgettext("filter list by collections", "include"),
+                pgettext("filter list by collections", "exclude"),
+            ],
             required=self.extra["required"],
         )
 
