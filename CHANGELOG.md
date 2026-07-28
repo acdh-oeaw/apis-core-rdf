@@ -1,5 +1,56 @@
 # Changelog
 
+## [0.67.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.66.0...v0.67.0) (2026-07-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** The `generic.template_list` templatetag was renamed to `model_mro_templates` to make make the name more specific to what the templatetag actually does.
+* **generic:** we rename `GenericModel.content_type()` to `GenericModel.get_self_content_type()`
+
+### Features
+
+* **collections:** override `GenericModel.Config` in collections models ([2c339a3](https://github.com/acdh-oeaw/apis-core-rdf/commit/2c339a34f7a6c738fce478e528498376f3bc9d16))
+* **entities:** override `GenericModel.Config` in `Entity` ([3ab4973](https://github.com/acdh-oeaw/apis-core-rdf/commit/3ab497334905ee5e832b074e8dcd4efcb2ef70f6))
+* **generic:** add `app_templates` templatetag ([12dbce7](https://github.com/acdh-oeaw/apis-core-rdf/commit/12dbce7d0080d33a0593ef9831f8fa8d7c786b53))
+* **generic:** add a `get_count` classmethod to GenericModel ([76d4f2a](https://github.com/acdh-oeaw/apis-core-rdf/commit/76d4f2a99cfb633d8b7bb23cdd48fb64aee7691b))
+* **generic:** add a `get_delete_success_url` method for the Delete view ([d528af1](https://github.com/acdh-oeaw/apis-core-rdf/commit/d528af16d47c82d9030d7f699f1ebb20da6e1a13))
+* **generic:** add a footer to the genericmodel card ([d6513dc](https://github.com/acdh-oeaw/apis-core-rdf/commit/d6513dca45c30df948a1e15030f808ec7fe8a793))
+* **generic:** handle the `?redirect` parameter in success_url methods ([ee59896](https://github.com/acdh-oeaw/apis-core-rdf/commit/ee598962f50db68cff43e51e1a432fd5ed03369e))
+* **generic:** introduce a `ConfigModel` class and use it ([cb37fa1](https://github.com/acdh-oeaw/apis-core-rdf/commit/cb37fa101b2b8d492d3e68b7b7aa998c975d88fd))
+* **generic:** introduce two new templatetags ([0868603](https://github.com/acdh-oeaw/apis-core-rdf/commit/08686035f58f835e48e344bb7d3641d8e0c9e811))
+* **generic:** optionally pass the request object to get_*_success_url ([7aa5faa](https://github.com/acdh-oeaw/apis-core-rdf/commit/7aa5faa0e5a499716839a6ab7532fc6315016a69))
+* **generic:** pass `request` to `get_*_success_url` methods ([95340ec](https://github.com/acdh-oeaw/apis-core-rdf/commit/95340ec574923a6050eb528178f7016952100747))
+* **generic:** return the value of generic forein keys in modeldict ([5bc0e3f](https://github.com/acdh-oeaw/apis-core-rdf/commit/5bc0e3f12ed4a48931120b1b0d660de66440b0a9))
+* **generic:** use `get_delete_success_url` instead of view logic ([c46ce6c](https://github.com/acdh-oeaw/apis-core-rdf/commit/c46ce6c74fa75fad914c3541523952209adfc392))
+* **generic:** use the new `Config` setting to group the overview page ([1285d12](https://github.com/acdh-oeaw/apis-core-rdf/commit/1285d12817d396499846cb94c422c63275b4c4cb))
+* **history:** override `GenericModel.Config` in `APISHistoryTableBase` ([9b055f8](https://github.com/acdh-oeaw/apis-core-rdf/commit/9b055f84f8c204d96e1498e095c480774a772224))
+* **relations:** go to relation detail view after updating ([5b8b837](https://github.com/acdh-oeaw/apis-core-rdf/commit/5b8b8371a02dcf5fd1b48ebf817731725fa5866a)), closes [#1727](https://github.com/acdh-oeaw/apis-core-rdf/issues/1727)
+* **relations:** override `GenericModel.Config` in `Relation` ([405c069](https://github.com/acdh-oeaw/apis-core-rdf/commit/405c06928d396fdfa46d0e01e42c00afb2893725))
+* **relations:** override actions column for relations ([734e09a](https://github.com/acdh-oeaw/apis-core-rdf/commit/734e09a70375dc9ba4eac35a1043727bd5d8aa17)), closes [#1727](https://github.com/acdh-oeaw/apis-core-rdf/issues/1727)
+* **uris:** add `get_for_instance` method to the UriManager ([437f518](https://github.com/acdh-oeaw/apis-core-rdf/commit/437f5189c35ba255bac8fc6e3dca331e83bfff52))
+* **uris:** add `instance_uris` templatetag ([60591a0](https://github.com/acdh-oeaw/apis-core-rdf/commit/60591a000ad9331a0d6bf9896f920c36faa1ca9e))
+* **uris:** add a card footer listing the uris for an object ([2dbb266](https://github.com/acdh-oeaw/apis-core-rdf/commit/2dbb266806e8130680407c6119ca4d4e54d24c67))
+
+
+### Bug Fixes
+
+* **collections:** only use content_object in str if it exists ([dc83d3d](https://github.com/acdh-oeaw/apis-core-rdf/commit/dc83d3df6549c8a9c24b66405d681bd27fe5491d))
+* **entities:** update `content_type` to `get_self_content_type` ([80595c6](https://github.com/acdh-oeaw/apis-core-rdf/commit/80595c62ccf0af2b3ac2182f83496163e23a5dd4))
+* **generic:** rename `.content_type` to `.get_self_content_type` ([f7b4ec4](https://github.com/acdh-oeaw/apis-core-rdf/commit/f7b4ec4257356860ef868d4ecd0a72941e5d5c8a))
+* **generic:** update `content_type` to `get_self_content_type` ([8bfb797](https://github.com/acdh-oeaw/apis-core-rdf/commit/8bfb79705d25d43f2ac721686690d4f3746d6d38))
+* **relations:** update `content_type` to `get_self_content_type` ([5cf417f](https://github.com/acdh-oeaw/apis-core-rdf/commit/5cf417fa566f1b6569166397e4014bdcaaed22ca))
+
+
+### Documentation
+
+* **readme:** point to sample_project/settings.py ([8c2f92a](https://github.com/acdh-oeaw/apis-core-rdf/commit/8c2f92a2c2c74d122c96953d17da0583c1c805d7))
+
+
+### Code Refactoring
+
+* **generic:** rename `template_list` to `model_mro_templates` ([6978f3e](https://github.com/acdh-oeaw/apis-core-rdf/commit/6978f3e767cc349d4102a841e26af53b683733aa))
+
 ## [0.66.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.65.1...v0.66.0) (2026-07-06)
 
 
