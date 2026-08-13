@@ -128,21 +128,25 @@ class TypeSenseAutocompleteAdapter(ExternalAutocompleteAdapter):
         headers = {"X-TYPESENSE-API-KEY": self.token}
         res = None
         if self.token and self.server:
-            match self.collections:
-                # if there is only on collection configured, we hit that collection directly
-                case str() as collection:
-                    url = f"{self.server}/collections/{collection}/documents/search?q={q}&query_by=description&query_by=label"
-                    res = client.get(url, headers=headers)
-                # if there are multiple collections configured, we use the `multi_search` endpoint
-                case list() as collectionlist:
-                    url = f"{self.server}/multi_search?q={q}&query_by=description&query_by=label"
-                    data = {"searches": []}
-                    for collection in collectionlist:
-                        data["searches"].append({"collection": collection})
-                    res = client.post(url, data=json.dumps(data), headers=headers)
-                case unknown:
-                    logger.error("Don't know what to do with collection %s", unknown)
-
+            try:
+                match self.collections:
+                    # if there is only on collection configured, we hit that collection directly
+                    case str() as collection:
+                        url = f"{self.server}/collections/{collection}/documents/search?q={q}&query_by=description&query_by=label"
+                        res = client.get(url, headers=headers)
+                    # if there are multiple collections configured, we use the `multi_search` endpoint
+                    case list() as collectionlist:
+                        url = f"{self.server}/multi_search?q={q}&query_by=description&query_by=label"
+                        data = {"searches": []}
+                        for collection in collectionlist:
+                            data["searches"].append({"collection": collection})
+                        res = client.post(url, data=json.dumps(data), headers=headers)
+                    case unknown:
+                        logger.error(
+                            "Don't know what to do with collection %s", unknown
+                        )
+            except Exception:
+                pass
             if res:
                 data = res.json()
                 hits = data.get("hits", [])
@@ -178,7 +182,10 @@ class LobidAutocompleteAdapter(ExternalAutocompleteAdapter):
     def get_results(self, q, client=httpx.Client()):
         endpoint = "https://lobid.org/gnd/search?"
         self.params["q"] = q
-        res = client.get(endpoint, params=self.params)
-        if res:
-            return list(filter(bool, map(self.extract, res.json())))
+        try:
+            res = client.get(endpoint, params=self.params)
+            if res:
+                return list(filter(bool, map(self.extract, res.json())))
+        except Exception:
+            pass
         return []
