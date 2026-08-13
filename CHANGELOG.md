@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.67.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.0...v0.67.1) (2026-08-13)
+
+
+### Bug Fixes
+
+* **generic:** use correct attribute name in MergeOrEnrichForm ([c52df13](https://github.com/acdh-oeaw/apis-core-rdf/commit/c52df138e392f6ceaffe7ca4b308978d8a37e81c))
+
 ## [0.67.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.66.0...v0.67.0) (2026-07-28)
 
 
