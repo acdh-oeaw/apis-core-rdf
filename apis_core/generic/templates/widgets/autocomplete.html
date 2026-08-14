@@ -1,0 +1,29 @@
+<div class="autocomplete-wrapper {% if "is-invalid" in widget.attrs.class %}is-invalid{% endif %}">
+  <details class="autocomplete"
+           ontoggle="this.querySelector('#{{ widget.name }}-autocomplete').focus()">
+    <summary id="summary-{{ widget.name }}"
+             {% include "django/forms/widgets/attrs.html" %}>
+
+      {% block summary %}
+      {% endblock summary %}
+
+      <span id="{{ widget.name }}-loading" class="loading"></span>
+    </summary>
+    <div class="suggestions-dropdown">
+      <div class="input-container">
+        <input type="text"
+               id="{{ widget.name }}-autocomplete"
+               name="q"
+               autocomplete="off"
+               placeholder="Search ..."
+               class="form-control"
+               hx-get="{{ widget.url }}"
+               hx-trigger="input changed delay:300ms, focus, click"
+               hx-swap="innerHTML"
+               hx-target="next .suggestions"
+               hx-indicator="#{{ widget.name }}-loading">
+      </div>
+      <div class="suggestions"></div>
+    </div>
+  </details>
+</div>
