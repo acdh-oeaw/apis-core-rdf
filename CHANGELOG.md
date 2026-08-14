@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.67.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.1...v0.67.2) (2026-08-14)
+
+
+### Bug Fixes
+
+* **utils:** catch exceptions in external autocomplete lookups ([569b0e7](https://github.com/acdh-oeaw/apis-core-rdf/commit/569b0e74ab75137833183c8f96713976325785ca))
+
 ## [0.67.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.0...v0.67.1) (2026-08-13)
 
 
