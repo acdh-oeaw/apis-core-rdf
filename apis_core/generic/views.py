@@ -8,7 +8,7 @@ from dal import autocomplete
 from django import http
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured, ValidationError
@@ -57,7 +57,7 @@ from .tables import GenericTable
 logger = logging.getLogger(__name__)
 
 
-class Overview(TemplateView):
+class Overview(LoginRequiredMixin, TemplateView):
     template_name = "generic/overview.html"
 
 
