@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.67.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.2...v0.67.3) (2026-08-18)
+
+
+### Bug Fixes
+
+* **generic:** make the overview only accessible for logged in users ([d7fabcb](https://github.com/acdh-oeaw/apis-core-rdf/commit/d7fabcb67b49ba258405fe4ce5a5fb9c21d7d942))
+
 ## [0.67.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.1...v0.67.2) (2026-08-14)
 
 
