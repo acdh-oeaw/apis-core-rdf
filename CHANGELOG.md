@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.67.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.3...v0.67.4) (2026-08-21)
+
+
+### Bug Fixes
+
+* **collections:** update method name in template ([9e985bd](https://github.com/acdh-oeaw/apis-core-rdf/commit/9e985bd27922a11c1a8bf34cd1809bab3a9ff759))
+
 ## [0.67.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.2...v0.67.3) (2026-08-18)
 
 
