@@ -190,6 +190,11 @@ def model_field_template_lookup_list(model, field, suffix="") -> list[str]:
     return [path, f"generic/partials/default_model_field_{suffix}.html"]
 
 
+@register.simple_tag
+def get_model_from_modelform(form) -> object:
+    return form._meta.model
+
+
 def template_exists(value):
     try:
         template.loader.get_template(value)
