@@ -1,0 +1,16 @@
+<div id="{{ widget.name }}-selected-items" class="selected-items">
+  <select multiple name="{{ fieldname }}" hidden>
+    {% for object in object_list %}
+      <option name="{{ fieldname }}" value="{{ object.pk }}" selected>{{ object }}</option>
+    {% endfor %}
+  </select>
+  {% for object in object_list %}
+    <span class="selected-item">{{ object }}
+      <span class="delete"
+            hx-get="{% url 'apis_core:generic:autocomplete-multiple-select' object.get_self_content_type %}?toggle={{ object.pk }}&fieldname={{ fieldname }}"
+            hx-include="previous select"
+            hx-target="closest summary"
+            hx-swap="innerHTML">×</span></span>
+    {% endfor %}
+    {% if request.GET.q %}<span class="created">Created ✔</span>{% endif %}
+  </div>

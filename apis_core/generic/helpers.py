@@ -3,7 +3,14 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import get_permission_codename
+from django.core.exceptions import (
+    ImproperlyConfigured,
+    PermissionDenied,
+    ValidationError,
+)
+from django.core.validators import URLValidator
 from django.db.models import CharField, Model, Q, TextField
+from django.http import HttpRequest
 from django.utils import module_loading
 
 logger = logging.getLogger(__name__)
@@ -157,3 +164,29 @@ def string_to_bool(string: str = "false") -> bool:
     Convert a string to a boolean representing its semantic value
     """
     return string.lower() == "true"
+
+
+def create_object_from_string(model: Model, value: str, request: HttpRequest):
+    """
+    We try multiple approaches to create a model instance from a value:
+    * we first test if the value is a URL and if so we expect it to be
+    something that can be imported using one of the configured importers
+    and so we pass the value to the import logic.
+    * if the value is not a string, we try to pass it to the `create_from_string`
+    method of the model, if that does exist. It is the models responsibility to
+    implement this method and the method should somehow know how to create
+    model instance from the value...
+    """
+    if not request.user.has_perms([permission_fullname("add", model)]):
+        raise PermissionDenied
+    try:
+        URLValidator()(value)
+        return model.import_from(value)
+    except ValidationError:
+        pass
+    try:
+        return model.create_from_string(value)
+    except AttributeError:
+        raise ImproperlyConfigured(
+            f'Model "{model._meta.verbose_name}" not configured to create from string'
+        )
