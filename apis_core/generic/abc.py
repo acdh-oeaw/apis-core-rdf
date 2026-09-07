@@ -55,8 +55,7 @@ class GenericModel(models.Model):
 
     @classmethod
     def get_listview_url(cls):
-        ct = ContentType.objects.get_for_model(cls)
-        return reverse("apis_core:generic:list", args=[ct])
+        return reverse("apis_core:generic:list", args=[cls])
 
     @classmethod
     def get_createview_url(cls):
