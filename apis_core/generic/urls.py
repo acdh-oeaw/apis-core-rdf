@@ -31,6 +31,8 @@ class ContenttypeConverter:
             return f"{value.app_label}.{value.model}"
         if isinstance(value, str):
             return value
+        if issubclass(value, GenericModel):
+            return value._meta.label_lower
 
 
 register_converter(ContenttypeConverter, "contenttype")
