@@ -260,3 +260,14 @@ def get_pure_genericmodels() -> list[GenericModel]:
         if not issubclass(model, tuple(parents))
     ]
     return genericmodels
+
+
+@register.simple_tag
+def sort_object_on_attribute(objects: list[object], attribute: str) -> list[object]:
+    """
+    Sort a list of objects based on an attribute. The attribute can be nested, like
+    `some.nested.attribute`
+    """
+    return sorted(
+        objects, key=lambda x: functools.reduce(getattr, attribute.split("."), x)
+    )
