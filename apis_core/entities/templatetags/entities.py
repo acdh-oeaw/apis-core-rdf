@@ -1,4 +1,5 @@
 from django import template
+from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 
 from apis_core.entities.abc import Entity
@@ -24,3 +25,11 @@ def entities_content_types():
         )
     )
     return entities
+
+
+@register.simple_tag
+def get_entitymodels() -> list[Entity]:
+    """
+    Return a list of `Entity` models
+    """
+    return list(filter(lambda x: issubclass(x, Entity), apps.get_models()))

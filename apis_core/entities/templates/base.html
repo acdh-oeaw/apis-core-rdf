@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load entities %}
+{% load generic %}
 {% load i18n %}
 
 {% block main-menu %}
@@ -17,10 +18,10 @@
         <span class="caret" />
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        {% entities_content_types as content_types %}
-        {% for content_type in content_types|dictsort:"name" %}
-          <a class="dropdown-item"
-             href="{{ content_type.model_class.get_listview_url }}">{{ content_type.model_class.get_verbose_name_plural|capfirst }}</a>
+        {% get_entitymodels as entitymodels %}
+        {% sort_object_on_attribute entitymodels "_meta.verbose_name_plural" as entitymodels %}
+        {% for model in entitymodels %}
+          <a class="dropdown-item" href="{{ model.get_listview_url }}">{{ model.get_verbose_name_plural|capfirst }}</a>
         {% endfor %}
       </div>
     </li>
