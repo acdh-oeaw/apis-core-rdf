@@ -258,8 +258,11 @@ class GenericModel(models.Model):
         res = getattr(self, str(field.name))
         if not field.choices:
             otherres = getattr(other, str(field.name), res)
-            if otherres and otherres != res:
+            if not res:
+                res = otherres
+            elif otherres and otherres != res:
                 res += f" ({otherres})"
+
         return res
 
     def get_merge_textfield_value(self, other: TextField, field: TextField):
