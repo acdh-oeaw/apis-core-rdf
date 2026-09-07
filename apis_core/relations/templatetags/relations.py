@@ -1,4 +1,5 @@
 from django import template
+from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Case, Q, Value, When
 
@@ -88,3 +89,13 @@ def relations_instances_from_relation_types(context, relation_types):
     for relation_type in relation_types:
         relations.extend(relations_from(context["object"], relation_type))
     return relations
+
+
+@register.simple_tag
+def get_relationmodels() -> list[Relation]:
+    """
+    Return a list of `Relation` models
+    """
+    return list(
+        filter(lambda x: issubclass(x, Relation) and x != Relation, apps.get_models())
+    )

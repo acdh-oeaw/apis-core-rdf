@@ -27,10 +27,10 @@
                  placeholder="{% translate "Filter relations..." %}">
         </form>
         <div id="relationList">
-          {% get_relation_content_types as content_types %}
-          {% for content_type in content_types %}
+          {% get_relationmodels as relationmodels %}
+          {% for model in relationmodels %}
             <a class="dropdown-item relation-item"
-               href="{{ content_type.model_class.get_listview_url }}">{{ content_type.model_class.name_and_reverse_name }}</a>
+               href="{{ model.get_listview_url }}">{{ model.name_and_reverse_name }}</a>
           {% endfor %}
         </div>
       </div>
