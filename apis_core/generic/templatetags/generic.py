@@ -137,11 +137,9 @@ def model_mro_templates(obj, folder="", prefix="", suffix=""):
 
 
 @register.simple_tag(takes_context=True)
-def any_view_permission(context, content_types):
+def any_view_permission(context, models):
     user = context.request.user
-    return any(
-        [user.has_perm(ct.model_class().get_view_permission()) for ct in content_types]
-    )
+    return any([user.has_perm(model.get_view_permission()) for model in models])
 
 
 @register.simple_tag
@@ -235,3 +233,30 @@ def regroup_filter_empty(
     for model in models:
         groups[functools.reduce(getattr, attribute.split("."), model)].append(model)
     return dict(groups)
+
+
+@register.simple_tag
+def get_pure_genericmodels() -> list[GenericModel]:
+    parents = []
+    if apps.is_installed("apis_core.collections"):
+        collections = apps.get_app_config("collections")
+        parents.append(collections.models_module.SkosCollection)
+        parents.append(collections.models_module.SkosCollectionContentObject)
+    if apps.is_installed("apis_core.relations"):
+        relations = apps.get_app_config("relations")
+        parents.append(relations.models_module.Relation)
+    if apps.is_installed("apis_core.history"):
+        history = apps.get_app_config("history")
+        parents.append(history.models_module.APISHistoryTableBase)
+    if apps.is_installed("apis_core.apis_entities"):
+        entities = apps.get_app_config("apis_entities")
+        parents.append(entities.models_module.AbstractEntity)
+    if apps.is_installed("apis_core.entities"):
+        entities = apps.get_app_config("entities")
+        parents.append(entities.module.abc.Entity)
+    genericmodels = [
+        model
+        for model in set(get_genericmodels())
+        if not issubclass(model, tuple(parents))
+    ]
+    return genericmodels
