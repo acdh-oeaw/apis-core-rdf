@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.67.5](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.4...v0.67.5) (2026-09-07)
+
+
+### Bug Fixes
+
+* **generic:** handle null values when merging character fields ([6eadf5e](https://github.com/acdh-oeaw/apis-core-rdf/commit/6eadf5e22a880bb96e6107bd5162075354aee1f4)), closes [#2479](https://github.com/acdh-oeaw/apis-core-rdf/issues/2479)
+
 ## [0.67.4](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.3...v0.67.4) (2026-08-21)
 
 
