@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% load generic %}
+{% load collections %}
 {% load i18n %}
 
 {% block main-menu %}
   {{ block.super }}
-  {% contenttypes "collections" as collection_content_types %}
-  {% any_view_permission collection_content_types as anyperm %}
+  {% get_collectionsmodels as collectionmodels %}
+  {% any_view_permission collectionmodels as anyperm %}
   {% if anyperm %}
     <li class="nav-item dropdown">
       <a href="#"

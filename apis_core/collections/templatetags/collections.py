@@ -1,5 +1,6 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
 
 from apis_core.collections.models import SkosCollection, SkosCollectionContentObject
 
@@ -95,3 +96,11 @@ def collection_session_toggle_by_id(context, collection_id):
     context["collection"] = SkosCollection.objects.get(pk=collection_id)
     context["enabled"] = collection_id in session_collections
     return context
+
+
+@register.simple_tag
+def get_collectionsmodels() -> list[models.Model]:
+    """
+    Return a list of `Collection` models
+    """
+    return [SkosCollection, SkosCollectionContentObject]
