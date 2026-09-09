@@ -31,8 +31,7 @@
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         {% for model in genericmodels %}
           {% if model.get_view_permission in perms %}
-            <a class="dropdown-item"
-               href="{{ content_type.model_class.get_listview_url }}">{{ model.get_verbose_name_plural|capfirst }}</a>
+            <a class="dropdown-item" href="{{ model.get_listview_url }}">{{ model.get_verbose_name_plural|capfirst }}</a>
           {% endif %}
         {% endfor %}
       </div>
