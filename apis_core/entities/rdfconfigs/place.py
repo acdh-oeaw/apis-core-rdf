@@ -41,10 +41,32 @@ class E53_PlaceFromWikidata:
 
     label = Attribute(
         [
-            "rdfs:label,de",
-            "rdfs:label,en",
-            "wdt:P1448/rdfs:label",
-            "rdfs:label",
+            """
+    SELECT ?label
+    WHERE {
+      ?subject wdt:P625 ?coordinates .
+      ?subject rdfs:label ?label .
+      FILTER(lang(?label) = "de")
+    } """,
+            """
+    SELECT ?label
+    WHERE {
+      ?subject wdt:P625 ?coordinates .
+      ?subject rdfs:label ?label .
+      FILTER(lang(?label) = "en")
+    } """,
+            """
+    SELECT ?label
+    WHERE {
+      ?subject wdt:P625 ?coordinates .
+      ?subject wdt:P1448/rdfs:label ?label
+    } """,
+            """
+    SELECT ?label
+    WHERE {
+      ?subject wdt:P625 ?coordinates .
+      ?subject rdfs:label ?label .
+    }""",
         ]
     )
     longitude = Attribute("""
