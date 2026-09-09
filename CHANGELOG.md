@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.68.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.5...v0.68.0) (2026-09-09)
+
+
+### Features
+
+* **collections:** use classes instead of content types in menu ([7d951e9](https://github.com/acdh-oeaw/apis-core-rdf/commit/7d951e95d7fa56c6330fbfe231a93e09ae037e42))
+* **entities:** use classes instead of content types in menu ([4ab7736](https://github.com/acdh-oeaw/apis-core-rdf/commit/4ab77364b0057a0ca1b966288eef1e2d1e5c4f2f))
+* **generic:** introduce templatetag to allow sorting in templates ([09a6ab6](https://github.com/acdh-oeaw/apis-core-rdf/commit/09a6ab61d633b712ebd4fbb0a058edd1c9add257))
+* **generic:** list models using classes instead of content types ([bfea927](https://github.com/acdh-oeaw/apis-core-rdf/commit/bfea9271243776557a0e1a702584a0f2eaa82b5e))
+* **generic:** make ContenttypeConverter handle pure models ([81e3733](https://github.com/acdh-oeaw/apis-core-rdf/commit/81e3733976a3edae6c0a13b0126af12d7b8dac64))
+* **generic:** pass model class instead of ContentType to reverse ([0413341](https://github.com/acdh-oeaw/apis-core-rdf/commit/041334190999686ea6e78ca5d29580ea239de954))
+* **relations:** use classes instead of content types in menu ([ec34af7](https://github.com/acdh-oeaw/apis-core-rdf/commit/ec34af7eefba4be8c5c760701902cad116afb8ec))
+* **search:** implement generic search functionality ([68673a3](https://github.com/acdh-oeaw/apis-core-rdf/commit/68673a3035d4d3a991780fb4415430dd7fd3ee5b))
+
+
+### Documentation
+
+* **search:** add a section about the search functionality ([a5c98df](https://github.com/acdh-oeaw/apis-core-rdf/commit/a5c98df3b771413ed543238a0d356ad3df10a4e7))
+
 ## [0.67.5](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.4...v0.67.5) (2026-09-07)
 
 
