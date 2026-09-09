@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.68.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.68.0...v0.68.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* **generic:** fix link generation in generic menu ([7deaf17](https://github.com/acdh-oeaw/apis-core-rdf/commit/7deaf17160137fafcde1dad4244e3d0c7b4cc24c))
+
 ## [0.68.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.67.5...v0.68.0) (2026-09-09)
 
 
