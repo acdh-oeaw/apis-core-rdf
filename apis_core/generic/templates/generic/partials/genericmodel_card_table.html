@@ -5,4 +5,12 @@
     {% model_field_template_lookup_list object key "table_row" as template_list %}
     {% include template_list %}
   {% endfor %}
+
+  {% block apps %}
+    {% app_templates suffix="/partials/object_table_suffix.html" as table_suffix_templates %}
+    {% for template in table_suffixes_templates %}
+      {% include template %}
+    {% endfor %}
+  {% endblock apps %}
+
 </table>
