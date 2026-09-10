@@ -150,8 +150,7 @@ class List(
 
     def setup(self, *args, **kwargs):
         super().setup(*args, **kwargs)
-        content_type = ContentType.objects.get_for_model(self.model)
-        self.cookie_name = f"{content_type.app_label}.{content_type.model}-list"
+        self.cookie_name = f"{self.model._meta.label_lower}-list"
         cookie = QueryDict(self.request.COOKIES.get(self.cookie_name, ""))
         get = self.request.GET.copy()
         for prefix in ["filterset", "choices"]:
