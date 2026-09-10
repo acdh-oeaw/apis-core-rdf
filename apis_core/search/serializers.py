@@ -1,11 +1,13 @@
 from django.core.serializers.json import Serializer
+from django.db.models import ForeignKey
 
 
 class SearchSerializer(Serializer):
     """
     This serializer is based on the default JSON serializer shipped in Django core.
     The only change is, that is serializes m2m fields as list of string representations
-    instead of list of ids
+    instead of list of ids and that it serializes foreign keys as the string
+    representation of the object they point to.
     """
 
     def handle_m2m_field(self, obj, field):
@@ -24,3 +26,9 @@ class SearchSerializer(Serializer):
             self._current[field.name] = ", ".join(
                 [str(related) for related in m2m_iter]
             )
+
+    def handle_fk_field(self, obj, field):
+        """We handle foreign keys in a special way, to get their value serialized"""
+        if isinstance(field, ForeignKey):
+            return getattr(obj, field.name)
+        return super().handle_fk_field(obj, field)
