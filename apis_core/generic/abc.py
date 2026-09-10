@@ -60,13 +60,11 @@ class GenericModel(models.Model):
 
     @classmethod
     def get_createview_url(cls):
-        ct = ContentType.objects.get_for_model(cls)
-        return reverse("apis_core:generic:create", args=[ct])
+        return reverse("apis_core:generic:create", args=[cls])
 
     @classmethod
     def get_importview_url(cls):
-        ct = ContentType.objects.get_for_model(cls)
-        return reverse("apis_core:generic:import", args=[ct])
+        return reverse("apis_core:generic:import", args=[cls])
 
     @classmethod
     def get_openapi_tags(cls):
@@ -90,32 +88,27 @@ class GenericModel(models.Model):
         return cls.objects.count()
 
     def get_edit_url(self):
-        ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:generic:update", args=[ct, self.id])
+        return reverse("apis_core:generic:update", args=[type(self), self.id])
 
     def get_duplicate_url(self):
-        ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:generic:duplicate", args=[ct, self.id])
+        return reverse("apis_core:generic:duplicate", args=[type(self), self.id])
 
     def get_enrich_url(self):
-        ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:generic:enrich", args=[ct, self.id])
+        return reverse("apis_core:generic:enrich", args=[type(self), self.id])
 
     def get_absolute_url(self):
-        ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:generic:detail", args=[ct, self.id])
+        return reverse("apis_core:generic:detail", args=[type(self), self.id])
 
     def get_delete_url(self):
-        ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:generic:delete", args=[ct, self.id])
+        return reverse("apis_core:generic:delete", args=[type(self), self.id])
 
     def get_merge_url(self, other_id):
-        ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:generic:merge", args=[ct, self.id, other_id])
+        return reverse("apis_core:generic:merge", args=[type(self), self.id, other_id])
 
     def get_select_merge_or_enrich_url(self):
-        ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:generic:selectmergeorenrich", args=[ct, self.id])
+        return reverse(
+            "apis_core:generic:selectmergeorenrich", args=[type(self), self.id]
+        )
 
     def get_create_success_url(self, request: Optional[HttpRequest] = None):
         if request and request.GET.get("redirect", False):
@@ -133,8 +126,9 @@ class GenericModel(models.Model):
         return self.get_listview_url()
 
     def get_api_detail_endpoint(self):
-        ct = ContentType.objects.get_for_model(self)
-        return reverse("apis_core:generic:genericmodelapi-detail", args=[ct, self.id])
+        return reverse(
+            "apis_core:generic:genericmodelapi-detail", args=[type(self), self.id]
+        )
 
     @classmethod
     def get_change_permission(self):
