@@ -59,7 +59,11 @@
         </form>
       </div>
       <div class="card-footer text-muted">
-        <a class="btn btn-outline-secondary"  href="?filterset-remember=off">{% translate "Reset filter" %}</a>
+
+        {% block filter-card-footer %}
+          <a class="btn btn-outline-secondary"  href="?filterset-remember=off">{% translate "Reset filter" %}</a>
+        {% endblock filter-card-footer %}
+
       </div>
     </div>
   {% endblock col %}
