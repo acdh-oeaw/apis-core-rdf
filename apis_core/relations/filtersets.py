@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django_filters import CharFilter, MultipleChoiceFilter
@@ -8,6 +9,7 @@ from apis_core.generic.helpers import generate_search_filter
 from apis_core.relations.forms import RelationFilterSetForm
 from apis_core.relations.models import Relation
 from apis_core.relations.utils import get_all_relation_subj_and_obj
+from apis_core.search.filters import SearchFilter
 
 
 class EntityFilter(CharFilter):
@@ -71,14 +73,14 @@ class RelationFilterSet(GenericFilterSet):
     to relations (this does only work for instances inheriting from RootObject).
     """
 
-    subj_search = EntityFilter(
-        field_name="subj",
-        label="Subject search",
-    )
-    obj_search = EntityFilter(
-        field_name="obj",
-        label="Object search",
-    )
+    #subj_search = EntityFilter(
+    #    field_name="subj",
+    #    label="Subject search",
+    #)
+    #obj_search = EntityFilter(
+    #    field_name="obj",
+    #    label="Object search",
+    #)
 
     class Meta:
         exclude = [
@@ -94,6 +96,11 @@ class RelationFilterSet(GenericFilterSet):
         if model := getattr(self.Meta, "model", False):
             if model is Relation and "collections" in self.filters:
                 del self.filters["collections"]
+
+            if apps.is_installed("apis_core.search"):
+                subject_filter = SearchFilter(field_name="subj_object_id", label="Subject search")
+                self.filters["subj"] = subject_filter
+
             all_models = [ct.model_class() for ct in get_all_relation_subj_and_obj()]
             subj_models = getattr(model, "subj_model", all_models)
             obj_models = getattr(model, "obj_model", all_models)
