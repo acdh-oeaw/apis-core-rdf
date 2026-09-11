@@ -1,3 +1,4 @@
+import functools
 import logging
 import re
 from typing import Optional, Tuple
@@ -182,6 +183,7 @@ class GenericModel(models.Model):
         return data, uri
 
     @classmethod
+    @functools.cache
     def fetch_from(cls, uri: str):
         """
         Normalize the URI and extract the autocomplete data.
