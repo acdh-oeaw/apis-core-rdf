@@ -1,8 +1,8 @@
 {% load generic %}
-<tr>
-  <th>{{ key.verbose_name }}</th>
-  <td>
+<dt class="col-sm-4 py-3 border-bottom">{{ key.verbose_name }}</dt>
+<dd class="col-sm-8 border-bottom mb-0 d-flex align-items-center">
+  <div class="mx-1">
     {% model_field_template_lookup_list object key "value" as template_list %}
     {% include template_list with value=value %}
-  </td>
-</tr>
+  </div>
+</dd>

@@ -1,30 +1,24 @@
-{% extends "generic/generic_content.html" %}
+{% extends "generic/genericmodel_detail.html" %}
 {% load crispy_forms_tags %}
 {% load i18n %}
+{% load generic %}
 
 {% block title %}
-  {% if object %}
-    {% blocktrans with object as object %}Edit {{ object }}{% endblocktrans %}
-  {% else %}
-    {% translate "Create" %}
-  {% endif %}
+  {% blocktrans with object as object %}Edit {{ object }}{% endblocktrans %}
 {% endblock title %}
 
-{% block content %}
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-header">
-
-        {% block card-header-content %}
-          {% if object %}
-            {% blocktrans with object as object %}Edit {{ object }}{% endblocktrans %}
-          {% else %}
-            {% translate "Create" %}
-          {% endif %}
-        {% endblock card-header-content %}
-
-      </div>
-      <div class="card-body">{% crispy form form.helper %}</div>
-    </div>
-  </div>
-{% endblock content %}
+{% block attributes %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <dl class="row border rounded mx-0">
+      {% for field in form %}
+        <dt class="col-sm-4 py-3 border-bottom">{{ field.label }}</dt>
+        <dd class="col-sm-8 border-bottom mb-0 d-flex align-items-center">
+          {{ field }}{{ field.errors }}
+        </dd>
+      {% endfor %}
+    </dl>
+    <input type="submit" value="Save">
+  </form>
+{% endblock attributes %}

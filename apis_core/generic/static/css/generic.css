@@ -20,7 +20,7 @@
 }
 
 .object-history {
-    color: var(--object-history-color, #007bff);
+    color: var(--object-history-color, darkturquoise);
 }
 
 .filter-input-selected {
@@ -83,4 +83,43 @@
 
 .left-column {
     max-width: 20vw;
+}
+
+
+.detail-container {
+    display: grid;
+    grid-template-rows: auto auto auto;
+
+    .header {
+        padding-bottom: 2em;
+        display: grid;
+        grid-template-rows: auto auto;
+
+        div:first-child {
+            display: grid;
+            grid-template-columns: auto auto;
+        }
+    }
+
+    .body {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1em;
+    }
+
+    .body:has(.body-row:nth-child(2):not(:empty)) {
+        grid-template-columns: 7fr 3fr;
+    }
+
+    input,
+    select {
+        border: 1px solid lightgrey;
+        padding: 4px;
+        background-color: whitesmoke;
+        width: 100%;
+    }
+
+    input[type="checkbox"] {
+        width: auto;
+    }
 }

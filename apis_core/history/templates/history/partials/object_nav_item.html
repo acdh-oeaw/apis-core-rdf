@@ -1,0 +1,10 @@
+{% load i18n %}
+{% if object.get_history_url %}
+<li>
+  <a class="dropdown-item object-history"
+     href="{{ object.get_history_url }}">
+     <span class="material-symbols-outlined material-symbols-align">history</span>
+    {%translate "History" %}
+  </a>
+</li>
+{% endif %}

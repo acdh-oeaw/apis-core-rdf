@@ -101,6 +101,9 @@ class GenericModelForm(forms.ModelForm):
 
         self.helper = FormHelper(self)
         self.helper.add_input(Submit("submit", _("Submit")))
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = "col-md-4"
+        self.helper.field_class = "col-md-8"
 
         # override the fields pointing to other models,
         # to make them use the autocomplete widgets

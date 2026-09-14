@@ -1,17 +1,37 @@
 {% extends "generic/generic_content.html" %}
 {% load generic %}
+{% load i18n %}
 
 {% block title %}
   {{ object }}
 {% endblock title %}
 
-{% if object %}
-
-  {% block content %}
-    <div class="container-fluid">
-      {% model_mro_templates object prefix="partials/" suffix="_card.html" as template_list %}
+{% block content %}
+  <div class="container detail-container">
+    <div>
+      {% model_mro_templates object prefix="partials/" suffix="_nav.html" as template_list %}
       {% include template_list %}
     </div>
-  {% endblock content %}
+    <div class="header">
+      <div>
+        <div>
+          <h1 class="h4 d-flex align-items-center">{{ object }} <span class="text-black-50 ps-2">#{{ object.pk }}</span></h1>
+          {% if object.subtitle %}<p class="text-muted small">{{ object.subtitle }}</p>{% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="body-row">
 
-{% endif %}
+        {% block attributes %}
+          {% model_mro_templates object prefix="partials/" suffix="_card_table.html" as template_list %}
+          {% include template_list %}
+        {% endblock attributes %}
+      </div>
+      {% app_templates suffix="/partials/detail_side_block.html" as detail_templates %}
+      {# djlint:off #}
+      <div class="body-row">{% spaceless %}{% for template in detail_templates %}{% include template %}{% endfor %}{% endspaceless %}</div>
+      {# djlint:on #}
+    </div>
+  </div>
+{% endblock content %}
