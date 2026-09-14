@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.69.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.68.1...v0.69.0) (2026-09-14)
+
+
+### Features
+
+* **generic:** allow apps to add table suffix to genericmodel table ([889f4ae](https://github.com/acdh-oeaw/apis-core-rdf/commit/889f4ae08faf290c7cfc89490007b78fd9f2d7ea))
+* **generic:** allow to override the filter-card-footer ([e049d9b](https://github.com/acdh-oeaw/apis-core-rdf/commit/e049d9bdee2c891291cd2eca510bd21b65fa0226))
+* **generic:** don't make a content type lookup just for the label ([550bcb3](https://github.com/acdh-oeaw/apis-core-rdf/commit/550bcb341bd3b7fd80593186dafdef0d98bc966a))
+* **generic:** replace unnecessary ContentType lookups ([0bd1e0d](https://github.com/acdh-oeaw/apis-core-rdf/commit/0bd1e0de001b0c07103c3f4adf5f51ee74c41a3d))
+* **search:** serialize foreign keys as their value ([d65b892](https://github.com/acdh-oeaw/apis-core-rdf/commit/d65b892f7f619e19978a684722d31f3f990872b7)), closes [#2495](https://github.com/acdh-oeaw/apis-core-rdf/issues/2495)
+
+
+### Bug Fixes
+
+* **entities:** tighten the wikidata place label lookups ([e287460](https://github.com/acdh-oeaw/apis-core-rdf/commit/e287460635922f0de4ecac8511fb0a0986a39744)), closes [#2288](https://github.com/acdh-oeaw/apis-core-rdf/issues/2288)
+* **search:** the params are sometimes tuple, so we cast the value ([1045058](https://github.com/acdh-oeaw/apis-core-rdf/commit/1045058405023012776e54d490954c92fee65d78))
+
 ## [0.68.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.68.0...v0.68.1) (2026-09-09)
 
 
