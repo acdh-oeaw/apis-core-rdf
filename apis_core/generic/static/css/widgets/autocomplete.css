@@ -1,0 +1,92 @@
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.autocomplete-wrapper {
+    position: relative;
+
+    .created {
+        float: right;
+        color: green;
+        animation: fadeout 2s ease-in-out forwards;
+    }
+
+    .loading {
+        float: right;
+        color: red;
+        opacity: 0;
+    }
+
+    .htmx-request.loading {
+        transition-delay: 250ms;
+        opacity: 1;
+        width: 24px;
+        height: 24px;
+        border: 5px solid #ffc2c2;
+        border-bottom-color: black;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 3s linear infinite;
+    }
+}
+
+
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
+    font-size: small;
+    border-top: none;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    box-sizing: border-box;
+
+    .suggestion {
+        border-radius: .5em;
+        margin: 1em;
+        padding: 1em;
+        cursor: pointer;
+        transition-duration: .15s;
+
+    }
+
+    .suggestion:hover {
+        background: #86b7fe;
+    }
+
+    .suggestion.external {
+        background: #ffc2c2;
+    }
+}
+
+details.autocomplete[open] summary::before {
+    content: "";
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    cursor: auto;
+}

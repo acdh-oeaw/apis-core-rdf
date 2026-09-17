@@ -6,16 +6,11 @@ from django import forms
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from apis_core.core.fields import (
-    ApisListSelect2,
-    ApisModelSelect2,
-    ApisModelSelect2Multiple,
-)
 from apis_core.generic.abc import GenericModel
 from apis_core.generic.forms.fields import ModelImportChoiceField
+from apis_core.generic.widgets import AutocompleteMultiSelect, AutocompleteSingleSelect
 
 logger = logging.getLogger(__name__)
 
@@ -47,12 +42,7 @@ class GenericImportForm(forms.Form):
         self.fields["url"] = ModelImportChoiceField(
             queryset=self.Meta.model.objects.all()
         )
-        ct = ContentType.objects.get_for_model(self.Meta.model)
-        url = reverse("apis_core:generic:autocompleteexternalonly", args=[ct])
-        self.fields["url"].widget = ApisModelSelect2(
-            url, attrs={"data-html": True, "data-tags": 1}
-        )
-        self.fields["url"].widget.choices = self.fields["url"].choices
+        self.fields["url"].widget = AutocompleteSingleSelect(self.fields["url"])
         self.helper = FormHelper()
         self.helper.add_input(Submit("submit", _("Submit")))
 
@@ -105,9 +95,9 @@ class GenericModelForm(forms.ModelForm):
         # override the fields pointing to other models,
         # to make them use the autocomplete widgets
         override_fieldtypes = {
-            "ModelMultipleChoiceField": ApisModelSelect2Multiple,
-            "ModelChoiceField": ApisModelSelect2,
-            "ModelImportChoiceField": ApisModelSelect2,
+            "ModelMultipleChoiceField": AutocompleteMultiSelect,
+            "ModelChoiceField": AutocompleteSingleSelect,
+            "ModelImportChoiceField": AutocompleteSingleSelect,
         }
         for field in self.fields:
             clsname = self.fields[field].__class__.__name__
@@ -116,11 +106,9 @@ class GenericModelForm(forms.ModelForm):
                     self.fields[field]._queryset.model
                 )
                 if issubclass(ct.model_class(), GenericModel):
-                    url = reverse("apis_core:generic:autocomplete", args=[ct])
                     self.fields[field].widget = override_fieldtypes[clsname](
-                        url, attrs={"data-html": True}
+                        self.fields[field]
                     )
-                    self.fields[field].widget.choices = self.fields[field].choices
 
     def clean(self):
         cleaned_data = super().clean()
@@ -148,10 +136,10 @@ class GenericSelectMergeOrEnrichForm(forms.Form):
         if "content_type" in kwargs:
             self.content_type = kwargs.pop("content_type")
         super().__init__(*args, **kwargs)
-        self.fields["uri"] = forms.CharField()
-        uri = reverse("apis_core:generic:autocomplete", args=[self.content_type])
-        attrs = {"data-html": True, "data-tags": 1}
-        self.fields["uri"].widget = ApisListSelect2(uri, attrs=attrs)
+        self.fields["uri"] = forms.ModelChoiceField(
+            queryset=self.content_type.model_class().objects.all()
+        )
+        self.fields["uri"].widget = AutocompleteSingleSelect(self.fields["uri"])
         self.fields["uri"].label = "Select or paste URI"
         self.helper = FormHelper()
         self.helper.add_input(Submit("submit", _("Submit")))
