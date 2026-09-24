@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.69.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.69.0...v0.69.1) (2026-09-24)
+
+
+### Bug Fixes
+
+* **generic:** fix variable name in template ([d6f57d8](https://github.com/acdh-oeaw/apis-core-rdf/commit/d6f57d8be87863d2c40c6af5e892d1e8d660a58a))
+
 ## [0.69.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.68.1...v0.69.0) (2026-09-14)
 
 
