@@ -129,6 +129,7 @@ class SearchEntry(models.Model):
     objects = SearchManager()
 
     class Meta:
+        app_label = "search"
         unique_together = ["content_type", "object_id"]
         indexes = [
             models.Index(fields=["content_type", "object_id"]),
