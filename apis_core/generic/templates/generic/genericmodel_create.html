@@ -1,16 +1,21 @@
-{% extends "generic/generic_content.html" %}
+{% extends "generic/genericmodel_single.html" %}
 {% load crispy_forms_tags %}
 {% load i18n %}
 
 {% block title %}
-  {% translate "Create" %}
+  {% blocktranslate with verbose_name=form.instance.get_verbose_name %}Create {{ verbose_name }}{% endblocktranslate %}
 {% endblock title %}
 
-{% block content %}
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-header">{% translate "Create" %}</div>
-      <div class="card-body">{% crispy form form.helper %}</div>
-    </div>
-  </div>
-{% endblock content %}
+{% block genericmodel-single.header %}
+  <h1 class="h4">
+    {% blocktranslate with verbose_name=form.instance.get_verbose_name %}Create {{ verbose_name }}{% endblocktranslate %}
+  </h1>
+{% endblock genericmodel-single.header %}
+
+{% block genericmodel-single.object-listview-link %}
+  {% include "generic/partials/object_listview_link.html" with object=form.instance %}
+{% endblock genericmodel-single.object-listview-link %}
+
+{% block genericmodel-single.body %}
+  {% crispy form form.helper %}
+{% endblock genericmodel-single.body %}

@@ -1,0 +1,6 @@
+{% if object %}
+  <h1 class="h4 d-flex align-items-center">
+    {{ object }} <span class="text-black-50 ps-2">#{{ object.pk }}</span>
+  </h1>
+  {% if object.subtitle %}<p class="text-muted small">{{ object.subtitle }}</p>{% endif %}
+{% endif %}
