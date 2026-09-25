@@ -1,0 +1,53 @@
+{% extends basetemplate|default:"base.html" %}
+{% load generic %}
+{#
+this template should provide a base template for working with single objects
+it provides a simple structure inside a container, consisting of a navigation,
+a header and a body
+#}
+
+{% block content %}
+  <div class="container genericmodel-single">
+
+    {% block genericmodel-single.container %}
+      <nav class="mb-4 d-flex justify-content-between"
+           aria-label="object navigation">
+
+        {% block genericmodel-single.navigation %}
+          {% block genericmodel-single.object-listview-link %}
+            {% include "generic/partials/object_listview_link.html" %}
+          {% endblock genericmodel-single.object-listview-link %}
+
+          <div>
+
+            {% block genericmodel-single.object-navigation %}
+              {% model_mro_templates object prefix="partials/" suffix="_single_object_nav.html" as template_list %}
+              {% if template_list %}
+                {% include template_list %}
+              {% endif %}
+            {% endblock genericmodel-single.object-navigation %}
+
+          </div>
+        {% endblock genericmodel-single.navigation %}
+
+      </nav>
+      <div class="header">
+
+        {% block genericmodel-single.header %}
+          {% model_mro_templates object prefix="partials/" suffix="_single_object_header.html" as template_list %}
+          {% if template_list %}
+            {% include template_list %}
+          {% endif %}
+        {% endblock genericmodel-single.header %}
+
+      </div>
+      <div class="body">
+
+        {% block genericmodel-single.body %}
+        {% endblock genericmodel-single.body %}
+
+      </div>
+    {% endblock genericmodel-single.container %}
+
+  </div>
+{% endblock content %}
