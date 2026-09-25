@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 03:05-0500\n"
+"POT-Creation-Date: 2026-09-25 03:11-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,10 +100,9 @@ msgid "Yes, delete"
 msgstr "Ja, löschen"
 
 #: apis_core/generic/templates/generic/genericmodel_create.html
-#: apis_core/generic/templates/generic/genericmodel_form.html
-#: apis_core/generic/templates/generic/genericmodel_list.html
-msgid "Create"
-msgstr "Erstellen"
+#, python-format
+msgid "Create %(verbose_name)s"
+msgstr "%(verbose_name)s erstellen"
 
 #: apis_core/generic/templates/generic/genericmodel_create_success_message.html
 #, python-format
@@ -143,15 +142,24 @@ msgstr "Es konnten von %(uri)s keine Daten geladen werden, die zu Attributen die
 msgid "Edit %(object)s"
 msgstr "%(object)s bearbeiten"
 
-#: apis_core/generic/templates/generic/genericmodel_import.html
+#: apis_core/generic/templates/generic/genericmodel_form.html
 #: apis_core/generic/templates/generic/genericmodel_list.html
-msgid "Import"
-msgstr "Importieren"
+msgid "Create"
+msgstr "Erstellen"
+
+#: apis_core/generic/templates/generic/genericmodel_import.html
+#, python-format
+msgid "Import %(verbose_name)s"
+msgstr "%(verbose_name)s importieren"
 
 #: apis_core/generic/templates/generic/genericmodel_list.html
 #, python-format
 msgid "List %(verbose_name_plural)s"
 msgstr "%(verbose_name_plural)s Liste"
+
+#: apis_core/generic/templates/generic/genericmodel_list.html
+msgid "Import"
+msgstr "Importieren"
 
 #: apis_core/generic/templates/generic/genericmodel_list.html
 msgid "Reset filter"
