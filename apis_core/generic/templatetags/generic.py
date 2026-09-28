@@ -217,9 +217,6 @@ def get_pure_genericmodels() -> list[GenericModel]:
     if apps.is_installed("apis_core.history"):
         history = apps.get_app_config("history")
         parents.append(history.models_module.APISHistoryTableBase)
-    if apps.is_installed("apis_core.apis_entities"):
-        entities = apps.get_app_config("apis_entities")
-        parents.append(entities.models_module.AbstractEntity)
     if apps.is_installed("apis_core.entities"):
         entities = apps.get_app_config("entities")
         parents.append(entities.module.abc.Entity)
