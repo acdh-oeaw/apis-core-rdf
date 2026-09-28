@@ -85,37 +85,6 @@ def genericmodel_content_types():
     return genericmodels
 
 
-@register.simple_tag
-def pure_genericmodel_content_types():
-    """
-    Retrieve all models which inherit from GenericModel class
-    but are not Collections, Entities, Relations or History models
-    """
-    parents = []
-    if apps.is_installed("apis_core.collections"):
-        collections = apps.get_app_config("collections")
-        parents.append(collections.models_module.SkosCollection)
-        parents.append(collections.models_module.SkosCollectionContentObject)
-    if apps.is_installed("apis_core.relations"):
-        relations = apps.get_app_config("relations")
-        parents.append(relations.models_module.Relation)
-    if apps.is_installed("apis_core.history"):
-        history = apps.get_app_config("history")
-        parents.append(history.models_module.APISHistoryTableBase)
-    if apps.is_installed("apis_core.apis_entities"):
-        entities = apps.get_app_config("apis_entities")
-        parents.append(entities.models_module.AbstractEntity)
-    if apps.is_installed("apis_core.entities"):
-        entities = apps.get_app_config("entities")
-        parents.append(entities.module.abc.Entity)
-    genericmodels = [
-        ct
-        for ct in set(genericmodel_content_types())
-        if not issubclass(ct.model_class(), tuple(parents))
-    ]
-    return genericmodels
-
-
 @register.filter
 def get_attribute(obj, attribute):
     return getattr(obj, attribute, None)
