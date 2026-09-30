@@ -2,9 +2,11 @@ import logging
 
 import django_filters
 from django.apps import apps
+from django.contrib.contenttypes.models import ContentType
 from django_filters.filterset import FilterSet
 
 from apis_core.collections.filters import CollectionsIncludeExcludeFilter
+from apis_core.search.filters import SearchFilterByContenttype
 
 from .forms import GenericFilterSetForm
 
@@ -31,6 +33,14 @@ class GenericFilterSet(FilterSet):
         for field in model._meta.get_fields():
             if getattr(field, "auto_created", False) and field.name in self.filters:
                 del self.filters[field.name]
+        if apps.is_installed("apis_core.search"):
+            searchmodel = apps.get_model("search", "SearchEntry")
+            content_type = ContentType.objects.get_for_model(model)
+            if searchmodel.objects.filter(content_type=content_type).exists():
+                self.filters["search"] = SearchFilterByContenttype(
+                    content_type=content_type, object_id_field="pk"
+                )
+
         try:
             skoscollection = apps.get_model("collections.SkosCollection")
             if skoscollection.objects.exists():
