@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.70.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.69.1...v0.70.0) (2026-09-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* **generic:** drop `pure_genericmodel_content_types` templatetag
+
+### Features
+
+* **entities:** add admin integration for EntityID ([b9fe889](https://github.com/acdh-oeaw/apis-core-rdf/commit/b9fe88915e295b8f1ea1fcdb5038b571c980cfa2))
+* **generic:** cache the result of the external resource lookup ([d9da67e](https://github.com/acdh-oeaw/apis-core-rdf/commit/d9da67e18c32e2214983b154032c9d0304670e4f)), closes [#2408](https://github.com/acdh-oeaw/apis-core-rdf/issues/2408)
+* **relations:** use `SearchFilter` instead of old `EntityFilter` ([ea34123](https://github.com/acdh-oeaw/apis-core-rdf/commit/ea341230f50cd0d90cf3411277cf80934c91f9d6))
+* **search:** add a SearchFilter class to allow filtering using search ([653823e](https://github.com/acdh-oeaw/apis-core-rdf/commit/653823e91bfa6b5155c72034c4bde3042630ffb5))
+* **search:** add app_label to SearchEntry model ([0b3eade](https://github.com/acdh-oeaw/apis-core-rdf/commit/0b3eade17f0264e7f368cd3fa5ee9e39082cd733))
+* **uris:** add admin integration for Uri ([ab63bec](https://github.com/acdh-oeaw/apis-core-rdf/commit/ab63becd4dbd5ce82c5afeac3acf22d4ac6897f9))
+
+
+### Bug Fixes
+
+* **generic:** don't test for `AbstractEntity` anymore ([b98e1a9](https://github.com/acdh-oeaw/apis-core-rdf/commit/b98e1a935f89ac2342b480feb82b673de68c77ec))
+* **generic:** filter parent classes before creating mro paths ([1480706](https://github.com/acdh-oeaw/apis-core-rdf/commit/148070642e37dad62ed8221a78728cad8338cfc8))
+
+
+### Code Refactoring
+
+* **generic:** drop `pure_genericmodel_content_types` templatetag ([c80822c](https://github.com/acdh-oeaw/apis-core-rdf/commit/c80822c64ba3345394c39cb8934a51cf5f02a638))
+
 ## [0.69.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.69.0...v0.69.1) (2026-09-24)
 
 
