@@ -1,0 +1,5 @@
+{% extends "widgets/autocomplete.html" %}
+
+{% block summary %}
+  {% include "generic/genericmodel_autocomplete_multiple_select.html" with fieldname=widget.name object_list=widget.value %}
+{% endblock summary %}
