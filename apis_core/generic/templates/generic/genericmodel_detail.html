@@ -1,17 +1,11 @@
-{% extends "generic/generic_content.html" %}
+{% extends "generic/genericmodel_single.html" %}
 {% load generic %}
 
 {% block title %}
   {{ object }}
 {% endblock title %}
 
-{% if object %}
-
-  {% block content %}
-    <div class="container-fluid">
-      {% model_mro_templates object prefix="partials/" suffix="_card.html" as template_list %}
-      {% include template_list %}
-    </div>
-  {% endblock content %}
-
-{% endif %}
+{% block genericmodel-single.body %}
+  {% model_mro_templates object prefix="partials/" suffix="_card_table.html" as template_list %}
+  {% include template_list %}
+{% endblock genericmodel-single.body %}
