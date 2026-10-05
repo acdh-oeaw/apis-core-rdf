@@ -130,7 +130,7 @@
                 {% else %}
                   <li class="nav-item dropdown ml-auto">
                     <a class="nav-link p-0"
-                       href="{% url 'apis_core:login' %}?next={{ request.path|urlencode }}">
+                       href="{% url 'apis_core:login' %}?next={% url 'apis:generic:overview' %}">
                       <span class="material-symbols-outlined">login</span>
                     </a>
                   </li>
