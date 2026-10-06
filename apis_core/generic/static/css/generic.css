@@ -84,3 +84,37 @@
 .left-column {
     max-width: 20vw;
 }
+
+
+.genericmodel-single {
+    display: grid;
+    grid-template-rows: auto auto auto;
+
+    .header {
+        padding-bottom: 2em;
+        display: grid;
+        grid-template-rows: auto auto;
+    }
+
+    .body {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1em;
+
+        form {
+            border: 1px solid silver;
+            padding: 1em;
+        }
+    }
+}
+
+.detail-table-container {
+    background-color: whitesmoke;
+    padding: 1em;
+    border-radius: .8em;
+
+    th,
+    td {
+        background-color: whitesmoke;
+    }
+}
