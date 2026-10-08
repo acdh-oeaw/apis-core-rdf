@@ -2,7 +2,7 @@
 Main entry point for APIS routes
 """
 
-from django.conf import settings
+from django.apps import apps
 from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import (
@@ -25,40 +25,40 @@ urlpatterns = [
 router = CustomDefaultRouter()
 
 
-if "apis_core.search" in settings.INSTALLED_APPS:
+if apps.is_installed("apis_core.search"):
     urlpatterns.append(path("", include("apis_core.search.urls")))
 
 
-if "apis_core.entities" in settings.INSTALLED_APPS:
+if apps.is_installed("apis_core.entities"):
     urlpatterns.append(path("", include("apis_core.entities.urls")))
 
 
-if "apis_core.uri" in settings.INSTALLED_APPS:
+if apps.is_installed("apis_core.uri"):
     from apis_core.uri.urls import router as apis_uris_router
 
     router.registry.extend(apis_uris_router.registry)
 
 
-if "apis_core.apis_entities" in settings.INSTALLED_APPS:
+if apps.is_installed("apis_core.apis_entities"):
     urlpatterns.append(path("entities/", include("apis_core.apis_entities.urls")))
     from apis_core.apis_entities.urls import api_routes
 
     urlpatterns.append(path("api/", include(api_routes)))
 
 
-if "apis_core.relations" in settings.INSTALLED_APPS:
+if apps.is_installed("apis_core.relations"):
     urlpatterns.append(path("relations/", include("apis_core.relations.urls")))
 
 
-if "apis_core.history" in settings.INSTALLED_APPS:
+if apps.is_installed("apis_core.history"):
     urlpatterns.append(path("history/", include("apis_core.history.urls")))
 
 
-if "apis_core.collections" in settings.INSTALLED_APPS:
+if apps.is_installed("apis_core.collections"):
     urlpatterns.append(path("collections/", include("apis_core.collections.urls")))
 
 
-if "apis_core.documentation" in settings.INSTALLED_APPS:
+if apps.is_installed("apis_core.documentation"):
     urlpatterns.append(path("", include("apis_core.documentation.urls")))
 
 
