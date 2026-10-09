@@ -166,7 +166,7 @@ def template_exists(value):
 
 
 @register.simple_tag
-def app_templates(prefix: str = "", suffix: str = ""):
+def app_templates(prefix: str = "", suffix: str = "", reverse=True):
     """
     List templates found in the installed apps template folder.
     The template path is prefixed with `prefix` and suffixed with
@@ -175,6 +175,8 @@ def app_templates(prefix: str = "", suffix: str = ""):
     labels = [app.label for app in apps.get_app_configs()]
     templates = [f"{prefix}{label}{suffix}" for label in labels]
     existing = [template for template in templates if template_exists(template)]
+    if reverse:
+        existing.reverse()
     return existing
 
 
