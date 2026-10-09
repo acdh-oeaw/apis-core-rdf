@@ -1,0 +1,23 @@
+{% load generic %}
+{% load collections %}
+{% load i18n %}
+{% get_collectionsmodels as collectionmodels %}
+{% any_view_permission collectionmodels as anyperm %}
+{% if anyperm %}
+  <li class="nav-item dropdown">
+    <a href="#"
+       class="nav-link dropdown-toggle"
+       data-bs-toggle="dropdown"
+       role="button"
+       aria-haspopup="true"
+       aria-expanded="false">{% translate "Collections" %}
+      <span class="caret" />
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item"
+         href="{% url "apis_core:generic:list" "collections.skoscollection" %}">{% translate "All collections" %}</a>
+      <a class="dropdown-item"
+         href="{% url "apis_core:generic:list" "collections.skoscollectioncontentobject" %}">{% translate "Collection linked objects" %}</a>
+    </div>
+  </li>
+{% endif %}

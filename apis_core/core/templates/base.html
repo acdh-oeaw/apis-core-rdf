@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 {% load core %}
+{% load generic %}
 {% load i18n %}
 <html lang="en">
   <head>
@@ -90,6 +91,10 @@
           <!-- Start main menu -->
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul id="main-menu" class="navbar-nav me-auto">
+              {% app_templates suffix="/partials/main_menu.html" as main_menu_templates %}
+              {% for template in main_menu_templates %}
+                {% include template %}
+              {% endfor %}
 
               {% block main-menu %}
               {% endblock main-menu %}
