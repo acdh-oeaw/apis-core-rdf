@@ -1,0 +1,24 @@
+{% load i18n %}
+{% load generic %}
+{% get_pure_genericmodels as genericmodels %}
+{% any_view_permission genericmodels as anyperm %}
+{% if anyperm %}
+  <li class="nav-item dropdown">
+    <a href="#"
+       class="nav-link dropdown-toggle"
+       data-bs-toggle="dropdown"
+       role="button"
+       aria-haspopup="true"
+       aria-expanded="false">
+      {% translate "Other models" %}
+      <span class="caret" />
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      {% for model in genericmodels %}
+        {% if model.get_view_permission in perms %}
+          <a class="dropdown-item" href="{{ model.get_listview_url }}">{{ model.get_verbose_name_plural|capfirst }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </li>
+{% endif %}
