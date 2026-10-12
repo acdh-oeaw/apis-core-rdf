@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.71.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.70.0...v0.71.0) (2026-10-12)
+
+
+### Features
+
+* **core:** redirect to overview after login ([9d28abb](https://github.com/acdh-oeaw/apis-core-rdf/commit/9d28abb1b13c739ebf6830b50485450ec214d3cf))
+* **generic:** introduce `genericmodel-single.html` template ([9b5a995](https://github.com/acdh-oeaw/apis-core-rdf/commit/9b5a995ee70d015381c964ab440d8a6bce94c4b0))
+* **generic:** introduce a `search` field in the default filters ([f2761c2](https://github.com/acdh-oeaw/apis-core-rdf/commit/f2761c26a2dd0b9a62d193d86c36d984e12dc299))
+* **generic:** switch create & import templates to single base template ([d295b0b](https://github.com/acdh-oeaw/apis-core-rdf/commit/d295b0b19a00ec46b69e9d1a4f8277456a80d0a0))
+* **generic:** switch detail & form templates to single base template ([755e635](https://github.com/acdh-oeaw/apis-core-rdf/commit/755e6359702b2d7ca359b77a0e5239315e02c03b))
+* **relations:** set min-width for relation dialog ([2e111da](https://github.com/acdh-oeaw/apis-core-rdf/commit/2e111da259e55324d2ea51a104b9abcfb9aaa1ad))
+* **search:** add `SearchFilterByContenttype` filter ([cbd1ff6](https://github.com/acdh-oeaw/apis-core-rdf/commit/cbd1ff6ef609d9cee15d5f270a0f870a3992f2eb))
+
+
+### Bug Fixes
+
+* **generic:** reverse `app_templates` by default ([17900de](https://github.com/acdh-oeaw/apis-core-rdf/commit/17900de3bb6fa1b164a3f9ddcc43b7595ee98f47))
+* **urls.py:** use correct way of checking if app is installed ([b19929e](https://github.com/acdh-oeaw/apis-core-rdf/commit/b19929e52d57288dbe26ce7dcbdf65ae5adf8159))
+
 ## [0.70.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.69.1...v0.70.0) (2026-09-30)
 
 
