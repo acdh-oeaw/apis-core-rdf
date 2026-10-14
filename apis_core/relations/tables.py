@@ -15,6 +15,6 @@ class RelationsListTable(GenericTable):
     actions = RelationActionsColumn()
 
     class Meta:
-        attrs = {"class": "table-sm"}
+        attrs = {"class": "table-sm w-100"}
         sequence = GenericTable.Meta.sequence
         exclude = ("desc",)
