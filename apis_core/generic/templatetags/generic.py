@@ -154,7 +154,11 @@ def model_field_template_lookup_list(model, field, suffix="") -> list[str]:
     """
     content_type = ContentType.objects.get_for_model(model)
     path = f"{content_type.app_label}/partials/{content_type.model}_{field.name}_{suffix}.html"
-    return [path, f"generic/partials/default_model_field_{suffix}.html"]
+    return [
+        path,
+        f"generic/partials/default_{field.get_internal_type().lower()}_{suffix}.html",
+        f"generic/partials/default_model_field_{suffix}.html",
+    ]
 
 
 def template_exists(value):
