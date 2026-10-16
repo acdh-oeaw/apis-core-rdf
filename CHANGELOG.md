@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.71.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.71.0...v0.71.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **relations:** use full table width for relation tables ([65d4521](https://github.com/acdh-oeaw/apis-core-rdf/commit/65d4521ee4900bb369bd9b89ef6a90745aa67d59))
+
 ## [0.71.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.70.0...v0.71.0) (2026-10-12)
 
 
