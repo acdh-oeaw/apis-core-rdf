@@ -148,13 +148,18 @@ def split(string: str = "", delimiter=",") -> list[str]:
 @register.simple_tag
 def model_field_template_lookup_list(model, field, suffix="") -> list[str]:
     """
-    generate a template path based on the modelname, the fieldname and
-    the suffix. return a list with this template path and a fallback
-    path.
+    Generate a list of template paths based on the modelname, the field and
+    the suffix. The list contains a template based on the field type and the
+    suffix, a template based on the model name, the field name and the suffix
+    and a generic fallback template that is only based on the suffix.
     """
     content_type = ContentType.objects.get_for_model(model)
     path = f"{content_type.app_label}/partials/{content_type.model}_{field.name}_{suffix}.html"
-    return [path, f"generic/partials/default_model_field_{suffix}.html"]
+    return [
+        path,
+        f"generic/partials/default_{field.get_internal_type().lower()}_{suffix}.html",
+        f"generic/partials/default_model_field_{suffix}.html",
+    ]
 
 
 def template_exists(value):
