@@ -31,6 +31,8 @@ class SkosCollection(GenericModel, models.Model):
 
     class Meta:
         ordering = ["name"]
+        verbose_name = _("collection")
+        verbose_name_plural = _("collections")
 
     class Config(GenericModel.Config):
         overview_section = _("Collections")
@@ -105,6 +107,10 @@ class SkosCollectionContentObject(GenericModel, models.Model):
     """
     *Throughtable* datamodel to connect collections to arbitrary content
     """
+
+    class Meta:
+        verbose_name = _("collection content object")
+        verbose_name_plural = _("collection content objects")
 
     class Config(GenericModel.Config):
         overview_section = _("Collections")
