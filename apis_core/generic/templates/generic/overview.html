@@ -16,7 +16,7 @@
       <div class="model-overview-container">
         {% for model in models %}
           <a class="model-overview" href="{{ model.get_listview_url }}">
-            {{ model.get_verbose_name }}
+            {{ model.get_verbose_name_plural|capfirst }}
             <span class="count">{{ model.get_count }}</span>
           </a>
         {% endfor %}
