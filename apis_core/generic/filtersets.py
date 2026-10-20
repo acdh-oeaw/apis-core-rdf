@@ -33,6 +33,12 @@ class GenericFilterSet(FilterSet):
                     "lookup_expr": "icontains",
                 },
             },
+            models.TextField: {
+                "filter_class": django_filters.CharFilter,
+                "extra": lambda f: {
+                    "lookup_expr": "icontains",
+                },
+            },
         }
 
     def __init__(self, *args, **kwargs):
