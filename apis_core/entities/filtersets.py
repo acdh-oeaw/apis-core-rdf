@@ -4,7 +4,6 @@ import django_filters
 from django.apps import apps
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.db import models
 from django.forms import DateInput
 from django.utils.encoding import force_str
 from simple_history.utils import get_history_manager_for_model
@@ -47,16 +46,6 @@ def changed_since(queryset, name, value):
 
 
 class EntityFilterSet(GenericFilterSet):
-    class Meta(GenericFilterSet.Meta):
-        filter_overrides = {
-            models.CharField: {
-                "filter_class": django_filters.CharFilter,
-                "extra": lambda f: {
-                    "lookup_expr": "icontains",
-                },
-            },
-        }
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if model := getattr(self.Meta, "model", False):
