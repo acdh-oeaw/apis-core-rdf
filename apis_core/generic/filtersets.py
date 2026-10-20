@@ -3,6 +3,7 @@ import logging
 import django_filters
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
+from django.db import models
 from django_filters.filterset import FilterSet
 
 from apis_core.collections.filters import CollectionsIncludeExcludeFilter
@@ -25,6 +26,14 @@ class GenericFilterSet(FilterSet):
         # we set the UnknownFieldBehavior to WARN, so the form does not
         # break if there are JSONFields
         unknown_field_behavior = django_filters.UnknownFieldBehavior.WARN
+        filter_overrides = {
+            models.CharField: {
+                "filter_class": django_filters.CharFilter,
+                "extra": lambda f: {
+                    "lookup_expr": "icontains",
+                },
+            },
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
