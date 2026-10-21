@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.72.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.71.1...v0.72.0) (2026-10-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* **entities:** drop `EntityFilterSet.Meta`
+
+### Features
+
+* **collection:** add verbose names & translation to collection models ([0443b43](https://github.com/acdh-oeaw/apis-core-rdf/commit/0443b4373f205581687785592474fec13763c512))
+* **collections:** use partial instead of overriding `base.html` ([0857a84](https://github.com/acdh-oeaw/apis-core-rdf/commit/0857a84d5ff13fa051019df972911de56e189d31))
+* **core:** allow to include main-menu entries using app_templates ([9c36434](https://github.com/acdh-oeaw/apis-core-rdf/commit/9c3643402aef9da46f97e97289faa1033fbfcdcf))
+* **entities:** use partial instead of overriding `base.html` ([fa3593f](https://github.com/acdh-oeaw/apis-core-rdf/commit/fa3593f72dc928ec757f35ee1ce173b0a4a7383a))
+* **generic:** add default field template for foreign keys ([f5dc821](https://github.com/acdh-oeaw/apis-core-rdf/commit/f5dc821bb8d704b4f816a17b3369d2394aff51c4))
+* **generic:** capitalize the first char of the key in the detail view ([4f92d85](https://github.com/acdh-oeaw/apis-core-rdf/commit/4f92d8513d633cce0e67073997d898b732804cf7))
+* **generic:** lookup model field templates also based on type ([f71b664](https://github.com/acdh-oeaw/apis-core-rdf/commit/f71b664dab85f5d8d08a6565dcb27453c68118b9))
+* **generic:** set default CharField filter type to icontains ([118c3eb](https://github.com/acdh-oeaw/apis-core-rdf/commit/118c3eb3f1bd2c1d703bebea8f69c7ecb087fbe6)), closes [#2539](https://github.com/acdh-oeaw/apis-core-rdf/issues/2539)
+* **generic:** set default TextField filter type to icontains ([83ffc04](https://github.com/acdh-oeaw/apis-core-rdf/commit/83ffc048ebefbadfd08ea964785571912cda3142))
+* **generic:** use partial instead of overriding `base.html` ([249b356](https://github.com/acdh-oeaw/apis-core-rdf/commit/249b356d98f7c9fc0a813c0e71917e793faaefe7))
+* **relations:** use partial instead of overriding `base.html` ([a758a2c](https://github.com/acdh-oeaw/apis-core-rdf/commit/a758a2caee5a0ee720acc2869b287ecc0fe9d1a1))
+
+
+### Bug Fixes
+
+* **generic:** use the plural form in the overview and capitalize it ([e9a2620](https://github.com/acdh-oeaw/apis-core-rdf/commit/e9a262062c662d17fcc5d2cc9fd34ba0d84eb935))
+
+
+### Documentation
+
+* **generic:** update docstring of `model_field_template_lookup_list` ([94fe31b](https://github.com/acdh-oeaw/apis-core-rdf/commit/94fe31bbe3fb2b137e0d38f4ab03813c7b65cc87))
+
+
+### Code Refactoring
+
+* **entities:** drop `EntityFilterSet.Meta` ([eca53d5](https://github.com/acdh-oeaw/apis-core-rdf/commit/eca53d57bac01b3bda545ce2059c30d33e8ca4a4))
+
 ## [0.71.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.71.0...v0.71.1) (2026-10-16)
 
 
