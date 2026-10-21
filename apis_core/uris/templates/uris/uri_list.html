@@ -1,0 +1,47 @@
+{% load i18n %}
+<div id="uris-{{ object.pk }}" hx-swap-oob="true">
+  <div class="uri-buttons">
+    {% for uri in uris %}
+      {% if not uri.internal %}
+        <div class="btn-group mb-2">
+          <a class="btn btn-sm btn-outline-secondary"
+             target="_blank"
+             title="{{ uri.uri }}"
+             href="{{ uri.uri }}">{{ uri.short_label }}</a>
+          {% if object.get_change_permission in perms %}
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                {% if uri in object.uri_set_with_importer %}
+                  <a href="{{ object.get_enrich_url }}?uri={{ uri.uri }}"
+                     class="dropdown-item small">{% translate "... merge data" %}</a>
+                {% else %}
+                  <a class="dropdown-item small disabled">{% translate "... not importable" %}</a>
+                {% endif %}
+              </li>
+              {% if uri.get_delete_permission in perms %}
+                <li>
+                  <a href="{{ uri.get_delete_url }}?redirect={{ request.path }}"
+                     class="dropdown-item small">{% translate "delete uri" %}</a>
+                </li>
+              {% endif %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% if object.Config.enable_uris %}
+    <button class="btn btn-sm bold"
+            popovertarget="add-uri-dialog-{{ object.pk }}"
+            hx-get="{% url 'apis_core:createuri' app_label model object.pk %}"
+            hx-target="next dialog">+</button>
+    <dialog id="add-uri-dialog-{{ object.pk }}" class="add-uri-dialog" popover>
+    </dialog>
+  {% endif %}
+</div>
