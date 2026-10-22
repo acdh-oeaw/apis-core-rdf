@@ -56,7 +56,8 @@ class Uri(GenericModel, models.Model):
         return super().save(*args, **kwargs)
 
     def clean(self):
-        self.uri = get_normalized_uri(self.uri)
+        if self.uri:
+            self.uri = get_normalized_uri(self.uri)
         if self.uri and not hasattr(self, "content_object"):
             try:
                 result = rdf.get_something_from_uri(self.uri)
