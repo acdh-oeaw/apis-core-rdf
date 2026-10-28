@@ -11,3 +11,17 @@ def instance_uris(instance):
     Return all URIs that point to a specific model instance
     """
     return Uri.objects.get_for_instance(instance)
+
+
+@register.inclusion_tag(
+    "uris/templatetags/list_uris_on_object.html", takes_context=True
+)
+def list_uris_on_object(context, instance, editable=False):
+    uris = Uri.objects.get_for_instance(instance)
+    app_label, model = instance._meta.label_lower.split(".")
+    context["uris"] = uris
+    context["object"] = instance
+    context["app_label"] = app_label
+    context["model"] = model
+    context["editable"] = editable
+    return context
