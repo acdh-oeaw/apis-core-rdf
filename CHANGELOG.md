@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.72.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.72.0...v0.72.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* **uris:** only pass existing uris to `get_normalized_uri` ([695df3a](https://github.com/acdh-oeaw/apis-core-rdf/commit/695df3a60867274d1884c4d348814e58bf28efd8))
+
 ## [0.72.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.71.1...v0.72.0) (2026-10-21)
 
 
