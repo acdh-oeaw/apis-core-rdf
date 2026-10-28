@@ -1,0 +1,9 @@
+{% load i18n %}
+{% load uris %}
+{% instance_uris object as uris %}
+{% if uris or object.Config.enable_uris %}
+  <tr>
+    <th>Uris</th>
+    <td>{% list_uris_on_object object editable=True %}</td>
+  </tr>
+{% endif %}
