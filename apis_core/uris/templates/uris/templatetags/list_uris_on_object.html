@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load static %}
+<link href="{% static "css/uris.css" %}" rel="stylesheet">
 <div id="uris-{{ object.pk }}" hx-swap-oob="true">
   <div class="uri-buttons">
     {% for uri in uris %}
@@ -40,4 +41,12 @@
       {% endif %}
     {% endfor %}
   </div>
+  {% if editable and object.Config.enable_uris and uris.model.get_add_permission in perms %}
+    <button class="btn btn-sm bold"
+            popovertarget="add-uri-dialog-{{ object.pk }}"
+            hx-get="{% url 'apis_core:createuritoobject' app_label model object.pk %}?from={{ request.path }}"
+            hx-target="next dialog">+</button>
+    <dialog id="add-uri-dialog-{{ object.pk }}" class="add-uri-dialog" popover>
+    </dialog>
+  {% endif %}
 </div>

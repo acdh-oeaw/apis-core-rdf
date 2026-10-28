@@ -1,0 +1,23 @@
+.add-uri-dialog {
+    position-area: bottom span-right;
+    padding: 1em;
+    border: none;
+    overflow: visible;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: whitesmoke;
+    border-radius: .375em;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        translate: 10% -100%;
+        width: 0;
+        height: 0;
+        border-bottom: solid 0.7rem whitesmoke;
+        border-left: solid 0.7rem transparent;
+        border-right: solid 0.7rem transparent;
+        z-index: 99;
+    }
+}
