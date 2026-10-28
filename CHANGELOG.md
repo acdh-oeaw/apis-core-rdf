@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.72.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.72.1...v0.72.2) (2026-10-28)
+
+
+### Bug Fixes
+
+* **uris:** fix typos in main urls.py to include uris urls ([f60868f](https://github.com/acdh-oeaw/apis-core-rdf/commit/f60868f75adebd3c21ebf9e5356fa56189713128))
+
 ## [0.72.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.72.0...v0.72.1) (2026-10-28)
 
 
