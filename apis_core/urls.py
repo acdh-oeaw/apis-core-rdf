@@ -37,6 +37,7 @@ if apps.is_installed("apis_core.uris"):
     from apis_core.uris.urls import router as apis_uris_router
 
     router.registry.extend(apis_uris_router.registry)
+    urlpatterns.append(path("", include("apis_core.uris.urls")))
 
 
 if apps.is_installed("apis_core.apis_entities"):
