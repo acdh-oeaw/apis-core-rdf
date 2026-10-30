@@ -15,7 +15,7 @@ class RelationFilter(django_filters.Filter):
         relationid, entity_ct_id = value
         subj = Q()
         obj = Q()
-        if entity_ct_id:
+        if entity_ct_id and "_" in entity_ct_id:
             content_type_id, entity_id = entity_ct_id.split("_")
             entity = (
                 ContentType.objects.get(pk=content_type_id)

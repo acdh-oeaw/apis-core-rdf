@@ -1,3 +1,4 @@
+from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 
@@ -21,3 +22,34 @@ class SearchView(ListView, FormMixin):
         if self.request.GET:
             kwargs["data"] = self.request.GET
         return kwargs
+
+
+class AutocompleteSuggestions(ListView):
+    """
+    Show `SearchEntry` autocomplete suggestions; this is meant
+    to be used as autocomplete endpoint for dropdown input
+    forms; the template includes a `hx-get` for every suggestion
+    which points to the `AutocompleteSingleSelect` endpoint and
+    swaps its content on click
+    """
+
+    template_name = "search/autocomplete_suggestions.html"
+    paginate_by = 25
+
+    def get_queryset(self):
+        if q := self.request.GET.get("q"):
+            content_types = self.request.GET.getlist("content_types")
+            return SearchEntry.objects.search(query_str=q, content_types=content_types)
+        return SearchEntry.objects.none()
+
+
+class AutocompleteSingleSelect(DetailView):
+    """
+    Show the title of `SearchEntry` together with a hidden input
+    that contains the `content_type_id` and `object_id`. This view
+    is meant to be used together with `AutocompleteSuggestions` and
+    be swapped on click of a suggestion
+    """
+
+    template_name = "search/autocomplete_single_select.html"
+    model = SearchEntry
