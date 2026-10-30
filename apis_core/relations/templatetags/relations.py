@@ -58,7 +58,7 @@ def relations_from(from_obj, relation_type: ContentType = None):
 
 
 @register.simple_tag(takes_context=True)
-def relations_list_table(context, relations, suffix=None):
+def relations_list_table(context, relations, prefix=None, suffix=None):
     suffixes = ["RelationsTable"]
     if suffix:
         suffixes.insert(0, f"{suffix}RelationsTable")
@@ -68,7 +68,7 @@ def relations_list_table(context, relations, suffix=None):
             type(context["object"]), path="tables", suffix=suffix
         )
     table_class = first_member_match(table_modules, RelationsListTable)
-    return table_class(relations, request=context["request"])
+    return table_class(relations, request=context["request"], prefix=prefix)
 
 
 @register.simple_tag
