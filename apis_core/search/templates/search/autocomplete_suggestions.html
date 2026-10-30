@@ -1,0 +1,11 @@
+{% for object in object_list %}
+  <div class="suggestion"
+       hx-get="{% url "apis_core:search:autocomplete-singleselect" object.pk %}?fieldname={{ request.GET.fieldname }}"
+       hx-target="previous summary"
+       hx-swap="innerHTML"
+       onclick="this.closest('details').open=false">
+    <div {% if forloop.last and page_obj.next_page_number %}hx-get="{{ request.path }}{% querystring page=page_obj.next_page_number %}" hx-trigger="intersect once" hx-swap="afterend" hx-target="closest .suggestion" {% endif %}>
+      {{ object.title }}
+    </div>
+  </div>
+{% endfor %}
