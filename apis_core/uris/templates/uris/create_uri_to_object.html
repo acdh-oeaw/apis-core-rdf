@@ -1,0 +1,12 @@
+{% load crispy_forms_tags %}
+{% load uris %}
+{% if "success" in request.GET %}
+  {% list_uris_on_object object %}
+{% else %}
+  <form hx-post="{{ request.path }}?from={{ request.GET.from }}"
+        hx-swap="outerHTML"
+        method="post">
+    {{ form|crispy }}
+    <input type="submit" value="OK">
+  </form>
+{% endif %}
