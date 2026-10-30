@@ -3,7 +3,7 @@
 <div id="{{ replace_id }}" hx-swap-oob="true">
 
   {% block relations_list %}
-    {% relations_list_table relations table_suffix as table %}
+    {% relations_list_table relations suffix=table_suffix prefix=replace_id as table %}
     {% if table.data %}
       {% render_table table %}
     {% endif %}
