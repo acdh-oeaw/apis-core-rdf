@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.73.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.72.2...v0.73.0) (2026-11-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* **search:** add a `search` namespace to the search urls
+* **relations:** add `prefix` argument to `relations_list_table` tag
+
+### Features
+
+* **entities:** stop including then lod partial ([bd8bd77](https://github.com/acdh-oeaw/apis-core-rdf/commit/bd8bd77b128cf0ec3647b833f6246faeccf79c1e))
+* **generic:** enclose genericmodel-forms in separate classes ([73ecd28](https://github.com/acdh-oeaw/apis-core-rdf/commit/73ecd28a314a61fd749a03d10780886c46b5a3f1))
+* **generic:** set `enable_uris` as default on all GenericModels ([d068399](https://github.com/acdh-oeaw/apis-core-rdf/commit/d068399b5a0df2d0306d79d8342ff064df5fb560))
+* **relations:** add `prefix` argument to `relations_list_table` tag ([325cd4f](https://github.com/acdh-oeaw/apis-core-rdf/commit/325cd4fd0d22f564137d3681744c30a7672f97fe)), closes [#2535](https://github.com/acdh-oeaw/apis-core-rdf/issues/2535)
+* **relations:** RelationMultiWidget: switch to search autocomplete ([8078319](https://github.com/acdh-oeaw/apis-core-rdf/commit/80783190260f5f50989be03771d77b0da496b4df))
+* **search:** add a `search` namespace to the search urls ([1153cc7](https://github.com/acdh-oeaw/apis-core-rdf/commit/1153cc79768fd8e1ab9fda259c35b6c2f0b1298f))
+* **search:** add an `AutocompleteSingleSelect` widget ([e2d87ae](https://github.com/acdh-oeaw/apis-core-rdf/commit/e2d87ae7fd44d606a5414c41d166ed2992f2c9ee))
+* **search:** add search autocomplete endpoints ([bc60202](https://github.com/acdh-oeaw/apis-core-rdf/commit/bc60202596452d1cdfc1047aea2e3c1cd7a31cee))
+* **uris:** add a `list_uris_on_object` template view ([f302ee1](https://github.com/acdh-oeaw/apis-core-rdf/commit/f302ee1adf8b7968c55a6e16fdf7efe0b0d3d4ee))
+* **uris:** add a view + form + template to add an uri to an object ([ac4af35](https://github.com/acdh-oeaw/apis-core-rdf/commit/ac4af35bef0e6404e07ece4965f3d99f90d637d0))
+* **uris:** link uri create view in list_uris_on_object templatetag ([d827e6a](https://github.com/acdh-oeaw/apis-core-rdf/commit/d827e6a35f1112e77616b20ab17feab2148f2d25))
+* **uris:** ship an `object_table_suffix` partial in uris ([00d3c09](https://github.com/acdh-oeaw/apis-core-rdf/commit/00d3c09e6fb320bc8019d181a8e8fe5b053880a7))
+
 ## [0.72.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.72.1...v0.72.2) (2026-10-28)
 
 
