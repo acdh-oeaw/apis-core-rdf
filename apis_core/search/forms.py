@@ -16,7 +16,7 @@ content_type_ids = SearchEntry.objects.values_list("content_type", flat=True).di
 
 
 class SearchForm(forms.Form):
-    query_str = forms.CharField()
+    query_str = forms.CharField(label=False)
     content_types = ContentTypeMultipleChoiceField(
         queryset=ContentType.objects.filter(id__in=content_type_ids), required=False
     )
