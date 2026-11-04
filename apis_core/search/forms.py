@@ -22,6 +22,8 @@ class SearchForm(forms.Form):
     )
     with_content = forms.BooleanField(required=False)
 
+    query_str.widget.attrs.update({"placeholder": _("Search...")})
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
