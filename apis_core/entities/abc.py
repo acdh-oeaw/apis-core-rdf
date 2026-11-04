@@ -17,6 +17,7 @@ class Entity(GenericModel):
 
     class Config(GenericModel.Config):
         overview_section = _("Entities")
+        search_initial = True
 
     @property
     def get_canonical_url(self):
