@@ -95,6 +95,7 @@ def get_by_natural_key(natural_key: str):
 class Relation(GenericModel, models.Model, metaclass=RelationModelBase):
     class Config(GenericModel.Config):
         overview_section = _("Relations")
+        search_initial = True
 
     subj_content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, related_name="relation_subj_set"
