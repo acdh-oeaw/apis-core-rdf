@@ -16,6 +16,7 @@ from django.db.models.functions import Greatest
 from django.db.models.lookups import PatternLookup
 
 from .utils import (
+    get_models_registered_for_search,
     get_search_serialization_from_instance,
     split_query_string_for_search,
 )
@@ -39,7 +40,9 @@ class ILike(PatternLookup):
 
 
 class SearchManager(models.Manager):
-    def search(self, query_str: str, content_types=[], with_content=False):
+    def search(
+        self, query_str: str, content_types=[], with_content=False, only_registered=True
+    ):
         """
         We combine multiple approaches to searching the entries.
         We use the `search_vector` full text search on the title
@@ -103,6 +106,12 @@ class SearchManager(models.Manager):
 
         query = query.order_by("-frank", "-contains", "id")
 
+        if only_registered:
+            registered_cts = [
+                ContentType.objects.get_for_model(model)
+                for model in get_models_registered_for_search()
+            ]
+            query = query.filter(content_type__in=registered_cts)
         if content_types:
             query = query.filter(content_type__in=content_types)
         return query
