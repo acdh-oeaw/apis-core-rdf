@@ -10,7 +10,7 @@
 
 {% block content %}
   <div class="container">
-    {% crispy form form.helper %}
+    <div class="search">{% crispy form form.helper %}</div>
     <hr>
     {% if object_list %}
       {{ page_obj.paginator.count }} results
