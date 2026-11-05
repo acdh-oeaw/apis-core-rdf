@@ -1,0 +1,10 @@
+{% if request.user.is_authenticated %}
+  <form class="d-flex m-auto" action="{% url "apis_core:search:search" %}">
+    <input class="form-control ms-3 me-2 form-control-sm"
+           name="query_str"
+           type="search"
+           placeholder="Search"
+           aria-label="Search">
+    <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
+  </form>
+{% endif %}
