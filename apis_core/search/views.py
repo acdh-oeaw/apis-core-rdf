@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
@@ -6,7 +7,7 @@ from .forms import SearchForm
 from .models import SearchEntry
 
 
-class SearchView(ListView, FormMixin):
+class SearchView(LoginRequiredMixin, ListView, FormMixin):
     template_name = "search/search.html"
     form_class = SearchForm
     paginate_by = 25
@@ -24,7 +25,7 @@ class SearchView(ListView, FormMixin):
         return kwargs
 
 
-class AutocompleteSuggestions(ListView):
+class AutocompleteSuggestions(LoginRequiredMixin, ListView):
     """
     Show `SearchEntry` autocomplete suggestions; this is meant
     to be used as autocomplete endpoint for dropdown input
@@ -43,7 +44,7 @@ class AutocompleteSuggestions(ListView):
         return SearchEntry.objects.none()
 
 
-class AutocompleteSingleSelect(DetailView):
+class AutocompleteSingleSelect(LoginRequiredMixin, DetailView):
     """
     Show the title of `SearchEntry` together with a hidden input
     that contains the `content_type_id` and `object_id`. This view
