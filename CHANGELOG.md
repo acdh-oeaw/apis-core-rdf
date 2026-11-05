@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.73.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.73.0...v0.73.1) (2026-11-05)
+
+
+### Bug Fixes
+
+* **search:** fix check if widget.value with is empty ([4857215](https://github.com/acdh-oeaw/apis-core-rdf/commit/4857215859acd4dfe9ba4ba6ab62e17ac4d8256d))
+
 ## [0.73.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.72.2...v0.73.0) (2026-11-02)
 
 
