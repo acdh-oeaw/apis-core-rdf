@@ -6,7 +6,7 @@
       {{ widget.value.title|default:"Search..." }}
       <input type="hidden"
              name="{{ widget.name }}"
-             {% if widget.value != None %}value="{{ widget.value.content_type_id }}_{{ widget.value.object_id }}"{% endif %}>
+             {% if widget.value %}value="{{ widget.value.content_type_id }}_{{ widget.value.object_id }}"{% endif %}>
       <span id="{{ widget.name }}-loading" class="loading"></span>
     </summary>
     <div class="suggestions-dropdown">
