@@ -9,7 +9,13 @@
           <a class="btn btn-sm btn-outline-secondary"
              target="_blank"
              title="{{ uri.uri }}"
-             href="{{ uri.uri }}">{{ uri.short_label }}</a>
+             href="{{ uri.uri }}">
+
+            {% block uri_label %}
+              {{ uri.short_label }}
+            {% endblock uri_label %}
+
+          </a>
           {% if editable and object.get_change_permission in perms %}
             <button type="button"
                     class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split"
