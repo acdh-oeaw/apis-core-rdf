@@ -27,17 +27,17 @@ jobs:
      - name: Install uv
        uses: astral-sh/setup-uv@v7
      - name: Build docs
-       run: uv run --group docs mkdocs build -f docs/mkdocs.yml -d _build
+       run: cd docs && uv run --group docs sphinx-build -M html docs docs/build
      - name: Build coverage
        run: |
          uv run --group docs coverage run
          uv run --group docs coverage html
-         mv htmlcov docs/_build/
+         mv htmlcov docs/build/
      - name: Upload static files as artifact
        id: deployment
        uses: actions/upload-pages-artifact@v5 # or specific "vX.X.X" version tag for this action
        with:
-         path: docs/_build/
+         path: docs/build/
 
   # Deployment job
   deploy:
