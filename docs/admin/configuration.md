@@ -1,8 +1,6 @@
----
-title: Configuration
----
+# Configuration
 
-# `APIS_BASE_URI`
+## `APIS_BASE_URI`
 
 When you create an instance of an entity, a signal
 [apis_core.apis_entities.models.create_default_uri][] is triggered that tries to generate a canonical URI for
@@ -19,7 +17,7 @@ old `APIS_BASE_URI` value must be added to the setting
 `APIS_FORMER_BASE_URIS`. `APIS_FORMER_BASE_URIS` is a list that contains
 base URLs that were once used.
 
-# Django settings
+## Django settings
 
 This section deals with the internal configuration of APIS. For
 instructions on how to set it up please refer to
@@ -27,7 +25,7 @@ instructions on how to set it up please refer to
 here are part of the Django settings and can be set in the `settings.py`
 file of your Django project.
 
-## REST_FRAMEWORK
+### REST_FRAMEWORK
 
 APIS uses [Django
 REST framework](https://www.django-rest-framework.org/) for API
@@ -51,7 +49,7 @@ REST_FRAMEWORK["PAGE_SIZE"] = 50
 
 Sets the default page size the APIS REST API should deliver.
 
-## SPECTACULAR_SETTINGS
+### SPECTACULAR_SETTINGS
 
 We provide a custom schema generator for spectacular. It is meant as a
 drop in replacement for the `DEFAULT_GENERATOR_CLASS` of
@@ -82,7 +80,7 @@ with and can not provide the correct serializer and filter classes.
 Therefore, we create the callback for the endpoints by hand and set the
 model from there.
 
-## APIS_BASE_URI
+### APIS_BASE_URI
 
 ``` python
 APIS_BASE_URI = "https://your-url-goes-here.com"
@@ -94,13 +92,13 @@ canonical URI of an entity. It is included in the serializations of
 entities (for example the JSON returned by the API) and therefore should be set
 to the URL your production app is running on.
 
-## APIS_NEXT_PREV
+### APIS_NEXT_PREV
 
 ``` python
 APIS_NEXT_PREV = True
 ```
 
-## APIS_ANON_VIEWS_ALLOWED
+### APIS_ANON_VIEWS_ALLOWED
 
 ``` python
 APIS_ANON_VIEWS_ALLOWED = False
@@ -111,7 +109,7 @@ logged-in) users. If only a subset of the data should be exposed to the
 anonymous user, use [custom
 managers](https://docs.djangoproject.com/en/stable/topics/db/managers/#custom-managers).
 
-## Maintenance middleware
+### Maintenance middleware
 
 APIS ships a maintenance middleware that you can use and activate to
 enable a maintenance mode in your project. Maintenance mode means that

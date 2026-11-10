@@ -1,6 +1,4 @@
----
-title: Create your ontology
----
+# Create your ontology
 
 The heart and soul of your APIS application is its
 `ontology`. It describes `entities` and `relations`.
@@ -14,7 +12,7 @@ You can use the history plugin to version model
 instances, i.e. track changes to all objects of a given model in your
 ontology, by having the model inherit from [apis_core.history.models.VersionMixin][].
 
-# Entities
+## Entities
 
 Entities have to inherit from
 [apis_core.apis_entities.models.AbstractEntity][].
@@ -44,7 +42,7 @@ creating, updating, merging and deleting entities.
 
 ![Image showing the APIS Entity menu with one item labeled Persons](img/ontology_entity_menu.png)
 
-# Relations
+## Relations
 
 To use the relations module, you have to add it to your
 `INSTALLED_APPS`. The module includes templates that add the relation

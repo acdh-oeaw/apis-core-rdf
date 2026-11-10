@@ -1,6 +1,4 @@
----
-title: Overview
----
+# Overview
 
 ANERO is a framework for providing a web platform for collecting data and for
 maintaining that data in a structured form. ANERO is based on the
@@ -19,7 +17,7 @@ repositories reside at the public code hosting platform
 [GitHub](https://github.com). All the repositories are **public**.
 </div>
 
-# ANERO Building Blocks
+## ANERO Building Blocks
 
 ANERO is built of different modules that provide various functionality. Those
 modules all have various settings to adapt them to different use cases. Every
@@ -63,7 +61,7 @@ one specific type. The `search` module provides a search index to search over
 different kinds of data. The `documentation` provides an overview of the data
 that can be entered. It provides a graphic representation of the *data model*.
 
-# The Data Model
+## The Data Model
 
 The first step before you can start using ANERO, is to define a [data
 model](https://en.wikipedia.org/wiki/Data_model) that represents the data that

@@ -1,19 +1,17 @@
----
-title: Additional Features
----
+# Aditional Features
 
 APIS is designed to be extensible and customizable. This section
 describes some additional features that are shipped with APIS and how to
 use them.
 
-# History plugin
+## History plugin
 
 The [apis_core.history][] module provides
 versioning for APIS. It is based on the
 [django-simple-history](https://django-simple-history.readthedocs.io/en/latest/)
 package.
 
-## Track changes by users
+### Track changes by users
 
 To record the user who made a change, the
 `django-simple-history` module used by APIS provides a
@@ -32,7 +30,7 @@ MIDDLEWARE = [
 ]
 ```
 
-## VersionMixin
+### VersionMixin
 
 The [apis_core.history.models.VersionMixin][] class is a mixin that can be added to any model to enable
 versioning. It adds a `history` property to the model that
@@ -49,7 +47,7 @@ class MyModel(VersionMixin, models.Model):
     pass
 ```
 
-## API endpoint
+### API endpoint
 
 The [apis_core.history.api_views.GenericHistoryLog][] class is a viewset that provides a REST API endpoint for
 the version history of a model. It can be used to retrieve the version
@@ -64,13 +62,13 @@ revisions of the model instance. It is also included in the
 accessed under
 `/apis/swagger/schema/swagger-ui/#/apis/apis_api_history_entity_edit_log_list`.
 
-## Management commands
+### Management commands
 
 The APIS history plugin, based on `django-simple-history`,
 provides several management commands to help curate history objects.
 Here are some of the most useful commands:
 
-# 1. Populate history tables
+## 1. Populate history tables
 
 ``` bash
 python manage.py populate_history --auto
@@ -82,7 +80,7 @@ models. It's particularly useful when you've added
 `--auto` flag applies the command to all tracked models, or
 you can specify a list of models instead.
 
-# 2. Clean duplicate history entries
+## 2. Clean duplicate history entries
 
 ``` bash
 python manage.py clean_duplicate_history --auto
@@ -94,7 +92,7 @@ This command removes duplicate history entries.
 changes were made. This command deletes history objects that are
 identical to the previous entry.
 
-# 3. Remove old history entries
+## 3. Remove old history entries
 
 ``` bash
 python manage.py clean_old_history --days 60 --auto
@@ -107,7 +105,7 @@ For more information on these and other management commands, refer to
 the [django-simple-history
 documentation](https://django-simple-history.readthedocs.io/en/latest/utils.html).
 
-# Collections plugin
+## Collections plugin
 
 APIS includes models to make working with collections easier. These
 can be used to build vocabularies or a tagging solution or even a
