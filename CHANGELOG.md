@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.74.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.73.1...v0.74.0) (2026-11-10)
+
+
+### Features
+
+* **collections:** add index for fields in SkosCollectionContentObject ([08ed73a](https://github.com/acdh-oeaw/apis-core-rdf/commit/08ed73aaf68a30427a6f044169cd3ca5e161249e)), closes [#2597](https://github.com/acdh-oeaw/apis-core-rdf/issues/2597)
+* **entities:** set `search_initial` for entities ([74c484e](https://github.com/acdh-oeaw/apis-core-rdf/commit/74c484ed01697165b70aa04806da2c8cec4273a3))
+* **relations:** set `search_initial` for relations ([f0e54ba](https://github.com/acdh-oeaw/apis-core-rdf/commit/f0e54ba9a81b60fcd2a05ca731737163d8a078a2))
+* **search:** add a placeholder to the search input ([2580f57](https://github.com/acdh-oeaw/apis-core-rdf/commit/2580f574e2376ff7005bac41b43b5dcebb423b13))
+* **search:** allow to limit default models to be searched ([5daf9e5](https://github.com/acdh-oeaw/apis-core-rdf/commit/5daf9e54607ba2b8fe19a3b2f04ab2c26318a5d1))
+* **search:** exclude not registered contenttypes from search results ([6d17e70](https://github.com/acdh-oeaw/apis-core-rdf/commit/6d17e7097f9a98f57f23a1eba776d311e8051071))
+* **search:** make search input stand out a bit ([8c3bdc9](https://github.com/acdh-oeaw/apis-core-rdf/commit/8c3bdc90f6ddb5dc1ebf92ed6800383c8dd787f4))
+* **search:** ship navbar element for search input ([dcc22e3](https://github.com/acdh-oeaw/apis-core-rdf/commit/dcc22e3e5d576ed6c0c24c886fefcb5166bd61cb))
+* **search:** suppress the label for the query string form field ([b851aa0](https://github.com/acdh-oeaw/apis-core-rdf/commit/b851aa0499b0b1f10bde4fc3851135117734a998))
+* **uris:** allow to override the uri label in the list uri templatetag ([201aa1d](https://github.com/acdh-oeaw/apis-core-rdf/commit/201aa1d1d24d1020f25416b11985520dcdde499e))
+
+
+### Bug Fixes
+
+* **core:** set `max-height` for multiselect containers ([f5d8605](https://github.com/acdh-oeaw/apis-core-rdf/commit/f5d8605af8b2888291763c7e2fa96feb7e18b6a3)), closes [#2575](https://github.com/acdh-oeaw/apis-core-rdf/issues/2575)
+* **generic:** allow to wrap table data anywhere ([aee97ad](https://github.com/acdh-oeaw/apis-core-rdf/commit/aee97ade07b54078569ad3528235f941c0b5d147))
+* **search:** put search views behind `LoginRequiredMixin` ([e6515a7](https://github.com/acdh-oeaw/apis-core-rdf/commit/e6515a7fcc181e0a7f12cae099efaa3b6a33f497))
+
+
+### Documentation
+
+* switch back to sphinx ([a6e40d5](https://github.com/acdh-oeaw/apis-core-rdf/commit/a6e40d53967ec90ceeabe6ad3455dfe2a8b219ef))
+
 ## [0.73.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.73.0...v0.73.1) (2026-11-05)
 
 
