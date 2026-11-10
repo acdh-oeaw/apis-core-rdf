@@ -111,6 +111,7 @@ class SkosCollectionContentObject(GenericModel, models.Model):
     class Meta:
         verbose_name = _("collection content object")
         verbose_name_plural = _("collection content objects")
+        indexes = [models.Index(fields=["content_type", "object_id", "collection"])]
 
     class Config(GenericModel.Config):
         overview_section = _("Collections")
