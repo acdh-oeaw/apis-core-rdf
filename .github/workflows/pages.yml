@@ -32,12 +32,12 @@ jobs:
        run: |
          uv run --group docs coverage run
          uv run --group docs coverage html
-         mv htmlcov docs/build/
+         mv htmlcov docs/build/html/
      - name: Upload static files as artifact
        id: deployment
        uses: actions/upload-pages-artifact@v5 # or specific "vX.X.X" version tag for this action
        with:
-         path: docs/build/
+         path: docs/build/html/
 
   # Deployment job
   deploy:
