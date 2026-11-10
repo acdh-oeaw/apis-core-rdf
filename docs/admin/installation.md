@@ -1,6 +1,4 @@
----
-title: Installation
----
+# Installation
 
 APIS Core is a library that allows you to easily build tools to manage
 prosopographical data. It is not a ready-made software solution that you can
@@ -10,7 +8,7 @@ project is as follows: set up the project, create an
 and views, and finally add your data. This section will guide you
 through the first step.
 
-# Prerequisites
+## Prerequisites
 
 APIS needs Python 3.11+.
 
@@ -18,7 +16,7 @@ APIS needs Python 3.11+.
 
 {!../README.md!lines=55-132}
 
-# Installation with Docker
+## Installation with Docker
 
 This is the recommended way to install APIS on local machines as well as
 on server infrastructure. For experimenting with APIS you can use the
@@ -53,7 +51,7 @@ This container uses the Django development server and is not suitable
 for production use. Please see the next section for deploying APIS in
 production.
 
-## Docker Compose
+### Docker Compose
 
 In production, APIS should be used together with an SQL database. The
 simplest way to set that up is by using [Docker

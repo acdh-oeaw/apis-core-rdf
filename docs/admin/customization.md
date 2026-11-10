@@ -1,6 +1,4 @@
----
-title: Customization
----
+# Customization
 
 APIS is designed to be easily customizable. This section describes how
 you can customize the views and the templates of the views that are
@@ -31,7 +29,7 @@ If you want to use the generic app for your own model, simply make your
 model inherit from
 [apis_core.generic.abc.GenericModel][].
 
-# List views
+## List views
 
 The list views consist of a
 [django-filters](https://django-filter.readthedocs.io)
@@ -68,7 +66,7 @@ override the queryset by creating a custom queryset for your model in
 app `myproject`, the view looks for the queryset
 `myproject.querysets.PersonListViewQueryset`.
 
-## List view templates
+### List view templates
 
 The list view looks for templates using the `_list.html` suffix. It uses
 the `generic/generic_list.html` template as fallback, but you can use a
@@ -76,7 +74,7 @@ custom template using your model name, so if your model is
 `myproject.Person` then you can use the `myproject/person_list.html`
 template to override the generic template.
 
-# Create and update views
+## Create and update views
 
 The create and update views use the form
 [apis_core.generic.forms.GenericModelForm][] by default. You can override the form they use by creating
@@ -85,7 +83,7 @@ a custom form in `your_app.forms`. The form class has to be named
 `myproject`, the view looks for the form class
 `myproject.forms.PersonForm`.
 
-## Create and update view templates
+### Create and update view templates
 
 The create and update views look for templates using the `_form.html`
 suffix. They use the `generic/generic_form.html` template as fallback,
@@ -93,7 +91,7 @@ but you can use a custom template using your model name, so if your
 model is `myproject.Person`, you can use the
 `myproject/person_form.html` template to override the generic template.
 
-# Autocomplete views
+## Autocomplete views
 
 The autocomplete views filter your model instances based on a query
 string provided. By default, the autocomplete views use
@@ -146,7 +144,7 @@ the first parameter and returns a result in the format the
 [django-autocomplete-light](https://django-autocomplete-light.readthedocs.io/)
 module uses - a dict with the keys `id`, `text` and `selected_text`.
 
-# Import view
+## Import view
 
 The import view uses the form
 [apis_core.generic.forms.GenericImportForm][] by default. You can override the form it uses by creating
@@ -155,7 +153,7 @@ a custom form in `your_app.forms`. The form class has to be named
 `myproject`, the view looks for the form class
 `myproject.forms.PersonImportForm`.
 
-## Import view template
+### Import view template
 
 The import view looks for templates using the `_import.html` suffix. It
 uses the `generic/generic_import.html` template as fallback, but you can
@@ -163,7 +161,7 @@ use a custom template using your model name, so if your model is
 `myproject.Person`, you can use the `myproject/person_import.html`
 template to override the generic template.
 
-# Class, method and template lookup
+## Class, method and template lookup
 
 As mentioned above, APIS tries to find the correct class or method to
 override the ones `generic` ships. This is done using
@@ -173,7 +171,7 @@ following the full inheritance chain. So if all your models inherit from
 `MyAbstractModel`, you can for example create an override table for all
 your models by creating a `myproject.tables.MyAbstractModelTable`.
 
-# Importing data from external resources
+## Importing data from external resources
 
 APIS provides the structure for easily importing data from external
 resources. One main component for this are `Importer` classes. They
@@ -205,7 +203,7 @@ To use this logic in forms, there is
 It checks if the passed value starts with `http` and if so, it uses the
 importer that fits the model and uses it to create the model instance.
 
-# Using the GenericModelImporter to import RDF
+## Using the GenericModelImporter to import RDF
 
 The [apis_core.generic.importers.GenericModelImporter][]
 tries to parse the passed URI using the

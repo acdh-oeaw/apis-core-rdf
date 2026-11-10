@@ -1,4 +1,4 @@
-# Search
+## Search
 
 The [apis_core.search] module provides a way to create a search index over
 different models. It uses a combination of simple search queries and PostgreSQLs
@@ -46,7 +46,7 @@ class Person(GenericModel):
         search_fields = {"forename", "surname"}
 ```
 
-## m2m fields
+### m2m fields
 
 As mentioned above, m2m fields are being serialized as the values of the model
 they point to. If the instances of the ManyToManyField model change, the model
@@ -74,7 +74,7 @@ class Person(GenericModel):
 In this case, when a profession is changed, the `SearchEntry`s of all `Person`s
 that point to that profession are also updated.
 
-## Management command
+### Management command
 
 There is an `initialize_search` management command that (re)creates the
 SearchEntry instances for all registered models.
@@ -82,7 +82,7 @@ You can pass the `--content-types` argument to create the SearchEntry only
 for a subset of models. You can pass the `--recreate` argument to recreate
 existing search index entries.
 
-## Weighting
+### Weighting
 
 The weighting logic annotates the search results with the result of the ranking
 calculation. In the search result overview you can see a 🛈 symbol - hovering over
