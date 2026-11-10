@@ -27,7 +27,7 @@ jobs:
      - name: Install uv
        uses: astral-sh/setup-uv@v7
      - name: Build docs
-       run: cd docs && uv run --group docs sphinx-build -M html docs docs/build
+       run: cd docs && uv run --group docs make -M html
      - name: Build coverage
        run: |
          uv run --group docs coverage run
