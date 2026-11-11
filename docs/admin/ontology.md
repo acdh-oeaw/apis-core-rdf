@@ -1,46 +1,45 @@
-# Create your ontology
+# Codify an ontology
 
-The heart and soul of your {{ project_name }} application is its
-`ontology`. It describes `entities` and `relations`.
+The heart and soul of your {{ project_name }} application is its `ontology`. It
+describes `entities` and `relations`.
 
-Given that {{ project_name }} is based on [Django](https://www.djangoproject.com/),
-the file where we describe our entities and relations is the
-[models.py](https://docs.djangoproject.com/en/stable/topics/db/models/)
-file of your {{ project_name }} project.
+Given that {{ project_name }} is based on
+[Django](https://www.djangoproject.com/), the file where we describe our
+entities and relations is the
+[models.py](https://docs.djangoproject.com/en/stable/topics/db/models/) file of
+your {{ project_name }} project.
 
 You can use the history plugin to version model
 instances, i.e. track changes to all objects of a given model in your
-ontology, by having the model inherit from [apis_core.history.models.VersionMixin][].
+ontology, by having the model inherit from [](#apis_core.history.models.VersionMixin).
 
 ## Entities
 
-Entities have to inherit from
-[apis_core.apis_entities.models.AbstractEntity][].
-Like with any other Django model, you can define [model
-fields](https://docs.djangoproject.com/en/stable/ref/models/fields/)
-describing the attributes of this entity. A simple person model could
-look like this:
+Entities have to inherit from [](#apis_core.entities.abc.Entity). Like with any
+other Django model, you can define [model
+fields](https://docs.djangoproject.com/en/stable/ref/models/fields/) describing
+the attributes of this entity. A simple person model could look like this:
 
 ``` python
 from django.db import models
-from apis_core.apis_entities.models import AbstractEntity
+from apis_core.entities.abc import Entity
 
-class Person(AbstractEntity):
+class Person(Entity):
      name = models.CharField(blank=True, default="", max_length=1024)
 ```
 
-[apis_core.apis_entities.models.AbstractEntity][]
+[](#apis_core.entities.abc.Entity)
 brings some useful functionality to entities but also
 inherits from
-[apis_core.generic.abc.GenericModel][],
+[](#apis_core.generic.abc.GenericModel),
 which means that as soon as you define your models and [run
 migrations](https://docs.djangoproject.com/en/stable/topics/migrations/),
 your models will show up in the {{ project_name }} web interface in the `Entities` menu in
-the top left corner. For every `entity` you define, there will be an overview
-page that lists all instances for that `entity` as well as a form for
-creating, updating, merging and deleting entities.
+the top left corner. For every `Entity` you define, there will be an overview
+page that lists all instances for that `Entity` as well as a form for
+creating, updating, merging, and deleting entities.
 
-![Image showing the {{ project_name }} Entity menu with one item labeled Persons](img/ontology_entity_menu.png)
+![Image showing the {{ project_name }} Entity menu with one item labeled Persons](/img/ontology_entity_menu.png)
 
 ## Relations
 
@@ -54,7 +53,7 @@ INSTALLED_APPS = ["apis_core.relations"] + INSTALLED_APPS
 ```
 
 Relations have to inherit from
-[apis_core.relations.models.Relation][].
+[](#apis_core.relations.models.Relation).
 You will have to set the attributes `subj_model` and
 `obj_model`, which each point to some Django model (can also be a
 list of Django models). The Django models can be specified by their
