@@ -24,7 +24,7 @@ author = ''
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_parser", "autodoc2", "sphinx.ext.autodoc", "sphinx.ext.viewcode"]
+extensions = ["myst_parser", "autodoc2", "sphinx.ext.autodoc", "sphinx.ext.viewcode", "sphinx.ext.autodoc"]
 
 autodoc2_packages = [{"path": "../apis_core", "exclude_dirs": ["__pycache__", "migrations"]}]
 
