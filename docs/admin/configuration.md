@@ -19,7 +19,7 @@ base URLs that were once used.
 
 ## Django settings
 
-This section deals with the internal configuration of APIS. For
+This section deals with the internal configuration of {{ project_name }}. For
 instructions on how to set it up please refer to
 [installation](installation.md). All the settings described
 here are part of the Django settings and can be set in the `settings.py`
@@ -27,7 +27,7 @@ file of your Django project.
 
 ### REST_FRAMEWORK
 
-APIS uses [Django
+{{ project_name }} uses [Django
 REST framework](https://www.django-rest-framework.org/) for API
 provisioning. REST framework-specific settings like the default page size
 can be set here.
@@ -47,7 +47,7 @@ should have all permissions.
 REST_FRAMEWORK["PAGE_SIZE"] = 50
 ```
 
-Sets the default page size the APIS REST API should deliver.
+Sets the default page size the {{ project_name }} REST API should deliver.
 
 ### SPECTACULAR_SETTINGS
 
@@ -86,7 +86,7 @@ model from there.
 APIS_BASE_URI = "https://your-url-goes-here.com"
 ```
 
-Sets the base URI your instance should use. This is important as APIS
+Sets the base URI your instance should use. This is important as {{ project_name }} 
 uses mainly URIs instead of IDs. This setting is used to generate the
 canonical URI of an entity. It is included in the serializations of
 entities (for example the JSON returned by the API) and therefore should be set
@@ -111,7 +111,7 @@ managers](https://docs.djangoproject.com/en/stable/topics/db/managers/#custom-ma
 
 ### Maintenance middleware
 
-APIS ships a maintenance middleware that you can use and activate to
+{{ project_name }} ships a maintenance middleware that you can use and activate to
 enable a maintenance mode in your project. Maintenance mode means that
 only superuser accounts can access the web interfaces; all other requests
 are being answered with a simple maintenance mode page (the

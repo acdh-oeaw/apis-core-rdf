@@ -1,12 +1,12 @@
 # Create your ontology
 
-The heart and soul of your APIS application is its
+The heart and soul of your {{ project_name }} application is its
 `ontology`. It describes `entities` and `relations`.
 
-Given that APIS is based on [Django](https://www.djangoproject.com/),
+Given that {{ project_name }} is based on [Django](https://www.djangoproject.com/),
 the file where we describe our entities and relations is the
 [models.py](https://docs.djangoproject.com/en/stable/topics/db/models/)
-file of your APIS project.
+file of your {{ project_name }} project.
 
 You can use the history plugin to version model
 instances, i.e. track changes to all objects of a given model in your
@@ -35,12 +35,12 @@ inherits from
 [apis_core.generic.abc.GenericModel][],
 which means that as soon as you define your models and [run
 migrations](https://docs.djangoproject.com/en/stable/topics/migrations/),
-your models will show up in the APIS web interface in the `Entities` menu in
+your models will show up in the {{ project_name }} web interface in the `Entities` menu in
 the top left corner. For every `entity` you define, there will be an overview
 page that lists all instances for that `entity` as well as a form for
 creating, updating, merging and deleting entities.
 
-![Image showing the APIS Entity menu with one item labeled Persons](img/ontology_entity_menu.png)
+![Image showing the {{ project_name }} Entity menu with one item labeled Persons](img/ontology_entity_menu.png)
 
 ## Relations
 

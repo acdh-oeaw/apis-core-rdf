@@ -1,20 +1,20 @@
 # Aditional Features
 
-APIS is designed to be extensible and customizable. This section
-describes some additional features that are shipped with APIS and how to
+{{ project_name}} is designed to be extensible and customizable. This section
+describes some additional features that are shipped with {{ project_name }} and how to
 use them.
 
 ## History plugin
 
 The [apis_core.history][] module provides
-versioning for APIS. It is based on the
+versioning for {{ project_name }}. It is based on the
 [django-simple-history](https://django-simple-history.readthedocs.io/en/latest/)
 package.
 
 ### Track changes by users
 
 To record the user who made a change, the
-`django-simple-history` module used by APIS provides a
+`django-simple-history` module used by {{ project_name }} provides a
 middleware that sets the `history_user` attribute of the
 request object to the current user. It then saves this information to
 the `history_user` attribute of the historical record. To
@@ -64,7 +64,7 @@ accessed under
 
 ### Management commands
 
-The APIS history plugin, based on `django-simple-history`,
+The {{ project_name }} history plugin, based on `django-simple-history`,
 provides several management commands to help curate history objects.
 Here are some of the most useful commands:
 
@@ -107,7 +107,7 @@ documentation](https://django-simple-history.readthedocs.io/en/latest/utils.html
 
 ## Collections plugin
 
-APIS includes models to make working with collections easier. These
+{{ project_name }} includes models to make working with collections easier. These
 can be used to build vocabularies or a tagging solution or even a
 workflow solution. To use it, you have to add
 `apis_core.collections` to your
