@@ -32,10 +32,16 @@ def modeldict(instance, fields=None, exclude=None, exclude_noneditable=True):
         if exclude and f.name in exclude:
             continue
         field = instance._meta.get_field(f.name)
-        try:
-            data[field] = getattr(instance, field.name)
-        except ObjectDoesNotExist as e:
-            data[field] = f"{field.value_from_object(instance)} ({e})"
+        # special handling for reverse foreign keys
+        # (i.e. something pointing *to* the instance)
+        if isinstance(field, models.fields.reverse_related.ForeignObjectRel):
+            accessor = getattr(instance, field.accessor_name)
+            data[field.field] = accessor.all()
+        else:
+            try:
+                data[field] = getattr(instance, field.name)
+            except ObjectDoesNotExist as e:
+                data[field] = f"{field.value_from_object(instance)} ({e})"
         if fn := getattr(instance, f"get_{field.name}_display", False):
             data[field] = fn()
         if getattr(field, "m2m_field_name", False):
