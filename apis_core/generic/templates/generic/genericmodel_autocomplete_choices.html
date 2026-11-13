@@ -1,0 +1,43 @@
+{% if "multiple" in request.GET %}
+  {% url 'apis_core:generic:autocomplete-multiple-select' content_type as hx_get_url %}
+{% else %}
+  {% url 'apis_core:generic:autocomplete-single-select' content_type as hx_get_url %}
+{% endif %}
+{% if q and page_obj.number == 1 %}
+  <div class="suggestion create"
+       type="None"
+       hx-get="{{ hx_get_url }}?q={{ q }}&fieldname={{ request.GET.fieldname }}"
+       {% if "multiple" in request.GET %}hx-include="previous select"{% endif %}
+       hx-target="previous summary"
+       hx-swap="innerHTML"
+       onclick="this.closest('details').open=false">Create "{{ q }}"</div>
+{% endif %}
+{% for object in page_obj %}
+  <div class="suggestion"
+       hx-get="{{ hx_get_url }}?{% if "multiple" in request.GET %}toggle{% else %}pk{% endif %}={{ object.pk }}&fieldname={{ request.GET.fieldname }}"
+       {% if "multiple" in request.GET %}hx-include="previous select"{% endif %}
+       hx-target="previous summary"
+       hx-swap="innerHTML"
+       onclick="this.closest('details').open=false">
+    <div {% if forloop.last and page_obj.next_page_number %}hx-get="{{ request.path }}{% querystring page=page_obj.next_page_number %}" hx-trigger="intersect once" hx-swap="afterend" hx-target="closest .suggestion" {% endif %}>
+      <span class="suggestionctr me-3 text-secondary">
+        {% widthratio page_obj.number|add:-1 1 page_obj.paginator.per_page as items %}{{ items|add:forloop.counter }}/{{ page_obj.paginator.count }}
+      </span>
+      {{ object }}
+    </div>
+  </div>
+{% endfor %}
+{% if not page_obj.has_next and external %}
+<hr>
+<div class="d-flex justify-content-center">
+  <h1>External results:</h1>
+</div>
+{% for result in external %}
+  <div class="suggestion external"
+       hx-get="{{ hx_get_url }}?q={{ result.id }}&fieldname={{ request.GET.fieldname }}"
+       {% if "multiple" in request.GET %}hx-include="previous select"{% endif %}
+       hx-target="previous summary"
+       hx-swap="innerHTML"
+       onclick="this.closest('details').open=false">Import {{ result.text|safe }}</div>
+{% endfor %}
+{% endif %}

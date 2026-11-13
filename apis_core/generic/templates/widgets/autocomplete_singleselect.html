@@ -1,0 +1,8 @@
+{% extends "widgets/autocomplete.html" %}
+
+{% block summary %}
+  {{ widget.value|default:"Search..." }}
+  <input type="hidden"
+         name="{{ widget.name }}"
+         {% if widget.value != None %}value="{{ widget.value.pk }}"{% endif %}>
+{% endblock summary %}
