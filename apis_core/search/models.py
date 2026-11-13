@@ -1,4 +1,5 @@
 import unicodedata
+from collections.abc import Iterable
 
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -11,7 +12,7 @@ from django.contrib.postgres.search import (
     SearchVectorField,
 )
 from django.db import models
-from django.db.models import Case, F, Field, Q, Value, When
+from django.db.models import Case, F, Field, Q, Value, When, Func
 from django.db.models.functions import Greatest
 from django.db.models.lookups import PatternLookup
 
@@ -19,7 +20,12 @@ from .utils import (
     get_models_registered_for_search,
     get_search_serialization_from_instance,
     split_query_string_for_search,
+    get_tags_for_model,
 )
+
+class ArrayToTSVector(Func):
+    function = 'array_to_tsvector'
+    output_field = SearchVectorField()
 
 
 @Field.register_lookup
@@ -134,6 +140,7 @@ class SearchEntry(models.Model):
 
     title_search_vector = SearchVectorField()
     content_search_vector = SearchVectorField()
+    tags_search_vector = SearchVectorField(null=True)
 
     objects = SearchManager()
 
@@ -154,6 +161,7 @@ class SearchEntry(models.Model):
             ),
             GinIndex(fields=["title_search_vector"]),
             GinIndex(fields=["content_search_vector"]),
+            GinIndex(fields=["tags_search_vector"]),
         ]
 
     @classmethod
@@ -166,6 +174,18 @@ class SearchEntry(models.Model):
 
         serialization_text = {k: str(v) for k, v in serialization.items() if v}
         content_text = " ".join(serialization_text.values())
+        prefix = content_type.name
+        tags = []
+        for field in get_tags_for_model(instance):
+            value = field.value_from_object(instance)
+            if not value:
+                continue
+            if isinstance(value, Iterable):
+                for item in value:
+                    tags.append(f"{prefix}:{field.name}:{item}")
+            else:
+                tags.append(f"{prefix}:{field.name}:{value}")
+        print(tags)
 
         defaults = {
             "title": title,
@@ -177,6 +197,7 @@ class SearchEntry(models.Model):
         )
         s.title_search_vector = SearchVector("title", weight="A")
         s.content_search_vector = SearchVector("content_text", weight="A")
+        s.tags_search_vector = SearchVector(ArrayToTSVector(tags))
         s.save()
 
     @classmethod

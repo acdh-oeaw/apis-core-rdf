@@ -17,6 +17,14 @@ def get_models_registered_for_search() -> list[models.Model]:
     return list(filter(lambda x: is_model_registered_for_search(x), apps.get_models()))
 
 
+def get_tags_for_model(model: models.Model) -> list[str]:
+    tags = []
+    for field in model._meta.get_fields():
+        if issubclass(type(field), (models.BooleanField, models.ForeignKey, models.ManyToManyField)):
+            tags.append(field)
+    return tags
+
+
 def get_search_serialization_from_instance(instance) -> dict:
     if hasattr(instance, "search_serialization"):
         return instance.search_serialization()

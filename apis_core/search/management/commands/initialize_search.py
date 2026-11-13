@@ -49,7 +49,7 @@ class Command(BaseCommand):
             number_of_instances = instances.count()
             for instance in model.objects.exclude(pk__in=existing):
                 self.stdout.write(
-                    f"\rIndexing {cnt} of {number_of_instances} {model}", ending=""
+                        f"\rIndexing {cnt} of {number_of_instances} {model}: {instance.pk}", ending=""
                 )
                 self.stdout.flush()
                 SearchEntry.reindex_model_instance(instance)
