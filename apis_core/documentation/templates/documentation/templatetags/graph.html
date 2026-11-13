@@ -1,0 +1,15 @@
+{% load documentation %}
+<script type="module">
+  import { mount } from 'https://cdn.jsdelivr.net/npm/pele@1/dist/pele.js';
+
+  mount(document.querySelector('#diagram'), document.querySelector("#mermaid").textContent);
+</script>
+<div id="mermaid" hidden>
+flowchart LR
+{% for relation in relations %}
+{{ relation.subj_model.get_verbose_name }} -. "{{ relation.name|escapecolon }}" .-> {{ relation.obj_model.get_verbose_name }}
+{% endfor %}
+</div>
+
+<div id="diagram">
+</div>

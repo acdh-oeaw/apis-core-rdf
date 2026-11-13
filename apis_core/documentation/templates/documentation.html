@@ -1,13 +1,15 @@
 {% extends "base.html" %}
+{% load documentation %}
 {% load core %}
 {% load generic %}
 {% load i18n %}
 
+{% block scriptHeader %}
+<script src="https://cdn.jsdelivr.net/npm/pele@1/dist/pele.global.js"></script>
+{% endblock %}
+
 {% block content %}
-  {% if datamodel.graph.svg %}
-    <div class="d-flex justify-content-center">{{ datamodel.graph.svg|safe }}</div>
-    <hr>
-  {% endif %}
+{% entity_relation_model %}
   <div class="container">
     {% if datamodel.graph.error %}
       <div class="alert alert-warning" role="alert">{{ datamodel.graph.error }}</div>
