@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.74.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.74.0...v0.74.1) (2026-11-13)
+
+
+### Bug Fixes
+
+* **generic:** handle reverse foreign keys in `modeldict` templatetag ([d9b7f6b](https://github.com/acdh-oeaw/apis-core-rdf/commit/d9b7f6b15f69eb36d250aa1581d5f4ff5f98b345))
+
 ## [0.74.0](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.73.1...v0.74.0) (2026-11-10)
 
 
