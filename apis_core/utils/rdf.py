@@ -136,7 +136,7 @@ def build_sparql_query(curie: str) -> str:
     return query
 
 
-def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
+def get_value_graph(graph: Graph, subject: str, curies: str | list[str]) -> list:
     values = []
     if curies is None:
         return []
@@ -144,7 +144,10 @@ def get_value_graph(graph: Graph, curies: str | list[str]) -> list:
         curies = [curies]
     for curie in curies:
         try:
-            results = graph.query(build_sparql_query(curie))
+            query = build_sparql_query(curie)
+            query = query.replace("WHERE {", "WHERE { BIND(\"" + subject +"\" as ?subject)")
+            print(query)
+            results = graph.query(query)
         except Exception as e:
             logger.debug("Could not parse query: %s", e)
             results = []
@@ -180,10 +183,10 @@ def load_uri_using_path(uri, configfile: Path | str) -> dict:
         result["same_as"] = [uri]
         result["relations"] = defaultdict(list)
         for attribute, curies in config.get("attributes", {}).items():
-            values = get_value_graph(graph, curies)
+            values = get_value_graph(graph, uri, curies)
             result[attribute].extend(values)
         for relation, details in config.get("relations", {}).items():
-            details["curies"] = get_value_graph(graph, details.get("curies", []))
+            details["curies"] = get_value_graph(graph, uri, details.get("curies", []))
             result["relations"][relation] = details
         return dict(result)
     return None
