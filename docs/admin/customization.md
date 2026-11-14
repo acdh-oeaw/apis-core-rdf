@@ -1,15 +1,15 @@
 # Customization
 
-APIS is designed to be easily customizable. This section describes how
+{{ project_name }} is designed to be easily customizable. This section describes how
 you can customize the views and the templates of the views that are
-shipped with APIS by injecting classes and methods that are then
+shipped with {{ project_name }} by injecting classes and methods that are then
 automatically used by the generic views. The core of the logic described
 here is based on [apis_core.generic][].
 It provides generic CRUD views and API views for all models that are
 configured to use it. To make a model use the generic functionality, it
 has to inherit from
 [apis_core.generic.abc.GenericModel][]. In
-standard APIS those models are:
+standard {{ project_name }} those models are:
 
 -   [apis_core.apis_metainfo.models.RootObject][]
 -   [apis_core.apis_metainfo.models.Uri][]
@@ -163,7 +163,7 @@ template to override the generic template.
 
 ## Class, method and template lookup
 
-As mentioned above, APIS tries to find the correct class or method to
+As mentioned above, {{ project_name }} tries to find the correct class or method to
 override the ones `generic` ships. This is done using
 [apis_core.generic.helpers.first_match_via_mro][]. The method does not only look for possible overrides using
 the name of the model itself, but also using all the parent models
@@ -173,7 +173,7 @@ your models by creating a `myproject.tables.MyAbstractModelTable`.
 
 ## Importing data from external resources
 
-APIS provides the structure for easily importing data from external
+{{ project_name }} provides the structure for easily importing data from external
 resources. One main component for this are `Importer` classes. They
 always belong to a Django model, reside in the same app as the Django
 model in the `importers` module and are named after the Django model. So
