@@ -90,6 +90,9 @@
           </button>
           <!-- Start main menu -->
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <a class="navbar-brand" href="{% url 'apis:generic:overview' %}">
+              <img src="{% static '/svg/logo.svg' %}" alt="logo" height="40px">
+            </a>
             <ul id="main-menu" class="navbar-nav me-auto">
               {% app_templates suffix="/partials/main_menu.html" as main_menu_templates %}
               {% for template in main_menu_templates %}
