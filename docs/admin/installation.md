@@ -1,8 +1,8 @@
 # Installation
 
-APIS Core is a library that allows you to easily build tools to manage
+{{ project_name }} Core is a library that allows you to easily build tools to manage
 prosopographical data. It is not a ready-made software solution that you can
-just deploy and start working. The typical workflow for starting an APIS
+just deploy and start working. The typical workflow for starting an {{ project_name }}
 project is as follows: set up the project, create an
 `ontology`, customize functionalities
 and views, and finally add your data. This section will guide you
@@ -10,7 +10,7 @@ through the first step.
 
 ## Prerequisites
 
-APIS needs Python 3.11+.
+{{ project_name }} needs Python 3.11+.
 
 # Installation
 
@@ -18,19 +18,19 @@ APIS needs Python 3.11+.
 
 ## Installation with Docker
 
-This is the recommended way to install APIS on local machines as well as
-on server infrastructure. For experimenting with APIS you can use the
+This is the recommended way to install {{ project_name }} on local machines as well as
+on server infrastructure. For experimenting with {{ project_name }} you can use the
 [Docker file](https://github.com/acdh-oeaw/apis-core-rdf/blob/main/Dockerfile)
-provided in the APIS core library. It allows you to spin up an APIS
-instance using the sample project shipped with the APIS core library. To
+provided in the {{ project_name }} core library. It allows you to spin up an APIS
+instance using the sample project shipped with the {{ project_name }} core library. To
 start it, start a terminal and run:
 
 -   `cd path/to/apis-core-rdf` to change to the directory where the
     Docker file is located,
--   `docker build -t apis .` to build the APIS image,
+-   `docker build -t apis .` to build the {{ project_name }} image,
 -   `docker run -p 5000:5000 apis` to start the container.
 
-The APIS instance should now be accessible under
+The {{ project_name }} instance should now be accessible under
 <http://localhost:5000>.
 
 Alternatively you can also use the Docker image built for our
@@ -39,24 +39,24 @@ demo project. To do so run:
 -   `docker run -p 5000:5000 ghcr.io/acdh-oeaw/apis-core-rdf/discworld/main:latest`
     to start the container.
 
-To use the image for local development you can mount your local APIS
+To use the image for local development you can mount your local {{ project_name }}
 instance directory into the container using the following command:
 
 `docker run -p 5000:5000 -v /path/to/your/apis_instance:/app apis`
 
 Please note that you might need to install custom dependencies for the
-APIS instance in your local Docker container.
+{{ project_name }} instance in your local Docker container.
 
 This container uses the Django development server and is not suitable
-for production use. Please see the next section for deploying APIS in
+for production use. Please see the next section for deploying {{ project_name }} in
 production.
 
 ### Docker Compose
 
-In production, APIS should be used together with an SQL database. The
+In production, {{ project_name }} should be used together with an SQL database. The
 simplest way to set that up is by using [Docker
 Compose](https://docs.docker.com/compose/). Below is an example of a
-`docker-compose.yml` file that sets up an APIS instance with a
+`docker-compose.yml` file that sets up an {{ project_name }} instance with a
 PostgreSQL database.
 
 ``` yaml
@@ -78,7 +78,7 @@ services:
       - DJANGO_DEBUG=True
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
     volumes:
-      - ${PWD}/local_apis_instance:/app #mount your local APIS instance to the container if needed
+      - ${PWD}/local_apis_instance:/app #mount your local {{ project_name }} instance to the container if needed
     ports:
       - 5000:5000
 
@@ -102,5 +102,5 @@ volumes:
   postgres-data:
 ```
 
-After `docker-compose up` you should now have a default APIS
+After `docker-compose up` you should now have a default {{ project_name }}
 installation accessible under <http://127.0.0.1:5000>.
