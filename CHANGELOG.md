@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.74.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.74.1...v0.74.2) (2026-11-16)
+
+
+### Bug Fixes
+
+* **core:** put main menu includes into `main-menu` block ([412d12a](https://github.com/acdh-oeaw/apis-core-rdf/commit/412d12a8b7051cfc23b9b32f30f0ecb9c9cb4275))
+
 ## [0.74.1](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.74.0...v0.74.1) (2026-11-13)
 
 
