@@ -91,12 +91,12 @@
           <!-- Start main menu -->
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul id="main-menu" class="navbar-nav me-auto">
-              {% app_templates suffix="/partials/main_menu.html" as main_menu_templates %}
-              {% for template in main_menu_templates %}
-                {% include template %}
-              {% endfor %}
 
               {% block main-menu %}
+                {% app_templates suffix="/partials/main_menu.html" as main_menu_templates %}
+                {% for template in main_menu_templates %}
+                  {% include template %}
+                {% endfor %}
               {% endblock main-menu %}
 
               {% block main-menu-extra %}
