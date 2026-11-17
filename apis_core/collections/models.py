@@ -36,6 +36,7 @@ class SkosCollection(GenericModel, models.Model):
 
     class Config(GenericModel.Config):
         overview_section = _("Collections")
+        search_initial = False
 
     name = models.CharField(
         max_length=300,
@@ -115,6 +116,7 @@ class SkosCollectionContentObject(GenericModel, models.Model):
 
     class Config(GenericModel.Config):
         overview_section = _("Collections")
+        search_initial = False
 
     collection = models.ForeignKey(SkosCollection, on_delete=models.CASCADE)
 
