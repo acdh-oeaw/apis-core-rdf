@@ -31,7 +31,6 @@ class SearchForm(forms.Form):
     content_types = ContentTypeMultipleChoiceField(
         queryset=ContentType.objects.filter(id__in=content_type_ids),
         required=False,
-        initial=get_initial_content_types(),
     )
     with_content = forms.BooleanField(required=False)
 
@@ -42,3 +41,10 @@ class SearchForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_method = "GET"
         self.helper.add_input(Submit("submit", _("Submit")))
+
+        # This has to be set dynamically on instantiation of the
+        # form, otherwise Django tries to access content type
+        # information at import time rather than runtime, which
+        # leads to "no such table: django_content_type" exception
+        # on running migrations
+        self.fields["content_types"].initial = get_initial_content_types()
