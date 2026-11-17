@@ -42,7 +42,7 @@ class GenericImportForm(forms.Form):
         self.fields["url"] = ModelImportChoiceField(
             queryset=self.Meta.model.objects.all()
         )
-        self.fields["url"].widget = AutocompleteSingleSelect(self.fields["url"])
+        self.fields["url"].widget = AutocompleteSingleSelect(self.fields["url"], external=True, internal=False)
         self.helper = FormHelper()
         self.helper.add_input(Submit("submit", _("Submit")))
 
