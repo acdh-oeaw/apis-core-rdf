@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.74.3](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.74.2...v0.74.3) (2026-11-23)
+
+
+### Bug Fixes
+
+* **collections:** don't search collections by default ([80804f3](https://github.com/acdh-oeaw/apis-core-rdf/commit/80804f3113433a035ccf79471ada6b9375aae850)), closes [#2622](https://github.com/acdh-oeaw/apis-core-rdf/issues/2622)
+* **entities:** align prev/next arrows in object header ([0037eef](https://github.com/acdh-oeaw/apis-core-rdf/commit/0037eef9c3e84402c3aed87837d8881dd0c17531)), closes [#2626](https://github.com/acdh-oeaw/apis-core-rdf/issues/2626)
+* **search:** make border-radius of input element smaller ([85a5614](https://github.com/acdh-oeaw/apis-core-rdf/commit/85a561451802cb1d55b9e40ae6c522590c493776))
+* **search:** make input query css specific to query input element ([4780197](https://github.com/acdh-oeaw/apis-core-rdf/commit/4780197afa0441facb7a13037913075114c515df))
+* **search:** set the initial content types in form initialization ([bf0b4d9](https://github.com/acdh-oeaw/apis-core-rdf/commit/bf0b4d9b53758ca3a5a591fdb07bf7506b731135)), closes [#2624](https://github.com/acdh-oeaw/apis-core-rdf/issues/2624)
+
 ## [0.74.2](https://github.com/acdh-oeaw/apis-core-rdf/compare/v0.74.1...v0.74.2) (2026-11-16)
 
 
