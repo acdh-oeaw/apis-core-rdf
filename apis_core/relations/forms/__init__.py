@@ -2,13 +2,12 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 
-from apis_core.core.fields import ApisListSelect2
 from apis_core.generic.forms import GenericFilterSetForm, GenericModelForm
 from apis_core.generic.forms.fields import ModelImportChoiceField
+from apis_core.generic.widgets import AutocompleteSingleSelect
 
 
 class RelationForm(GenericModelForm):
@@ -61,10 +60,8 @@ class RelationForm(GenericModelForm):
                 self.fields["subj_object_id"] = ModelImportChoiceField(
                     queryset=subj_model.objects.all(), label=_("Subject")
                 )
-                self.fields["subj_object_id"].widget = ApisListSelect2(
-                    attrs={"data-html": True},
-                    url=reverse("apis_core:generic:autocomplete", args=[subj_ct])
-                    + "?create=True",
+                self.fields["subj_object_id"].widget = AutocompleteSingleSelect(
+                    self.fields["subj_object_id"]
                 )
                 self.fields["subj_object_id"].widget.choices = self.fields[
                     "subj_object_id"
@@ -81,10 +78,8 @@ class RelationForm(GenericModelForm):
                 self.fields["obj_object_id"] = ModelImportChoiceField(
                     queryset=obj_model.objects.all(), label=_("Object")
                 )
-                self.fields["obj_object_id"].widget = ApisListSelect2(
-                    attrs={"data-html": True},
-                    url=reverse("apis_core:generic:autocomplete", args=[obj_ct])
-                    + "?create=True",
+                self.fields["obj_object_id"].widget = AutocompleteSingleSelect(
+                    self.fields["obj_object_id"]
                 )
                 self.fields["obj_object_id"].widget.choices = self.fields[
                     "obj_object_id"
